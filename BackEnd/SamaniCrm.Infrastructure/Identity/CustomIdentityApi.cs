@@ -90,7 +90,7 @@ namespace SamaniCrm.Infrastructure.Identity
                 return TypedResults.Ok();
             });
 
-            routeGroup.MapPost("/login", async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>>
+            routeGroup.MapPost("/login2", async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>>
                 ([FromBody] LoginRequest login, [FromQuery] bool? useCookies, [FromQuery] bool? useSessionCookies, [FromServices] IServiceProvider sp) =>
             {
                 var signInManager = sp.GetRequiredService<SignInManager<TUser>>();

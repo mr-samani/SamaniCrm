@@ -1,7 +1,10 @@
 
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.IdentityModel.Tokens;
 using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.Identity;
@@ -18,25 +21,45 @@ namespace SamaniCrm.Host
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            // JWT Authentication
+            var jwtKey = builder.Configuration["Jwt:Key"];
+            var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+            var jwtAudience = builder.Configuration["Jwt:Audience"];
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtIssuer,
+                    ValidAudience = jwtAudience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+                };
+            });
+
+
 
             builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            // builder.Services.AddIdentityInfrastructure(builder.Configuration);
-            //builder.Services.AddAuthentication("Bearer")
-            //    .AddJwtBearer("Bearer", options =>
-            //    {
-            //        options.Authority = "https://localhost:5001";
-            //        options.RequireHttpsMetadata = false;
-            //        options.Audience = "api1";
-            //    });
- 
+            //builder.Services.ConfigureHttpJsonOptions(options =>
+            //{
+            //    options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
+            //});
+
+            builder.Services.AddIdentityInfrastructure(builder.Configuration);
+           
+
 
             builder.Services.AddSingleton(TimeProvider.System);
-            builder.Services.AddTransient<IEmailSender<ApplicationUser>,MyEmailSender>();
+            builder.Services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
 
-            builder.Services.AddEndpointsApiExplorer();
-
-            builder.Services.AddSwaggerGen();
+             
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -48,10 +71,35 @@ namespace SamaniCrm.Host
                                       .AllowAnyMethod();
                                   });
             });
-
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new() { Title = "SamaniCrm API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme.",
+                    Name = "Authorization",
+                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+                c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+            });
             var app = builder.Build();
 
-          //  app.UseIdentityServer();
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -63,9 +111,11 @@ namespace SamaniCrm.Host
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication(); // اضافه کردن middleware احراز هویت
+            app.UseIdentityServer();
             app.UseAuthorization();
 
-            app.MapGroup("/auth").MapCustomIdentityApi<ApplicationUser>().WithTags(["Auth"]);
+            app.MapGroup("/auth2").MapCustomIdentityApi<ApplicationUser>().WithTags(["Auth2"]);
 
 
             app.MapControllers();

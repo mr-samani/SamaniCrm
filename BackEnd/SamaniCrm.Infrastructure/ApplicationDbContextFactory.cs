@@ -34,20 +34,21 @@ namespace SamaniCrm.Infrastructure
 
             // برای دسترسی به RoleManager و UserManager باید Identity رو هم رجیستر کنیم
             // اعمال تنظیمات سفارشی Identity
-            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
-            {
-                options.SignIn.RequireConfirmedEmail = false;
-                options.User.RequireUniqueEmail = true;
-                options.Password.RequiredLength = 3;
-                options.Password.RequireDigit = true;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Lockout.MaxFailedAccessAttempts = 5;
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(2);
-            })
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
+            //services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            //{
+            //    options.SignIn.RequireConfirmedEmail = false;
+            //    options.User.RequireUniqueEmail = true;
+            //    options.Password.RequiredLength = 3;
+            //    options.Password.RequireDigit = true;
+            //    options.Password.RequireUppercase = false;
+            //    options.Password.RequireLowercase = false;
+            //    options.Password.RequireNonAlphanumeric = false;
+            //    options.Lockout.MaxFailedAccessAttempts = 5;
+            //    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(2);
+            //})
+            //.AddEntityFrameworkStores<ApplicationDbContext>()
+            //.AddDefaultTokenProviders()
+            //.AddSignInManager();
 
 
 
