@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SamaniCrm.Application\SamaniCrm.Application.csproj" />
-    <ProjectReference Include="..\SamaniCrm.Persistence\SamaniCrm.Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,7 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Email\" />
+    <Folder Include="Persistence\NewFolder\" />
+    <Folder Include="Persistence\Seeds\" />
     <Folder Include="Sms\" />
   </ItemGroup>
 

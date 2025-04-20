@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SamaniCrm.Persistence\SamaniCrm.Persistence.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Exceptions\" />

@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SamaniCrm.Infrastructure.Identity
 {
-    public class IdentityDbContext:IdentityDbContext<ApplicationUser,ApplicationRole,string>
+    public class ApplicationDbContext:IdentityDbContext<ApplicationUser,ApplicationRole,string>
     {
-        public IdentityDbContext(DbContextOptions<IdentityDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<IdentityDbContext> options) : base(options)
         {
         }
         protected override void OnModelCreating(ModelBuilder builder)

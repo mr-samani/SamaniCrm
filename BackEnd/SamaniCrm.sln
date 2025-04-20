@@ -5,8 +5,6 @@ VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamaniCrm.Application", "SamaniCrm.Application\SamaniCrm.Application.csproj", "{0EB81048-AAA5-4DB5-B916-5FDD36A3A940}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamaniCrm.Persistence", "SamaniCrm.Persistence\SamaniCrm.Persistence.csproj", "{22559C41-7CE5-4252-A1AD-C1DC51EF08CE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamaniCrm.Domain", "SamaniCrm.Domain\SamaniCrm.Domain.csproj", "{17E1B4B6-F543-4CDE-8FBF-032754AD8174}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamaniCrm.Infrastructure", "SamaniCrm.Infrastructure\SamaniCrm.Infrastructure.csproj", "{12856B3F-65C1-410E-A8A4-32A8AEA63A96}"
@@ -23,10 +21,6 @@ Global
 		{0EB81048-AAA5-4DB5-B916-5FDD36A3A940}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EB81048-AAA5-4DB5-B916-5FDD36A3A940}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EB81048-AAA5-4DB5-B916-5FDD36A3A940}.Release|Any CPU.Build.0 = Release|Any CPU
-		{22559C41-7CE5-4252-A1AD-C1DC51EF08CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22559C41-7CE5-4252-A1AD-C1DC51EF08CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{22559C41-7CE5-4252-A1AD-C1DC51EF08CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{22559C41-7CE5-4252-A1AD-C1DC51EF08CE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{17E1B4B6-F543-4CDE-8FBF-032754AD8174}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{17E1B4B6-F543-4CDE-8FBF-032754AD8174}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17E1B4B6-F543-4CDE-8FBF-032754AD8174}.Release|Any CPU.ActiveCfg = Release|Any CPU
