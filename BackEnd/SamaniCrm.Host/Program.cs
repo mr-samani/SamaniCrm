@@ -8,6 +8,9 @@ using Microsoft.IdentityModel.Tokens;
 using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.Identity;
+using SamaniCrm.Application.Auth.Commands;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 
 
 namespace SamaniCrm.Host
@@ -21,6 +24,11 @@ namespace SamaniCrm.Host
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssemblyContaining<LoginCommand>();
+            });
+
             // JWT Authentication
             var jwtKey = builder.Configuration["Jwt:Key"];
             var jwtIssuer = builder.Configuration["Jwt:Issuer"];

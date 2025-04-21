@@ -5,6 +5,10 @@ using SamaniCrm.Infrastructure.Identity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using SamaniCrm.Host.Models;
+using MediatR;
+using SamaniCrm.Application.Auth.Commands;
+using SamaniCrm.Application.Auth;
 
 namespace SamaniCrm.Host.Controllers
 {
@@ -12,49 +16,37 @@ namespace SamaniCrm.Host.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IConfiguration _configuration;
 
-        public AccountController(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            IConfiguration configuration)
+        private readonly IConfiguration _configuration;
+        private readonly IMediator _mediator;
+
+        public AccountController(
+            IConfiguration configuration, IMediator mediator)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
             _configuration = configuration;
+            _mediator = mediator;
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto model)
+        public async Task<IActionResult> Login([FromBody] LoginCommand command)
         {
-            var user = await _userManager.FindByNameAsync(model.Username);
-            if (user == null) return Unauthorized();
-
-            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
-            if (!result.Succeeded) return Unauthorized();
-
-            var claims = new[]
+            try
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email ?? "")
-            };
+                var result =await _mediator.Send(command);
+                return Ok(new ApiResponse<LoginResult>(true, "OK", StatusCodes.Status200OK, result));
+            }
+            catch (InvalidLoginException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new ApiResponse<LoginResult>(false, ex.Message, StatusCodes.Status500InternalServerError));
+            }
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(1),
-                signingCredentials: creds
-            );
-
-            return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
         }
     }
 
-    public record LoginDto(string Username, string Password);
 }

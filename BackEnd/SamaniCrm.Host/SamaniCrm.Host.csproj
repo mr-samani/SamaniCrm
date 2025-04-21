@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SamaniCrm.Application\SamaniCrm.Application.csproj" />
-    <ProjectReference Include="..\SamaniCrm.Infrastructure\SamaniCrm.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
