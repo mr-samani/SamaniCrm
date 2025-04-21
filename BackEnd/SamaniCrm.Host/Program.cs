@@ -61,13 +61,13 @@ namespace SamaniCrm.Host
             //});
 
             builder.Services.AddIdentityInfrastructure(builder.Configuration);
-           
+
 
 
             builder.Services.AddSingleton(TimeProvider.System);
             builder.Services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
 
-             
+
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -82,6 +82,7 @@ namespace SamaniCrm.Host
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new() { Title = "SamaniCrm API", Version = "v1" });
+                c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
                 c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme.",
@@ -123,7 +124,7 @@ namespace SamaniCrm.Host
             app.UseIdentityServer();
             app.UseAuthorization();
 
-           // app.MapGroup("/auth2").MapCustomIdentityApi<ApplicationUser>().WithTags(["Auth2"]);
+            // app.MapGroup("/auth2").MapCustomIdentityApi<ApplicationUser>().WithTags(["Auth2"]);
 
 
             app.MapControllers();
