@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "generate-api": "openapi-generator-cli generate -i swagger.json -g typescript-angular -o src/shared/service-proxies -c openapitools.json"
+    "generate-api": "set JAVA_OPTS=-Djavax.net.ssl.trustStoreType=Windows-ROOT && openapi-generator-cli generate -g typescript-angular -o src/shared/service-proxies -c open-api-config.json --skip-validate-spec"
   },
   "private": true,
   "dependencies": {

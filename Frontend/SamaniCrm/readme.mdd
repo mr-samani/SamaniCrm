@@ -1,0 +1,7 @@
+دریافت تملیت های خودش 
+
+
+npx openapi-generator-cli author template -g typescript-angular -o custom-templates
+
+
+
