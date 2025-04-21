@@ -123,7 +123,7 @@ namespace SamaniCrm.Host
             app.UseIdentityServer();
             app.UseAuthorization();
 
-            app.MapGroup("/auth2").MapCustomIdentityApi<ApplicationUser>().WithTags(["Auth2"]);
+           // app.MapGroup("/auth2").MapCustomIdentityApi<ApplicationUser>().WithTags(["Auth2"]);
 
 
             app.MapControllers();
