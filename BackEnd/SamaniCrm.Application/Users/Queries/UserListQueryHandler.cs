@@ -53,7 +53,7 @@ namespace SamaniCrm.Application.Users.Queries
 
             int total = await query.CountAsync(cancellationToken);
 
-            var users =await query
+            var users = await query
                 .Skip(request.PageSize * (request.PageNumber - 1))
                 .Take(request.PageSize)
                 .Select(u => new UserDto
@@ -63,7 +63,7 @@ namespace SamaniCrm.Application.Users.Queries
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     Email = u.Email,
-                    ProfilePicture = u.ProfilePicture
+                    ProfilePicture = u.ProfilePicture ?? ""
                 })
                 .ToListAsync(cancellationToken);
 

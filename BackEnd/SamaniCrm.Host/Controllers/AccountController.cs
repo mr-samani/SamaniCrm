@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using SamaniCrm.Infrastructure.Identity;
@@ -10,6 +10,7 @@ using MediatR;
 using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Users.Queries;
+using SamaniCrm.Application.Common.DTOs;
 
 namespace SamaniCrm.Host.Controllers
 {
@@ -28,49 +29,29 @@ namespace SamaniCrm.Host.Controllers
             _mediator = mediator;
         }
 
+
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginCommand command)
+        public async Task<ActionResult<ApiResponse<LoginResult>>> Login([FromBody] LoginCommand command)
         {
-            try
-            {
-                var result = await _mediator.Send(command);
-                return Ok(new ApiResponse<LoginResult>(true, "OK", StatusCodes.Status200OK, result));
-            }
-            catch (InvalidLoginException ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new ApiResponse<LoginResult>(false, ex.Message, StatusCodes.Status500InternalServerError));
-            }
-
-
+            var result = await _mediator.Send(command);
+            return Ok(ApiResponse<LoginResult>.Ok(result));
         }
 
-
-
         [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh([FromBody] RefreshTokenCommand command)
+        public async Task<ActionResult<ApiResponse<TokenResponseDto>>> Refresh([FromBody] RefreshTokenCommand command)
         {
-            var tokens = await _mediator.Send(command);
-            return Ok(tokens);
+            var result = await _mediator.Send(command);
+            return Ok(ApiResponse<TokenResponseDto>.Ok(result));
         }
 
         [HttpPost("revoke")]
-        public async Task<IActionResult> Revoke([FromBody] RevokeRefreshTokenCommand command)
+        public async Task<ActionResult<ApiResponse<string>>> Revoke([FromBody] RevokeRefreshTokenCommand command)
         {
-            var result = await _mediator.Send(command);
-            return result ? Ok() : BadRequest("Token invalid or already revoked");
-        }
+            var success = await _mediator.Send(command);
+            if (!success)
+                return BadRequest(ApiResponse<string>.Fail(new List<ApiError> { new() { Message = "Token invalid or already revoked" } }));
 
-
-        [HttpPost("GetUsers")]
-        public async Task<IActionResult> GetUsers([FromBody] UserListQuery query)
-        {
-            var result = await _mediator.Send(query);
-            return Ok(result);
+            return Ok(ApiResponse<string>.Ok(data: ""));
         }
 
     }

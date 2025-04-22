@@ -19,6 +19,7 @@ services
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseMiddleware<ApiExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
@@ -33,6 +34,6 @@ app.UseIdentityServer();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapGroup("/auth2").MapCustomIdentityApi<ApplicationUser>().WithTags(["Auth2"]);
+//app.MapGroup("/auth2").MapCustomIdentityApi<ApplicationUser>().WithTags(["Auth2"]);
 
 app.Run();

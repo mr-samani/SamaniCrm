@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json.Serialization;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
@@ -124,8 +127,11 @@ public static class ServiceCollectionExtensions
         services.AddControllers()
             .AddJsonOptions(opt =>
             {
-                opt.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
-                opt.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+                opt.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+                opt.JsonSerializerOptions.PropertyNamingPolicy = null;
+                opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
+               // opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
 
         return services;
