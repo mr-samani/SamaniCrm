@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamaniCrm.Application.DTOs
+namespace SamaniCrm.Application.Common.DTOs
 {
     public class TokenResponseDto
     {
-        public string AccessToken { get; set; }
-        public string RefreshToken { get; set; }
+        public required string AccessToken { get; set; }
+        public required string RefreshToken { get; set; }
     }
 
 }

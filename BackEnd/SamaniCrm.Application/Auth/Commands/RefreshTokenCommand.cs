@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
-using SamaniCrm.Application.DTOs;
+using SamaniCrm.Application.Common.DTOs;
 
 namespace SamaniCrm.Application.Auth.Commands
 {

@@ -7,9 +7,9 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
-using SamaniCrm.Application.DTOs;
-using SamaniCrm.Application.Services;
+using SamaniCrm.Application.Common.Services;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.Identity;
@@ -72,7 +72,7 @@ namespace SamaniCrm.Application.Auth.Commands
                 throw new ForbiddenAccessException();
             }
 
-            var accessToken = await _authService.GenerateAccessToken(user);
+            var accessToken = _authService.GenerateAccessToken(user);
             var newRefreshToken = await _authService.GenerateRefreshToken(user, accessToken);
 
             return new TokenResponseDto

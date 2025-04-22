@@ -11,8 +11,11 @@ using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Application.Auth.Commands;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using SamaniCrm.Application.Services;
-
+using SamaniCrm.Application.Common.Services;
+using SamaniCrm.Application.Users.Queries;
+using FluentValidation;
+using SamaniCrm.Application.Common.Behaviors;
+using SamaniCrm.Host.Middlewares;
 
 namespace SamaniCrm.Host
 {
@@ -30,9 +33,14 @@ namespace SamaniCrm.Host
                 cfg.RegisterServicesFromAssemblyContaining<LoginCommand>();
                 cfg.RegisterServicesFromAssemblyContaining<RefreshTokenCommand>();
             });
+            builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            builder.Services.AddValidatorsFromAssemblyContaining<UserListQueryValidator>();
+
+
+
 
             // JWT Authentication
-            var jwtKey = builder.Configuration["Jwt:Key"];
+            var jwtKey = builder.Configuration["Jwt:Key"] ?? "";
             var jwtIssuer = builder.Configuration["Jwt:Issuer"];
             var jwtAudience = builder.Configuration["Jwt:Audience"];
             builder.Services.AddAuthentication(options =>
@@ -63,7 +71,7 @@ namespace SamaniCrm.Host
             //});
 
             builder.Services.AddIdentityInfrastructure(builder.Configuration);
-           
+
 
 
             builder.Services.AddSingleton(TimeProvider.System);
@@ -111,6 +119,7 @@ namespace SamaniCrm.Host
             var app = builder.Build();
 
 
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

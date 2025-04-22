@@ -14,7 +14,7 @@ using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.Identity;
 
-namespace SamaniCrm.Application.Services
+namespace SamaniCrm.Application.Common.Services
 {
     public class AuthService : IAuthService
     {
@@ -30,16 +30,16 @@ namespace SamaniCrm.Application.Services
         }
 
 
-        public async Task<string> GenerateAccessToken(ApplicationUser user)
+        public string GenerateAccessToken(ApplicationUser user)
         {
             var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-            new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
+            new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName??""),
             new Claim(JwtRegisteredClaimNames.Email, user.Email ?? "")
         };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? ""));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expiration = DateTime.UtcNow.AddHours(1);
 

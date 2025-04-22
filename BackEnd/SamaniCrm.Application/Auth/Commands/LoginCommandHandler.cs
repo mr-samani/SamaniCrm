@@ -14,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SamaniCrm.Application.Auth.Queries;
 using SamaniCrm.Application.Common.Exceptions;
-using SamaniCrm.Application.Services;
+using SamaniCrm.Application.Common.Services;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.Identity;
@@ -56,7 +56,7 @@ namespace SamaniCrm.Application.Auth.Commands
             var roles = await _mediator.Send(new GetUserRolesQuery(user), cancellationToken);
 
             var expiration = DateTime.UtcNow.AddHours(1);
-            var accessToken = await _authService.GenerateAccessToken(user);
+            var accessToken = _authService.GenerateAccessToken(user);
             var refreshToken = await _authService.GenerateRefreshToken(user, accessToken);
 
            

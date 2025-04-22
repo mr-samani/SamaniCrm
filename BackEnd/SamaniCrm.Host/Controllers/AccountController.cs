@@ -9,6 +9,7 @@ using SamaniCrm.Host.Models;
 using MediatR;
 using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.Exceptions;
+using SamaniCrm.Application.Users.Queries;
 
 namespace SamaniCrm.Host.Controllers
 {
@@ -65,6 +66,12 @@ namespace SamaniCrm.Host.Controllers
         }
 
 
+        [HttpPost("GetUsers")]
+        public async Task<IActionResult> GetUsers([FromBody] UserListQuery query)
+        {
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
 
     }
 }
