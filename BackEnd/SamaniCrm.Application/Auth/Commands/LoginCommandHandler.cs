@@ -9,9 +9,14 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SamaniCrm.Application.Auth.Queries;
+using SamaniCrm.Application.Common.Exceptions;
+using SamaniCrm.Application.Services;
+using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.Identity;
 
 namespace SamaniCrm.Application.Auth.Commands
@@ -22,17 +27,22 @@ namespace SamaniCrm.Application.Auth.Commands
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly IMediator _mediator;
-
+        private readonly ApplicationDbContext _context;
+        private readonly IAuthService _authService;
 
         public LoginCommandHandler(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IConfiguration configuration,
-            IMediator mediator)
+            IMediator mediator,
+            ApplicationDbContext context,
+            IAuthService authService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _mediator = mediator;
+            _context = context;
+            _authService = authService;
         }
 
 
@@ -45,28 +55,14 @@ namespace SamaniCrm.Application.Auth.Commands
 
             var roles = await _mediator.Send(new GetUserRolesQuery(user), cancellationToken);
 
-            var claims = new List<Claim>
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-            new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email ?? "")
-        };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expiration = DateTime.UtcNow.AddHours(1);
+            var accessToken = await _authService.GenerateAccessToken(user);
+            var refreshToken = await _authService.GenerateRefreshToken(user, accessToken);
 
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                claims: claims,
-                expires: expiration,
-                signingCredentials: creds
-            );
-
+           
             LoginResult output = new LoginResult(
-                AccessToken: new JwtSecurityTokenHandler().WriteToken(token),
-                RefreshToken: "",
+                AccessToken: accessToken,
+                RefreshToken: refreshToken,
                 AccessTokenExpiration: expiration,
                 RefreshTokenExpiration: expiration.AddDays(7), // فرضی
                 UserId: user.Id,

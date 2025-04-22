@@ -13,12 +13,9 @@
 
   <ItemGroup>
     <Folder Include="Auth\Events\" />
-    <Folder Include="DTOs\" />
     <Folder Include="Interfaces\" />
-    <Folder Include="Commands\" />
     <Folder Include="Queries\" />
     <Folder Include="Validators\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>

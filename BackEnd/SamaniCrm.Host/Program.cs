@@ -11,6 +11,7 @@ using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Application.Auth.Commands;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using SamaniCrm.Application.Services;
 
 
 namespace SamaniCrm.Host
@@ -27,6 +28,7 @@ namespace SamaniCrm.Host
             builder.Services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssemblyContaining<LoginCommand>();
+                cfg.RegisterServicesFromAssemblyContaining<RefreshTokenCommand>();
             });
 
             // JWT Authentication
@@ -66,8 +68,9 @@ namespace SamaniCrm.Host
 
             builder.Services.AddSingleton(TimeProvider.System);
             builder.Services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
+            builder.Services.AddTransient<IAuthService, AuthService>();
 
-             
+
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins,

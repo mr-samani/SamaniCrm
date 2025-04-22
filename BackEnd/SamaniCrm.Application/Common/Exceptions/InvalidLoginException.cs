@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamaniCrm.Application.Auth
+namespace SamaniCrm.Application.Common.Exceptions
 {
     public class InvalidLoginException : Exception
     {

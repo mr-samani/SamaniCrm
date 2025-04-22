@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Duende.IdentityServer.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Infrastructure.Identity;
+using RefreshToken = SamaniCrm.Domain.Entities.RefreshToken;
 
 namespace SamaniCrm.Infrastructure
 {
     public class ApplicationDbContext:IdentityDbContext<ApplicationUser,ApplicationRole,string>
     {
+
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }

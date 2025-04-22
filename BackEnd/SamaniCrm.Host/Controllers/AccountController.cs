@@ -8,7 +8,7 @@ using System.Text;
 using SamaniCrm.Host.Models;
 using MediatR;
 using SamaniCrm.Application.Auth.Commands;
-using SamaniCrm.Application.Auth;
+using SamaniCrm.Application.Common.Exceptions;
 
 namespace SamaniCrm.Host.Controllers
 {
@@ -32,7 +32,7 @@ namespace SamaniCrm.Host.Controllers
         {
             try
             {
-                var result =await _mediator.Send(command);
+                var result = await _mediator.Send(command);
                 return Ok(new ApiResponse<LoginResult>(true, "OK", StatusCodes.Status200OK, result));
             }
             catch (InvalidLoginException ex)
@@ -47,6 +47,24 @@ namespace SamaniCrm.Host.Controllers
 
 
         }
-    }
 
+
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenCommand command)
+        {
+            var tokens = await _mediator.Send(command);
+            return Ok(tokens);
+        }
+
+        [HttpPost("revoke")]
+        public async Task<IActionResult> Revoke([FromBody] RevokeRefreshTokenCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return result ? Ok() : BadRequest("Token invalid or already revoked");
+        }
+
+
+
+    }
 }
