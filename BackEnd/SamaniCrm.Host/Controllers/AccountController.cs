@@ -30,21 +30,21 @@ namespace SamaniCrm.Host.Controllers
         }
 
 
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public async Task<ActionResult<ApiResponse<LoginResult>>> Login([FromBody] LoginCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(ApiResponse<LoginResult>.Ok(result));
         }
 
-        [HttpPost("refresh")]
+        [HttpPost("Refresh")]
         public async Task<ActionResult<ApiResponse<TokenResponseDto>>> Refresh([FromBody] RefreshTokenCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(ApiResponse<TokenResponseDto>.Ok(result));
         }
 
-        [HttpPost("revoke")]
+        [HttpPost("Revoke")]
         public async Task<ActionResult<ApiResponse<string>>> Revoke([FromBody] RevokeRefreshTokenCommand command)
         {
             var success = await _mediator.Send(command);
@@ -52,6 +52,14 @@ namespace SamaniCrm.Host.Controllers
                 return BadRequest(ApiResponse<string>.Fail(new List<ApiError> { new() { Message = "Token invalid or already revoked" } }));
 
             return Ok(ApiResponse<string>.Ok(data: ""));
+        }
+
+
+        [HttpGet("GetCurrentUserPermissions")]
+        public async Task<ActionResult<ApiResponse<Dictionary<string, bool>>>> GetCurrentUserPermissions()
+        {
+            var permissions = await _mediator.Send(new UserPermissionsQuery());
+            return Ok(ApiResponse<Dictionary<string, bool>>.Ok(permissions));
         }
 
     }

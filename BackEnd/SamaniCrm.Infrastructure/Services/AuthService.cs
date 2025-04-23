@@ -4,17 +4,15 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
-using Azure.Core;
+using System.Threading;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Domain.Entities;
-using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.Identity;
 
-namespace SamaniCrm.Application.Common.Services
+namespace SamaniCrm.Infrastructure.Services
 {
     public class AuthService : IAuthService
     {
@@ -30,11 +28,11 @@ namespace SamaniCrm.Application.Common.Services
         }
 
 
-        public string GenerateAccessToken(ApplicationUser user)
+        public string GenerateAccessToken(IUser user)
         {
             var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName??""),
             new Claim(JwtRegisteredClaimNames.Email, user.Email ?? "")
         };
@@ -58,7 +56,7 @@ namespace SamaniCrm.Application.Common.Services
 
 
 
-        public async Task<string> GenerateRefreshToken(ApplicationUser user, string accessToken)
+        public async Task<string> GenerateRefreshToken(IUser user, string accessToken, CancellationToken cancellationToken)
         {
             var newRefreshToken = new RefreshToken
             {
@@ -70,7 +68,7 @@ namespace SamaniCrm.Application.Common.Services
                 UserId = user.Id
             };
             _context.Add(newRefreshToken);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return newRefreshToken.RefreshTokenValue;
         }
 

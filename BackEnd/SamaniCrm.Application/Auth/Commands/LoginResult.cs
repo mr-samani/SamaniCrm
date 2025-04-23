@@ -11,7 +11,7 @@ namespace SamaniCrm.Application.Auth.Commands
       string RefreshToken,
         DateTime AccessTokenExpiration,
         DateTime RefreshTokenExpiration,
-        string UserId,
+        Guid UserId,
         string? UserName,
         string? Email,
         string FirstName,

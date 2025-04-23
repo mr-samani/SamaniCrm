@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using SamaniCrm.Application.Common.DTOs;
-using SamaniCrm.Infrastructure.Identity;
+using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Application.Auth.Commands
 {
-    public record GenerateTokenCommand(ApplicationUser User) : IRequest<TokenResponseDto>;
+    public record GenerateTokenCommand(IUser User) : IRequest<TokenResponseDto>;
 
 }

@@ -8,11 +8,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SamaniCrm.Domain\SamaniCrm.Domain.csproj" />
-    <ProjectReference Include="..\SamaniCrm.Infrastructure\SamaniCrm.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Auth\Events\" />
+    <Folder Include="Common\Services\" />
     <Folder Include="Users\Commands\" />
     <Folder Include="Users\Events\" />
   </ItemGroup>
@@ -20,6 +20,8 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="MediatR" Version="12.5.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.4" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.4" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.0.2" />
   </ItemGroup>

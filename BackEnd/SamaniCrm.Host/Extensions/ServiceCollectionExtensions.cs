@@ -15,10 +15,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SamaniCrm.Application.Common.Behaviors;
-using SamaniCrm.Application.Common.Services;
+using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.Identity.Interfaces;
 using SamaniCrm.Application.Users.Queries;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.Identity;
+using SamaniCrm.Infrastructure.Identity.Repositories;
+using SamaniCrm.Infrastructure.Services;
 
 namespace SamaniCrm.Infrastructure.Extensions;
 public static class ServiceCollectionExtensions
@@ -188,6 +191,9 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
         services.AddTransient<IAuthService, AuthService>();
         services.AddSingleton(TimeProvider.System);
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<IUserRepository, UserRepository>();
         return services;
     }
 }

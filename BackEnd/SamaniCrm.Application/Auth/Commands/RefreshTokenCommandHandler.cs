@@ -4,27 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
-using SamaniCrm.Application.Common.Services;
-using SamaniCrm.Domain.Entities;
-using SamaniCrm.Infrastructure;
-using SamaniCrm.Infrastructure.Identity;
+using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.Identity.Interfaces;
 
 namespace SamaniCrm.Application.Auth.Commands
 {
     public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, TokenResponseDto>
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IDbContext _context;
         private readonly IAuthService _authService;
+        private readonly IUserRepository _userRepository;
 
-        public RefreshTokenCommandHandler(ApplicationDbContext context, IAuthService authService)
+        public RefreshTokenCommandHandler(IDbContext context, IAuthService authService, IUserRepository userRepository)
         {
             _context = context;
             _authService = authService;
+            _userRepository = userRepository;
         }
 
         public async Task<TokenResponseDto> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
@@ -56,7 +54,7 @@ namespace SamaniCrm.Application.Auth.Commands
                     rt.Active = false;
                 }
 
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
 
                 throw new ForbiddenAccessException();
             }
@@ -65,7 +63,7 @@ namespace SamaniCrm.Application.Auth.Commands
 
             refreshToken.Used = true;
 
-            var user = await _context.Users.FindAsync(refreshToken.UserId);
+            var user = await _userRepository.GetByIdAsync(refreshToken.UserId);
 
             if (user is null)
             {
@@ -73,7 +71,7 @@ namespace SamaniCrm.Application.Auth.Commands
             }
 
             var accessToken = _authService.GenerateAccessToken(user);
-            var newRefreshToken = await _authService.GenerateRefreshToken(user, accessToken);
+            var newRefreshToken = await _authService.GenerateRefreshToken(user, accessToken,cancellationToken);
 
             return new TokenResponseDto
             {

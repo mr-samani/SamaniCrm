@@ -5,15 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using SamaniCrm.Infrastructure;
+using SamaniCrm.Application.Common.Interfaces;
 
 namespace SamaniCrm.Application.Auth.Commands
 {
     public class RevokeRefreshTokenCommandHandler : IRequestHandler<RevokeRefreshTokenCommand, bool>
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IDbContext _context;
 
-        public RevokeRefreshTokenCommandHandler(ApplicationDbContext context)
+        public RevokeRefreshTokenCommandHandler(IDbContext context)
         {
             _context = context;
         }

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
-using SamaniCrm.Infrastructure.Identity;
+using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Application.Auth.Queries
 {
-    public record GetUserRolesQuery(ApplicationUser User) : IRequest<string[]>;
+    public record GetUserRolesQuery(IUser User) : IRequest<string[]>;
 
 }

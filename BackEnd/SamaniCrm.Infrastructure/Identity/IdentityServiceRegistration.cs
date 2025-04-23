@@ -7,6 +7,7 @@ using Duende.IdentityServer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using SamaniCrm.Application.Common.Interfaces;
 
 
 namespace SamaniCrm.Infrastructure.Identity
@@ -18,7 +19,7 @@ namespace SamaniCrm.Infrastructure.Identity
             // ✅ DbContext
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddScoped<IDbContext>(provider => provider.GetService<ApplicationDbContext>());
             // ✅ تنظیمات پیشرفته Identity
             services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {

@@ -13,7 +13,7 @@ namespace SamaniCrm.Domain.Entities
         public bool Active { get; set; }
         public DateTime Expiration { get; set; }
         public bool Used { get; set; }
-        public required string UserId { get; set; }
+        public required Guid UserId { get; set; }
         public required string AccessToken { get; set; }
     }
 }

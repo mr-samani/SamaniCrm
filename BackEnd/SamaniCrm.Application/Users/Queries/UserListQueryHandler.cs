@@ -7,8 +7,8 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.DTOs;
-using SamaniCrm.Infrastructure.Identity;
 using System.Linq.Dynamic.Core;
+using SamaniCrm.Domain.Entities;
 
 
 
@@ -16,16 +16,16 @@ namespace SamaniCrm.Application.Users.Queries
 {
     public class UserListQueryHandler : IRequestHandler<UserListQuery, PaginatedResult<UserDto>>
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<IUser> _userManager;
 
-        public UserListQueryHandler(UserManager<ApplicationUser> userManager)
+        public UserListQueryHandler(UserManager<IUser> userManager)
         {
             _userManager = userManager;
         }
 
         public async Task<PaginatedResult<UserDto>> Handle(UserListQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<ApplicationUser> query = _userManager.Users.AsQueryable();
+            IQueryable<IUser> query = _userManager.Users.AsQueryable();
             if (!string.IsNullOrEmpty(request.Filter))
             {
                 query = query.Where(x =>

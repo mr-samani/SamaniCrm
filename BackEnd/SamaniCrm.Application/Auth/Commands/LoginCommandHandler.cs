@@ -1,44 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Authentication;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using SamaniCrm.Application.Auth.Queries;
 using SamaniCrm.Application.Common.Exceptions;
-using SamaniCrm.Application.Common.Services;
+using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Domain.Entities;
-using SamaniCrm.Infrastructure;
-using SamaniCrm.Infrastructure.Identity;
 
 namespace SamaniCrm.Application.Auth.Commands
 {
     public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult>
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<IUser> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IMediator _mediator;
-        private readonly ApplicationDbContext _context;
+        private readonly IDbContext _context;
         private readonly IAuthService _authService;
 
-        public LoginCommandHandler(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+        public LoginCommandHandler(UserManager<IUser> userManager,
             IConfiguration configuration,
             IMediator mediator,
-            ApplicationDbContext context,
+            IDbContext context,
             IAuthService authService)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _configuration = configuration;
             _mediator = mediator;
             _context = context;
@@ -57,7 +41,7 @@ namespace SamaniCrm.Application.Auth.Commands
 
             var expiration = DateTime.UtcNow.AddHours(1);
             var accessToken = _authService.GenerateAccessToken(user);
-            var refreshToken = await _authService.GenerateRefreshToken(user, accessToken);
+            var refreshToken = await _authService.GenerateRefreshToken(user, accessToken,cancellationToken);
 
            
             LoginResult output = new LoginResult(

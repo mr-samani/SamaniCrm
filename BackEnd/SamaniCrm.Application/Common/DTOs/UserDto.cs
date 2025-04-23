@@ -2,7 +2,7 @@
 {
     public class UserDto()
     {
-        public required string Id { get; set; }
+        public required Guid Id { get; set; }
         [Sortable]
         public string? Username { get; set; }
         [Sortable]
