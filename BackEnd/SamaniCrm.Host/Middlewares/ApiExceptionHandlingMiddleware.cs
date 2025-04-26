@@ -39,12 +39,15 @@ public class ApiExceptionHandlingMiddleware
         {
             await HandleValidationExceptionAsync(context, vex);
         }
+        catch (InvalidLoginException loginEx)
+        {
+            await HandleKnownExceptionAsync(context, loginEx.StatusCode, loginEx.Message);
+        }
         catch (Exception ex)
         {
             await HandleUnknownExceptionAsync(context, ex);
         }
     }
-
     private async Task HandleValidationExceptionAsync(HttpContext context, FluentValidation.ValidationException vex)
     {
         context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -101,5 +104,20 @@ public class ApiExceptionHandlingMiddleware
         var payload = JsonSerializer.Serialize(response, options);
         await context.Response.WriteAsync(payload);
     }
+
+    private async Task HandleKnownExceptionAsync(HttpContext context, HttpStatusCode statusCode, string message)
+    {
+        context.Response.StatusCode = (int)statusCode;
+        context.Response.ContentType = "application/json; charset=utf-8";
+
+        var response = ApiResponse<object>.Fail(
+            errors: new List<ApiError> { new ApiError { Message = message } },
+            meta: null
+        );
+
+        await WriteResponseAsync(context, response);
+    }
+
+
 }
 

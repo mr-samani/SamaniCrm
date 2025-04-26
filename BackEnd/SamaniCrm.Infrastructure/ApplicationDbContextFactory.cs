@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using SamaniCrm.Infrastructure.Persistence;
 using Microsoft.Extensions.DependencyInjection;
-using SamaniCrm.Infrastructure.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
+using SamaniCrm.Infrastructure.Persistence;
+using SamaniCrm.Infrastructure.Identity;
 
 namespace SamaniCrm.Infrastructure
 {
@@ -31,27 +28,45 @@ namespace SamaniCrm.Infrastructure
 
             services.AddLogging(logging => logging.AddConsole());
 
-            // فقط اگه قصد Seed داریم (مثلاً موقع Update-Database) این خط اجرا بشه
-            if (args.Contains("seed", StringComparer.OrdinalIgnoreCase))
+            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
-                services.AddIdentity<ApplicationUser, ApplicationRole>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>()
-                    .AddDefaultTokenProviders()
-                    .AddSignInManager();
+                // 🔐 Password Rules
+                options.Password.RequiredLength = 4;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
 
-                services.AddScoped<ApplicationDbInitializer>();
+                // 👤 User Rules
+                options.User.RequireUniqueEmail = true;
 
-                var provider = services.BuildServiceProvider();
-                var initializer = provider.GetRequiredService<ApplicationDbInitializer>();
-                initializer.SeedAsync().GetAwaiter().GetResult();
+                // 🔒 Lockout
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+                options.Lockout.AllowedForNewUsers = true;
 
-                return provider.GetRequiredService<ApplicationDbContext>();
+                // 📧 Email confirmation
+                options.SignIn.RequireConfirmedEmail = false;
+            })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders()
+                .AddSignInManager();
+
+            services.AddScoped<ApplicationDbInitializer>();
+
+            var provider = services.BuildServiceProvider();
+
+            // 🪄 اگر Initializer وجود داشت، اجرا کن
+            using (var scope = provider.CreateScope())
+            {
+                var initializer = scope.ServiceProvider.GetService<ApplicationDbInitializer>();
+                if (initializer != null)
+                {
+                    initializer.SeedAsync().GetAwaiter().GetResult();
+                }
             }
 
-            // حالت عادی - بدون اجرای Seed
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-            return new ApplicationDbContext(optionsBuilder.Options);
+            return provider.GetRequiredService<ApplicationDbContext>();
         }
     }
 }
