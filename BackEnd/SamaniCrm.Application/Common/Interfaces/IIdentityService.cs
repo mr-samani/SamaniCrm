@@ -23,10 +23,10 @@ namespace SamaniCrm.Application.Common.Interfaces
 
         // Role Section
         Task<bool> CreateRoleAsync(string roleName);
-        Task<bool> DeleteRoleAsync(string roleId);
-        Task<List<(string id, string roleName)>> GetRolesAsync();
-        Task<(string id, string roleName)> GetRoleByIdAsync(string id);
-        Task<bool> UpdateRole(string id, string roleName);
+        Task<bool> DeleteRoleAsync(Guid roleId);
+        Task<List<(Guid id, string roleName)>> GetRolesAsync();
+        Task<(Guid id, string roleName)> GetRoleByIdAsync(Guid id);
+        Task<bool> UpdateRole(Guid id, string roleName);
 
         // User's Role section
         Task<bool> IsInRoleAsync(Guid userId, string role);

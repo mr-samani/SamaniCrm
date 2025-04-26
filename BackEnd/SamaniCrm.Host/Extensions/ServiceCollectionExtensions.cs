@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
@@ -16,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SamaniCrm.Application.Common.Behaviors;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.Queries.Role;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Services;
@@ -33,7 +35,9 @@ public static class ServiceCollectionExtensions
     {
         services.AddMediatR(cfg =>
         {
-           // cfg.RegisterServicesFromAssembly(typeof(UserListQuery).Assembly);
+            // cfg.RegisterServicesFromAssembly(typeof(UserListQuery).Assembly);
+            cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            cfg.RegisterServicesFromAssembly(typeof(GetRoleQueryHandler).Assembly);
         });
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
@@ -186,8 +190,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCustomServices(this IServiceCollection services)
     {
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
-        services.AddTransient<ITokenGenerator, TokenGenerator>();
-        services.AddTransient<IIdentityService, IdentityService>();
+        services.AddScoped<ITokenGenerator,TokenGenerator>();
+        services.AddScoped<IIdentityService, IdentityService>();
         services.AddSingleton(TimeProvider.System);
         return services;
     }

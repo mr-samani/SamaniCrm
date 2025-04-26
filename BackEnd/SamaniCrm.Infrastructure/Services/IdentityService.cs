@@ -14,14 +14,13 @@ public class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly ApplicationDbContext _applicationDbContext;
 
-    public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
+    public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
-        _roleManager = roleManager;
         _roleManager = roleManager;
     }
 
@@ -39,7 +38,7 @@ public class IdentityService : IIdentityService
 
     public async Task<bool> CreateRoleAsync(string roleName)
     {
-        var result = await _roleManager.CreateAsync(new IdentityRole(roleName));
+        var result = await _roleManager.CreateAsync(new ApplicationRole(roleName));
         if (!result.Succeeded)
         {
             throw new ValidationException(result.Errors);
@@ -73,9 +72,9 @@ public class IdentityService : IIdentityService
         return (result.Succeeded, user.Id);
     }
 
-    public async Task<bool> DeleteRoleAsync(string roleId)
+    public async Task<bool> DeleteRoleAsync(Guid roleId)
     {
-        var roleDetails = await _roleManager.FindByIdAsync(roleId);
+        var roleDetails = await _roleManager.FindByIdAsync(roleId.ToString());
         if (roleDetails == null)
         {
             throw new NotFoundException("Role not found");
@@ -134,7 +133,7 @@ public class IdentityService : IIdentityService
         //var users = _userManager.Users.ToListAsync();
     }
 
-    public async Task<List<(string id, string roleName)>> GetRolesAsync()
+    public async Task<List<(Guid id, string roleName)>> GetRolesAsync()
     {
         var roles = await _roleManager.Roles.Select(x => new
         {
@@ -234,17 +233,17 @@ public class IdentityService : IIdentityService
         return result.Succeeded;
     }
 
-    public async Task<(string id, string roleName)> GetRoleByIdAsync(string id)
+    public async Task<(Guid id, string roleName)> GetRoleByIdAsync(Guid id)
     {
-        var role = await _roleManager.FindByIdAsync(id);
+        var role = await _roleManager.FindByIdAsync(id.ToString());
         return (role.Id, role.Name);
     }
 
-    public async Task<bool> UpdateRole(string id, string roleName)
+    public async Task<bool> UpdateRole(Guid id, string roleName)
     {
         if (roleName != null)
         {
-            var role = await _roleManager.FindByIdAsync(id);
+            var role = await _roleManager.FindByIdAsync(id.ToString());
             role.Name = roleName;
             var result = await _roleManager.UpdateAsync(role);
             return result.Succeeded;

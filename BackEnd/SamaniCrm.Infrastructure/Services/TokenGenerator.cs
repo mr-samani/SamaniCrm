@@ -20,13 +20,11 @@ namespace SamaniCrm.Infrastructure.Services
     public class TokenGenerator : ITokenGenerator
     {
         private readonly IConfiguration _configuration;
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public TokenGenerator(IConfiguration config, UserManager<ApplicationUser> userManager, ApplicationDbContext context, string expiryMinutes)
+        public TokenGenerator(IConfiguration config, ApplicationDbContext context)
         {
             _configuration = config;
-            _userManager = userManager;
             _context = context;
         }
 
