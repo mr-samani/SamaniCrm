@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AccountServiceProxy } from '../shared/service-proxies';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +8,17 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'SamaniCrm';
+  constructor(
+    private service:AccountServiceProxy
+  ){
+
+  }
+  ngOnInit(): void {
+    const input=logincomm
+   this.service.login(input)
+  }
+
+ 
 }

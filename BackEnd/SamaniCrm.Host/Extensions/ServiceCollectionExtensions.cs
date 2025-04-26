@@ -153,7 +153,12 @@ public static class ServiceCollectionExtensions
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "SamaniCrm API", Version = "v1" });
-
+            c.AddServer(new OpenApiServer
+            {
+                Url = "https://api.samani-crm.com", 
+                Description = "Production Server"
+            });
+            c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Description = "JWT Authorization header using the Bearer scheme.",

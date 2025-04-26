@@ -1,9 +1,0 @@
-# openapi-config.yaml
-apiPackage: src/app/service-proxies/services
-modelPackage: src/app/service-proxies/models
-enumPackage: src/app/service-proxies/enums
-withInterfaces: true
-useSingleRequestParameter: true
-additionalProperties:
-  ngVersion: 19.2.0
-  providedInRoot: false
