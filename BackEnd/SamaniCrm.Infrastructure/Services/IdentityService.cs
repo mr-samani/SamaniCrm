@@ -3,10 +3,13 @@ using Azure.Core;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.DTOs;
+using SamaniCrm.Application.Queries.User;
 using SamaniCrm.Infrastructure.Identity;
-
+using System.Linq.Dynamic.Core;
 
 
 namespace SamaniCrm.Infrastructure.Services;
@@ -110,17 +113,50 @@ public class IdentityService : IIdentityService
         return result.Succeeded;
     }
 
-    public async Task<List<(Guid id, string fullName, string userName, string email)>> GetAllUsersAsync()
+    public async Task<PaginatedResult<UserResponseDTO>> GetAllUsersAsync(GetUserQuery request, CancellationToken cancellationToken)
     {
-        var users = await _userManager.Users.Select(x => new
+        IQueryable<ApplicationUser> query = _userManager.Users.AsQueryable();
+        if (!string.IsNullOrEmpty(request.Filter))
         {
-            x.Id,
-            x.FullName,
-            x.UserName,
-            x.Email
-        }).ToListAsync();
+            query = query.Where(x =>
+            x.UserName.Contains(request.Filter) ||
+            x.FirstName.Contains(request.Filter) ||
+            x.LastName.Contains(request.Filter) ||
+            x.Email.Contains(request.Filter)
+            );
+        }
 
-        return users.Select(user => (user.Id, user.FullName, user.UserName, user.Email)).ToList();
+        // Sorting
+        if (!string.IsNullOrEmpty(request.SortBy))
+        {
+            var sortString = $"{request.SortBy} {request.SortDirection}";
+            query = query.OrderBy(sortString);
+        }
+
+        int total = await query.CountAsync(cancellationToken);
+
+        var users = await query
+            .Skip(request.PageSize * (request.PageNumber - 1))
+            .Take(request.PageSize)
+            .Select(u => new UserResponseDTO
+            {
+                Id = u.Id,
+                UserName = u.UserName,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email,
+                ProfilePicture = u.ProfilePicture
+            })
+            .ToListAsync(cancellationToken);
+
+
+        return new PaginatedResult<UserResponseDTO>
+        {
+            Items = users,
+            TotalCount = total,
+            PageNumber = request.PageNumber,
+            PageSize = request.PageSize
+        };
     }
 
     public Task<List<(string id, string userName, string email, IList<string> roles)>> GetAllUsersDetailsAsync()

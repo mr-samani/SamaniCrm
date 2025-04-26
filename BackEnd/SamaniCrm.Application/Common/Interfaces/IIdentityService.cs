@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SamaniCrm.Application.Common.DTOs;
+using SamaniCrm.Application.DTOs;
+using SamaniCrm.Application.Queries.User;
 
 namespace SamaniCrm.Application.Common.Interfaces
 {
@@ -17,7 +20,7 @@ namespace SamaniCrm.Application.Common.Interfaces
         Task<string> GetUserNameAsync(Guid userId);
         Task<bool> DeleteUserAsync(Guid userId);
         Task<bool> IsUniqueUserName(string userName);
-        Task<List<(Guid id, string fullName, string userName, string email)>> GetAllUsersAsync();
+        Task<PaginatedResult<UserResponseDTO>> GetAllUsersAsync(GetUserQuery request,CancellationToken cancellationToken);
         Task<List<(string id, string userName, string email, IList<string> roles)>> GetAllUsersDetailsAsync();
         Task<bool> UpdateUserProfile(string id, string fullName, string email, IList<string> roles);
 

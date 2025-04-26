@@ -8,9 +8,19 @@ namespace SamaniCrm.Application.DTOs
 {
     public class UserResponseDTO
     {
-        public Guid Id { get; set; }
-        public string FullName { get; set; }
-        public string UserName { get; set; }
-        public string Email { get; set; }
+        public required Guid Id { get; set; }
+        [Sortable]
+        public string? UserName { get; set; }
+        [Sortable]
+        public string? FirstName { get; set; }
+        [Sortable]
+        public string? LastName { get; set; } = string.Empty;
+        [Sortable]
+        public string? FullName { get; set; } = string.Empty;
+        [Sortable]
+        public string? Email { get; set; } = string.Empty;
+        public string? ProfilePicture { get; set; } = string.Empty;
+
+
     }
 }

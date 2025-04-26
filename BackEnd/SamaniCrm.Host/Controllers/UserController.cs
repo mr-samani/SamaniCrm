@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using SamaniCrm.Application.User.Commands;
 using SamaniCrm.Application.Queries.User;
 using SamaniCrm.Host.Models;
+using SamaniCrm.Application.Common.DTOs;
 
 
 namespace SamaniCrm.Api.Controllers
@@ -31,11 +32,10 @@ namespace SamaniCrm.Api.Controllers
             return Ok(ApiResponse<int>.Ok(await _mediator.Send(command)));
         }
 
-        [HttpGet("GetAll")]
-        [ProducesDefaultResponseType(typeof(List<UserResponseDTO>))]
-        public async Task<ActionResult<ApiResponse<List<UserResponseDTO>>>> GetAllUserAsync()
+        [HttpPost("GetAllUsers")]
+        public async Task<ActionResult<ApiResponse<PaginatedResult<UserResponseDTO>>>> GetAllUserAsync([FromBody] GetUserQuery request)
         {
-            return Ok(ApiResponse<List<UserResponseDTO>>.Ok(await _mediator.Send(new GetUserQuery())));
+            return Ok(ApiResponse<PaginatedResult<UserResponseDTO>>.Ok(await _mediator.Send(request)));
         }
 
         [HttpDelete("Delete/{userId}")]
@@ -80,12 +80,7 @@ namespace SamaniCrm.Api.Controllers
             return Ok(ApiResponse<int>.Ok(result));
         }
 
-        [HttpGet("GetAllUserDetails")]
-        public async Task<ActionResult<ApiResponse<List<UserDetailsResponseDTO>>>> GetAllUserDetails()
-        {
-            List<UserDetailsResponseDTO> result = await _mediator.Send(new GetAllUsersDetailsQuery());
-            return Ok(ApiResponse<List<UserDetailsResponseDTO>>.Ok(result));
-        }
+      
 
 
         [HttpPut("EditUserProfile/{id}")]

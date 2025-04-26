@@ -6,14 +6,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SamaniCrm.Application.Common.DTOs;
 
 namespace SamaniCrm.Application.Queries.User
 {
-    public class GetUserQuery : IRequest<List<UserResponseDTO>>
+    public class GetUserQuery : PaginationRequest, IRequest<PaginatedResult<UserResponseDTO>>
     {
+        public string? Filter { get; set; }
     }
 
-    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, List<UserResponseDTO>>
+    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, PaginatedResult<UserResponseDTO>>
     {
         private readonly IIdentityService _identityService;
 
@@ -22,16 +24,10 @@ namespace SamaniCrm.Application.Queries.User
             _identityService = identityService;
         }
 
-        public async Task<List<UserResponseDTO>> Handle(GetUserQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<UserResponseDTO>> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-            var users = await _identityService.GetAllUsersAsync();
-            return users.Select(x => new UserResponseDTO()
-            {
-                Id = x.id,
-                FullName = x.fullName,
-                UserName = x.userName,
-                Email = x.email
-            }).ToList();
+            PaginatedResult<UserResponseDTO> users = await _identityService.GetAllUsersAsync(request, cancellationToken);
+            return users;
         }
     }
 }

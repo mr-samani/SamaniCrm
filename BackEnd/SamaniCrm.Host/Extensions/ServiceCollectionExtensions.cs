@@ -18,6 +18,7 @@ using Microsoft.OpenApi.Models;
 using SamaniCrm.Application.Common.Behaviors;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Queries.Role;
+using SamaniCrm.Application.User.Queries;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Services;
@@ -52,7 +53,7 @@ public static class ServiceCollectionExtensions
     /// <returns></returns>
     public static IServiceCollection AddFluentValidation(this IServiceCollection services)
     {
-     //   services.AddValidatorsFromAssemblyContaining<UserListQueryValidator>();
+        services.AddValidatorsFromAssemblyContaining<GetUserQueryValidator>();
         return services;
     }
 
