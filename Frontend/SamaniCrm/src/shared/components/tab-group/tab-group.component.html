@@ -1,0 +1,18 @@
+<div class="tab-group-container">
+  <div class="tabs">
+    <div
+      class="tab-item"
+      *ngFor="let tab of tabs; let tabIndex = index"
+      #tabEl
+      (click)="selectTab(tab, tabIndex)"
+      [class.active]="tab.active">
+      <span class="title">
+        <span class="top-line"></span>
+        <span class="tab-name">{{ tab.title }}</span>
+      </span>
+    </div>
+    <div class="tab-item plus" *ngIf="showPlusButton" (click)="onClickPlus()">+</div>
+  </div>
+
+  <ng-content></ng-content>
+</div>

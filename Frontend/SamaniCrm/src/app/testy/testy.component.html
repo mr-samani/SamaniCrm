@@ -1,0 +1,35 @@
+<p>testy works!</p>
+,
+<div>
+  <mat-checkbox [(ngModel)]="dark" (change)="toggleDarkMode()">dark</mat-checkbox>
+</div>
+
+<mat-form-field>
+  <mat-label>test label</mat-label>
+  <input matInput [(ngModel)]="name" required #n="ngModel" />
+  <mat-error *ngIf="n.hasError('required')">required</mat-error>
+  <mat-icon matPrefix>sentiment_very_satisfied</mat-icon>
+
+  <i class="fa fa-cog" matSuffix></i>
+  <mat-hint>بررسی متن طولانی بررسی متن طولانی بررسی متن طولانی</mat-hint>
+</mat-form-field>
+
+<div>
+  <button mat-raised-button>rtrr rt rt yty ty ty ty</button>
+  <button mat-raised-button color="primary">text test</button>
+  <button mat-raised-button color="primary">test</button>
+  <button mat-raised-button color="warning">fgdfgdfggr</button>
+</div>
+
+<!-- <pagination [totalPages]="1000" [perPage]="10" [(page)]="page"></pagination> -->
+<pagination [total]="1501" [perPage]="10" [(page)]="page"></pagination>
+{{ page }}
+<div class="example-box" cdkDrag>sdfsdfsdf</div>
+<div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+  @for (movie of movies; track movie) {
+    <div class="example-box" cdkDrag (cdkDragMoved)="onDragMoved($event)" [cdkDragPreviewContainer]="'global'">
+      <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+      {{ movie }}
+    </div>
+  }
+</div>

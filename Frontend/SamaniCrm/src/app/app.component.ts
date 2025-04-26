@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { AccountServiceProxy } from '../shared/service-proxies';
+import { MainSpinnerService } from '../shared/services/main-spinner.service';
 
 @Component({
   selector: 'app-root',
@@ -12,21 +13,24 @@ import { AccountServiceProxy } from '../shared/service-proxies';
   ]
 })
 export class AppComponent implements OnInit {
-  title = 'SamaniCrm';
-  constructor(private service: AccountServiceProxy) {}
+  constructor(
+    router: Router,
+    public mainSpinnerService: MainSpinnerService,
+  ) {
+    router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        mainSpinnerService.showLoading = true;
+      }
+      if (event instanceof NavigationCancel || event instanceof NavigationError) {
+        mainSpinnerService.showLoading = false;
+      }
+      if (event instanceof NavigationEnd) {
+        mainSpinnerService.showLoading = false;
+      }
+    });
+  }
+  
   ngOnInit(): void {
-    this.service
-      .login({
-        Password: '123qwe1',
-        UserName: 'samani',
-      })
-      .subscribe({
-        next: (r) => {
-          console.log(r);
-        },
-        error:er=>{
-          console.log(er.message)
-        }
-      });
+  
   }
 }

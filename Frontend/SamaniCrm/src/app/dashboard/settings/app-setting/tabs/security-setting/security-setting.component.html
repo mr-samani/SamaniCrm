@@ -1,0 +1,54 @@
+<div *ngIf="settings">
+  <switch [(ngModel)]="settings.requireCaptchaOnLogin" name="requireCaptchaOnLogin">
+    {{ 'RequireCaptchaOnLogin' | translate }}
+  </switch>
+  <!-- ---------------------------------------------------- -->
+
+  <h5>
+    {{ 'TwoFactorAuthentication' | translate }}
+  </h5>
+  <switch
+    [(ngModel)]="settings.twoFactorAuthentication.enable"
+    name="enableTwoFactorAuth"
+    (ngModelChange)="onChangeTwoFactor()">
+    {{ 'Enable' | translate }}
+  </switch>
+  <div class="mx-3" *ngIf="settings.twoFactorAuthentication.enable">
+    <switch [(ngModel)]="settings.twoFactorAuthentication.viaEmail" name="viaEmail">
+      {{ 'TwoFactorAuthenticationViaEmail' | translate }}
+    </switch>
+    <switch [(ngModel)]="settings.twoFactorAuthentication.viaSMS" name="viaSMS">
+      {{ 'TwoFactorAuthenticationViaSMS' | translate }}
+    </switch>
+  </div>
+
+  <!-- ---------------------------------------------------- -->
+
+  <h5>
+    {{ 'PasswordComplexity' | translate }}
+  </h5>
+  <mat-form-field>
+    <mat-label>{{ 'MinLength' | translate }}</mat-label>
+    <input
+      type="number"
+      matInput
+      [(ngModel)]="settings.passwordComplexity.minLength"
+      name="minPass"
+      required
+      min="3"
+      max="50" />
+  </mat-form-field>
+
+  <switch [(ngModel)]="settings.passwordComplexity.requireDigit" name="requireDigit">
+    {{ 'PasswordComplexityRequireDigit' | translate }}
+  </switch>
+  <switch [(ngModel)]="settings.passwordComplexity.requireLowercase" name="requireLowercase">
+    {{ 'PasswordComplexityRequireLowercaset' | translate }}
+  </switch>
+  <switch [(ngModel)]="settings.passwordComplexity.requireUppercase" name="requireUppercase">
+    {{ 'PasswordComplexityRequireUppercase' | translate }}
+  </switch>
+  <switch [(ngModel)]="settings.passwordComplexity.requireSpecialChar" name="requireSpecialChar">
+    {{ 'PasswordComplexityRequireSpecialChar' | translate }}
+  </switch>
+</div>

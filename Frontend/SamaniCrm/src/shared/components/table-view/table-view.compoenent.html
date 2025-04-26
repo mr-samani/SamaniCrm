@@ -1,0 +1,65 @@
+<div class="table-responsive">
+  <div class="table-mrs">
+    <div class="thead-mrs">
+      <div class="tr-mrs">
+        <div
+          class="th-mrs"
+          *ngFor="let item of fields"
+          [style.max-width.px]="item.width"
+          [style.min-width.px]="item.width">
+          {{item.title}}
+        </div>
+        <div class="th-mrs operations" *ngIf="operations">{{'Operation'|translate}}</div>
+      </div>
+    </div>
+    <div class="tbody-mrs">
+      <div class="tr-mrs" *ngFor="let item of _list">
+        <div
+          class="td-mrs"
+          *ngFor="let f of fields"
+          vAlign="middle"
+          [style.max-width.px]="f.width"
+          [style.min-width.px]="f.width">
+          <div class="cel">
+            <span class="cell-title">{{f.title}}</span>
+            <ng-container [ngSwitch]="f.type">
+              <ng-container *ngSwitchCase="'avatar'">
+                <img *ngIf="item[f.column]" [src]="item[f.column]" class="img-circle" />
+                <img *ngIf="!item[f.column]" src="/assets/images/avatar.jpg" class="img-circle" />
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'image'">
+                <img *ngIf="item[f.column]" [src]="item[f.column]" class="img-cover" />
+                <img *ngIf="!item[f.column]" src="/assets/images/default-image.png" class="img-cover" />
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'date'">
+                <span>{{item[f.column]|luxonFormat:'D'}}</span>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'time'">
+                <span>{{item[f.column]|luxonFormat:'HH:ss'}}</span>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'dateTime'">
+                <span class="text-wrap">{{item[f.column]|luxonFormat:'F'}}</span>
+              </ng-container>
+
+              <ng-container *ngSwitchDefault>{{item[f.column]}}</ng-container>
+            </ng-container>
+          </div>
+        </div>
+        <div class="td-mrs operations" *ngIf="operations" vAlign="middle">
+          <div class="cel">
+            <span class="cell-title">Operation:</span>
+            <ng-container [ngTemplateOutlet]="operations" [ngTemplateOutletContext]="{$implicit: item}"></ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading-container" *ngIf="_loading">
+    <div class="loading">{{'Loading...'|translate}}</div>
+  </div>
+</div>

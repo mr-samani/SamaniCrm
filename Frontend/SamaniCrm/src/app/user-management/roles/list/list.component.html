@@ -1,0 +1,13 @@
+<table-view [list]="list" [fields]="fields" [operations]="operations" [loading]="loading"></table-view>
+
+<ng-template #operations let-item>
+  <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
+    <i class="fa fa-ellipsis-v"></i>
+  </button>
+  <mat-menu #menu="matMenu">
+    <a mat-menu-item routerLink="/dashboard/roles/permissions/{{ item.name }}">
+      <i class="fa fa-check-list mx-1"></i>
+      <span>{{ l('Permissions') }}</span>
+    </a>
+  </mat-menu>
+</ng-template>

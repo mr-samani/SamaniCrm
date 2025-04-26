@@ -1,0 +1,6 @@
+<div *ngIf="settings">
+  <mat-form-field>
+    <mat-label>{{ 'SiteName' | translate }}</mat-label>
+    <input type="text" matInput [(ngModel)]="settings.siteName" name="siteName" required />
+  </mat-form-field>
+</div>

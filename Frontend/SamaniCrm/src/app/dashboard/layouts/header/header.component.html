@@ -1,0 +1,108 @@
+<nav
+  class="navbar navbar-expand-lg fixed-top"
+  [class.navbar-dark]="AppConst.isDarkMode"
+  [class.navbar-light]="!AppConst.isDarkMode"
+  [class.bg-dark]="AppConst.isDarkMode"
+  [class.bg-light]="!AppConst.isDarkMode">
+  <div class="container-fluid">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <div class="user-block navbar-brand">
+        <img *ngIf="user?.avatar" [src]="user?.avatar" alt="avatar" />
+        <img *ngIf="!user?.avatar" src="/assets/images/avatar.jpg" alt="avatar" />
+        <span>{{ user?.username }}</span>
+      </div>
+
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/dashboard']" routerLinkActive="active">
+            <i class="fa fa-desktop"></i>
+            {{ 'Dashboard' | translate }}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/dashboard/setting']" routerLinkActive="active">
+            <i class="fa fa-gear"></i>
+            {{ 'Settings' | translate }}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="openFileManager()">
+            <i class="fa fa-folder-image"></i>
+            {{ 'Media' | translate }}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/dashboard/content']" routerLinkActive="active">
+            <i class="fa fa-file-contract"></i>
+            {{ 'Content' | translate }}
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            id="productDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <i class="fa fa-tag"></i>
+            {{ 'Products' | translate }}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="productDropdown">
+            <li>
+              <a class="dropdown-item" [routerLink]="['/dashboard/product/categories']" routerLinkActive="active">
+                {{ 'Categories' | translate }}
+              </a>
+            </li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+      </ul>
+      <div class="flex-fill"></div>
+      <!-- darkmode -->
+      <label class="switch">
+        <input
+          class="switch__input"
+          type="checkbox"
+          [ngModel]="AppConst.isDarkMode"
+          (change)="colorSchemaService.toggleMode()" />
+        <span class="switch__background">
+          <span class="switch__toggle">
+            <span class="switch__moon"></span>
+          </span>
+          <span class="switch__stars"></span>
+          <span class="switch__clouds"></span>
+        </span>
+      </label>
+      <!-- //darkmode -->
+      <!-- language -->
+      <button mat-icon-button [matMenuTriggerFor]="langMnu" class="pt-2">
+        <!-- <i class="flag" [ngClass]="currentLang"></i> -->
+        <img [src]="backEndUrl + '/storage/flags/' + currentLang + '.png'" />
+      </button>
+      <mat-menu #langMnu="matMenu">
+        <button mat-menu-item *ngFor="let lang of languages" (click)="changeLanguage(lang.code)" class="language-menu">
+          <div class="d-flex align-items-center g-5">
+            <!-- <i class="flag" [ngClass]="lang.code"></i> -->
+            <img [src]="lang.image" />
+            <span>{{ lang.title }}</span>
+          </div>
+        </button>
+      </mat-menu>
+      <!-- //language -->
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,44 @@
+<div cdkDrag cdkDragRootElement=".cdk-overlay-pane" mat-dialog-title>
+  <h5 cdkDragHandle class="title">
+    {{ 'SelectImage' | translate }}
+  </h5>
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<mat-dialog-content>
+  <div class="crop-container">
+    <image-cropper
+      [imageChangedEvent]="imageChangedEvent"
+      [maintainAspectRatio]="false"
+      (imageCropped)="imageCroppedFile($event)"
+      [imageURL]="previousFileAddress"
+      [resizeToWidth]="maximumWidth"
+      [resizeToHeight]="maximumHeight"
+      [onlyScaleDown]="true"
+      [format]="format"
+      [imageQuality]="60"
+      [allowMoveImage]="true"></image-cropper>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <mat-progress-bar [value]="tusUpoadService.progress" color="primary"></mat-progress-bar>
+  <div class="d-flex align-items-center justify-content-between w-100">
+    <label for="cropperFileSelector" class="mat-raised-button mat-button-base mat-default btn-fileUpload">
+      {{ 'SelectFile' | translate }}
+      <input
+        type="file"
+        name="cropperFileSelector"
+        id="cropperFileSelector"
+        (change)="fileChangeEvent($event)"
+        [accept]="acceptedInputFile" />
+    </label>
+    <div class="d-flex align-items-center">
+      <button mat-raised-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
+      <mat-spinner color="default" diameter="25" *ngIf="tusUpoadService.uploading"></mat-spinner>
+      <button mat-raised-button (click)="uploadImage()" color="default" [disabled]="tusUpoadService.uploading">
+        {{ 'Ok' | translate }}
+      </button>
+    </div>
+  </div>
+</mat-dialog-actions>

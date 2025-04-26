@@ -1,0 +1,26 @@
+:host {
+  display: contents;
+}
+
+form {
+  width: 100%;
+  display: block;
+  margin: 20px 0;
+  padding: 30px 10px;
+  border: 1px #89898940 solid;
+  border-radius: 5px;
+  box-shadow: 0 0 16px #1c1c1cdb;
+  animation: showForm 350ms cubic-bezier(0.4, -0.32, 0.4, 1.24);
+}
+
+@keyframes showForm {
+  from {
+    margin-top: -100px;
+    opacity: 0;
+  }
+
+  to {
+    margin-top: 0px;
+    opacity: 1;
+  }
+}

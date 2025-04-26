@@ -1,0 +1,14 @@
+<button mat-raised-button color="primary" (click)="toggleFilter()">
+  <i class="fa fa-filter mx-1"></i>
+  <span>{{ 'Filter' | translate }}</span>
+</button>
+<form [formGroup]="form" #formContent *ngIf="showFilter">
+  <ng-content #filterContent></ng-content>
+
+  <div class="d-flex align-items-center justify-content-end gap-2">
+    <button mat-stroked-button color="primary" (click)="onReload()">
+      <i class="fa fa-refresh mx-1"></i>
+      <span>{{ 'Reload' | translate }}</span>
+    </button>
+  </div>
+</form>

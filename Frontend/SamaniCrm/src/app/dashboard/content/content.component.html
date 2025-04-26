@@ -1,0 +1,56 @@
+<div class="d-flex">
+  <div class="menu-list">
+    <a class="menu-item" routerLink="/dashboard/content/pages" routerLinkActive="active">
+      <div class="icon">
+        <i class="fad fa-file-invoice"></i>
+      </div>
+      <div class="content">
+        <div class="title">{{ 'Pages' | translate }}</div>
+        <div class="description">{{ 'PagesDescription' | translate }}</div>
+      </div>
+    </a>
+
+    <a class="menu-item" routerLink="/dashboard/content/articles" routerLinkActive="active">
+      <div class="icon">
+        <i class="fad fa-file-signature"></i>
+      </div>
+      <div class="content">
+        <div class="title">{{ 'Articles' | translate }}</div>
+        <div class="description">{{ 'ArticleDescription' | translate }}</div>
+      </div>
+    </a>
+
+    <a class="menu-item" routerLink="/dashboard/content/blogs" routerLinkActive="active">
+      <div class="icon">
+        <i class="fad fa-blog"></i>
+      </div>
+      <div class="content">
+        <div class="title">{{ 'Blogs' | translate }}</div>
+        <div class="description">{{ 'BlogsDescription' | translate }}</div>
+      </div>
+    </a>
+
+    <a class="menu-item" routerLink="/dashboard/content/news" routerLinkActive="active">
+      <div class="icon">
+        <i class="fad fa-newspaper"></i>
+      </div>
+      <div class="content">
+        <div class="title">{{ 'News' | translate }}</div>
+        <div class="description">{{ 'NewsDescription' | translate }}</div>
+      </div>
+    </a>
+
+    <a class="menu-item" routerLink="/dashboard/content/aboutus" routerLinkActive="active">
+      <div class="icon">
+        <i class="fad fa-memo-circle-info"></i>
+      </div>
+      <div class="content">
+        <div class="title">{{ 'AboutUs' | translate }}</div>
+        <div class="description">{{ 'AboutUsDescription' | translate }}</div>
+      </div>
+    </a>
+  </div>
+  <div class="flex-fill">
+    <router-outlet></router-outlet>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+body {
+  background-image: url('../../../assets/images/dashboard/background/1.png');
+}
+
+app-dashboard {
+  background: #2a2a2a5c;
+  display: block;
+  height: 100%;
+  padding: 1px;
+}
+
+.dashboard-container {
+  margin-top: 66px;
+}
+
+.dashboard-content {
+  background-color: var(--bs-body-bg);
+  border: 1px #b9b9b9 solid;
+  border-radius: 4px;
+  margin: 10px;
+  overflow: hidden;
+  padding: 15px 10px;
+}

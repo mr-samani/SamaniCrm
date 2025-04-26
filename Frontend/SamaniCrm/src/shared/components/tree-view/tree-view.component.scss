@@ -1,0 +1,131 @@
+.tree {
+  ul {
+    list-style: none;
+
+    li.node {
+      background-image: url('../../../assets/images/line.png');
+      background-position: right -5px top 0;
+      background-repeat: repeat-y;
+
+      .inner {
+        display: flex;
+        align-items: center;
+      }
+
+      &.last {
+        background-image: none;
+      }
+
+      .tree-icon,
+      .icon-file,
+      .icon-folder,
+      .icon-folder-open,
+      .check-all,
+      .un-check-all,
+      .checkbox {
+        background-image: url('../../../assets/images/32px.png');
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+      }
+
+      .tree-icon {
+        background-position: -100px -32px;
+        cursor: pointer;
+
+        &.isOpen {
+          background-position: -132px -32px;
+        }
+
+        &.no-child {
+          background-position: -68px -32px;
+        }
+      }
+
+      .icon-folder {
+        background-position: -165px -67px;
+      }
+
+      .icon-folder-open {
+        background-position: -129px -67px;
+      }
+
+      .icon-file {
+        background-position: -100px -67px;
+      }
+
+      .check-all {
+        background-position: -229px -35px;
+      }
+
+      .un-check-all {
+        background-position: -165px -35px;
+      }
+
+      .checkbox-container {
+        display: flex;
+        align-items: center;
+      }
+
+      .checkbox {
+        background-position: -229px -67px;
+      }
+
+      .checkbox.checked {
+        background-position: -198px -67px;
+      }
+
+      .checkbox.indeterminate {
+        background-position: -261px -67px;
+      }
+
+      .checkbox.squre {
+        background-position: -261px -98px;
+      }
+    }
+  }
+}
+
+.close-child .tree {
+  display: none;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+/*-------------------LTR----------------------------*/
+
+::ng-deep body[dir='ltr'],
+::ng-deep html[dir='ltr'] {
+  .tree {
+    ul {
+      li.node {
+        background-position: left -4px top 0 !important;
+
+        .tree-icon {
+          background-position: -100px 0px !important;
+
+          &.open {
+            background-position: -132px 0px !important;
+          }
+
+          &.no-child {
+            background-position: -68px 0px !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+.textbox-capacity {
+  width: 80px;
+  margin: 0px 10px;
+  padding: 0px 10px !important;
+}
+
+.text-bold {
+  font-weight: bold;
+}

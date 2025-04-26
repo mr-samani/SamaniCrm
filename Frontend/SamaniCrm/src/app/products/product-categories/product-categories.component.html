@@ -1,0 +1,9 @@
+<mat-progress-bar *ngIf="loading" class="my-5" [mode]="'indeterminate'"></mat-progress-bar>
+<div cdkDropListGroup *ngIf="!loading">
+  <app-tree-category [list]="list"></app-tree-category>
+</div>
+<div class="d-flex align-items-end justify-content-end" *ngIf="!loading">
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="isSaving">
+    {{ 'Save' | translate }}
+  </button>
+</div>

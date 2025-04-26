@@ -1,0 +1,48 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title" *ngIf="!isUpdate">{{ 'CreateMenu' | translate }}</span>
+  <span cdkDragHandle class="title" *ngIf="isUpdate">{{ 'EditMenu' | translate }}</span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+  <div class="m-auto py-5" *ngIf="loading">
+    <mat-spinner color="primary" diameter="25"></mat-spinner>
+  </div>
+  <form [formGroup]="form" *ngIf="!loading">
+    <div class="row">
+      <mat-form-field class="col-md-6">
+        <mat-label>{{ 'Url' | translate }}</mat-label>
+        <input matInput formControlName="url" />
+      </mat-form-field>
+      <mat-form-field class="col-md-6">
+        <mat-label>{{ 'Icon' | translate }}</mat-label>
+        <input matInput formControlName="icon" />
+      </mat-form-field>
+    </div>
+
+    <tab-group>
+      <tab-item
+        [title]="translation.get('lang')?.value.toUpperCase()"
+        formArrayName="translations"
+        *ngFor="let translation of translationsArray.controls; let i = index">
+        <div [formGroupName]="i" class="row">
+          <mat-form-field class="col-sm-12">
+            <mat-label>{{ 'Title' | translate }}</mat-label>
+            <input matInput formControlName="title" />
+          </mat-form-field>
+        </div>
+      </tab-item>
+    </tab-group>
+  </form>
+
+  <!-- <pre dir="ltr" style="text-align: left;">{{form.value|json}}</pre> -->
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>{{ 'Cancel' | translate }}</button>
+  <button mat-raised-button (click)="save()" cdkFocusInitial [disabled]="loading || saving">
+    <mat-spinner *ngIf="saving" color="primary" diameter="25"></mat-spinner>
+    <span>{{ 'Save' | translate }}</span>
+  </button>
+</mat-dialog-actions>

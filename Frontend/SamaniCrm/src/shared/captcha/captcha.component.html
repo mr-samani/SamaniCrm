@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col-sm-6">
+    <label>{{ 'captchaCode' | translate }}</label>
+    <input type="text" [(ngModel)]="captchaCode" (change)="onChange()" [placeholder]="'captchaCode' | translate" />
+  </div>
+  <div class="col-sm-6 d-flex align-items-end">
+    <img [src]="image" alt="captcha" *ngIf="!loading" />
+    <mat-spinner [diameter]="25" *ngIf="loading"></mat-spinner>
+    <button mat-icon-button (click)="reloadCaptcha()" [disabled]="loading" type="button">
+      <i class="fa fa-refresh"></i>
+    </button>
+  </div>
+</div>

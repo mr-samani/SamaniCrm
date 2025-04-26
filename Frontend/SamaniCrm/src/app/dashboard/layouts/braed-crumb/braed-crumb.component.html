@@ -1,0 +1,11 @@
+<div class="bread-crumb">
+  <a [routerLink]="['/dashboard']" routerLinkActive="active">
+    <i class="fa fa-home"></i>
+    <span>{{ 'Dashboard' | translate }}</span>
+  </a>
+  @for (item of breadcrumb.list; track item) {
+    <a [routerLink]="[item.url]" routerLinkActive="active">
+      <span>{{ item.name }}</span>
+    </a>
+  }
+</div>

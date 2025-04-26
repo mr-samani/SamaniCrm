@@ -1,0 +1,11 @@
+<div class="folder-address">
+  <div class="parent-path">
+    <i class="fa fa-computer"></i>
+    <ng-container *ngFor="let p of breadcrumb">
+      <i class="fa fa-chevron-right"></i>
+      <span (click)="onSelect(p)" class="item">
+        {{ p.filename }}
+      </span>
+    </ng-container>
+  </div>
+</div>

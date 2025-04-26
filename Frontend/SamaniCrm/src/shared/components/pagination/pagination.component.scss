@@ -1,0 +1,24 @@
+.pagination {
+  user-select: none;
+  margin: 15px 0;
+  .page-item.disabled {
+    cursor: not-allowed;
+  }
+}
+
+::ng-deep {
+  body[dir='rtl'],
+  html[dir='rtl'] {
+    .pagination {
+      .page-item .fa {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .pagination .page-item.page-num {
+    display: none;
+  }
+}

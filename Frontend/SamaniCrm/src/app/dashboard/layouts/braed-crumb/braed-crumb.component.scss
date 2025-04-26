@@ -1,0 +1,23 @@
+.bread-crumb {
+  background: #ffffff2e;
+  margin: 0 12px;
+  padding: 5px 15px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  a {
+    transition: all 500ms;
+
+    &:not(:first-child):before {
+      content: '-';
+      margin: 0 2px;
+      color: #fff !important;
+    }
+
+    &:hover {
+      color: rgb(115, 0, 255);
+    }
+  }
+}

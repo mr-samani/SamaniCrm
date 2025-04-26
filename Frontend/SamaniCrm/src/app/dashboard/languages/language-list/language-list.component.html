@@ -1,0 +1,13 @@
+<table-view [list]="list" [fields]="fields" [operations]="operations" [loading]="loading"></table-view>
+
+<ng-template #operations let-item>
+  <mat-spinner [diameter]="20" *ngIf="item.loading"></mat-spinner>
+  <mat-slide-toggle
+    [(ngModel)]="item.isActive"
+    *ngIf="!item.loading"
+    color="primary"
+    (toggleChange)="changeActive(item)">
+    <span *ngIf="item.isActive">{{ 'active' | translate }}</span>
+    <span *ngIf="!item.isActive">{{ 'deActive' | translate }}</span>
+  </mat-slide-toggle>
+</ng-template>

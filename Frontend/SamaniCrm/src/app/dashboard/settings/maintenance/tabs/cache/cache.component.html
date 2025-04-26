@@ -1,0 +1,13 @@
+<div class="list-container">
+  @for (item of cacheKeys; track item.key) {
+    <div class="list-item">
+      <mat-spinner diameter="20" *ngIf="item.loading" color="primary"></mat-spinner>
+      <span>{{ item.title }}</span>
+      <span class="flex-fill"></span>
+      <button mat-stroked-button color="primary" (click)="clear(item)">
+        {{ 'Clear' | translate }}
+      </button>
+    </div>
+  }
+</div>
+<mat-progress-bar *ngIf="loading" class="my-5" [mode]="'indeterminate'"></mat-progress-bar>

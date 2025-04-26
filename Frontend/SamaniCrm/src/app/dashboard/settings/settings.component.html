@@ -1,0 +1,38 @@
+<div class="accordion" id="accordionExample">
+  <div class="accordion-item" *ngFor="let item of menuService.menuList; let i = index">
+    <div class="accordion-header" [id]="'mnu-' + i">
+      <button
+        class="accordion-button"
+        type="button"
+        data-bs-toggle="collapse"
+        [attr.data-bs-target]="'#collapse' + i"
+        aria-expanded="true"
+        [attr.aria-controls]="'#collapse' + i">
+        {{ item.title }}
+      </button>
+    </div>
+    <div
+      [id]="'collapse' + i"
+      class="accordion-collapse collapse show"
+      [attr.aria-labelledby]="'heading' + i"
+      data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <div class="menu-container">
+          <div
+            class="menu-item"
+            *ngFor="let menu of item.children"
+            [routerLink]="[menu.route]"
+            routerLinkActive="active">
+            <div class="icon">
+              <i [class]="menu.icon"></i>
+            </div>
+            <div class="menu-block">
+              <div class="title">{{ menu.title }}</div>
+              <small>{{ menu.description }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title">{{ 'CreateFolder' | translate }}</span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>{{ 'Title' | translate }}</mat-label>
+    <input matInput [(ngModel)]="folderName" name="foldername" required />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>{{ 'Cancel' | translate }}</button>
+  <button mat-raised-button (click)="createFolder()" cdkFocusInitial [disabled]="loading">
+    <mat-spinner *ngIf="loading" color="primary" diameter="25"></mat-spinner>
+    <span>{{ 'Create' | translate }}</span>
+  </button>
+</mat-dialog-actions>

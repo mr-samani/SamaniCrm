@@ -1,0 +1,17 @@
+.pane {
+  padding: 30px 15px;
+  position: relative;
+
+  &:before {
+    content: ' ';
+    border: 2px solid var(--oc-tab-border);
+    position: absolute;
+    height: 100%;
+    top: -2px;
+    left: -20px;
+    right: -20px;
+    border-radius: 8px;
+    z-index: -1;
+    pointer-events: none;
+  }
+}
