@@ -1,0 +1,18 @@
+{{>licenseInfo}}
+/*Created with custom template*/
+{{#models}}
+{{#model}}
+export class {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{
+{{#vars}}
+  {{#description}}
+  /**
+   * {{{description}}}
+   */
+  {{/description}}
+  {{#isReadOnly}}
+ readonly {{/isReadOnly}}{{name}}{{^required}}?{{/required}}{{#required}}{{^nullable}}!{{/nullable}}{{/required}}: {{{datatype}}};
+  
+{{/vars}}
+}
+{{/model}}
+{{/models}}

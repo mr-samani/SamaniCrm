@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.Behaviors;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Queries.Role;
@@ -153,6 +154,11 @@ public static class ServiceCollectionExtensions
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "SamaniCrm API", Version = "v1" });
+            c.AddServer(new OpenApiServer
+            {
+                Url = "https://localhost:44342",
+                Description = "localhost"
+            });
             c.AddServer(new OpenApiServer
             {
                 Url = "https://api.samani-crm.com", 

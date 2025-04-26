@@ -24,6 +24,9 @@ export class AppComponent implements OnInit {
         next: (r) => {
           console.log(r);
         },
+        error:er=>{
+          console.log(er.message)
+        }
       });
   }
 }
