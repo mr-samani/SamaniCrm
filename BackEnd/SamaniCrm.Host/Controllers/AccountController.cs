@@ -9,7 +9,6 @@ using SamaniCrm.Host.Models;
 using MediatR;
 using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.Exceptions;
-using SamaniCrm.Application.Users.Queries;
 using SamaniCrm.Application.Common.DTOs;
 
 namespace SamaniCrm.Host.Controllers

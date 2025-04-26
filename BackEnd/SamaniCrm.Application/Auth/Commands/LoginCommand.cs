@@ -7,7 +7,7 @@ using MediatR;
 
 namespace SamaniCrm.Application.Auth.Commands
 {
-    public record LoginCommand(string Username,string Password):IRequest<LoginResult>;
+    public record LoginCommand(string UserName,string Password):IRequest<LoginResult>;
 
     
 }

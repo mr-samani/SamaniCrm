@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace SamaniCrm.Infrastructure.Identity
 {
-    public class ApplicationRole : IdentityRole
+    public class ApplicationRole : IdentityRole<Guid>
     {
         public ApplicationRole() : base()
         {

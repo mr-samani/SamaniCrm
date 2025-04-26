@@ -4,7 +4,7 @@
     {
         public required string Id { get; set; }
         [Sortable]
-        public string? Username { get; set; }
+        public string? UserName { get; set; }
         [Sortable]
         public string? FirstName { get; set; }
         [Sortable]

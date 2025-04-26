@@ -10,19 +10,20 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.Identity;
 
-namespace SamaniCrm.Application.Common.Services
+namespace SamaniCrm.Infrastructure.Services
 {
-    public class AuthService : IAuthService
+    public class TokenGenerator : ITokenGenerator
     {
         private readonly IConfiguration _configuration;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
 
-        public AuthService(IConfiguration config, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
+        public TokenGenerator(IConfiguration config, UserManager<ApplicationUser> userManager, ApplicationDbContext context, string expiryMinutes)
         {
             _configuration = config;
             _userManager = userManager;
@@ -30,25 +31,26 @@ namespace SamaniCrm.Application.Common.Services
         }
 
 
-        public string GenerateAccessToken(ApplicationUser user)
+        public string GenerateAccessToken(Guid userId, string userName, IList<string> roles)
         {
             var claims = new List<Claim>
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-            new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName??""),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email ?? "")
-        };
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
+                new Claim(JwtRegisteredClaimNames.UniqueName, userName),
+            };
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? ""));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? ""));
+            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
             var expiration = DateTime.UtcNow.AddHours(1);
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: expiration,
-                signingCredentials: creds
+                expires: DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:"])),
+                signingCredentials: signingCredentials
             );
             var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
             return accessToken;
@@ -58,7 +60,7 @@ namespace SamaniCrm.Application.Common.Services
 
 
 
-        public async Task<string> GenerateRefreshToken(ApplicationUser user, string accessToken)
+        public async Task<string> GenerateRefreshToken(Guid userId, string accessToken)
         {
             var newRefreshToken = new RefreshToken
             {
@@ -67,7 +69,7 @@ namespace SamaniCrm.Application.Common.Services
                 Expiration = DateTime.UtcNow.AddDays(7),
                 RefreshTokenValue = Guid.NewGuid().ToString("N"),
                 Used = false,
-                UserId = user.Id
+                UserId = userId
             };
             _context.Add(newRefreshToken);
             await _context.SaveChangesAsync();

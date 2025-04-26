@@ -15,10 +15,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SamaniCrm.Application.Common.Behaviors;
-using SamaniCrm.Application.Common.Services;
-using SamaniCrm.Application.Users.Queries;
+using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.Identity;
+using SamaniCrm.Infrastructure.Services;
 
 namespace SamaniCrm.Infrastructure.Extensions;
 public static class ServiceCollectionExtensions
@@ -33,7 +33,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddMediatR(cfg =>
         {
-            cfg.RegisterServicesFromAssembly(typeof(UserListQuery).Assembly);
+           // cfg.RegisterServicesFromAssembly(typeof(UserListQuery).Assembly);
         });
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
@@ -48,7 +48,7 @@ public static class ServiceCollectionExtensions
     /// <returns></returns>
     public static IServiceCollection AddFluentValidation(this IServiceCollection services)
     {
-        services.AddValidatorsFromAssemblyContaining<UserListQueryValidator>();
+     //   services.AddValidatorsFromAssemblyContaining<UserListQueryValidator>();
         return services;
     }
 
@@ -186,7 +186,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCustomServices(this IServiceCollection services)
     {
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
-        services.AddTransient<IAuthService, AuthService>();
+        services.AddTransient<ITokenGenerator, TokenGenerator>();
+        services.AddTransient<IIdentityService, IdentityService>();
         services.AddSingleton(TimeProvider.System);
         return services;
     }

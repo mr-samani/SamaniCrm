@@ -6,6 +6,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
+using FluentValidation.Validators;
 
 namespace SamaniCrm.Host.Middlewares;
 
@@ -34,7 +35,7 @@ public class ApiExceptionHandlingMiddleware
         {
             await _next(context);
         }
-        catch (ValidationException vex)
+        catch (FluentValidation.ValidationException vex)
         {
             await HandleValidationExceptionAsync(context, vex);
         }
@@ -44,7 +45,7 @@ public class ApiExceptionHandlingMiddleware
         }
     }
 
-    private async Task HandleValidationExceptionAsync(HttpContext context, ValidationException vex)
+    private async Task HandleValidationExceptionAsync(HttpContext context, FluentValidation.ValidationException vex)
     {
         context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
         context.Response.ContentType = "application/json; charset=utf-8";

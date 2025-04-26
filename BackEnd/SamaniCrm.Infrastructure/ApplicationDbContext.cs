@@ -11,7 +11,7 @@ using RefreshToken = SamaniCrm.Domain.Entities.RefreshToken;
 
 namespace SamaniCrm.Infrastructure
 {
-    public class ApplicationDbContext:IdentityDbContext<ApplicationUser,ApplicationRole,string>
+    public class ApplicationDbContext:IdentityDbContext<ApplicationUser,ApplicationRole,Guid>
     {
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }

@@ -8,6 +8,6 @@ namespace SamaniCrm.Application.Common.Exceptions
 {
     public class InvalidLoginException : Exception
     {
-        public InvalidLoginException() : base("Invalid Username or Password!") { }
+        public InvalidLoginException() : base("Invalid UserName or Password!") { }
     }
 }

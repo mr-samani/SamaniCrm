@@ -8,13 +8,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SamaniCrm.Domain\SamaniCrm.Domain.csproj" />
-    <ProjectReference Include="..\SamaniCrm.Infrastructure\SamaniCrm.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Auth\Events\" />
-    <Folder Include="Users\Commands\" />
-    <Folder Include="Users\Events\" />
+    <Folder Include="Auth\Queries\" />
+    <Folder Include="Common\Services\" />
   </ItemGroup>
 
   <ItemGroup>

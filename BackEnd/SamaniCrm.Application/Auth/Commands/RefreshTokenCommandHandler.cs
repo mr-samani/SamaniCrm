@@ -4,76 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
-using SamaniCrm.Application.Common.Services;
-using SamaniCrm.Domain.Entities;
-using SamaniCrm.Infrastructure;
-using SamaniCrm.Infrastructure.Identity;
+using SamaniCrm.Application.Common.Interfaces;
 
 namespace SamaniCrm.Application.Auth.Commands
 {
     public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, TokenResponseDto>
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IAuthService _authService;
+        private readonly ITokenGenerator _tokenGenerator;
+        private readonly IIdentityService   _identityService;
 
-        public RefreshTokenCommandHandler(ApplicationDbContext context, IAuthService authService)
+        public RefreshTokenCommandHandler(ITokenGenerator tokenGenerator, IIdentityService identityService)
         {
-            _context = context;
-            _authService = authService;
+            _tokenGenerator = tokenGenerator;
+            _identityService = identityService;
         }
 
         public async Task<TokenResponseDto> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
-            var refreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(q => q.RefreshTokenValue == request.RefreshToken);
-
-            // Refresh token no existe, expiró o fue revocado manualmente
-            // (Pensando que el usuario puede dar click en "Cerrar Sesión en todos lados" o similar)
-            if (refreshToken is null ||
-                refreshToken.Active == false ||
-                refreshToken.Expiration <= DateTime.UtcNow)
-            {
+            var result = await _identityService.GetUserIdFromRefreshToken(request.RefreshToken);
+            if(result.Equals(Guid.Empty))
                 throw new ForbiddenAccessException();
-            }
 
-            // Se está intentando usar un Refresh Token que ya fue usado anteriormente,
-            // puede significar que este refresh token fue robado.
-            if (refreshToken.Used)
-            {
-                // _logger.LogWarning("El refresh token del {UserId} ya fue usado. RT={RefreshToken}", refreshToken.UserId, refreshToken.RefreshTokenValue);
-
-                var refreshTokens = await _context.RefreshTokens
-                    .Where(q => q.Active && q.Used == false && q.UserId == refreshToken.UserId)
-                    .ToListAsync();
-
-                foreach (var rt in refreshTokens)
-                {
-                    rt.Used = true;
-                    rt.Active = false;
-                }
-
-                await _context.SaveChangesAsync();
-
-                throw new ForbiddenAccessException();
-            }
-
-            // TODO: Podríamos validar que el Access Token sí corresponde al mismo usuario
-
-            refreshToken.Used = true;
-
-            var user = await _context.Users.FindAsync(refreshToken.UserId);
-
-            if (user is null)
-            {
-                throw new ForbiddenAccessException();
-            }
-
-            var accessToken = _authService.GenerateAccessToken(user);
-            var newRefreshToken = await _authService.GenerateRefreshToken(user, accessToken);
+            var user= await _identityService.GetUserDetailsAsync(result);
+            var accessToken = _tokenGenerator.GenerateAccessToken(user.userId, user.UserName, user.roles);
+            var newRefreshToken = await _tokenGenerator.GenerateRefreshToken(user.userId, accessToken);
 
             return new TokenResponseDto
             {
