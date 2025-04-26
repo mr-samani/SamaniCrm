@@ -118,7 +118,7 @@ public static class ServiceCollectionExtensions
         {
             options.AddPolicy("DefaultCors", policy =>
             {
-                policy.WithOrigins("http://example.com", "https://localhost:44342")
+                policy.WithOrigins("http://example.com", "https://localhost:44342", "http://localhost:5753")
                       .AllowAnyHeader()
                       .AllowAnyMethod();
             });

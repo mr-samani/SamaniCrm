@@ -6,19 +6,24 @@ import { AccountServiceProxy } from '../shared/service-proxies';
   selector: 'app-root',
   imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
+  providers:[
+    AccountServiceProxy
+  ]
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'SamaniCrm';
-  constructor(
-    private service:AccountServiceProxy
-  ){
-
-  }
+  constructor(private service: AccountServiceProxy) {}
   ngOnInit(): void {
-    const input=logincomm
-   this.service.login(input)
+    this.service
+      .login({
+        Password: '123qwe1',
+        UserName: 'samani',
+      })
+      .subscribe({
+        next: (r) => {
+          console.log(r);
+        },
+      });
   }
-
- 
 }
