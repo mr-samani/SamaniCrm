@@ -15,6 +15,10 @@ namespace SamaniCrm.Application.Auth.Commands
     {
         public required string UserName { get; set; }
         public required string Password { get; set; }
+
+
+        public string CaptchaKey { get; set; }
+        public string CaptchaText { get; set; }
     }
 
 

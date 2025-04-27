@@ -3,6 +3,7 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 import { AccountServiceProxy } from './api/account.service';
+import { CaptchaServiceProxy } from './api/captcha.service';
 import { RoleServiceProxy } from './api/role.service';
 import { UserServiceProxy } from './api/user.service';
 import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
@@ -13,6 +14,7 @@ import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
   exports:      [],
   providers: [
     AccountServiceProxy,
+    CaptchaServiceProxy,
     RoleServiceProxy,
     UserServiceProxy,
     WeatherForecastServiceProxy ]

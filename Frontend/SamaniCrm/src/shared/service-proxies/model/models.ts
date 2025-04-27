@@ -1,5 +1,6 @@
 export * from './api-error';
 export * from './assign-users-role-command';
+export * from './captcha-dto';
 export * from './create-user-command';
 export * from './edit-user-profile-command';
 export * from './get-user-query';

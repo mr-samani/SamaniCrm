@@ -18,21 +18,33 @@ namespace SamaniCrm.Application.Auth.Commands
         private readonly IMediator _mediator;
         private readonly ITokenGenerator _tokenGenerator;
         private readonly IIdentityService _identityService;
-
+        private readonly ICaptchaStore _captchaStore;
         public LoginCommandHandler(
                 IMediator mediator,
                 ITokenGenerator tokenGenerator,
-                IIdentityService identityService)
+                IIdentityService identityService,
+                ICaptchaStore captchaStore)
         {
             _mediator = mediator;
             _tokenGenerator = tokenGenerator;
             _identityService = identityService;
+            _captchaStore = captchaStore;
         }
 
 
         public async Task<LoginResult> Handle(LoginCommand request, CancellationToken cancellationToken)
-        { 
-          var result= await _identityService.SigninUserAsync(request.UserName, request.Password);
+        {
+            var isCaptchaValid = _captchaStore.ValidateCaptcha(request.CaptchaKey, request.CaptchaText);
+            if (!isCaptchaValid)
+            {
+                throw new ValidationException();// ["کپچا نامعتبر است یا منقضی شده است."]);
+            }
+            // کپچا مصرف شد - حذفش کنیم
+            _captchaStore.RemoveCaptcha(request.CaptchaKey);
+
+
+
+            var result = await _identityService.SigninUserAsync(request.UserName, request.Password);
 
             if (!result)
                 throw new InvalidLoginException();

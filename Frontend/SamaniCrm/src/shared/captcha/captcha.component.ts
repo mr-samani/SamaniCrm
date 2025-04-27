@@ -6,17 +6,10 @@ import {
   Validator,
   AbstractControl,
   ValidationErrors,
-} from '@angular/forms'; 
+} from '@angular/forms';
 import { finalize } from 'rxjs/operators';
-import { CaptchaDto } from '@app/account/models/captcha-dto';
-import { Apis } from '@shared/apis';
 import { AppComponentBase } from '@app/app-component-base';
-
-export interface getCaptcharesponse {
-  sensitive: boolean;
-  key: string;
-  img: string;
-}
+import { CaptchaServiceProxy } from '@shared/service-proxies';
 
 @Component({
   selector: 'captcha',
@@ -33,6 +26,7 @@ export interface getCaptcharesponse {
       multi: true,
       useExisting: CaptchaComponent,
     },
+    CaptchaServiceProxy,
   ],
   standalone: false,
 })
@@ -41,7 +35,10 @@ export class CaptchaComponent extends AppComponentBase implements OnInit, Contro
   key = '';
   image = '';
   loading = true;
-  constructor(injector: Injector) {
+  constructor(
+    injector: Injector,
+    private captchaService: CaptchaServiceProxy,
+  ) {
     super(injector);
   }
   private _onChange = (t: { key: string; captcha: string }) => {};
@@ -74,13 +71,12 @@ export class CaptchaComponent extends AppComponentBase implements OnInit, Contro
 
   public reloadCaptcha() {
     this.loading = true;
-    this.dataService
-      .get<any, CaptchaDto>(Apis.reloadCaptcha, {})
+    this.captchaService
+      .reload()
       .pipe(finalize(() => (this.loading = false)))
-      .subscribe((result: any) => {
-        let data: getCaptcharesponse = result;
-        this.image = data.img;
-        this.key = data.key;
+      .subscribe((result) => {
+        this.image = result.img;
+        this.key = result.key;
       });
   }
 

@@ -4,6 +4,7 @@ api.base.service.ts
 api.module.ts
 api/account.service.ts
 api/api.ts
+api/captcha.service.ts
 api/role.service.ts
 api/user.service.ts
 api/weather-forecast.service.ts
@@ -13,6 +14,7 @@ git_push.sh
 index.ts
 model/api-error.ts
 model/assign-users-role-command.ts
+model/captcha-dto.ts
 model/create-user-command.ts
 model/edit-user-profile-command.ts
 model/get-user-query.ts

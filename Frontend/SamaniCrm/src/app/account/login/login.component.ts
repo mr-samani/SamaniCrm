@@ -25,8 +25,6 @@ export class LoginComponent extends AppComponentBase implements OnInit {
     this.loginForm = this.fb.group({
       userName: ['', [Validators.required]],
       password: ['', [Validators.required]],
-      captchaKey: [''],
-      captcha: [''],
       captchaResponse: [''],
       rememberMe: [true],
     });
@@ -42,8 +40,8 @@ export class LoginComponent extends AppComponentBase implements OnInit {
     }
     this.loading = true;
     let formValue: LoginCommand = this.loginForm.value;
-    // formValue.captcha = formValue.captchaResponse?.captcha;
-    // formValue.captchaKey = formValue.captchaResponse?.key;
+   formValue.captchaText = this.loginForm.get('captchaResponse')?.value?.captcha;
+   formValue.captchaKey = this.loginForm.get('captchaResponse')?.value?.key;
     // delete formValue.captchaResponse;
     this.authService
       .login(formValue)

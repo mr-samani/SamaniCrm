@@ -19,14 +19,12 @@
  * Do not edit the class manually.
  */
 /*Created with custom template*/
-export class LoginCommand {
-userName!: string;
+export class CaptchaDto {
+key!: string;
   
-password!: string;
+img!: string;
   
-captchaKey?: string;
-  
-captchaText?: string;
+sensitive!: boolean;
   
 }
 

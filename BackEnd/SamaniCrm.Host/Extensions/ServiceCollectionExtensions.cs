@@ -21,6 +21,8 @@ using SamaniCrm.Application.Common.Behaviors;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Queries.Role;
 using SamaniCrm.Application.User.Queries;
+using SamaniCrm.Infrastructure.BackgroundServices;
+using SamaniCrm.Infrastructure.Captcha;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Services;
@@ -206,6 +208,11 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ITokenGenerator,TokenGenerator>();
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddSingleton(TimeProvider.System);
+        //چون حافظه ایه Singleton باشه بهتره.
+        services.AddSingleton<ICaptchaStore, InMemoryCaptchaStore>();
+        services.AddHostedService<CaptchaCleanupBackgroundService>();
+
+
         return services;
     }
 }
