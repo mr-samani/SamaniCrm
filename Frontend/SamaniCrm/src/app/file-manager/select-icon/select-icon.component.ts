@@ -1,7 +1,5 @@
 import { Component, Inject, Injector, OnInit } from '@angular/core';
-import { finalize } from 'rxjs';
-import { Apis } from '@shared/apis';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 
 @Component({
@@ -9,7 +7,6 @@ import { AppComponentBase } from '@app/app-component-base';
   templateUrl: './select-icon.component.html',
   styleUrls: ['./select-icon.component.scss'],
   standalone: false,
-
 })
 export class SelectIconDialogComponent extends AppComponentBase implements OnInit {
   loading = true;
@@ -19,7 +16,7 @@ export class SelectIconDialogComponent extends AppComponentBase implements OnIni
   selected?: string;
   constructor(
     injector: Injector,
-    @Inject(DIALOG_DATA) _data: any,
+    @Inject(MAT_DIALOG_DATA) _data: any,
     private matDialogRef: MatDialogRef<SelectIconDialogComponent>,
   ) {
     super(injector);
@@ -32,12 +29,12 @@ export class SelectIconDialogComponent extends AppComponentBase implements OnIni
 
   getIcons() {
     this.loading = true;
-    this.dataService
-      .get(Apis.getFilemanagerIcons, {})
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe((result) => {
-        this.list = result.result ?? [];
-      });
+    // this.dataService
+    //   .get(Apis.getFilemanagerIcons, {})
+    //   .pipe(finalize(() => (this.loading = false)))
+    //   .subscribe((result) => {
+    //     this.list = result.result ?? [];
+    //   });
   }
 
   changeIcon() {
@@ -45,16 +42,16 @@ export class SelectIconDialogComponent extends AppComponentBase implements OnIni
       return;
     }
     this.saving = true;
-    this.dataService
-      .post(Apis.setFolderIcon, {
-        icon: this.selected,
-        id: this.folderId,
-      })
-      .pipe(finalize(() => (this.saving = false)))
-      .subscribe((response) => {
-        if (response.data) {
-          this.matDialogRef.close(response.data);
-        }
-      });
+    // this.dataService
+    //   .post(Apis.setFolderIcon, {
+    //     icon: this.selected,
+    //     id: this.folderId,
+    //   })
+    //   .pipe(finalize(() => (this.saving = false)))
+    //   .subscribe((response) => {
+    //     if (response.data) {
+    //       this.matDialogRef.close(response.data);
+    //     }
+    //   });
   }
 }

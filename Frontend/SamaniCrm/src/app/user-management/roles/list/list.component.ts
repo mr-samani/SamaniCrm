@@ -3,16 +3,17 @@ import { FileUsageEnum } from '@app/file-manager/image-cropper-dialog/image-crop
 import { Apis } from '@shared/apis';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@app/app-component-base';
-import { FileManagerService } from 'src/app/file-manager/file-manager.service';
-import { AppConst } from 'src/shared/app-const';
-import { DownloadFileType, DownloadService } from 'src/shared/services/download.service';
 import { RoleDto } from '../models/RoleDto';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
+import { FileManagerService } from '@app/file-manager/file-manager.service';
+import { AppConst } from '@shared/app-const';
+import { DownloadService, DownloadFileType } from '@shared/services/download.service';
 
 @Component({
   selector: 'app-user-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
+  standalone: false,
 })
 export class RoleListComponent extends AppComponentBase implements OnInit {
   loading = true;
@@ -36,12 +37,12 @@ export class RoleListComponent extends AppComponentBase implements OnInit {
 
   getList() {
     this.loading = true;
-    this.dataService
-      .get<any, RoleDto[]>(Apis.roleList, {})
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe((response) => {
-        this.list = response.data ?? [];
-      });
+    // this.dataService
+    //   .get<any, RoleDto[]>(Apis.roleList, {})
+    //   .pipe(finalize(() => (this.loading = false)))
+    //   .subscribe((response) => {
+    //     this.list = response.data ?? [];
+    //   });
   }
 
   exportExcel() {

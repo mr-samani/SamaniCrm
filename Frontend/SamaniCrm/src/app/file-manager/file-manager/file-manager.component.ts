@@ -60,35 +60,35 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
   }
 
   getTreeFolders() {
-    this.loadingFolders = true;
-    this.dataService
-      .get<any, FileManagerDto[]>(Apis.getFolders, {})
-      .pipe(finalize(() => (this.loadingFolders = false)))
-      .subscribe((result) => {
-        this.folders = result.result ?? [];
-      });
+    // this.loadingFolders = true;
+    // this.dataService
+    //   .get<any, FileManagerDto[]>(Apis.getFolders, {})
+    //   .pipe(finalize(() => (this.loadingFolders = false)))
+    //   .subscribe((result) => {
+    //     this.folders = result.result ?? [];
+    //   });
   }
 
   private initGetFolderDetails() {
-    this.getDetailsRequest$
-      .pipe(
-        debounceTime(500),
-        distinctUntilChanged(),
-        switchMap((input) => {
-          this.loading = true;
-          this.fileList = [];
-          return this.dataService.get<any, FileManagerDto[]>(Apis.getFileDetails, input).pipe(
-            catchError((err, caught) => {
-              return of(new ApiResult<FileManagerDto[]>());
-            }),
-            map((response) => response.data ?? []),
-            finalize(() => (this.loading = false)),
-          );
-        }),
-      )
-      .subscribe((result) => {
-        this.fileList = result ?? [];
-      });
+    // this.getDetailsRequest$
+    //   .pipe(
+    //     debounceTime(500),
+    //     distinctUntilChanged(),
+    //     switchMap((input) => {
+    //       this.loading = true;
+    //       this.fileList = [];
+    //       return this.dataService.get<any, FileManagerDto[]>(Apis.getFileDetails, input).pipe(
+    //         catchError((err, caught) => {
+    //           return of(new ApiResult<FileManagerDto[]>());
+    //         }),
+    //         map((response) => response.data ?? []),
+    //         finalize(() => (this.loading = false)),
+    //       );
+    //     }),
+    //   )
+    //   .subscribe((result) => {
+    //     this.fileList = result ?? [];
+    //   });
   }
 
   reload() {

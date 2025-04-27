@@ -5,6 +5,7 @@ import { SideNavMenuItem } from '../models/menu-item.model';
   selector: 'menu-dynamic',
   templateUrl: './menu-dynamic.component.html',
   styleUrls: ['./menu-dynamic.component.scss'],
+  standalone: false,
 })
 export class MenuDynamicComponent implements OnInit, OnDestroy {
   @Input('menu') menuItems: SideNavMenuItem[] = [];

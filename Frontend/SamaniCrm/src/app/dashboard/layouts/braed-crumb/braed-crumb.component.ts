@@ -5,6 +5,7 @@ import { BreadcrumbService } from '@shared/services/breadcrumb.service';
   selector: 'braed-crumb',
   templateUrl: './braed-crumb.component.html',
   styleUrl: './braed-crumb.component.scss',
+  standalone: false,
 })
 export class BraedCrumbComponent {
   constructor(public breadcrumb: BreadcrumbService) {}

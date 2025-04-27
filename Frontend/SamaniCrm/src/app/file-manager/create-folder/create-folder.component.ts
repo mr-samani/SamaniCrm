@@ -31,15 +31,15 @@ export class CreateFolderDialogComponent extends AppComponentBase implements OnI
 
   createFolder() {
     this.loading = true;
-    this.dataService
-      .post<CreateFolderRequest, FileManagerDto[]>(Apis.createDirectory, {
-        name: this.folderName,
-        parentId: this.parentId,
-      })
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe((response) => {
-        this.notify.success(this.l('Message.SaveSuccessfully'));
-        this.matDialogRef.close(response.data);
-      });
+    // this.dataService
+    //   .post<CreateFolderRequest, FileManagerDto[]>(Apis.createDirectory, {
+    //     name: this.folderName,
+    //     parentId: this.parentId,
+    //   })
+    //   .pipe(finalize(() => (this.loading = false)))
+    //   .subscribe((response) => {
+    //     this.notify.success(this.l('Message.SaveSuccessfully'));
+    //     this.matDialogRef.close(response.data);
+    //   });
   }
 }

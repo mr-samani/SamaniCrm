@@ -12,6 +12,7 @@ import { FilterComponent } from '@shared/components/filter/filter.component';
 import { FilteFormrDirective } from '@shared/directives/filter-form.directive';
 import { TableViewComponent } from '@shared/components/table-view/table-view.compoenent';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
+import { UserServiceProxy } from '@shared/service-proxies/api/user.service';
 
 @NgModule({
   declarations: [UserListComponent],
@@ -28,6 +29,6 @@ import { FileManagerModule } from '@app/file-manager/file-manager.module';
     FileManagerModule,
     MaterialCommonModule,
   ],
-  providers: [],
+  providers: [UserServiceProxy],
 })
 export class UsersModule {}

@@ -9,6 +9,7 @@ import { ColorSchemaService } from '@shared/services/color-schema.service';
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
+  standalone: false,
 })
 export class HeaderComponent extends AppComponentBase {
   user?: UserResponseDTO;

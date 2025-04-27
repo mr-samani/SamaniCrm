@@ -3,12 +3,13 @@ import { Apis } from '@shared/apis';
 import { LanguageDto } from '@shared/models/language-dto';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@app/app-component-base';
-import { FieldsType } from 'src/shared/components/table-view/fields-type.model';
+import { FieldsType } from '@shared/components/table-view/fields-type.model';
 
 @Component({
   selector: 'app-language-list',
   templateUrl: './language-list.component.html',
   styleUrls: ['./language-list.component.scss'],
+  standalone: false,
 })
 export class LanguageListComponent extends AppComponentBase implements OnInit {
   loading = true;
@@ -33,22 +34,22 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
 
   getList() {
     this.loading = true;
-    this.dataService
-      .get<any, LanguageDto[]>(Apis.getAllLanguages, {})
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe((response) => {
-        this.list = response.data ?? [];
-      });
+    // this.dataService
+    //   .get<any, LanguageDto[]>(Apis.getAllLanguages, {})
+    //   .pipe(finalize(() => (this.loading = false)))
+    //   .subscribe((response) => {
+    //     this.list = response.data ?? [];
+    //   });
   }
 
   changeActive(item: LanguageDto) {
     item.loading = true;
-    this.dataService
-      .post<any, LanguageDto[]>(Apis.changeActiveLanguage, {
-        lang: item.code,
-        isActive: !item.isActive,
-      })
-      .pipe(finalize(() => (item.loading = false)))
-      .subscribe();
+    // this.dataService
+    //   .post<any, LanguageDto[]>(Apis.changeActiveLanguage, {
+    //     lang: item.code,
+    //     isActive: !item.isActive,
+    //   })
+    //   .pipe(finalize(() => (item.loading = false)))
+    //   .subscribe();
   }
 }

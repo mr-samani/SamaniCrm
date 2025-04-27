@@ -6,5 +6,5 @@ export class TreeViewModel extends RolePermissionsDto {
   hasUnSelectedChildren?: boolean;
   hasChildren?: boolean;
 
-  override children!: TreeViewModel[];
+  declare  children: TreeViewModel[];
 }

@@ -12,45 +12,45 @@ const routes: Routes = [
     },
     children: [
       { path: 'setting', loadChildren: () => import('./settings/settings.module').then((m) => m.SettingsModule) },
-      {
-        path: 'media',
-        loadChildren: () => import('../file-manager/file-manager.module').then((m) => m.FileManagerModule),
-      },
+      // {
+      //   path: 'media',
+      //   loadChildren: () => import('../file-manager/file-manager.module').then((m) => m.FileManagerModule),
+      // },
       { path: 'languages', loadChildren: () => import('./languages/languages.module').then((m) => m.LanguagesModule) },
       {
         path: 'users',
         loadChildren: () => import('..//user-management/users/users.module').then((m) => m.UsersModule),
       },
-      {
-        path: 'roles',
-        loadChildren: () => import('..//user-management/roles/roles.module').then((m) => m.RolesModule),
-      },
+      // {
+      //   path: 'roles',
+      //   loadChildren: () => import('..//user-management/roles/roles.module').then((m) => m.RolesModule),
+      // },
       {
         path: 'app-setting',
         loadChildren: () => import('./settings/app-setting/app-setting.module').then((m) => m.AppSettingModule),
       },
-      {
-        path: 'maintenance',
-        loadChildren: () => import('./settings/maintenance/maintenance.module').then((m) => m.MaintenanceModule),
-      },
-      { path: 'menu', loadChildren: () => import('./settings/menu/menu.module').then((m) => m.MenuModule) },
+      // {
+      //   path: 'maintenance',
+      //   loadChildren: () => import('./settings/maintenance/maintenance.module').then((m) => m.MaintenanceModule),
+      // },
+      // { path: 'menu', loadChildren: () => import('./settings/menu/menu.module').then((m) => m.MenuModule) },
 
       // products
-      {
-        path: 'product',
-        children: [
-          {
-            path: 'categories',
-            loadComponent: () =>
-              import('../products/product-categories/product-categories.component').then(
-                (c) => c.ProductCategoriesComponent,
-              ),
-          },
-        ],
-      },
+      // {
+      //   path: 'product',
+      //   children: [
+      //     {
+      //       path: 'categories',
+      //       loadComponent: () =>
+      //         import('../products/product-categories/product-categories.component').then(
+      //           (c) => c.ProductCategoriesComponent,
+      //         ),
+      //     },
+      //   ],
+      // },
 
       // content
-      { path: 'content', loadChildren: () => import('./content/content.module').then((m) => m.ContentModule) },
+      // { path: 'content', loadChildren: () => import('./content/content.module').then((m) => m.ContentModule) },
     ],
   },
 ];

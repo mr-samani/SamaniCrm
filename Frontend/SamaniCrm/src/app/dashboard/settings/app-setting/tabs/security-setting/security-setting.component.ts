@@ -12,6 +12,7 @@ import { ControlContainer, NgForm } from '@angular/forms';
       useExisting: NgForm,
     },
   ],
+  standalone: false,
 })
 export class SecuritySettingComponent implements OnInit {
   @Input() settings?: SecuritySettingDto;

@@ -29,12 +29,12 @@ export class CacheComponent extends AppComponentBase implements OnInit {
 
   getData() {
     this.loading = true;
-    this.dataService
-      .get<any, CacheKey[]>(Apis.getAllCacheKeys, {})
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe((response) => {
-        this.cacheKeys = response.data ?? [];
-      });
+    // this.dataService
+    //   .get<any, CacheKey[]>(Apis.getAllCacheKeys, {})
+    //   .pipe(finalize(() => (this.loading = false)))
+    //   .subscribe((response) => {
+    //     this.cacheKeys = response.data ?? [];
+    //   });
   }
 
   clear(key: CacheKey) {
@@ -44,11 +44,11 @@ export class CacheComponent extends AppComponentBase implements OnInit {
     }
 
     key.loading = true;
-    this.dataService
-      .post(Apis.clearCache, { key: key.key })
-      .pipe(finalize(() => (key.loading = false)))
-      .subscribe((response) => {
-        this.notify.success(this.l('DoneSuccessFully') + '(' + response.data + ')');
-      });
+    // this.dataService
+    //   .post(Apis.clearCache, { key: key.key })
+    //   .pipe(finalize(() => (key.loading = false)))
+    //   .subscribe((response) => {
+    //     this.notify.success(this.l('DoneSuccessFully') + '(' + response.data + ')');
+    //   });
   }
 }

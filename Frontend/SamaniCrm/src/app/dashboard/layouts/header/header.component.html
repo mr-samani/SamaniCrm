@@ -17,9 +17,9 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
       <div class="user-block navbar-brand">
-        <img *ngIf="user?.avatar" [src]="user?.avatar" alt="avatar" />
-        <img *ngIf="!user?.avatar" src="/images/avatar.jpg" alt="avatar" />
-        <span>{{ user?.username }}</span>
+        <img *ngIf="user?.profilePicture" [src]="user?.profilePicture" alt="avatar" />
+        <img *ngIf="!user?.profilePicture" src="/images/avatar.jpg" alt="avatar" />
+        <span>{{ user?.userName }}</span>
       </div>
 
       <ul class="navbar-nav mb-2 mb-lg-0">

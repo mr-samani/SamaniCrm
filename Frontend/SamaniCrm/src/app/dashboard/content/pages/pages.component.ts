@@ -45,14 +45,14 @@ export class PagesComponent extends AppComponentBase implements OnInit {
   }
 
   getList() {
-    this.loading = true;
-    this.dataService
-      .get<any, PageModel[]>(Apis.pageList, {})
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe((response) => {
-        this.list = response.data ?? [];
-        this.totalCount = response.meta!.total;
-      });
+    // this.loading = true;
+    // this.dataService
+    //   .get<any, PageModel[]>(Apis.pageList, {})
+    //   .pipe(finalize(() => (this.loading = false)))
+    //   .subscribe((response) => {
+    //     this.list = response.data ?? [];
+    //     this.totalCount = response.meta!.total;
+    //   });
   }
 
   reload() {
@@ -68,15 +68,15 @@ export class PagesComponent extends AppComponentBase implements OnInit {
       .then((r) => {
         if (r) {
           item.loading = true;
-          this.dataService
-            .post(Apis.setPageCover, {
-              id: item.id,
-              fileId: r,
-            })
-            .pipe(finalize(() => (item.loading = false)))
-            .subscribe((response) => {
-              this.reload();
-            });
+          // this.dataService
+          //   .post(Apis.setPageCover, {
+          //     id: item.id,
+          //     fileId: r,
+          //   })
+          //   .pipe(finalize(() => (item.loading = false)))
+          //   .subscribe((response) => {
+          //     this.reload();
+          //   });
         }
       });
   }

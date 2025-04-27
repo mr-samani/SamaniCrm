@@ -6,6 +6,7 @@ import { AppComponentBase } from '@app/app-component-base';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class DashboardComponent extends AppComponentBase {
   constructor(injector: Injector) {

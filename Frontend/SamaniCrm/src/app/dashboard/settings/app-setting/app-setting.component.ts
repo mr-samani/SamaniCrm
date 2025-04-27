@@ -10,6 +10,7 @@ import { ApiResult } from '@shared/models/api-result';
   selector: 'app-app-setting',
   templateUrl: './app-setting.component.html',
   styleUrls: ['./app-setting.component.css'],
+  standalone: false,
 })
 export class AppSettingComponent extends AppComponentBase implements OnInit {
   loading = true;
@@ -31,12 +32,12 @@ export class AppSettingComponent extends AppComponentBase implements OnInit {
 
   getSettings() {
     this.loading = true;
-    this.dataService
-      .get<any, AppSettingsDto>(Apis.getAllSettings, {})
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe((response) => {
-        this.settings = response.data;
-      });
+    // this.dataService
+    //   .get<any, AppSettingsDto>(Apis.getAllSettings, {})
+    //   .pipe(finalize(() => (this.loading = false)))
+    //   .subscribe((response) => {
+    //     this.settings = response.data;
+    //   });
   }
 
   save(frm: NgForm) {
@@ -46,12 +47,12 @@ export class AppSettingComponent extends AppComponentBase implements OnInit {
     }
 
     this.isSaving = true;
-    this.dataService
-      .post<{ settings: AppSettingsDto }, null>(Apis.saveSettings, { settings: this.settings })
-      .pipe(finalize(() => (this.isSaving = false)))
-      .subscribe((response) => {
-        this.notify.success(this.l('SaveSuccessFully'));
-        this.getSettings();
-      });
+    // this.dataService
+    //   .post<{ settings: AppSettingsDto }, null>(Apis.saveSettings, { settings: this.settings })
+    //   .pipe(finalize(() => (this.isSaving = false)))
+    //   .subscribe((response) => {
+    //     this.notify.success(this.l('SaveSuccessFully'));
+    //     this.getSettings();
+    //   });
   }
 }

@@ -27,22 +27,22 @@ export class MenuComponent extends AppComponentBase implements OnInit {
 
   getList() {
     this.loading = true;
-    this.dataService
-      .get<any, MenuModel[]>(Apis.menuList, {})
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe((response) => {
-        this.list = response.data ?? [];
-      });
+    // this.dataService
+    //   .get<any, MenuModel[]>(Apis.menuList, {})
+    //   .pipe(finalize(() => (this.loading = false)))
+    //   .subscribe((response) => {
+    //     this.list = response.data ?? [];
+    //   });
   }
 
   save() {
     this.isSaving = true;
-    this.dataService
-      .post<{ menus: MenuModel[] }, null>(Apis.reorderMenu, { menus: this.list })
-      .pipe(finalize(() => (this.isSaving = false)))
-      .subscribe((response) => {
-        this.notify.success(this.l('SaveSuccessFully'));
-        this.getList();
-      });
+    // this.dataService
+    //   .post<{ menus: MenuModel[] }, null>(Apis.reorderMenu, { menus: this.list })
+    //   .pipe(finalize(() => (this.isSaving = false)))
+    //   .subscribe((response) => {
+    //     this.notify.success(this.l('SaveSuccessFully'));
+    //     this.getList();
+    //   });
   }
 }

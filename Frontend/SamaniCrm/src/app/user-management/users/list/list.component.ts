@@ -1,10 +1,9 @@
-import { AfterViewInit, Component, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { FileUsageEnum } from '@app/file-manager/image-cropper-dialog/image-cropper-dialog.component';
-import { UserListInput } from '@app/user-management/models/user-list-input';
-import { Apis } from '@shared/apis';
+
 import { AppConst } from '@shared/app-const';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
@@ -53,8 +52,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
       { name: this.l('Users'), url: '/dashboard/users' },
     ];
     this.form = this.fb.group({
-      name: [''],
-      email: [''],
+      filter: [''],
     });
     this.page = this.route.snapshot.queryParams['page'] ?? 1;
     this.perPage = this.route.snapshot.queryParams['perPage'] ?? 10;
@@ -76,7 +74,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
     }
     this.loading = true;
     const input = new GetUserQuery();
-    input.filter = this.form.value;
+    input.filter = this.form.get('filter')?.value;
     input.pageNumber = this.page;
     input.pageSize = this.perPage;
     this.listSubscription$ = this.userService

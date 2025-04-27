@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
   selector: 'tab-group',
   templateUrl: './tab-group.component.html',
   styleUrls: ['./tab-group.component.scss'],
+  standalone: false,
 })
 export class TabGroupComponent implements AfterContentInit {
   @Input() showPlusButton = false;

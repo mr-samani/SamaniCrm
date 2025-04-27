@@ -5,6 +5,7 @@ import { Component, Input, OnInit } from '@angular/core';
   selector: 'tab-item',
   templateUrl: './tab-item.component.html',
   styleUrls: ['./tab-item.component.scss'],
+  standalone: false,
 })
 export class TabItemComponent implements OnInit {
   @Input() title = '';

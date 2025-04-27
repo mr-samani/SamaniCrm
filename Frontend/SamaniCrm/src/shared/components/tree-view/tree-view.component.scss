@@ -3,7 +3,7 @@
     list-style: none;
 
     li.node {
-      background-image: url('../../../images/line.png');
+      background-image: url('../../../../public/images/line.png');
       background-position: right -5px top 0;
       background-repeat: repeat-y;
 
@@ -23,7 +23,7 @@
       .check-all,
       .un-check-all,
       .checkbox {
-        background-image: url('../../../images/32px.png');
+        background-image: url('../../../../public/images/32px.png');
         display: inline-block;
         width: 24px;
         height: 24px;
