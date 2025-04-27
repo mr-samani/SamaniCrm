@@ -23,13 +23,13 @@ import { ApiError } from './api-error';
  */
 /*Created with custom template*/
 export class RoleResponseDTOApiResponse {
-Success?: boolean;
+success?: boolean;
   
-Data?: RoleResponseDTO;
+data?: RoleResponseDTO;
   
-Errors?: Array<ApiError>;
+errors?: Array<ApiError>;
   
-Meta?: Meta;
+meta?: Meta;
   
 }
 

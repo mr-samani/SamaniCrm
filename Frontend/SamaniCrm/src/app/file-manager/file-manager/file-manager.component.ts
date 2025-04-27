@@ -81,7 +81,7 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
             catchError((err, caught) => {
               return of(new ApiResult<FileManagerDto[]>());
             }),
-            map((response) => response.result ?? []),
+            map((response) => response.data ?? []),
             finalize(() => (this.loading = false)),
           );
         }),
@@ -215,7 +215,7 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
           // this.fileManagerProxy.delete(this.selectedFileInfo?.id)
           //   .pipe(finalize(() => this.hideMainLoading()))
           //   .subscribe(response => {
-          //     if (response.result == true) {
+          //     if (response.data == true) {
           //       this.notify.success(this.l('DeleteSuccessfully'));
           //       this.reload();
           //     }

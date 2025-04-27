@@ -4,7 +4,8 @@ import { AppComponentBase } from '@app/app-component-base';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
 import { AppConst } from '@shared/app-const';
 import { CaptchaComponent } from '@shared/captcha/captcha.component';
-import { finalize } from 'rxjs'; 
+import { LoginCommand } from '@shared/service-proxies/model/login-command';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
   constructor(injector: Injector) {
     super(injector);
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required]],
+      userName: ['', [Validators.required]],
       password: ['', [Validators.required]],
       captchaKey: [''],
       captcha: [''],
@@ -40,10 +41,10 @@ export class LoginComponent extends AppComponentBase implements OnInit {
       return;
     }
     this.loading = true;
-    let formValue = Object.assign({}, this.loginForm.value);
-    formValue.captcha = formValue.captchaResponse?.captcha;
-    formValue.captchaKey = formValue.captchaResponse?.key;
-    delete formValue.captchaResponse;
+    let formValue: LoginCommand = this.loginForm.value;
+    // formValue.captcha = formValue.captchaResponse?.captcha;
+    // formValue.captchaKey = formValue.captchaResponse?.key;
+    // delete formValue.captchaResponse;
     this.authService
       .login(formValue)
       .pipe(finalize(() => (this.loading = false)))

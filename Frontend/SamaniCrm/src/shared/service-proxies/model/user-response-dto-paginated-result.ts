@@ -21,13 +21,13 @@ import { UserResponseDTO } from './user-response-dto';
  */
 /*Created with custom template*/
 export class UserResponseDTOPaginatedResult {
-Items?: Array<UserResponseDTO>;
+items?: Array<UserResponseDTO>;
   
-TotalCount?: number;
+totalCount?: number;
   
-PageNumber?: number;
+pageNumber?: number;
   
-PageSize?: number;
+pageSize?: number;
   
 }
 

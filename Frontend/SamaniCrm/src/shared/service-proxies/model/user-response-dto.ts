@@ -20,19 +20,19 @@
  */
 /*Created with custom template*/
 export class UserResponseDTO {
-Id!: string;
+id!: string;
   
-UserName?: string;
+userName?: string;
   
-FirstName?: string;
+firstName?: string;
   
-LastName?: string;
+lastName?: string;
   
-FullName?: string;
+fullName?: string;
   
-Email?: string;
+email?: string;
   
-ProfilePicture?: string;
+profilePicture?: string;
   
 }
 

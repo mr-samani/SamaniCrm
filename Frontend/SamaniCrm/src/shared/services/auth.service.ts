@@ -7,62 +7,69 @@ import { TokenService } from './token.service';
 import { NgxAlertModalService } from 'ngx-alert-modal';
 import { AppConst } from '../app-const';
 import { LanguageService } from './language.service';
-import { DataService } from './data-service.service';
-import { LoginRequest } from '@app/account/models/login-request';
 import { Apis } from '@shared/apis';
-import { LoginDto, UserDto } from '@app/account/models/login-dto';
-import { RegisterRequest } from '@app/account/models/register-request';
+import { AccountServiceProxy, LoginCommand, RefreshTokenCommand, UserResponseDTO } from '@shared/service-proxies';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private currentUserSubject = new BehaviorSubject<UserDto | undefined>(undefined);
-  public currentUser: Observable<UserDto | undefined>;
+  private currentUserSubject: BehaviorSubject<UserResponseDTO | undefined> = new BehaviorSubject<
+    UserResponseDTO | undefined
+  >(undefined);
+  public currentUser: Observable<UserResponseDTO | undefined>;
   constructor(
     private http: HttpClient,
     private router: Router,
     private tokenService: TokenService,
-    private dataService: DataService,
+
     private alert: NgxAlertModalService,
     private language: LanguageService,
+    private accountService: AccountServiceProxy,
   ) {
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  public get currentUserValue(): UserDto | undefined {
+  public get currentUserValue(): UserResponseDTO | undefined {
     return this.currentUserSubject.value;
   }
 
-  login(credential: LoginRequest) {
-    return this.dataService.post<LoginRequest, LoginDto>(Apis.login, credential).pipe(
+  login(input: LoginCommand) {
+    return this.accountService.login(input).pipe(
       map((response) => {
-        if (response.success && response.result && response.result.token && response.result.user) {
-          this.tokenService.saveToken(response.result.token, credential.rememberMe);
-          this.currentUserSubject.next(response.result.user);
+        if (response.success && response.data && response.data.accessToken) {
+          this.tokenService.saveToken(response.data.accessToken);
+          this.currentUserSubject.next({
+            id: response.data.userId!,
+            fullName: response.data.fullName,
+            email: response.data.email,
+            userName: response.data.userName,
+            profilePicture: response.data.profilePicture,
+            // roles:response.data.roles,
+          });
         }
         return response;
       }),
     );
   }
 
-  register(credential: RegisterRequest): Observable<any> {
-    return this.dataService.post<RegisterRequest, LoginDto>(Apis.register, credential).pipe(
-      map((response) => {
-        if (response.success && response.result && response.result.token && response.result.user) {
-          this.tokenService.saveToken(response.result.token);
-          this.currentUserSubject.next(response.result.user);
-        }
-        return response;
-      }),
-    );
-  }
+  // register(credential: RegisterRequest): Observable<any> {
+  //   return this.dataService.post<RegisterRequest, LoginDto>(Apis.register, credential).pipe(
+  //     map((response) => {
+  //       if (response.success && response.data && response.data.token && response.data.user) {
+  //         this.tokenService.saveToken(response.data.token);
+  //         this.currentUserSubject.next(response.data.user);
+  //       }
+  //       return response;
+  //     }),
+  //   );
+  // }
 
-  refreshToken(token: string) {
-    return this.dataService.post<any, LoginDto>(Apis.refresh, {}).pipe(
+  refreshToken(input: RefreshTokenCommand) {
+    return this.accountService.refresh(input).pipe(
       map((response) => {
-        if (response.success && response.result && response.result.token) {
-          this.tokenService.updateToken(response.result.token);
-          return response.result.token;
+        if (response.success && response.data && response.data.accessToken) {
+          this.tokenService.updateToken(response.data.accessToken);
+          return response.data.accessToken;
         } else {
           this.logOut();
           this.alert
@@ -93,25 +100,25 @@ export class AuthService {
     this.router.navigate(['/account/login']);
   }
 
-  getCurrentUserValue() {
-    return new Promise((resolve, reject) => {
-      return this.dataService.get<any, UserDto>(Apis.getCurrentUser, {}).subscribe({
-        next: (response) => {
-          if (response.success && response.result) {
-            this.currentUserSubject.next(response.result);
-            AppConst.currentLanguage = response.result.lang!;
-            this.language.changeLanguage(AppConst.currentLanguage, true);
-            resolve(true);
-          } else {
-            reject(false);
-          }
-        },
-        error: (err) => {
-          reject(false);
-        },
-      });
-    });
-  }
+  // getCurrentUserValue() {
+  //   return new Promise((resolve, reject) => {
+  //     return this.dataService.get<any, UserResponseDTO>(Apis.getCurrentUser, {}).subscribe({
+  //       next: (response) => {
+  //         if (response.success && response.data) {
+  //           this.currentUserSubject.next(response.data);
+  //           AppConst.currentLanguage = response.data.lang!;
+  //           this.language.changeLanguage(AppConst.currentLanguage, true);
+  //           resolve(true);
+  //         } else {
+  //           reject(false);
+  //         }
+  //       },
+  //       error: (err) => {
+  //         reject(false);
+  //       },
+  //     });
+  //   });
+  // }
 }
 
 export const encodeBase64 = (data: string) => {

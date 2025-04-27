@@ -22,7 +22,7 @@
 export class UpdateUserRolesCommand {
 userName?: string;
   
-Roles?: Array<string>;
+roles?: Array<string>;
   
 }
 

@@ -40,7 +40,7 @@ export class RoleListComponent extends AppComponentBase implements OnInit {
       .get<any, RoleDto[]>(Apis.roleList, {})
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.list = response.result ?? [];
+        this.list = response.data ?? [];
       });
   }
 

@@ -76,7 +76,7 @@ export class CreateOrEditProductCategoryComponent extends AppComponentBase imple
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
         next: (response) => {
-          this.translations = response.result.translations;
+          this.translations = response.data.translations;
           this.setTranslations();
         },
         error: (err) => {

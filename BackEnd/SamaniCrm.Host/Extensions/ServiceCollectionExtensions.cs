@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
 using System.Threading.Tasks;
@@ -134,7 +135,7 @@ public static class ServiceCollectionExtensions
             .AddJsonOptions(opt =>
             {
                 opt.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
-                opt.JsonSerializerOptions.PropertyNamingPolicy = null;
+                opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 
                // opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;

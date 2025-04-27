@@ -50,7 +50,7 @@ export class PagesComponent extends AppComponentBase implements OnInit {
       .get<any, PageModel[]>(Apis.pageList, {})
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.list = response.result ?? [];
+        this.list = response.data ?? [];
         this.totalCount = response.meta!.total;
       });
   }

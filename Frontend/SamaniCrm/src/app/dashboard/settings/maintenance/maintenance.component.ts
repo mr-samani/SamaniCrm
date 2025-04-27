@@ -32,7 +32,7 @@ export class MaintenanceComponent extends AppComponentBase implements OnInit {
   //   this.dataService.get<any, MaintenancesDto>(Apis.getAllSettings, {})
   //     .pipe(finalize(() => this.loading = false))
   //     .subscribe(response => {
-  //       this.settings = response.result;
+  //       this.settings = response.data;
   //     });
   // }
 

@@ -35,7 +35,7 @@ export class AppSettingComponent extends AppComponentBase implements OnInit {
       .get<any, AppSettingsDto>(Apis.getAllSettings, {})
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.settings = response.result;
+        this.settings = response.data;
       });
   }
 

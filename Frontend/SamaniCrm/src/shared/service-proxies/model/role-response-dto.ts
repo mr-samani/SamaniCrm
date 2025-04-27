@@ -20,9 +20,9 @@
  */
 /*Created with custom template*/
 export class RoleResponseDTO {
-Id?: string;
+id?: string;
   
-RoleName?: string;
+roleName?: string;
   
 }
 

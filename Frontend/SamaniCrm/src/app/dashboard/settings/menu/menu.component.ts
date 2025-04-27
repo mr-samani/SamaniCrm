@@ -31,7 +31,7 @@ export class MenuComponent extends AppComponentBase implements OnInit {
       .get<any, MenuModel[]>(Apis.menuList, {})
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.list = response.result ?? [];
+        this.list = response.data ?? [];
       });
   }
 

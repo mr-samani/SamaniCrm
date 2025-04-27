@@ -22,13 +22,13 @@ import { ApiError } from './api-error';
  */
 /*Created with custom template*/
 export class StringApiResponse {
-Success?: boolean;
+success?: boolean;
   
-Data?: string;
+data?: string;
   
-Errors?: Array<ApiError>;
+errors?: Array<ApiError>;
   
-Meta?: Meta;
+meta?: Meta;
   
 }
 

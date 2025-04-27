@@ -20,13 +20,13 @@
  */
 /*Created with custom template*/
 export class ApiError {
-Field?: string;
+field?: string;
   
-Message?: string;
+message?: string;
   
-Code?: string;
+code?: string;
   
-Detail?: string;
+detail?: string;
   
 }
 

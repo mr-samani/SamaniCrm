@@ -23,13 +23,13 @@ import { ApiError } from './api-error';
  */
 /*Created with custom template*/
 export class LoginResultApiResponse {
-Success?: boolean;
+success?: boolean;
   
-Data?: LoginResult;
+data?: LoginResult;
   
-Errors?: Array<ApiError>;
+errors?: Array<ApiError>;
   
-Meta?: Meta;
+meta?: Meta;
   
 }
 

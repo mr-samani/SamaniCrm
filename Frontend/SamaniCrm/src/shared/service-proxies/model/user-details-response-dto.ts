@@ -20,15 +20,15 @@
  */
 /*Created with custom template*/
 export class UserDetailsResponseDTO {
-Id?: string;
+id?: string;
   
-FullName?: string;
+fullName?: string;
   
-UserName?: string;
+userName?: string;
   
-Email?: string;
+email?: string;
   
-Roles?: Array<string>;
+roles?: Array<string>;
   
 }
 

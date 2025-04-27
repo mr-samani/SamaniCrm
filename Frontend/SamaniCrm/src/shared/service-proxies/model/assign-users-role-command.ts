@@ -20,9 +20,9 @@
  */
 /*Created with custom template*/
 export class AssignUsersRoleCommand {
-UserName?: string;
+userName?: string;
   
-Roles?: Array<string>;
+roles?: Array<string>;
   
 }
 

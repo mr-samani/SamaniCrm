@@ -20,13 +20,13 @@
  */
 /*Created with custom template*/
 export class EditUserProfileCommand {
-Id?: string;
+id?: string;
   
-FullName?: string;
+fullName?: string;
   
-Email?: string;
+email?: string;
   
-Roles?: Array<string>;
+roles?: Array<string>;
   
 }
 

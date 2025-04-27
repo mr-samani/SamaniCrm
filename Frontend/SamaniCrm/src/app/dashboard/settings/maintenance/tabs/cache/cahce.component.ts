@@ -33,7 +33,7 @@ export class CacheComponent extends AppComponentBase implements OnInit {
       .get<any, CacheKey[]>(Apis.getAllCacheKeys, {})
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.cacheKeys = response.result ?? [];
+        this.cacheKeys = response.data ?? [];
       });
   }
 
@@ -48,7 +48,7 @@ export class CacheComponent extends AppComponentBase implements OnInit {
       .post(Apis.clearCache, { key: key.key })
       .pipe(finalize(() => (key.loading = false)))
       .subscribe((response) => {
-        this.notify.success(this.l('DoneSuccessFully') + '(' + response.result + ')');
+        this.notify.success(this.l('DoneSuccessFully') + '(' + response.data + ')');
       });
   }
 }

@@ -20,13 +20,13 @@
  */
 /*Created with custom template*/
 export class WeatherForecast {
-Date?: string;
+date?: string;
   
-TemperatureC?: number;
+temperatureC?: number;
   
- readonly TemperatureF?: number;
+ readonly temperatureF?: number;
   
-Summary?: string;
+summary?: string;
   
 }
 

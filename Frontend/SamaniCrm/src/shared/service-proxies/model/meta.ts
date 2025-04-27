@@ -20,13 +20,13 @@
  */
 /*Created with custom template*/
 export class Meta {
-TotalCount?: number;
+totalCount?: number;
   
-PageNumber?: number;
+pageNumber?: number;
   
-PageSize?: number;
+pageSize?: number;
   
- readonly TotalPages?: number;
+ readonly totalPages?: number;
   
 }
 

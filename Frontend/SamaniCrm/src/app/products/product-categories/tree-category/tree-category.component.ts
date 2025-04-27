@@ -84,7 +84,7 @@ export class TreeCategoryComponent extends AppComponentBase implements OnInit, O
       .get<any, ProductCategory[]>(Apis.productCategories, {})
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.list = response.result ?? [];
+        this.list = response.data ?? [];
       });
   }
 

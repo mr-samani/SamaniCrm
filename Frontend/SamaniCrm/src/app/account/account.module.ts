@@ -10,6 +10,7 @@ import { AccountComponent } from './account.component';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { CaptchaModule } from '@shared/captcha/captcha.module';
 import { SharedModule } from '@shared/shared.module';
+import { AccountServiceProxy } from '@shared/service-proxies';
 
 @NgModule({
   declarations: [AccountComponent, LoginComponent, RegisterComponent],
@@ -22,6 +23,8 @@ import { SharedModule } from '@shared/shared.module';
     CaptchaModule,
     MaterialCommonModule,
   ],
-  providers: [],
+  providers: [
+    AccountServiceProxy
+  ],
 })
 export class AccountModule {}

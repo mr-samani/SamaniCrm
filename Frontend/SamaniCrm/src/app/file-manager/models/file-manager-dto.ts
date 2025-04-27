@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-import { UserDto } from '@app/account/models/login-dto';
+import { UserResponseDTO } from '@app/account/models/login-dto';
 import { ThumbnailsDto } from '../models/thumbnails-dto';
 
 /**
@@ -25,5 +25,5 @@ export class FileManagerDto {
   size?: any;
   thumbnails?: ThumbnailsDto;
   type?: any;
-  user?: UserDto;
+  user?: UserResponseDTO;
 }

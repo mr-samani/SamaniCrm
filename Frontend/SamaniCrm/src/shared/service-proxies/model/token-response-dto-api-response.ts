@@ -23,13 +23,13 @@ import { ApiError } from './api-error';
  */
 /*Created with custom template*/
 export class TokenResponseDtoApiResponse {
-Success?: boolean;
+success?: boolean;
   
-Data?: TokenResponseDto;
+data?: TokenResponseDto;
   
-Errors?: Array<ApiError>;
+errors?: Array<ApiError>;
   
-Meta?: Meta;
+meta?: Meta;
   
 }
 

@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { UserDto } from '@app/account/models/login-dto';
+import { UserResponseDTO } from '@app/account/models/login-dto';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { ColorSchemaService } from '@shared/services/color-schema.service';
 import { AppComponentBase } from 'src/app/app-component-base';
@@ -11,7 +11,7 @@ import { AppConst } from 'src/shared/app-const';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent extends AppComponentBase {
-  user?: UserDto;
+  user?: UserResponseDTO;
   currentLang = AppConst.currentLanguage;
   languages = AppConst.languageList;
   backEndUrl = AppConst.apiUrl;

@@ -20,21 +20,21 @@
  */
 /*Created with custom template*/
 export class LoginResult {
-AccessToken?: string;
+accessToken?: string;
   
-RefreshToken?: string;
+refreshToken?: string;
   
-UserId?: string;
+userId?: string;
   
-UserName?: string;
+userName?: string;
   
-Email?: string;
+email?: string;
   
-FullName?: string;
+fullName?: string;
   
-ProfilePicture?: string;
+profilePicture?: string;
   
-Roles?: Array<string>;
+roles?: Array<string>;
   
 }
 

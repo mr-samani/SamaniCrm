@@ -20,7 +20,7 @@
  */
 /*Created with custom template*/
 export class RefreshTokenCommand {
-RefreshToken?: string;
+refreshToken?: string;
   
 }
 

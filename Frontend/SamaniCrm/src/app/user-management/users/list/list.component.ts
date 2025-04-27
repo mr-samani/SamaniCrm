@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { UserDto } from '@app/account/models/login-dto';
+import { UserResponseDTO } from '@app/account/models/login-dto';
 import { AppComponentBase } from '@app/app-component-base';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { FileUsageEnum } from '@app/file-manager/image-cropper-dialog/image-cropper-dialog.component';
@@ -22,7 +22,7 @@ import { finalize } from 'rxjs/operators';
 export class UserListComponent extends AppComponentBase implements OnInit, OnDestroy {
   loading = true;
 
-  list: UserDto[] = [];
+  list: UserResponseDTO[] = [];
   totalCount = 0;
 
   fields: FieldsType[] = [
@@ -77,10 +77,10 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
     input.page = this.page;
     input.perPage = this.perPage;
     this.listSubscription$ = this.dataService
-      .get<UserListInput, UserDto[]>(Apis.userList, input)
+      .get<UserListInput, UserResponseDTO[]>(Apis.userList, input)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.list = response.result ?? [];
+        this.list = response.data ?? [];
         this.totalCount = response.meta!.total;
       });
   }
@@ -114,7 +114,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
     );
   }
 
-  changeAvatar(item: UserDto) {
+  changeAvatar(item: UserResponseDTO) {
     this.fileManager
       .selectFile({
         usage: FileUsageEnum.USER_AVATAR,

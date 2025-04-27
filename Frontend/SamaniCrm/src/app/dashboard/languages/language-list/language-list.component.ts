@@ -37,7 +37,7 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
       .get<any, LanguageDto[]>(Apis.getAllLanguages, {})
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.list = response.result ?? [];
+        this.list = response.data ?? [];
       });
   }
 

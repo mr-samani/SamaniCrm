@@ -22,13 +22,13 @@ import { ApiError } from './api-error';
  */
 /*Created with custom template*/
 export class Int32ApiResponse {
-Success?: boolean;
+success?: boolean;
   
-Data?: number;
+data?: number;
   
-Errors?: Array<ApiError>;
+errors?: Array<ApiError>;
   
-Meta?: Meta;
+meta?: Meta;
   
 }
 

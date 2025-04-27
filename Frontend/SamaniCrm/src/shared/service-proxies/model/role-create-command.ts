@@ -20,7 +20,7 @@
  */
 /*Created with custom template*/
 export class RoleCreateCommand {
-RoleName?: string;
+roleName?: string;
   
 }
 

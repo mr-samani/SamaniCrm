@@ -98,7 +98,7 @@ export class FileSelectorComponent extends AppComponentBase implements OnInit, C
     // this.fileManagerProxy.getInfo(this.fileId)
     //   .pipe(finalize(() => this.loading = false))
     //   .subscribe(response => {
-    //     this.fileInfo = response.result;
+    //     this.fileInfo = response.data;
     //   })
   }
 }

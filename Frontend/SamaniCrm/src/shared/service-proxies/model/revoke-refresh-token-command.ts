@@ -20,7 +20,7 @@
  */
 /*Created with custom template*/
 export class RevokeRefreshTokenCommand {
-Token?: string;
+token?: string;
   
 }
 

@@ -39,7 +39,7 @@ export class CreateFolderDialogComponent extends AppComponentBase implements OnI
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
         this.notify.success(this.l('Message.SaveSuccessfully'));
-        this.matDialogRef.close(response.result);
+        this.matDialogRef.close(response.data);
       });
   }
 }

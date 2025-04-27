@@ -39,7 +39,7 @@ export class RolePermissionsListComponent extends AppComponentBase implements On
       .get<any, RolePermissionsDto[]>(Apis.getRolePermissions + this.roleName, {})
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.list = response.result ?? [];
+        this.list = response.data ?? [];
       });
   }
 

@@ -63,8 +63,8 @@ export class CreateOrEditMenuComponent extends AppComponentBase implements OnIni
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
         next: (response) => {
-          this.form.patchValue(response.result);
-          this.translations = response.result.translations;
+          this.form.patchValue(response.data);
+          this.translations = response.data.translations;
           this.setTranslations();
         },
         error: (err) => {

@@ -1,7 +1,5 @@
 export const Apis = {
-  login: '/api/account/login',
   register: '/api/account/register',
-  refresh: '/api/account/refresh',
   getCurrentUser: '/api/account/getCurrentUser',
 
   reloadCaptcha: '/api/index/reloadCaptcha',

@@ -20,9 +20,9 @@
  */
 /*Created with custom template*/
 export class LoginCommand {
-UserName!: string;
+userName!: string;
   
-Password!: string;
+password!: string;
   
 }
 

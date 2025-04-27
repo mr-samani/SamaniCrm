@@ -20,17 +20,17 @@
  */
 /*Created with custom template*/
 export class CreateUserCommand {
-FullName?: string;
+fullName?: string;
   
-UserName?: string;
+userName?: string;
   
-Email?: string;
+email?: string;
   
-Password?: string;
+password?: string;
   
-ConfirmationPassword?: string;
+confirmationPassword?: string;
   
-Roles?: Array<string>;
+roles?: Array<string>;
   
 }
 

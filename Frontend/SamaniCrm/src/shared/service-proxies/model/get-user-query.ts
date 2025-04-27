@@ -20,15 +20,15 @@
  */
 /*Created with custom template*/
 export class GetUserQuery {
-PageNumber?: number;
+pageNumber?: number;
   
-PageSize?: number;
+pageSize?: number;
   
-SortBy?: string;
+sortBy?: string;
   
-SortDirection?: string;
+sortDirection?: string;
   
-Filter?: string;
+filter?: string;
   
 }
 

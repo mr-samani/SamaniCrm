@@ -52,8 +52,8 @@ export class SelectIconDialogComponent extends AppComponentBase implements OnIni
       })
       .pipe(finalize(() => (this.saving = false)))
       .subscribe((response) => {
-        if (response.result) {
-          this.matDialogRef.close(response.result);
+        if (response.data) {
+          this.matDialogRef.close(response.data);
         }
       });
   }

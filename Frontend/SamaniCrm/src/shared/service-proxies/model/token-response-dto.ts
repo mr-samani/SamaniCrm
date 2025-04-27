@@ -20,9 +20,9 @@
  */
 /*Created with custom template*/
 export class TokenResponseDto {
-AccessToken!: string;
+accessToken!: string;
   
-RefreshToken!: string;
+refreshToken!: string;
   
 }
 
