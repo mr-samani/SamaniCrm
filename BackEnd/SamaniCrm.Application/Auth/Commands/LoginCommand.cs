@@ -5,9 +5,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FluentValidation;
 using MediatR;
 using SamaniCrm.Application.Auth.Commands;
+using SamaniCrm.Application.Common.DTOs;
+using SamaniCrm.Application.DTOs;
+using SamaniCrm.Application.Queries.User;
 
 namespace SamaniCrm.Application.Auth.Commands
 {
@@ -16,11 +18,7 @@ namespace SamaniCrm.Application.Auth.Commands
         public required string UserName { get; set; }
         public required string Password { get; set; }
 
-
-        public string CaptchaKey { get; set; }
-        public string CaptchaText { get; set; }
+        public InputCaptchaDTO? captcha { get; set; }
     }
-
-
 
 }

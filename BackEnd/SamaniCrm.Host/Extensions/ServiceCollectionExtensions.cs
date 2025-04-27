@@ -60,6 +60,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddFluentValidation(this IServiceCollection services)
     {
         services.AddValidatorsFromAssemblyContaining<GetUserQueryValidator>();
+        services.AddValidatorsFromAssemblyContaining<LoginCommandValidator>();
         return services;
     }
 

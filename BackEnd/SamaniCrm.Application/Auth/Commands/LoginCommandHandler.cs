@@ -35,16 +35,6 @@ namespace SamaniCrm.Application.Auth.Commands
 
         public async Task<LoginResult> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            var isCaptchaValid = _captchaStore.ValidateCaptcha(request.CaptchaKey, request.CaptchaText);
-            if (!isCaptchaValid)
-            {
-                throw new ValidationException();// ["کپچا نامعتبر است یا منقضی شده است."]);
-            }
-            // کپچا مصرف شد - حذفش کنیم
-            _captchaStore.RemoveCaptcha(request.CaptchaKey);
-
-
-
             var result = await _identityService.SigninUserAsync(request.UserName, request.Password);
 
             if (!result)
