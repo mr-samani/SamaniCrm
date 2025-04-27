@@ -5,6 +5,7 @@ using System.Security.Authentication;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using SamaniCrm.Application.Common.Exceptions;
@@ -47,24 +48,40 @@ namespace SamaniCrm.Application.Auth.Commands
             var result = await _identityService.SigninUserAsync(request.UserName, request.Password);
 
             if (!result)
+            {
+                BackgroundJob.Enqueue(() => SendLoginFailureNotification(request.UserName));
                 throw new InvalidLoginException();
-            var userData= await _identityService.GetUserDetailsByUserNameAsync(request.UserName);
+            }
+            var userData = await _identityService.GetUserDetailsByUserNameAsync(request.UserName);
 
-            var accessToken = _tokenGenerator.GenerateAccessToken(userData.userId,userData.UserName,userData.roles);
-            var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.userId,accessToken);
+            var accessToken = _tokenGenerator.GenerateAccessToken(userData.userId, userData.UserName, userData.roles);
+            var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.userId, accessToken);
 
-
+            BackgroundJob.Enqueue(() => SendLoginNotification(request.UserName));
             LoginResult output = new LoginResult(
                 AccessToken: accessToken,
                 RefreshToken: refreshToken,
                 UserId: userData.userId,
                 UserName: userData.UserName,
                 Email: userData.email ?? "",
-                FullName:userData.fullName ?? "",
+                FullName: userData.fullName ?? "",
                 ProfilePicture: userData.profilePicture ?? "",
                 Roles: userData.roles.ToArray()
                 );
             return output;
+        }
+
+
+        public void SendLoginNotification(string username)
+        {
+            // کد ارسال نوتیفیکیشن یا لاگ
+            Console.WriteLine($"User {username} logged in successfully!");
+        }
+
+        public void SendLoginFailureNotification(string username)
+        {
+            // کد ارسال نوتیفیکیشن یا لاگ
+            Console.WriteLine($"User {username} failed to log in.");
         }
     }
 }

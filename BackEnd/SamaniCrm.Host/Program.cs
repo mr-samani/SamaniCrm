@@ -1,3 +1,4 @@
+using Hangfire;
 using SamaniCrm.Host.Middlewares;
 using SamaniCrm.Infrastructure.Extensions;
 using SamaniCrm.Infrastructure.Identity;
@@ -14,6 +15,7 @@ services
     .AddJwtAuthentication(config)
     .AddInfrastructure(config)
     .AddSwaggerDocumentation()
+    .AddHangfire(config)
     .AddCustomServices();
 
 var app = builder.Build();
@@ -35,5 +37,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 //app.MapGroup("/auth2").MapCustomIdentityApi<ApplicationUser>().WithTags(["Auth2"]);
+// Hangfire Dashboard
+app.UseHangfireDashboard("/hangfire");
+
 
 app.Run();

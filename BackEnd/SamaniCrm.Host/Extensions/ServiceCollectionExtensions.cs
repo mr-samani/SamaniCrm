@@ -9,6 +9,8 @@ using System.Text.Json.Serialization;
 using System.Text.Unicode;
 using System.Threading.Tasks;
 using FluentValidation;
+using Hangfire;
+using Hangfire.SqlServer;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -140,7 +142,7 @@ public static class ServiceCollectionExtensions
                 opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                 opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 
-               // opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                // opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
 
         return services;
@@ -164,7 +166,7 @@ public static class ServiceCollectionExtensions
             });
             c.AddServer(new OpenApiServer
             {
-                Url = "https://api.samani-crm.com", 
+                Url = "https://api.samani-crm.com",
                 Description = "Production Server"
             });
             c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
@@ -197,6 +199,26 @@ public static class ServiceCollectionExtensions
     }
 
 
+    public static IServiceCollection AddHangfire(this IServiceCollection services, IConfiguration config)
+    {
+        services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(config.GetConnectionString("DefaultConnection"), new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true
+                }));
+
+        // Add the processing server as IHostedService
+        services.AddHangfireServer();
+        return services;
+    }
+
     /// <summary>
     /// ثبت سرویس های برنامه
     /// </summary>
@@ -205,7 +227,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCustomServices(this IServiceCollection services)
     {
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
-        services.AddScoped<ITokenGenerator,TokenGenerator>();
+        services.AddScoped<ITokenGenerator, TokenGenerator>();
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddSingleton(TimeProvider.System);
         //چون حافظه ایه Singleton باشه بهتره.
