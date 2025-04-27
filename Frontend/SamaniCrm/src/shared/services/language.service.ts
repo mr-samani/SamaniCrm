@@ -2,11 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AppConst } from '../app-const';
-import { Apis } from '@shared/apis';
-
-import { UserResponseDTO } from '@app/account/models/login-dto';
 import { MainSpinnerService } from './main-spinner.service';
-import { finalize, pipe } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -40,14 +36,14 @@ export class LanguageService {
     document.documentElement.dir = this.direction;
     if (dontSave == false) {
       this.mainSpinner.showLoading = true;
-      this.dataService
-        .post<any, UserResponseDTO>(Apis.changeUserLanguage + '/' + AppConst.currentLanguage, {
-          lang: AppConst.currentLanguage,
-        })
-        .pipe(finalize(() => (this.mainSpinner.showLoading = false)))
-        .subscribe((r) => {
-          location.reload();
-        });
+      // this.dataService
+      //   .post<any, UserResponseDTO>(Apis.changeUserLanguage + '/' + AppConst.currentLanguage, {
+      //     lang: AppConst.currentLanguage,
+      //   })
+      //   .pipe(finalize(() => (this.mainSpinner.showLoading = false)))
+      //   .subscribe((r) => {
+      //     location.reload();
+      //   });
     }
   }
 }

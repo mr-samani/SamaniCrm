@@ -18,15 +18,46 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class ApiError {
-field?: string;
-  
-message?: string;
-  
-code?: string;
-  
-detail?: string;
-  
+/* Created with custom template */
+
+/** Interface for ApiError */
+export interface IApiError {
+  field?: string;
+  message?: string;
+  code?: string;
+  detail?: string;
 }
+
+/** Class for ApiError */
+export class ApiError implements IApiError {
+  field?: string;
+  message?: string;
+  code?: string;
+  detail?: string;
+
+  constructor(data?: IApiError) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.field = data["field"];
+    this.message = data["message"];
+    this.code = data["code"];
+    this.detail = data["detail"];
+  }
+}
+
+  static fromJS(data: any): ApiError {
+    const instance = new ApiError();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

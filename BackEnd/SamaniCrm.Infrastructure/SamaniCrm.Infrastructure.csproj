@@ -21,8 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Persistence\NewFolder\" />
-    <Folder Include="Persistence\Seeds\" />
     <Folder Include="Sms\" />
   </ItemGroup>
 

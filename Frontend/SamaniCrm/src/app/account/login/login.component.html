@@ -26,10 +26,10 @@
     </mat-form-field>
 
     <p>
-      <mat-checkbox formControlName="rememberMe">{{ 'rememberMe' | translate }}</mat-checkbox>
+      <mat-checkbox formControlName="rememberMe">{{ 'RememberMe' | translate }}</mat-checkbox>
     </p>
 
-    <captcha formControlName="captchaResponse" #captcha *ngIf="requiredCaptcha"></captcha>
+    <captcha formControlName="captcha" #captcha *ngIf="requiredCaptcha"></captcha>
     <!-- <p>
       <a routerLink="/account/forgot-password" class="forgot-link">
         کلمه عبور خود را فراموش کرده اید؟

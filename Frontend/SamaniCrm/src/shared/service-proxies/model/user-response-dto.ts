@@ -18,21 +18,55 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class UserResponseDTO {
-id!: string;
-  
-userName?: string;
-  
-firstName?: string;
-  
-lastName?: string;
-  
-fullName?: string;
-  
-email?: string;
-  
-profilePicture?: string;
-  
+/* Created with custom template */
+
+/** Interface for UserResponseDTO */
+export interface IUserResponseDTO {
+  id: string;
+  userName?: string;
+  firstName?: string;
+  lastName?: string;
+  fullName?: string;
+  email?: string;
+  profilePicture?: string;
 }
+
+/** Class for UserResponseDTO */
+export class UserResponseDTO implements IUserResponseDTO {
+  id!: string;
+  userName?: string;
+  firstName?: string;
+  lastName?: string;
+  fullName?: string;
+  email?: string;
+  profilePicture?: string;
+
+  constructor(data?: IUserResponseDTO) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.id = data["id"];
+    this.userName = data["userName"];
+    this.firstName = data["firstName"];
+    this.lastName = data["lastName"];
+    this.fullName = data["fullName"];
+    this.email = data["email"];
+    this.profilePicture = data["profilePicture"];
+  }
+}
+
+  static fromJS(data: any): UserResponseDTO {
+    const instance = new UserResponseDTO();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

@@ -18,9 +18,37 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class RoleCreateCommand {
-roleName?: string;
-  
+/* Created with custom template */
+
+/** Interface for RoleCreateCommand */
+export interface IRoleCreateCommand {
+  roleName?: string;
 }
+
+/** Class for RoleCreateCommand */
+export class RoleCreateCommand implements IRoleCreateCommand {
+  roleName?: string;
+
+  constructor(data?: IRoleCreateCommand) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.roleName = data["roleName"];
+  }
+}
+
+  static fromJS(data: any): RoleCreateCommand {
+    const instance = new RoleCreateCommand();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

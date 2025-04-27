@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { UserResponseDTO } from '@app/account/models/login-dto';
 import { AppComponentBase } from '@app/app-component-base';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { FileUsageEnum } from '@app/file-manager/image-cropper-dialog/image-cropper-dialog.component';
@@ -9,6 +8,8 @@ import { Apis } from '@shared/apis';
 import { AppConst } from '@shared/app-const';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
+import { GetUserQuery, UserServiceProxy } from '@shared/service-proxies';
+import { UserResponseDTO } from '@shared/service-proxies/model/user-response-dto';
 import { DownloadService, DownloadFileType } from '@shared/services/download.service';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -44,6 +45,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
     injector: Injector,
     private downloadService: DownloadService,
     private fileManager: FileManagerService,
+    private userService: UserServiceProxy,
   ) {
     super(injector);
     this.breadcrumb.list = [
@@ -73,15 +75,16 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
       this.listSubscription$.unsubscribe();
     }
     this.loading = true;
-    const input = new UserListInput(this.form.value);
-    input.page = this.page;
-    input.perPage = this.perPage;
-    this.listSubscription$ = this.dataService
-      .get<UserListInput, UserResponseDTO[]>(Apis.userList, input)
+    const input = new GetUserQuery();
+    input.filter = this.form.value;
+    input.pageNumber = this.page;
+    input.pageSize = this.perPage;
+    this.listSubscription$ = this.userService
+      .getAllUser(input)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.list = response.data ?? [];
-        this.totalCount = response.meta!.total;
+        this.list = response.data?.items ?? [];
+        this.totalCount = response.meta!.totalCount ?? 0;
       });
   }
 

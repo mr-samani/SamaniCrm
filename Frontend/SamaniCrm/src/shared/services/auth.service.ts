@@ -1,13 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, map, Observable, of, throwError } from 'rxjs';
 import { Buffer } from 'buffer';
 import { TokenService } from './token.service';
 import { NgxAlertModalService } from 'ngx-alert-modal';
-import { AppConst } from '../app-const';
 import { LanguageService } from './language.service';
-import { Apis } from '@shared/apis';
 import { AccountServiceProxy, LoginCommand, RefreshTokenCommand, UserResponseDTO } from '@shared/service-proxies';
 @Injectable({
   providedIn: 'root',
@@ -17,6 +15,7 @@ export class AuthService {
     UserResponseDTO | undefined
   >(undefined);
   public currentUser: Observable<UserResponseDTO | undefined>;
+  accountService: AccountServiceProxy;
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -24,8 +23,9 @@ export class AuthService {
 
     private alert: NgxAlertModalService,
     private language: LanguageService,
-    private accountService: AccountServiceProxy,
+    injector: Injector,
   ) {
+    this.accountService = injector.get(AccountServiceProxy);
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
@@ -37,15 +37,17 @@ export class AuthService {
     return this.accountService.login(input).pipe(
       map((response) => {
         if (response.success && response.data && response.data.accessToken) {
-          this.tokenService.saveToken(response.data.accessToken);
-          this.currentUserSubject.next({
-            id: response.data.userId!,
-            fullName: response.data.fullName,
-            email: response.data.email,
-            userName: response.data.userName,
-            profilePicture: response.data.profilePicture,
-            // roles:response.data.roles,
-          });
+          this.tokenService.set(response.data);
+          this.currentUserSubject.next(
+            new UserResponseDTO({
+              id: response.data.userId!,
+              fullName: response.data.fullName,
+              email: response.data.email,
+              userName: response.data.userName,
+              profilePicture: response.data.profilePicture,
+              // roles:response.data.roles,
+            }),
+          );
         }
         return response;
       }),
@@ -56,7 +58,7 @@ export class AuthService {
   //   return this.dataService.post<RegisterRequest, LoginDto>(Apis.register, credential).pipe(
   //     map((response) => {
   //       if (response.success && response.data && response.data.token && response.data.user) {
-  //         this.tokenService.saveToken(response.data.token);
+  //         this.tokenService.set(response.data);
   //         this.currentUserSubject.next(response.data.user);
   //       }
   //       return response;
@@ -68,7 +70,7 @@ export class AuthService {
     return this.accountService.refresh(input).pipe(
       map((response) => {
         if (response.success && response.data && response.data.accessToken) {
-          this.tokenService.updateToken(response.data.accessToken);
+          this.tokenService.set(response.data);
           return response.data.accessToken;
         } else {
           this.logOut();
@@ -96,7 +98,7 @@ export class AuthService {
   }
 
   logOut() {
-    this.tokenService.removeTokens();
+    this.tokenService.remove();
     this.router.navigate(['/account/login']);
   }
 

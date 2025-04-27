@@ -18,23 +18,62 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class LoginResult {
-accessToken?: string;
-  
-refreshToken?: string;
-  
-userId?: string;
-  
-userName?: string;
-  
-email?: string;
-  
-fullName?: string;
-  
-profilePicture?: string;
-  
-roles?: Array<string>;
-  
+/* Created with custom template */
+
+/** Interface for LoginResult */
+export interface ILoginResult {
+  accessToken?: string;
+  refreshToken?: string;
+  userId?: string;
+  userName?: string;
+  email?: string;
+  fullName?: string;
+  profilePicture?: string;
+  roles?: Array<string>;
 }
+
+/** Class for LoginResult */
+export class LoginResult implements ILoginResult {
+  accessToken?: string;
+  refreshToken?: string;
+  userId?: string;
+  userName?: string;
+  email?: string;
+  fullName?: string;
+  profilePicture?: string;
+  roles?: Array<string>;
+
+  constructor(data?: ILoginResult) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.accessToken = data["accessToken"];
+    this.refreshToken = data["refreshToken"];
+    this.userId = data["userId"];
+    this.userName = data["userName"];
+    this.email = data["email"];
+    this.fullName = data["fullName"];
+    this.profilePicture = data["profilePicture"];
+    if (Array.isArray(data["roles"])) {
+      this.roles = [] as any;
+      for (let item of data["roles"])
+        (this.roles as any).push(item);
+    }
+  }
+}
+
+  static fromJS(data: any): LoginResult {
+    const instance = new LoginResult();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

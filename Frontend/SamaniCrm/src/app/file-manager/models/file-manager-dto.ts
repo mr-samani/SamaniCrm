@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-import { UserResponseDTO } from '@app/account/models/login-dto';
+import { UserResponseDTO } from '@shared/service-proxies/model/user-response-dto';
 import { ThumbnailsDto } from '../models/thumbnails-dto';
 
 /**

@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { AppComponentBase } from 'src/app/app-component-base';
+import { AppComponentBase } from '@app/app-component-base';
 
 @Component({
   selector: 'app-footer',

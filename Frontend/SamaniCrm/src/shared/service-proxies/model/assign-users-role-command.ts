@@ -18,11 +18,44 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class AssignUsersRoleCommand {
-userName?: string;
-  
-roles?: Array<string>;
-  
+/* Created with custom template */
+
+/** Interface for AssignUsersRoleCommand */
+export interface IAssignUsersRoleCommand {
+  userName?: string;
+  roles?: Array<string>;
 }
+
+/** Class for AssignUsersRoleCommand */
+export class AssignUsersRoleCommand implements IAssignUsersRoleCommand {
+  userName?: string;
+  roles?: Array<string>;
+
+  constructor(data?: IAssignUsersRoleCommand) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.userName = data["userName"];
+    if (Array.isArray(data["roles"])) {
+      this.roles = [] as any;
+      for (let item of data["roles"])
+        (this.roles as any).push(item);
+    }
+  }
+}
+
+  static fromJS(data: any): AssignUsersRoleCommand {
+    const instance = new AssignUsersRoleCommand();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

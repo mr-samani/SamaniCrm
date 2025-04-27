@@ -18,6 +18,7 @@ model/captcha-dto.ts
 model/create-user-command.ts
 model/edit-user-profile-command.ts
 model/get-user-query.ts
+model/input-captcha-dto.ts
 model/int32-api-response.ts
 model/login-command.ts
 model/login-result-api-response.ts

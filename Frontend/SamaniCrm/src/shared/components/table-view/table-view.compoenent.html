@@ -25,12 +25,12 @@
             <ng-container [ngSwitch]="f.type">
               <ng-container *ngSwitchCase="'avatar'">
                 <img *ngIf="item[f.column]" [src]="item[f.column]" class="img-circle" />
-                <img *ngIf="!item[f.column]" src="/assets/images/avatar.jpg" class="img-circle" />
+                <img *ngIf="!item[f.column]" src="/images/avatar.jpg" class="img-circle" />
               </ng-container>
 
               <ng-container *ngSwitchCase="'image'">
                 <img *ngIf="item[f.column]" [src]="item[f.column]" class="img-cover" />
-                <img *ngIf="!item[f.column]" src="/assets/images/default-image.png" class="img-cover" />
+                <img *ngIf="!item[f.column]" src="/images/default-image.png" class="img-cover" />
               </ng-container>
 
               <ng-container *ngSwitchCase="'date'">

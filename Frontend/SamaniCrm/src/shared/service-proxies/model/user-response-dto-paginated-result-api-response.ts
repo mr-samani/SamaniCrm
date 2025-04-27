@@ -21,15 +21,50 @@ import { ApiError } from './api-error';
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class UserResponseDTOPaginatedResultApiResponse {
-success?: boolean;
-  
-data?: UserResponseDTOPaginatedResult;
-  
-errors?: Array<ApiError>;
-  
-meta?: Meta;
-  
+/* Created with custom template */
+
+/** Interface for UserResponseDTOPaginatedResultApiResponse */
+export interface IUserResponseDTOPaginatedResultApiResponse {
+  success?: boolean;
+  data?: UserResponseDTOPaginatedResult;
+  errors?: Array<ApiError>;
+  meta?: Meta;
 }
+
+/** Class for UserResponseDTOPaginatedResultApiResponse */
+export class UserResponseDTOPaginatedResultApiResponse implements IUserResponseDTOPaginatedResultApiResponse {
+  success?: boolean;
+  data?: UserResponseDTOPaginatedResult;
+  errors?: Array<ApiError>;
+  meta?: Meta;
+
+  constructor(data?: IUserResponseDTOPaginatedResultApiResponse) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.success = data["success"];
+    this.data = data["data"];
+    if (Array.isArray(data["errors"])) {
+      this.errors = [] as any;
+      for (let item of data["errors"])
+        (this.errors as any).push(ApiError.fromJS(item));
+    }
+    this.meta = data["meta"];
+  }
+}
+
+  static fromJS(data: any): UserResponseDTOPaginatedResultApiResponse {
+    const instance = new UserResponseDTOPaginatedResultApiResponse();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

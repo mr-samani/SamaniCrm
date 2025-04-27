@@ -31,9 +31,7 @@
             ],
             "styles": [
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/styles/styles.scss",
-              "src/styles/light-theme.scss",
-              "src/styles/dark-theme.scss"
+              "src/styles/styles.scss"
             ],
             "scripts": [
               "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
@@ -67,8 +65,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "sslKey": "../SSL/localhost.key",
-            "sslCert": "../SSL/localhost.crt"
+            "sslKey": "../../SSL/localhost.key",
+            "sslCert": "../../SSL/localhost.crt"
           },
           "configurations": {
             "production": {
@@ -97,9 +95,7 @@
             ],
             "styles": [
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/styles/styles.scss",
-              "src/styles/light-theme.scss",
-              "src/styles/dark-theme.scss"
+              "src/styles/styles.scss"
             ],
             "scripts": ["./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
           }

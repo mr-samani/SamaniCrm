@@ -1,0 +1,38 @@
+.accordion {
+  --bs-accordion-btn-padding-x: 1.25rem;
+  --bs-accordion-btn-padding-y: 0.5rem;
+}
+
+html[dir='rtl'] {
+  .accordion-button::after {
+    margin-right: auto;
+    margin-left: 0;
+  }
+
+  .dropdown-menu[data-bs-popper] {
+    left: auto;
+    right: 0;
+  }
+
+  .page-item:last-child .page-link {
+    border-radius: 0;
+    border-top-left-radius: var(--bs-pagination-border-radius);
+    border-bottom-left-radius: var(--bs-pagination-border-radius);
+  }
+  .page-item:first-child .page-link {
+    border-radius: 0;
+    border-top-right-radius: var(--bs-pagination-border-radius);
+    border-bottom-right-radius: var(--bs-pagination-border-radius);
+  }
+}
+
+.dropdown-menu {
+  text-align: start;
+}
+
+.pagination {
+  --bs-pagination-font-size: 0.8rem;
+  .page-link .fa {
+    font-size: 0.8rem;
+  }
+}

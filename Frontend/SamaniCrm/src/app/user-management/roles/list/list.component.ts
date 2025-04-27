@@ -2,7 +2,7 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { FileUsageEnum } from '@app/file-manager/image-cropper-dialog/image-cropper-dialog.component';
 import { Apis } from '@shared/apis';
 import { finalize } from 'rxjs/operators';
-import { AppComponentBase } from 'src/app/app-component-base';
+import { AppComponentBase } from '@app/app-component-base';
 import { FileManagerService } from 'src/app/file-manager/file-manager.service';
 import { AppConst } from 'src/shared/app-const';
 import { DownloadFileType, DownloadService } from 'src/shared/services/download.service';

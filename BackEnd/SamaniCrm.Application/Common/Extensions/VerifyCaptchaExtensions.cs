@@ -14,20 +14,29 @@ namespace SamaniCrm.Application
       
      
 
-        private static ICaptchaStore _captchaStore; 
+        private static ICaptchaStore _captchaStore;
+        public static void Configure(ICaptchaStore captchaStore)
+        {
+            _captchaStore = captchaStore;
+        }
 
-        
 
         public static bool VerifyCaptcha(this InputCaptchaDTO? captcha)
         {
             if (captcha == null || string.IsNullOrEmpty(captcha.CaptchaKey) || string.IsNullOrEmpty(captcha.CaptchaText))
             {
-                throw new ArgumentException("Captcha key or text cannot be null or empty");
+                // throw new ArgumentException("Captcha key or text cannot be null or empty");
+                return false;
             }
 
             try
             {
-                 var isCaptchaValid = _captchaStore.ValidateCaptcha(captcha.CaptchaKey, captcha.CaptchaText);
+                if (_captchaStore == null)
+                {
+                    throw new InvalidOperationException("CaptchaStore is not configured. Call VerifyCaptchaExtensions.Configure() during application startup.");
+                }
+
+                var isCaptchaValid = _captchaStore.ValidateCaptcha(captcha.CaptchaKey, captcha.CaptchaText);
                 _captchaStore.RemoveCaptcha(captcha.CaptchaKey);
                 return isCaptchaValid;
             }

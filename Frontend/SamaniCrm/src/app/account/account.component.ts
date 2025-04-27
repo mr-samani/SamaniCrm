@@ -28,8 +28,8 @@ export class AccountComponent extends AppComponentBase implements OnInit {
     const imageCount = 7;
     const rndImg = Math.floor(Math.random() * imageCount) + 1;
 
-    this.backgroundImage = AppConst.baseUrl + '/assets/images/login/' + rndImg + '/image.png';
-    const cssUrl = AppConst.baseUrl + '/assets/images/login/' + rndImg + '/background.css';
+    this.backgroundImage = AppConst.baseUrl + '/images/login/' + rndImg + '/image.png';
+    const cssUrl = AppConst.baseUrl + '/images/login/' + rndImg + '/background.css';
     const headers = new HttpHeaders().set('Content-Type', 'text/plain; charset=utf-8');
     this.http.get<string>(cssUrl, { headers: headers, responseType: 'text' as any }).subscribe((c) => {
       this.backgroundColor = c;

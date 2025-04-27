@@ -35,12 +35,12 @@ export class RegisterComponent extends AppComponentBase implements OnInit {
     }
     this.loading = true;
     const formValue = this.registerForm.value;
-    this.authService
-      .register(formValue)
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe((result: any) => {
-        this.notify.success('ثبت نام شما با موفقیت انجام شد');
-        this.router.navigate(['/app']);
-      });
+    // this.authService
+    //   .register(formValue)
+    //   .pipe(finalize(() => (this.loading = false)))
+    //   .subscribe((result: any) => {
+    //     this.notify.success('ثبت نام شما با موفقیت انجام شد');
+    //     this.router.navigate(['/app']);
+    //   });
   }
 }

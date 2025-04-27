@@ -4,6 +4,7 @@ export * from './captcha-dto';
 export * from './create-user-command';
 export * from './edit-user-profile-command';
 export * from './get-user-query';
+export * from './input-captcha-dto';
 export * from './int32-api-response';
 export * from './login-command';
 export * from './login-result';

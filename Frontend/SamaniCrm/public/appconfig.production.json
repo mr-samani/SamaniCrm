@@ -1,0 +1,6 @@
+{
+  "baseUrl": "https://localhost:4320",
+  "apiUrl": "http://localhost:5753",
+  "tinyMceApiKey": "",
+  "appName": "mr-samani"
+}

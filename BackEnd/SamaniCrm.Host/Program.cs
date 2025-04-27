@@ -1,4 +1,6 @@
-using Hangfire;
+﻿using Hangfire;
+using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application;
 using SamaniCrm.Host.Middlewares;
 using SamaniCrm.Infrastructure.Extensions;
 using SamaniCrm.Infrastructure.Identity;
@@ -19,6 +21,10 @@ services
     .AddCustomServices();
 
 var app = builder.Build();
+// برای اینکه از همان instance ICaptchaStore استفاده کنم و یک نمون جدید نسازد این جا مقدار دهی میکنم
+var captchaStore = app.Services.GetRequiredService<ICaptchaStore>();
+VerifyCaptchaExtensions.Configure(captchaStore);
+
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseMiddleware<ApiExceptionHandlingMiddleware>();

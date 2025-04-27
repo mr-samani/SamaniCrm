@@ -18,9 +18,37 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class RevokeRefreshTokenCommand {
-token?: string;
-  
+/* Created with custom template */
+
+/** Interface for RevokeRefreshTokenCommand */
+export interface IRevokeRefreshTokenCommand {
+  token?: string;
 }
+
+/** Class for RevokeRefreshTokenCommand */
+export class RevokeRefreshTokenCommand implements IRevokeRefreshTokenCommand {
+  token?: string;
+
+  constructor(data?: IRevokeRefreshTokenCommand) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.token = data["token"];
+  }
+}
+
+  static fromJS(data: any): RevokeRefreshTokenCommand {
+    const instance = new RevokeRefreshTokenCommand();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

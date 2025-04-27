@@ -2,8 +2,8 @@ import { Injectable, Injector } from '@angular/core';
 import { Upload, UploadOptions } from 'tus-js-client';
 import { TokenService } from '../../shared/services/token.service';
 import { AppConst } from '../../shared/app-const';
-import { AppComponentBase } from 'src/app/app-component-base';
 import { FileUsageEnum } from './image-cropper-dialog/image-cropper-dialog.component';
+import { AppComponentBase } from '@app/app-component-base';
 
 @Injectable()
 export class TusUploadService extends AppComponentBase {
@@ -60,7 +60,7 @@ export class TusUploadService extends AppComponentBase {
         },
         metadata,
         headers: {
-          Authorization: 'Bearer ' + this._tokenService.getToken(),
+          Authorization: 'Bearer ' + this._tokenService.get().accessToken,
           fileToken: token,
         },
         onError: (error) => {

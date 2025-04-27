@@ -1,0 +1,94 @@
+// Theme	                Light or dark?                  	Specification
+//--------------------------------------------------------------------------------
+// azure-blue.css	        Light	                            Material Design 3
+// rose-red.css         	Light	                            Material Design 3
+// cyan-orange.css	        Dark	                            Material Design 3
+// magenta-violet.css	    Dark	                            Material Design 3
+// deeppurple-amber.css	    Light	                            Material Design 2
+// indigo-pink.css	        Light	                            Material Design 2
+// pink-bluegrey.css    	Dark	                            Material Design 2
+// purple-green.css	        Dark	                            Material Design 2
+
+//@import '@angular/material/prebuilt-themes/magenta-violet.css';
+// @import '@angular/material/prebuilt-themes/rose-red.css';
+@use '@angular/material' as mat;
+
+@use '@angular/material/prebuilt-themes/azure-blue.css';
+
+$faTheme: mat.define-theme(
+  (
+    density: (
+      scale: -2,
+    ),
+    typography: (
+      brand-family: 'iranSans',
+      plain-family: 'iranSans',
+    ),
+  )
+);
+$enTheme: mat.define-theme(
+  (
+    density: (
+      scale: -2,
+    ),
+    typography: (
+      brand-family: 'axiforma',
+      plain-family: 'axiforma',
+    ),
+  )
+);
+
+$dark-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: mat.$violet-palette,
+    ),
+  )
+);
+
+body {
+  &[dir='rtl'] {
+    @include mat.all-component-themes($faTheme);
+  }
+  &[dir='ltr'] {
+    @include mat.theme($enTheme);
+  }
+  &.color-scheme-dark {
+    @include mat.all-component-colors($dark-theme);
+
+    .mat-primary.mat-mdc-checkbox,
+    .mat-accent.mat-mdc-checkbox,
+    .mat-internal-form-field {
+      --mat-checkbox-disabled-label-color: rgba(209, 209, 209, 0.38);
+      --mat-checkbox-label-text-color: var(--bs-body-color);
+    }
+  }
+
+  --mdc-dialog-container-shape: 10px;
+  --mat-dialog-container-min-width: 780px;
+  --mat-dialog-container-max-width: unset;
+}
+/* fix bug multi line error */
+mat-form-field.mat-mdc-form-field {
+  &-subscript-wrapper {
+    min-height: 16px;
+    &:before {
+      content: unset;
+    }
+  }
+  &-error-wrapper {
+    position: static;
+  }
+  &-hint-wrapper {
+    position: static;
+  }
+}
+[class^='col-'] mat-form-field.mat-mdc-form-field {
+  width: 100%;
+}
+/* for use spinner in button*/
+.mdc-button__label {
+  display: flex;
+  gap: 10px;
+}

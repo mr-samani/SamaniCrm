@@ -21,15 +21,54 @@ import { ApiError } from './api-error';
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class RoleResponseDTOListApiResponse {
-success?: boolean;
-  
-data?: Array<RoleResponseDTO>;
-  
-errors?: Array<ApiError>;
-  
-meta?: Meta;
-  
+/* Created with custom template */
+
+/** Interface for RoleResponseDTOListApiResponse */
+export interface IRoleResponseDTOListApiResponse {
+  success?: boolean;
+  data?: Array<RoleResponseDTO>;
+  errors?: Array<ApiError>;
+  meta?: Meta;
 }
+
+/** Class for RoleResponseDTOListApiResponse */
+export class RoleResponseDTOListApiResponse implements IRoleResponseDTOListApiResponse {
+  success?: boolean;
+  data?: Array<RoleResponseDTO>;
+  errors?: Array<ApiError>;
+  meta?: Meta;
+
+  constructor(data?: IRoleResponseDTOListApiResponse) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.success = data["success"];
+    if (Array.isArray(data["data"])) {
+      this.data = [] as any;
+      for (let item of data["data"])
+        (this.data as any).push(RoleResponseDTO.fromJS(item));
+    }
+    if (Array.isArray(data["errors"])) {
+      this.errors = [] as any;
+      for (let item of data["errors"])
+        (this.errors as any).push(ApiError.fromJS(item));
+    }
+    this.meta = data["meta"];
+  }
+}
+
+  static fromJS(data: any): RoleResponseDTOListApiResponse {
+    const instance = new RoleResponseDTOListApiResponse();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

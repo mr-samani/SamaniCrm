@@ -2,7 +2,7 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { Apis } from '@shared/apis';
 import { LanguageDto } from '@shared/models/language-dto';
 import { finalize } from 'rxjs/operators';
-import { AppComponentBase } from 'src/app/app-component-base';
+import { AppComponentBase } from '@app/app-component-base';
 import { FieldsType } from 'src/shared/components/table-view/fields-type.model';
 
 @Component({

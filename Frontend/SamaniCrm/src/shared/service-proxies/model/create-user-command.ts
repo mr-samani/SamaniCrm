@@ -18,19 +18,56 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class CreateUserCommand {
-fullName?: string;
-  
-userName?: string;
-  
-email?: string;
-  
-password?: string;
-  
-confirmationPassword?: string;
-  
-roles?: Array<string>;
-  
+/* Created with custom template */
+
+/** Interface for CreateUserCommand */
+export interface ICreateUserCommand {
+  fullName?: string;
+  userName?: string;
+  email?: string;
+  password?: string;
+  confirmationPassword?: string;
+  roles?: Array<string>;
 }
+
+/** Class for CreateUserCommand */
+export class CreateUserCommand implements ICreateUserCommand {
+  fullName?: string;
+  userName?: string;
+  email?: string;
+  password?: string;
+  confirmationPassword?: string;
+  roles?: Array<string>;
+
+  constructor(data?: ICreateUserCommand) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.fullName = data["fullName"];
+    this.userName = data["userName"];
+    this.email = data["email"];
+    this.password = data["password"];
+    this.confirmationPassword = data["confirmationPassword"];
+    if (Array.isArray(data["roles"])) {
+      this.roles = [] as any;
+      for (let item of data["roles"])
+        (this.roles as any).push(item);
+    }
+  }
+}
+
+  static fromJS(data: any): CreateUserCommand {
+    const instance = new CreateUserCommand();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

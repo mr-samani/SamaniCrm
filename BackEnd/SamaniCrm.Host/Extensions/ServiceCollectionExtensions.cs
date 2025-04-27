@@ -18,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SamaniCrm.Application;
 using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.Behaviors;
 using SamaniCrm.Application.Common.Interfaces;
@@ -125,7 +126,7 @@ public static class ServiceCollectionExtensions
         {
             options.AddPolicy("DefaultCors", policy =>
             {
-                policy.WithOrigins("http://example.com", "https://localhost:44342", "http://localhost:5753")
+                policy.WithOrigins("http://example.com", "https://localhost:44342", "http://localhost:5753", "https://localhost:5753")
                       .AllowAnyHeader()
                       .AllowAnyMethod();
             });
@@ -234,6 +235,7 @@ public static class ServiceCollectionExtensions
         //چون حافظه ایه Singleton باشه بهتره.
         services.AddSingleton<ICaptchaStore, InMemoryCaptchaStore>();
         services.AddHostedService<CaptchaCleanupBackgroundService>();
+
 
 
         return services;

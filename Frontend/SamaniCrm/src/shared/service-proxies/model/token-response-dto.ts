@@ -18,11 +18,40 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class TokenResponseDto {
-accessToken!: string;
-  
-refreshToken!: string;
-  
+/* Created with custom template */
+
+/** Interface for TokenResponseDto */
+export interface ITokenResponseDto {
+  accessToken: string;
+  refreshToken: string;
 }
+
+/** Class for TokenResponseDto */
+export class TokenResponseDto implements ITokenResponseDto {
+  accessToken!: string;
+  refreshToken!: string;
+
+  constructor(data?: ITokenResponseDto) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.accessToken = data["accessToken"];
+    this.refreshToken = data["refreshToken"];
+  }
+}
+
+  static fromJS(data: any): TokenResponseDto {
+    const instance = new TokenResponseDto();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

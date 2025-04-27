@@ -18,15 +18,46 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class Meta {
-totalCount?: number;
-  
-pageNumber?: number;
-  
-pageSize?: number;
-  
- readonly totalPages?: number;
-  
+/* Created with custom template */
+
+/** Interface for Meta */
+export interface IMeta {
+  totalCount?: number;
+  pageNumber?: number;
+  pageSize?: number;
+  totalPages?: number;
 }
+
+/** Class for Meta */
+export class Meta implements IMeta {
+  totalCount?: number;
+  pageNumber?: number;
+  pageSize?: number;
+  totalPages?: number;
+
+  constructor(data?: IMeta) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.totalCount = data["totalCount"];
+    this.pageNumber = data["pageNumber"];
+    this.pageSize = data["pageSize"];
+    this.totalPages = data["totalPages"];
+  }
+}
+
+  static fromJS(data: any): Meta {
+    const instance = new Meta();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

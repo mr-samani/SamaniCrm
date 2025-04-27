@@ -1,9 +1,14 @@
-import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom, isDevMode, provideZoneChangeDetection } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  ApplicationConfig,
+  importProvidersFrom,
+  isDevMode,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { BASE_PATH, Configuration } from '../shared/service-proxies';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
@@ -14,6 +19,9 @@ import { PAGINATION_LABELS } from '@shared/components/pagination/pagination.comp
 import { PaginationLocalize } from '@shared/localize/pagination';
 import { AuthInterceptor } from '@shared/services/auth.interceptor';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { AccountServiceProxy } from '@shared/service-proxies/api/account.service';
+import { Configuration } from '@shared/service-proxies/configuration';
+import { AuthService } from '@shared/services/auth.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -39,6 +47,8 @@ export const appConfig: ApplicationConfig = {
       }),
       MatSnackBarModule,
     ),
+    AccountServiceProxy,
+
     {
       provide: APP_INITIALIZER,
       useFactory: (appInitializer: AppInitializer, translate: TranslateService) => appInitializer.init(translate),
@@ -64,7 +74,7 @@ function configurationFactory() {
   return config;
 }
 export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+  return new TranslateHttpLoader(http, './i18n/', '.json');
 }
 
 export function getRemoteServiceBaseUrl(): string {

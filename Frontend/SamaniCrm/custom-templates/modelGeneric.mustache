@@ -1,18 +1,58 @@
 {{>licenseInfo}}
-/*Created with custom template*/
+/* Created with custom template */
 {{#models}}
 {{#model}}
-export class {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{
+
+/** Interface for {{classname}} */
+export interface I{{classname}} {
 {{#vars}}
   {{#description}}
   /**
    * {{{description}}}
    */
   {{/description}}
-  {{#isReadOnly}}
- readonly {{/isReadOnly}}{{name}}{{^required}}?{{/required}}{{#required}}{{^nullable}}!{{/nullable}}{{/required}}: {{{datatype}}};
-  
+  {{name}}{{^required}}?{{/required}}: {{{datatype}}};
 {{/vars}}
 }
+
+/** Class for {{classname}} */
+export class {{classname}} implements I{{classname}} {
+{{#vars}}
+  {{name}}{{^required}}?{{/required}}{{#required}}{{^nullable}}!{{/nullable}}{{/required}}: {{{datatype}}}{{#nullable}} | undefined{{/nullable}};
+{{/vars}}
+
+  constructor(data?: I{{classname}}) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+{{#vars}}
+    {{#isArray}}
+    if (Array.isArray(data["{{baseName}}"])) {
+      this.{{name}} = [] as any;
+      for (let item of data["{{baseName}}"])
+        (this.{{name}} as any).push({{#complexType}}{{{complexType}}}.fromJS(item){{/complexType}}{{^complexType}}item{{/complexType}});
+    }
+    {{/isArray}}
+    {{^isArray}}
+    this.{{name}} = data["{{baseName}}"];
+    {{/isArray}}
+{{/vars}}
+  }
+}
+
+  static fromJS(data: any): {{classname}} {
+    const instance = new {{classname}}();
+    instance.init(data);
+    return instance;
+  }
+}
+
 {{/model}}
 {{/models}}

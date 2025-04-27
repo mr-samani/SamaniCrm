@@ -1,0 +1,127 @@
+// @use '@angular/material' as mat;
+@use './bootstrap-overide.scss';
+@use './dashboard.scss';
+@use './flags.scss';
+@use './theme.scss';
+@use './list.scss';
+
+@font-face {
+  font-family: 'iranSans';
+  src:
+    url('../../public/fonts/farsiNum/eot/IRANSansXFaNum-UltraLight.eot') format('embedded-opentype'),
+    url('../../public/fonts/farsiNum/otf/IRANSansXFaNum-UltraLight.otf') format('truetype'),
+    url('../../public/fonts/farsiNum/ttf/IRANSansXFaNum-UltraLight.ttf') format('truetype'),
+    url('../../public/fonts/farsiNum/woff/IRANSansXFaNum-UltraLight.woff') format('woff'),
+    url('../../public/fonts/farsiNum/woff2/IRANSansXFaNum-UltraLight.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'axiforma';
+  src:
+    url('../../public/fonts/Axiforma/Axiforma-Regular.eot') format('embedded-opentype'),
+    url('../../public/fonts/Axiforma/Axiforma-Regular.ttf') format('truetype'),
+    url('../../public/fonts/Axiforma/Axiforma-Regular.woff') format('woff');
+}
+
+:root {
+  // font awosome weigth
+  --fa-style: 400;
+  // font awosome size
+  --fa-size: 16px;
+  /* for table view responsive */
+  --available-content-height: calc(100vh - 220px);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  &.dark-mode {
+    background-color: #252222;
+    color: #eee;
+
+    .ngx-alert-container {
+      &.has-backdrop {
+        background: #a9a9a954 !important;
+      }
+
+      .ngx-alert-inner {
+        background-color: #252222 !important;
+        color: #eee;
+      }
+
+      .ngx-alert-title,
+      .ngx-alert-body {
+        word-wrap: break-word;
+      }
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+body[dir='rtl'] {
+  font-family: iranSans;
+  font-size: 12px !important;
+}
+body[dir='ltr'] {
+  font-family: 'axiforma', Roboto, 'Helvetica Neue', sans-serif;
+  font-size: 10px !important;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.fa {
+  font-size: var(--fa-size);
+}
+
+/*notify */
+.notify-success {
+  background-color: #00bb73;
+  --mdc-snackbar-container-color: #00bb73;
+  color: #fff;
+  --mdc-snackbar-supporting-text-color: #fff;
+}
+
+.notify-warning {
+  background-color: #ff7b00;
+  --mdc-snackbar-container-color: #ff7b00;
+  color: #fff;
+  --mdc-snackbar-supporting-text-color: #fff;
+}
+
+.notify-error {
+  background-color: #ff0055;
+  --mdc-snackbar-container-color: #ff0055;
+  color: #fff;
+  --mdc-snackbar-supporting-text-color: #fff;
+}
+
+.notify-info {
+  background-color: #0084ff;
+  --mdc-snackbar-container-color: #0084ff;
+  color: #fff;
+  --mdc-snackbar-supporting-text-color: #fff;
+}
+
+/* end of notify */
+
+/* alert */
+html[data-bs-theme='light'] {
+  .ngx-alert-container .ngx-alert-inner {
+    background-color: var(--bs-light) !important;
+  }
+}
+
+html[data-bs-theme='dark'] {
+  .ngx-alert-container .ngx-alert-inner {
+    background-color: var(--bs-dark) !important;
+  }
+}

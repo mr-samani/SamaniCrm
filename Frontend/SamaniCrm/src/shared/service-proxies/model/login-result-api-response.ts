@@ -21,15 +21,50 @@ import { ApiError } from './api-error';
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class LoginResultApiResponse {
-success?: boolean;
-  
-data?: LoginResult;
-  
-errors?: Array<ApiError>;
-  
-meta?: Meta;
-  
+/* Created with custom template */
+
+/** Interface for LoginResultApiResponse */
+export interface ILoginResultApiResponse {
+  success?: boolean;
+  data?: LoginResult;
+  errors?: Array<ApiError>;
+  meta?: Meta;
 }
+
+/** Class for LoginResultApiResponse */
+export class LoginResultApiResponse implements ILoginResultApiResponse {
+  success?: boolean;
+  data?: LoginResult;
+  errors?: Array<ApiError>;
+  meta?: Meta;
+
+  constructor(data?: ILoginResultApiResponse) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.success = data["success"];
+    this.data = data["data"];
+    if (Array.isArray(data["errors"])) {
+      this.errors = [] as any;
+      for (let item of data["errors"])
+        (this.errors as any).push(ApiError.fromJS(item));
+    }
+    this.meta = data["meta"];
+  }
+}
+
+  static fromJS(data: any): LoginResultApiResponse {
+    const instance = new LoginResultApiResponse();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

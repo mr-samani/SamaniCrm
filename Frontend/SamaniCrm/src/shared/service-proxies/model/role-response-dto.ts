@@ -18,11 +18,40 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class RoleResponseDTO {
-id?: string;
-  
-roleName?: string;
-  
+/* Created with custom template */
+
+/** Interface for RoleResponseDTO */
+export interface IRoleResponseDTO {
+  id?: string;
+  roleName?: string;
 }
+
+/** Class for RoleResponseDTO */
+export class RoleResponseDTO implements IRoleResponseDTO {
+  id?: string;
+  roleName?: string;
+
+  constructor(data?: IRoleResponseDTO) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.id = data["id"];
+    this.roleName = data["roleName"];
+  }
+}
+
+  static fromJS(data: any): RoleResponseDTO {
+    const instance = new RoleResponseDTO();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

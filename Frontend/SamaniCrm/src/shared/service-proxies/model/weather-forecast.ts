@@ -18,15 +18,46 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class WeatherForecast {
-date?: string;
-  
-temperatureC?: number;
-  
- readonly temperatureF?: number;
-  
-summary?: string;
-  
+/* Created with custom template */
+
+/** Interface for WeatherForecast */
+export interface IWeatherForecast {
+  date?: string;
+  temperatureC?: number;
+  temperatureF?: number;
+  summary?: string;
 }
+
+/** Class for WeatherForecast */
+export class WeatherForecast implements IWeatherForecast {
+  date?: string;
+  temperatureC?: number;
+  temperatureF?: number;
+  summary?: string;
+
+  constructor(data?: IWeatherForecast) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.date = data["date"];
+    this.temperatureC = data["temperatureC"];
+    this.temperatureF = data["temperatureF"];
+    this.summary = data["summary"];
+  }
+}
+
+  static fromJS(data: any): WeatherForecast {
+    const instance = new WeatherForecast();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

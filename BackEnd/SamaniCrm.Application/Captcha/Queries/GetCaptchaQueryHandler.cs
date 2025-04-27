@@ -25,10 +25,10 @@ namespace SamaniCrm.Application.Captcha.Queries
         public async Task<CaptchaDto> Handle(GetCaptchaQuery request, CancellationToken cancellationToken)
         {
 
-            var randomText = GenerateRandomText(5);
+            var randomText = GenerateRandomText(2);
             //   using FileStream fs = File.OpenWrite("d:/1.jpg") ;
             using var ms = new MemoryStream();
-            using (Stream picStream = ImageFactory.BuildImage(randomText, 60, 120, 20, 10, ImageFormat.Jpeg))
+            using (Stream picStream = ImageFactory.BuildImage(randomText, 40, 140, 24, 10, ImageFormat.Jpeg))
             {
                 // picStream.CopyTo(fs);
                 picStream.CopyTo(ms);

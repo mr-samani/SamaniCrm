@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { InputCaptchaDTO } from './input-captcha-dto';
 
 
 /**
@@ -18,15 +19,43 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class LoginCommand {
-userName!: string;
-  
-password!: string;
-  
-captchaKey?: string;
-  
-captchaText?: string;
-  
+/* Created with custom template */
+
+/** Interface for LoginCommand */
+export interface ILoginCommand {
+  userName: string;
+  password: string;
+  captcha?: InputCaptchaDTO;
 }
+
+/** Class for LoginCommand */
+export class LoginCommand implements ILoginCommand {
+  userName!: string;
+  password!: string;
+  captcha?: InputCaptchaDTO;
+
+  constructor(data?: ILoginCommand) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.userName = data["userName"];
+    this.password = data["password"];
+    this.captcha = data["captcha"];
+  }
+}
+
+  static fromJS(data: any): LoginCommand {
+    const instance = new LoginCommand();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

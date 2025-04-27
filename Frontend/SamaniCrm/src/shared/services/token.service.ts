@@ -1,40 +1,49 @@
 import { Injectable } from '@angular/core';
-import { CookieService } from './cookie.service';
-import { DateTime } from 'luxon';
-
+export class TokenModel {
+  accessToken?: string;
+  refreshToken?: string;
+}
 @Injectable({
   providedIn: 'root',
 })
 export class TokenService {
-  tokenName = 'access_token';
-  _token = '';
-  constructor(private cookieService: CookieService) {}
-  saveToken(token: string, rememberMe?: boolean) {
-    this._token = token;
-    let exp = rememberMe ? 365 : undefined;
-    this.cookieService.set(this.tokenName, token, exp);
-    this.cookieService.set('rememberMe', rememberMe + '', exp);
-  }
+  private accessTokenName = 'access_token';
+  private refreshTokenName = 'refresh_token';
+  private basicTokenName = 'auth';
+  constructor() {}
 
-  /***
-   * called from refresh token
+  /**
+   * store token on client
+   * @param accessToken  access token
+   * @param refreshToken refresh token
+   * @param expire expire day
    */
-  updateToken(token: string) {
-    this._token = token;
-    let rememberMe = this.cookieService.get('rememberMe') === 'true';
-    let exp = rememberMe ? 365 : undefined;
-    this.cookieService.set(this.tokenName, token, exp);
-  }
-  getToken(): string {
-    if (this._token) {
-      return this._token;
-    }
-    return this.cookieService.get(this.tokenName);
+  set(token: TokenModel) {
+    localStorage.setItem(this.accessTokenName, token.accessToken ?? '');
+    localStorage.setItem(this.refreshTokenName, token.refreshToken ?? '');
   }
 
-  removeTokens() {
-    this.cookieService.delete(this.tokenName);
-    sessionStorage.removeItem(this.tokenName);
-    sessionStorage.removeItem('rememberMe');
+  get(): TokenModel {
+    const token = {
+      accessToken: localStorage.getItem(this.accessTokenName) || '',
+      refreshToken: localStorage.getItem(this.refreshTokenName) || '',
+    };
+    return token;
+  }
+
+  remove(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      localStorage.removeItem(this.accessTokenName);
+      localStorage.removeItem(this.refreshTokenName);
+      localStorage.removeItem(this.basicTokenName);
+      sessionStorage.removeItem(this.accessTokenName);
+      sessionStorage.removeItem(this.refreshTokenName);
+      sessionStorage.removeItem(this.basicTokenName);
+      localStorage.removeItem('rememberMe');
+
+      setTimeout(() => {
+        resolve();
+      }, 500);
+    });
   }
 }

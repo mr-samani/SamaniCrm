@@ -1,5 +1,5 @@
 import { Component, Injector, Input, Output, TemplateRef } from '@angular/core';
-import { AppComponentBase } from 'src/app/app-component-base';
+import { AppComponentBase } from '@app/app-component-base';
 import { FieldsType } from './fields-type.model';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';

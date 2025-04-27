@@ -19,15 +19,50 @@ import { UserResponseDTO } from './user-response-dto';
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class UserResponseDTOPaginatedResult {
-items?: Array<UserResponseDTO>;
-  
-totalCount?: number;
-  
-pageNumber?: number;
-  
-pageSize?: number;
-  
+/* Created with custom template */
+
+/** Interface for UserResponseDTOPaginatedResult */
+export interface IUserResponseDTOPaginatedResult {
+  items?: Array<UserResponseDTO>;
+  totalCount?: number;
+  pageNumber?: number;
+  pageSize?: number;
 }
+
+/** Class for UserResponseDTOPaginatedResult */
+export class UserResponseDTOPaginatedResult implements IUserResponseDTOPaginatedResult {
+  items?: Array<UserResponseDTO>;
+  totalCount?: number;
+  pageNumber?: number;
+  pageSize?: number;
+
+  constructor(data?: IUserResponseDTOPaginatedResult) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    if (Array.isArray(data["items"])) {
+      this.items = [] as any;
+      for (let item of data["items"])
+        (this.items as any).push(UserResponseDTO.fromJS(item));
+    }
+    this.totalCount = data["totalCount"];
+    this.pageNumber = data["pageNumber"];
+    this.pageSize = data["pageSize"];
+  }
+}
+
+  static fromJS(data: any): UserResponseDTOPaginatedResult {
+    const instance = new UserResponseDTOPaginatedResult();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

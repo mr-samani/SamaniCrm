@@ -18,17 +18,49 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class GetUserQuery {
-pageNumber?: number;
-  
-pageSize?: number;
-  
-sortBy?: string;
-  
-sortDirection?: string;
-  
-filter?: string;
-  
+/* Created with custom template */
+
+/** Interface for GetUserQuery */
+export interface IGetUserQuery {
+  pageNumber?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortDirection?: string;
+  filter?: string;
 }
+
+/** Class for GetUserQuery */
+export class GetUserQuery implements IGetUserQuery {
+  pageNumber?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortDirection?: string;
+  filter?: string;
+
+  constructor(data?: IGetUserQuery) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.pageNumber = data["pageNumber"];
+    this.pageSize = data["pageSize"];
+    this.sortBy = data["sortBy"];
+    this.sortDirection = data["sortDirection"];
+    this.filter = data["filter"];
+  }
+}
+
+  static fromJS(data: any): GetUserQuery {
+    const instance = new GetUserQuery();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

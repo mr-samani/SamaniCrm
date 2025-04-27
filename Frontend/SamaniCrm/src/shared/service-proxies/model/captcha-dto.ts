@@ -18,13 +18,43 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class CaptchaDto {
-key!: string;
-  
-img!: string;
-  
-sensitive!: boolean;
-  
+/* Created with custom template */
+
+/** Interface for CaptchaDto */
+export interface ICaptchaDto {
+  key: string;
+  img: string;
+  sensitive: boolean;
 }
+
+/** Class for CaptchaDto */
+export class CaptchaDto implements ICaptchaDto {
+  key!: string;
+  img!: string;
+  sensitive!: boolean;
+
+  constructor(data?: ICaptchaDto) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.key = data["key"];
+    this.img = data["img"];
+    this.sensitive = data["sensitive"];
+  }
+}
+
+  static fromJS(data: any): CaptchaDto {
+    const instance = new CaptchaDto();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

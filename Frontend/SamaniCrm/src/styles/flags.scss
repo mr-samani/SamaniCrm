@@ -1,0 +1,22 @@
+$x: 16px;
+$y: 11px;
+.flag {
+  background: url('/images/flags.png') no-repeat;
+  background-size: 224px 199px;
+  margin: 0 5px;
+  width: 16px;
+  height: 12px;
+  display: inline-block;
+  &.fa {
+    background-position: $x * 0 $y * -12;
+  }
+  &.ar {
+    background-position: $x * 0 $y * -16;
+  }
+  &.en {
+    background-position: $x * -7 $y * -8;
+  }
+  &.hi {
+    background-position: $x * -6 $y * -11;
+  }
+}

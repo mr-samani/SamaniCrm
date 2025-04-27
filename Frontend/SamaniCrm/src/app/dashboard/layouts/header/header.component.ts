@@ -1,9 +1,9 @@
 import { Component, Injector } from '@angular/core';
-import { UserResponseDTO } from '@app/account/models/login-dto';
+import { AppComponentBase } from '@app/app-component-base';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
+import { AppConst } from '@shared/app-const';
+import { UserResponseDTO } from '@shared/service-proxies/model/user-response-dto';
 import { ColorSchemaService } from '@shared/services/color-schema.service';
-import { AppComponentBase } from 'src/app/app-component-base';
-import { AppConst } from 'src/shared/app-const';
 
 @Component({
   selector: 'app-header',

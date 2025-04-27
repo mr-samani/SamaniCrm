@@ -18,11 +18,40 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class UpdateRoleCommand {
-id?: string;
-  
-roleName?: string;
-  
+/* Created with custom template */
+
+/** Interface for UpdateRoleCommand */
+export interface IUpdateRoleCommand {
+  id?: string;
+  roleName?: string;
 }
+
+/** Class for UpdateRoleCommand */
+export class UpdateRoleCommand implements IUpdateRoleCommand {
+  id?: string;
+  roleName?: string;
+
+  constructor(data?: IUpdateRoleCommand) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.id = data["id"];
+    this.roleName = data["roleName"];
+  }
+}
+
+  static fromJS(data: any): UpdateRoleCommand {
+    const instance = new UpdateRoleCommand();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

@@ -21,15 +21,50 @@ import { ApiError } from './api-error';
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class RoleResponseDTOApiResponse {
-success?: boolean;
-  
-data?: RoleResponseDTO;
-  
-errors?: Array<ApiError>;
-  
-meta?: Meta;
-  
+/* Created with custom template */
+
+/** Interface for RoleResponseDTOApiResponse */
+export interface IRoleResponseDTOApiResponse {
+  success?: boolean;
+  data?: RoleResponseDTO;
+  errors?: Array<ApiError>;
+  meta?: Meta;
 }
+
+/** Class for RoleResponseDTOApiResponse */
+export class RoleResponseDTOApiResponse implements IRoleResponseDTOApiResponse {
+  success?: boolean;
+  data?: RoleResponseDTO;
+  errors?: Array<ApiError>;
+  meta?: Meta;
+
+  constructor(data?: IRoleResponseDTOApiResponse) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.success = data["success"];
+    this.data = data["data"];
+    if (Array.isArray(data["errors"])) {
+      this.errors = [] as any;
+      for (let item of data["errors"])
+        (this.errors as any).push(ApiError.fromJS(item));
+    }
+    this.meta = data["meta"];
+  }
+}
+
+  static fromJS(data: any): RoleResponseDTOApiResponse {
+    const instance = new RoleResponseDTOApiResponse();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

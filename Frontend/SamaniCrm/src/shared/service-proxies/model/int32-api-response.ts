@@ -20,15 +20,50 @@ import { ApiError } from './api-error';
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-/*Created with custom template*/
-export class Int32ApiResponse {
-success?: boolean;
-  
-data?: number;
-  
-errors?: Array<ApiError>;
-  
-meta?: Meta;
-  
+/* Created with custom template */
+
+/** Interface for Int32ApiResponse */
+export interface IInt32ApiResponse {
+  success?: boolean;
+  data?: number;
+  errors?: Array<ApiError>;
+  meta?: Meta;
 }
+
+/** Class for Int32ApiResponse */
+export class Int32ApiResponse implements IInt32ApiResponse {
+  success?: boolean;
+  data?: number;
+  errors?: Array<ApiError>;
+  meta?: Meta;
+
+  constructor(data?: IInt32ApiResponse) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property))
+          (this as any)[property] = (data as any)[property];
+      }
+    }
+  }
+
+init(data?: any) {
+  if (data) {
+    this.success = data["success"];
+    this.data = data["data"];
+    if (Array.isArray(data["errors"])) {
+      this.errors = [] as any;
+      for (let item of data["errors"])
+        (this.errors as any).push(ApiError.fromJS(item));
+    }
+    this.meta = data["meta"];
+  }
+}
+
+  static fromJS(data: any): Int32ApiResponse {
+    const instance = new Int32ApiResponse();
+    instance.init(data);
+    return instance;
+  }
+}
+
 

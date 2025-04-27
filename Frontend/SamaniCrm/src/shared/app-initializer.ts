@@ -25,7 +25,7 @@ export class AppInitializer {
     return () => {
       AppConst.currentLanguage = localStorage.getItem('lang') || '';
       return new Promise((resolve, reject) => {
-        let baseUrl = this.getDocumentOrigin() + this.getBaseHref() + 'assets/';
+        let baseUrl = this.getDocumentOrigin() + this.getBaseHref();
         if (isDevMode()) {
           baseUrl = baseUrl + 'appconfig.json';
         } else {
@@ -38,27 +38,35 @@ export class AppInitializer {
             AppConst.baseUrl = config.baseUrl;
             AppConst.tinyMceApiKey = config.tinyMceApiKey;
             AppConst.appName = config.appName;
+
+            AppConst.languageList = [];
+            AppConst.defaultLang = 'fa';
+            AppConst.requireCaptcha = true;
+            let lang = 'fa';
+            translate.setDefaultLang(lang);
+            this.languageService.changeLanguage(lang, true);
+            resolve(true);
             // api initialize
-            this.httpClient
-              .get<{
-                result: InitializeDto;
-                success: string;
-                message: string;
-              }>(AppConst.apiUrl + '/api/index/initialize')
-              .subscribe({
-                next: (resp) => {
-                  AppConst.languageList = resp.result.languages ?? [];
-                  AppConst.defaultLang = resp.result.defaultLang;
-                  AppConst.requireCaptcha = resp.result.requireCaptcha;
-                  let lang = resp.result.currentLanguage || resp.result.defaultLang;
-                  translate.setDefaultLang(lang);
-                  this.languageService.changeLanguage(lang, true);
-                  resolve(true);
-                },
-                error: (er) => {
-                  reject();
-                },
-              });
+            // this.httpClient
+            //   .get<{
+            //     result: InitializeDto;
+            //     success: string;
+            //     message: string;
+            //   }>(AppConst.apiUrl + '/api/index/initialize')
+            //   .subscribe({
+            //     next: (resp) => {
+            //       AppConst.languageList = resp.result.languages ?? [];
+            //       AppConst.defaultLang = resp.result.defaultLang;
+            //       AppConst.requireCaptcha = resp.result.requireCaptcha;
+            //       let lang = resp.result.currentLanguage || resp.result.defaultLang;
+            //       translate.setDefaultLang(lang);
+            //       this.languageService.changeLanguage(lang, true);
+            //       resolve(true);
+            //     },
+            //     error: (er) => {
+            //       reject();
+            //     },
+            //   });
           },
           error: (er) => {
             reject(er);

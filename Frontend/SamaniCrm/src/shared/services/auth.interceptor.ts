@@ -14,7 +14,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { TokenService } from './token.service';
 import { AppConst } from '../app-const';
 import { NgxAlertModalService } from 'ngx-alert-modal';
-export const exceptionUrls = ['background.css', 'assets/i18n/'];
+import { RefreshTokenCommand } from '@shared/service-proxies/model/refresh-token-command';
+import { ApiError } from '@shared/service-proxies/model/api-error';
+export const exceptionUrls = ['background.css', '/i18n/'];
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private isRefreshing = false;
@@ -29,10 +31,10 @@ export class AuthInterceptor implements HttpInterceptor {
   ) {}
   setHeader(req: HttpRequest<any>): HttpRequest<any> {
     const lang = this.getLang(req);
-    const token = this.tokenService.getToken();
+    const token = this.tokenService.get();
     let modifiedHeaders = req.headers;
-    if (token) {
-      modifiedHeaders = modifiedHeaders.set('Authorization', 'Bearer ' + token);
+    if (token && token.accessToken) {
+      modifiedHeaders = modifiedHeaders.set('Authorization', 'Bearer ' + token.accessToken);
     }
     if (lang) {
       modifiedHeaders = modifiedHeaders.set('lang', lang);
@@ -66,16 +68,17 @@ export class AuthInterceptor implements HttpInterceptor {
       case 401:
         if (
           error instanceof HttpErrorResponse &&
-          !request.url.includes('api/account/login') &&
-          !request.url.includes('api/account/refresh')
+          !request.url.toLowerCase().includes('api/account/login') &&
+          !request.url.toLowerCase().includes('api/account/refresh')
         ) {
           return this.handle401Error(request, next);
-        } else {
-          return this.handleAccessDeniedError(error.error);
         }
+        return throwError(() => error);
       case 400:
       case 422:
         return this.handleBadRequestError(error.error);
+      case 403:
+        return this.handleAccessDeniedError(error.error);
       default:
         return this.handleServerError(error);
     }
@@ -85,21 +88,27 @@ export class AuthInterceptor implements HttpInterceptor {
     if (!this.isRefreshing) {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
-      const token = this.tokenService.getToken();
-      if (token) {
-        return this.authService.refreshToken(token).pipe(
-          switchMap((token) => {
-            this.isRefreshing = false;
-            this.refreshTokenSubject.next(token);
-            return next.handle(this.setHeader(request));
-          }),
-          catchError((err) => {
-            this.isRefreshing = false;
-            this.authService.logOut();
-            // this.matDialog.closeAll();
-            return throwError(() => new Error(err));
-          }),
-        );
+      const token = this.tokenService.get();
+      if (token && token.refreshToken) {
+        return this.authService
+          .refreshToken(
+            new RefreshTokenCommand({
+              refreshToken: token.refreshToken,
+            }),
+          )
+          .pipe(
+            switchMap((token) => {
+              this.isRefreshing = false;
+              this.refreshTokenSubject.next(token);
+              return next.handle(this.setHeader(request));
+            }),
+            catchError((err) => {
+              this.isRefreshing = false;
+              this.authService.logOut();
+              // this.matDialog.closeAll();
+              return throwError(() => new Error(err));
+            }),
+          );
       } else {
         return this.handleAccessDeniedError();
       }
@@ -113,15 +122,10 @@ export class AuthInterceptor implements HttpInterceptor {
 
   handleBadRequestError(err: any) {
     const msg = err?.message ?? this.translateService.instant('Message.ErrorOccurred');
-    const errorList: any = err.validation ?? {};
+    const errorList: Array<ApiError> = err.errors ?? [];
     let html = '';
-    for (let item of Object.entries(errorList)) {
-      // نام فیلد
-      // html += item[0];
-      const str: any = item && item[1] ? item[1] : [];
-      for (let s of str) {
-        html += '<p>' + s + '</p>';
-      }
+    for (let item of errorList) {
+      html += `<p>${item.field}: ${item.message}</p>`;
     }
     this.alertService.show({
       title: msg,
@@ -145,7 +149,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   handleAccessDeniedError(err?: any) {
-    const msg = err?.message ?? this.translateService.instant('pleaseLogin');
+    const msg = err?.message ?? this.translateService.instant('Message.PleaseLogin');
     this.alertService
       .show({
         title: msg,

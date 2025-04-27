@@ -1,9 +1,11 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
 import { AppConst } from '@shared/app-const';
 import { CaptchaComponent } from '@shared/captcha/captcha.component';
+import { InputCaptchaDTO } from '@shared/service-proxies/model/input-captcha-dto';
 import { LoginCommand } from '@shared/service-proxies/model/login-command';
 import { finalize } from 'rxjs';
 
@@ -25,7 +27,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
     this.loginForm = this.fb.group({
       userName: ['', [Validators.required]],
       password: ['', [Validators.required]],
-      captchaResponse: [''],
+      captcha: [''],
       rememberMe: [true],
     });
   }
@@ -40,9 +42,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
     }
     this.loading = true;
     let formValue: LoginCommand = this.loginForm.value;
-   formValue.captchaText = this.loginForm.get('captchaResponse')?.value?.captcha;
-   formValue.captchaKey = this.loginForm.get('captchaResponse')?.value?.key;
-    // delete formValue.captchaResponse;
+    formValue.captcha = new InputCaptchaDTO(this.loginForm.get('captcha')?.value);
     this.authService
       .login(formValue)
       .pipe(finalize(() => (this.loading = false)))
@@ -51,8 +51,10 @@ export class LoginComponent extends AppComponentBase implements OnInit {
           this.notify.success(this.l('Message.LoginSuccess'));
           this.router.navigate(['/dashboard']);
         },
-        error: (error: any) => {
-          this.notify.warning(this.l('Message.UsernameOrPasswordIsInvalid'));
+        error: (error: HttpErrorResponse) => {
+          if (error.status == 401) {
+            this.notify.warning(this.l('Message.UsernameOrPasswordIsInvalid'));
+          }
           if (this.captcha && AppConst.requireCaptcha) this.captcha.reloadCaptcha();
         },
       });

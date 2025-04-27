@@ -1,4 +1,4 @@
-import { Component, forwardRef, Injector, OnInit } from '@angular/core';
+import { Component, forwardRef, Injector, Input, OnInit } from '@angular/core';
 import {
   NG_VALUE_ACCESSOR,
   NG_VALIDATORS,
@@ -31,6 +31,7 @@ import { CaptchaServiceProxy } from '@shared/service-proxies';
   standalone: false,
 })
 export class CaptchaComponent extends AppComponentBase implements OnInit, ControlValueAccessor, Validator {
+  @Input() isMaterial = true;
   captchaCode = '';
   key = '';
   image = '';
@@ -41,7 +42,7 @@ export class CaptchaComponent extends AppComponentBase implements OnInit, Contro
   ) {
     super(injector);
   }
-  private _onChange = (t: { key: string; captcha: string }) => {};
+  private _onChange = (t: { captchaKey: string; captchaText: string }) => {};
   private _onTouched = () => {};
 
   ngOnInit(): void {
@@ -77,13 +78,14 @@ export class CaptchaComponent extends AppComponentBase implements OnInit, Contro
       .subscribe((result) => {
         this.image = result.img;
         this.key = result.key;
+        this.onChange();
       });
   }
 
   onChange() {
     this._onChange({
-      key: this.key,
-      captcha: this.captchaCode,
+      captchaKey: this.key,
+      captchaText: this.captchaCode,
     });
   }
 }

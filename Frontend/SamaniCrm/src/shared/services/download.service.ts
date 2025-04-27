@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
-import { AppComponentBase } from 'src/app/app-component-base';
 import { TokenService } from './token.service';
 import { HttpClient } from '@angular/common/http';
+import { AppComponentBase } from '@app/app-component-base';
 
 export enum DownloadFileType {
   Excel = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -23,7 +23,7 @@ export class DownloadService extends AppComponentBase {
     let pw = this.notify.info(this.l('PleaseWait'));
 
     const headers = {
-      Authorization: 'Bearer ' + this.tokenService.getToken(),
+      Authorization: 'Bearer ' + this.tokenService.get().accessToken,
     };
     this.http
       .get(url, {
