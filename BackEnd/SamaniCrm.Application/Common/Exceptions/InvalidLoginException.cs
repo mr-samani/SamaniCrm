@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.Common.Exceptions
 {
-    public class InvalidLoginException : Exception
+    public class InvalidLoginException : BaseAppException
     {
         public InvalidLoginException() : base("Invalid UserName or Password!") { }
         

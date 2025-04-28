@@ -31,7 +31,9 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
     { column: 'fullName', title: this.l('Name') },
     { column: 'userName', title: this.l('UserName') },
     { column: 'email', title: this.l('Email') },
-    { column: 'lang', title: this.l('Language') },
+    { column: 'phoneNumber', title: this.l('Phone') },
+    { column: 'address', title: this.l('Address') },
+    { column: 'lang', title: this.l('Language') ,width:50},
     { column: 'creationTime', title: this.l('CreationTime'), type: 'dateTime' },
   ];
 

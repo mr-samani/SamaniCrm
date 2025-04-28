@@ -15,7 +15,7 @@ export class LuxonFormatPipe implements PipeTransform {
       if (this.isIsoDate(value)) {
         value = DateTime.fromISO(value as any);
       } else {
-        value = DateTime.fromSQL(value as any);
+        value = DateTime.fromJSDate(new Date(value));
       }
     }
     if (value instanceof DateTime) {

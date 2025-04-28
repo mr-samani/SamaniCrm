@@ -37,6 +37,7 @@ model/token-response-dto.ts
 model/update-role-command.ts
 model/update-user-roles-command.ts
 model/user-details-response-dto.ts
+model/user-response-dto-api-response.ts
 model/user-response-dto-paginated-result-api-response.ts
 model/user-response-dto-paginated-result.ts
 model/user-response-dto.ts

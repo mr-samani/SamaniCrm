@@ -14,7 +14,6 @@ services
     .AddControllersWithDefaults()
     .AddCustomMediatR()
     .AddFluentValidation()
-    .AddJwtAuthentication(config)
     .AddInfrastructure(config)
     .AddSwaggerDocumentation()
     .AddHangfire(config)
@@ -37,8 +36,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("DefaultCors");
+app.UseStaticFiles();
+// آگر این خط کامنت نباشد احراز هویت بر اساس کوکی خواهد بود
+// app.UseIdentityServer();
 app.UseAuthentication();
-app.UseIdentityServer();
 app.UseAuthorization();
 
 app.MapControllers();

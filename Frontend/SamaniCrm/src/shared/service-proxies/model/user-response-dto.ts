@@ -30,6 +30,9 @@ export interface IUserResponseDTO {
   email: string;
   profilePicture: string;
   lang: string;
+  address?: string;
+  phoneNumber: string;
+  creationTime: string;
 }
 
 /** Class for UserResponseDTO */
@@ -42,6 +45,9 @@ export class UserResponseDTO implements IUserResponseDTO {
   email!: string;
   profilePicture!: string;
   lang!: string;
+  address?: string;
+  phoneNumber!: string;
+  creationTime!: string;
 
   constructor(data?: IUserResponseDTO) {
     if (data) {
@@ -62,6 +68,9 @@ init(data?: any) {
     this.email = data["email"];
     this.profilePicture = data["profilePicture"];
     this.lang = data["lang"];
+    this.address = data["address"];
+    this.phoneNumber = data["phoneNumber"];
+    this.creationTime = data["creationTime"];
   }
 }
 

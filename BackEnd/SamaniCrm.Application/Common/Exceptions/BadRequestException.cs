@@ -1,6 +1,6 @@
 ﻿namespace SamaniCrm.Application.Common.Exceptions
 {
-    public class BadRequestException : Exception
+    public class BadRequestException : BaseAppException
     {
         public BadRequestException() : base()
         {

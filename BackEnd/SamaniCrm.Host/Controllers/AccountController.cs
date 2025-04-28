@@ -47,8 +47,8 @@ namespace SamaniCrm.Host.Controllers
         public async Task<ActionResult<ApiResponse<string>>> Revoke([FromBody] RevokeRefreshTokenCommand command)
         {
             var success = await _mediator.Send(command);
-            if (!success)
-                return BadRequest(ApiResponse<string>.Fail(new List<ApiError> { new() { Message = "Token invalid or already revoked" } }));
+            //if (!success)
+            //    return BadRequest(ApiResponse<string>.Fail(new List<ApiError> { new() { Message = "Token invalid or already revoked" } }));
 
             return Ok(ApiResponse<string>.Ok(data: ""));
         }

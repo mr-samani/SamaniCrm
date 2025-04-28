@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterOutlet } from '@angular/router';
+import {
+  NavigationCancel,
+  NavigationEnd,
+  NavigationError,
+  NavigationStart,
+  Router,
+  RouterOutlet,
+} from '@angular/router';
 import { AccountServiceProxy } from '../shared/service-proxies';
 import { MainSpinnerService } from '../shared/services/main-spinner.service';
 
@@ -8,9 +15,7 @@ import { MainSpinnerService } from '../shared/services/main-spinner.service';
   imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
-  providers:[
-    AccountServiceProxy
-  ]
+  providers: [AccountServiceProxy],
 })
 export class AppComponent implements OnInit {
   constructor(
@@ -29,8 +34,7 @@ export class AppComponent implements OnInit {
       }
     });
   }
-  
-  ngOnInit(): void {
-  
-  }
+
+  ngOnInit(): void {}
+
 }

@@ -23,6 +23,7 @@ export * from './update-role-command';
 export * from './update-user-roles-command';
 export * from './user-details-response-dto';
 export * from './user-response-dto';
+export * from './user-response-dto-api-response';
 export * from './user-response-dto-paginated-result';
 export * from './user-response-dto-paginated-result-api-response';
 export * from './weather-forecast';

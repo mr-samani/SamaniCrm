@@ -1,6 +1,6 @@
 ﻿namespace SamaniCrm.Application.Common.Exceptions
 {
-    public class NotFoundException : Exception
+    public class NotFoundException : BaseAppException
     {
         public NotFoundException() : base()
         {

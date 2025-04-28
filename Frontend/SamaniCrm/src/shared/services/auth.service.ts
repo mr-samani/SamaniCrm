@@ -12,8 +12,10 @@ import {
   RefreshTokenCommand,
   RevokeRefreshTokenCommand,
   UserResponseDTO,
+  UserServiceProxy,
 } from '@shared/service-proxies';
 import { TranslateService } from '@ngx-translate/core';
+import { AppConst } from '@shared/app-const';
 @Injectable({
   providedIn: 'root',
 })
@@ -23,16 +25,18 @@ export class AuthService {
   >(undefined);
   public currentUser: Observable<UserResponseDTO | undefined>;
   accountService: AccountServiceProxy;
+  userService: UserServiceProxy;
   constructor(
-    private http: HttpClient,
     private router: Router,
     private tokenService: TokenService,
 
     private alert: NgxAlertModalService,
     injector: Injector,
     private translateService: TranslateService,
+    private languageService: LanguageService,
   ) {
     this.accountService = injector.get(AccountServiceProxy);
+    this.userService = injector.get(UserServiceProxy);
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
@@ -107,25 +111,27 @@ export class AuthService {
     this.router.navigate(['/account/login']);
   }
 
-  // getCurrentUserValue() {
-  //   return new Promise((resolve, reject) => {
-  //     return this.dataService.get<any, UserResponseDTO>(Apis.getCurrentUser, {}).subscribe({
-  //       next: (response) => {
-  //         if (response.success && response.data) {
-  //           this.currentUserSubject.next(response.data);
-  //           AppConst.currentLanguage = response.data.lang!;
-  //           this.language.changeLanguage(AppConst.currentLanguage, true);
-  //           resolve(true);
-  //         } else {
-  //           reject(false);
-  //         }
-  //       },
-  //       error: (err) => {
-  //         reject(false);
-  //       },
-  //     });
-  //   });
-  // }
+  getCurrentUserValue() {
+    return new Promise((resolve, reject) => {
+      return this.userService.getCurrentUser().subscribe({
+        next: (response) => {
+          if (response.success && response.data) {
+            this.currentUserSubject.next(response.data);
+            if (AppConst.currentLanguage !== response.data.lang) {
+              AppConst.currentLanguage = response.data.lang!;
+              this.languageService.changeLanguage(AppConst.currentLanguage, true);
+            }
+            resolve(true);
+          } else {
+            reject(false);
+          }
+        },
+        error: (err) => {
+          reject(false);
+        },
+      });
+    });
+  }
 }
 
 export const encodeBase64 = (data: string) => {

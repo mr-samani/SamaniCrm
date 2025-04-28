@@ -14,6 +14,7 @@ using Hangfire.SqlServer;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -66,37 +67,7 @@ public static class ServiceCollectionExtensions
     }
 
 
-    /// <summary>
-    /// راه اندازی احرازهویت JWT
-    /// </summary>
-    /// <param name="services"></param>
-    /// <param name="config"></param>
-    /// <returns></returns>
-    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration config)
-    {
-        var key = Encoding.UTF8.GetBytes(config["Jwt:Key"] ?? "");
-        var issuer = config["Jwt:Issuer"];
-        var audience = config["Jwt:Audience"];
-
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = issuer,
-                    ValidAudience = audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(key)
-                };
-            });
-
-        return services;
-    }
-
-
+ 
     /// <summary>
     /// راه اندازی زیرساخت های برنامه
     /// </summary>
@@ -137,7 +108,12 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddControllersWithDefaults(this IServiceCollection services)
     {
-        services.AddControllers()
+        services.AddControllers(options =>
+            {
+                options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+                options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status401Unauthorized));
+                options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status403Forbidden));
+            })
             .AddJsonOptions(opt =>
             {
                 opt.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);

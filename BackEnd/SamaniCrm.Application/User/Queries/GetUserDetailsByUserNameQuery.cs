@@ -35,6 +35,9 @@ namespace SamaniCrm.Application.Queries.User
                 Lang = result.user.Lang,
                 Email = result.user.Email,
                 FullName = result.user.FullName,
+                Address= result.user.Address,
+                PhoneNumber = result.user.PhoneNumber,
+                CreationTime= result.user.CreationTime,
                 Roles = result.roles.ToArray(),
             };
         }

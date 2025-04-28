@@ -39,9 +39,9 @@ public class ApiExceptionHandlingMiddleware
         {
             await HandleValidationExceptionAsync(context, vex);
         }
-        catch (InvalidLoginException loginEx)
+        catch (BaseAppException appEx)
         {
-            await HandleKnownExceptionAsync(context, loginEx.StatusCode, loginEx.Message);
+            await HandleKnownExceptionAsync(context, appEx.StatusCode, appEx.Message);
         }
         catch (Exception ex)
         {

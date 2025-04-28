@@ -20,11 +20,12 @@ public class IdentityService : IIdentityService
     private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly ApplicationDbContext _applicationDbContext;
 
-    public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager)
+    public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, ApplicationDbContext applicationDbContext)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
+        _applicationDbContext = applicationDbContext;
     }
 
     public async Task<bool> AssignUserToRole(string userName, IList<string> roles)
@@ -123,7 +124,8 @@ public class IdentityService : IIdentityService
             x.UserName.Contains(request.Filter) ||
             x.FirstName.Contains(request.Filter) ||
             x.LastName.Contains(request.Filter) ||
-            x.Email.Contains(request.Filter)
+            x.Email.Contains(request.Filter) ||
+            x.PhoneNumber.Contains(request.Filter) 
             );
         }
 
@@ -149,6 +151,9 @@ public class IdentityService : IIdentityService
                 Lang = u.Lang ?? "",
                 Email = u.Email ?? "",
                 ProfilePicture = u.ProfilePicture ?? "",
+                Address = u.Address ??"",
+                PhoneNumber = u.PhoneNumber ??"",
+                CreationTime = u.CreationTime.ToUniversalTime()
             })
             .ToListAsync(cancellationToken);
 
@@ -201,6 +206,9 @@ public class IdentityService : IIdentityService
             Lang = user.Lang,
             Email = user.Email ?? "",
             ProfilePicture = user.ProfilePicture ?? "",
+            Address = user.Address ?? "",
+            PhoneNumber = user.PhoneNumber ?? "",
+            CreationTime = user.CreationTime.ToUniversalTime()
         }, roles);
     }
 
@@ -222,6 +230,9 @@ public class IdentityService : IIdentityService
             Lang = user.Lang,
             Email = user.Email ?? "",
             ProfilePicture = user.ProfilePicture ?? "",
+            Address = user.Address ?? "",
+            PhoneNumber = user.PhoneNumber ?? "",
+            CreationTime = user.CreationTime.ToUniversalTime()
         }, roles);
     }
 
@@ -364,7 +375,7 @@ public class IdentityService : IIdentityService
     public async Task<bool> RevokeRefreshToken(string refreshToken, CancellationToken cancellationToken)
     {
         var token = await _applicationDbContext.RefreshTokens
-        .FirstOrDefaultAsync(rt => rt.AccessToken == refreshToken, cancellationToken);
+        .FirstOrDefaultAsync(rt => rt.RefreshTokenValue == refreshToken, cancellationToken);
 
         if (token == null || token.Active == false)
             return false;

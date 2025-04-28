@@ -3,7 +3,7 @@ using FluentValidation.Results;
 
 namespace SamaniCrm.Application.Common.Exceptions
 {
-    public class ValidationException : Exception
+    public class ValidationException : BaseAppException
     {
         public ValidationException()
             : base("One or more validation failures have occurred.")

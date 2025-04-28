@@ -25,6 +25,7 @@ import { AccountServiceProxy } from '@shared/service-proxies/api/account.service
 import { Configuration } from '@shared/service-proxies/configuration';
 import { AuthService } from '@shared/services/auth.service';
 import { GlobalErrorHandler } from '@shared/handlers/global-error-handler';
+import { UserServiceProxy } from '@shared/service-proxies';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -51,7 +52,7 @@ export const appConfig: ApplicationConfig = {
       MatSnackBarModule,
     ),
     AccountServiceProxy,
-
+    UserServiceProxy,
     {
       provide: APP_INITIALIZER,
       useFactory: (appInitializer: AppInitializer, translate: TranslateService) => appInitializer.init(translate),

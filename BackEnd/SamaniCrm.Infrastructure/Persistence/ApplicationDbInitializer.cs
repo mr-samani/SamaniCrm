@@ -103,7 +103,10 @@ namespace SamaniCrm.Infrastructure.Persistence
                 Email = "mr.samani1368@gmail.com",
                 FirstName = "محمدرضا",
                 LastName = "سامانی",
+                FullName = "محمدرضا سامانی",
                 Lang = "fa",
+                Address = "سامان",
+                PhoneNumber = "09338972924",
                 IsDeleted = false
             };
 

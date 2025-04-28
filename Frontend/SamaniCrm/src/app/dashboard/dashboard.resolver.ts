@@ -9,14 +9,13 @@ export const dashboardResolver: ResolveFn<boolean> = (
   authService: AuthService = inject(AuthService),
   router: Router = inject(Router),
 ) => {
-  return of(true);
-  // return authService
-  //   .getCurrentUserValue()
-  //   .then((r) => {
-  //     return true;
-  //   })
-  //   .catch((er) => {
-  //     router.navigate(['/account/login']);
-  //     return false;
-  //   });
+  return authService
+    .getCurrentUserValue()
+    .then((r) => {
+      return true;
+    })
+    .catch((er) => {
+      router.navigate(['/account/login']);
+      return false;
+    });
 };

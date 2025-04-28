@@ -30,6 +30,9 @@ export interface IUserDetailsResponseDTO {
   email: string;
   profilePicture: string;
   lang: string;
+  address?: string;
+  phoneNumber: string;
+  creationTime: string;
   roles?: Array<string>;
 }
 
@@ -43,6 +46,9 @@ export class UserDetailsResponseDTO implements IUserDetailsResponseDTO {
   email!: string;
   profilePicture!: string;
   lang!: string;
+  address?: string;
+  phoneNumber!: string;
+  creationTime!: string;
   roles?: Array<string>;
 
   constructor(data?: IUserDetailsResponseDTO) {
@@ -64,6 +70,9 @@ init(data?: any) {
     this.email = data["email"];
     this.profilePicture = data["profilePicture"];
     this.lang = data["lang"];
+    this.address = data["address"];
+    this.phoneNumber = data["phoneNumber"];
+    this.creationTime = data["creationTime"];
     if (Array.isArray(data["roles"])) {
       this.roles = [] as any;
       for (let item of data["roles"])

@@ -109,7 +109,6 @@ export class PaginationComponent implements AfterViewInit {
   }
 
   onPerPageChange() {
-    debugger;
     this.setupPage();
     if (this.paginationCount < this.page) {
       this.page = 1;

@@ -7,13 +7,14 @@ using SamaniCrm.Application.User.Commands;
 using SamaniCrm.Application.Queries.User;
 using SamaniCrm.Host.Models;
 using SamaniCrm.Application.Common.DTOs;
+using SamaniCrm.Application.User.Queries;
 
 
 namespace SamaniCrm.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
+    [Authorize]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     //[Authorize(Roles = "Admin, Management")]
     public class UserController : ControllerBase
@@ -23,6 +24,12 @@ namespace SamaniCrm.Api.Controllers
         public UserController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        [HttpGet("GetCurrentUser")]
+        public async Task<ActionResult<ApiResponse<UserResponseDTO>>> GetCurrentUser()
+        {
+            return Ok(ApiResponse<UserResponseDTO>.Ok(await _mediator.Send(new GetCurrentUserQuery())));
         }
 
         [HttpPost("Create")]
@@ -80,7 +87,7 @@ namespace SamaniCrm.Api.Controllers
             return Ok(ApiResponse<int>.Ok(result));
         }
 
-      
+
 
 
         [HttpPut("EditUserProfile/{id}")]
@@ -90,7 +97,7 @@ namespace SamaniCrm.Api.Controllers
             if (id == command.Id)
             {
                 var result = await _mediator.Send(command);
-                return Ok(ApiResponse<int>.Ok( result));
+                return Ok(ApiResponse<int>.Ok(result));
             }
             else
             {
