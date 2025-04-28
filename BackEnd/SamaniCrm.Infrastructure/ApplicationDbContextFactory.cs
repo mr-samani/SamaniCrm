@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using SamaniCrm.Infrastructure.Persistence;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Application.Common.Interfaces;
+using Microsoft.Extensions.Hosting;
 
 namespace SamaniCrm.Infrastructure
 {
@@ -59,14 +60,21 @@ namespace SamaniCrm.Infrastructure
             var provider = services.BuildServiceProvider();
 
             // 🪄 اگر Initializer وجود داشت، اجرا کن
+            // چک کردن اینکه آیا Migration اعمال شده است یا خیر
             using (var scope = provider.CreateScope())
             {
-                var initializer = scope.ServiceProvider.GetService<ApplicationDbInitializer>();
-                if (initializer != null)
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                if (!dbContext.Database.GetPendingMigrations().Any())
                 {
-                    initializer.SeedAsync().GetAwaiter().GetResult();
+                    // اگر Migration‌های معلق وجود داشت، در اینجا می‌توانیم Seed کردن را انجام دهیم
+                    var initializer = scope.ServiceProvider.GetService<ApplicationDbInitializer>();
+                    if (initializer != null)
+                    {
+                        initializer.SeedAsync().GetAwaiter().GetResult();
+                    }
                 }
             }
+
 
             return provider.GetRequiredService<ApplicationDbContext>();
         }

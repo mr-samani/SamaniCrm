@@ -8,7 +8,7 @@ using SamaniCrm.Domain.Interfaces;
 
 namespace SamaniCrm.Infrastructure.Identity
 {
-    public class ApplicationUser: IdentityUser<Guid>,IAuditableEntity
+    public class ApplicationUser: IdentityUser<Guid>,IAuditableEntity,ISoftDelete
     {
         public string? FirstName { get; set; }
         public string LastName { get; set; } = string.Empty;
@@ -23,5 +23,11 @@ namespace SamaniCrm.Infrastructure.Identity
         public string? CreatedBy { get; set; }
         public DateTime? LastModifiedTime { get; set; }
         public string? LastModifiedBy { get; set; }
+
+        // Implementing ISoftDelete properties
+        public bool IsDeleted { get; set; }
+        public DateTime? DeletedTime { get; set; }
+        public string? DeletedBy { get; set; }
+
     }
 }

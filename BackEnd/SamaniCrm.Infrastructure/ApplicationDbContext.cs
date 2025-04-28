@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Duende.IdentityServer.Models;
@@ -29,12 +30,14 @@ namespace SamaniCrm.Infrastructure
         public override int SaveChanges()
         {
             ApplyAuditInformation();
+            ApplySoftDelete();
             return base.SaveChanges();
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             ApplyAuditInformation();
+            ApplySoftDelete();
             return await base.SaveChangesAsync(cancellationToken);
         }
 
@@ -52,6 +55,22 @@ namespace SamaniCrm.Infrastructure
                 b.Property(e => e.PhoneNumber).HasMaxLength(15);
                 b.Property(e => e.ProfilePicture).HasMaxLength(200);
             });
+
+            foreach (var entityType in builder.Model.GetEntityTypes())
+            {
+                if (typeof(ISoftDelete).IsAssignableFrom(entityType.ClrType))
+                {
+                    var parameter = Expression.Parameter(entityType.ClrType, "e");
+                    var filter = Expression.Lambda(
+                        Expression.Equal(
+                            Expression.Property(parameter, nameof(ISoftDelete.IsDeleted)),
+                            Expression.Constant(false)
+                        ),
+                        parameter
+                    );
+                    entityType.SetQueryFilter(filter);
+                }
+            }
         }
 
 
@@ -80,6 +99,24 @@ namespace SamaniCrm.Infrastructure
                 }
             }
         }
+
+
+        private void ApplySoftDelete()
+        {
+            foreach (var entry in ChangeTracker.Entries<ISoftDelete>())
+            {
+                if (entry.State == EntityState.Deleted)
+                {
+                    entry.State = EntityState.Modified; // دیگه Delete واقعی نمیشه
+                    entry.Entity.IsDeleted = true;
+                    entry.Entity.DeletedTime = DateTime.UtcNow;
+                    if (_currentUserService.UserId != null)
+                        entry.Entity.DeletedBy = _currentUserService.UserId;
+                }
+            }
+        }
+
+
 
     }
 }
