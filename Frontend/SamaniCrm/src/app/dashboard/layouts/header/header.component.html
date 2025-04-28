@@ -17,8 +17,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
       <div class="user-block navbar-brand">
-        <img *ngIf="user?.profilePicture" [src]="user?.profilePicture" alt="avatar" />
-        <img *ngIf="!user?.profilePicture" src="/images/avatar.jpg" alt="avatar" />
+        <img *ngIf="user?.profilePicture" [src]="user?.profilePicture" [alt]="user?.userName" />
+        <img *ngIf="!user?.profilePicture" src="/images/profile-picture.jpg" [alt]="user?.userName" />
         <span>{{ user?.userName }}</span>
       </div>
 
@@ -91,7 +91,7 @@
       <!-- language -->
       <button mat-icon-button [matMenuTriggerFor]="langMnu" class="pt-2">
         <!-- <i class="flag" [ngClass]="currentLang"></i> -->
-        <img [src]="backEndUrl + '/storage/flags/' + currentLang + '.png'" />
+        <img [src]="'images/flags/' + currentLang + '.png'" />
       </button>
       <mat-menu #langMnu="matMenu">
         <button mat-menu-item *ngFor="let lang of languages" (click)="changeLanguage(lang.code)" class="language-menu">

@@ -10,17 +10,18 @@ namespace SamaniCrm.Application.DTOs
     {
         public required Guid Id { get; set; }
         [Sortable]
-        public string? UserName { get; set; }
+        public required string UserName { get; set; }
         [Sortable]
-        public string? FirstName { get; set; }
+        public required string FirstName { get; set; }
         [Sortable]
-        public string? LastName { get; set; } = string.Empty;
+        public required string LastName { get; set; } = string.Empty;
         [Sortable]
-        public string? FullName { get; set; } = string.Empty;
+        public required string FullName { get; set; } = string.Empty;
         [Sortable]
-        public string? Email { get; set; } = string.Empty;
-        public string? ProfilePicture { get; set; } = string.Empty;
+        public required string Email { get; set; } = string.Empty;
+        public required string ProfilePicture { get; set; } = string.Empty;
 
-
+        public required string  Lang { get; set; }
+      
     }
 }

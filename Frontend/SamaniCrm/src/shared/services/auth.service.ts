@@ -6,7 +6,14 @@ import { Buffer } from 'buffer';
 import { TokenService } from './token.service';
 import { NgxAlertModalService } from 'ngx-alert-modal';
 import { LanguageService } from './language.service';
-import { AccountServiceProxy, LoginCommand, RefreshTokenCommand, UserResponseDTO } from '@shared/service-proxies';
+import {
+  AccountServiceProxy,
+  LoginCommand,
+  RefreshTokenCommand,
+  RevokeRefreshTokenCommand,
+  UserResponseDTO,
+} from '@shared/service-proxies';
+import { TranslateService } from '@ngx-translate/core';
 @Injectable({
   providedIn: 'root',
 })
@@ -22,8 +29,8 @@ export class AuthService {
     private tokenService: TokenService,
 
     private alert: NgxAlertModalService,
-    private language: LanguageService,
     injector: Injector,
+    private translateService: TranslateService,
   ) {
     this.accountService = injector.get(AccountServiceProxy);
     this.currentUser = this.currentUserSubject.asObservable();
@@ -76,11 +83,11 @@ export class AuthService {
           this.logOut();
           this.alert
             .show({
-              title: 'خطای دسترسی',
-              text: 'اعتبار دسترسی شما به اتمام رسیده است. لطفاً مجددا وارد حساب کاربری خود شوید.',
+              title: this.translateService.instant('Message.AccessDenied'),
+              text: this.translateService.instant('Message.AccessDeniedMessage'),
               showConfirmButton: true,
               // showCancelButton: true,
-              confirmButtonText: 'تائید',
+              confirmButtonText: this.translateService.instant('Ok'),
               // cancelButtonText: 'انصراف'
             })
             .then((result) => {
@@ -98,6 +105,13 @@ export class AuthService {
   }
 
   logOut() {
+    this.accountService
+      .revoke(
+        new RevokeRefreshTokenCommand({
+          token: this.tokenService.get().accessToken,
+        }),
+      )
+      .subscribe();
     this.tokenService.remove();
     this.router.navigate(['/account/login']);
   }

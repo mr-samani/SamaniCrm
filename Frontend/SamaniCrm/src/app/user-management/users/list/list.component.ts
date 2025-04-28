@@ -26,7 +26,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
   totalCount = 0;
 
   fields: FieldsType[] = [
-    { column: 'avatar', title: this.l('Image'), width: 100, type: 'avatar' },
+    { column: 'profilePicture', title: this.l('Image'), width: 100, type: 'profilePicture' },
     // { column: 'id', title: this.l('id'), width: 100 },
     { column: 'name', title: this.l('Name') },
     { column: 'username', title: this.l('UserName') },
@@ -82,7 +82,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
         this.list = response.data?.items ?? [];
-        this.totalCount = response.meta!.totalCount ?? 0;
+        this.totalCount = response.data?.totalCount ?? 0;
       });
   }
 
@@ -94,7 +94,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
   }
   resetFilter() {
     this.showFilter = false;
-    this.form.patchValue({ name: '', email: '' });
+    this.form.patchValue({ filter: '' });
     this.reload();
   }
 

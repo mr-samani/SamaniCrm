@@ -141,11 +141,13 @@ public class IdentityService : IIdentityService
             .Select(u => new UserResponseDTO
             {
                 Id = u.Id,
-                UserName = u.UserName,
-                FirstName = u.FirstName,
+                UserName = u.UserName??"",
+                FirstName = u.FirstName??"",
                 LastName = u.LastName,
-                Email = u.Email,
-                ProfilePicture = u.ProfilePicture
+                FullName= u.FullName ?? "",
+                Lang = u.Lang ?? "",
+                Email = u.Email ?? "",
+                ProfilePicture = u.ProfilePicture ?? "",
             })
             .ToListAsync(cancellationToken);
 

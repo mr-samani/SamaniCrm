@@ -23,9 +23,9 @@
           <div class="cel">
             <span class="cell-title">{{f.title}}</span>
             <ng-container [ngSwitch]="f.type">
-              <ng-container *ngSwitchCase="'avatar'">
+              <ng-container *ngSwitchCase="'profilePicture'">
                 <img *ngIf="item[f.column]" [src]="item[f.column]" class="img-circle" />
-                <img *ngIf="!item[f.column]" src="/images/avatar.jpg" class="img-circle" />
+                <img *ngIf="!item[f.column]" src="/images/profile-picture.jpg" class="img-circle" />
               </ng-container>
 
               <ng-container *ngSwitchCase="'image'">
