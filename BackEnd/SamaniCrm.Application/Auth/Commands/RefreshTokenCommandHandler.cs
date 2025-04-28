@@ -27,9 +27,9 @@ namespace SamaniCrm.Application.Auth.Commands
             if(result.Equals(Guid.Empty))
                 throw new ForbiddenAccessException();
 
-            var user= await _identityService.GetUserDetailsAsync(result);
-            var accessToken = _tokenGenerator.GenerateAccessToken(user.userId, user.UserName, user.roles);
-            var newRefreshToken = await _tokenGenerator.GenerateRefreshToken(user.userId, accessToken);
+            var userData= await _identityService.GetUserDetailsAsync(result);
+            var accessToken = _tokenGenerator.GenerateAccessToken(userData.user.Id, userData.user.UserName, userData.roles);
+            var newRefreshToken = await _tokenGenerator.GenerateRefreshToken(userData.user.Id, accessToken);
 
             return new TokenResponseDto
             {

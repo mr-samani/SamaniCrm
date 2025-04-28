@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.DTOs
 {
-    public class UserDetailsResponseDTO
+    public class UserDetailsResponseDTO:UserResponseDTO
     {
-        public Guid Id { get; set; }
-        public string FullName { get; set; }
-        public string UserName { get; set; }
-        public string Email { get; set; }
-        public IList<string> Roles { get; set; }
+        public IList<string> Roles { get; set; } = [];
     }
 }

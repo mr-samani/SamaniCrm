@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using SamaniCrm.Infrastructure.Persistence;
 using SamaniCrm.Infrastructure.Identity;
+using SamaniCrm.Application.Common.Interfaces;
 
 namespace SamaniCrm.Infrastructure
 {
@@ -52,6 +53,7 @@ namespace SamaniCrm.Infrastructure
                 .AddDefaultTokenProviders()
                 .AddSignInManager();
 
+            services.AddScoped<ICurrentUserService, DummyCurrentUserService>();
             services.AddScoped<ApplicationDbInitializer>();
 
             var provider = services.BuildServiceProvider();
@@ -69,4 +71,10 @@ namespace SamaniCrm.Infrastructure
             return provider.GetRequiredService<ApplicationDbContext>();
         }
     }
+
+    public class DummyCurrentUserService : ICurrentUserService
+    {
+        public string? UserId => "MigrationUser"; // یا null هم میتونی بدی
+    }
+
 }

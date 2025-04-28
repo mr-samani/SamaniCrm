@@ -102,7 +102,8 @@ namespace SamaniCrm.Infrastructure.Persistence
                 UserName = "samani",
                 Email = "mr.samani1368@gmail.com",
                 FirstName = "محمدرضا",
-                LastName = "سامانی"
+                LastName = "سامانی",
+                Lang="fa",
             };
 
             if (_userManager.Users.All(u => u.UserName != administrator.UserName))

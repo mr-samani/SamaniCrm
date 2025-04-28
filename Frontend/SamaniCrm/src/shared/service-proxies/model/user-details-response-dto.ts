@@ -22,19 +22,27 @@
 
 /** Interface for UserDetailsResponseDTO */
 export interface IUserDetailsResponseDTO {
-  id?: string;
-  fullName?: string;
-  userName?: string;
-  email?: string;
+  id: string;
+  userName: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  email: string;
+  profilePicture: string;
+  lang: string;
   roles?: Array<string>;
 }
 
 /** Class for UserDetailsResponseDTO */
 export class UserDetailsResponseDTO implements IUserDetailsResponseDTO {
-  id?: string;
-  fullName?: string;
-  userName?: string;
-  email?: string;
+  id!: string;
+  userName!: string;
+  firstName!: string;
+  lastName!: string;
+  fullName!: string;
+  email!: string;
+  profilePicture!: string;
+  lang!: string;
   roles?: Array<string>;
 
   constructor(data?: IUserDetailsResponseDTO) {
@@ -49,9 +57,13 @@ export class UserDetailsResponseDTO implements IUserDetailsResponseDTO {
 init(data?: any) {
   if (data) {
     this.id = data["id"];
-    this.fullName = data["fullName"];
     this.userName = data["userName"];
+    this.firstName = data["firstName"];
+    this.lastName = data["lastName"];
+    this.fullName = data["fullName"];
     this.email = data["email"];
+    this.profilePicture = data["profilePicture"];
+    this.lang = data["lang"];
     if (Array.isArray(data["roles"])) {
       this.roles = [] as any;
       for (let item of data["roles"])

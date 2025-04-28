@@ -15,13 +15,13 @@ namespace SamaniCrm.Application.Common.Interfaces
         Task<(bool isSucceed, Guid userId)> CreateUserAsync(string userName, string password, string email, string fullName, List<string> roles);
         Task<bool> SigninUserAsync(string userName, string password);
         Task<string> GetUserIdAsync(string userName);
-        Task<(Guid userId, string fullName, string UserName, string email,string profilePicture, IList<string> roles)> GetUserDetailsAsync(Guid userId);
-        Task<(Guid userId, string fullName, string UserName, string email, string profilePicture, IList<string> roles)> GetUserDetailsByUserNameAsync(string userName);
+        Task<(UserResponseDTO user, IList<string> roles)> GetUserDetailsAsync(Guid userId);
+        Task<(UserResponseDTO user, IList<string> roles)> GetUserDetailsByUserNameAsync(string userName);
         Task<string> GetUserNameAsync(Guid userId);
         Task<bool> DeleteUserAsync(Guid userId);
         Task<bool> IsUniqueUserName(string userName);
         Task<PaginatedResult<UserResponseDTO>> GetAllUsersAsync(GetUserQuery request,CancellationToken cancellationToken);
-        Task<List<(string id, string userName, string email, IList<string> roles)>> GetAllUsersDetailsAsync();
+        Task<List<(UserResponseDTO user, IList<string> roles)>> GetAllUsersDetailsAsync();
         Task<bool> UpdateUserProfile(string id, string fullName, string email, IList<string> roles);
 
         // Role Section

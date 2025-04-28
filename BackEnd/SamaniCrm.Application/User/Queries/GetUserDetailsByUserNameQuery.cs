@@ -24,8 +24,19 @@ namespace SamaniCrm.Application.Queries.User
         }
         public async Task<UserDetailsResponseDTO> Handle(GetUserDetailsByUserNameQuery request, CancellationToken cancellationToken)
         {
-            var (userId, fullName, userName, email,profilePicture, roles) = await _identityService.GetUserDetailsByUserNameAsync(request.UserName);
-            return new UserDetailsResponseDTO() { Id = userId, FullName = fullName, UserName = userName, Email = email, Roles = roles };
+            var result = await _identityService.GetUserDetailsByUserNameAsync(request.UserName);
+            return new UserDetailsResponseDTO()
+            {
+                Id = result.user.Id,
+                UserName = result.user.UserName,
+                FirstName = result.user.FirstName,
+                LastName = result.user.LastName,
+                ProfilePicture = result.user.ProfilePicture,
+                Lang = result.user.Lang,
+                Email = result.user.Email,
+                FullName = result.user.FullName,
+                Roles = result.roles.ToArray(),
+            };
         }
     }
 }

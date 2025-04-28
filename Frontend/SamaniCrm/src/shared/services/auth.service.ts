@@ -45,16 +45,7 @@ export class AuthService {
       map((response) => {
         if (response.success && response.data && response.data.accessToken) {
           this.tokenService.set(response.data);
-          this.currentUserSubject.next(
-            new UserResponseDTO({
-              id: response.data.userId!,
-              fullName: response.data.fullName,
-              email: response.data.email,
-              userName: response.data.userName,
-              profilePicture: response.data.profilePicture,
-              // roles:response.data.roles,
-            }),
-          );
+          this.currentUserSubject.next(response.data.user);
         }
         return response;
       }),

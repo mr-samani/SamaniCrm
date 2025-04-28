@@ -57,7 +57,8 @@ public class IdentityService : IIdentityService
         {
             FullName = fullName,
             UserName = userName,
-            Email = email
+            Email = email,
+            Lang = "fa",
         };
 
         var result = await _userManager.CreateAsync(user, password);
@@ -141,10 +142,10 @@ public class IdentityService : IIdentityService
             .Select(u => new UserResponseDTO
             {
                 Id = u.Id,
-                UserName = u.UserName??"",
-                FirstName = u.FirstName??"",
+                UserName = u.UserName ?? "",
+                FirstName = u.FirstName ?? "",
                 LastName = u.LastName,
-                FullName= u.FullName ?? "",
+                FullName = u.FullName ?? "",
                 Lang = u.Lang ?? "",
                 Email = u.Email ?? "",
                 ProfilePicture = u.ProfilePicture ?? "",
@@ -161,7 +162,7 @@ public class IdentityService : IIdentityService
         };
     }
 
-    public Task<List<(string id, string userName, string email, IList<string> roles)>> GetAllUsersDetailsAsync()
+    public Task<List<(UserResponseDTO user, IList<string> roles)>> GetAllUsersDetailsAsync()
     {
         throw new NotImplementedException();
 
@@ -182,7 +183,7 @@ public class IdentityService : IIdentityService
         return roles.Select(role => (role.Id, role.Name)).ToList();
     }
 
-    public async Task<(Guid userId, string fullName, string UserName, string email, string profilePicture, IList<string> roles)> GetUserDetailsAsync(Guid userId)
+    public async Task<(UserResponseDTO user, IList<string> roles)> GetUserDetailsAsync(Guid userId)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
         if (user == null)
@@ -190,10 +191,20 @@ public class IdentityService : IIdentityService
             throw new NotFoundException("User not found");
         }
         var roles = await _userManager.GetRolesAsync(user);
-        return (user.Id, user.FullName, user.UserName, user.Email, user.ProfilePicture, roles);
+        return (new UserResponseDTO()
+        {
+            Id = user.Id,
+            UserName = user.UserName ?? "",
+            FirstName = user.FirstName ?? "",
+            LastName = user.LastName ?? "",
+            FullName = user.FullName ?? "",
+            Lang = user.Lang,
+            Email = user.Email ?? "",
+            ProfilePicture = user.ProfilePicture ?? "",
+        }, roles);
     }
 
-    public async Task<(Guid userId, string fullName, string UserName, string email, string profilePicture, IList<string> roles)> GetUserDetailsByUserNameAsync(string userName)
+    public async Task<(UserResponseDTO user, IList<string> roles)> GetUserDetailsByUserNameAsync(string userName)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == userName);
         if (user == null)
@@ -201,7 +212,17 @@ public class IdentityService : IIdentityService
             throw new NotFoundException("User not found");
         }
         var roles = await _userManager.GetRolesAsync(user);
-        return (user.Id, user.FullName, user.UserName, user.Email,user.ProfilePicture, roles);
+        return (new UserResponseDTO()
+        {
+            Id = user.Id,
+            UserName = user.UserName ?? "",
+            FirstName = user.FirstName ?? "",
+            LastName = user.LastName ?? "",
+            FullName = user.FullName ?? "",
+            Lang = user.Lang,
+            Email = user.Email ?? "",
+            ProfilePicture = user.ProfilePicture ?? "",
+        }, roles);
     }
 
     public async Task<string> GetUserIdAsync(string userName)

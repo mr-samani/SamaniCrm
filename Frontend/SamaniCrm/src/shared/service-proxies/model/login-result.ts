@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { UserResponseDTO } from './user-response-dto';
 
 
 /**
@@ -22,25 +23,17 @@
 
 /** Interface for LoginResult */
 export interface ILoginResult {
+  user?: UserResponseDTO;
   accessToken?: string;
   refreshToken?: string;
-  userId?: string;
-  userName?: string;
-  email?: string;
-  fullName?: string;
-  profilePicture?: string;
   roles?: Array<string>;
 }
 
 /** Class for LoginResult */
 export class LoginResult implements ILoginResult {
+  user?: UserResponseDTO;
   accessToken?: string;
   refreshToken?: string;
-  userId?: string;
-  userName?: string;
-  email?: string;
-  fullName?: string;
-  profilePicture?: string;
   roles?: Array<string>;
 
   constructor(data?: ILoginResult) {
@@ -54,13 +47,9 @@ export class LoginResult implements ILoginResult {
 
 init(data?: any) {
   if (data) {
+    this.user = data["user"];
     this.accessToken = data["accessToken"];
     this.refreshToken = data["refreshToken"];
-    this.userId = data["userId"];
-    this.userName = data["userName"];
-    this.email = data["email"];
-    this.fullName = data["fullName"];
-    this.profilePicture = data["profilePicture"];
     if (Array.isArray(data["roles"])) {
       this.roles = [] as any;
       for (let item of data["roles"])

@@ -228,6 +228,8 @@ public static class ServiceCollectionExtensions
     /// <returns></returns>
     public static IServiceCollection AddCustomServices(this IServiceCollection services)
     {
+        services.AddHttpContextAccessor();
+
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
         services.AddScoped<ITokenGenerator, TokenGenerator>();
         services.AddScoped<IIdentityService, IdentityService>();
@@ -236,6 +238,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ICaptchaStore, InMemoryCaptchaStore>();
         services.AddHostedService<CaptchaCleanupBackgroundService>();
 
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 
         return services;

@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SamaniCrm.Application.DTOs;
 
 namespace SamaniCrm.Application.Auth.Commands
 {
-    public record LoginResult(
-         string AccessToken,
-         string RefreshToken,
-         Guid UserId,
-         string? UserName,
-         string? Email,
-         string FullName,
-         string? ProfilePicture,
-         string[] Roles
-        );
+    public class LoginResult
+    {
+        public UserResponseDTO User { get; set; } = null!;
+        public string AccessToken { get; set; } = string.Empty;
+        public string RefreshToken { get; set; } = string.Empty;
+
+        public string[] Roles { get; set; } = [];
+    }
+
 }

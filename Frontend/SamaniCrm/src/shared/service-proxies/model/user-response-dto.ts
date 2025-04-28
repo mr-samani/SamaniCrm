@@ -23,23 +23,25 @@
 /** Interface for UserResponseDTO */
 export interface IUserResponseDTO {
   id: string;
-  userName?: string;
-  firstName?: string;
-  lastName?: string;
-  fullName?: string;
-  email?: string;
-  profilePicture?: string;
+  userName: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  email: string;
+  profilePicture: string;
+  lang: string;
 }
 
 /** Class for UserResponseDTO */
 export class UserResponseDTO implements IUserResponseDTO {
   id!: string;
-  userName?: string;
-  firstName?: string;
-  lastName?: string;
-  fullName?: string;
-  email?: string;
-  profilePicture?: string;
+  userName!: string;
+  firstName!: string;
+  lastName!: string;
+  fullName!: string;
+  email!: string;
+  profilePicture!: string;
+  lang!: string;
 
   constructor(data?: IUserResponseDTO) {
     if (data) {
@@ -59,6 +61,7 @@ init(data?: any) {
     this.fullName = data["fullName"];
     this.email = data["email"];
     this.profilePicture = data["profilePicture"];
+    this.lang = data["lang"];
   }
 }
 

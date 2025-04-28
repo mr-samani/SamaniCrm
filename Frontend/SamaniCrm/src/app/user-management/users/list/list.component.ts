@@ -28,11 +28,11 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
   fields: FieldsType[] = [
     { column: 'profilePicture', title: this.l('Image'), width: 100, type: 'profilePicture' },
     // { column: 'id', title: this.l('id'), width: 100 },
-    { column: 'name', title: this.l('Name') },
-    { column: 'username', title: this.l('UserName') },
+    { column: 'fullName', title: this.l('Name') },
+    { column: 'userName', title: this.l('UserName') },
     { column: 'email', title: this.l('Email') },
     { column: 'lang', title: this.l('Language') },
-    { column: 'registerTime', title: this.l('RegisterTime'), type: 'dateTime' },
+    { column: 'creationTime', title: this.l('CreationTime'), type: 'dateTime' },
   ];
 
   form: FormGroup;

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using SamaniCrm.Domain.Interfaces;
 
 namespace SamaniCrm.Infrastructure.Identity
 {
-    public class ApplicationUser: IdentityUser<Guid>
+    public class ApplicationUser: IdentityUser<Guid>,IAuditableEntity
     {
         public string? FirstName { get; set; }
         public string LastName { get; set; } = string.Empty;
@@ -15,6 +16,12 @@ namespace SamaniCrm.Infrastructure.Identity
         public string? Address { get; set; }
         // public string? PhoneNumber { get; set; }
         public string? ProfilePicture { get; set; }
+        public required string Lang { get; set; }
 
+        // Implementing IAuditableEntity properties
+        public DateTime CreationTime { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTime? LastModifiedTime { get; set; }
+        public string? LastModifiedBy { get; set; }
     }
 }

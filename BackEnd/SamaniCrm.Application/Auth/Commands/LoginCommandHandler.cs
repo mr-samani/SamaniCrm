@@ -10,6 +10,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.DTOs;
 using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Application.Auth.Commands
@@ -44,20 +45,17 @@ namespace SamaniCrm.Application.Auth.Commands
             }
             var userData = await _identityService.GetUserDetailsByUserNameAsync(request.UserName);
 
-            var accessToken = _tokenGenerator.GenerateAccessToken(userData.userId, userData.UserName, userData.roles);
-            var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.userId, accessToken);
+            var accessToken = _tokenGenerator.GenerateAccessToken(userData.user.Id, userData.user.UserName, userData.roles);
+            var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.user.Id, accessToken);
 
             BackgroundJob.Enqueue(() => SendLoginNotification(request.UserName));
-            LoginResult output = new LoginResult(
-                AccessToken: accessToken,
-                RefreshToken: refreshToken,
-                UserId: userData.userId,
-                UserName: userData.UserName,
-                Email: userData.email ?? "",
-                FullName: userData.fullName ?? "",
-                ProfilePicture: userData.profilePicture ?? "",
-                Roles: userData.roles.ToArray()
-                );
+            LoginResult output = new LoginResult()
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+                User = userData.user,
+                Roles = userData.roles.ToArray()
+            };
             return output;
         }
 
