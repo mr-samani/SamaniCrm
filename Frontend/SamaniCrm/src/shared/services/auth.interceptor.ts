@@ -106,7 +106,7 @@ export class AuthInterceptor implements HttpInterceptor {
               this.isRefreshing = false;
               this.authService.logOut();
               // this.matDialog.closeAll();
-              return throwError(() => new Error(err));
+              return throwError(() => err);
             }),
           );
       } else {
@@ -134,7 +134,7 @@ export class AuthInterceptor implements HttpInterceptor {
       showConfirmButton: true,
       confirmButtonText: this.translateService.instant('ok'),
     });
-    return throwError(() => new Error(err as any));
+    return throwError(() => err);
   }
 
   handleServerError(err: HttpErrorResponse) {
@@ -145,7 +145,7 @@ export class AuthInterceptor implements HttpInterceptor {
       showConfirmButton: true,
       confirmButtonText: this.translateService.instant('ok'),
     });
-    return throwError(() => new Error(err as any));
+    return throwError(() => err);
   }
 
   handleAccessDeniedError(err?: any) {
@@ -160,6 +160,6 @@ export class AuthInterceptor implements HttpInterceptor {
       .then((r) => {
         this.authService.logOut();
       });
-    return throwError(() => new Error(err as any));
+    return throwError(() => err);
   }
 }

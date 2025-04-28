@@ -1,7 +1,9 @@
 import {
   APP_INITIALIZER,
   ApplicationConfig,
+  ErrorHandler,
   importProvidersFrom,
+  Injector,
   isDevMode,
   provideZoneChangeDetection,
 } from '@angular/core';
@@ -12,7 +14,7 @@ import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromD
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
-import { NgxAlertModalModule } from 'ngx-alert-modal';
+import { NgxAlertModalModule, NgxAlertModalService } from 'ngx-alert-modal';
 import { AppConst } from '@shared/app-const';
 import { AppInitializer } from '@shared/app-initializer';
 import { PAGINATION_LABELS } from '@shared/components/pagination/pagination.component';
@@ -22,6 +24,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AccountServiceProxy } from '@shared/service-proxies/api/account.service';
 import { Configuration } from '@shared/service-proxies/configuration';
 import { AuthService } from '@shared/services/auth.service';
+import { GlobalErrorHandler } from '@shared/handlers/global-error-handler';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -66,6 +69,7 @@ export const appConfig: ApplicationConfig = {
       deps: [PaginationLocalize],
     },
     { provide: Configuration, useFactory: configurationFactory },
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
   ],
 };
 function configurationFactory() {
