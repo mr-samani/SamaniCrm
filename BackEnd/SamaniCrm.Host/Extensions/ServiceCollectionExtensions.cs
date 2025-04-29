@@ -7,19 +7,12 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
-using System.Threading.Tasks;
 using FluentValidation;
 using Hangfire;
 using Hangfire.SqlServer;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using SamaniCrm.Application;
 using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.Behaviors;
 using SamaniCrm.Application.Common.Interfaces;
@@ -110,9 +103,9 @@ public static class ServiceCollectionExtensions
     {
         services.AddControllers(options =>
             {
-                options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
-                options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status401Unauthorized));
-                options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status403Forbidden));
+                //options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+                //options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status401Unauthorized));
+               // options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status403Forbidden));
             })
             .AddJsonOptions(opt =>
             {

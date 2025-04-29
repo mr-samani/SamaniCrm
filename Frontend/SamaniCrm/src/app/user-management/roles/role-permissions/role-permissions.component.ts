@@ -1,8 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { Apis } from '@shared/apis';
-import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@app/app-component-base';
-import { RolePermissionsDto } from '../models/role-permissions';
 
 @Component({
   selector: 'app-role-permissions',
@@ -14,7 +11,7 @@ export class RolePermissionsListComponent extends AppComponentBase implements On
   roleName = '';
   loading = true;
   isSaving = false;
-  list: RolePermissionsDto[] = [];
+  list: any[] = [];
   constructor(injector: Injector) {
     super(injector);
     this.roleName = this.route.snapshot.params['roleName'];

@@ -1,10 +1,9 @@
-import { RolePermissionsDto } from '@app/user-management/roles/models/role-permissions';
-
-export class TreeViewModel extends RolePermissionsDto {
+export class TreeViewModel {
   isModified?: boolean;
   isOpen?: boolean;
   hasUnSelectedChildren?: boolean;
   hasChildren?: boolean;
-
-  declare  children: TreeViewModel[];
+  selected?: boolean;
+  name?: string;
+  declare children: TreeViewModel[];
 }

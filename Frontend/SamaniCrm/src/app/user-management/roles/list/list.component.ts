@@ -3,11 +3,12 @@ import { FileUsageEnum } from '@app/file-manager/image-cropper-dialog/image-crop
 import { Apis } from '@shared/apis';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@app/app-component-base';
-import { RoleDto } from '../models/RoleDto';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { AppConst } from '@shared/app-const';
 import { DownloadService, DownloadFileType } from '@shared/services/download.service';
+import { RoleServiceProxy } from '@shared/service-proxies/api/role.service';
+import { RoleResponseDTO } from '@shared/service-proxies/model/role-response-dto';
 
 @Component({
   selector: 'app-user-list',
@@ -17,7 +18,7 @@ import { DownloadService, DownloadFileType } from '@shared/services/download.ser
 })
 export class RoleListComponent extends AppComponentBase implements OnInit {
   loading = true;
-  list: RoleDto[] = [];
+  list: RoleResponseDTO[] = [];
   totalCount = 0;
   fields: FieldsType[] = [
     { column: 'id', title: this.l('Id'), width: 100 },
@@ -27,6 +28,7 @@ export class RoleListComponent extends AppComponentBase implements OnInit {
     injector: Injector,
     private downloadService: DownloadService,
     private fileManager: FileManagerService,
+    private roleService: RoleServiceProxy,
   ) {
     super(injector);
   }
@@ -37,12 +39,12 @@ export class RoleListComponent extends AppComponentBase implements OnInit {
 
   getList() {
     this.loading = true;
-    // this.dataService
-    //   .get<any, RoleDto[]>(Apis.roleList, {})
-    //   .pipe(finalize(() => (this.loading = false)))
-    //   .subscribe((response) => {
-    //     this.list = response.data ?? [];
-    //   });
+    this.roleService
+      .getRole()
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe((response) => {
+        this.list = response.data ?? [];
+      });
   }
 
   exportExcel() {
@@ -53,7 +55,7 @@ export class RoleListComponent extends AppComponentBase implements OnInit {
     );
   }
 
-  changeAvatar(item: RoleDto) {
+  changeAvatar(item: RoleResponseDTO) {
     this.fileManager
       .selectFile({
         usage: FileUsageEnum.USER_AVATAR,
