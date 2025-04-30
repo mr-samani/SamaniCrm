@@ -87,6 +87,9 @@ namespace SamaniCrm.Infrastructure.Persistence
 
         public async Task TrySeedAsync()
         {
+
+            await SeedPermissions.TrySeedAsync(_context);
+
             // Default roles
             var administratorRole = new ApplicationRole(Roles.Administrator);
 

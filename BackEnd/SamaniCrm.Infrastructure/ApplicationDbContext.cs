@@ -2,24 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using Duende.IdentityServer.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Interfaces;
 using SamaniCrm.Infrastructure.Identity;
 using RefreshToken = SamaniCrm.Domain.Entities.RefreshToken;
 
 namespace SamaniCrm.Infrastructure
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>, IApplicationDbContext
     {
         private readonly ICurrentUserService _currentUserService;
 
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
+        // public DbSet<RolePermission> RolePermissions { get; set; }
+
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, ICurrentUserService currentUserService) : base(options)
         {
@@ -55,6 +60,27 @@ namespace SamaniCrm.Infrastructure
                 b.Property(e => e.PhoneNumber).HasMaxLength(15);
                 b.Property(e => e.ProfilePicture).HasMaxLength(200);
             });
+            builder.Entity<RolePermission>(b =>
+            {
+                b.HasKey(rp => new { rp.RoleId, rp.PermissionId });
+
+                b.HasOne<ApplicationRole>()
+                    .WithMany()
+                    .HasForeignKey(rp => rp.RoleId)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                b.HasOne(rp => rp.Permission)
+                    .WithMany()
+                    .HasForeignKey(rp => rp.PermissionId)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+
+            builder.Entity<Permission>()
+                .HasIndex(p => p.LocalizeKey)
+                .IsUnique();
 
             foreach (var entityType in builder.Model.GetEntityTypes())
             {

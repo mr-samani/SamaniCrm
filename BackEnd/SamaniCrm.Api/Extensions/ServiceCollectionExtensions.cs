@@ -11,6 +11,7 @@ using FluentValidation;
 using Hangfire;
 using Hangfire.SqlServer;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using SamaniCrm.Application.Auth.Commands;
@@ -18,6 +19,7 @@ using SamaniCrm.Application.Common.Behaviors;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Queries.Role;
 using SamaniCrm.Application.User.Queries;
+using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.BackgroundServices;
 using SamaniCrm.Infrastructure.Captcha;
 using SamaniCrm.Infrastructure.Email;
@@ -202,6 +204,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
         services.AddScoped<ITokenGenerator, TokenGenerator>();
         services.AddScoped<IIdentityService, IdentityService>();
+        services.AddScoped<IRolePermissionService, RolePermissionService>();
         services.AddSingleton(TimeProvider.System);
         //چون حافظه ایه Singleton باشه بهتره.
         services.AddSingleton<ICaptchaStore, InMemoryCaptchaStore>();
@@ -209,6 +212,27 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+
+        return services;
+    }
+
+
+
+
+    public static IServiceCollection AddAuthorization(this IServiceCollection services)
+    {
+        //services.AddAuthorization(options =>
+        //{
+        //    foreach (var permission in Enum.GetNames(typeof(Permission)))
+        //    {
+        //        options.AddPolicy($"Permission:{permission}", policy =>
+        //        {
+        //            policy.Requirements.Add(new PermissionRequirement(permission));
+        //        });
+        //    }
+        //});
+
+        //services.AddScoped<IAuthorizationHandler, PermissionHandler>();
 
         return services;
     }
