@@ -88,6 +88,7 @@ namespace SamaniCrm.Infrastructure.Persistence
         public async Task TrySeedAsync()
         {
 
+            await SeedLocalization.TrySeedAsync(_context);
             await SeedPermissions.TrySeedAsync(_context);
 
             // Default roles

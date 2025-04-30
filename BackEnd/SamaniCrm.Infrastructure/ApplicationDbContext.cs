@@ -23,6 +23,8 @@ namespace SamaniCrm.Infrastructure
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Permission> Permissions { get; set; }
+        public DbSet<Language> Languages { get; set; }
+
         // public DbSet<RolePermission> RolePermissions { get; set; }
 
 
@@ -81,6 +83,22 @@ namespace SamaniCrm.Infrastructure
             builder.Entity<Permission>()
                 .HasIndex(p => p.LocalizeKey)
                 .IsUnique();
+
+            builder.Entity<Language>(l =>
+            {
+                l.HasKey(x => x.Culture);
+                l.HasIndex(c => c.Culture).IsUnique();
+            });
+            builder.Entity<Localization>(l =>
+            {
+                l.HasKey(k => k.Id);
+                l.HasIndex(c => c.Culture).IsUnique();
+                l.HasOne(x=>x.Language)
+                    .WithMany(x=>x.Localizations)
+                    .HasForeignKey(x => x.Culture)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
 
             foreach (var entityType in builder.Model.GetEntityTypes())
             {

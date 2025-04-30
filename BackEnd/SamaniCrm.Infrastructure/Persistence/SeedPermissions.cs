@@ -16,6 +16,8 @@ namespace SamaniCrm.Infrastructure.Persistence
 
         public static async Task TrySeedAsync(ApplicationDbContext dbContext)
         {
+            Console.WriteLine("Try seed permission data");
+
             var permissions = typeof(AppPermissions)
                 .GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)
                 .Where(f => f.FieldType == typeof(string))

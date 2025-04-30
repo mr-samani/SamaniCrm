@@ -55,25 +55,30 @@ namespace SamaniCrm.Infrastructure
                 .AddSignInManager();
 
             services.AddScoped<ICurrentUserService, DummyCurrentUserService>();
-            services.AddScoped<ApplicationDbInitializer>();
+
+            if (args.Contains("--seed"))
+            {
+                services.AddScoped<ApplicationDbInitializer>();
+            }
 
             var provider = services.BuildServiceProvider();
-
-            // 🪄 اگر Initializer وجود داشت، اجرا کن
-            // چک کردن اینکه آیا Migration اعمال شده است یا خیر
-            using (var scope = provider.CreateScope())
+            Console.WriteLine("Received args: " + string.Join(", ", args));
+            Console.WriteLine(args.Contains("--seed"));
+            // run only with "seed-database.bat"
+            // dotnet ef database update -- --seed
+            if (args.Contains("--seed"))
             {
+                using var scope = provider.CreateScope();
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                if (!dbContext.Database.GetPendingMigrations().Any())
+                dbContext.Database.Migrate();
+                var initializer = scope.ServiceProvider.GetService<ApplicationDbInitializer>();
+                Console.WriteLine("initializer:" + (initializer != null));
+                if (initializer != null)
                 {
-                    // اگر Migration‌های معلق وجود داشت، در اینجا می‌توانیم Seed کردن را انجام دهیم
-                    var initializer = scope.ServiceProvider.GetService<ApplicationDbInitializer>();
-                    if (initializer != null)
-                    {
-                        initializer.SeedAsync().GetAwaiter().GetResult();
-                    }
+                    initializer.SeedAsync().GetAwaiter().GetResult();
                 }
             }
+
 
 
             return provider.GetRequiredService<ApplicationDbContext>();
