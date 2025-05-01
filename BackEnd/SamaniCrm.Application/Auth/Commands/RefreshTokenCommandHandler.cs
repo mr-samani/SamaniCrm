@@ -13,7 +13,7 @@ namespace SamaniCrm.Application.Auth.Commands
     public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, TokenResponseDto>
     {
         private readonly ITokenGenerator _tokenGenerator;
-        private readonly IIdentityService   _identityService;
+        private readonly IIdentityService _identityService;
 
         public RefreshTokenCommandHandler(ITokenGenerator tokenGenerator, IIdentityService identityService)
         {
@@ -24,11 +24,11 @@ namespace SamaniCrm.Application.Auth.Commands
         public async Task<TokenResponseDto> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
             var result = await _identityService.GetUserIdFromRefreshToken(request.RefreshToken);
-            if(result.Equals(Guid.Empty))
+            if (result.Equals(Guid.Empty))
                 throw new ForbiddenAccessException();
 
-            var userData= await _identityService.GetUserDetailsAsync(result);
-            var accessToken = _tokenGenerator.GenerateAccessToken(userData.user.Id, userData.user.UserName, userData.roles);
+            (DTOs.UserResponseDTO user, IList<string> roles) userData = await _identityService.GetUserDetailsAsync(result);
+            var accessToken = _tokenGenerator.GenerateAccessToken(userData.user.Id, userData.user.UserName, userData.user.Lang, userData.roles);
             var newRefreshToken = await _tokenGenerator.GenerateRefreshToken(userData.user.Id, accessToken);
 
             return new TokenResponseDto

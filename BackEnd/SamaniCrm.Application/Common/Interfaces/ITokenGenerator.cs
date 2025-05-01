@@ -8,7 +8,7 @@ namespace SamaniCrm.Application.Common.Interfaces
 {
     public interface ITokenGenerator
     {
-        public string GenerateAccessToken(Guid userId, string userName, IList<string> roles);
+        public string GenerateAccessToken(Guid userId, string userName,string lang, IList<string> roles);
         public Task<string> GenerateRefreshToken(Guid userId, string accessToken);
     }
 }

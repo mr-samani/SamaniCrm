@@ -88,6 +88,8 @@ namespace SamaniCrm.Infrastructure
     public class DummyCurrentUserService : ICurrentUserService
     {
         public string? UserId => "MigrationUser"; // یا null هم میتونی بدی
+
+        public string lang => "fa-IR";
     }
 
 }

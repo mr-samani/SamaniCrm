@@ -20,17 +20,14 @@ namespace SamaniCrm.Application.Auth.Commands
         private readonly IMediator _mediator;
         private readonly ITokenGenerator _tokenGenerator;
         private readonly IIdentityService _identityService;
-        private readonly ICaptchaStore _captchaStore;
         public LoginCommandHandler(
                 IMediator mediator,
                 ITokenGenerator tokenGenerator,
-                IIdentityService identityService,
-                ICaptchaStore captchaStore)
+                IIdentityService identityService)
         {
             _mediator = mediator;
             _tokenGenerator = tokenGenerator;
             _identityService = identityService;
-            _captchaStore = captchaStore;
         }
 
 
@@ -43,9 +40,12 @@ namespace SamaniCrm.Application.Auth.Commands
                 BackgroundJob.Enqueue(() => SendLoginFailureNotification(request.UserName));
                 throw new InvalidLoginException();
             }
-            var userData = await _identityService.GetUserDetailsByUserNameAsync(request.UserName);
+            (UserResponseDTO user, IList<string> roles) userData = await _identityService.GetUserDetailsByUserNameAsync(request.UserName);
 
-            var accessToken = _tokenGenerator.GenerateAccessToken(userData.user.Id, userData.user.UserName, userData.roles);
+            var accessToken = _tokenGenerator.GenerateAccessToken(userData.user.Id,
+                userData.user.UserName,
+                userData.user.Lang,
+                userData.roles);
             var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.user.Id, accessToken);
 
             BackgroundJob.Enqueue(() => SendLoginNotification(request.UserName));

@@ -17,6 +17,7 @@ using Microsoft.OpenApi.Models;
 using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.Behaviors;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.InitialApp.Queries;
 using SamaniCrm.Application.Queries.Role;
 using SamaniCrm.Application.User.Queries;
 using SamaniCrm.Domain.Entities;
@@ -42,6 +43,8 @@ public static class ServiceCollectionExtensions
             // cfg.RegisterServicesFromAssembly(typeof(UserListQuery).Assembly);
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
             cfg.RegisterServicesFromAssembly(typeof(GetRoleQueryHandler).Assembly);
+            cfg.RegisterServicesFromAssembly(typeof(InitialAppQueryHandler).Assembly);
+            cfg.RegisterServicesFromAssembly(typeof(GetCurrentUserQueryHandler).Assembly);
         });
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
@@ -200,7 +203,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCustomServices(this IServiceCollection services)
     {
         services.AddHttpContextAccessor();
-
+        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
         services.AddScoped<ITokenGenerator, TokenGenerator>();
         services.AddScoped<IIdentityService, IdentityService>();

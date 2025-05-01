@@ -29,12 +29,13 @@ namespace SamaniCrm.Infrastructure.Services
         }
 
 
-        public string GenerateAccessToken(Guid userId, string userName, IList<string> roles)
+        public string GenerateAccessToken(Guid userId, string userName, string lang, IList<string> roles)
         {
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, userName),
+                new Claim("lang",lang)
             };
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
@@ -47,7 +48,7 @@ namespace SamaniCrm.Infrastructure.Services
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:"])),
+                expires: DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:Expiration"])),
                 signingCredentials: signingCredentials
             );
             var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
