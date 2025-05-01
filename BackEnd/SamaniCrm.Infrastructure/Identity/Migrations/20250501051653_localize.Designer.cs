@@ -12,8 +12,8 @@ using SamaniCrm.Infrastructure;
 namespace SamaniCrm.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250430112344_CreateLocalize")]
-    partial class CreateLocalize
+    [Migration("20250501051653_localize")]
+    partial class localize
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -196,19 +196,15 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<int?>("LanguageCulture")
-                        .HasColumnType("int");
-
-                    b.Property<string>("value")
+                    b.Property<string>("Value")
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Culture")
-                        .IsUnique();
+                    b.HasIndex("Culture");
 
-                    b.ToTable("Localization");
+                    b.ToTable("Localizations");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Permission", b =>

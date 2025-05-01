@@ -193,19 +193,15 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<int?>("LanguageCulture")
-                        .HasColumnType("int");
-
-                    b.Property<string>("value")
+                    b.Property<string>("Value")
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Culture")
-                        .IsUnique();
+                    b.HasIndex("Culture");
 
-                    b.ToTable("Localization");
+                    b.ToTable("Localizations");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Permission", b =>

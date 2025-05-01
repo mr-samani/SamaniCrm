@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SamaniCrm.Infrastructure.Identity.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateLocalize : Migration
+    public partial class localize : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,20 +35,19 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Localization",
+                name: "Localizations",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Culture = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     Key = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
-                    LanguageCulture = table.Column<int>(type: "int", nullable: true)
+                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Localization", x => x.Id);
+                    table.PrimaryKey("PK_Localizations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Localization_Languages_Culture",
+                        name: "FK_Localizations_Languages_Culture",
                         column: x => x.Culture,
                         principalTable: "Languages",
                         principalColumn: "Culture",
@@ -62,17 +61,16 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Localization_Culture",
-                table: "Localization",
-                column: "Culture",
-                unique: true);
+                name: "IX_Localizations_Culture",
+                table: "Localizations",
+                column: "Culture");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Localization");
+                name: "Localizations");
 
             migrationBuilder.DropTable(
                 name: "Languages");

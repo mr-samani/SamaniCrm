@@ -88,8 +88,9 @@ namespace SamaniCrm.Infrastructure.Persistence
         public async Task TrySeedAsync()
         {
 
-            await SeedLocalization.TrySeedAsync(_context);
             await SeedPermissions.TrySeedAsync(_context);
+            // seeld localization must be after seed permissions
+            await SeedLocalization.TrySeedAsync(_context);
 
             // Default roles
             var administratorRole = new ApplicationRole(Roles.Administrator);

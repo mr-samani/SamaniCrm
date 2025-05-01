@@ -24,6 +24,8 @@ namespace SamaniCrm.Infrastructure
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Language> Languages { get; set; }
+        public DbSet<Localization> Localizations { get; set; }
+
 
         // public DbSet<RolePermission> RolePermissions { get; set; }
 
@@ -92,7 +94,7 @@ namespace SamaniCrm.Infrastructure
             builder.Entity<Localization>(l =>
             {
                 l.HasKey(k => k.Id);
-                l.HasIndex(c => c.Culture).IsUnique();
+                l.HasIndex(c => c.Culture);
                 l.HasOne(x=>x.Language)
                     .WithMany(x=>x.Localizations)
                     .HasForeignKey(x => x.Culture)

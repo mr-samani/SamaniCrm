@@ -16,10 +16,9 @@ namespace SamaniCrm.Domain.Entities
         [MaxLength(250)]
         public required string Key { get; set; }
         [MaxLength(2000)]
-        public string? value { get; set; }
+        public string? Value { get; set; }
 
 
-        [ForeignKey("LanguageCulture")]
         public Language? Language { get; set; }
 
 

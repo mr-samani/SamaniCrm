@@ -36,6 +36,49 @@ namespace SamaniCrm.Infrastructure.Persistence
                 await dbContext.Languages.AddRangeAsync(languages);
                 await dbContext.SaveChangesAsync();
             }
+
+
+            //-----------------------------------------------------
+            // seed permission to localization 
+            var allPermissions = dbContext.Permissions
+        .Select(p => p.LocalizeKey)
+        .Distinct()
+        .ToList();
+
+            var allLanguages = dbContext.Languages
+                .Where(l => l.IsActive)
+                .Select(l => l.Culture)
+                .ToList();
+
+            var existingLocalizations = dbContext.Localizations
+                .Where(l => allPermissions.Contains(l.Key))
+                .Select(l => new { l.Key, l.Culture })
+                .ToHashSet();
+
+            var newLocalizations = new List<Localization>();
+
+            foreach (var permissionKey in allPermissions)
+            {
+                foreach (var culture in allLanguages)
+                {
+                    if (!existingLocalizations.Contains(new { Key = permissionKey, Culture = culture }))
+                    {
+                        newLocalizations.Add(new Localization
+                        {
+                            Key = permissionKey,
+                            Culture = culture,
+                            Value = string.Empty, // بعداً توسط کاربر تکمیل می‌شود
+                        });
+                    }
+                }
+            }
+            Console.WriteLine("new localize count:",newLocalizations.Count);
+            if (newLocalizations.Any())
+            {
+                dbContext.Localizations.AddRange(newLocalizations);
+                dbContext.SaveChanges();
+            }
+
         }
     }
 }
