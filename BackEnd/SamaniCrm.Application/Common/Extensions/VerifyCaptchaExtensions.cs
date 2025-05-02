@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Interfaces;
 
@@ -11,18 +12,24 @@ namespace SamaniCrm.Application
 {
     public static class VerifyCaptchaExtensions
     {
-      
-     
+
+        private static IConfiguration _configuration;
 
         private static ICaptchaStore _captchaStore;
-        public static void Configure(ICaptchaStore captchaStore)
+        public static void Configure(ICaptchaStore captchaStore, IConfiguration configuration)
         {
             _captchaStore = captchaStore;
+            _configuration = configuration;
         }
 
 
         public static bool VerifyCaptcha(this InputCaptchaDTO? captcha)
         {
+            bool.TryParse(_configuration["Captcha:Enabled"], out var requiredCaptcha);
+            if (requiredCaptcha == false)
+            {
+                return true;
+            }
             if (captcha == null || string.IsNullOrEmpty(captcha.CaptchaKey) || string.IsNullOrEmpty(captcha.CaptchaText))
             {
                 // throw new ArgumentException("Captcha key or text cannot be null or empty");
@@ -43,7 +50,7 @@ namespace SamaniCrm.Application
             catch (Exception ex)
             {
                 // logger.Error($"Captcha validation failed: {ex.Message}");
-                return false; 
+                return false;
             }
         }
 

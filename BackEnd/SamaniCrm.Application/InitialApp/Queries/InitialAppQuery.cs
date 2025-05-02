@@ -43,7 +43,7 @@ public class InitialAppQueryHandler : IRequestHandler<InitialAppQuery, InitialAp
                 IsDefault = s.IsDefault
             }).ToListAsync();
         string defaultLanguage = languages.Find(x => x.IsDefault)?.Culture ?? "";
-        bool requiredCaptcha = _configuration["Captcha:Enabled"] == "true";
+        bool.TryParse(_configuration["Captcha:Enabled"], out var requiredCaptcha);
 
         return new InitialAppDTO()
         {

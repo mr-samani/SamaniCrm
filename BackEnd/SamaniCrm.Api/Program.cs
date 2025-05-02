@@ -22,7 +22,7 @@ services
 var app = builder.Build();
 // برای اینکه از همان instance ICaptchaStore استفاده کنم و یک نمون جدید نسازد این جا مقدار دهی میکنم
 var captchaStore = app.Services.GetRequiredService<ICaptchaStore>();
-VerifyCaptchaExtensions.Configure(captchaStore);
+VerifyCaptchaExtensions.Configure(captchaStore, config);
 
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
