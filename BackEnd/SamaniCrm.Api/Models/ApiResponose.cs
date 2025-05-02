@@ -41,6 +41,11 @@
                 Errors = errors,
                 Meta = meta
             };
+
+        internal static object? Fail(string message)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     /// <summary>Encapsulates error details.</summary>

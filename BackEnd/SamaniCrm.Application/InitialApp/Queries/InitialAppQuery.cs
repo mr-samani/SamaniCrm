@@ -37,12 +37,12 @@ public class InitialAppQueryHandler : IRequestHandler<InitialAppQuery, InitialAp
             .Select(s => new LanguageDto()
             {
                 Name = s.Name,
-                Calture = s.Culture,
+                Culture = s.Culture,
                 Flag = s.Flag,
                 IsRtl = s.IsRtl,
                 IsDefault = s.IsDefault
             }).ToListAsync();
-        string defaultLanguage = languages.Find(x => x.IsDefault)?.Calture ?? "";
+        string defaultLanguage = languages.Find(x => x.IsDefault)?.Culture ?? "";
         bool requiredCaptcha = _configuration["Captcha:Enabled"] == "true";
 
         return new InitialAppDTO()
