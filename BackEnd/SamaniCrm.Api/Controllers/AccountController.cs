@@ -10,12 +10,12 @@ using MediatR;
 using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.DTOs;
+using SamaniCrm.Api.Controllers;
 
 namespace SamaniCrm.Host.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AccountController : ControllerBase
+
+    public class AccountController : ApiBaseController
     {
 
         private readonly IConfiguration _configuration;
@@ -30,27 +30,30 @@ namespace SamaniCrm.Host.Controllers
 
 
         [HttpPost("login")]
-        public async Task<ActionResult<ApiResponse<LoginResult>>> Login([FromBody] LoginCommand command)
+        [ProducesResponseType(typeof(ApiResponse<LoginResult>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Login([FromBody] LoginCommand command)
         {
-            var result = await _mediator.Send(command);
-            return Ok(ApiResponse<LoginResult>.Ok(result));
+            LoginResult result = await _mediator.Send(command);
+            return ApiOk<LoginResult>(result);
         }
 
         [HttpPost("refresh")]
-        public async Task<ActionResult<ApiResponse<TokenResponseDto>>> Refresh([FromBody] RefreshTokenCommand command)
+        [ProducesResponseType(typeof(ApiResponse<TokenResponseDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenCommand command)
         {
             var result = await _mediator.Send(command);
-            return Ok(ApiResponse<TokenResponseDto>.Ok(result));
+            return ApiOk<TokenResponseDto>(result);
         }
 
         [HttpPost("revoke")]
-        public async Task<ActionResult<ApiResponse<string>>> Revoke([FromBody] RevokeRefreshTokenCommand command)
+        [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Revoke([FromBody] RevokeRefreshTokenCommand command)
         {
             var success = await _mediator.Send(command);
             //if (!success)
             //    return BadRequest(ApiResponse<string>.Fail(new List<ApiError> { new() { Message = "Token invalid or already revoked" } }));
 
-            return Ok(ApiResponse<string>.Ok(data: ""));
+            return ApiOk<string>("");
         }
 
     }

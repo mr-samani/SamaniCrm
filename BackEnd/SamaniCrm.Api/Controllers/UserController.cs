@@ -12,12 +12,10 @@ using SamaniCrm.Application.User.Queries;
 
 namespace SamaniCrm.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     [Authorize]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     //[Authorize(Roles = "Admin, Management")]
-    public class UserController : ControllerBase
+    public class UserController : ApiBaseController
     {
         private readonly IMediator _mediator;
 
@@ -27,64 +25,66 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetCurrentUser")]
-        public async Task<ActionResult<ApiResponse<UserResponseDTO>>> GetCurrentUser()
+        [ProducesResponseType(typeof(UserResponseDTO), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetCurrentUser()
         {
-            return Ok(ApiResponse<UserResponseDTO>.Ok(await _mediator.Send(new GetCurrentUserQuery())));
+            return ApiOk(await _mediator.Send(new GetCurrentUserQuery()));
         }
 
         [HttpPost("Create")]
         [ProducesDefaultResponseType(typeof(int))]
-        public async Task<ActionResult<ApiResponse<int>>> CreateUser(CreateUserCommand command)
+        public async Task<IActionResult> CreateUser(CreateUserCommand command)
         {
-            return Ok(ApiResponse<int>.Ok(await _mediator.Send(command)));
+            return ApiOk(await _mediator.Send(command));
         }
 
         [HttpPost("GetAllUsers")]
-        public async Task<ActionResult<ApiResponse<PaginatedResult<UserResponseDTO>>>> GetAllUserAsync([FromBody] GetUserQuery request)
+        [ProducesResponseType(typeof(PaginatedResult<UserResponseDTO>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllUserAsync([FromBody] GetUserQuery request)
         {
-            return Ok(ApiResponse<PaginatedResult<UserResponseDTO>>.Ok(await _mediator.Send(request)));
+            return ApiOk<PaginatedResult<UserResponseDTO>>(await _mediator.Send(request));
         }
 
         [HttpDelete("Delete/{userId}")]
-        [ProducesDefaultResponseType(typeof(int))]
-        public async Task<ActionResult<ApiResponse<int>>> DeleteUser(Guid userId)
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeleteUser(Guid userId)
         {
             var result = await _mediator.Send(new DeleteUserCommand() { Id = userId });
-            return Ok(ApiResponse<int>.Ok(result));
+            return ApiOk(result);
         }
 
         [HttpGet("GetUserDetails/{userId}")]
         [ProducesDefaultResponseType(typeof(UserDetailsResponseDTO))]
-        public async Task<ActionResult<ApiResponse<UserDetailsResponseDTO>>> GetUserDetails(Guid userId)
+        public async Task<IActionResult> GetUserDetails(Guid userId)
         {
             var result = await _mediator.Send(new GetUserDetailsQuery() { UserId = userId });
-            return Ok(ApiResponse<UserDetailsResponseDTO>.Ok(result));
+            return ApiOk(result);
         }
 
         [HttpGet("GetUserDetailsByUserName/{userName}")]
         [ProducesDefaultResponseType(typeof(UserDetailsResponseDTO))]
-        public async Task<ActionResult<ApiResponse<UserDetailsResponseDTO>>> GetUserDetailsByUserName(string userName)
+        public async Task<IActionResult> GetUserDetailsByUserName(string userName)
         {
             var result = await _mediator.Send(new GetUserDetailsByUserNameQuery() { UserName = userName });
-            return Ok(ApiResponse<UserDetailsResponseDTO>.Ok(result));
+            return ApiOk(result);
         }
 
         [HttpPost("AssignRoles")]
         [ProducesDefaultResponseType(typeof(int))]
 
-        public async Task<ActionResult<ApiResponse<int>>> AssignRoles(AssignUsersRoleCommand command)
+        public async Task<IActionResult> AssignRoles(AssignUsersRoleCommand command)
         {
             var result = await _mediator.Send(command);
-            return Ok(ApiResponse<int>.Ok(result));
+            return ApiOk(result);
         }
 
         [HttpPut("EditUserRoles")]
         [ProducesDefaultResponseType(typeof(int))]
 
-        public async Task<ActionResult<ApiResponse<int>>> EditUserRoles(UpdateUserRolesCommand command)
+        public async Task<IActionResult> EditUserRoles(UpdateUserRolesCommand command)
         {
             var result = await _mediator.Send(command);
-            return Ok(ApiResponse<int>.Ok(result));
+            return ApiOk(result);
         }
 
 
@@ -92,12 +92,12 @@ namespace SamaniCrm.Api.Controllers
 
         [HttpPut("EditUserProfile/{id}")]
         [ProducesDefaultResponseType(typeof(int))]
-        public async Task<ActionResult<ApiResponse<int>>> EditUserProfile(string id, [FromBody] EditUserProfileCommand command)
+        public async Task<IActionResult> EditUserProfile(string id, [FromBody] EditUserProfileCommand command)
         {
             if (id == command.Id)
             {
                 var result = await _mediator.Send(command);
-                return Ok(ApiResponse<int>.Ok(result));
+                return ApiOk(result);
             }
             else
             {

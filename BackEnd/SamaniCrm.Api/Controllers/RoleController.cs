@@ -10,11 +10,10 @@ using SamaniCrm.Host.Models;
 
 namespace SamaniCrm.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+
     // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     //[Authorize(Roles = "Admin, Management")]
-    public class RoleController : ControllerBase
+    public class RoleController : ApiBaseController
     {
         public readonly IMediator _mediator;
 
@@ -26,42 +25,46 @@ namespace SamaniCrm.Api.Controllers
         [HttpPost("Create")]
         [ProducesDefaultResponseType(typeof(int))]
 
-        public async Task<ActionResult<ApiResponse<int>>> CreateRoleAsync(RoleCreateCommand command)
+        public async Task<IActionResult> CreateRoleAsync(RoleCreateCommand command)
         {
-            return Ok(ApiResponse<int>.Ok(await _mediator.Send(command)));
+            return ApiOk<int>(await _mediator.Send(command));
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult<ApiResponse<List<RoleResponseDTO>>>> GetRoleAsync()
+        [ProducesResponseType(typeof(List<RoleResponseDTO>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetRoleAsync()
         {
-            IList<RoleResponseDTO> result = await _mediator.Send(new GetRoleQuery());
-            return Ok(ApiResponse<List<RoleResponseDTO>>.Ok((List<RoleResponseDTO>)result));
+            var result = await _mediator.Send(new GetRoleQuery());
+            return ApiOk<IList<RoleResponseDTO>>(result);
         }
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ApiResponse<RoleResponseDTO>>> GetRoleByIdAsync(Guid id)
+        [ProducesResponseType(typeof(RoleResponseDTO), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetRoleByIdAsync(Guid id)
         {
-            return Ok(ApiResponse<RoleResponseDTO>.Ok(await _mediator.Send(new GetRoleByIdQuery() { RoleId = id })));
+            return ApiOk(await _mediator.Send(new GetRoleByIdQuery() { RoleId = id }));
         }
 
         [HttpDelete("Delete/{id}")]
-        public async Task<ActionResult<ApiResponse<int>>> DeleteRoleAsync(Guid id)
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeleteRoleAsync(Guid id)
         {
-            var result= await _mediator.Send(new DeleteRoleCommand()
+            int result = await _mediator.Send(new DeleteRoleCommand()
             {
                 RoleId = id
             });
-            return Ok(ApiResponse<int>.Ok(result));
+            return ApiOk<int>(result);
         }
 
         [HttpPut("Edit/{id}")]
-        public async Task<ActionResult<ApiResponse<int>>> EditRole(string id, [FromBody] UpdateRoleCommand command)
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        public async Task<IActionResult> EditRole(string id, [FromBody] UpdateRoleCommand command)
         {
             if (id == command.Id.ToString())
             {
                 var result = await _mediator.Send(command);
-                return Ok(ApiResponse<int>.Ok(result));
+                return ApiOk(result);
             }
             else
             {
