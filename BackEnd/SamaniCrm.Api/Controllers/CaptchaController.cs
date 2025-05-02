@@ -18,7 +18,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("reload")]
-        public async Task<ActionResult<CaptchaDto>> Reload()
+        public async Task<ActionResult<CaptchaDTO>> Reload()
         {
             var captcha = await _mediator.Send(new GetCaptchaQuery());
             return Ok(captcha);

@@ -10,5 +10,5 @@ public class RolePermission
     public Guid RoleId { get; set; }
 
     public Guid PermissionId { get; set; }
-    public Permission Permission { get; set; } = default!;
+    public virtual Permission Permission { get; set; } = default!;
 }

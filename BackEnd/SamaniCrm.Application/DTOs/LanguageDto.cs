@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SamaniCrm.Application.DTOs
 {
 
-    public class LanguageDto
+    public class LanguageDTO
     {
         public string Culture { get; set; } = default!;
         public string Name { get; set; } = default!;

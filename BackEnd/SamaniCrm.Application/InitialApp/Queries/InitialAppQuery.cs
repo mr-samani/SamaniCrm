@@ -32,9 +32,9 @@ public class InitialAppQueryHandler : IRequestHandler<InitialAppQuery, InitialAp
 
     public async Task<InitialAppDTO> Handle(InitialAppQuery request, CancellationToken cancellationToken)
     {
-        List<LanguageDto> languages = await dbContext.Languages
+        List<LanguageDTO> languages = await dbContext.Languages
                         .Where(x => x.IsActive)
-            .Select(s => new LanguageDto()
+            .Select(s => new LanguageDTO()
             {
                 Name = s.Name,
                 Culture = s.Culture,

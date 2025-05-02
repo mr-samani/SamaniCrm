@@ -6,7 +6,7 @@ using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Application.Localize.Commands
 {
-    public class CreateOrEditLanguageCommand : LanguageDto, IRequest<bool>;
+    public class CreateOrEditLanguageCommand : LanguageDTO, IRequest<bool>;
 
     public class CreateOrEditLanguageCommandHandler : IRequestHandler<CreateOrEditLanguageCommand, bool>
     {

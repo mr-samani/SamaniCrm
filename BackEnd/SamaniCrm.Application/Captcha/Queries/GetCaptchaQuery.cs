@@ -8,7 +8,7 @@ using SamaniCrm.Application.DTOs;
 
 namespace SamaniCrm.Application.Captcha.Queries
 {
-    public class GetCaptchaQuery : IRequest<CaptchaDto>
+    public class GetCaptchaQuery : IRequest<CaptchaDTO>
     {
     }
 }

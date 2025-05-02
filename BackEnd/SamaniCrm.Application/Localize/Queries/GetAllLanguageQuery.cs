@@ -10,9 +10,9 @@ using SamaniCrm.Application.DTOs;
 
 namespace SamaniCrm.Application.Localize.Queries
 {
-    public record GetAllLanguageQuery() : IRequest<List<LanguageDto>>;
+    public record GetAllLanguageQuery() : IRequest<List<LanguageDTO>>;
 
-    public class GetAllLanguageQueryHandler : IRequestHandler<GetAllLanguageQuery, List<LanguageDto>>
+    public class GetAllLanguageQueryHandler : IRequestHandler<GetAllLanguageQuery, List<LanguageDTO>>
     {
         private readonly IApplicationDbContext _dbContext;
 
@@ -21,9 +21,9 @@ namespace SamaniCrm.Application.Localize.Queries
             _dbContext = dbContext;
         }
 
-        public async Task<List<LanguageDto>> Handle(GetAllLanguageQuery request, CancellationToken cancellationToken)
+        public async Task<List<LanguageDTO>> Handle(GetAllLanguageQuery request, CancellationToken cancellationToken)
         {
-            var result = await _dbContext.Languages.Select(s => new LanguageDto
+            var result = await _dbContext.Languages.Select(s => new LanguageDTO
             {
                 Name = s.Name,
                 Culture = s.Culture,

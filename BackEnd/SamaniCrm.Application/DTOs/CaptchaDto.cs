@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.DTOs
 {
-    public class CaptchaDto
+    public class CaptchaDTO
     {
         public required string Key { get; set; }
         public required string Img { get; set; }

@@ -13,7 +13,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace SamaniCrm.Application.Captcha.Queries
 {
-    public class GetCaptchaQueryHandler : IRequestHandler<GetCaptchaQuery, CaptchaDto>
+    public class GetCaptchaQueryHandler : IRequestHandler<GetCaptchaQuery, CaptchaDTO>
     {
         private readonly ICaptchaStore _captchaStore;
 
@@ -22,7 +22,7 @@ namespace SamaniCrm.Application.Captcha.Queries
             _captchaStore = captchaStore;
         }
 
-        public async Task<CaptchaDto> Handle(GetCaptchaQuery request, CancellationToken cancellationToken)
+        public async Task<CaptchaDTO> Handle(GetCaptchaQuery request, CancellationToken cancellationToken)
         {
 
             var randomText = GenerateRandomText(2);
@@ -37,7 +37,7 @@ namespace SamaniCrm.Application.Captcha.Queries
                 // ذخیره کپچا
                 var key = Guid.NewGuid().ToString();
                 _captchaStore.SaveCaptcha(key, randomText);
-                var dto = new CaptchaDto
+                var dto = new CaptchaDTO
                 {
                     Key = key,
                     Img = $"data:image/png;base64,{base64Image}",

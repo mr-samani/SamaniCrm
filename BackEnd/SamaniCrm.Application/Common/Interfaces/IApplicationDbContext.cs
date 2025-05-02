@@ -12,6 +12,7 @@ namespace SamaniCrm.Application.Common.Interfaces
     {
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Permission> Permissions { get; set; }
+        public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<Language> Languages { get; set; }
         public DbSet<Localization> Localizations { get; set; }
 

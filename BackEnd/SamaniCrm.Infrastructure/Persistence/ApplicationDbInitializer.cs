@@ -91,74 +91,7 @@ namespace SamaniCrm.Infrastructure.Persistence
             await SeedPermissions.TrySeedAsync(_context);
             // seeld localization must be after seed permissions
             await SeedLocalization.TrySeedAsync(_context);
-
-            // Default roles
-            var administratorRole = new ApplicationRole(Roles.Administrator);
-
-            if (_roleManager.Roles.All(r => r.Name != administratorRole.Name))
-            {
-                await _roleManager.CreateAsync(administratorRole);
-                await _context.SaveChangesAsync(); // ذخیره نقش
-            }
-
-            // Default users
-            var administrator = new ApplicationUser
-            {
-                UserName = "samani",
-                Email = "mr.samani1368@gmail.com",
-                FirstName = "محمدرضا",
-                LastName = "سامانی",
-                FullName = "محمدرضا سامانی",
-                Lang = "fa",
-                Address = "سامان",
-                PhoneNumber = "09338972924",
-                IsDeleted = false
-            };
-
-            if (_userManager.Users.All(u => u.UserName != administrator.UserName))
-            {
-                var result = await _userManager.CreateAsync(administrator, "123qwe");
-                if (result.Succeeded)
-                {
-                    await _context.SaveChangesAsync(); // ذخیره کاربر
-                    if (!string.IsNullOrWhiteSpace(administratorRole.Name))
-                    {
-                        await _userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
-                    }
-                }
-                else
-                {
-                    // لاگ کردن خطاهای ایجاد کاربر
-                    foreach (var error in result.Errors)
-                    {
-                        _logger.LogError("Error creating user: {Error}", error.Description);
-                    }
-                    throw new Exception("Failed to create user.");
-                }
-            }
-
-            await _context.SaveChangesAsync();
-
-
-            // ذخیره نهایی تغییرات
-            // Default data
-            // Seed, if necessary
-            //if (!_context.TodoLists.Any())
-            //{
-            //    _context.TodoLists.Add(new TodoList
-            //    {
-            //        Title = "Todo List",
-            //        Items =
-            //    {
-            //        new TodoItem { Title = "Make a todo list 📃" },
-            //        new TodoItem { Title = "Check off the first item ✅" },
-            //        new TodoItem { Title = "Realise you've already done two things on the list! 🤯"},
-            //        new TodoItem { Title = "Reward yourself with a nice, long nap 🏆" },
-            //    }
-            //    });
-
-            // await _context.SaveChangesAsync();
-            //}
+            await SeedDefaultUsers.TrySeedAsync(_context,_logger,_userManager,_roleManager);
         }
     }
 
