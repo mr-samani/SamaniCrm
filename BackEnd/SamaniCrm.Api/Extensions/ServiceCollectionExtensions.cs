@@ -66,7 +66,7 @@ public static class ServiceCollectionExtensions
     }
 
 
- 
+
     /// <summary>
     /// راه اندازی زیرساخت های برنامه
     /// </summary>
@@ -111,7 +111,7 @@ public static class ServiceCollectionExtensions
             {
                 //options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
                 //options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status401Unauthorized));
-               // options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status403Forbidden));
+                // options.Filters.Add(new ProducesResponseTypeAttribute(typeof(void), StatusCodes.Status403Forbidden));
             })
             .AddJsonOptions(opt =>
             {
@@ -210,6 +210,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IRolePermissionService, RolePermissionService>();
         services.AddSingleton(TimeProvider.System);
+
+        services.AddMemoryCache();
         //چون حافظه ایه Singleton باشه بهتره.
         services.AddSingleton<ICaptchaStore, InMemoryCaptchaStore>();
         services.AddHostedService<CaptchaCleanupBackgroundService>();

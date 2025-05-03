@@ -6,6 +6,7 @@ import { finalize } from 'rxjs/operators';
 
 export class LanguageDTOExtended extends LanguageDTO {
   loading?: boolean;
+  direction?: 'RTL' | 'LTR';
 }
 @Component({
   selector: 'app-language-list',
@@ -20,7 +21,7 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
     { column: 'flag', title: this.l('Image'), width: 100, type: 'image' },
     { column: 'cultur', title: this.l('Cultur'), width: 100 },
     { column: 'name', title: this.l('Name') },
-    { column: 'isRtl', title: this.l('Rtl'), type: 'yesNo', width: 100 },
+    { column: 'direction', title: this.l('Direction'), width: 100 },
     { column: 'isDefault', title: this.l('Default'), type: 'yesNo', width: 100 },
     { column: 'isActive', title: this.l('Active'), type: 'yesNo', width: 100 },
   ];
@@ -47,7 +48,10 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
         this.list = response.data ?? [];
-        this.list.map((x) => (x.flag = 'images/flags/' + x.flag + '.png'));
+        this.list.map((x) => {
+          x.flag = 'images/flags/' + x.flag + '.png';
+          x.direction = x.isRtl ? 'RTL' : 'LTR';
+        });
       });
   }
 
