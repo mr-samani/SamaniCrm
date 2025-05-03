@@ -117,7 +117,10 @@ export class AuthService {
         next: (response) => {
           if (response.success && response.data) {
             this.currentUserSubject.next(response.data);
-            if (AppConst.currentLanguage !== response.data.lang) {
+            if (
+              AppConst.currentLanguage !== response.data.lang &&
+              AppConst.languageList.findIndex((x) => x.culture == response.data?.lang) > -1
+            ) {
               AppConst.currentLanguage = response.data.lang!;
               this.languageService.changeLanguage(AppConst.currentLanguage, true);
             }

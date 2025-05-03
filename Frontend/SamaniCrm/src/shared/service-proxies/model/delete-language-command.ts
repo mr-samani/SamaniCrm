@@ -20,20 +20,16 @@
  */
 /* Created with custom template */
 
-/** Interface for CaptchaDTO */
-export interface ICaptchaDTO {
-  key: string;
-  img: string;
-  sensitive: boolean;
+/** Interface for DeleteLanguageCommand */
+export interface IDeleteLanguageCommand {
+  culture?: string;
 }
 
-/** Class for CaptchaDTO */
-export class CaptchaDTO implements ICaptchaDTO {
-  key!: string;
-  img!: string;
-  sensitive!: boolean;
+/** Class for DeleteLanguageCommand */
+export class DeleteLanguageCommand implements IDeleteLanguageCommand {
+  culture?: string;
 
-  constructor(data?: ICaptchaDTO) {
+  constructor(data?: IDeleteLanguageCommand) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -44,14 +40,12 @@ export class CaptchaDTO implements ICaptchaDTO {
 
 init(data?: any) {
   if (data) {
-    this.key = data["key"];
-    this.img = data["img"];
-    this.sensitive = data["sensitive"];
+    this.culture = data["culture"];
   }
 }
 
-  static fromJS(data: any): CaptchaDTO {
-    const instance = new CaptchaDTO();
+  static fromJS(data: any): DeleteLanguageCommand {
+    const instance = new DeleteLanguageCommand();
     instance.init(data);
     return instance;
   }

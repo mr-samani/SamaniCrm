@@ -10,7 +10,6 @@ import {
   ImageCropperDialogComponent,
   ImageCropperDialogData,
 } from '../image-cropper-dialog/image-cropper-dialog.component';
-import { ApiResult } from '@shared/models/api-result';
 import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
 import { IOptions } from '../options.interface';

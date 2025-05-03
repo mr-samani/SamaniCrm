@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AppConst } from '../app-const';
 import { MainSpinnerService } from './main-spinner.service';
+import { isRtl } from '@shared/helper/is-rtl';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class LanguageService {
   constructor(
     public translate: TranslateService,
     @Inject(DOCUMENT) private _document: Document,
- 
+
     private mainSpinner: MainSpinnerService,
   ) {
     // this.changeLanguage(AppConst.currentLanguage);
@@ -26,9 +27,10 @@ export class LanguageService {
   }
 
   changeLanguage(lang: string, dontSave = false) {
+    lang = this.validateLanguage(lang);
     localStorage.setItem('lang', lang);
     AppConst.currentLanguage = lang;
-    AppConst.isRtl = ['fa', 'ar'].indexOf(lang) > -1;
+    AppConst.isRtl = isRtl(lang);
     this.direction = AppConst.isRtl ? 'rtl' : 'ltr';
     this.translate.use(lang);
     this._document.body.dir = this.direction;
@@ -44,6 +46,14 @@ export class LanguageService {
       //   .subscribe((r) => {
       //     location.reload();
       //   });
+    }
+  }
+
+  validateLanguage(lang: string) {
+    if (AppConst.languageList.findIndex((x) => x.culture === lang) > -1) {
+      return lang;
+    } else {
+      return AppConst.defaultLang;
     }
   }
 }

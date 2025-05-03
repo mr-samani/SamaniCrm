@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TableViewComponent } from '@shared/components/table-view/table-view.compoenent';
+import { LanguageServiceProxy } from '@shared/service-proxies/api/language.service';
 
 @NgModule({
   declarations: [LanguageListComponent],
@@ -20,5 +21,8 @@ import { TableViewComponent } from '@shared/components/table-view/table-view.com
     FormsModule,
     MatProgressSpinnerModule,
   ],
+  providers:[
+    LanguageServiceProxy
+  ]
 })
 export class LanguagesModule {}

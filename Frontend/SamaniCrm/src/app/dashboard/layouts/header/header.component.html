@@ -94,11 +94,11 @@
         <img [src]="'images/flags/' + currentLang + '.png'" />
       </button>
       <mat-menu #langMnu="matMenu">
-        <button mat-menu-item *ngFor="let lang of languages" (click)="changeLanguage(lang.code)" class="language-menu">
+        <button mat-menu-item *ngFor="let lang of languages" (click)="changeLanguage(lang.culture!)" class="language-menu">
           <div class="d-flex align-items-center g-5">
             <!-- <i class="flag" [ngClass]="lang.code"></i> -->
-            <img [src]="lang.image" />
-            <span>{{ lang.title }}</span>
+            <img [src]="lang.flag" />
+            <span>{{ lang.name }}</span>
           </div>
         </button>
       </mat-menu>

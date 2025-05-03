@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 
 import { AccountServiceProxy } from './api/account.service';
 import { CaptchaServiceProxy } from './api/captcha.service';
+import { InitialServiceProxy } from './api/initial.service';
+import { LanguageServiceProxy } from './api/language.service';
 import { RoleServiceProxy } from './api/role.service';
 import { UserServiceProxy } from './api/user.service';
 import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
@@ -15,6 +17,8 @@ import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
   providers: [
     AccountServiceProxy,
     CaptchaServiceProxy,
+    InitialServiceProxy,
+    LanguageServiceProxy,
     RoleServiceProxy,
     UserServiceProxy,
     WeatherForecastServiceProxy ]

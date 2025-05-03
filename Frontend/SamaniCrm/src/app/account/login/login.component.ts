@@ -27,7 +27,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
     this.loginForm = this.fb.group({
       userName: ['', [Validators.required]],
       password: ['', [Validators.required]],
-      captcha: [''],
+      captcha: [new InputCaptchaDTO({captchaKey:'',captchaText:''})],
       rememberMe: [true],
     });
   }

@@ -1,10 +1,12 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { Apis } from '@shared/apis';
-import { LanguageDto } from '@shared/models/language-dto';
-import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@app/app-component-base';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
+import { ActiveOrDeactiveLanguageCommand, LanguageDTO, LanguageServiceProxy } from '@shared/service-proxies';
+import { finalize } from 'rxjs/operators';
 
+export class LanguageDTOExtended extends LanguageDTO {
+  loading?: boolean;
+}
 @Component({
   selector: 'app-language-list',
   templateUrl: './language-list.component.html',
@@ -13,14 +15,20 @@ import { FieldsType } from '@shared/components/table-view/fields-type.model';
 })
 export class LanguageListComponent extends AppComponentBase implements OnInit {
   loading = true;
-  list: LanguageDto[] = [];
+  list: LanguageDTOExtended[] = [];
   fields: FieldsType[] = [
-    { column: 'image', title: this.l('Image'), width: 100, type: 'image' },
-    { column: 'code', title: this.l('Code'), width: 100 },
+    { column: 'flag', title: this.l('Image'), width: 100, type: 'image' },
+    { column: 'cultur', title: this.l('Cultur'), width: 100 },
     { column: 'name', title: this.l('Name') },
-    { column: 'title', title: this.l('Title') },
+    { column: 'isRtl', title: this.l('Rtl'), type: 'yesNo' },
+    { column: 'isDefault', title: this.l('Default'), type: 'yesNo' },
+    { column: 'isActive', title: this.l('Active'), type: 'yesNo' },
   ];
-  constructor(injector: Injector) {
+  constructor(
+    injector: Injector,
+
+    private languageService: LanguageServiceProxy,
+  ) {
     super(injector);
     this.breadcrumb.list = [
       { name: this.l('Settings'), url: '/dashboard/setting' },
@@ -34,22 +42,22 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
 
   getList() {
     this.loading = true;
-    // this.dataService
-    //   .get<any, LanguageDto[]>(Apis.getAllLanguages, {})
-    //   .pipe(finalize(() => (this.loading = false)))
-    //   .subscribe((response) => {
-    //     this.list = response.data ?? [];
-    //   });
+    this.languageService
+      .getAllLanguages()
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe((response) => {
+        this.list = response.data ?? [];
+      });
   }
 
-  changeActive(item: LanguageDto) {
+  changeActive(item: LanguageDTOExtended) {
     item.loading = true;
-    // this.dataService
-    //   .post<any, LanguageDto[]>(Apis.changeActiveLanguage, {
-    //     lang: item.code,
-    //     isActive: !item.isActive,
-    //   })
-    //   .pipe(finalize(() => (item.loading = false)))
-    //   .subscribe();
+    const input = new ActiveOrDeactiveLanguageCommand();
+    input.culture = item.culture;
+    input.isActive = !item.isActive;
+    this.languageService
+      .activeOrDeactive(input)
+      .pipe(finalize(() => (item.loading = false)))
+      .subscribe();
   }
 }

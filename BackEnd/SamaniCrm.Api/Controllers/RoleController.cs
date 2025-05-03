@@ -27,7 +27,7 @@ namespace SamaniCrm.Api.Controllers
 
         [HttpPost("Create")]
         [HasPermission(AppPermissions.RoleManagement_Create)]
-        [ProducesDefaultResponseType(typeof(int))]
+        [ProducesDefaultResponseType(typeof(ApiResponse<int>))]
         public async Task<IActionResult> CreateRoleAsync(RoleCreateCommand command)
         {
             return ApiOk<int>(await _mediator.Send(command));
@@ -35,7 +35,7 @@ namespace SamaniCrm.Api.Controllers
 
         [HttpGet("GetAll")]
         [HasPermission(AppPermissions.RoleManagement_List)]
-        [ProducesResponseType(typeof(List<RoleResponseDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<List<RoleResponseDTO>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllRolesAsync()
         {
             var result = await _mediator.Send(new GetRoleQuery());
@@ -45,7 +45,7 @@ namespace SamaniCrm.Api.Controllers
 
         [HttpGet("{id}")]
         [HasPermission(AppPermissions.RoleManagement_List)]
-        [ProducesResponseType(typeof(RoleResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<RoleResponseDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetRoleByIdAsync(Guid id)
         {
             return ApiOk(await _mediator.Send(new GetRoleByIdQuery() { RoleId = id }));
@@ -53,7 +53,7 @@ namespace SamaniCrm.Api.Controllers
 
         [HttpDelete("Delete/{id}")]
         [HasPermission(AppPermissions.RoleManagement_Delete)]
-        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<int>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteRoleAsync(Guid id)
         {
             int result = await _mediator.Send(new DeleteRoleCommand()
@@ -65,7 +65,7 @@ namespace SamaniCrm.Api.Controllers
 
         [HttpPut("Edit/{id}")]
         [HasPermission(AppPermissions.RoleManagement_Edit)]
-        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<int>), StatusCodes.Status200OK)]
         public async Task<IActionResult> EditRole(string id, [FromBody] UpdateRoleCommand command)
         {
             if (id == command.Id.ToString())

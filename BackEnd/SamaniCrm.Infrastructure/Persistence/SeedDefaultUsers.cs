@@ -68,7 +68,7 @@ namespace SamaniCrm.Infrastructure.Persistence
                 FirstName = "محمدرضا",
                 LastName = "سامانی",
                 FullName = "محمدرضا سامانی",
-                Lang = "fa",
+                Lang = "fa-IR",
                 Address = "سامان",
                 PhoneNumber = "09338972924",
                 IsDeleted = false

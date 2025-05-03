@@ -20,20 +20,16 @@
  */
 /* Created with custom template */
 
-/** Interface for CaptchaDTO */
-export interface ICaptchaDTO {
-  key: string;
-  img: string;
-  sensitive: boolean;
+/** Interface for DeleteLocalizeKeyCommand */
+export interface IDeleteLocalizeKeyCommand {
+  keyId?: string;
 }
 
-/** Class for CaptchaDTO */
-export class CaptchaDTO implements ICaptchaDTO {
-  key!: string;
-  img!: string;
-  sensitive!: boolean;
+/** Class for DeleteLocalizeKeyCommand */
+export class DeleteLocalizeKeyCommand implements IDeleteLocalizeKeyCommand {
+  keyId?: string;
 
-  constructor(data?: ICaptchaDTO) {
+  constructor(data?: IDeleteLocalizeKeyCommand) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -44,14 +40,12 @@ export class CaptchaDTO implements ICaptchaDTO {
 
 init(data?: any) {
   if (data) {
-    this.key = data["key"];
-    this.img = data["img"];
-    this.sensitive = data["sensitive"];
+    this.keyId = data["keyId"];
   }
 }
 
-  static fromJS(data: any): CaptchaDTO {
-    const instance = new CaptchaDTO();
+  static fromJS(data: any): DeleteLocalizeKeyCommand {
+    const instance = new DeleteLocalizeKeyCommand();
     instance.init(data);
     return instance;
   }

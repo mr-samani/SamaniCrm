@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, isDevMode } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AppConst } from './app-const';
-import { InitializeDto } from './models/initialize-dto';
 import { ColorSchemaService } from './services/color-schema.service';
 import { LanguageService } from './services/language.service';
+import { InitialAppDTOApiResponse } from './service-proxies/model/initial-app-dto-api-response';
 
 @Injectable({
   providedIn: 'root',
@@ -39,34 +39,24 @@ export class AppInitializer {
             AppConst.tinyMceApiKey = config.tinyMceApiKey;
             AppConst.appName = config.appName;
 
-            AppConst.languageList = [];
-            AppConst.defaultLang = 'fa';
-            AppConst.requireCaptcha = true;
-            let lang = 'fa';
-            translate.setDefaultLang(lang);
-            this.languageService.changeLanguage(lang, true);
-            resolve(true);
             // api initialize
-            // this.httpClient
-            //   .get<{
-            //     result: InitializeDto;
-            //     success: string;
-            //     message: string;
-            //   }>(AppConst.apiUrl + '/api/index/initialize')
-            //   .subscribe({
-            //     next: (resp) => {
-            //       AppConst.languageList = resp.result.languages ?? [];
-            //       AppConst.defaultLang = resp.result.defaultLang;
-            //       AppConst.requireCaptcha = resp.result.requireCaptcha;
-            //       let lang = resp.result.currentLanguage || resp.result.defaultLang;
-            //       translate.setDefaultLang(lang);
-            //       this.languageService.changeLanguage(lang, true);
-            //       resolve(true);
-            //     },
-            //     error: (er) => {
-            //       reject();
-            //     },
-            //   });
+            this.httpClient.get<InitialAppDTOApiResponse>(AppConst.apiUrl + '/api/Initial/initialApp').subscribe({
+              next: (resp) => {
+                if (resp.success && resp.data) {
+                  AppConst.languageList = resp.data.languages ?? [];
+                  AppConst.defaultLang = resp.data.defaultLang ?? 'fa-IR';
+                  AppConst.requireCaptcha = resp.data.requireCaptcha === true;
+                  let lang = resp.data.currentLanguage || AppConst.defaultLang;
+                  this.languageService.changeLanguage(lang, true);
+                  resolve(true);
+                } else {
+                  reject();
+                }
+              },
+              error: (er) => {
+                reject();
+              },
+            });
           },
           error: (er) => {
             reject(er);

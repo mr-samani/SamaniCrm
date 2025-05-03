@@ -44,6 +44,10 @@
               <ng-container *ngSwitchCase="'dateTime'">
                 <span class="text-wrap">{{item[f.column]|luxonFormat:'F'}}</span>
               </ng-container>
+              <ng-container *ngSwitchCase="'yesNo'">
+                <span *ngIf="item[f.column]" class="label label-success">{{'Yes'|translate}}</span>
+                <span *ngIf="!item[f.column]" class="label label-success">{{'No'|translate}}</span>
+              </ng-container>
 
               <ng-container *ngSwitchDefault>{{item[f.column]}}</ng-container>
             </ng-container>

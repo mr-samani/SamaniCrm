@@ -20,20 +20,22 @@
  */
 /* Created with custom template */
 
-/** Interface for CaptchaDTO */
-export interface ICaptchaDTO {
+/** Interface for LocalizationKeyDTO */
+export interface ILocalizationKeyDTO {
+  id?: string;
+  culture: string;
   key: string;
-  img: string;
-  sensitive: boolean;
+  value?: string;
 }
 
-/** Class for CaptchaDTO */
-export class CaptchaDTO implements ICaptchaDTO {
+/** Class for LocalizationKeyDTO */
+export class LocalizationKeyDTO implements ILocalizationKeyDTO {
+  id?: string;
+  culture!: string;
   key!: string;
-  img!: string;
-  sensitive!: boolean;
+  value?: string;
 
-  constructor(data?: ICaptchaDTO) {
+  constructor(data?: ILocalizationKeyDTO) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -44,14 +46,15 @@ export class CaptchaDTO implements ICaptchaDTO {
 
 init(data?: any) {
   if (data) {
+    this.id = data["id"];
+    this.culture = data["culture"];
     this.key = data["key"];
-    this.img = data["img"];
-    this.sensitive = data["sensitive"];
+    this.value = data["value"];
   }
 }
 
-  static fromJS(data: any): CaptchaDTO {
-    const instance = new CaptchaDTO();
+  static fromJS(data: any): LocalizationKeyDTO {
+    const instance = new LocalizationKeyDTO();
     instance.init(data);
     return instance;
   }

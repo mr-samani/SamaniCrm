@@ -19,7 +19,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("initialApp")]
-        [ProducesResponseType(typeof(InitialAppDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<InitialAppDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> initialApp()
         {
             return ApiOk<InitialAppDTO>(await _mediator.Send(new InitialAppQuery()));

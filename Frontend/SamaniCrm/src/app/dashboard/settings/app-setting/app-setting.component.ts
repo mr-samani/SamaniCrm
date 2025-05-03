@@ -4,7 +4,6 @@ import { Apis } from '@shared/apis';
 import { finalize } from 'rxjs';
 import { AppSettingsDto } from './models/app-settings';
 import { NgForm } from '@angular/forms';
-import { ApiResult } from '@shared/models/api-result';
 
 @Component({
   selector: 'app-app-setting',

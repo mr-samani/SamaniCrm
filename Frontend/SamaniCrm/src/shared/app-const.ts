@@ -1,10 +1,8 @@
+import { LanguageDTO } from "./service-proxies";
+
 export class AppConst {
   static appName = '';
-  static languageList: {
-    code: string;
-    title: string;
-    image: string;
-  }[] = [];
+  static languageList: LanguageDTO[] = [];
   static currentLanguage = '';
   static defaultLang = '';
   static isRtl: boolean;

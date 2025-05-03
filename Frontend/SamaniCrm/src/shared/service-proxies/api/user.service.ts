@@ -25,9 +25,11 @@ import { EditUserProfileCommand } from '../model/edit-user-profile-command';
 // @ts-ignore
 import { GetUserQuery } from '../model/get-user-query';
 // @ts-ignore
+import { Int32ApiResponse } from '../model/int32-api-response';
+// @ts-ignore
 import { UpdateUserRolesCommand } from '../model/update-user-roles-command';
 // @ts-ignore
-import { UserDetailsResponseDTO } from '../model/user-details-response-dto';
+import { UserDetailsResponseDTOApiResponse } from '../model/user-details-response-dto-api-response';
 // @ts-ignore
 import { UserResponseDTOApiResponse } from '../model/user-response-dto-api-response';
 // @ts-ignore
@@ -52,9 +54,9 @@ export class UserServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public assignRoles(assignUsersRoleCommand?: AssignUsersRoleCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
-    public assignRoles(assignUsersRoleCommand?: AssignUsersRoleCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
-    public assignRoles(assignUsersRoleCommand?: AssignUsersRoleCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
+    public assignRoles(assignUsersRoleCommand?: AssignUsersRoleCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Int32ApiResponse>;
+    public assignRoles(assignUsersRoleCommand?: AssignUsersRoleCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Int32ApiResponse>>;
+    public assignRoles(assignUsersRoleCommand?: AssignUsersRoleCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Int32ApiResponse>>;
     public assignRoles(assignUsersRoleCommand?: AssignUsersRoleCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -99,7 +101,7 @@ export class UserServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/User/AssignRoles`;
-        return this.httpClient.request<number>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<Int32ApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: assignUsersRoleCommand,
@@ -118,9 +120,9 @@ export class UserServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createUser(createUserCommand?: CreateUserCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
-    public createUser(createUserCommand?: CreateUserCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
-    public createUser(createUserCommand?: CreateUserCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
+    public createUser(createUserCommand?: CreateUserCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Int32ApiResponse>;
+    public createUser(createUserCommand?: CreateUserCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Int32ApiResponse>>;
+    public createUser(createUserCommand?: CreateUserCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Int32ApiResponse>>;
     public createUser(createUserCommand?: CreateUserCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -165,7 +167,7 @@ export class UserServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/User/Create`;
-        return this.httpClient.request<number>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<Int32ApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createUserCommand,
@@ -184,9 +186,9 @@ export class UserServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteUser(userId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
-    public deleteUser(userId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
-    public deleteUser(userId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
+    public deleteUser(userId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Int32ApiResponse>;
+    public deleteUser(userId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Int32ApiResponse>>;
+    public deleteUser(userId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Int32ApiResponse>>;
     public deleteUser(userId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (userId === null || userId === undefined) {
             throw new Error('Required parameter userId was null or undefined when calling deleteUser.');
@@ -223,7 +225,7 @@ export class UserServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/User/Delete/${this.configuration.encodeParam({name: "userId", value: userId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<number>('delete', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<Int32ApiResponse>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -242,9 +244,9 @@ export class UserServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public editUserProfile(id: string, editUserProfileCommand?: EditUserProfileCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
-    public editUserProfile(id: string, editUserProfileCommand?: EditUserProfileCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
-    public editUserProfile(id: string, editUserProfileCommand?: EditUserProfileCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
+    public editUserProfile(id: string, editUserProfileCommand?: EditUserProfileCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Int32ApiResponse>;
+    public editUserProfile(id: string, editUserProfileCommand?: EditUserProfileCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Int32ApiResponse>>;
+    public editUserProfile(id: string, editUserProfileCommand?: EditUserProfileCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Int32ApiResponse>>;
     public editUserProfile(id: string, editUserProfileCommand?: EditUserProfileCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling editUserProfile.');
@@ -292,7 +294,7 @@ export class UserServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/User/EditUserProfile/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        return this.httpClient.request<number>('put', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<Int32ApiResponse>('put', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: editUserProfileCommand,
@@ -311,9 +313,9 @@ export class UserServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public editUserRoles(updateUserRolesCommand?: UpdateUserRolesCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<number>;
-    public editUserRoles(updateUserRolesCommand?: UpdateUserRolesCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<number>>;
-    public editUserRoles(updateUserRolesCommand?: UpdateUserRolesCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<number>>;
+    public editUserRoles(updateUserRolesCommand?: UpdateUserRolesCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<Int32ApiResponse>;
+    public editUserRoles(updateUserRolesCommand?: UpdateUserRolesCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Int32ApiResponse>>;
+    public editUserRoles(updateUserRolesCommand?: UpdateUserRolesCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Int32ApiResponse>>;
     public editUserRoles(updateUserRolesCommand?: UpdateUserRolesCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -358,7 +360,7 @@ export class UserServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/User/EditUserRoles`;
-        return this.httpClient.request<number>('put', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<Int32ApiResponse>('put', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: updateUserRolesCommand,
@@ -496,9 +498,9 @@ export class UserServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUserDetails(userId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<UserDetailsResponseDTO>;
-    public getUserDetails(userId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserDetailsResponseDTO>>;
-    public getUserDetails(userId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserDetailsResponseDTO>>;
+    public getUserDetails(userId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<UserDetailsResponseDTOApiResponse>;
+    public getUserDetails(userId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserDetailsResponseDTOApiResponse>>;
+    public getUserDetails(userId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserDetailsResponseDTOApiResponse>>;
     public getUserDetails(userId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (userId === null || userId === undefined) {
             throw new Error('Required parameter userId was null or undefined when calling getUserDetails.');
@@ -535,7 +537,7 @@ export class UserServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/User/GetUserDetails/${this.configuration.encodeParam({name: "userId", value: userId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<UserDetailsResponseDTO>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<UserDetailsResponseDTOApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -553,9 +555,9 @@ export class UserServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUserDetailsByUserName(userName: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<UserDetailsResponseDTO>;
-    public getUserDetailsByUserName(userName: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserDetailsResponseDTO>>;
-    public getUserDetailsByUserName(userName: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserDetailsResponseDTO>>;
+    public getUserDetailsByUserName(userName: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<UserDetailsResponseDTOApiResponse>;
+    public getUserDetailsByUserName(userName: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserDetailsResponseDTOApiResponse>>;
+    public getUserDetailsByUserName(userName: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserDetailsResponseDTOApiResponse>>;
     public getUserDetailsByUserName(userName: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (userName === null || userName === undefined) {
             throw new Error('Required parameter userName was null or undefined when calling getUserDetailsByUserName.');
@@ -592,7 +594,7 @@ export class UserServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/User/GetUserDetailsByUserName/${this.configuration.encodeParam({name: "userName", value: userName, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        return this.httpClient.request<UserDetailsResponseDTO>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<UserDetailsResponseDTOApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
