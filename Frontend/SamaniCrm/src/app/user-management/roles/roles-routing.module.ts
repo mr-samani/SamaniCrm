@@ -5,7 +5,7 @@ import { RolePermissionsListComponent } from './role-permissions/role-permission
 
 const routes: Routes = [
   { path: '', component: RoleListComponent },
-  { path: 'permissions/:roleName', component: RolePermissionsListComponent },
+  { path: 'permissions/:roleId', component: RolePermissionsListComponent },
 ];
 
 @NgModule({

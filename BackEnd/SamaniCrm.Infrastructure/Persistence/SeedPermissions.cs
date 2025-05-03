@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
-using SamaniCrm.Core.AppPermissions;
+using SamaniCrm.Core.Permissions;
+using SamaniCrm.Core.Shared.Permissions;
 using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Infrastructure.Persistence
@@ -18,22 +19,13 @@ namespace SamaniCrm.Infrastructure.Persistence
         {
             Console.WriteLine("Try seed permission data");
 
-            var permissions = typeof(AppPermissions)
-                .GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)
-                .Where(f => f.FieldType == typeof(string))
-                .Select(f => new
-                {
-                    localizeKey = f.Name,
-                    value = f.GetRawConstantValue()?.ToString(),
-                })
-                .Where(p => !string.IsNullOrEmpty(p.value))
-                .ToList();
+            var permissions = PermissionsHelper.GetAllPermissions();
 
             var existingPermissions = dbContext.Permissions.Select(p => p.Name).ToHashSet();
 
             var newPermissions = permissions
-                .Where(p => !existingPermissions.Contains(p.value!))
-                .Select(p => new Permission { Name = p.value!, LocalizeKey = p.localizeKey })
+                .Where(p => !existingPermissions.Contains(p.Value!))
+                .Select(p => new Permission { Name = p.Value!, LocalizeKey = p.LocalizeKey })
                 .ToList();
             Console.WriteLine("New Permissions Count: " + newPermissions.Count);
             if (newPermissions.Any())

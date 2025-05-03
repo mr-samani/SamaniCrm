@@ -40,6 +40,8 @@ model/models.ts
 model/refresh-token-command.ts
 model/revoke-refresh-token-command.ts
 model/role-create-command.ts
+model/role-permissions-dto-list-api-response.ts
+model/role-permissions-dto.ts
 model/role-response-dto-api-response.ts
 model/role-response-dto-list-api-response.ts
 model/role-response-dto.ts

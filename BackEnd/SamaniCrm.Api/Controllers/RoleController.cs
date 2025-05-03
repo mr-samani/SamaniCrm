@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using SamaniCrm.Application.Role.Commands;
 using SamaniCrm.Host.Models;
 using SamaniCrm.Api.Attributes;
-using SamaniCrm.Core.AppPermissions;
+using SamaniCrm.Core.Permissions;
+using SamaniCrm.Application.Role.Queries;
 
 
 namespace SamaniCrm.Api.Controllers
@@ -33,13 +34,22 @@ namespace SamaniCrm.Api.Controllers
             return ApiOk<int>(await _mediator.Send(command));
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet("GetAllRoles")]
         [Permission(AppPermissions.RoleManagement_List)]
         [ProducesResponseType(typeof(ApiResponse<List<RoleResponseDTO>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllRolesAsync()
         {
             var result = await _mediator.Send(new GetRoleQuery());
             return ApiOk<IList<RoleResponseDTO>>(result);
+        }
+
+        [HttpGet("GetRolePermissions")]
+        [Permission(AppPermissions.RoleManagement_List)]
+        [ProducesResponseType(typeof(ApiResponse<List<RolePermissionsDTO>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetRolePermissions(Guid roleId)
+        {
+            var result = await _mediator.Send(new GetRolePermissionQuery(roleId));
+            return ApiOk<IList<RolePermissionsDTO>>(result);
         }
 
 

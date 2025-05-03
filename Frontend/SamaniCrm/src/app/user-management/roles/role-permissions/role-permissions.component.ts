@@ -1,5 +1,8 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
+import { TreeViewModel } from '@shared/components/tree-view/tree-view.model';
+import { RoleServiceProxy } from '@shared/service-proxies';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-role-permissions',
@@ -8,13 +11,17 @@ import { AppComponentBase } from '@app/app-component-base';
   standalone: false,
 })
 export class RolePermissionsListComponent extends AppComponentBase implements OnInit {
-  roleName = '';
+  roleId = '';
   loading = true;
   isSaving = false;
-  list: any[] = [];
-  constructor(injector: Injector) {
+  list: TreeViewModel[] = [];
+  constructor(
+    injector: Injector,
+
+    private roleService: RoleServiceProxy,
+  ) {
     super(injector);
-    this.roleName = this.route.snapshot.params['roleName'];
+    this.roleId = this.route.snapshot.params['roleId'];
     this.breadcrumb.list = [
       { name: this.l('Settings'), url: '/dashboard/setting' },
       { name: this.l('Roles'), url: '/dashboard/roles' },
@@ -27,18 +34,18 @@ export class RolePermissionsListComponent extends AppComponentBase implements On
 
   getList() {
     this.loading = true;
-    // this.dataService
-    //   .get<any, RolePermissionsDto[]>(Apis.getRolePermissions + this.roleName, {})
-    //   .pipe(finalize(() => (this.loading = false)))
-    //   .subscribe((response) => {
-    //     this.list = response.data ?? [];
-    //   });
+    this.roleService
+      .getRolePermissions(this.roleId)
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe((response) => {
+        this.list = response.data ?? ([] as any);
+      });
   }
 
   save() {
     this.isSaving = true;
     // this.dataService
-    //   .post<{ permissions: RolePermissionsDto[] }, null>(Apis.saveRolePermissions + this.roleName, {
+    //   .post<{ permissions: RolePermissionsDto[] }, null>(Apis.saveRolePermissions + this.roleId, {
     //     permissions: this.list,
     //   })
     //   .pipe(finalize(() => (this.isSaving = false)))

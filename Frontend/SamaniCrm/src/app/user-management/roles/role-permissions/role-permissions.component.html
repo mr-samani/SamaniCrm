@@ -2,7 +2,7 @@
   <i class="fa fa-reload"></i>
 </button>
 <mat-progress-bar *ngIf="loading" class="my-5" [mode]="'indeterminate'"></mat-progress-bar>
-<!-- <tree-view [Items]="list"></tree-view> -->
+<tree-view [Items]="list"></tree-view>
 <div class="d-flex align-items-end justify-content-end" *ngIf="!loading">
   <button mat-raised-button color="primary" (click)="save()" [disabled]="isSaving">
     {{ 'Save' | translate }}

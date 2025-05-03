@@ -20,20 +20,24 @@
  */
 /* Created with custom template */
 
-/** Interface for RoleResponseDTO */
-export interface IRoleResponseDTO {
+/** Interface for RolePermissionsDTO */
+export interface IRolePermissionsDTO {
   id?: string;
-  roleName: string;
+  name: string;
+  selected?: boolean;
+  children?: Array<RolePermissionsDTO>;
   displayName?: string;
 }
 
-/** Class for RoleResponseDTO */
-export class RoleResponseDTO implements IRoleResponseDTO {
+/** Class for RolePermissionsDTO */
+export class RolePermissionsDTO implements IRolePermissionsDTO {
   id?: string;
-  roleName!: string;
+  name!: string;
+  selected?: boolean;
+  children?: Array<RolePermissionsDTO>;
   displayName?: string;
 
-  constructor(data?: IRoleResponseDTO) {
+  constructor(data?: IRolePermissionsDTO) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -45,13 +49,19 @@ export class RoleResponseDTO implements IRoleResponseDTO {
 init(data?: any) {
   if (data) {
     this.id = data["id"];
-    this.roleName = data["roleName"];
+    this.name = data["name"];
+    this.selected = data["selected"];
+    if (Array.isArray(data["children"])) {
+      this.children = [] as any;
+      for (let item of data["children"])
+        (this.children as any).push(RolePermissionsDTO.fromJS(item));
+    }
     this.displayName = data["displayName"];
   }
 }
 
-  static fromJS(data: any): RoleResponseDTO {
-    const instance = new RoleResponseDTO();
+  static fromJS(data: any): RolePermissionsDTO {
+    const instance = new RolePermissionsDTO();
     instance.init(data);
     return instance;
   }

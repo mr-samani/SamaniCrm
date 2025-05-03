@@ -9,6 +9,7 @@ namespace SamaniCrm.Application.DTOs
     public class RoleResponseDTO
     {
         public Guid Id { get; set; }
-        public string RoleName { get; set; }
+        public required string RoleName { get; set; }
+        public string? DisplayName { get; set; }
     }
 }

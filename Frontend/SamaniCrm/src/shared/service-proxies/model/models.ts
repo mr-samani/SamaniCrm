@@ -23,6 +23,8 @@ export * from './meta';
 export * from './refresh-token-command';
 export * from './revoke-refresh-token-command';
 export * from './role-create-command';
+export * from './role-permissions-dto';
+export * from './role-permissions-dto-list-api-response';
 export * from './role-response-dto';
 export * from './role-response-dto-api-response';
 export * from './role-response-dto-list-api-response';

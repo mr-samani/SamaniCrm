@@ -23,7 +23,7 @@
             [class.checked]="item.selected"
             [class.indeterminate]="item.hasUnSelectedChildren"
             [class.squre]="item.selected && item.hasUnSelectedChildren"></span>
-          <span [class.text-bold]="item.isModified">{{ item.name }}</span>
+          <span [class.text-bold]="item.isModified" [title]="item.name">{{ item.displayName }}</span>
         </div>
       </div>
 

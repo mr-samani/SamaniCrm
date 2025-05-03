@@ -6,7 +6,7 @@ using SamaniCrm.Api.Attributes;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Localize.Commands;
 using SamaniCrm.Application.Localize.Queries;
-using SamaniCrm.Core.AppPermissions;
+using SamaniCrm.Core.Permissions;
 using SamaniCrm.Host.Models;
 
 namespace SamaniCrm.Api.Controllers

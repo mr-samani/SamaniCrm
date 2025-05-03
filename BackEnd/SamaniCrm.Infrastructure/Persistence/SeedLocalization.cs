@@ -19,6 +19,7 @@ namespace SamaniCrm.Infrastructure.Persistence
                 {
                     Name = "فارسی (Persian)",
                     Culture = "fa-IR",
+                    Flag = "fa-IR",
                     IsDefault = true,
                     IsRtl = true
                 },
@@ -26,6 +27,7 @@ namespace SamaniCrm.Infrastructure.Persistence
                 {
                     Name = "English",
                     Culture = "en-US",
+                    Flag = "en-US",
                     IsDefault = false,
                     IsRtl = false
                 }
@@ -39,29 +41,53 @@ namespace SamaniCrm.Infrastructure.Persistence
 
 
             //-----------------------------------------------------
-            // seed permission to localization 
-            var allPermissions = dbContext.Permissions
-        .Select(p => p.LocalizeKey)
-        .Distinct()
-        .ToList();
-
+            var newLocalizations = new List<Localization>();
             var allLanguages = dbContext.Languages
                 .Where(l => l.IsActive)
                 .Select(l => l.Culture)
                 .ToList();
 
-            var existingLocalizations = dbContext.Localizations
+
+            // seed roles
+            var roles = dbContext.Roles.Select(s => s.Name).Distinct().ToList();
+            var existingRoleLocalizations = dbContext.Localizations
+                .Where(l => roles.Contains(l.Key))
+                .Select(l => new { l.Key, l.Culture })
+                .ToHashSet();
+            foreach (var roleKey in roles)
+            {
+                foreach (var culture in allLanguages)
+                {
+                    if (!existingRoleLocalizations.Contains(new { Key = "Role:" + roleKey, Culture = culture }))
+                    {
+                        newLocalizations.Add(new Localization
+                        {
+                            Key = "Role:" + roleKey,
+                            Culture = culture,
+                            Value = string.Empty, // بعداً توسط کاربر تکمیل می‌شود
+                        });
+                    }
+                }
+            }
+
+
+
+            // seed permission to localization 
+            var allPermissions = dbContext.Permissions
+                .Select(p => p.LocalizeKey)
+                .Distinct()
+                .ToList();
+
+
+            var existingPermissionLocalizations = dbContext.Localizations
                 .Where(l => allPermissions.Contains(l.Key))
                 .Select(l => new { l.Key, l.Culture })
                 .ToHashSet();
-
-            var newLocalizations = new List<Localization>();
-
             foreach (var permissionKey in allPermissions)
             {
                 foreach (var culture in allLanguages)
                 {
-                    if (!existingLocalizations.Contains(new { Key = permissionKey, Culture = culture }))
+                    if (!existingPermissionLocalizations.Contains(new { Key = permissionKey, Culture = culture }))
                     {
                         newLocalizations.Add(new Localization
                         {
@@ -72,7 +98,7 @@ namespace SamaniCrm.Infrastructure.Persistence
                     }
                 }
             }
-            Console.WriteLine("new localize count:",newLocalizations.Count);
+            Console.WriteLine("new localize count:", newLocalizations.Count);
             if (newLocalizations.Any())
             {
                 dbContext.Localizations.AddRange(newLocalizations);

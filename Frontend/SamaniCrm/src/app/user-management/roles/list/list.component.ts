@@ -21,8 +21,9 @@ export class RoleListComponent extends AppComponentBase implements OnInit {
   list: RoleResponseDTO[] = [];
   totalCount = 0;
   fields: FieldsType[] = [
-    { column: 'id', title: this.l('Id'), width: 100 },
-    { column: 'name', title: this.l('Name') },
+    { column: 'id', title: this.l('Id'), width: 200 },
+    { column: 'roleName', title: this.l('Name') },
+    { column: 'displayName', title: this.l('DisplayName') },
   ];
   constructor(
     injector: Injector,
@@ -44,6 +45,9 @@ export class RoleListComponent extends AppComponentBase implements OnInit {
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
         this.list = response.data ?? [];
+        this.list.map((m) => {
+          m.displayName = this.l(m.displayName!);
+        });
       });
   }
 

@@ -9,7 +9,7 @@ using SamaniCrm.Host.Models;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.User.Queries;
 using SamaniCrm.Api.Attributes;
-using SamaniCrm.Core.AppPermissions;
+using SamaniCrm.Core.Permissions;
 
 
 namespace SamaniCrm.Api.Controllers

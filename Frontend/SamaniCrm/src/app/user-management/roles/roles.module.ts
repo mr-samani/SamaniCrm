@@ -10,6 +10,7 @@ import { RolePermissionsListComponent } from './role-permissions/role-permission
 import { TreeViewComponent } from '@shared/components/tree-view/tree-view.component';
 import { TableViewComponent } from '@shared/components/table-view/table-view.compoenent';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
+import { RoleServiceProxy } from '@shared/service-proxies';
 
 @NgModule({
   declarations: [RoleListComponent, RolePermissionsListComponent],
@@ -23,6 +24,6 @@ import { FileManagerModule } from '@app/file-manager/file-manager.module';
     MaterialCommonModule,
     TreeViewComponent,
   ],
-  providers: [],
+  providers: [RoleServiceProxy],
 })
 export class RolesModule {}

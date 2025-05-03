@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SamaniCrm.Core.AppPermissions;
+using SamaniCrm.Core.Permissions;
 using SamaniCrm.Domain.Constants;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.Identity;
