@@ -26,7 +26,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("Create")]
-        [HasPermission(AppPermissions.RoleManagement_Create)]
+        [Permission(AppPermissions.RoleManagement_Create)]
         [ProducesDefaultResponseType(typeof(ApiResponse<int>))]
         public async Task<IActionResult> CreateRoleAsync(RoleCreateCommand command)
         {
@@ -34,7 +34,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetAll")]
-        [HasPermission(AppPermissions.RoleManagement_List)]
+        [Permission(AppPermissions.RoleManagement_List)]
         [ProducesResponseType(typeof(ApiResponse<List<RoleResponseDTO>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllRolesAsync()
         {
@@ -44,7 +44,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpGet("{id}")]
-        [HasPermission(AppPermissions.RoleManagement_List)]
+        [Permission(AppPermissions.RoleManagement_List)]
         [ProducesResponseType(typeof(ApiResponse<RoleResponseDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetRoleByIdAsync(Guid id)
         {
@@ -52,7 +52,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
-        [HasPermission(AppPermissions.RoleManagement_Delete)]
+        [Permission(AppPermissions.RoleManagement_Delete)]
         [ProducesResponseType(typeof(ApiResponse<int>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteRoleAsync(Guid id)
         {
@@ -64,7 +64,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPut("Edit/{id}")]
-        [HasPermission(AppPermissions.RoleManagement_Edit)]
+        [Permission(AppPermissions.RoleManagement_Edit)]
         [ProducesResponseType(typeof(ApiResponse<int>), StatusCodes.Status200OK)]
         public async Task<IActionResult> EditRole(string id, [FromBody] UpdateRoleCommand command)
         {

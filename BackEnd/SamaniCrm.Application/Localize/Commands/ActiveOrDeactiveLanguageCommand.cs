@@ -27,7 +27,6 @@ namespace SamaniCrm.Application.Localize.Commands
             var language = await _dbContext.Languages.FindAsync(new object[] { request.Culture }, cancellationToken);
             if (language is null) throw new NotFoundException(nameof(Language), request.Culture);
             language.IsActive = request.isActive;
-            _dbContext.Languages.Remove(language);
             await _dbContext.SaveChangesAsync(cancellationToken);
             return true;
         }

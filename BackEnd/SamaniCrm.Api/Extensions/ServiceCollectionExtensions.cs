@@ -14,6 +14,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
+using SamaniCrm.Api.Middlewares;
 using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.Behaviors;
 using SamaniCrm.Application.Common.Interfaces;
@@ -95,7 +96,7 @@ public static class ServiceCollectionExtensions
         {
             options.AddPolicy("DefaultCors", policy =>
             {
-                policy.WithOrigins("http://example.com", "https://localhost:44342", "http://localhost:5753", "https://localhost:5753")
+                policy.WithOrigins("https://localhost:44342", "http://localhost:5753", "https://localhost:5753")
                       .AllowAnyHeader()
                       .AllowAnyMethod();
             });
@@ -214,8 +215,14 @@ public static class ServiceCollectionExtensions
         services.AddHostedService<CaptchaCleanupBackgroundService>();
 
         services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<IUserPermissionService, UserPermissionService>();
 
+        services.AddScoped<PermissionFilter>();
 
+        services.AddControllers(options =>
+        {
+            options.Filters.Add<PermissionFilter>();
+        });
         return services;
     }
 

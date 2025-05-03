@@ -44,7 +44,7 @@ namespace SamaniCrm.Infrastructure.Services
 
       
 
-        public async Task<bool> HasPermissionAsync(Guid userId, string permissionName)
+        public async Task<bool> PermissionAsync(Guid userId, string permissionName)
         {
             var permissions = await GetPermissionsForUserAsync(userId);
             return permissions.Contains(permissionName);

@@ -20,9 +20,9 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
     { column: 'flag', title: this.l('Image'), width: 100, type: 'image' },
     { column: 'cultur', title: this.l('Cultur'), width: 100 },
     { column: 'name', title: this.l('Name') },
-    { column: 'isRtl', title: this.l('Rtl'), type: 'yesNo' },
-    { column: 'isDefault', title: this.l('Default'), type: 'yesNo' },
-    { column: 'isActive', title: this.l('Active'), type: 'yesNo' },
+    { column: 'isRtl', title: this.l('Rtl'), type: 'yesNo', width: 100 },
+    { column: 'isDefault', title: this.l('Default'), type: 'yesNo', width: 100 },
+    { column: 'isActive', title: this.l('Active'), type: 'yesNo', width: 100 },
   ];
   constructor(
     injector: Injector,
@@ -47,6 +47,7 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
         this.list = response.data ?? [];
+        this.list.map((x) => (x.flag = 'images/flags/' + x.flag + '.png'));
       });
   }
 

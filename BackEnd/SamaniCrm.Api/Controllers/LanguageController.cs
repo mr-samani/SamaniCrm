@@ -24,7 +24,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpGet("GetAllLanguages")]
-        [HasPermission(AppPermissions.LanguageManagement_List)]
+        [Permission(AppPermissions.LanguageManagement_List)]
         [ProducesResponseType(typeof(ApiResponse<List<LanguageDTO>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllLanguages()
         {
@@ -33,8 +33,8 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("CreateOrUpdate")]
-        [HasPermission(AppPermissions.LanguageManagement_Create)]
-        [HasPermission(AppPermissions.LanguageManagement_Edit)]
+        [Permission(AppPermissions.LanguageManagement_Create)]
+        [Permission(AppPermissions.LanguageManagement_Edit)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateOrUpdate(CreateOrEditLanguageCommand input)
         {
@@ -44,7 +44,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpPost("DeleteLangauuge")]
-        [HasPermission(AppPermissions.LanguageManagement_Delete)]
+        [Permission(AppPermissions.LanguageManagement_Delete)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteLangauuge(DeleteLanguageCommand input)
         {
@@ -53,7 +53,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("ActiveOrDeactive")]
-        [HasPermission(AppPermissions.LanguageManagement_Edit)]
+        [Permission(AppPermissions.LanguageManagement_Edit)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> ActiveOrDeactive(ActiveOrDeactiveLanguageCommand input)
         {
@@ -62,8 +62,8 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("CreateOrEditLocalizeKeys")]
-        [HasPermission(AppPermissions.LanguageManagement_Create)]
-        [HasPermission(AppPermissions.LanguageManagement_Edit)]
+        [Permission(AppPermissions.LanguageManagement_Create)]
+        [Permission(AppPermissions.LanguageManagement_Edit)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateOrEditLocalizeKeys(string culture, List<LocalizationKeyDTO> items)
         {
@@ -72,7 +72,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("DeleteKey")]
-        [HasPermission(AppPermissions.LanguageManagement_Delete)]
+        [Permission(AppPermissions.LanguageManagement_Delete)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteKey(DeleteLocalizeKeyCommand input)
         {

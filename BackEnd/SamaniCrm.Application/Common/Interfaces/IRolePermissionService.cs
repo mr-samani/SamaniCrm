@@ -11,6 +11,6 @@ namespace SamaniCrm.Application.Common.Interfaces
         Task<List<string>> GetRolePermissionsAsyc(Guid RoleId);
 
         Task<List<string>> GetPermissionsForUserAsync(Guid userId);
-        Task<bool> HasPermissionAsync(Guid userId, string permissionName);
+        Task<bool> PermissionAsync(Guid userId, string permissionName);
     }
 }

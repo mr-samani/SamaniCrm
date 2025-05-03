@@ -7,7 +7,7 @@
     *ngIf="!item.loading"
     color="primary"
     (toggleChange)="changeActive(item)">
-    <span *ngIf="item.isActive">{{ 'active' | translate }}</span>
-    <span *ngIf="!item.isActive">{{ 'deActive' | translate }}</span>
+    <!-- <span *ngIf="item.isActive">{{ 'active' | translate }}</span>
+    <span *ngIf="!item.isActive">{{ 'deActive' | translate }}</span> -->
   </mat-slide-toggle>
 </ng-template>
