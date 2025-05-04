@@ -1,0 +1,44 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title" *ngIf="!isUpdate">{{ 'CreateLanguage' | translate }}</span>
+  <span cdkDragHandle class="title" *ngIf="isUpdate">{{ 'EditLanguage' | translate }}</span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <div class="row">
+      <mat-form-field class="col-sm-6">
+        <mat-label>{{ 'Culture' | translate }}</mat-label>
+        <input matInput type="text" formControlName="culture" maxlength="5" />
+        <mat-error *ngIf="form.get('culture')?.hasError('required')">
+          {{ 'IsRequired' | translate: { value: ('Culture' | translate) } }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="col-sm-6">
+        <mat-label>{{ 'Name' | translate }}</mat-label>
+        <input matInput type="text" formControlName="name" maxlength="100" />
+        <mat-error *ngIf="form.get('name')?.hasError('required')">
+          {{ 'IsRequired' | translate: { value: ('Name' | translate) } }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <p>
+      <mat-checkbox color="primary" formControlName="isRtl">{{ 'IsRtl' | translate }}</mat-checkbox>
+    </p>
+    <p>
+      <mat-checkbox color="primary" formControlName="isDefault">{{ 'IsDefault' | translate }}</mat-checkbox>
+    </p>
+    <p>
+      <mat-checkbox color="primary" formControlName="isActive">{{ 'IsActive' | translate }}</mat-checkbox>
+    </p>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="saving">
+    <mat-spinner *ngIf="saving" color="primary" diameter="25"></mat-spinner>
+    <span>{{ 'Save' | translate }}</span>
+  </button>
+</mat-dialog-actions>

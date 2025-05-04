@@ -1,3 +1,10 @@
+<div class="d-flex justify-content-end my-2">
+  <button mat-stroked-button color="primary" (click)="openLanguageDialog()">
+    <i class="fa fa-plus mx-1"></i>
+    <span>{{ 'CreateNewLanguage' | translate }}</span>
+  </button>
+</div>
+
 <table-view [list]="list" [fields]="fields" [operations]="operations" [loading]="loading"></table-view>
 
 <ng-template #operations let-item>
@@ -15,6 +22,10 @@
     <a mat-menu-item (click)="openDetails(item)">
       <i class="fa fa-check-list mx-1"></i>
       <span>{{ l('LocalizationTexts') }}</span>
+    </a>
+    <a mat-menu-item (click)="remove(item)">
+      <i class="fa fa-trash mx-1"></i>
+      <span>{{ l('Remove') }}</span>
     </a>
   </mat-menu>
 </ng-template>

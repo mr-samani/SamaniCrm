@@ -2,9 +2,15 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
-import { ActiveOrDeactiveLanguageCommand, LanguageDTO, LanguageServiceProxy } from '@shared/service-proxies';
+import {
+  ActiveOrDeactiveLanguageCommand,
+  DeleteLanguageCommand,
+  LanguageDTO,
+  LanguageServiceProxy,
+} from '@shared/service-proxies';
 import { finalize } from 'rxjs/operators';
 import { LocalizationKeysComponent } from '../localization-keys/localization-keys.component';
+import { CreateOrEditLanguageComponent } from '../create-or-edit-language/create-or-edit-language.component';
 
 export class LanguageDTOExtended extends LanguageDTO {
   loading?: boolean;
@@ -74,5 +80,37 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
         culture: item.culture,
       },
     });
+  }
+
+  remove(item: LanguageDTOExtended) {
+    this.confirmMessage(`${this.l('Delete')}:${item.culture}`, this.l('AreYouSureForDelete')).then((result) => {
+      if (result.isConfirmed) {
+        this.showMainLoading();
+        const input = new DeleteLanguageCommand();
+        input.culture = item.culture;
+        this.languageService
+          .deleteLangauuge(input)
+          .pipe(finalize(() => this.hideMainLoading()))
+          .subscribe((response) => {
+            if (response.success) {
+              this.notify.success(this.l('DeletedSuccessfully'));
+              this.getList();
+            }
+          });
+      }
+    });
+  }
+
+  openLanguageDialog(item?: LanguageDTOExtended) {
+    this.matDialog
+      .open(CreateOrEditLanguageComponent, {
+        data: item,
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.getList();
+        }
+      });
   }
 }

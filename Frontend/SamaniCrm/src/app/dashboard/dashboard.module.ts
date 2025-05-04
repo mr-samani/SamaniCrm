@@ -32,5 +32,6 @@ import { BraedCrumbComponent } from './layouts/braed-crumb/braed-crumb.component
     MatButtonModule,
     FileManagerModule,
   ],
+  exports: [],
 })
 export class DashboardModule {}
