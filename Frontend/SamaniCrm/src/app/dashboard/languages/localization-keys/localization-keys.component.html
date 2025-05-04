@@ -48,10 +48,10 @@
 </mat-dialog-content>
 <mat-dialog-actions class="d-flex flex-wrap justify-content-between">
   <div class="d-flex gap-2">
-    <button mat-stroked-button (click)="exportData()">
+    <button mat-stroked-button (click)="exportData()" [disabled]="busy">
       {{ 'ExportAsJson' | translate }}
     </button>
-    <button mat-stroked-button (click)="importData()">
+    <button mat-stroked-button (click)="importData()" [disabled]="busy">
       {{ 'ImportFromJson' | translate }}
     </button>
   </div>

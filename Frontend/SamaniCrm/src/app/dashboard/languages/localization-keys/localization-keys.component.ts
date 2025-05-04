@@ -2,6 +2,7 @@ import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
+import { DeleteLocalizeKeyCommand } from '@shared/service-proxies';
 import { LanguageServiceProxy } from '@shared/service-proxies/api/language.service';
 import { DownloadService } from '@shared/services/download.service';
 import { JsonFileReaderService } from '@shared/services/json-file-reader.service';
@@ -82,7 +83,25 @@ export class LocalizationKeysComponent extends AppComponentBase implements OnIni
 
   save() {}
 
-  remove(key: string) {}
+  remove(key: string) {
+    this.confirmMessage(`${this.l('Delete')}:${key}`, this.l('ThisKeyWasDeletedFromAllLanguages')).then((result) => {
+      if (result.isConfirmed) {
+        this.showMainLoading();
+        const input = new DeleteLocalizeKeyCommand();
+        input.key = key;
+        this.languageService
+          .deleteKey(input)
+          .pipe(finalize(() => this.hideMainLoading()))
+          .subscribe((response) => {
+            if (response.success) {
+              this.notify.success(this.l('DeletedSuccessfully'));
+              delete this.allLocalizations[key];
+              this.search();
+            }
+          });
+      }
+    });
+  }
 
   exportData() {
     this.busy = true;

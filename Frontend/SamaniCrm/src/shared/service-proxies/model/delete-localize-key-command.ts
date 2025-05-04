@@ -22,12 +22,12 @@
 
 /** Interface for DeleteLocalizeKeyCommand */
 export interface IDeleteLocalizeKeyCommand {
-  keyId?: string;
+  key?: string;
 }
 
 /** Class for DeleteLocalizeKeyCommand */
 export class DeleteLocalizeKeyCommand implements IDeleteLocalizeKeyCommand {
-  keyId?: string;
+  key?: string;
 
   constructor(data?: IDeleteLocalizeKeyCommand) {
     if (data) {
@@ -40,7 +40,7 @@ export class DeleteLocalizeKeyCommand implements IDeleteLocalizeKeyCommand {
 
 init(data?: any) {
   if (data) {
-    this.keyId = data["keyId"];
+    this.key = data["key"];
   }
 }
 
