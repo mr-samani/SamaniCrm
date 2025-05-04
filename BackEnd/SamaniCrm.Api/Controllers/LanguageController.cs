@@ -90,5 +90,18 @@ namespace SamaniCrm.Api.Controllers
             var result = await _mediator.Send(input);
             return ApiOk(result);
         }
+
+
+        [HttpPost("UpdateBatchLocalizeKey")]
+        [Permission(AppPermissions.LanguageManagement_Create)]
+        [Permission(AppPermissions.LanguageManagement_Edit)]
+        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> UpdateBatchLocalizeKey(UpdateBatchLocalizeKeyCommand input)
+        {
+            var result = await _mediator.Send(input);
+            return ApiOk(result);
+        }
+
+
     }
 }

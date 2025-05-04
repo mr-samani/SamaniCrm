@@ -49,6 +49,7 @@ model/string-api-response.ts
 model/string-string-dictionary-api-response.ts
 model/token-response-dto-api-response.ts
 model/token-response-dto.ts
+model/update-batch-localize-key-command.ts
 model/update-role-command.ts
 model/update-user-roles-command.ts
 model/user-details-response-dto-api-response.ts

@@ -37,7 +37,7 @@
           </td>
           <td vAlign="middle">{{ item.key }}</td>
           <td class="w-100">
-            <input type="text" class="form-control" [(ngModel)]="item.value" />
+            <input type="text" class="form-control" [(ngModel)]="allLocalizations[item.key]" />
           </td>
         </tr>
       }

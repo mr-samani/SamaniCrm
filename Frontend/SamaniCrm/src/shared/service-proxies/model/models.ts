@@ -32,6 +32,7 @@ export * from './string-api-response';
 export * from './string-string-dictionary-api-response';
 export * from './token-response-dto';
 export * from './token-response-dto-api-response';
+export * from './update-batch-localize-key-command';
 export * from './update-role-command';
 export * from './update-user-roles-command';
 export * from './user-details-response-dto';

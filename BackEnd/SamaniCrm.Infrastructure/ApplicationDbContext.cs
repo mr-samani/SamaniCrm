@@ -95,10 +95,11 @@ namespace SamaniCrm.Infrastructure
             {
                 l.HasKey(k => k.Id);
                 l.HasIndex(c => c.Culture);
-                l.HasOne(x=>x.Language)
-                    .WithMany(x=>x.Localizations)
+                l.HasOne(x => x.Language)
+                    .WithMany(x => x.Localizations)
                     .HasForeignKey(x => x.Culture)
                     .OnDelete(DeleteBehavior.Cascade);
+                l.HasIndex(x => new { x.Key, x.Culture }).IsUnique();
             });
 
 
