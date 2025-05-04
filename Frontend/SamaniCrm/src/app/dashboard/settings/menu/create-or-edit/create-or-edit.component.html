@@ -40,8 +40,8 @@
   <!-- <pre dir="ltr" style="text-align: left;">{{form.value|json}}</pre> -->
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>{{ 'Cancel' | translate }}</button>
-  <button mat-raised-button (click)="save()" cdkFocusInitial [disabled]="loading || saving">
+  <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
     <mat-spinner *ngIf="saving" color="primary" diameter="25"></mat-spinner>
     <span>{{ 'Save' | translate }}</span>
   </button>

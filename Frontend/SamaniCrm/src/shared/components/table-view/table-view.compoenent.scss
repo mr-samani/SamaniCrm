@@ -57,6 +57,7 @@
   border-top: 1px var(--border-color) solid;
   overflow: auto;
   height: calc(var(--available-content-height, 100vh) - (var(--header-height) + var(--header-padding-y) * 2));
+  min-height: 200px;
 }
 
 .tr-mrs {

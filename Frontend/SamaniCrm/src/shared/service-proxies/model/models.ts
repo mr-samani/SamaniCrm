@@ -29,6 +29,7 @@ export * from './role-response-dto';
 export * from './role-response-dto-api-response';
 export * from './role-response-dto-list-api-response';
 export * from './string-api-response';
+export * from './string-string-dictionary-api-response';
 export * from './token-response-dto';
 export * from './token-response-dto-api-response';
 export * from './update-role-command';

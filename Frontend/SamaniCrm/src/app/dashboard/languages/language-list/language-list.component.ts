@@ -1,8 +1,10 @@
 import { Component, Injector, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
 import { ActiveOrDeactiveLanguageCommand, LanguageDTO, LanguageServiceProxy } from '@shared/service-proxies';
 import { finalize } from 'rxjs/operators';
+import { LocalizationKeysComponent } from '../localization-keys/localization-keys.component';
 
 export class LanguageDTOExtended extends LanguageDTO {
   loading?: boolean;
@@ -27,7 +29,7 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
   ];
   constructor(
     injector: Injector,
-
+    private matDialog: MatDialog,
     private languageService: LanguageServiceProxy,
   ) {
     super(injector);
@@ -55,7 +57,7 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
       });
   }
 
-  changeActive(item: LanguageDTOExtended) {
+  toggleActivate(item: LanguageDTOExtended) {
     item.loading = true;
     const input = new ActiveOrDeactiveLanguageCommand();
     input.culture = item.culture;
@@ -64,5 +66,13 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
       .activeOrDeactive(input)
       .pipe(finalize(() => (item.loading = false)))
       .subscribe();
+  }
+
+  openDetails(item: LanguageDTOExtended) {
+    this.matDialog.open(LocalizationKeysComponent, {
+      data: {
+        culture: item.culture,
+      },
+    });
   }
 }

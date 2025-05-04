@@ -1,0 +1,22 @@
+{
+    "Administrator": "مدیر سیستم",
+    "LanguageManagement": "مدیریت زبان‌ها",
+    "LanguageManagement_Create": "ایجاد زبان",
+    "LanguageManagement_Delete": "حذف زبان",
+    "LanguageManagement_Edit": "ویرایش زبان",
+    "LanguageManagement_List": "لیست زبان‌ها",
+    "RoleManagement": "مدیریت نقش‌ها",
+    "RoleManagement_AssignToRole": "اختصاص به نقش",
+    "RoleManagement_Create": "ایجاد نقش",
+    "RoleManagement_Delete": "حذف نقش",
+    "RoleManagement_Edit": "ویرایش نقش",
+    "RoleManagement_List": "لیست نقش‌ها",
+    "UserManagement": "مدیریت کاربران",
+    "UserManagement_AssignRole": "اختصاص نقش به کاربر",
+    "UserManagement_Create": "ایجاد کاربر",
+    "UserManagement_Delete": "حذف کاربر",
+    "UserManagement_Edit": "ویرایش کاربر",
+    "UserManagement_EditUserProfile": "ویرایش پروفایل کاربر",
+    "UserManagement_List": "لیست کاربران"
+  }
+  

@@ -32,6 +32,17 @@ namespace SamaniCrm.Api.Controllers
             return ApiOk<List<LanguageDTO>>(result);
         }
 
+
+        [HttpGet("GetAllLanguageKeys")]
+        [Permission(AppPermissions.LanguageManagement_List)]
+        [ProducesResponseType(typeof(ApiResponse<Dictionary<string, string?>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllLanguageKeys(string culture)
+        {
+            Dictionary<string, string?> result = await _mediator.Send(new GetAllLanguageKeys(culture));
+            return ApiOk<Dictionary<string, string?>>(result);
+        }
+
+
         [HttpPost("CreateOrUpdate")]
         [Permission(AppPermissions.LanguageManagement_Create)]
         [Permission(AppPermissions.LanguageManagement_Edit)]

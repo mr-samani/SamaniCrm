@@ -2,12 +2,19 @@
 
 <ng-template #operations let-item>
   <mat-spinner [diameter]="20" *ngIf="item.loading"></mat-spinner>
-  <mat-slide-toggle
-    [(ngModel)]="item.isActive"
-    *ngIf="!item.loading"
-    color="primary"
-    (toggleChange)="changeActive(item)">
-    <!-- <span *ngIf="item.isActive">{{ 'active' | translate }}</span>
-    <span *ngIf="!item.isActive">{{ 'deActive' | translate }}</span> -->
-  </mat-slide-toggle>
+  <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger" *ngIf="!item.loading">
+    <i class="fa fa-ellipsis-v"></i>
+  </button>
+  <mat-menu #menu="matMenu">
+    <a mat-menu-item (click)="toggleActivate(item)">
+      <i class="fa fa-circle-check mx-1"></i>
+      <span *ngIf="!item.isActive">{{ 'Activate' | translate }}</span>
+      <span *ngIf="item.isActive">{{ 'DeActivate' | translate }}</span>
+    </a>
+
+    <a mat-menu-item (click)="openDetails(item)">
+      <i class="fa fa-check-list mx-1"></i>
+      <span>{{ l('LocalizationTexts') }}</span>
+    </a>
+  </mat-menu>
 </ng-template>

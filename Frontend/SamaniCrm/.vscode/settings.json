@@ -15,5 +15,7 @@
         "*.sln": true,
         "*.csproj.user": true,
         "*.suo": true,
-    }
+    },
+    "ngFileGenerator.baseComponentClassName": "AppComponentBase",
+    "ngFileGenerator.baseComponentPath": "@app/app-component-base"
 }

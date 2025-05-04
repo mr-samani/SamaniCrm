@@ -2,6 +2,9 @@ import { Injectable, Injector } from '@angular/core';
 import { TokenService } from './token.service';
 import { HttpClient } from '@angular/common/http';
 import { AppComponentBase } from '@app/app-component-base';
+import { NgxAlertModalService } from 'ngx-alert-modal';
+import { TranslateService } from '@ngx-translate/core';
+import { NotifyService } from './notify.service';
 
 export enum DownloadFileType {
   Excel = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -10,13 +13,17 @@ export enum DownloadFileType {
 @Injectable({
   providedIn: 'root',
 })
-export class DownloadService extends AppComponentBase {
+export class DownloadService {
   constructor(
-    injector: Injector,
     private tokenService: TokenService,
     private http: HttpClient,
-  ) {
-    super(injector);
+
+    private notify: NotifyService,
+    private translateService: TranslateService,
+  ) {}
+
+  l(key: string, param?: Object) {
+    return this.translateService.instant(key, param);
   }
 
   downloadUrlWithToken(url: string, fileType: DownloadFileType, fileName: string) {
@@ -105,7 +112,7 @@ export class DownloadService extends AppComponentBase {
         a.remove();
         setTimeout(() => {
           v.dismiss();
-        }, 3000);
+        }, 1000);
         resolve();
       } catch (error) {
         reject(error);

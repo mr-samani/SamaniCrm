@@ -1,0 +1,65 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title">{{ culture }}</span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content style="min-width: 80vw">
+  <form class="input-group" (submit)="search()">
+    <input type="text" class="form-control" [(ngModel)]="filter" name="filter" />
+    <button class="btn primary input-group-text">
+      <i class="fa fa-search"></i>
+    </button>
+  </form>
+
+  <div class="m-auto py-5" *ngIf="loading">
+    <mat-spinner color="primary" diameter="25"></mat-spinner>
+  </div>
+
+  <table class="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>{{ 'Delete' | translate }}</th>
+        <th>{{ 'Key' | translate }}</th>
+        <th>{{ 'Value' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of filteredList | keyvalue; track $index) {
+        <tr>
+          <td>{{ (page - 1) * perPage + ($index + 1) }}</td>
+          <td>
+            <button type="button" mat-icon-button (click)="remove(item.key)">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+          <td vAlign="middle">{{ item.key }}</td>
+          <td class="w-100">
+            <input type="text" class="form-control" [(ngModel)]="item.value" />
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <pagination [total]="totalCount" [(page)]="page" [(perPage)]="perPage" (change)="search($event)"></pagination>
+</mat-dialog-content>
+<mat-dialog-actions class="d-flex flex-wrap justify-content-between">
+  <div class="d-flex gap-2">
+    <button mat-stroked-button (click)="exportData()">
+      {{ 'ExportAsJson' | translate }}
+    </button>
+    <button mat-stroked-button (click)="importData()">
+      {{ 'ImportFromJson' | translate }}
+    </button>
+  </div>
+  <div class="d-flex gap-2">
+    <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
+    <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
+      <mat-spinner *ngIf="saving" color="primary" diameter="25"></mat-spinner>
+      <span>{{ 'Save' | translate }}</span>
+    </button>
+  </div>
+</mat-dialog-actions>

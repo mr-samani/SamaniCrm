@@ -46,6 +46,7 @@ model/role-response-dto-api-response.ts
 model/role-response-dto-list-api-response.ts
 model/role-response-dto.ts
 model/string-api-response.ts
+model/string-string-dictionary-api-response.ts
 model/token-response-dto-api-response.ts
 model/token-response-dto.ts
 model/update-role-command.ts

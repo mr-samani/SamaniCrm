@@ -12,8 +12,8 @@
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close>{{ 'Cancel' | translate }}</button>
-  <button mat-raised-button (click)="createFolder()" cdkFocusInitial [disabled]="loading">
+  <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="createFolder()" cdkFocusInitial [disabled]="loading">
     <mat-spinner *ngIf="loading" color="primary" diameter="25"></mat-spinner>
     <span>{{ 'Create' | translate }}</span>
   </button>
