@@ -35,6 +35,13 @@ namespace SamaniCrm.Core.Permissions
         public const string LanguageManagement_Edit = "Administrator.LanguageManagement.Edit";
         public const string LanguageManagement_Delete = "Administrator.LanguageManagement.Delete";
 
+        // menu management 
+        public const string MenuManagement = "Administrator.MenuManagement";
+        public const string MenuManagement_List = "Administrator.MenuManagement.List";
+        public const string MenuManagement_Create = "Administrator.MenuManagement.Create";
+        public const string MenuManagement_Edit = "Administrator.MenuManagement.Edit";
+        public const string MenuManagement_Delete = "Administrator.MenuManagement.Delete";
+
     }
 
 

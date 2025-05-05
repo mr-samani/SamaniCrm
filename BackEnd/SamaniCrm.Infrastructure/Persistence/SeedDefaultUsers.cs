@@ -10,58 +10,72 @@ using Microsoft.Extensions.Logging;
 using SamaniCrm.Core.Permissions;
 using SamaniCrm.Domain.Constants;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.Identity;
+using SamaniCrm.Infrastructure.Persistence;
 
-namespace SamaniCrm.Infrastructure.Persistence
+public static class SeedDefaultUsers
 {
-    public static class SeedDefaultUsers
+    public static async Task TrySeedAsync(
+        ApplicationDbContext dbContext,
+        ILogger<ApplicationDbInitializer> logger,
+        UserManager<ApplicationUser> userManager,
+        RoleManager<ApplicationRole> roleManager)
     {
-        public static async Task TrySeedAsync(
-            ApplicationDbContext dbContext,
-            ILogger<ApplicationDbInitializer> logger,
-            UserManager<ApplicationUser> userManager,
-            RoleManager<ApplicationRole> roleManager)
+        Console.WriteLine("Try seed Administrator Role");
+
+        // 1. ایجاد نقش ادمین در صورت عدم وجود
+        var administratorRole = await roleManager.FindByNameAsync(Roles.Administrator);
+        if (administratorRole == null)
         {
-            Console.WriteLine("Try seed Administor Role");
-            // Default roles
-            var administratorRole = new ApplicationRole(Roles.Administrator);
-
-            if (roleManager.Roles.All(r => r.Name != administratorRole.Name))
+            administratorRole = new ApplicationRole(Roles.Administrator);
+            var roleResult = await roleManager.CreateAsync(administratorRole);
+            if (!roleResult.Succeeded)
             {
-                await roleManager.CreateAsync(administratorRole);
-                await dbContext.SaveChangesAsync(); // ذخیره نقش
-            }
-            Console.WriteLine("Try seed Administor Role Permissions");
-            // set role permissions
-            var existingPermissionIds = await dbContext.RolePermissions
-                .Where(rp => rp.RoleId == administratorRole.Id)
-                .Select(rp => rp.PermissionId)
-                .ToListAsync();
-
-            var allNewPermissions = await dbContext.Permissions
-                .Where(p => !existingPermissionIds.Contains(p.Id))
-                .Select(p => new RolePermission
+                foreach (var error in roleResult.Errors)
                 {
-                    PermissionId = p.Id,
-                    RoleId = administratorRole.Id
-                })
-                .ToListAsync();
-
-            if (allNewPermissions.Any())
-            {
-                await dbContext.RolePermissions.AddRangeAsync(allNewPermissions);
-                await dbContext.SaveChangesAsync();
-                Console.WriteLine($"Seeded {allNewPermissions.Count} new permissions for Administrator role.");
+                    logger.LogError("Error creating role: {Error}", error.Description);
+                }
+                throw new Exception("Failed to create Administrator role.");
             }
-            else
+            await dbContext.SaveChangesAsync();
+        }
+
+        Console.WriteLine("Try seed Administrator Role Permissions");
+
+        // 2. اضافه کردن پرمیشن های جدید به نقش ادمین
+        var existingPermissionIds = await dbContext.RolePermissions
+            .Where(rp => rp.RoleId == administratorRole.Id)
+            .Select(rp => rp.PermissionId)
+            .ToListAsync();
+
+        var newPermissions = await dbContext.Permissions
+            .Where(p => !existingPermissionIds.Contains(p.Id))
+            .Select(p => new RolePermission
             {
-                Console.WriteLine("No new permissions to seed for Administrator role.");
-            }
+                RoleId = administratorRole.Id,
+                PermissionId = p.Id
+            })
+            .ToListAsync();
 
-            Console.WriteLine("Try seed Admin user");
+        if (newPermissions.Any())
+        {
+            await dbContext.RolePermissions.AddRangeAsync(newPermissions);
+            await dbContext.SaveChangesAsync();
+            Console.WriteLine($"Seeded {newPermissions.Count} new permissions for Administrator role.");
+        }
+        else
+        {
+            Console.WriteLine("No new permissions to seed for Administrator role.");
+        }
 
-            // Default users
-            var administrator = new ApplicationUser
+        Console.WriteLine("Try seed Admin user");
+
+        // 3. ایجاد کاربر پیش فرض ادمین در صورت عدم وجود
+        var adminUser = await userManager.FindByNameAsync("samani");
+        if (adminUser == null)
+        {
+            adminUser = new ApplicationUser
             {
                 UserName = "samani",
                 Email = "mr.samani1368@gmail.com",
@@ -74,31 +88,20 @@ namespace SamaniCrm.Infrastructure.Persistence
                 IsDeleted = false
             };
 
-            if (userManager.Users.All(u => u.UserName != administrator.UserName))
+            var userResult = await userManager.CreateAsync(adminUser, "123qwe");
+            if (!userResult.Succeeded)
             {
-                var result = await userManager.CreateAsync(administrator, "123qwe");
-                if (result.Succeeded)
+                foreach (var error in userResult.Errors)
                 {
-                    await dbContext.SaveChangesAsync(); // ذخیره کاربر
-                    if (!string.IsNullOrWhiteSpace(administratorRole.Name))
-                    {
-                        await userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
-                    }
+                    logger.LogError("Error creating user: {Error}", error.Description);
                 }
-                else
-                {
-                    // لاگ کردن خطاهای ایجاد کاربر
-                    foreach (var error in result.Errors)
-                    {
-                        logger.LogError("Error creating user: {Error}", error.Description);
-                    }
-                    throw new Exception("Failed to create user.");
-                }
+                throw new Exception("Failed to create administrator user.");
             }
 
-            await dbContext.SaveChangesAsync();
-
-
+            await userManager.AddToRoleAsync(adminUser, administratorRole.Name!);
         }
+
+        await dbContext.SaveChangesAsync();
     }
 }
+

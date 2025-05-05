@@ -19,11 +19,11 @@ const routes: Routes = [
       { path: 'languages', loadChildren: () => import('./languages/languages.module').then((m) => m.LanguagesModule) },
       {
         path: 'users',
-        loadChildren: () => import('..//user-management/users/users.module').then((m) => m.UsersModule),
+        loadChildren: () => import('../user-management/users/users.module').then((m) => m.UsersModule),
       },
       {
         path: 'roles',
-        loadChildren: () => import('..//user-management/roles/roles.module').then((m) => m.RolesModule),
+        loadChildren: () => import('../user-management/roles/roles.module').then((m) => m.RolesModule),
       },
       
       {

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SamaniCrm.Application.DTOs;
 using SamaniCrm.Domain.Entities;
-
 namespace SamaniCrm.Application.Common.Interfaces
 {
     public interface IApplicationDbContext
@@ -15,7 +15,7 @@ namespace SamaniCrm.Application.Common.Interfaces
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<Language> Languages { get; set; }
         public DbSet<Localization> Localizations { get; set; }
-
+        public DbSet<SamaniCrm.Domain.Entities.Menu> Menus { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

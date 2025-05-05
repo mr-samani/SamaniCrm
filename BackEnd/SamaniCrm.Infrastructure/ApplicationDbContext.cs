@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using Duende.IdentityServer.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Interfaces;
 using SamaniCrm.Infrastructure.Identity;
@@ -26,6 +28,7 @@ namespace SamaniCrm.Infrastructure
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<Language> Languages { get; set; }
         public DbSet<Localization> Localizations { get; set; }
+        public DbSet<Menu> Menus { get; set; }
 
 
 
@@ -103,6 +106,24 @@ namespace SamaniCrm.Infrastructure
             });
 
 
+            builder.Entity<Menu>(l =>
+            {
+                l.HasKey(k => k.Id);
+                l.HasIndex(k => k.Code).IsUnique();
+                l.Property(l => l.Target);
+                l.HasMany(c => c.Children)
+                    .WithOne()
+                    .HasForeignKey(m => m.ParentId)
+                    .OnDelete(DeleteBehavior.Restrict);
+                var converter = new ValueConverter<MenuTargetEnum, string>(
+                                    v => EnumHelper.GetDescription(v),
+                                    v => EnumHelper.GetValueFromDescription<MenuTargetEnum>(v)
+                                );
+                l.Property(l => l.Target).HasConversion(converter);
+
+            });
+
+            // global filter
             foreach (var entityType in builder.Model.GetEntityTypes())
             {
                 if (typeof(ISoftDelete).IsAssignableFrom(entityType.ClrType))

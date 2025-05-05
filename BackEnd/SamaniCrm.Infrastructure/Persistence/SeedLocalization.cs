@@ -49,7 +49,7 @@ namespace SamaniCrm.Infrastructure.Persistence
 
 
             // seed roles
-            var roles = dbContext.Roles.Select(s => s.Name).Distinct().ToList();
+            var roles = dbContext.Roles.Select(s => "Role:" + s.Name).Distinct().ToList();
             var existingRoleLocalizations = dbContext.Localizations
                 .Where(l => roles.Contains(l.Key))
                 .Select(l => new { l.Key, l.Culture })
@@ -58,13 +58,13 @@ namespace SamaniCrm.Infrastructure.Persistence
             {
                 foreach (var culture in allLanguages)
                 {
-                    if (!existingRoleLocalizations.Contains(new { Key = "Role:" + roleKey, Culture = culture }))
+                    if (!existingRoleLocalizations.Contains(new { Key = roleKey, Culture = culture }))
                     {
                         newLocalizations.Add(new Localization
                         {
-                            Key = "Role:" + roleKey,
+                            Key = roleKey,
                             Culture = culture,
-                            Value = string.Empty, // بعداً توسط کاربر تکمیل می‌شود
+                            Value = string.Empty, // بعداً توسط کاربر تکمیل می شود
                         });
                     }
                 }
@@ -93,12 +93,37 @@ namespace SamaniCrm.Infrastructure.Persistence
                         {
                             Key = permissionKey,
                             Culture = culture,
-                            Value = string.Empty, // بعداً توسط کاربر تکمیل می‌شود
+                            Value = string.Empty, // بعداً توسط کاربر تکمیل می شود
                         });
                     }
                 }
             }
-            Console.WriteLine("new localize count:", newLocalizations.Count);
+
+
+            // seed static menus
+            var allMenus = await dbContext.Menus.Select(s => "Menu:" + s.Code).ToListAsync();
+            var existingMenuLocalizations = dbContext.Localizations
+              .Where(l => allMenus.Contains(l.Key))
+              .Select(l => new { l.Key, l.Culture })
+              .ToHashSet();
+            foreach (var mnu in allMenus)
+            {
+                foreach (var culture in allLanguages)
+                {
+                    if (!existingMenuLocalizations.Contains(new { Key = mnu, Culture = culture }))
+                    {
+                        newLocalizations.Add(new Localization
+                        {
+                            Key = mnu,
+                            Culture = culture,
+                            Value = string.Empty, // بعداً توسط کاربر تکمیل می شود
+                        });
+                    }
+                }
+            }
+
+
+            Console.WriteLine("new localize count:" + newLocalizations.Count);
             if (newLocalizations.Any())
             {
                 dbContext.Localizations.AddRange(newLocalizations);
