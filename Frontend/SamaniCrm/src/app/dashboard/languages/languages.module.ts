@@ -11,6 +11,7 @@ import { LanguageServiceProxy } from '@shared/service-proxies/api/language.servi
 import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { CreateOrEditLanguageComponent } from './create-or-edit-language/create-or-edit-language.component';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [LanguageListComponent, LocalizationKeysComponent, CreateOrEditLanguageComponent],
@@ -23,6 +24,7 @@ import { CreateOrEditLanguageComponent } from './create-or-edit-language/create-
     MaterialCommonModule,
     PaginationComponent,
     ReactiveFormsModule,
+    SharedModule,
   ],
   providers: [LanguageServiceProxy],
 })

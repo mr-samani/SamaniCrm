@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.DTOs;
 
 namespace SamaniCrm.Application.Localize.Queries
 {
-    public record class GetAllLanguageKeys(string culture) : IRequest<Dictionary<string, string?>>;
+    public record class GetAllLanguageKeys(string culture) : IRequest<List<LocalizationKeyDTO>>;
 
-    public class GetAllLanguageKeysHandler : IRequestHandler<GetAllLanguageKeys, Dictionary<string, string?>>
+    public class GetAllLanguageKeysHandler : IRequestHandler<GetAllLanguageKeys, List<LocalizationKeyDTO>>
     {
         private readonly IApplicationDbContext _dbContext;
 
@@ -20,11 +21,19 @@ namespace SamaniCrm.Application.Localize.Queries
             _dbContext = dbContext;
         }
 
-        public async Task<Dictionary<string, string?>> Handle(GetAllLanguageKeys request, CancellationToken cancellationToken)
+        public async Task<List<LocalizationKeyDTO>> Handle(GetAllLanguageKeys request, CancellationToken cancellationToken)
         {
-            Dictionary<string, string?> result = await _dbContext.Localizations
+            var result = await _dbContext.Localizations
+                .Select(s => new LocalizationKeyDTO()
+                {
+                    Key = s.Key,
+                    Culture = s.Culture,
+                    Category = s.Category,
+                    Id = s.Id,
+                    Value = s.Value ?? ""
+                })
                  .Where(x => x.Culture == request.culture)
-                 .ToDictionaryAsync(x => x.Key, x => x.Value);
+                 .ToListAsync();
             return result;
         }
     }

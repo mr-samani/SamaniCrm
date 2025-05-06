@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { LocalizationCategoryEnum } from './localization-category-enum';
 
 
 /**
@@ -26,6 +27,7 @@ export interface ILocalizationKeyDTO {
   culture: string;
   key: string;
   value?: string;
+  category: LocalizationCategoryEnum;
 }
 
 /** Class for LocalizationKeyDTO */
@@ -34,6 +36,7 @@ export class LocalizationKeyDTO implements ILocalizationKeyDTO {
   culture!: string;
   key!: string;
   value?: string;
+  category!: LocalizationCategoryEnum;
 
   constructor(data?: ILocalizationKeyDTO) {
     if (data) {
@@ -50,6 +53,7 @@ init(data?: any) {
     this.culture = data["culture"];
     this.key = data["key"];
     this.value = data["value"];
+    this.category = data["category"];
   }
 }
 

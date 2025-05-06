@@ -22,6 +22,7 @@ namespace SamaniCrm.Api.Controllers
             _mediator = mediator;
         }
 
+        #region Language
 
         [HttpGet("GetAllLanguages")]
         [Permission(AppPermissions.LanguageManagement_List)]
@@ -33,14 +34,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
 
-        [HttpGet("GetAllLanguageKeys")]
-        [Permission(AppPermissions.LanguageManagement_List)]
-        [ProducesResponseType(typeof(ApiResponse<Dictionary<string, string?>>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllLanguageKeys(string culture)
-        {
-            Dictionary<string, string?> result = await _mediator.Send(new GetAllLanguageKeys(culture));
-            return ApiOk<Dictionary<string, string?>>(result);
-        }
+      
 
 
         [HttpPost("CreateOrUpdate")]
@@ -72,6 +66,19 @@ namespace SamaniCrm.Api.Controllers
             return ApiOk(result);
         }
 
+        #endregion
+
+        #region Localization keys
+        [HttpGet("GetAllLanguageKeys")]
+        [Permission(AppPermissions.LanguageManagement_List)]
+        [ProducesResponseType(typeof(ApiResponse<List<LocalizationKeyDTO>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllLanguageKeys(string culture)
+        {
+           var result = await _mediator.Send(new GetAllLanguageKeys(culture));
+            return ApiOk<List<LocalizationKeyDTO>>(result);
+        }
+
+
         [HttpPost("CreateOrEditLocalizeKeys")]
         [Permission(AppPermissions.LanguageManagement_Create)]
         [Permission(AppPermissions.LanguageManagement_Edit)]
@@ -102,6 +109,7 @@ namespace SamaniCrm.Api.Controllers
             return ApiOk(result);
         }
 
+        #endregion
 
     }
 }

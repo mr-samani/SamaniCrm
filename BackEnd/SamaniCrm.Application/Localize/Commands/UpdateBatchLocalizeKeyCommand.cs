@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.DTOs;
 using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Application.Localize.Commands
 {
-    public record UpdateBatchLocalizeKeyCommand(Dictionary<string, string?> data, string culture) : IRequest<bool>;
+    public record UpdateBatchLocalizeKeyCommand(List<LocalizationKeyDTO> data, string culture) : IRequest<bool>;
 
+    
 
     public class UpdateBatchLocalizeKeyCommandHandler : IRequestHandler<UpdateBatchLocalizeKeyCommand, bool>
     {
@@ -35,7 +37,8 @@ namespace SamaniCrm.Application.Localize.Commands
                     {
                         Culture = request.culture,
                         Key = item.Key,
-                        Value = item.Value
+                        Value = item.Value,
+                        Category = item.Category,
                     });
                 }
                 else if (found != null && found.Value != item.Value)

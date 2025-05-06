@@ -11,6 +11,9 @@
     <button class="btn primary input-group-text">
       <i class="fa fa-search"></i>
     </button>
+    <button class="btn primary input-group-text" type="button">
+      <i class="fa fa-search"></i>
+    </button>
   </form>
 
   <div class="m-auto py-5" *ngIf="loading">
@@ -22,22 +25,30 @@
       <tr>
         <th>#</th>
         <th>{{ 'Delete' | translate }}</th>
+        <th>{{ 'Category' | translate }}</th>
         <th>{{ 'Key' | translate }}</th>
         <th>{{ 'Value' | translate }}</th>
       </tr>
     </thead>
     <tbody>
-      @for (item of filteredList | keyvalue; track $index) {
+      @for (item of filteredList; track $index) {
         <tr>
           <td>{{ (page - 1) * perPage + ($index + 1) }}</td>
           <td>
-            <button type="button" mat-icon-button (click)="remove(item.key)">
+            <button type="button" mat-icon-button (click)="remove(item.key, $index)">
               <i class="fa fa-trash"></i>
             </button>
           </td>
+          <td>
+            <mat-select class="form-control" [(ngModel)]="item.category">
+              <mat-option [value]="+c" *ngFor="let c of LocalizationCategoryEnum | enumToArray">
+                {{ 'LocalizationCategoryEnum_' + c | translate }}
+              </mat-option>
+            </mat-select>
+          </td>
           <td vAlign="middle">{{ item.key }}</td>
           <td class="w-100">
-            <input type="text" class="form-control" [(ngModel)]="allLocalizations[item.key]" />
+            <input type="text" class="form-control" [(ngModel)]="item.value" />
           </td>
         </tr>
       }

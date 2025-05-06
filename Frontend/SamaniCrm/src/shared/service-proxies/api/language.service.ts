@@ -31,7 +31,7 @@ import { LanguageDTOListApiResponse } from '../model/language-dto-list-api-respo
 // @ts-ignore
 import { LocalizationKeyDTO } from '../model/localization-key-dto';
 // @ts-ignore
-import { StringStringDictionaryApiResponse } from '../model/string-string-dictionary-api-response';
+import { LocalizationKeyDTOListApiResponse } from '../model/localization-key-dto-list-api-response';
 // @ts-ignore
 import { UpdateBatchLocalizeKeyCommand } from '../model/update-batch-localize-key-command';
 
@@ -390,9 +390,9 @@ export class LanguageServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllLanguageKeys(culture?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<StringStringDictionaryApiResponse>;
-    public getAllLanguageKeys(culture?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<StringStringDictionaryApiResponse>>;
-    public getAllLanguageKeys(culture?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<StringStringDictionaryApiResponse>>;
+    public getAllLanguageKeys(culture?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<LocalizationKeyDTOListApiResponse>;
+    public getAllLanguageKeys(culture?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LocalizationKeyDTOListApiResponse>>;
+    public getAllLanguageKeys(culture?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LocalizationKeyDTOListApiResponse>>;
     public getAllLanguageKeys(culture?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -430,7 +430,7 @@ export class LanguageServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Language/GetAllLanguageKeys`;
-        return this.httpClient.request<StringStringDictionaryApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<LocalizationKeyDTOListApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,

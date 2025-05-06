@@ -18,7 +18,7 @@ namespace SamaniCrm.Core.Shared.Helpers
         }
 
 
-        public static T GetValueFromDescription<T>(string description) where T : Enum
+        public static T GetValueFromDescription<T>(string description, T defaultValue) where T : Enum
         {
             foreach (var field in typeof(T).GetFields())
             {
@@ -26,7 +26,7 @@ namespace SamaniCrm.Core.Shared.Helpers
                 if (attr != null && attr.Description == description)
                     return (T)field.GetValue(null);
             }
-
+            return defaultValue;
             throw new ArgumentException($"No matching enum value found for description '{description}' in {typeof(T).Name}");
         }
 

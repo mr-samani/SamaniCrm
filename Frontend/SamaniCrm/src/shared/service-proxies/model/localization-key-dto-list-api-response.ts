@@ -7,7 +7,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Meta } from './meta';
 import { LocalizationKeyDTO } from './localization-key-dto';
+import { ApiError } from './api-error';
 
 
 /**
@@ -21,18 +23,22 @@ import { LocalizationKeyDTO } from './localization-key-dto';
  */
 /* Created with custom template */
 
-/** Interface for UpdateBatchLocalizeKeyCommand */
-export interface IUpdateBatchLocalizeKeyCommand {
+/** Interface for LocalizationKeyDTOListApiResponse */
+export interface ILocalizationKeyDTOListApiResponse {
+  success?: boolean;
   data?: Array<LocalizationKeyDTO>;
-  culture?: string;
+  errors?: Array<ApiError>;
+  meta?: Meta;
 }
 
-/** Class for UpdateBatchLocalizeKeyCommand */
-export class UpdateBatchLocalizeKeyCommand implements IUpdateBatchLocalizeKeyCommand {
+/** Class for LocalizationKeyDTOListApiResponse */
+export class LocalizationKeyDTOListApiResponse implements ILocalizationKeyDTOListApiResponse {
+  success?: boolean;
   data?: Array<LocalizationKeyDTO>;
-  culture?: string;
+  errors?: Array<ApiError>;
+  meta?: Meta;
 
-  constructor(data?: IUpdateBatchLocalizeKeyCommand) {
+  constructor(data?: ILocalizationKeyDTOListApiResponse) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -43,17 +49,23 @@ export class UpdateBatchLocalizeKeyCommand implements IUpdateBatchLocalizeKeyCom
 
 init(data?: any) {
   if (data) {
+    this.success = data["success"];
     if (Array.isArray(data["data"])) {
       this.data = [] as any;
       for (let item of data["data"])
         (this.data as any).push(LocalizationKeyDTO.fromJS(item));
     }
-    this.culture = data["culture"];
+    if (Array.isArray(data["errors"])) {
+      this.errors = [] as any;
+      for (let item of data["errors"])
+        (this.errors as any).push(ApiError.fromJS(item));
+    }
+    this.meta = data["meta"];
   }
 }
 
-  static fromJS(data: any): UpdateBatchLocalizeKeyCommand {
-    const instance = new UpdateBatchLocalizeKeyCommand();
+  static fromJS(data: any): LocalizationKeyDTOListApiResponse {
+    const instance = new LocalizationKeyDTOListApiResponse();
     instance.init(data);
     return instance;
   }

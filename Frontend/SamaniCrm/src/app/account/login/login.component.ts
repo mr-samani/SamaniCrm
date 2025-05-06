@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
 import { AppConst } from '@shared/app-const';
@@ -22,17 +23,22 @@ export class LoginComponent extends AppComponentBase implements OnInit {
   @ViewChild('captcha') captcha!: CaptchaComponent;
   requiredCaptcha = AppConst.requireCaptcha;
   showPassword = false;
-  constructor(injector: Injector) {
+  constructor(
+    injector: Injector,
+    private matDialog: MatDialog,
+  ) {
     super(injector);
     this.loginForm = this.fb.group({
       userName: ['', [Validators.required]],
       password: ['', [Validators.required]],
-      captcha: [new InputCaptchaDTO({captchaKey:'',captchaText:''})],
+      captcha: [new InputCaptchaDTO({ captchaKey: '', captchaText: '' })],
       rememberMe: [true],
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.matDialog.closeAll();
+  }
 
   login() {
     if (this.loginForm.invalid) {

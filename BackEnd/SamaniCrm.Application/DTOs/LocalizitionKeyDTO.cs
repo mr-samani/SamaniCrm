@@ -14,5 +14,7 @@ namespace SamaniCrm.Application.DTOs
         public required string Culture { get; set; }
         public required string Key { get; set; }
         public string Value { get; set; } = string.Empty;
+        public required LocalizationCategoryEnum Category { get; set; } = LocalizationCategoryEnum.App;
+
     }
 }

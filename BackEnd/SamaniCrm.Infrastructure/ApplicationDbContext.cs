@@ -29,7 +29,7 @@ namespace SamaniCrm.Infrastructure
         public DbSet<Language> Languages { get; set; }
         public DbSet<Localization> Localizations { get; set; }
         public DbSet<Menu> Menus { get; set; }
-        public DbSet<MenuTranslation> MenuTranslations { get; set; }    
+        public DbSet<MenuTranslation> MenuTranslations { get; set; }
 
 
 
@@ -104,20 +104,26 @@ namespace SamaniCrm.Infrastructure
                     .HasForeignKey(x => x.Culture)
                     .OnDelete(DeleteBehavior.Cascade);
                 l.HasIndex(x => new { x.Key, x.Culture }).IsUnique();
+
+
+                var converter = new ValueConverter<LocalizationCategoryEnum, string>(
+                                    v => EnumHelper.GetDescription(v),
+                                    v => EnumHelper.GetValueFromDescription<LocalizationCategoryEnum>(v, LocalizationCategoryEnum.Other)
+                                );
+                l.Property(l => l.Category).HasConversion(converter);
             });
 
 
             builder.Entity<Menu>(l =>
             {
                 l.HasKey(k => k.Id);
-                l.Property(l => l.Target);
                 l.HasMany(c => c.Children)
                     .WithOne()
                     .HasForeignKey(m => m.ParentId)
                     .OnDelete(DeleteBehavior.Restrict);
                 var converter = new ValueConverter<MenuTargetEnum, string>(
                                     v => EnumHelper.GetDescription(v),
-                                    v => EnumHelper.GetValueFromDescription<MenuTargetEnum>(v)
+                                    v => EnumHelper.GetValueFromDescription<MenuTargetEnum>(v, MenuTargetEnum.Self)
                                 );
                 l.Property(l => l.Target).HasConversion(converter);
             });

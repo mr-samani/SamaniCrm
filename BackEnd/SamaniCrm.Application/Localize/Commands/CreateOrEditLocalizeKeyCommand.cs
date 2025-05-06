@@ -53,7 +53,8 @@ namespace SamaniCrm.Application.Localize.Commands
                     {
                         Culture = request.culture,
                         Key = item.Key,
-                        Value = item.Value
+                        Value = item.Value,
+                        Category = item.Category,
                     });
                 }
             }

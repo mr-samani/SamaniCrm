@@ -36,6 +36,8 @@ model/input-captcha-dto.ts
 model/int32-api-response.ts
 model/language-dto-list-api-response.ts
 model/language-dto.ts
+model/localization-category-enum.ts
+model/localization-key-dto-list-api-response.ts
 model/localization-key-dto.ts
 model/login-command.ts
 model/login-result-api-response.ts
@@ -58,7 +60,6 @@ model/role-response-dto-api-response.ts
 model/role-response-dto-list-api-response.ts
 model/role-response-dto.ts
 model/string-api-response.ts
-model/string-string-dictionary-api-response.ts
 model/token-response-dto-api-response.ts
 model/token-response-dto.ts
 model/update-batch-localize-key-command.ts

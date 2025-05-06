@@ -65,6 +65,7 @@ namespace SamaniCrm.Infrastructure.Persistence
                             Key = roleKey,
                             Culture = culture,
                             Value = string.Empty, // بعداً توسط کاربر تکمیل می شود
+                            Category = LocalizationCategoryEnum.Role,
                         });
                     }
                 }
@@ -94,10 +95,17 @@ namespace SamaniCrm.Infrastructure.Persistence
                             Key = permissionKey,
                             Culture = culture,
                             Value = string.Empty, // بعداً توسط کاربر تکمیل می شود
+                            Category= LocalizationCategoryEnum.Permission,
                         });
                     }
                 }
             }
+
+
+
+            // seed localize enums
+            // newLocalizations.Concat()
+
 
 
           
