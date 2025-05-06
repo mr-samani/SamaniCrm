@@ -22,6 +22,7 @@ model/boolean-api-response.ts
 model/captcha-dto.ts
 model/change-active-menu-command.ts
 model/create-or-edit-language-command.ts
+model/create-or-edit-localize-key-command.ts
 model/create-or-edit-menu-command.ts
 model/create-user-command.ts
 model/delete-language-command.ts

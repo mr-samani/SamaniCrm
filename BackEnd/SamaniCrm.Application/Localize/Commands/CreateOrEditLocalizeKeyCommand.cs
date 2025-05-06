@@ -12,12 +12,13 @@ using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Application.Localize.Commands
 {
-    public record CreateOrEditLocalizeKeyCommand(string culture, List<LocalizationKeyDTO> items) : IRequest<bool>;
-
+    public record CreateOrEditLocalizeKeyCommand(
+       string Key,
+       List<LocalizationKeyDTO> Items
+        ) : IRequest<bool>;
 
     public class CreateOrEditLocalizeKeyCommandHandler : IRequestHandler<CreateOrEditLocalizeKeyCommand, bool>
     {
-
         private readonly IApplicationDbContext _dbContext;
 
         public CreateOrEditLocalizeKeyCommandHandler(IApplicationDbContext dbContext)
@@ -27,32 +28,24 @@ namespace SamaniCrm.Application.Localize.Commands
 
         public async Task<bool> Handle(CreateOrEditLocalizeKeyCommand request, CancellationToken cancellationToken)
         {
-            // بررسی وجود زبان
-            var language = await _dbContext.Languages.FindAsync(new object[] { request.culture }, cancellationToken);
-            if (language == null)
-                throw new NotFoundException(nameof(Language), request.culture);
 
-            // گرفتن کلیدهای موجود برای این زبان
-            var existingLocalizations = await _dbContext.Localizations
-                .Where(l => l.Culture == request.culture)
-                .ToDictionaryAsync(l => l.Key, cancellationToken);
+
             List<Localization> addKeys = [];
-            foreach (var item in request.items)
+            foreach (var item in request.Items)
             {
-                if (string.IsNullOrWhiteSpace(item.Key))
-                    continue;
-
+                var found = await _dbContext.Localizations
+                .Where(w => w.Key == request.Key && w.Culture == item.Culture).FirstOrDefaultAsync();
                 // update value if exist
-                if (existingLocalizations.TryGetValue(item.Key, out var localization))
+                if (found != null)
                 {
-                    localization.Value = item.Value;
+                    found.Value = item.Value;
                 }
                 else
                 {
                     addKeys.Add(new Localization
                     {
-                        Culture = request.culture,
-                        Key = item.Key,
+                        Culture = item.Culture,
+                        Key = request.Key,
                         Value = item.Value,
                         Category = item.Category,
                     });

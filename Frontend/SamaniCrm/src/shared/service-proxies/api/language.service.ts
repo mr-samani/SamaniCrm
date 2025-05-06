@@ -23,13 +23,13 @@ import { BooleanApiResponse } from '../model/boolean-api-response';
 // @ts-ignore
 import { CreateOrEditLanguageCommand } from '../model/create-or-edit-language-command';
 // @ts-ignore
+import { CreateOrEditLocalizeKeyCommand } from '../model/create-or-edit-localize-key-command';
+// @ts-ignore
 import { DeleteLanguageCommand } from '../model/delete-language-command';
 // @ts-ignore
 import { DeleteLocalizeKeyCommand } from '../model/delete-localize-key-command';
 // @ts-ignore
 import { LanguageDTOListApiResponse } from '../model/language-dto-list-api-response';
-// @ts-ignore
-import { LocalizationKeyDTO } from '../model/localization-key-dto';
 // @ts-ignore
 import { LocalizationKeyDTOListApiResponse } from '../model/localization-key-dto-list-api-response';
 // @ts-ignore
@@ -116,19 +116,14 @@ export class LanguageServiceProxy extends BaseService {
     }
 
     /**
-     * @param culture 
-     * @param localizationKeyDTO 
+     * @param createOrEditLocalizeKeyCommand 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createOrEditLocalizeKeys(culture?: string, localizationKeyDTO?: Array<LocalizationKeyDTO>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<BooleanApiResponse>;
-    public createOrEditLocalizeKeys(culture?: string, localizationKeyDTO?: Array<LocalizationKeyDTO>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BooleanApiResponse>>;
-    public createOrEditLocalizeKeys(culture?: string, localizationKeyDTO?: Array<LocalizationKeyDTO>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BooleanApiResponse>>;
-    public createOrEditLocalizeKeys(culture?: string, localizationKeyDTO?: Array<LocalizationKeyDTO>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>culture, 'culture');
+    public createOrEditLocalizeKey(createOrEditLocalizeKeyCommand?: CreateOrEditLocalizeKeyCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<BooleanApiResponse>;
+    public createOrEditLocalizeKey(createOrEditLocalizeKeyCommand?: CreateOrEditLocalizeKeyCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BooleanApiResponse>>;
+    public createOrEditLocalizeKey(createOrEditLocalizeKeyCommand?: CreateOrEditLocalizeKeyCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BooleanApiResponse>>;
+    public createOrEditLocalizeKey(createOrEditLocalizeKeyCommand?: CreateOrEditLocalizeKeyCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -171,12 +166,11 @@ export class LanguageServiceProxy extends BaseService {
             }
         }
 
-        let localVarPath = `/api/Language/CreateOrEditLocalizeKeys`;
+        let localVarPath = `/api/Language/CreateOrEditLocalizeKey`;
         return this.httpClient.request<BooleanApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: localizationKeyDTO,
-                params: localVarQueryParameters,
+                body: createOrEditLocalizeKeyCommand,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

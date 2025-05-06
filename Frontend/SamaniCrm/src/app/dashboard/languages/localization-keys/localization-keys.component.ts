@@ -1,5 +1,5 @@
 import { Component, Inject, Injector, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import {
@@ -13,6 +13,7 @@ import { DownloadService } from '@shared/services/download.service';
 import { JsonFileReaderService } from '@shared/services/json-file-reader.service';
 import { cloneDeep, toLower } from 'lodash-es';
 import { finalize } from 'rxjs/operators';
+import { AddNewLocalizeKeyComponent } from '../add-new-localize-key/add-new-localize-key.component';
 
 @Component({
   selector: 'app-localization-keys',
@@ -39,6 +40,7 @@ export class LocalizationKeysComponent extends AppComponentBase implements OnIni
     private languageService: LanguageServiceProxy,
     private downloadService: DownloadService,
     private jsonFileReaderService: JsonFileReaderService,
+    private matDialog: MatDialog,
   ) {
     super(injector);
     this.culture = _data.culture;
@@ -141,5 +143,20 @@ export class LocalizationKeysComponent extends AppComponentBase implements OnIni
         this.notify.error(this.l('JsonFileIsInvalid'));
       }
     });
+  }
+
+  openNewLocalizeDialog() {
+    this.matDialog
+      .open(AddNewLocalizeKeyComponent, {
+        data: {
+          culture: this.culture,
+        },
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.getList();
+        }
+      });
   }
 }

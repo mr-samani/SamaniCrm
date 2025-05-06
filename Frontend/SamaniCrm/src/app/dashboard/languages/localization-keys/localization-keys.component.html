@@ -11,8 +11,13 @@
     <button class="btn primary input-group-text">
       <i class="fa fa-search"></i>
     </button>
-    <button class="btn primary input-group-text" type="button">
-      <i class="fa fa-search"></i>
+    <button
+      class="btn primary input-group-text"
+      type="button"
+      (click)="openNewLocalizeDialog()"
+      [title]="'AddNeyKeyToAllLanguages' | translate">
+      <i class="fa fa-plus mx-1"></i>
+      <span>{{ 'AddNewLocalizeKey' | translate }}</span>
     </button>
   </form>
 

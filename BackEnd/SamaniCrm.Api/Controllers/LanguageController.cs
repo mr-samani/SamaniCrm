@@ -79,13 +79,21 @@ namespace SamaniCrm.Api.Controllers
         }
 
 
-        [HttpPost("CreateOrEditLocalizeKeys")]
+
+
+        /// <summary>
+        /// افزودن یک کلید به کلیه زبان ها
+        /// </summary>
+        /// <param name="culture"></param>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        [HttpPost("CreateOrEditLocalizeKey")]
         [Permission(AppPermissions.LanguageManagement_Create)]
         [Permission(AppPermissions.LanguageManagement_Edit)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateOrEditLocalizeKeys(string culture, List<LocalizationKeyDTO> items)
+        public async Task<IActionResult> CreateOrEditLocalizeKey(CreateOrEditLocalizeKeyCommand input)
         {
-            var result = await _mediator.Send(new CreateOrEditLocalizeKeyCommand(culture, items));
+            var result = await _mediator.Send(input);
             return ApiOk(result);
         }
 

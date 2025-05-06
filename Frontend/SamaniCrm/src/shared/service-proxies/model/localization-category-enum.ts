@@ -15,8 +15,14 @@ export enum LocalizationCategoryEnum {
 
     Permission = 1,
 
-    App = 2,
+    Backend = 2,
 
-    Other = 3
+    Frontend = 3,
+
+    Enum = 4,
+
+    App = 5,
+
+    Other = 6
 }
 

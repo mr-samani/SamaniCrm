@@ -1,8 +1,8 @@
 @echo off
 
- cd Frontend\SamaniCrm
+cd Frontend\SamaniCrm
 
-start cmd /k "npm run generate-api"
+npm run generate-api
 
 
  

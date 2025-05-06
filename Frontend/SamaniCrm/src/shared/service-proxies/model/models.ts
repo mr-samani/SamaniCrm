@@ -5,6 +5,7 @@ export * from './boolean-api-response';
 export * from './captcha-dto';
 export * from './change-active-menu-command';
 export * from './create-or-edit-language-command';
+export * from './create-or-edit-localize-key-command';
 export * from './create-or-edit-menu-command';
 export * from './create-user-command';
 export * from './delete-language-command';
