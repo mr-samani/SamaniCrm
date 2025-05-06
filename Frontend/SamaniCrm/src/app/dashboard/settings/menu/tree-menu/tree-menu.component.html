@@ -34,7 +34,7 @@
   <div class="node-item" [attr.data-id]="node.id" [attr.id]="'node-' + node.id">
     <div class="node-title" (click)="node.isExpanded = !node.isExpanded">
       <mat-spinner color="primary" diameter="20" *ngIf="node.loading"></mat-spinner>
-      <img *ngIf="node.file && node.file.thumbnails" [src]="node.file.thumbnails[0].path" />
+      <i [class]="node.icon"></i>
       @if (node.children && node.children.length > 0) {
         @if (node.isExpanded) {
           <i class="fa fa-circle-minus mx-2"></i>

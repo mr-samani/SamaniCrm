@@ -6,27 +6,21 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SamaniCrm.Infrastructure.Identity.Migrations
 {
     /// <inheritdoc />
-    public partial class Menu : Migration
+    public partial class menuAndTranslation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<Guid>(
-                name: "MenuId",
-                table: "Localizations",
-                type: "uniqueidentifier",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "Menus",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Icon = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     Url = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
                     OrderIndex = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsSystem = table.Column<bool>(type: "bit", nullable: false),
                     ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Target = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -48,47 +42,58 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Localizations_MenuId",
-                table: "Localizations",
-                column: "MenuId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Menus_Code",
-                table: "Menus",
-                column: "Code",
-                unique: true);
+            migrationBuilder.CreateTable(
+                name: "MenuTranslations",
+                columns: table => new
+                {
+                    MenuId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Culture = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MenuTranslations", x => new { x.MenuId, x.Culture });
+                    table.ForeignKey(
+                        name: "FK_MenuTranslations_Languages_Culture",
+                        column: x => x.Culture,
+                        principalTable: "Languages",
+                        principalColumn: "Culture",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MenuTranslations_Menus_MenuId",
+                        column: x => x.MenuId,
+                        principalTable: "Menus",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Menus_ParentId",
                 table: "Menus",
                 column: "ParentId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Localizations_Menus_MenuId",
-                table: "Localizations",
-                column: "MenuId",
-                principalTable: "Menus",
-                principalColumn: "Id");
+            migrationBuilder.CreateIndex(
+                name: "IX_MenuTranslations_Culture",
+                table: "MenuTranslations",
+                column: "Culture");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Localizations_Menus_MenuId",
-                table: "Localizations");
+            migrationBuilder.DropTable(
+                name: "MenuTranslations");
 
             migrationBuilder.DropTable(
                 name: "Menus");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Localizations_MenuId",
-                table: "Localizations");
-
-            migrationBuilder.DropColumn(
-                name: "MenuId",
-                table: "Localizations");
         }
     }
 }

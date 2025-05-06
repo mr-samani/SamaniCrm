@@ -12,10 +12,6 @@ namespace SamaniCrm.Domain.Entities
     public class Menu : IAuditableEntity, ISoftDelete
     {
         public Guid Id { get; set; }
-        /// <summary>
-        /// Is Uniquie for localization key
-        /// </summary>
-        public required string Code { get; set; }
         [MaxLength(300)]
         public string? Icon { get; set; }
         [MaxLength(2000)]
@@ -24,6 +20,7 @@ namespace SamaniCrm.Domain.Entities
         public int OrderIndex { get; set; }
 
         public bool IsActive { get; set; } = true;
+        public bool IsSystem { get; set; } = false;
 
         public Guid? ParentId { get; set; }
 
@@ -32,7 +29,7 @@ namespace SamaniCrm.Domain.Entities
 
         public virtual ICollection<Menu> Children { get; set; } = new List<Menu>();
 
-        public virtual ICollection<Localization>? Localizations { get; set; }
+        public virtual ICollection<MenuTranslation>? Translations { get; set; }
 
 
 

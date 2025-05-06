@@ -97,7 +97,7 @@
         <button mat-menu-item *ngFor="let lang of languages" (click)="changeLanguage(lang.culture!)" class="language-menu">
           <div class="d-flex align-items-center g-5">
             <!-- <i class="flag" [ngClass]="lang.code"></i> -->
-            <img [src]="lang.flag" />
+            <img [src]="'images/flags/' + lang.flag + '.png'" />
             <span>{{ lang.name }}</span>
           </div>
         </button>

@@ -13,6 +13,7 @@ using Hangfire.SqlServer;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using SamaniCrm.Api.Middlewares;
 using SamaniCrm.Application.Auth.Commands;
@@ -27,6 +28,7 @@ using SamaniCrm.Infrastructure.Captcha;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Services;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace SamaniCrm.Infrastructure.Extensions;
 public static class ServiceCollectionExtensions
@@ -155,6 +157,7 @@ public static class ServiceCollectionExtensions
                 Type = SecuritySchemeType.ApiKey,
                 Scheme = "Bearer"
             });
+            c.SchemaFilter<AddEnumNamesSchemaFilter>();
 
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
@@ -249,3 +252,26 @@ public static class ServiceCollectionExtensions
         return services;
     }
 }
+
+
+public class AddEnumNamesSchemaFilter : ISchemaFilter
+{
+    public void Apply(OpenApiSchema schema, SchemaFilterContext context)
+    {
+        var type = context.Type;
+
+        if (type.IsEnum)
+        {
+            var enumNames = Enum.GetNames(type);
+            var enumNamesArray = new OpenApiArray();
+            foreach (var name in enumNames)
+            {
+                enumNamesArray.Add(new OpenApiString(name));
+            }
+
+            schema.Extensions.Add("x-enum-varnames", enumNamesArray);
+        }
+    }
+}
+
+

@@ -34,7 +34,7 @@ const routes: Routes = [
       //   path: 'maintenance',
       //   loadChildren: () => import('./settings/maintenance/maintenance.module').then((m) => m.MaintenanceModule),
       // },
-      // { path: 'menu', loadChildren: () => import('./settings/menu/menu.module').then((m) => m.MenuModule) },
+      { path: 'menu', loadChildren: () => import('./settings/menu/menu.module').then((m) => m.MenuModule) },
 
       // products
       // {

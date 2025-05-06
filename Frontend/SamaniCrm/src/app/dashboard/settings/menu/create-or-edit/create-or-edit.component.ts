@@ -2,40 +2,44 @@ import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
-import { Apis } from '@shared/apis';
 import { finalize } from 'rxjs';
-import { GetMenuForEditDto, MenuTranslation } from '../models/get-menu-for-edit';
-import { LanguageDto } from '@shared/models/language-dto';
 import { AppConst } from '@shared/app-const';
+import { MenuServiceProxy } from '@shared/service-proxies/api/menu.service';
+import { CreateOrEditMenuCommand, MenuTargetEnum, MenuTranslationsDTO } from '@shared/service-proxies';
 
 @Component({
   selector: 'create-or-edit-menu',
   templateUrl: './create-or-edit.component.html',
   styleUrls: ['./create-or-edit.component.scss'],
+  standalone: false,
 })
 export class CreateOrEditMenuComponent extends AppComponentBase implements OnInit {
   form: FormGroup;
   loading = false;
   saving = false;
   isUpdate: boolean;
-  translations?: MenuTranslation[];
+  translations?: MenuTranslationsDTO[];
   id: string;
   constructor(
     injector: Injector,
-    @Inject(MAT_DIALOG_DATA) _data: any,
+    @Inject(MAT_DIALOG_DATA) _data: { id: string },
     private dialogRef: MatDialogRef<CreateOrEditMenuComponent>,
+    private menuService: MenuServiceProxy,
   ) {
     super(injector);
     this.form = this.fb.group({
       url: ['', [Validators.maxLength(500)]],
       icon: ['', [Validators.maxLength(200)]],
       translations: this.fb.array([]),
+      isActive: [true],
+      isSystem: [{ value: false, disabled: true }],
+      target: [MenuTargetEnum.Self, [Validators.required]],
     });
     this.id = _data.id;
 
-    if (_data.id) {
+    if (this.id) {
       this.isUpdate = true;
-      this.getForEdit(_data.id);
+      this.getForEdit(this.id);
     } else {
       this.isUpdate = false;
       this.getForCreate();
@@ -44,28 +48,37 @@ export class CreateOrEditMenuComponent extends AppComponentBase implements OnIni
 
   ngOnInit(): void {}
 
+  public get MenuTargetEnum(): typeof MenuTargetEnum {
+    return MenuTargetEnum;
+  }
   getForCreate() {
     this.translations = [];
     for (let item of AppConst.languageList ?? []) {
-      this.translations.push({
-        id: undefined,
-        lang: item.code,
-        title: '',
-      });
+      this.translations.push(
+        new MenuTranslationsDTO({
+          culture: item.culture!,
+          title: '',
+          menuId: this.id,
+        }),
+      );
     }
     this.setTranslations();
   }
 
   getForEdit(id: string) {
     this.loading = true;
-    this.dataService
-      .get<{ id: string }, GetMenuForEditDto>(Apis.getMenuForEdit, { id })
+    this.menuService
+      .getForEdit(id)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
         next: (response) => {
-          this.form.patchValue(response.data);
-          this.translations = response.data.translations;
-          this.setTranslations();
+          if (response.success && response.data) {
+            this.form.patchValue(response.data);
+            this.translations = response.data.translations;
+            this.setTranslations();
+          } else {
+            this.dialogRef.close();
+          }
         },
         error: (err) => {
           this.dialogRef.close();
@@ -84,10 +97,10 @@ export class CreateOrEditMenuComponent extends AppComponentBase implements OnIni
     this.translations.forEach((translation) => {
       this.translationsArray.push(
         this.fb.group({
-          lang: [translation.lang, Validators.required],
+          culture: [translation.culture],
           // data: this.fb.group({
-          id: [translation.id],
           title: [translation.title, Validators.required],
+          menuId: [translation.menuId],
           //})
         }),
       );
@@ -101,19 +114,17 @@ export class CreateOrEditMenuComponent extends AppComponentBase implements OnIni
       return;
     }
     this.saving = true;
-    const input = this.form.value;
-    input.menuId = this.id;
-    this.dataService
-      .post(Apis.createOrEditMenu, input)
+    const input = new CreateOrEditMenuCommand();
+    input.init(this.form.value);
+    input.id = this.id;
+    this.menuService
+      .createOrUpdate(input)
       .pipe(finalize(() => (this.saving = false)))
       .subscribe({
         next: (response) => {
           if (response.success) {
             this.notify.success(this.l('SaveSuccessFully'));
             this.dialogRef.close(true);
-          } else {
-            let msg = response.message ?? this.l('Message.ErrorOccurred');
-            this.notify.error(msg);
           }
         },
       });

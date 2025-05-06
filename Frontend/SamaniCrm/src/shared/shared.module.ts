@@ -4,10 +4,12 @@ import { SanitizerPipe } from './pipes/sanitizer.pipe';
 import { LuxonFormatPipe } from './pipes/luxon-format.pipe';
 import { LuxonFromNowPipe } from './pipes/luxon-from-now.pipe';
 import { FileSizePipe } from './pipes/file-size.pipe';
+import { EnumToArrayPipe } from './pipes/enum-to-array.pipe';
 
+const pipes = [SanitizerPipe, LuxonFormatPipe, LuxonFromNowPipe, FileSizePipe, EnumToArrayPipe];
 @NgModule({
-  declarations: [SanitizerPipe, LuxonFormatPipe, LuxonFromNowPipe, FileSizePipe],
+  declarations: [...pipes],
   imports: [CommonModule],
-  exports: [SanitizerPipe, LuxonFormatPipe, LuxonFromNowPipe, FileSizePipe],
+  exports: [...pipes],
 })
 export class SharedModule {}

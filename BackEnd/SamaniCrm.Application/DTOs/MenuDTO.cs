@@ -10,12 +10,8 @@ namespace SamaniCrm.Application.DTOs
 {
     public class MenuDTO
     {
-        public Guid Id { get; set; }
-        /// <summary>
-        /// Is Uniquie for localization key
-        /// </summary>
-        public required string Code { get; set; }
-        public string Title { get; set; } = string.Empty;
+        public Guid? Id { get; set; }
+        public string? Title { get; set; }
         [MaxLength(300)]
         public string? Icon { get; set; }
         [MaxLength(2000)]
@@ -24,6 +20,8 @@ namespace SamaniCrm.Application.DTOs
         public int OrderIndex { get; set; }
 
         public bool IsActive { get; set; } = true;
+        public bool IsSystem { get; set; } = false;
+
 
         public Guid? ParentId { get; set; }
 
@@ -31,5 +29,14 @@ namespace SamaniCrm.Application.DTOs
         public MenuTargetEnum Target { get; set; } = MenuTargetEnum.Self;
 
         public List<MenuDTO> Children { get; set; } = [];
+
+        public List<MenuTranslationsDTO>? Translations { get; set; }
+    }
+
+    public class MenuTranslationsDTO
+    {
+        public Guid MenuId { get; set; }
+        public required string Culture { get; set; }
+        public string Title { get; set; } = string.Empty;
     }
 }

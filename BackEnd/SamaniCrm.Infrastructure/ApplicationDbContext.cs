@@ -29,6 +29,7 @@ namespace SamaniCrm.Infrastructure
         public DbSet<Language> Languages { get; set; }
         public DbSet<Localization> Localizations { get; set; }
         public DbSet<Menu> Menus { get; set; }
+        public DbSet<MenuTranslation> MenuTranslations { get; set; }    
 
 
 
@@ -109,7 +110,6 @@ namespace SamaniCrm.Infrastructure
             builder.Entity<Menu>(l =>
             {
                 l.HasKey(k => k.Id);
-                l.HasIndex(k => k.Code).IsUnique();
                 l.Property(l => l.Target);
                 l.HasMany(c => c.Children)
                     .WithOne()
@@ -120,8 +120,23 @@ namespace SamaniCrm.Infrastructure
                                     v => EnumHelper.GetValueFromDescription<MenuTargetEnum>(v)
                                 );
                 l.Property(l => l.Target).HasConversion(converter);
-
             });
+            builder.Entity<MenuTranslation>(t =>
+            {
+                t.HasKey(t => new { t.MenuId, t.Culture });
+                t.HasOne(x => x.Language)
+                    .WithMany().HasForeignKey(x => x.Culture)
+                    .OnDelete(DeleteBehavior.Cascade);
+                t.HasOne(x => x.Menu)
+                    .WithMany(x => x.Translations)
+                    .HasForeignKey(x => x.MenuId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+
+
+
+
 
             // global filter
             foreach (var entityType in builder.Model.GetEntityTypes())

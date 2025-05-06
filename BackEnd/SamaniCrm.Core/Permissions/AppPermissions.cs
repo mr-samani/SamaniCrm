@@ -41,6 +41,7 @@ namespace SamaniCrm.Core.Permissions
         public const string MenuManagement_Create = "Administrator.MenuManagement.Create";
         public const string MenuManagement_Edit = "Administrator.MenuManagement.Edit";
         public const string MenuManagement_Delete = "Administrator.MenuManagement.Delete";
+        public const string MenuManagement_ReOrder = "Administrator.MenuManagement.ReOrder";
 
     }
 

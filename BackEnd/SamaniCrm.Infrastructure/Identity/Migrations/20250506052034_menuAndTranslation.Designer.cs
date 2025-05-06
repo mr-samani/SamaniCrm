@@ -12,8 +12,8 @@ using SamaniCrm.Infrastructure;
 namespace SamaniCrm.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250505085511_Menu")]
-    partial class Menu
+    [Migration("20250506052034_menuAndTranslation")]
+    partial class menuAndTranslation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -196,9 +196,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<Guid?>("MenuId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Value")
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
@@ -206,8 +203,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Culture");
-
-                    b.HasIndex("MenuId");
 
                     b.HasIndex("Key", "Culture")
                         .IsUnique();
@@ -220,10 +215,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -245,6 +236,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSystem")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
@@ -270,12 +264,53 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Code")
-                        .IsUnique();
-
                     b.HasIndex("ParentId");
 
                     b.ToTable("Menus");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.MenuTranslation", b =>
+                {
+                    b.Property<Guid>("MenuId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Culture")
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MenuId", "Culture");
+
+                    b.HasIndex("Culture");
+
+                    b.ToTable("MenuTranslations");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Permission", b =>
@@ -552,10 +587,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SamaniCrm.Domain.Entities.Menu", null)
-                        .WithMany("Localizations")
-                        .HasForeignKey("MenuId");
-
                     b.Navigation("Language");
                 });
 
@@ -565,6 +596,25 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .WithMany("Children")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.MenuTranslation", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("Culture")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SamaniCrm.Domain.Entities.Menu", "Menu")
+                        .WithMany("Translations")
+                        .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("Menu");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.RolePermission", b =>
@@ -597,7 +647,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                 {
                     b.Navigation("Children");
 
-                    b.Navigation("Localizations");
+                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("SamaniCrm.Infrastructure.Identity.ApplicationRole", b =>

@@ -100,28 +100,7 @@ namespace SamaniCrm.Infrastructure.Persistence
             }
 
 
-            // seed static menus
-            var allMenus = await dbContext.Menus.Select(s => "Menu:" + s.Code).ToListAsync();
-            var existingMenuLocalizations = dbContext.Localizations
-              .Where(l => allMenus.Contains(l.Key))
-              .Select(l => new { l.Key, l.Culture })
-              .ToHashSet();
-            foreach (var mnu in allMenus)
-            {
-                foreach (var culture in allLanguages)
-                {
-                    if (!existingMenuLocalizations.Contains(new { Key = mnu, Culture = culture }))
-                    {
-                        newLocalizations.Add(new Localization
-                        {
-                            Key = mnu,
-                            Culture = culture,
-                            Value = string.Empty, // بعداً توسط کاربر تکمیل می شود
-                        });
-                    }
-                }
-            }
-
+          
 
             Console.WriteLine("new localize count:" + newLocalizations.Count);
             if (newLocalizations.Any())

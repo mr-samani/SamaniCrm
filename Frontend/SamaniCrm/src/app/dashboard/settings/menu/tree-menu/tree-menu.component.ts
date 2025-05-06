@@ -1,23 +1,15 @@
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { Component, Inject, Injector, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
-import { CdkDrag, CdkDragDrop, CdkDragMove, CdkDragPlaceholder, CdkDropList } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragMove } from '@angular/cdk/drag-drop';
 import { Subject, debounceTime, finalize } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { Apis } from '@shared/apis';
-import { MatButtonModule } from '@angular/material/button';
-import { TranslateModule } from '@ngx-translate/core';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MenuModel } from '../models/menu';
 import { CreateOrEditMenuComponent } from '../create-or-edit/create-or-edit.component';
+import { MenuServiceProxy } from '@shared/service-proxies/api/menu.service';
+import { ChangeActiveMenuCommand, DeleteMenuCommand } from '@shared/service-proxies';
+import { TreeNode } from '../TreeNode';
 
-export interface TreeNode extends MenuModel {
-  children: TreeNode[];
-
-  isExpanded?: boolean;
-  loading?: boolean;
-}
 export interface DropInfo {
   targetId: string;
   action?: string;
@@ -28,6 +20,7 @@ export interface DropInfo {
   templateUrl: './tree-menu.component.html',
   styleUrl: './tree-menu.component.scss',
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class TreeMenuComponent extends AppComponentBase implements OnInit, OnDestroy {
   nodes: TreeNode[] = [];
@@ -52,6 +45,7 @@ export class TreeMenuComponent extends AppComponentBase implements OnInit, OnDes
     @Inject(DOCUMENT) private document: Document,
     private dialog: MatDialog,
     private fileManagerService: FileManagerService,
+    private menuService: MenuServiceProxy,
   ) {
     super(injector);
   }
@@ -66,18 +60,18 @@ export class TreeMenuComponent extends AppComponentBase implements OnInit, OnDes
 
   reload() {
     this.loading = true;
-    this.dataService
-      .get<any, MenuModel[]>(Apis.menuList, {})
+    this.menuService
+      .getAllMenus()
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.list = response.data ?? [];
+        this.list = response.data ?? ([] as any);
       });
   }
 
   prepareDragDrop(nodes: TreeNode[]) {
     nodes.forEach((node) => {
-      this.dropTargetIds.push(node.id);
-      this.nodeLookup[node.id] = node;
+      this.dropTargetIds.push(node.id!);
+      this.nodeLookup[node.id!] = node;
       this.prepareDragDrop(node.children);
     });
   }
@@ -159,7 +153,7 @@ export class TreeMenuComponent extends AppComponentBase implements OnInit, OnDes
   getParentNodeId(id: string, nodesToSearch: TreeNode[], parentId: string): string {
     for (let node of nodesToSearch) {
       if (node.id == id) return parentId;
-      let ret = this.getParentNodeId(id, node.children, node.id);
+      let ret = this.getParentNodeId(id, node.children, node.id!);
       if (ret) return ret;
     }
     return '';
@@ -197,16 +191,14 @@ export class TreeMenuComponent extends AppComponentBase implements OnInit, OnDes
   }
 
   delete(item: TreeNode) {
-    this.confirmMessage('AreYouSureDelete', item.title).then((r) => {
+    this.confirmMessage('AreYouSureDelete', item.title ?? '').then((r) => {
       if (r.isConfirmed) {
-        this.dataService
-          .delete(Apis.deleteMenu, {
-            id: item.id,
-          })
-          .subscribe((response) => {
-            this.notify.success('DeleteSuccessfully');
-            this.deleteFromTree(this.nodes, item.id);
-          });
+        const input = new DeleteMenuCommand();
+        input.id = item.id;
+        this.menuService.deleteMenu(input).subscribe((response) => {
+          this.notify.success('DeleteSuccessfully');
+          this.deleteFromTree(this.nodes, item.id!);
+        });
       }
     });
   }
@@ -232,25 +224,20 @@ export class TreeMenuComponent extends AppComponentBase implements OnInit, OnDes
 
   changeActive(item: TreeNode) {
     item.loading = true;
-    this.dataService
-      .post<any, TreeNode[]>(Apis.changeActiveMenu, {
-        id: item.id,
-        isActive: !item.active,
-      })
+    const input = new ChangeActiveMenuCommand();
+    input.id = item.id;
+    input.isActive = !item.isActive;
+    this.menuService
+      .activeOrDeactive(input)
       .pipe(finalize(() => (item.loading = false)))
       .subscribe({
         next: (response) => {
           if (response.success) {
             this.notify.success(this.l('SaveSuccessFully'));
-          } else {
-            let msg = response.message ?? this.l('Message.ErrorOccurred');
-            this.notify.error(msg);
-            item.active = !item.active;
+            item.isActive = !item.isActive;
           }
         },
-        error: (err) => {
-          item.active = !item.active;
-        },
+        error: (err) => {},
       });
   }
 

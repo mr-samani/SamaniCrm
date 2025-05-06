@@ -20,11 +20,29 @@
         <mat-label>{{ 'Icon' | translate }}</mat-label>
         <input matInput formControlName="icon" />
       </mat-form-field>
+      <mat-form-field class="col-md-6">
+        <mat-label>{{ 'Target' | translate }}</mat-label>
+        <mat-select formControlName="target">
+          <mat-option [value]="item" *ngFor="let item of MenuTargetEnum | enumToArray">
+            {{ 'MenuTargetEnum_' + item | translate }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
+    <p>
+      <mat-checkbox formControlName="isActive" color="primary">
+        {{ 'IsActive' | translate }}
+      </mat-checkbox>
+    </p>
+    <p>
+      <mat-checkbox formControlName="isSystem" color="primary">
+        {{ 'IsSystem' | translate }}
+      </mat-checkbox>
+    </p>
 
     <tab-group>
       <tab-item
-        [title]="translation.get('lang')?.value.toUpperCase()"
+        [title]="translation.get('culture')?.value"
         formArrayName="translations"
         *ngFor="let translation of translationsArray.controls; let i = index">
         <div [formGroupName]="i" class="row">

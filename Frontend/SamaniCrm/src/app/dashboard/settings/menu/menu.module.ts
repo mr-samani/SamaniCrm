@@ -9,6 +9,8 @@ import { MenuComponent } from './menu.component';
 import { MenuRoutingModule } from './menu-routing.module';
 import { TreeMenuComponent } from './tree-menu/tree-menu.component';
 import { CreateOrEditMenuComponent } from './create-or-edit/create-or-edit.component';
+import { MenuServiceProxy } from '@shared/service-proxies';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [MenuComponent, TreeMenuComponent, CreateOrEditMenuComponent],
@@ -21,6 +23,8 @@ import { CreateOrEditMenuComponent } from './create-or-edit/create-or-edit.compo
     MaterialCommonModule,
     TabGroupModule,
     SwitchModule,
+    SharedModule,
   ],
+  providers: [MenuServiceProxy],
 })
 export class MenuModule {}
