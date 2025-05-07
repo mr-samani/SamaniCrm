@@ -1,5 +1,6 @@
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { FileUsageEnum } from '@app/file-manager/image-cropper-dialog/image-cropper-dialog.component';
@@ -7,7 +8,7 @@ import { FileUsageEnum } from '@app/file-manager/image-cropper-dialog/image-crop
 import { AppConst } from '@shared/app-const';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
-import { GetUserQuery, UserServiceProxy } from '@shared/service-proxies';
+import { CreateUserCommand, GetUserQuery, UserServiceProxy } from '@shared/service-proxies';
 import { UserResponseDTO } from '@shared/service-proxies/model/user-response-dto';
 import { DownloadService, DownloadFileType } from '@shared/services/download.service';
 import { Subscription } from 'rxjs';
@@ -33,7 +34,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
     { column: 'email', title: this.l('Email') },
     { column: 'phoneNumber', title: this.l('Phone') },
     { column: 'address', title: this.l('Address') },
-    { column: 'lang', title: this.l('Language') ,width:50},
+    { column: 'lang', title: this.l('Language'), width: 50 },
     { column: 'creationTime', title: this.l('CreationTime'), type: 'dateTime' },
   ];
 
@@ -47,6 +48,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
     private downloadService: DownloadService,
     private fileManager: FileManagerService,
     private userService: UserServiceProxy,
+    private matDialog: MatDialog,
   ) {
     super(injector);
     this.breadcrumb.list = [
@@ -123,5 +125,11 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
         usage: FileUsageEnum.USER_AVATAR,
       })
       .then((r) => {});
+  }
+
+  openCreateNewUserDialog() {
+    this.matDialog.open(CreateUserCommand, {
+      data: {},
+    });
   }
 }

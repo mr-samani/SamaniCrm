@@ -1,3 +1,4 @@
+import { CreateUserComponent } from './create-user/create-user.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -13,9 +14,11 @@ import { FilteFormrDirective } from '@shared/directives/filter-form.directive';
 import { TableViewComponent } from '@shared/components/table-view/table-view.compoenent';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { UserServiceProxy } from '@shared/service-proxies/api/user.service';
+import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
+import { RoleServiceProxy } from '@shared/service-proxies';
 
 @NgModule({
-  declarations: [UserListComponent],
+  declarations: [UserListComponent, CreateUserComponent],
   imports: [
     CommonModule,
     UsersRoutingModule,
@@ -28,7 +31,8 @@ import { UserServiceProxy } from '@shared/service-proxies/api/user.service';
     ReactiveFormsModule,
     FileManagerModule,
     MaterialCommonModule,
+    TabGroupModule,
   ],
-  providers: [UserServiceProxy],
+  providers: [UserServiceProxy, RoleServiceProxy],
 })
 export class UsersModule {}

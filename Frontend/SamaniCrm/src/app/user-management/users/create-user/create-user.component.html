@@ -1,0 +1,65 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title" *ngIf="">{{ 'CreateNewUser' | translate }}</span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+  <div class="m-auto py-5" *ngIf="loading">
+    <mat-spinner color="primary" diameter="25"></mat-spinner>
+  </div>
+  <tab-group>
+    <tab-item [title]="'UserInfo' | translate">
+      <form [formGroup]="form" *ngIf="!loading">
+        <div class="row">
+          <mat-form-field class="col-md-6">
+            <mat-label>{{ 'UserName' | translate }}</mat-label>
+            <input matInput formControlName="userName" />
+          </mat-form-field>
+          <mat-form-field class="col-md-6">
+            <mat-label>{{ 'FullName' | translate }}</mat-label>
+            <input matInput formControlName="fullName" />
+          </mat-form-field>
+          <mat-form-field class="col-md-6">
+            <mat-label>{{ 'Email' | translate }}</mat-label>
+            <input matInput formControlName="email" type="email" />
+          </mat-form-field>
+          <mat-form-field class="col-md-6">
+            <mat-label>{{ 'Password' | translate }}</mat-label>
+            <input matInput formControlName="password" type="password" autocomplete="new-password" />
+          </mat-form-field>
+          <mat-form-field class="col-md-6">
+            <mat-label>{{ 'ConfirmationPassword' | translate }}</mat-label>
+            <input matInput formControlName="confirmationPassword" type="password" autocomplete="new-password" />
+          </mat-form-field>
+
+          <!-- <mat-form-field class="col-md-6">
+          <mat-label>{{ 'Category' | translate }}</mat-label>
+          <mat-select formControlName="category">
+            <mat-option [value]="+item" *ngFor="let item of LocalizationCategoryEnum | enumToArray">
+              {{ 'LocalizationCategoryEnum_' + item | translate }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field> -->
+        </div>
+      </form>
+    </tab-item>
+
+    <!-- -------------------------------- -->
+    <tab-item [title]="'Roles' | translate">
+      <p *ngFor="let role of roles">
+        <mat-checkbox color="primary" [(ngModel)]="role.selected">
+          {{ role.displayName }}
+        </mat-checkbox>
+      </p>
+    </tab-item>
+  </tab-group>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
+    <mat-spinner *ngIf="saving" color="primary" diameter="25"></mat-spinner>
+    <span>{{ 'Save' | translate }}</span>
+  </button>
+</mat-dialog-actions>
