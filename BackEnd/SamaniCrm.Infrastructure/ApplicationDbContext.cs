@@ -30,6 +30,7 @@ namespace SamaniCrm.Infrastructure
         public DbSet<Localization> Localizations { get; set; }
         public DbSet<Menu> Menus { get; set; }
         public DbSet<MenuTranslation> MenuTranslations { get; set; }
+        public DbSet<SecuritySetting> SecuritySettings { get; set; }
 
 
 
@@ -59,6 +60,12 @@ namespace SamaniCrm.Infrastructure
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<SecuritySetting>(b =>
+            {
+                b.HasKey(k=>k.Id);
+            });
+
             builder.Entity<ApplicationUser>(b =>
             {
                 b.ToTable("Users");

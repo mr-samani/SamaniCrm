@@ -9,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var config = builder.Configuration;
 
+services 
+    .AddCustomServices()
+    .AddDbContext(config);
 services
     .AddCorsPolicy()
     .AddControllersWithDefaults()
@@ -16,8 +19,7 @@ services
     .AddFluentValidation()
     .AddInfrastructure(config)
     .AddSwaggerDocumentation()
-    .AddHangfire(config)
-    .AddCustomServices();
+    .AddHangfire(config);
 
 var app = builder.Build();
 // برای اینکه از همان instance ICaptchaStore استفاده کنم و یک نمون جدید نسازد این جا مقدار دهی میکنم

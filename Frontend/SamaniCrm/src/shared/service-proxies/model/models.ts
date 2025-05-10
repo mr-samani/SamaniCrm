@@ -32,6 +32,8 @@ export * from './menu-dto-list-api-response';
 export * from './menu-target-enum';
 export * from './menu-translations-dto';
 export * from './meta';
+export * from './password-complexity-dto';
+export * from './password-complexity-dto-api-response';
 export * from './refresh-token-command';
 export * from './reorder-item';
 export * from './reorder-menu-command';

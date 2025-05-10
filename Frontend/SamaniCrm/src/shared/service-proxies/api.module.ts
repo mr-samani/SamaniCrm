@@ -4,10 +4,11 @@ import { HttpClient } from '@angular/common/http';
 
 import { AccountServiceProxy } from './api/account.service';
 import { CaptchaServiceProxy } from './api/captcha.service';
-import { InitialServiceProxy } from './api/initial.service';
+import { CommonServiceProxy } from './api/common.service';
 import { LanguageServiceProxy } from './api/language.service';
 import { MenuServiceProxy } from './api/menu.service';
 import { RoleServiceProxy } from './api/role.service';
+import { SecuritySettingsServiceProxy } from './api/security-settings.service';
 import { UserServiceProxy } from './api/user.service';
 import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
 
@@ -18,10 +19,11 @@ import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
   providers: [
     AccountServiceProxy,
     CaptchaServiceProxy,
-    InitialServiceProxy,
+    CommonServiceProxy,
     LanguageServiceProxy,
     MenuServiceProxy,
     RoleServiceProxy,
+    SecuritySettingsServiceProxy,
     UserServiceProxy,
     WeatherForecastServiceProxy ]
 })

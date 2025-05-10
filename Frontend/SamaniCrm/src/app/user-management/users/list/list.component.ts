@@ -8,11 +8,12 @@ import { FileUsageEnum } from '@app/file-manager/image-cropper-dialog/image-crop
 import { AppConst } from '@shared/app-const';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
-import { CreateUserCommand, GetUserQuery, UserServiceProxy } from '@shared/service-proxies';
+import { GetUserQuery, UserServiceProxy } from '@shared/service-proxies';
 import { UserResponseDTO } from '@shared/service-proxies/model/user-response-dto';
 import { DownloadService, DownloadFileType } from '@shared/services/download.service';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+import { CreateUserComponent } from '../create-user/create-user.component';
 
 @Component({
   selector: 'app-user-list',
@@ -128,8 +129,16 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
   }
 
   openCreateNewUserDialog() {
-    this.matDialog.open(CreateUserCommand, {
-      data: {},
-    });
+    this.matDialog
+      .open(CreateUserComponent, {
+        data: {},
+        width: '768px',
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.reload();
+        }
+      });
   }
 }

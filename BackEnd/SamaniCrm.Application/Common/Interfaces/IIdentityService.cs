@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Queries.User;
+using SamaniCrm.Application.User.Commands;
 
 namespace SamaniCrm.Application.Common.Interfaces
 {
     public interface IIdentityService
     {
         // User section
-        Task<(bool isSucceed, Guid userId)> CreateUserAsync(string userName, string password, string email, string fullName, List<string> roles);
+        Task<(bool isSucceed, Guid userId)> CreateUserAsync(CreateUserCommand input);
         Task<bool> SigninUserAsync(string userName, string password);
         Task<string> GetUserIdAsync(string userName);
         Task<(UserResponseDTO user, IList<string> roles)> GetUserDetailsAsync(Guid userId);

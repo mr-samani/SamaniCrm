@@ -11,18 +11,18 @@
 
 export enum LocalizationCategoryEnum {
 
-    Role = 0,
+    Role = 'Role',
 
-    Permission = 1,
+    Permission = 'Permission',
 
-    Backend = 2,
+    Backend = 'Backend',
 
-    Frontend = 3,
+    Frontend = 'Frontend',
 
-    Enum = 4,
+    Enum = 'Enum',
 
-    App = 5,
+    App = 'App',
 
-    Other = 6
+    Other = 'Other'
 }
 

@@ -6,42 +6,65 @@
   </button>
 </h2>
 <mat-dialog-content>
-  <div class="m-auto py-5" *ngIf="loading">
+  <div class="d-flex align-items-center justify-content-center py-5" *ngIf="loading">
     <mat-spinner color="primary" diameter="25"></mat-spinner>
   </div>
-  <tab-group>
+  <tab-group *ngIf="!loading">
     <tab-item [title]="'UserInfo' | translate">
       <form [formGroup]="form" *ngIf="!loading">
         <div class="row">
           <mat-form-field class="col-md-6">
             <mat-label>{{ 'UserName' | translate }}</mat-label>
             <input matInput formControlName="userName" />
+            <mat-error *ngIf="form.get('userName')?.hasError('required')">
+              {{ 'IsRequired' | translate: { value: ('UserName' | translate) } }}
+            </mat-error>
           </mat-form-field>
           <mat-form-field class="col-md-6">
-            <mat-label>{{ 'FullName' | translate }}</mat-label>
-            <input matInput formControlName="fullName" />
+            <mat-label>{{ 'FirstName' | translate }}</mat-label>
+            <input matInput formControlName="firstName" />
+            <mat-error *ngIf="form.get('firstName')?.hasError('required')">
+              {{ 'IsRequired' | translate: { value: ('FirstName' | translate) } }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-md-6">
+            <mat-label>{{ 'LastName' | translate }}</mat-label>
+            <input matInput formControlName="lastName" />
+            <mat-error *ngIf="form.get('lastName')?.hasError('required')">
+              {{ 'IsRequired' | translate: { value: ('LastName' | translate) } }}
+            </mat-error>
           </mat-form-field>
           <mat-form-field class="col-md-6">
             <mat-label>{{ 'Email' | translate }}</mat-label>
             <input matInput formControlName="email" type="email" />
+            <mat-error *ngIf="form.get('email')?.hasError('required')">
+              {{ 'IsRequired' | translate: { value: ('Email' | translate) } }}
+            </mat-error>
           </mat-form-field>
           <mat-form-field class="col-md-6">
-            <mat-label>{{ 'Password' | translate }}</mat-label>
-            <input matInput formControlName="password" type="password" autocomplete="new-password" />
+            <mat-label>{{ 'PhoneNumber' | translate }}</mat-label>
+            <input matInput formControlName="phoneNumber" type="text" numberCheck minlength="4" maxlength="11" />
+            <mat-error *ngIf="form.get('phoneNumber')?.hasError('required')">
+              {{ 'IsRequired' | translate: { value: ('PhoneNumber' | translate) } }}
+            </mat-error>
           </mat-form-field>
           <mat-form-field class="col-md-6">
-            <mat-label>{{ 'ConfirmationPassword' | translate }}</mat-label>
-            <input matInput formControlName="confirmationPassword" type="password" autocomplete="new-password" />
+            <mat-label>{{ 'Language' | translate }}</mat-label>
+            <mat-select formControlName="lang">
+              <mat-option [value]="item.culture" *ngFor="let item of languageList">
+                {{ item.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('lang')?.hasError('required')">
+              {{ 'IsRequired' | translate: { value: ('Language' | translate) } }}
+            </mat-error>
           </mat-form-field>
-
-          <!-- <mat-form-field class="col-md-6">
-          <mat-label>{{ 'Category' | translate }}</mat-label>
-          <mat-select formControlName="category">
-            <mat-option [value]="+item" *ngFor="let item of LocalizationCategoryEnum | enumToArray">
-              {{ 'LocalizationCategoryEnum_' + item | translate }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field> -->
+          <app-password-input
+            [policy]="passwordPolicy!"
+            className="col-md-6"
+            parentClass="row"
+            formControlName="password"></app-password-input>
+      
         </div>
       </form>
     </tab-item>

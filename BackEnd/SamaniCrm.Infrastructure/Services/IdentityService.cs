@@ -10,6 +10,7 @@ using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Queries.User;
 using SamaniCrm.Infrastructure.Identity;
 using System.Linq.Dynamic.Core;
+using SamaniCrm.Application.User.Commands;
 
 
 namespace SamaniCrm.Infrastructure.Services;
@@ -45,34 +46,37 @@ public class IdentityService : IIdentityService
         var result = await _roleManager.CreateAsync(new ApplicationRole(roleName));
         if (!result.Succeeded)
         {
-            throw new ValidationException(result.Errors);
+            throw new CustomValidationException(result.Errors);
         }
         return result.Succeeded;
     }
 
 
     // Return multiple value
-    public async Task<(bool isSucceed, Guid userId)> CreateUserAsync(string userName, string password, string email, string fullName, List<string> roles)
+    public async Task<(bool isSucceed, Guid userId)> CreateUserAsync(CreateUserCommand input)
     {
         var user = new ApplicationUser()
         {
-            FullName = fullName,
-            UserName = userName,
-            Email = email,
-            Lang = "fa",
+            FirstName = input.FirstName,
+            LastName = input.LastName,
+            FullName = input.FirstName + " " + input.LastName,
+            UserName = input.UserName,
+            Email = input.Email,
+            PhoneNumber = input.PhoneNumber,
+            Lang = input.Lang,
         };
 
-        var result = await _userManager.CreateAsync(user, password);
+        var result = await _userManager.CreateAsync(user, input.Password);
 
         if (!result.Succeeded)
         {
-            throw new ValidationException(result.Errors);
+            throw new CustomValidationException(result.Errors);
         }
 
-        var addUserRole = await _userManager.AddToRolesAsync(user, roles);
+        var addUserRole = await _userManager.AddToRolesAsync(user, input.Roles);
         if (!addUserRole.Succeeded)
         {
-            throw new ValidationException(addUserRole.Errors);
+            throw new CustomValidationException(addUserRole.Errors);
         }
         return (result.Succeeded, user.Id);
     }
@@ -92,7 +96,7 @@ public class IdentityService : IIdentityService
         var result = await _roleManager.DeleteAsync(roleDetails);
         if (!result.Succeeded)
         {
-            throw new ValidationException(result.Errors);
+            throw new CustomValidationException(result.Errors);
         }
         return result.Succeeded;
     }

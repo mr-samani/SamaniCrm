@@ -5,10 +5,11 @@ api.module.ts
 api/account.service.ts
 api/api.ts
 api/captcha.service.ts
-api/initial.service.ts
+api/common.service.ts
 api/language.service.ts
 api/menu.service.ts
 api/role.service.ts
+api/security-settings.service.ts
 api/user.service.ts
 api/weather-forecast.service.ts
 configuration.ts
@@ -50,6 +51,8 @@ model/menu-target-enum.ts
 model/menu-translations-dto.ts
 model/meta.ts
 model/models.ts
+model/password-complexity-dto-api-response.ts
+model/password-complexity-dto.ts
 model/refresh-token-command.ts
 model/reorder-item.ts
 model/reorder-menu-command.ts

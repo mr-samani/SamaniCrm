@@ -22,22 +22,28 @@
 
 /** Interface for CreateUserCommand */
 export interface ICreateUserCommand {
-  fullName?: string;
-  userName?: string;
-  email?: string;
-  password?: string;
-  confirmationPassword?: string;
-  roles?: Array<string>;
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  phoneNumber: string;
+  lang: string;
+  password: string;
+  confirmationPassword: string;
+  roles: Array<string>;
 }
 
 /** Class for CreateUserCommand */
 export class CreateUserCommand implements ICreateUserCommand {
-  fullName?: string;
-  userName?: string;
-  email?: string;
-  password?: string;
-  confirmationPassword?: string;
-  roles?: Array<string>;
+  firstName!: string;
+  lastName!: string;
+  userName!: string;
+  email!: string;
+  phoneNumber!: string;
+  lang!: string;
+  password!: string;
+  confirmationPassword!: string;
+  roles!: Array<string>;
 
   constructor(data?: ICreateUserCommand) {
     if (data) {
@@ -50,9 +56,12 @@ export class CreateUserCommand implements ICreateUserCommand {
 
 init(data?: any) {
   if (data) {
-    this.fullName = data["fullName"];
+    this.firstName = data["firstName"];
+    this.lastName = data["lastName"];
     this.userName = data["userName"];
     this.email = data["email"];
+    this.phoneNumber = data["phoneNumber"];
+    this.lang = data["lang"];
     this.password = data["password"];
     this.confirmationPassword = data["confirmationPassword"];
     if (Array.isArray(data["roles"])) {

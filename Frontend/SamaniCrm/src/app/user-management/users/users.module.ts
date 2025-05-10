@@ -15,7 +15,9 @@ import { TableViewComponent } from '@shared/components/table-view/table-view.com
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { UserServiceProxy } from '@shared/service-proxies/api/user.service';
 import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
-import { RoleServiceProxy } from '@shared/service-proxies';
+import { RoleServiceProxy, SecuritySettingsServiceProxy } from '@shared/service-proxies';
+import { SharedModule } from '@shared/shared.module';
+import { PasswordInputComponent } from '@shared/components/password-input/password-input.component';
 
 @NgModule({
   declarations: [UserListComponent, CreateUserComponent],
@@ -32,7 +34,9 @@ import { RoleServiceProxy } from '@shared/service-proxies';
     FileManagerModule,
     MaterialCommonModule,
     TabGroupModule,
+    SharedModule,
+    PasswordInputComponent,
   ],
-  providers: [UserServiceProxy, RoleServiceProxy],
+  providers: [UserServiceProxy, RoleServiceProxy, SecuritySettingsServiceProxy],
 })
 export class UsersModule {}

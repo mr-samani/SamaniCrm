@@ -13,6 +13,8 @@ using Hangfire.SqlServer;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using SamaniCrm.Api.Middlewares;
@@ -33,6 +35,15 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace SamaniCrm.Infrastructure.Extensions;
 public static class ServiceCollectionExtensions
 {
+
+    public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration config)
+    {
+        // ✅ DbContext
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
+        return services;
+    }
+
 
     /// <summary>
     /// Mediator Configuration
@@ -214,6 +225,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IRolePermissionService, RolePermissionService>();
         services.AddSingleton(TimeProvider.System);
+
+        services.AddScoped<ISecuritySettingService, SecuritySettingService>();
+
 
         services.AddMemoryCache();
         //چون حافظه ایه Singleton باشه بهتره.

@@ -9,21 +9,23 @@ using SamaniCrm.Host.Models;
 namespace SamaniCrm.Api.Controllers
 {
 
-    public class InitialController : ApiBaseController
+    public class CommonController : ApiBaseController
     {
         public readonly IMediator _mediator;
 
-        public InitialController(IMediator mediator)
+        public CommonController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
-        [HttpGet("initialApp")]
+        [HttpGet("InitialApp")]
         [ProducesResponseType(typeof(ApiResponse<InitialAppDTO>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> initialApp()
+        public async Task<IActionResult> InitialApp()
         {
             return ApiOk<InitialAppDTO>(await _mediator.Send(new InitialAppQuery()));
 
         }
+
+
     }
 }

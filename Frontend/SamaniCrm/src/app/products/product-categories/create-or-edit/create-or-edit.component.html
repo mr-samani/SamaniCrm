@@ -7,7 +7,7 @@
   </button>
 </h2>
 <mat-dialog-content>
-  <div class="m-auto py-5" *ngIf="loading">
+  <div class="d-flex align-items-center justify-content-center py-5" *ngIf="loading">
     <mat-spinner color="primary" diameter="25"></mat-spinner>
   </div>
   <form [formGroup]="form" *ngIf="!loading">

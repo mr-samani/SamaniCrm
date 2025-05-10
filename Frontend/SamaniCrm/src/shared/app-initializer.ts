@@ -40,7 +40,7 @@ export class AppInitializer {
             AppConst.appName = config.appName;
 
             // api initialize
-            this.httpClient.get<InitialAppDTOApiResponse>(AppConst.apiUrl + '/api/Initial/initialApp').subscribe({
+            this.httpClient.get<InitialAppDTOApiResponse>(AppConst.apiUrl + '/api/Common/InitialApp').subscribe({
               next: (resp) => {
                 if (resp.success && resp.data) {
                   AppConst.languageList = resp.data.languages ?? [];

@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Domain.Entities;
 using MenuEntity = SamaniCrm.Domain.Entities.Menu;
+using SecuritySettingEntity = SamaniCrm.Domain.Entities.SecuritySetting;
+
+
 namespace SamaniCrm.Application.Common.Interfaces
 {
     public interface IApplicationDbContext
@@ -18,6 +21,7 @@ namespace SamaniCrm.Application.Common.Interfaces
         public DbSet<Localization> Localizations { get; set; }
         public DbSet<MenuEntity> Menus { get; set; }
         public DbSet<MenuTranslation> MenuTranslations { get; set; }
+        public DbSet<SecuritySettingEntity> SecuritySettings { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

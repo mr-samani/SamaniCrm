@@ -3,15 +3,15 @@ using FluentValidation.Results;
 
 namespace SamaniCrm.Application.Common.Exceptions
 {
-    public class ValidationException : BaseAppException
+    public class CustomValidationException : BaseAppException
     {
-        public ValidationException()
+        public CustomValidationException()
             : base("One or more validation failures have occurred.")
         {
             Errors = new Dictionary<string, string[]>();
         }
 
-        public ValidationException(IEnumerable<ValidationFailure> failures)
+        public CustomValidationException(IEnumerable<ValidationFailure> failures)
             : this()
         {
             Errors = failures
@@ -19,7 +19,7 @@ namespace SamaniCrm.Application.Common.Exceptions
                 .ToDictionary(failureGroup => failureGroup.Key, failureGroup => failureGroup.ToArray());
         }
 
-        public ValidationException(IEnumerable<IdentityError> errors) : this()
+        public CustomValidationException(IEnumerable<IdentityError> errors) : this()
         {
             Errors = errors
                 .GroupBy(e => e.Code, e => e.Description)

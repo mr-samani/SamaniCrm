@@ -93,6 +93,8 @@ namespace SamaniCrm.Infrastructure.Persistence
             // seeld localization must be after seed permissions,menu
             await SeedLocalization.TrySeedAsync(_context);
             await SeedDefaultUsers.TrySeedAsync(_context,_logger,_userManager,_roleManager);
+            await SeedSecuritySettings.TrySeedAsync(_context);
+
         }
     }
 

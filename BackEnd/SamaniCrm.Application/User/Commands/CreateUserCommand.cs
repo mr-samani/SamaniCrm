@@ -10,12 +10,14 @@ namespace SamaniCrm.Application.User.Commands
 {
     public class CreateUserCommand : IRequest<int>
     {
-        public string FullName { get; set; }
-        public string UserName { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string ConfirmationPassword { get; set; }
-        public List<string> Roles { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
+        public required string UserName { get; set; }
+        public required string Email { get; set; }
+        public required string PhoneNumber { get; set; }
+        public required string Lang { get; set; }
+        public required string Password { get; set; }
+        public required List<string> Roles { get; set; } = new();
     }
 
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, int>
@@ -27,7 +29,7 @@ namespace SamaniCrm.Application.User.Commands
         }
         public async Task<int> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var result = await _identityService.CreateUserAsync(request.UserName, request.Password, request.Email, request.FullName, request.Roles);
+            var result = await _identityService.CreateUserAsync(request);
             return result.isSucceed ? 1 : 0;
         }
     }

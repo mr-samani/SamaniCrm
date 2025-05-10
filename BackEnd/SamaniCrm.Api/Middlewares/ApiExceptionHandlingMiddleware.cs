@@ -37,6 +37,10 @@ public class ApiExceptionHandlingMiddleware
         }
         catch (FluentValidation.ValidationException vex)
         {
+            await HandleFluentValidationExceptionAsync(context, vex);
+        }
+        catch (CustomValidationException vex)
+        {
             await HandleValidationExceptionAsync(context, vex);
         }
         catch (BaseAppException appEx)
@@ -48,7 +52,25 @@ public class ApiExceptionHandlingMiddleware
             await HandleUnknownExceptionAsync(context, ex);
         }
     }
-    private async Task HandleValidationExceptionAsync(HttpContext context, FluentValidation.ValidationException vex)
+    private async Task HandleValidationExceptionAsync(HttpContext context, CustomValidationException vex)
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+        context.Response.ContentType = "application/json; charset=utf-8";
+
+        var errors = vex.Errors.Select(e => new ApiError
+        {
+            Field = e.Key,
+            Message = e.Value.Length > 0 ? e.Value[0] : ""
+        }).ToList();
+
+        var response = ApiResponse<object>.Fail(
+            errors: errors,
+            meta: null
+        );
+
+        await WriteResponseAsync(context, response);
+    }
+    private async Task HandleFluentValidationExceptionAsync(HttpContext context, FluentValidation.ValidationException vex)
     {
         context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
         context.Response.ContentType = "application/json; charset=utf-8";
@@ -66,6 +88,7 @@ public class ApiExceptionHandlingMiddleware
 
         await WriteResponseAsync(context, response);
     }
+
 
     private async Task HandleUnknownExceptionAsync(HttpContext context, Exception ex)
     {
