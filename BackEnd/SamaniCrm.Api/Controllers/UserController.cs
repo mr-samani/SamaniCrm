@@ -33,13 +33,23 @@ namespace SamaniCrm.Api.Controllers
             return ApiOk(await _mediator.Send(new GetCurrentUserQuery()));
         }
 
-        [HttpPost("Create")]
+        [HttpPost("CreateUser")]
         [Permission(AppPermissions.UserManagement_Create)]
         [ProducesDefaultResponseType(typeof(ApiResponse<int>))]
         public async Task<IActionResult> CreateUser(CreateUserCommand command)
         {
             return ApiOk(await _mediator.Send(command));
         }
+
+        [HttpPost("UpdateUser")]
+        [Permission(AppPermissions.UserManagement_Edit)]
+        [ProducesDefaultResponseType(typeof(ApiResponse<bool>))]
+        public async Task<IActionResult> UpdateUser([FromBody] EditUserCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return ApiOk(result);
+        }
+
 
         [HttpPost("GetAllUsers")]
         [Permission(AppPermissions.UserManagement_List)]
@@ -49,7 +59,7 @@ namespace SamaniCrm.Api.Controllers
             return ApiOk<PaginatedResult<UserResponseDTO>>(await _mediator.Send(request));
         }
 
-        [HttpDelete("Delete/{userId}")]
+        [HttpPost("Delete/{userId}")]
         [Permission(AppPermissions.UserManagement_Delete)]
         [ProducesResponseType(typeof(ApiResponse<int>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteUser(Guid userId)
@@ -57,6 +67,9 @@ namespace SamaniCrm.Api.Controllers
             var result = await _mediator.Send(new DeleteUserCommand() { Id = userId });
             return ApiOk(result);
         }
+
+
+
 
         [HttpGet("GetUserDetails/{userId}")]
         [Permission(AppPermissions.UserManagement_List)]
@@ -97,14 +110,7 @@ namespace SamaniCrm.Api.Controllers
 
 
 
-        [HttpPut("EditUser")]
-        [Permission(AppPermissions.UserManagement_EditUserProfile)]
-        [ProducesDefaultResponseType(typeof(ApiResponse<bool>))]
-        public async Task<IActionResult> EditUser([FromBody] EditUserCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return ApiOk(result);
-        }
+     
 
     }
 }

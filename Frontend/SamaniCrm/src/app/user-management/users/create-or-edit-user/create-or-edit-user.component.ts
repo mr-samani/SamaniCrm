@@ -155,7 +155,7 @@ export class CreateOrEditUserComponent extends AppComponentBase implements OnIni
     }
     this.saving = true;
     this.userService
-      .editUser(input)
+      .updateUser(input)
       .pipe(finalize(() => (this.saving = false)))
       .subscribe({
         next: (response) => {

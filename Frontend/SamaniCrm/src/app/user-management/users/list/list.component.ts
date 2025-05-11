@@ -145,7 +145,6 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
       });
   }
 
-  openUserPermissionsDialog(item?: UserResponseDTO) {}
   remove(item: UserResponseDTO) {
     this.confirmMessage(`${this.l('Delete')}:${item?.fullName}`, this.l('AreUseSureForDelete')).then((result) => {
       if (result.isConfirmed) {
@@ -163,5 +162,5 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
     });
   }
 
-  
+
 }

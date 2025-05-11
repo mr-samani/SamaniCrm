@@ -18,7 +18,6 @@ namespace SamaniCrm.Core.Permissions
         public const string UserManagement_Edit = "Administrator.UserManagement.Edit";
         public const string UserManagement_Delete = "Administrator.UserManagement.Delete";
         public const string UserManagement_AssignRole = "Administrator.UserManagement.AssignRole";
-        public const string UserManagement_EditUserProfile = "Administrator.UserManagement.EditUserProfile";
 
         // role management 
         public const string RoleManagement = "Administrator.RoleManagement";
