@@ -1,3 +1,11 @@
+<div class="tools d-flex justify-content-between align-items-center flex-wrap gap-2">
+  <div class="d-flex gap-2"></div>
+  <button mat-raised-button color="primary" (click)="openCreateOrEditDialog()">
+    <i class="fa fa-role mx-1"></i>
+    <span>{{ 'CreateNewRole' | translate }}</span>
+  </button>
+</div>
+
 <table-view [list]="list" [fields]="fields" [operations]="operations" [loading]="loading"></table-view>
 
 <ng-template #operations let-item>
@@ -8,6 +16,10 @@
     <a mat-menu-item routerLink="/dashboard/roles/permissions/{{ item.id }}">
       <i class="fa fa-check-list mx-1"></i>
       <span>{{ l('Permissions') }}</span>
+    </a>
+    <a mat-menu-item (click)="remove(item)">
+      <i class="fa fa-trash mx-1"></i>
+      <span>{{ 'Remove' | translate }}</span>
     </a>
   </mat-menu>
 </ng-template>

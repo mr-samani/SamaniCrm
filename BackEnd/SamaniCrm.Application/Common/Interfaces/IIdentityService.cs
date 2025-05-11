@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Queries.User;
+using SamaniCrm.Application.Role.Commands;
 using SamaniCrm.Application.User.Commands;
 
 namespace SamaniCrm.Application.Common.Interfaces
@@ -16,12 +17,12 @@ namespace SamaniCrm.Application.Common.Interfaces
         Task<(bool isSucceed, Guid userId)> CreateUserAsync(CreateUserCommand input);
         Task<bool> SigninUserAsync(string userName, string password);
         Task<string> GetUserIdAsync(string userName);
-        Task<UserResponseDTO> GetUserDetailsAsync(Guid userId);
-        Task<UserResponseDTO> GetUserDetailsByUserNameAsync(string userName);
+        Task<UserDTO> GetUserDetailsAsync(Guid userId);
+        Task<UserDTO> GetUserDetailsByUserNameAsync(string userName);
         Task<string> GetUserNameAsync(Guid userId);
         Task<bool> DeleteUserAsync(Guid userId);
         Task<bool> IsUniqueUserName(string userName);
-        Task<PaginatedResult<UserResponseDTO>> GetAllUsersAsync(GetUserQuery request, CancellationToken cancellationToken);
+        Task<PaginatedResult<UserDTO>> GetAllUsersAsync(GetUserQuery request, CancellationToken cancellationToken);
         Task<bool> UpdateUser(EditUserCommand input);
 
         // Role Section
@@ -41,5 +42,6 @@ namespace SamaniCrm.Application.Common.Interfaces
         // refresh token
         Task<Guid> GetUserIdFromRefreshToken(string refreshToken);
         Task<bool> RevokeRefreshToken(string refreshToken, CancellationToken cancellationToken);
+        Task<bool> UpdateRolePermissionsAsync(EditRolePermissionsCommand request, CancellationToken cancellationToken);
     }
 }

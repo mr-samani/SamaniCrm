@@ -10,6 +10,7 @@ using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.User.Queries;
 using SamaniCrm.Api.Attributes;
 using SamaniCrm.Core.Permissions;
+using SamaniCrm.Application.Role.Commands;
 
 
 namespace SamaniCrm.Api.Controllers
@@ -27,7 +28,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetCurrentUser")]
-        [ProducesResponseType(typeof(ApiResponse<UserResponseDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<UserDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCurrentUser()
         {
             return ApiOk(await _mediator.Send(new GetCurrentUserQuery()));
@@ -53,10 +54,10 @@ namespace SamaniCrm.Api.Controllers
 
         [HttpPost("GetAllUsers")]
         [Permission(AppPermissions.UserManagement_List)]
-        [ProducesResponseType(typeof(ApiResponse<PaginatedResult<UserResponseDTO>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<PaginatedResult<UserDTO>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllUserAsync([FromBody] GetUserQuery request)
         {
-            return ApiOk<PaginatedResult<UserResponseDTO>>(await _mediator.Send(request));
+            return ApiOk<PaginatedResult<UserDTO>>(await _mediator.Send(request));
         }
 
         [HttpPost("Delete/{userId}")]
@@ -73,7 +74,7 @@ namespace SamaniCrm.Api.Controllers
 
         [HttpGet("GetUserDetails/{userId}")]
         [Permission(AppPermissions.UserManagement_List)]
-        [ProducesDefaultResponseType(typeof(ApiResponse<UserResponseDTO>))]
+        [ProducesDefaultResponseType(typeof(ApiResponse<UserDTO>))]
         public async Task<IActionResult> GetUserDetails(Guid userId)
         {
             var result = await _mediator.Send(new GetUserDetailsQuery() { UserId = userId });
@@ -82,35 +83,33 @@ namespace SamaniCrm.Api.Controllers
 
         [HttpGet("GetUserDetailsByUserName/{userName}")]
         [Permission(AppPermissions.UserManagement_List)]
-        [ProducesDefaultResponseType(typeof(ApiResponse<UserResponseDTO>))]
+        [ProducesDefaultResponseType(typeof(ApiResponse<UserDTO>))]
         public async Task<IActionResult> GetUserDetailsByUserName(string userName)
         {
             var result = await _mediator.Send(new GetUserDetailsByUserNameQuery() { UserName = userName });
             return ApiOk(result);
         }
 
-        [HttpPost("AssignRoles")]
-        [Permission(AppPermissions.UserManagement_AssignRole)]
-        [ProducesDefaultResponseType(typeof(ApiResponse<int>))]
-        public async Task<IActionResult> AssignRoles(AssignUsersRoleCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return ApiOk(result);
-        }
+        //[HttpPost("AssignRoles")]
+        //[Permission(AppPermissions.UserManagement_AssignRole)]
+        //[ProducesDefaultResponseType(typeof(ApiResponse<int>))]
+        //public async Task<IActionResult> AssignRoles(AssignUsersRoleCommand command)
+        //{
+        //    var result = await _mediator.Send(command);
+        //    return ApiOk(result);
+        //}
 
-        [HttpPut("EditUserRoles")]
-        [Permission(AppPermissions.UserManagement_AssignRole)]
-        [ProducesDefaultResponseType(typeof(ApiResponse<int>))]
-        public async Task<IActionResult> EditUserRoles(UpdateUserRolesCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return ApiOk(result);
-        }
-
-
+        //[HttpPut("EditUserRoles")]
+        //[Permission(AppPermissions.UserManagement_AssignRole)]
+        //[ProducesDefaultResponseType(typeof(ApiResponse<int>))]
+        //public async Task<IActionResult> EditUserRoles(UpdateUserRolesCommand command)
+        //{
+        //    var result = await _mediator.Send(command);
+        //    return ApiOk(result);
+        //}
 
 
-     
+
 
     }
 }

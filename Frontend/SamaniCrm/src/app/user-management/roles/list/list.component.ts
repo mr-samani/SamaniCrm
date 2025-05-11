@@ -1,14 +1,11 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { FileUsageEnum } from '@app/file-manager/image-cropper-dialog/image-cropper-dialog.component';
-import { Apis } from '@shared/apis';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@app/app-component-base';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
-import { FileManagerService } from '@app/file-manager/file-manager.service';
-import { AppConst } from '@shared/app-const';
-import { DownloadService, DownloadFileType } from '@shared/services/download.service';
 import { RoleServiceProxy } from '@shared/service-proxies/api/role.service';
-import { RoleResponseDTO } from '@shared/service-proxies/model/role-response-dto';
+import { RoleDTO } from '@shared/service-proxies/model/role-dto';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateOrEditRoleComponent } from '../create-or-edit-role/create-or-edit-role.component';
 
 @Component({
   selector: 'app-user-list',
@@ -18,18 +15,17 @@ import { RoleResponseDTO } from '@shared/service-proxies/model/role-response-dto
 })
 export class RoleListComponent extends AppComponentBase implements OnInit {
   loading = true;
-  list: RoleResponseDTO[] = [];
+  list: RoleDTO[] = [];
   totalCount = 0;
   fields: FieldsType[] = [
-    { column: 'id', title: this.l('Id'), width: 200 },
+    // { column: 'id', title: this.l('Id'), width: 200 },
     { column: 'roleName', title: this.l('Name') },
     { column: 'displayName', title: this.l('DisplayName') },
   ];
   constructor(
     injector: Injector,
-    private downloadService: DownloadService,
-    private fileManager: FileManagerService,
     private roleService: RoleServiceProxy,
+    private matDialog: MatDialog,
   ) {
     super(injector);
   }
@@ -51,19 +47,38 @@ export class RoleListComponent extends AppComponentBase implements OnInit {
       });
   }
 
-  exportExcel() {
-    this.downloadService.downloadUrlWithToken(
-      AppConst.apiUrl + '/api/user/exportExcel',
-      DownloadFileType.Excel,
-      'userlist.xlsx',
-    );
+  openCreateOrEditDialog(item?: RoleDTO) {
+    this.matDialog
+      .open(CreateOrEditRoleComponent, {
+        data: {
+          role: item,
+        },
+        width: '768px',
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.getList();
+        }
+      });
   }
 
-  changeAvatar(item: RoleResponseDTO) {
-    this.fileManager
-      .selectFile({
-        usage: FileUsageEnum.USER_AVATAR,
-      })
-      .then((r) => {});
+  remove(item: RoleDTO) {
+    this.confirmMessage(`${this.l('Delete')}:${item?.roleName}`, this.l('AreUseSureForDelete')).then((result) => {
+      if (result.isConfirmed) {
+        this.showMainLoading();
+        this.roleService
+          .deleteRole(item.id)
+          .pipe(finalize(() => this.hideMainLoading()))
+          .subscribe((response) => {
+            if (response.success) {
+              this.notify.success(this.l('DeletedSuccessfully'));
+              this.getList();
+            }
+          });
+      }
+    });
   }
+
+  
 }

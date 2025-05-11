@@ -20,18 +20,20 @@
  */
 /* Created with custom template */
 
-/** Interface for AssignUsersRoleCommand */
-export interface IAssignUsersRoleCommand {
-  userName?: string;
-  roles?: Array<string>;
+/** Interface for RoleDTO */
+export interface IRoleDTO {
+  id?: string;
+  roleName: string;
+  displayName?: string;
 }
 
-/** Class for AssignUsersRoleCommand */
-export class AssignUsersRoleCommand implements IAssignUsersRoleCommand {
-  userName?: string;
-  roles?: Array<string>;
+/** Class for RoleDTO */
+export class RoleDTO implements IRoleDTO {
+  id?: string;
+  roleName!: string;
+  displayName?: string;
 
-  constructor(data?: IAssignUsersRoleCommand) {
+  constructor(data?: IRoleDTO) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -42,17 +44,14 @@ export class AssignUsersRoleCommand implements IAssignUsersRoleCommand {
 
 init(data?: any) {
   if (data) {
-    this.userName = data["userName"];
-    if (Array.isArray(data["roles"])) {
-      this.roles = [] as any;
-      for (let item of data["roles"])
-        (this.roles as any).push(item);
-    }
+    this.id = data["id"];
+    this.roleName = data["roleName"];
+    this.displayName = data["displayName"];
   }
 }
 
-  static fromJS(data: any): AssignUsersRoleCommand {
-    const instance = new AssignUsersRoleCommand();
+  static fromJS(data: any): RoleDTO {
+    const instance = new RoleDTO();
     instance.init(data);
     return instance;
   }

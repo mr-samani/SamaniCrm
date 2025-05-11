@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-import { UserResponseDTO } from '@shared/service-proxies/model/user-response-dto';
+import { UserDTO } from '@shared/service-proxies/model/user-dto';
 import { ThumbnailsDto } from '../models/thumbnails-dto';
 
 /**
@@ -25,5 +25,5 @@ export class FileManagerDto {
   size?: any;
   thumbnails?: ThumbnailsDto;
   type?: any;
-  user?: UserResponseDTO;
+  user?: UserDTO;
 }

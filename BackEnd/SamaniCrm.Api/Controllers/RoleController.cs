@@ -26,7 +26,7 @@ namespace SamaniCrm.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("Create")]
+        [HttpPost("CreateRole")]
         [Permission(AppPermissions.RoleManagement_Create)]
         [ProducesDefaultResponseType(typeof(ApiResponse<int>))]
         public async Task<IActionResult> CreateRoleAsync(RoleCreateCommand command)
@@ -36,11 +36,11 @@ namespace SamaniCrm.Api.Controllers
 
         [HttpGet("GetAllRoles")]
         [Permission(AppPermissions.RoleManagement_List)]
-        [ProducesResponseType(typeof(ApiResponse<List<RoleResponseDTO>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<List<RoleDTO>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllRolesAsync()
         {
             var result = await _mediator.Send(new GetRoleQuery());
-            return ApiOk<IList<RoleResponseDTO>>(result);
+            return ApiOk<IList<RoleDTO>>(result);
         }
 
         [HttpGet("GetRolePermissions")]
@@ -55,13 +55,13 @@ namespace SamaniCrm.Api.Controllers
 
         [HttpGet("{id}")]
         [Permission(AppPermissions.RoleManagement_List)]
-        [ProducesResponseType(typeof(ApiResponse<RoleResponseDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<RoleDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetRoleByIdAsync(Guid id)
         {
             return ApiOk(await _mediator.Send(new GetRoleByIdQuery() { RoleId = id }));
         }
 
-        [HttpDelete("Delete/{id}")]
+        [HttpPost("DeleteRole")]
         [Permission(AppPermissions.RoleManagement_Delete)]
         [ProducesResponseType(typeof(ApiResponse<int>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteRoleAsync(Guid id)
@@ -73,21 +73,30 @@ namespace SamaniCrm.Api.Controllers
             return ApiOk<int>(result);
         }
 
-        [HttpPut("Edit/{id}")]
+        [HttpPut("EditRole")]
         [Permission(AppPermissions.RoleManagement_Edit)]
         [ProducesResponseType(typeof(ApiResponse<int>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> EditRole(string id, [FromBody] UpdateRoleCommand command)
+        public async Task<IActionResult> EditRole([FromBody] UpdateRoleCommand command)
         {
-            if (id == command.Id.ToString())
-            {
-                var result = await _mediator.Send(command);
-                return ApiOk(result);
-            }
-            else
-            {
-                return BadRequest();
-            }
+
+            var result = await _mediator.Send(command);
+            return ApiOk(result);
+
         }
+
+
+
+        [HttpPut("EditRolePermissions")]
+        [Permission(AppPermissions.RoleManagement_EditRolePermissions)]
+        [ProducesDefaultResponseType(typeof(ApiResponse<bool>))]
+        public async Task<IActionResult> EditRolePermissions(EditRolePermissionsCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return ApiOk(result);
+        }
+
+
+
 
     }
 }

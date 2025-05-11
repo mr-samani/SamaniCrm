@@ -8,8 +8,8 @@
  * Do not edit the class manually.
  */
 import { Meta } from './meta';
+import { UserDTO } from './user-dto';
 import { ApiError } from './api-error';
-import { UserDetailsResponseDTO } from './user-details-response-dto';
 
 
 /**
@@ -23,22 +23,22 @@ import { UserDetailsResponseDTO } from './user-details-response-dto';
  */
 /* Created with custom template */
 
-/** Interface for UserDetailsResponseDTOApiResponse */
-export interface IUserDetailsResponseDTOApiResponse {
+/** Interface for UserDTOApiResponse */
+export interface IUserDTOApiResponse {
   success?: boolean;
-  data?: UserDetailsResponseDTO;
+  data?: UserDTO;
   errors?: Array<ApiError>;
   meta?: Meta;
 }
 
-/** Class for UserDetailsResponseDTOApiResponse */
-export class UserDetailsResponseDTOApiResponse implements IUserDetailsResponseDTOApiResponse {
+/** Class for UserDTOApiResponse */
+export class UserDTOApiResponse implements IUserDTOApiResponse {
   success?: boolean;
-  data?: UserDetailsResponseDTO;
+  data?: UserDTO;
   errors?: Array<ApiError>;
   meta?: Meta;
 
-  constructor(data?: IUserDetailsResponseDTOApiResponse) {
+  constructor(data?: IUserDTOApiResponse) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -60,8 +60,8 @@ init(data?: any) {
   }
 }
 
-  static fromJS(data: any): UserDetailsResponseDTOApiResponse {
-    const instance = new UserDetailsResponseDTOApiResponse();
+  static fromJS(data: any): UserDTOApiResponse {
+    const instance = new UserDTOApiResponse();
     instance.init(data);
     return instance;
   }

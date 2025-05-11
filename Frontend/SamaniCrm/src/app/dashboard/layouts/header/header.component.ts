@@ -2,7 +2,7 @@ import { Component, Injector } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { AppConst } from '@shared/app-const';
-import { UserResponseDTO } from '@shared/service-proxies/model/user-response-dto';
+import { UserDTO } from '@shared/service-proxies/model/user-dto';
 import { ColorSchemaService } from '@shared/services/color-schema.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { ColorSchemaService } from '@shared/services/color-schema.service';
   standalone: false,
 })
 export class HeaderComponent extends AppComponentBase {
-  user?: UserResponseDTO;
+  user?: UserDTO;
   currentLang = AppConst.currentLanguage;
   languages = AppConst.languageList;
   backEndUrl = AppConst.apiUrl;

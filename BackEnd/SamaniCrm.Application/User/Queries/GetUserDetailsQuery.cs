@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.Queries.User
 {
-    public class GetUserDetailsQuery : IRequest<UserResponseDTO>
+    public class GetUserDetailsQuery : IRequest<UserDTO>
     {
         public Guid UserId { get; set; }
     }
 
-    public class GetUserDetailsQueryHandler : IRequestHandler<GetUserDetailsQuery, UserResponseDTO>
+    public class GetUserDetailsQueryHandler : IRequestHandler<GetUserDetailsQuery, UserDTO>
     {
         private readonly IIdentityService _identityService;
 
@@ -22,10 +22,10 @@ namespace SamaniCrm.Application.Queries.User
         {
             _identityService = identityService;
         }
-        public async Task<UserResponseDTO> Handle(GetUserDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<UserDTO> Handle(GetUserDetailsQuery request, CancellationToken cancellationToken)
         {
             var result = await _identityService.GetUserDetailsAsync(request.UserId);
-            return new UserResponseDTO()
+            return new UserDTO()
             {
                 Id = result.Id,
                 UserName = result.UserName,

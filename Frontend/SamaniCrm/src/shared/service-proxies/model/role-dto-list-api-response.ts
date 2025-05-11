@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { RoleDTO } from './role-dto';
 import { Meta } from './meta';
 import { ApiError } from './api-error';
 
@@ -22,22 +23,22 @@ import { ApiError } from './api-error';
  */
 /* Created with custom template */
 
-/** Interface for StringListApiResponse */
-export interface IStringListApiResponse {
+/** Interface for RoleDTOListApiResponse */
+export interface IRoleDTOListApiResponse {
   success?: boolean;
-  data?: Array<string>;
+  data?: Array<RoleDTO>;
   errors?: Array<ApiError>;
   meta?: Meta;
 }
 
-/** Class for StringListApiResponse */
-export class StringListApiResponse implements IStringListApiResponse {
+/** Class for RoleDTOListApiResponse */
+export class RoleDTOListApiResponse implements IRoleDTOListApiResponse {
   success?: boolean;
-  data?: Array<string>;
+  data?: Array<RoleDTO>;
   errors?: Array<ApiError>;
   meta?: Meta;
 
-  constructor(data?: IStringListApiResponse) {
+  constructor(data?: IRoleDTOListApiResponse) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -52,7 +53,7 @@ init(data?: any) {
     if (Array.isArray(data["data"])) {
       this.data = [] as any;
       for (let item of data["data"])
-        (this.data as any).push(item);
+        (this.data as any).push(RoleDTO.fromJS(item));
     }
     if (Array.isArray(data["errors"])) {
       this.errors = [] as any;
@@ -63,8 +64,8 @@ init(data?: any) {
   }
 }
 
-  static fromJS(data: any): StringListApiResponse {
-    const instance = new StringListApiResponse();
+  static fromJS(data: any): RoleDTOListApiResponse {
+    const instance = new RoleDTOListApiResponse();
     instance.init(data);
     return instance;
   }

@@ -11,6 +11,9 @@ using SamaniCrm.Application.Queries.User;
 using SamaniCrm.Infrastructure.Identity;
 using System.Linq.Dynamic.Core;
 using SamaniCrm.Application.User.Commands;
+using SamaniCrm.Application.Role.Commands;
+using System.Security.Claims;
+using SamaniCrm.Domain.Entities;
 
 
 namespace SamaniCrm.Infrastructure.Services;
@@ -120,7 +123,7 @@ public class IdentityService : IIdentityService
         return result.Succeeded;
     }
 
-    public async Task<PaginatedResult<UserResponseDTO>> GetAllUsersAsync(GetUserQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedResult<UserDTO>> GetAllUsersAsync(GetUserQuery request, CancellationToken cancellationToken)
     {
         var rolesQuery = from ur in _applicationDbContext.UserRoles
                          join r in _applicationDbContext.Roles on ur.RoleId equals r.Id
@@ -150,7 +153,7 @@ public class IdentityService : IIdentityService
         var users = await query
             .Skip(request.PageSize * (request.PageNumber - 1))
             .Take(request.PageSize)
-            .Select(u => new UserResponseDTO
+            .Select(u => new UserDTO
             {
                 Id = u.Id,
                 UserName = u.UserName ?? "",
@@ -168,7 +171,7 @@ public class IdentityService : IIdentityService
             .ToListAsync(cancellationToken);
 
 
-        return new PaginatedResult<UserResponseDTO>
+        return new PaginatedResult<UserDTO>
         {
             Items = users,
             TotalCount = total,
@@ -189,7 +192,7 @@ public class IdentityService : IIdentityService
         return roles.Select(role => (role.Id, role.Name)).ToList();
     }
 
-    public async Task<UserResponseDTO> GetUserDetailsAsync(Guid userId)
+    public async Task<UserDTO> GetUserDetailsAsync(Guid userId)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
         if (user == null)
@@ -197,7 +200,7 @@ public class IdentityService : IIdentityService
             throw new NotFoundException("User not found");
         }
         var roles = await _userManager.GetRolesAsync(user);
-        return (new UserResponseDTO()
+        return (new UserDTO()
         {
             Id = user.Id,
             UserName = user.UserName ?? "",
@@ -214,7 +217,7 @@ public class IdentityService : IIdentityService
         });
     }
 
-    public async Task<UserResponseDTO> GetUserDetailsByUserNameAsync(string userName)
+    public async Task<UserDTO> GetUserDetailsByUserNameAsync(string userName)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == userName);
         if (user == null)
@@ -222,7 +225,7 @@ public class IdentityService : IIdentityService
             throw new NotFoundException("User not found");
         }
         var roles = await _userManager.GetRolesAsync(user);
-        return (new UserResponseDTO()
+        return (new UserDTO()
         {
             Id = user.Id,
             UserName = user.UserName ?? "",
@@ -410,6 +413,58 @@ public class IdentityService : IIdentityService
         token.Active = false;
         _applicationDbContext.RefreshTokens.Update(token);
         await _applicationDbContext.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> UpdateRolePermissionsAsync(EditRolePermissionsCommand request, CancellationToken cancellationToken)
+    {
+        var role = await _roleManager.FindByNameAsync(request.RoleName);
+        if (role == null)
+            throw new NotFoundException($"Role '{request.RoleName}' not found.");
+        // لیست پرمیژن هایی که از قبل به این نقش اختصاص داده شده اند
+        var currentPermissions = await _applicationDbContext.RolePermissions
+            .Where(rp => rp.RoleId == role.Id)
+            .Select(rp => rp.Permission.Name)
+            .ToListAsync(cancellationToken);
+
+        var newPermissions = request.GrantedPermissions ?? new List<string>();
+
+
+        // حذف پرمیژن هایی که در حال حاضر وجود دارند ولی در لیست جدید نیستند
+        var permissionsToRemove = currentPermissions.Except(newPermissions, StringComparer.OrdinalIgnoreCase).ToList();
+        if (permissionsToRemove.Any())
+        {
+            var entitiesToRemove = await _applicationDbContext.RolePermissions
+                .Include(i => i.Permission)
+                .Where(rp => rp.RoleId == role.Id && permissionsToRemove.Contains(rp.Permission.Name))
+                .ToListAsync(cancellationToken);
+
+            _applicationDbContext.RolePermissions.RemoveRange(entitiesToRemove);
+        }
+
+
+
+        // اضافه کردن پرمیژن هایی که جدید هستند
+        var permissionsToAdd = newPermissions.Except(currentPermissions, StringComparer.OrdinalIgnoreCase).ToList();
+        if (permissionsToAdd.Any())
+        {
+            var permissionsMustBeAdded = await _applicationDbContext.Permissions
+                  .Select(s => new { s.Id, s.Name })
+                  .Where(w => permissionsToAdd.Contains(w.Name)).ToListAsync();
+
+            var entitiesToAdd = permissionsMustBeAdded.Select(p => new RolePermission
+            {
+                RoleId = role.Id,
+                PermissionId = p.Id
+            });
+
+            await _applicationDbContext.RolePermissions.AddRangeAsync(entitiesToAdd, cancellationToken);
+        }
+
+        await _applicationDbContext.SaveChangesAsync(cancellationToken);
+        // _logger.LogInformation("Removed permissions: {Permissions}", string.Join(", ", permissionsToRemove));
+        // _logger.LogInformation("Added permissions: {Permissions}", string.Join(", ", permissionsToAdd));
+
         return true;
     }
 }

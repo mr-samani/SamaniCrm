@@ -10,10 +10,10 @@ using SamaniCrm.Application.DTOs;
 
 namespace SamaniCrm.Application.User.Queries
 {
-    public record GetCurrentUserQuery : IRequest<UserResponseDTO>;
+    public record GetCurrentUserQuery : IRequest<UserDTO>;
 
 
-    public class GetCurrentUserQueryHandler : IRequestHandler<GetCurrentUserQuery, UserResponseDTO>
+    public class GetCurrentUserQueryHandler : IRequestHandler<GetCurrentUserQuery, UserDTO>
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IIdentityService _identityService;
@@ -24,7 +24,7 @@ namespace SamaniCrm.Application.User.Queries
             _identityService = identityService;
         }
 
-        public async Task<UserResponseDTO> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
+        public async Task<UserDTO> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
         {
             if (!Guid.TryParse(_currentUserService.UserId, out Guid currentUserId))
             {

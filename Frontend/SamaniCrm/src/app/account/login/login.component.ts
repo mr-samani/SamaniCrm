@@ -23,6 +23,8 @@ export class LoginComponent extends AppComponentBase implements OnInit {
   @ViewChild('captcha') captcha!: CaptchaComponent;
   requiredCaptcha = AppConst.requireCaptcha;
   showPassword = false;
+
+  returnUrl?: string;
   constructor(
     injector: Injector,
     private matDialog: MatDialog,
@@ -34,6 +36,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
       captcha: [new InputCaptchaDTO({ captchaKey: '', captchaText: '' })],
       rememberMe: [true],
     });
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'];
   }
 
   ngOnInit(): void {
@@ -55,7 +58,11 @@ export class LoginComponent extends AppComponentBase implements OnInit {
       .subscribe({
         next: (result: any) => {
           this.notify.success(this.l('Message.LoginSuccess'));
-          this.router.navigate(['/dashboard']);
+          if (this.returnUrl) {
+            window.location.href = this.returnUrl;
+          } else {
+            this.router.navigate(['/dashboard']);
+          }
         },
         error: (error: HttpErrorResponse) => {
           if (error.status == 401) {

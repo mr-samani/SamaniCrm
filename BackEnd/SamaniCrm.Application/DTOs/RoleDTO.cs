@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.DTOs
 {
-    public class RoleResponseDTO
+    public class RoleDTO
     {
         public Guid Id { get; set; }
         public required string RoleName { get; set; }

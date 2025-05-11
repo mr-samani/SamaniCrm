@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { UserResponseDTO } from './user-response-dto';
+import { UserDTO } from './user-dto';
 
 
 /**
@@ -21,22 +21,22 @@ import { UserResponseDTO } from './user-response-dto';
  */
 /* Created with custom template */
 
-/** Interface for UserResponseDTOPaginatedResult */
-export interface IUserResponseDTOPaginatedResult {
-  items?: Array<UserResponseDTO>;
+/** Interface for UserDTOPaginatedResult */
+export interface IUserDTOPaginatedResult {
+  items?: Array<UserDTO>;
   totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
 }
 
-/** Class for UserResponseDTOPaginatedResult */
-export class UserResponseDTOPaginatedResult implements IUserResponseDTOPaginatedResult {
-  items?: Array<UserResponseDTO>;
+/** Class for UserDTOPaginatedResult */
+export class UserDTOPaginatedResult implements IUserDTOPaginatedResult {
+  items?: Array<UserDTO>;
   totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
 
-  constructor(data?: IUserResponseDTOPaginatedResult) {
+  constructor(data?: IUserDTOPaginatedResult) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -50,7 +50,7 @@ init(data?: any) {
     if (Array.isArray(data["items"])) {
       this.items = [] as any;
       for (let item of data["items"])
-        (this.items as any).push(UserResponseDTO.fromJS(item));
+        (this.items as any).push(UserDTO.fromJS(item));
     }
     this.totalCount = data["totalCount"];
     this.pageNumber = data["pageNumber"];
@@ -58,8 +58,8 @@ init(data?: any) {
   }
 }
 
-  static fromJS(data: any): UserResponseDTOPaginatedResult {
-    const instance = new UserResponseDTOPaginatedResult();
+  static fromJS(data: any): UserDTOPaginatedResult {
+    const instance = new UserDTOPaginatedResult();
     instance.init(data);
     return instance;
   }

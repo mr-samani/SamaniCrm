@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.DTOs
 {
-    public class UserResponseDTO
+    public class UserDTO
     {
         public required Guid Id { get; set; }
         [Sortable]

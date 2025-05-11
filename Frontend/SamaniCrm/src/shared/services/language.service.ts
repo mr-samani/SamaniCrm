@@ -39,7 +39,7 @@ export class LanguageService {
     if (dontSave == false) {
       this.mainSpinner.showLoading = true;
       // this.dataService
-      //   .post<any, UserResponseDTO>(Apis.changeUserLanguage + '/' + AppConst.currentLanguage, {
+      //   .post<any, UserDTO>(Apis.changeUserLanguage + '/' + AppConst.currentLanguage, {
       //     lang: AppConst.currentLanguage,
       //   })
       //   .pipe(finalize(() => (this.mainSpinner.showLoading = false)))

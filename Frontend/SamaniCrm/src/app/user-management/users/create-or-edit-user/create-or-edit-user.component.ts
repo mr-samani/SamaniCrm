@@ -8,16 +8,16 @@ import {
   CreateUserCommand,
   EditUserCommand,
   PasswordComplexityDTO,
-  RoleResponseDTO,
+  RoleDTO,
   RoleServiceProxy,
   SecuritySettingsServiceProxy,
-  UserResponseDTO,
+  UserDTO,
   UserServiceProxy,
 } from '@shared/service-proxies';
 import { forkJoin } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
-export class SelectableRole extends RoleResponseDTO {
+export class SelectableRole extends RoleDTO {
   selected?: boolean;
 }
 
@@ -38,7 +38,7 @@ export class CreateOrEditUserComponent extends AppComponentBase implements OnIni
   constructor(
     injector: Injector,
     private dialogRef: MatDialogRef<CreateUserCommand>,
-    @Inject(MAT_DIALOG_DATA) private _data: { user?: UserResponseDTO },
+    @Inject(MAT_DIALOG_DATA) private _data: { user?: UserDTO },
     private userService: UserServiceProxy,
     private roleService: RoleServiceProxy,
     private securitySettingsService: SecuritySettingsServiceProxy,

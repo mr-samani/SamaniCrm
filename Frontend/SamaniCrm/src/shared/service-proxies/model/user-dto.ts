@@ -20,8 +20,8 @@
  */
 /* Created with custom template */
 
-/** Interface for UserResponseDTO */
-export interface IUserResponseDTO {
+/** Interface for UserDTO */
+export interface IUserDTO {
   id: string;
   userName: string;
   firstName: string;
@@ -36,8 +36,8 @@ export interface IUserResponseDTO {
   roles: Array<string>;
 }
 
-/** Class for UserResponseDTO */
-export class UserResponseDTO implements IUserResponseDTO {
+/** Class for UserDTO */
+export class UserDTO implements IUserDTO {
   id!: string;
   userName!: string;
   firstName!: string;
@@ -51,7 +51,7 @@ export class UserResponseDTO implements IUserResponseDTO {
   creationTime!: string;
   roles!: Array<string>;
 
-  constructor(data?: IUserResponseDTO) {
+  constructor(data?: IUserDTO) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -81,8 +81,8 @@ init(data?: any) {
   }
 }
 
-  static fromJS(data: any): UserResponseDTO {
-    const instance = new UserResponseDTO();
+  static fromJS(data: any): UserDTO {
+    const instance = new UserDTO();
     instance.init(data);
     return instance;
   }

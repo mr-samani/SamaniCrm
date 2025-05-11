@@ -149,7 +149,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   handleAccessDeniedError(err?: any) {
-    const msg = err?.message ?? this.translateService.instant('Message.PleaseLogin');
+    const msg = err?.message ?? this.translateService.instant('Message.AccessDenied');
     this.alertService
       .show({
         title: msg,

@@ -36,12 +36,6 @@ export class SettingMenuService extends AppComponentBase {
     new MenuModel(this.l('Users'), '', '', '', [
       new MenuModel(this.l('Roles'), this.l('RolesDescription'), 'fa fa-users-gear', '/dashboard/roles'),
       new MenuModel(this.l('Users'), this.l('UsersDescription'), 'fa fa-users', '/dashboard/users'),
-      new MenuModel(
-        this.l('Permissions'),
-        this.l('PermissionsDescription'),
-        'fa fa-users-viewfinder',
-        '/dashboard/user-Permissions',
-      ),
     ]),
   ];
 }

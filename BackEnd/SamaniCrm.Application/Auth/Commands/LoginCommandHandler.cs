@@ -40,7 +40,7 @@ namespace SamaniCrm.Application.Auth.Commands
                 BackgroundJob.Enqueue(() => SendLoginFailureNotification(request.UserName));
                 throw new InvalidLoginException();
             }
-            UserResponseDTO  userData = await _identityService.GetUserDetailsByUserNameAsync(request.UserName);
+            UserDTO  userData = await _identityService.GetUserDetailsByUserNameAsync(request.UserName);
 
             var accessToken = _tokenGenerator.GenerateAccessToken(userData.Id,
                 userData.UserName,

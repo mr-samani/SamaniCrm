@@ -27,7 +27,7 @@ namespace SamaniCrm.Application.User.Queries
                 .WithMessage("SortDirection must be 'asc' or 'desc'.");
 
             RuleFor(x => x.SortBy)
-                .Must(field => field.IsValidSortField<UserResponseDTO>())
+                .Must(field => field.IsValidSortField<UserDTO>())
                 .WithMessage("SortBy must be a valid property of UserDto.");
         }
     }

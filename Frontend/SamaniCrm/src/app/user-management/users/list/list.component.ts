@@ -9,7 +9,7 @@ import { AppConst } from '@shared/app-const';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
 import { GetUserQuery, UserServiceProxy } from '@shared/service-proxies';
-import { UserResponseDTO } from '@shared/service-proxies/model/user-response-dto';
+import { UserDTO } from '@shared/service-proxies/model/user-dto';
 import { DownloadService, DownloadFileType } from '@shared/services/download.service';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -24,7 +24,7 @@ import { CreateOrEditUserComponent } from '../create-or-edit-user/create-or-edit
 export class UserListComponent extends AppComponentBase implements OnInit, OnDestroy {
   loading = true;
 
-  list: UserResponseDTO[] = [];
+  list: UserDTO[] = [];
   totalCount = 0;
 
   fields: FieldsType[] = [
@@ -121,7 +121,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
     );
   }
 
-  changeAvatar(item: UserResponseDTO) {
+  changeAvatar(item: UserDTO) {
     this.fileManager
       .selectFile({
         usage: FileUsageEnum.USER_AVATAR,
@@ -129,7 +129,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
       .then((r) => {});
   }
 
-  openCreateOrEditUserDialog(item?: UserResponseDTO) {
+  openCreateOrEditUserDialog(item?: UserDTO) {
     this.matDialog
       .open(CreateOrEditUserComponent, {
         data: {
@@ -145,7 +145,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
       });
   }
 
-  remove(item: UserResponseDTO) {
+  remove(item: UserDTO) {
     this.confirmMessage(`${this.l('Delete')}:${item?.fullName}`, this.l('AreUseSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();

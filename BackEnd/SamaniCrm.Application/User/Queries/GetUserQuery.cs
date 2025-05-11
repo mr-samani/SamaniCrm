@@ -10,12 +10,12 @@ using SamaniCrm.Application.Common.DTOs;
 
 namespace SamaniCrm.Application.Queries.User
 {
-    public class GetUserQuery : PaginationRequest, IRequest<PaginatedResult<UserResponseDTO>>
+    public class GetUserQuery : PaginationRequest, IRequest<PaginatedResult<UserDTO>>
     {
         public string? Filter { get; set; }
     }
 
-    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, PaginatedResult<UserResponseDTO>>
+    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, PaginatedResult<UserDTO>>
     {
         private readonly IIdentityService _identityService;
 
@@ -24,9 +24,9 @@ namespace SamaniCrm.Application.Queries.User
             _identityService = identityService;
         }
 
-        public async Task<PaginatedResult<UserResponseDTO>> Handle(GetUserQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<UserDTO>> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-            PaginatedResult<UserResponseDTO> users = await _identityService.GetAllUsersAsync(request, cancellationToken);
+            PaginatedResult<UserDTO> users = await _identityService.GetAllUsersAsync(request, cancellationToken);
             return users;
         }
     }

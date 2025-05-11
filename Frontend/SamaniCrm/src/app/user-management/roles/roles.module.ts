@@ -1,7 +1,8 @@
+import { CreateOrEditRoleComponent } from './create-or-edit-role/create-or-edit-role.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RolesRoutingModule } from './roles-routing.module';
 import { RoleListComponent } from './list/list.component';
 
@@ -13,7 +14,7 @@ import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { RoleServiceProxy } from '@shared/service-proxies';
 
 @NgModule({
-  declarations: [RoleListComponent, RolePermissionsListComponent],
+  declarations: [RoleListComponent, RolePermissionsListComponent, CreateOrEditRoleComponent],
   imports: [
     CommonModule,
     RolesRoutingModule,
@@ -23,6 +24,7 @@ import { RoleServiceProxy } from '@shared/service-proxies';
     FileManagerModule,
     MaterialCommonModule,
     TreeViewComponent,
+    ReactiveFormsModule,
   ],
   providers: [RoleServiceProxy],
 })

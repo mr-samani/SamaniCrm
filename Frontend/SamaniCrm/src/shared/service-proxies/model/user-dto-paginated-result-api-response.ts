@@ -8,8 +8,8 @@
  * Do not edit the class manually.
  */
 import { Meta } from './meta';
-import { UserResponseDTO } from './user-response-dto';
 import { ApiError } from './api-error';
+import { UserDTOPaginatedResult } from './user-dto-paginated-result';
 
 
 /**
@@ -23,22 +23,22 @@ import { ApiError } from './api-error';
  */
 /* Created with custom template */
 
-/** Interface for UserResponseDTOApiResponse */
-export interface IUserResponseDTOApiResponse {
+/** Interface for UserDTOPaginatedResultApiResponse */
+export interface IUserDTOPaginatedResultApiResponse {
   success?: boolean;
-  data?: UserResponseDTO;
+  data?: UserDTOPaginatedResult;
   errors?: Array<ApiError>;
   meta?: Meta;
 }
 
-/** Class for UserResponseDTOApiResponse */
-export class UserResponseDTOApiResponse implements IUserResponseDTOApiResponse {
+/** Class for UserDTOPaginatedResultApiResponse */
+export class UserDTOPaginatedResultApiResponse implements IUserDTOPaginatedResultApiResponse {
   success?: boolean;
-  data?: UserResponseDTO;
+  data?: UserDTOPaginatedResult;
   errors?: Array<ApiError>;
   meta?: Meta;
 
-  constructor(data?: IUserResponseDTOApiResponse) {
+  constructor(data?: IUserDTOPaginatedResultApiResponse) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -60,8 +60,8 @@ init(data?: any) {
   }
 }
 
-  static fromJS(data: any): UserResponseDTOApiResponse {
-    const instance = new UserResponseDTOApiResponse();
+  static fromJS(data: any): UserDTOPaginatedResultApiResponse {
+    const instance = new UserDTOPaginatedResultApiResponse();
     instance.init(data);
     return instance;
   }

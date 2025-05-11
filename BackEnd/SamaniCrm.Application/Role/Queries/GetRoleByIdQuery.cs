@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.Queries.Role
 {
-    public class GetRoleByIdQuery : IRequest<RoleResponseDTO>
+    public class GetRoleByIdQuery : IRequest<RoleDTO>
     {
         public Guid RoleId { get; set; }
     }
 
-    public class GetRoleQueryByIdHandler : IRequestHandler<GetRoleByIdQuery, RoleResponseDTO>
+    public class GetRoleQueryByIdHandler : IRequestHandler<GetRoleByIdQuery, RoleDTO>
     {
         private readonly IIdentityService _identityService;
 
@@ -22,10 +22,10 @@ namespace SamaniCrm.Application.Queries.Role
         {
             _identityService = identityService;
         }
-        public async Task<RoleResponseDTO> Handle(GetRoleByIdQuery request, CancellationToken cancellationToken)
+        public async Task<RoleDTO> Handle(GetRoleByIdQuery request, CancellationToken cancellationToken)
         {
             var role = await _identityService.GetRoleByIdAsync(request.RoleId);
-            return new RoleResponseDTO() { Id = role.id, RoleName = role.roleName };
+            return new RoleDTO() { Id = role.id, RoleName = role.roleName };
         }
     }
 }

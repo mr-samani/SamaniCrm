@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { RoleDTO } from './role-dto';
 import { Meta } from './meta';
 import { ApiError } from './api-error';
 
@@ -22,22 +23,22 @@ import { ApiError } from './api-error';
  */
 /* Created with custom template */
 
-/** Interface for StringStringDictionaryApiResponse */
-export interface IStringStringDictionaryApiResponse {
+/** Interface for RoleDTOApiResponse */
+export interface IRoleDTOApiResponse {
   success?: boolean;
-  data?: { [key: string]: string | null; };
+  data?: RoleDTO;
   errors?: Array<ApiError>;
   meta?: Meta;
 }
 
-/** Class for StringStringDictionaryApiResponse */
-export class StringStringDictionaryApiResponse implements IStringStringDictionaryApiResponse {
+/** Class for RoleDTOApiResponse */
+export class RoleDTOApiResponse implements IRoleDTOApiResponse {
   success?: boolean;
-  data?: { [key: string]: string | null; };
+  data?: RoleDTO;
   errors?: Array<ApiError>;
   meta?: Meta;
 
-  constructor(data?: IStringStringDictionaryApiResponse) {
+  constructor(data?: IRoleDTOApiResponse) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -59,8 +60,8 @@ init(data?: any) {
   }
 }
 
-  static fromJS(data: any): StringStringDictionaryApiResponse {
-    const instance = new StringStringDictionaryApiResponse();
+  static fromJS(data: any): RoleDTOApiResponse {
+    const instance = new RoleDTOApiResponse();
     instance.init(data);
     return instance;
   }

@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.Queries.Role
 {
-    public class GetRoleQuery : IRequest<IList<RoleResponseDTO>>
+    public class GetRoleQuery : IRequest<IList<RoleDTO>>
     {
 
     }
 
-    public class GetRoleQueryHandler : IRequestHandler<GetRoleQuery, IList<RoleResponseDTO>>
+    public class GetRoleQueryHandler : IRequestHandler<GetRoleQuery, IList<RoleDTO>>
     {
         private readonly IIdentityService _identityService;
 
@@ -22,10 +22,10 @@ namespace SamaniCrm.Application.Queries.Role
         {
             _identityService = identityService;
         }
-        public async Task<IList<RoleResponseDTO>> Handle(GetRoleQuery request, CancellationToken cancellationToken)
+        public async Task<IList<RoleDTO>> Handle(GetRoleQuery request, CancellationToken cancellationToken)
         {
             var roles = await _identityService.GetRolesAsync();
-            return roles.Select(role => new RoleResponseDTO()
+            return roles.Select(role => new RoleDTO()
             {
                 Id = role.id,
                 RoleName = role.roleName,

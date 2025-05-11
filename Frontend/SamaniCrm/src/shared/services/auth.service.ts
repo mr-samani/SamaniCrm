@@ -11,7 +11,7 @@ import {
   LoginCommand,
   RefreshTokenCommand,
   RevokeRefreshTokenCommand,
-  UserResponseDTO,
+  UserDTO,
   UserServiceProxy,
 } from '@shared/service-proxies';
 import { TranslateService } from '@ngx-translate/core';
@@ -20,10 +20,10 @@ import { AppConst } from '@shared/app-const';
   providedIn: 'root',
 })
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<UserResponseDTO | undefined> = new BehaviorSubject<
-    UserResponseDTO | undefined
+  private currentUserSubject: BehaviorSubject<UserDTO | undefined> = new BehaviorSubject<
+    UserDTO | undefined
   >(undefined);
-  public currentUser: Observable<UserResponseDTO | undefined>;
+  public currentUser: Observable<UserDTO | undefined>;
   accountService: AccountServiceProxy;
   userService: UserServiceProxy;
   constructor(
@@ -40,7 +40,7 @@ export class AuthService {
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  public get currentUserValue(): UserResponseDTO | undefined {
+  public get currentUserValue(): UserDTO | undefined {
     return this.currentUserSubject.value;
   }
 
@@ -108,7 +108,10 @@ export class AuthService {
       )
       .subscribe();
     this.tokenService.remove();
-    this.router.navigate(['/account/login']);
+    const returnUrl = window.location.href;
+    this.router.navigate(['/account/login'], {
+      queryParams: { returnUrl },
+    });
   }
 
   getCurrentUserValue() {

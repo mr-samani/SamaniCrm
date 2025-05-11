@@ -20,20 +20,18 @@
  */
 /* Created with custom template */
 
-/** Interface for RoleResponseDTO */
-export interface IRoleResponseDTO {
-  id?: string;
-  roleName: string;
-  displayName?: string;
+/** Interface for EditRolePermissionsCommand */
+export interface IEditRolePermissionsCommand {
+  grantedPermissions?: Array<string>;
+  roleName?: string;
 }
 
-/** Class for RoleResponseDTO */
-export class RoleResponseDTO implements IRoleResponseDTO {
-  id?: string;
-  roleName!: string;
-  displayName?: string;
+/** Class for EditRolePermissionsCommand */
+export class EditRolePermissionsCommand implements IEditRolePermissionsCommand {
+  grantedPermissions?: Array<string>;
+  roleName?: string;
 
-  constructor(data?: IRoleResponseDTO) {
+  constructor(data?: IEditRolePermissionsCommand) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -44,14 +42,17 @@ export class RoleResponseDTO implements IRoleResponseDTO {
 
 init(data?: any) {
   if (data) {
-    this.id = data["id"];
+    if (Array.isArray(data["grantedPermissions"])) {
+      this.grantedPermissions = [] as any;
+      for (let item of data["grantedPermissions"])
+        (this.grantedPermissions as any).push(item);
+    }
     this.roleName = data["roleName"];
-    this.displayName = data["displayName"];
   }
 }
 
-  static fromJS(data: any): RoleResponseDTO {
-    const instance = new RoleResponseDTO();
+  static fromJS(data: any): EditRolePermissionsCommand {
+    const instance = new EditRolePermissionsCommand();
     instance.init(data);
     return instance;
   }

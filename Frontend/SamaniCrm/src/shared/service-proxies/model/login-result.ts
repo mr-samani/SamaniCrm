@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { UserResponseDTO } from './user-response-dto';
+import { UserDTO } from './user-dto';
 
 
 /**
@@ -23,7 +23,7 @@ import { UserResponseDTO } from './user-response-dto';
 
 /** Interface for LoginResult */
 export interface ILoginResult {
-  user?: UserResponseDTO;
+  user?: UserDTO;
   accessToken?: string;
   refreshToken?: string;
   roles?: Array<string>;
@@ -31,7 +31,7 @@ export interface ILoginResult {
 
 /** Class for LoginResult */
 export class LoginResult implements ILoginResult {
-  user?: UserResponseDTO;
+  user?: UserDTO;
   accessToken?: string;
   refreshToken?: string;
   roles?: Array<string>;
