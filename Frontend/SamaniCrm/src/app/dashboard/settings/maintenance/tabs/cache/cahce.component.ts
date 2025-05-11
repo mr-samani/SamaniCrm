@@ -1,14 +1,23 @@
 import { Component, Injector, Input, OnInit } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
-import { CacheKey } from '../../models/maintenance';
 import { AppComponentBase } from '@app/app-component-base';
 import { finalize } from 'rxjs';
 import { Apis } from '@shared/apis';
+import { MaintenanceServiceProxy } from '@shared/service-proxies/api/maintenance.service';
+import { CacheEntryDto } from '@shared/service-proxies';
+import { FieldsType } from '@shared/components/table-view/fields-type.model';
+import { humanFileSize } from '@shared/helper/file.helper';
+
+export class CacheEntryDtoExtended extends CacheEntryDto {
+  loading?: boolean;
+  humanSize?: string;
+}
 
 @Component({
   selector: 'app-cache',
   templateUrl: './cache.component.html',
-  styleUrls: ['./cache.component.css'],
+  styleUrls: ['./cache.component.scss'],
+  standalone: false,
   viewProviders: [
     {
       provide: ControlContainer,
@@ -17,9 +26,20 @@ import { Apis } from '@shared/apis';
   ],
 })
 export class CacheComponent extends AppComponentBase implements OnInit {
-  cacheKeys: CacheKey[] = [];
+  cacheKeys: CacheEntryDtoExtended[] = [];
+  fields: FieldsType[] = [
+    { column: 'key', title: this.l('Key'), type: 'text' },
+    { column: 'provider', title: this.l('Provider') },
+    { column: 'lastModified', title: this.l('LastModified'), type: 'dateTime' },
+    { column: 'expiration', title: this.l('Expiration') },
+    { column: 'humanSize', title: this.l('Size'), type: 'text' },
+  ];
+
   loading = true;
-  constructor(injector: Injector) {
+  constructor(
+    injector: Injector,
+    private maintenanceService: MaintenanceServiceProxy,
+  ) {
     super(injector);
   }
 
@@ -29,26 +49,26 @@ export class CacheComponent extends AppComponentBase implements OnInit {
 
   getData() {
     this.loading = true;
-    // this.dataService
-    //   .get<any, CacheKey[]>(Apis.getAllCacheKeys, {})
-    //   .pipe(finalize(() => (this.loading = false)))
-    //   .subscribe((response) => {
-    //     this.cacheKeys = response.data ?? [];
-    //   });
+    this.maintenanceService
+      .getAllCacheEntries()
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe((response) => {
+        this.cacheKeys = response.data ?? [];
+        this.cacheKeys.map((m) => (m.humanSize = humanFileSize(m.sizeInBytes)));
+      });
   }
 
-  clear(key: CacheKey) {
-    if (!key) {
-      this.notify.warning(this.l('CompleteFormFields'));
-      return;
-    }
-
-    key.loading = true;
-    // this.dataService
-    //   .post(Apis.clearCache, { key: key.key })
-    //   .pipe(finalize(() => (key.loading = false)))
-    //   .subscribe((response) => {
-    //     this.notify.success(this.l('DoneSuccessFully') + '(' + response.data + ')');
-    //   });
+  remove(item: CacheEntryDtoExtended) {
+    this.confirmMessage(`${this.l('Delete')}:${item.key}`, this.l('AreYouSureForDelete')).then((result) => {
+      if (result.isConfirmed) {
+        item.loading = true;
+        this.maintenanceService
+          .deleteCache(item.key)
+          .pipe(finalize(() => (item.loading = false)))
+          .subscribe((response) => {
+            this.notify.success(this.l('DoneSuccessFully') + '(' + response.data + ')');
+          });
+      }
+    });
   }
 }

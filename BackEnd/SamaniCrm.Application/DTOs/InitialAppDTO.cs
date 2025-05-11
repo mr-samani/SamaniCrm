@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamaniCrm.Application.InitialApp.Queries;
+using SamaniCrm.Core.Shared.DTOs;
 
 namespace SamaniCrm.Application.DTOs
 {

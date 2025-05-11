@@ -24,6 +24,7 @@ using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.InitialApp.Queries;
 using SamaniCrm.Application.Queries.Role;
 using SamaniCrm.Application.User.Queries;
+using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.BackgroundServices;
 using SamaniCrm.Infrastructure.Captcha;
@@ -229,13 +230,14 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ISecuritySettingService, SecuritySettingService>();
 
 
-        services.AddMemoryCache();
+        // services.AddMemoryCache();
         //چون حافظه ایه Singleton باشه بهتره.
         services.AddSingleton<ICaptchaStore, InMemoryCaptchaStore>();
         services.AddHostedService<CaptchaCleanupBackgroundService>();
 
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IUserPermissionService, UserPermissionService>();
+        services.AddScoped<ILanguageService, LanguageService>();
 
         services.AddScoped<PermissionFilter>();
 

@@ -10,6 +10,7 @@ import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 import { SwitchModule } from '@shared/components/switch/switch.module';
 import { CacheComponent } from './tabs/cache/cahce.component';
+import { MaintenanceServiceProxy } from '@shared/service-proxies';
 
 @NgModule({
   declarations: [MaintenanceComponent, CacheComponent],
@@ -24,5 +25,6 @@ import { CacheComponent } from './tabs/cache/cahce.component';
     TabGroupModule,
     SwitchModule,
   ],
+  providers: [MaintenanceServiceProxy],
 })
 export class MaintenanceModule {}

@@ -1,13 +1,16 @@
-<div class="list-container">
-  @for (item of cacheKeys; track item.key) {
-    <div class="list-item">
-      <mat-spinner diameter="20" *ngIf="item.loading" color="primary"></mat-spinner>
-      <span>{{ item.title }}</span>
-      <span class="flex-fill"></span>
-      <button mat-stroked-button color="primary" (click)="clear(item)">
-        {{ 'Clear' | translate }}
-      </button>
-    </div>
-  }
-</div>
-<mat-progress-bar *ngIf="loading" class="my-5" [mode]="'indeterminate'"></mat-progress-bar>
+ 
+
+<table-view [list]="cacheKeys" [fields]="fields" [operations]="operations" [loading]="loading"></table-view>
+
+<ng-template #operations let-item>
+  <mat-spinner [diameter]="20" *ngIf="item.loading"></mat-spinner>
+  <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger" *ngIf="!item.loading">
+    <i class="fa fa-ellipsis-v"></i>
+  </button>
+  <mat-menu #menu="matMenu">
+    <a mat-menu-item (click)="remove(item)">
+      <i class="fa fa-trash mx-1"></i>
+      <span>{{ l('Remove') }}</span>
+    </a>
+  </mat-menu>
+</ng-template>

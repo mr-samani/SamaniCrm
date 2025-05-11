@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Application.Localize.Commands

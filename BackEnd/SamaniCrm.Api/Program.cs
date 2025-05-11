@@ -4,6 +4,7 @@ using SamaniCrm.Application;
 using SamaniCrm.Host.Middlewares;
 using SamaniCrm.Infrastructure.Extensions;
 using SamaniCrm.Infrastructure.Identity;
+using SamaniCrm.Infrastructure.Cache;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -20,6 +21,9 @@ services
     .AddInfrastructure(config)
     .AddSwaggerDocumentation()
     .AddHangfire(config);
+
+builder.Services.AddCacheService(config);
+
 
 var app = builder.Build();
 // برای اینکه از همان instance ICaptchaStore استفاده کنم و یک نمون جدید نسازد این جا مقدار دهی میکنم

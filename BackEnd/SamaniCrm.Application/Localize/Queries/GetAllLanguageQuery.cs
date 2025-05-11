@@ -7,6 +7,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Core.Shared.DTOs;
+using SamaniCrm.Core.Shared.Interfaces;
 
 namespace SamaniCrm.Application.Localize.Queries
 {
@@ -15,23 +17,17 @@ namespace SamaniCrm.Application.Localize.Queries
     public class GetAllLanguageQueryHandler : IRequestHandler<GetAllLanguageQuery, List<LanguageDTO>>
     {
         private readonly IApplicationDbContext _dbContext;
+        private readonly ILanguageService _languageService;
 
-        public GetAllLanguageQueryHandler(IApplicationDbContext dbContext)
+        public GetAllLanguageQueryHandler(IApplicationDbContext dbContext, ILanguageService languageService)
         {
             _dbContext = dbContext;
+            _languageService = languageService;
         }
 
         public async Task<List<LanguageDTO>> Handle(GetAllLanguageQuery request, CancellationToken cancellationToken)
         {
-            var result = await _dbContext.Languages.Select(s => new LanguageDTO
-            {
-                Name = s.Name,
-                Culture = s.Culture,
-                Flag = s.Flag,
-                IsRtl = s.IsRtl,
-                IsDefault = s.IsDefault,
-                IsActive = s.IsActive,
-            }).ToListAsync();
+            var result = await _languageService.GetAllLanguagesForAdmin();
             return result;
         }
     }

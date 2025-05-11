@@ -42,6 +42,18 @@ namespace SamaniCrm.Core.Permissions
         public const string MenuManagement_Delete = "Administrator.MenuManagement.Delete";
         public const string MenuManagement_ReOrder = "Administrator.MenuManagement.ReOrder";
 
+
+        // Maintenance 
+        public const string Meintenance = "Administrator.Maintenance";
+        public const string CacheEntries_List = "Administrator.Maintenance.Cache.List";
+        public const string CacheEntries_Delete = "Administrator.Maintenance.Cache.Delete";
+        public const string CacheEntries_ClearAll = "Administrator.Maintenance.Cache.ClearAll";
+
+
+
+
+
+
     }
 
 

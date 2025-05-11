@@ -25,15 +25,15 @@ const routes: Routes = [
         path: 'roles',
         loadChildren: () => import('../user-management/roles/roles.module').then((m) => m.RolesModule),
       },
-      
+
       {
         path: 'app-setting',
         loadChildren: () => import('./settings/app-setting/app-setting.module').then((m) => m.AppSettingModule),
       },
-      // {
-      //   path: 'maintenance',
-      //   loadChildren: () => import('./settings/maintenance/maintenance.module').then((m) => m.MaintenanceModule),
-      // },
+      {
+        path: 'maintenance',
+        loadChildren: () => import('./settings/maintenance/maintenance.module').then((m) => m.MaintenanceModule),
+      },
       { path: 'menu', loadChildren: () => import('./settings/menu/menu.module').then((m) => m.MenuModule) },
 
       // products

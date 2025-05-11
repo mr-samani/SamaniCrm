@@ -13,6 +13,7 @@
       </div>
     </div>
     <div class="tbody-mrs">
+      <div class="no-data" *ngIf="!_loading && _list.length ===0">{{'NoData'|translate}}</div>
       <div class="tr-mrs" *ngFor="let item of _list">
         <div
           class="td-mrs"

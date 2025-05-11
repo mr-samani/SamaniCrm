@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamaniCrm.Application.DTOs
+namespace SamaniCrm.Core.Shared.DTOs
 {
 
     public class LanguageDTO

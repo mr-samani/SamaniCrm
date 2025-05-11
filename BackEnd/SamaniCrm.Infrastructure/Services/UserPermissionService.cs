@@ -8,17 +8,19 @@ using Duende.IdentityServer.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Core.Shared.Consts;
+using SamaniCrm.Core.Shared.Interfaces;
 
 namespace SamaniCrm.Infrastructure.Services
 {
     public class UserPermissionService : IUserPermissionService
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly IMemoryCache _cache;
+        private readonly ICacheService _cache;
 
 
 
-        public UserPermissionService(ApplicationDbContext dbContext, IMemoryCache memoryCache)
+        public UserPermissionService(ApplicationDbContext dbContext, ICacheService memoryCache)
         {
             _dbContext = dbContext;
             _cache = memoryCache;
@@ -32,8 +34,9 @@ namespace SamaniCrm.Infrastructure.Services
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrWhiteSpace(userId))
                 return false;
-            var cacheKey = $"Permissions:{userId}";
-            if (!_cache.TryGetValue(cacheKey, out List<string>? permissions))
+            var cacheKey = CacheKeys.UserPermissions_ + userId;
+            List<string>? permissions = await _cache.GetAsync<List<string>>(cacheKey);
+            if (permissions == null)
             {
                 var parsedUserId = Guid.TryParse(userId, out var guid) ? guid : Guid.Empty;
                 if (parsedUserId == Guid.Empty)
@@ -54,7 +57,7 @@ namespace SamaniCrm.Infrastructure.Services
                     .ToListAsync();
 
 
-                _cache.Set(cacheKey, permissions, TimeSpan.FromHours(8));
+                await _cache.SetAsync(cacheKey, permissions, TimeSpan.FromHours(8));
             }
             return permissions == null ? false : permissions.Contains(permission);
         }

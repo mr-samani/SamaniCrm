@@ -13,12 +13,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SamaniCrm.Core\SamaniCrm.Core.Shared.csproj" />
     <ProjectReference Include="..\SamaniCrm.Domain\SamaniCrm.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Auth\Events\" />
     <Folder Include="Common\Services\" />
+    <Folder Include="Maintenance\Commands\" />
     <Folder Include="SecuritySetting\Commands\" />
   </ItemGroup>
 

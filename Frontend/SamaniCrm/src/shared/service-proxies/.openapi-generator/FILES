@@ -7,6 +7,7 @@ api/api.ts
 api/captcha.service.ts
 api/common.service.ts
 api/language.service.ts
+api/maintenance.service.ts
 api/menu.service.ts
 api/role.service.ts
 api/security-settings.service.ts
@@ -19,6 +20,8 @@ index.ts
 model/active-or-deactive-language-command.ts
 model/api-error.ts
 model/boolean-api-response.ts
+model/cache-entry-dto-list-api-response.ts
+model/cache-entry-dto.ts
 model/captcha-dto.ts
 model/change-active-menu-command.ts
 model/create-or-edit-language-command.ts
