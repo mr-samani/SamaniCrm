@@ -146,5 +146,22 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
   }
 
   openUserPermissionsDialog(item?: UserResponseDTO) {}
-  remove(item?: UserResponseDTO) {}
+  remove(item: UserResponseDTO) {
+    this.confirmMessage(`${this.l('Delete')}:${item?.fullName}`, this.l('AreUseSureForDelete')).then((result) => {
+      if (result.isConfirmed) {
+        this.showMainLoading();
+        this.userService
+          .deleteUser(item.id)
+          .pipe(finalize(() => this.hideMainLoading()))
+          .subscribe((response) => {
+            if (response.success) {
+              this.notify.success(this.l('DeletedSuccessfully'));
+              this.reload();
+            }
+          });
+      }
+    });
+  }
+
+  
 }
