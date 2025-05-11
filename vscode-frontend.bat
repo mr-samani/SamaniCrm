@@ -1,3 +1,0 @@
-cd Frontend\SamaniCrm
-
-code .

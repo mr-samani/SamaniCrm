@@ -29,7 +29,6 @@ export interface ICreateUserCommand {
   phoneNumber: string;
   lang: string;
   password: string;
-  confirmationPassword: string;
   roles: Array<string>;
 }
 
@@ -42,7 +41,6 @@ export class CreateUserCommand implements ICreateUserCommand {
   phoneNumber!: string;
   lang!: string;
   password!: string;
-  confirmationPassword!: string;
   roles!: Array<string>;
 
   constructor(data?: ICreateUserCommand) {
@@ -63,7 +61,6 @@ init(data?: any) {
     this.phoneNumber = data["phoneNumber"];
     this.lang = data["lang"];
     this.password = data["password"];
-    this.confirmationPassword = data["confirmationPassword"];
     if (Array.isArray(data["roles"])) {
       this.roles = [] as any;
       for (let item of data["roles"])
