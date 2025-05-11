@@ -28,6 +28,7 @@ namespace SamaniCrm.Application.DTOs
         public required string PhoneNumber { get; set; } = string.Empty;
         public required DateTime CreationTime { get; set; }
 
+        public required List<string> Roles { get; set; }
 
     }
 }

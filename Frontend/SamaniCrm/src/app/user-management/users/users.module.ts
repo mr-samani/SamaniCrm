@@ -1,4 +1,3 @@
-import { CreateUserComponent } from './create-user/create-user.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -18,9 +17,10 @@ import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 import { RoleServiceProxy, SecuritySettingsServiceProxy } from '@shared/service-proxies';
 import { SharedModule } from '@shared/shared.module';
 import { PasswordInputComponent } from '@shared/components/password-input/password-input.component';
+import { CreateOrEditUserComponent } from './create-or-edit-user/create-or-edit-user.component';
 
 @NgModule({
-  declarations: [UserListComponent, CreateUserComponent],
+  declarations: [UserListComponent, CreateOrEditUserComponent],
   imports: [
     CommonModule,
     UsersRoutingModule,

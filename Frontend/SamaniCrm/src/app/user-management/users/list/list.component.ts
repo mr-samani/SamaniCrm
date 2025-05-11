@@ -13,7 +13,7 @@ import { UserResponseDTO } from '@shared/service-proxies/model/user-response-dto
 import { DownloadService, DownloadFileType } from '@shared/services/download.service';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { CreateUserComponent } from '../create-user/create-user.component';
+import { CreateOrEditUserComponent } from '../create-or-edit-user/create-or-edit-user.component';
 
 @Component({
   selector: 'app-user-list',
@@ -35,6 +35,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
     { column: 'email', title: this.l('Email') },
     { column: 'phoneNumber', title: this.l('Phone') },
     { column: 'address', title: this.l('Address') },
+    { column: 'roles', title: this.l('Roles') },
     { column: 'lang', title: this.l('Language'), width: 50 },
     { column: 'creationTime', title: this.l('CreationTime'), type: 'dateTime' },
   ];
@@ -128,10 +129,12 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
       .then((r) => {});
   }
 
-  openCreateNewUserDialog() {
+  openCreateOrEditUserDialog(item?: UserResponseDTO) {
     this.matDialog
-      .open(CreateUserComponent, {
-        data: {},
+      .open(CreateOrEditUserComponent, {
+        data: {
+          user: item,
+        },
         width: '768px',
       })
       .afterClosed()
@@ -141,4 +144,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
         }
       });
   }
+
+  openUserPermissionsDialog(item?: UserResponseDTO) {}
+  remove(item?: UserResponseDTO) {}
 }

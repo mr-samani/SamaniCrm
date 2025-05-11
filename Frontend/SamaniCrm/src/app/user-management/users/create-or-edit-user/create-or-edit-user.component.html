@@ -1,5 +1,6 @@
 <h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
-  <span cdkDragHandle class="title" *ngIf="">{{ 'CreateNewUser' | translate }}</span>
+  <span cdkDragHandle class="title" *ngIf="!isUpdate">{{ 'CreateNewUser' | translate }}</span>
+  <span cdkDragHandle class="title" *ngIf="isUpdate">{{ 'EditUser' | translate }}</span>
 
   <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
     <span aria-hidden="true">&times;</span>
@@ -19,7 +20,21 @@
             <mat-error *ngIf="form.get('userName')?.hasError('required')">
               {{ 'IsRequired' | translate: { value: ('UserName' | translate) } }}
             </mat-error>
+            <mat-error *ngIf="form.get('userName')?.hasError('pattern')">
+              {{ 'IsInvalid' | translate: { value: ('UserName' | translate) } }}
+            </mat-error>
           </mat-form-field>
+          <mat-form-field class="col-md-6">
+            <mat-label>{{ 'Email' | translate }}</mat-label>
+            <input matInput formControlName="email" type="email" />
+            <mat-error *ngIf="form.get('email')?.hasError('required')">
+              {{ 'IsRequired' | translate: { value: ('Email' | translate) } }}
+            </mat-error>
+            <mat-error *ngIf="form.get('email')?.hasError('pattern')">
+              {{ 'IsInvalid' | translate: { value: ('Email' | translate) } }}
+            </mat-error>
+          </mat-form-field>
+
           <mat-form-field class="col-md-6">
             <mat-label>{{ 'FirstName' | translate }}</mat-label>
             <input matInput formControlName="firstName" />
@@ -34,13 +49,7 @@
               {{ 'IsRequired' | translate: { value: ('LastName' | translate) } }}
             </mat-error>
           </mat-form-field>
-          <mat-form-field class="col-md-6">
-            <mat-label>{{ 'Email' | translate }}</mat-label>
-            <input matInput formControlName="email" type="email" />
-            <mat-error *ngIf="form.get('email')?.hasError('required')">
-              {{ 'IsRequired' | translate: { value: ('Email' | translate) } }}
-            </mat-error>
-          </mat-form-field>
+
           <mat-form-field class="col-md-6">
             <mat-label>{{ 'PhoneNumber' | translate }}</mat-label>
             <input matInput formControlName="phoneNumber" type="text" numberCheck minlength="4" maxlength="11" />
@@ -60,11 +69,19 @@
             </mat-error>
           </mat-form-field>
           <app-password-input
+            *ngIf="!isUpdate"
             [policy]="passwordPolicy!"
             className="col-md-6"
             parentClass="row"
             formControlName="password"></app-password-input>
-      
+
+          <mat-form-field class="col-md-12">
+            <mat-label>{{ 'Address' | translate }}</mat-label>
+            <textarea matInput rows="3" formControlName="address"></textarea>
+            <mat-error *ngIf="form.get('address')?.hasError('required')">
+              {{ 'IsRequired' | translate: { value: ('Address' | translate) } }}
+            </mat-error>
+          </mat-form-field>
         </div>
       </form>
     </tab-item>

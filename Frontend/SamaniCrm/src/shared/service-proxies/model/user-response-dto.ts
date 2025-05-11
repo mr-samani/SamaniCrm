@@ -33,6 +33,7 @@ export interface IUserResponseDTO {
   address?: string;
   phoneNumber: string;
   creationTime: string;
+  roles: Array<string>;
 }
 
 /** Class for UserResponseDTO */
@@ -48,6 +49,7 @@ export class UserResponseDTO implements IUserResponseDTO {
   address?: string;
   phoneNumber!: string;
   creationTime!: string;
+  roles!: Array<string>;
 
   constructor(data?: IUserResponseDTO) {
     if (data) {
@@ -71,6 +73,11 @@ init(data?: any) {
     this.address = data["address"];
     this.phoneNumber = data["phoneNumber"];
     this.creationTime = data["creationTime"];
+    if (Array.isArray(data["roles"])) {
+      this.roles = [] as any;
+      for (let item of data["roles"])
+        (this.roles as any).push(item);
+    }
   }
 }
 

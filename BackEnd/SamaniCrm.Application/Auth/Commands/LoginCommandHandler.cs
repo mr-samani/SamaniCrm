@@ -40,21 +40,21 @@ namespace SamaniCrm.Application.Auth.Commands
                 BackgroundJob.Enqueue(() => SendLoginFailureNotification(request.UserName));
                 throw new InvalidLoginException();
             }
-            (UserResponseDTO user, IList<string> roles) userData = await _identityService.GetUserDetailsByUserNameAsync(request.UserName);
+            UserResponseDTO  userData = await _identityService.GetUserDetailsByUserNameAsync(request.UserName);
 
-            var accessToken = _tokenGenerator.GenerateAccessToken(userData.user.Id,
-                userData.user.UserName,
-                userData.user.Lang,
-                userData.roles);
-            var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.user.Id, accessToken);
+            var accessToken = _tokenGenerator.GenerateAccessToken(userData.Id,
+                userData.UserName,
+                userData.Lang,
+                userData.Roles);
+            var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.Id, accessToken);
 
             BackgroundJob.Enqueue(() => SendLoginNotification(request.UserName));
             LoginResult output = new LoginResult()
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
-                User = userData.user,
-                Roles = userData.roles.ToArray()
+                User = userData,
+                Roles = userData.Roles
             };
             return output;
         }

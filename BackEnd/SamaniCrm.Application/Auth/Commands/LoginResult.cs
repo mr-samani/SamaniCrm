@@ -13,7 +13,7 @@ namespace SamaniCrm.Application.Auth.Commands
         public string AccessToken { get; set; } = string.Empty;
         public string RefreshToken { get; set; } = string.Empty;
 
-        public string[] Roles { get; set; } = [];
+        public List<string> Roles { get; set; } = [];
     }
 
 }

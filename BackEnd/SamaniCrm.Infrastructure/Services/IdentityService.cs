@@ -64,6 +64,7 @@ public class IdentityService : IIdentityService
             Email = input.Email,
             PhoneNumber = input.PhoneNumber,
             Lang = input.Lang,
+            Address = input.Address,
         };
 
         var result = await _userManager.CreateAsync(user, input.Password);
@@ -121,6 +122,10 @@ public class IdentityService : IIdentityService
 
     public async Task<PaginatedResult<UserResponseDTO>> GetAllUsersAsync(GetUserQuery request, CancellationToken cancellationToken)
     {
+        var rolesQuery = from ur in _applicationDbContext.UserRoles
+                         join r in _applicationDbContext.Roles on ur.RoleId equals r.Id
+                         select new { ur.UserId, RoleName = r.Name };
+
         IQueryable<ApplicationUser> query = _userManager.Users.AsQueryable();
         if (!string.IsNullOrEmpty(request.Filter))
         {
@@ -129,7 +134,7 @@ public class IdentityService : IIdentityService
             x.FirstName.Contains(request.Filter) ||
             x.LastName.Contains(request.Filter) ||
             x.Email.Contains(request.Filter) ||
-            x.PhoneNumber.Contains(request.Filter) 
+            x.PhoneNumber.Contains(request.Filter)
             );
         }
 
@@ -155,9 +160,10 @@ public class IdentityService : IIdentityService
                 Lang = u.Lang ?? "",
                 Email = u.Email ?? "",
                 ProfilePicture = u.ProfilePicture ?? "",
-                Address = u.Address ??"",
-                PhoneNumber = u.PhoneNumber ??"",
-                CreationTime = u.CreationTime.ToUniversalTime()
+                Address = u.Address ?? "",
+                PhoneNumber = u.PhoneNumber ?? "",
+                CreationTime = u.CreationTime.ToUniversalTime(),
+                Roles = rolesQuery.Where(x => x.UserId == u.Id).Select(x => x.RoleName).ToList()
             })
             .ToListAsync(cancellationToken);
 
@@ -171,15 +177,6 @@ public class IdentityService : IIdentityService
         };
     }
 
-    public Task<List<(UserResponseDTO user, IList<string> roles)>> GetAllUsersDetailsAsync()
-    {
-        throw new NotImplementedException();
-
-        //var roles = await _userManager.GetRolesAsync(user);
-        //return (user.Id, user.UserName, user.Email, roles);
-
-        //var users = _userManager.Users.ToListAsync();
-    }
 
     public async Task<List<(Guid id, string roleName)>> GetRolesAsync()
     {
@@ -192,7 +189,7 @@ public class IdentityService : IIdentityService
         return roles.Select(role => (role.Id, role.Name)).ToList();
     }
 
-    public async Task<(UserResponseDTO user, IList<string> roles)> GetUserDetailsAsync(Guid userId)
+    public async Task<UserResponseDTO> GetUserDetailsAsync(Guid userId)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
         if (user == null)
@@ -212,11 +209,12 @@ public class IdentityService : IIdentityService
             ProfilePicture = user.ProfilePicture ?? "",
             Address = user.Address ?? "",
             PhoneNumber = user.PhoneNumber ?? "",
-            CreationTime = user.CreationTime.ToUniversalTime()
-        }, roles);
+            CreationTime = user.CreationTime.ToUniversalTime(),
+            Roles = roles.ToList(),
+        });
     }
 
-    public async Task<(UserResponseDTO user, IList<string> roles)> GetUserDetailsByUserNameAsync(string userName)
+    public async Task<UserResponseDTO> GetUserDetailsByUserNameAsync(string userName)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == userName);
         if (user == null)
@@ -236,8 +234,9 @@ public class IdentityService : IIdentityService
             ProfilePicture = user.ProfilePicture ?? "",
             Address = user.Address ?? "",
             PhoneNumber = user.PhoneNumber ?? "",
-            CreationTime = user.CreationTime.ToUniversalTime()
-        }, roles);
+            CreationTime = user.CreationTime.ToUniversalTime(),
+            Roles = roles.ToList()
+        });
     }
 
     public async Task<string> GetUserIdAsync(string userName)
@@ -297,14 +296,38 @@ public class IdentityService : IIdentityService
 
     }
 
-    public async Task<bool> UpdateUserProfile(string id, string fullName, string email, IList<string> roles)
+    public async Task<bool> UpdateUser(EditUserCommand input)
     {
-        var user = await _userManager.FindByIdAsync(id);
-        user.FullName = fullName;
-        user.Email = email;
-        var result = await _userManager.UpdateAsync(user);
+        var user = await _userManager.FindByIdAsync(input.Id.ToString());
+        if (user == null)
+            return false;
 
-        return result.Succeeded;
+        user.FirstName = input.FirstName;
+        user.LastName = input.LastName;
+        user.FullName = $"{input.FirstName} {input.LastName}";
+        user.Email = input.Email;
+        user.PhoneNumber = input.PhoneNumber;
+        user.Lang = input.Lang;
+        user.Address = input.Address;
+
+        var updateResult = await _userManager.UpdateAsync(user);
+        if (!updateResult.Succeeded)
+            throw new CustomValidationException(updateResult.Errors);
+
+        // دریافت رول های فعلی
+        var currentRoles = await _userManager.GetRolesAsync(user);
+
+        // حذف رول های قبلی
+        var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+        if (!removeResult.Succeeded)
+            throw new CustomValidationException(removeResult.Errors);
+
+        // اضافه کردن رول های جدید
+        var addResult = await _userManager.AddToRolesAsync(user, input.Roles);
+        if (!addResult.Succeeded)
+            throw new CustomValidationException(addResult.Errors);
+
+        return true;
     }
 
     public async Task<(Guid id, string roleName)> GetRoleByIdAsync(Guid id)

@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.Queries.User
 {
-    public class GetUserDetailsQuery : IRequest<UserDetailsResponseDTO>
+    public class GetUserDetailsQuery : IRequest<UserResponseDTO>
     {
         public Guid UserId { get; set; }
     }
 
-    public class GetUserDetailsQueryHandler : IRequestHandler<GetUserDetailsQuery, UserDetailsResponseDTO>
+    public class GetUserDetailsQueryHandler : IRequestHandler<GetUserDetailsQuery, UserResponseDTO>
     {
         private readonly IIdentityService _identityService;
 
@@ -22,23 +22,23 @@ namespace SamaniCrm.Application.Queries.User
         {
             _identityService = identityService;
         }
-        public async Task<UserDetailsResponseDTO> Handle(GetUserDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<UserResponseDTO> Handle(GetUserDetailsQuery request, CancellationToken cancellationToken)
         {
             var result = await _identityService.GetUserDetailsAsync(request.UserId);
-            return new UserDetailsResponseDTO()
+            return new UserResponseDTO()
             {
-                Id = result.user.Id,
-                UserName = result.user.UserName,
-                FirstName = result.user.FirstName,
-                LastName = result.user.LastName,
-                ProfilePicture = result.user.ProfilePicture,
-                Lang = result.user.Lang,
-                Email = result.user.Email,
-                FullName = result.user.FullName,
-                Address = result.user.Address,
-                PhoneNumber = result.user.PhoneNumber,
-                CreationTime = result.user.CreationTime,
-                Roles = result.roles.ToArray(),
+                Id = result.Id,
+                UserName = result.UserName,
+                FirstName = result.FirstName,
+                LastName = result.LastName,
+                ProfilePicture = result.ProfilePicture,
+                Lang = result.Lang,
+                Email = result.Email,
+                FullName = result.FullName,
+                Address = result.Address,
+                PhoneNumber = result.PhoneNumber,
+                CreationTime = result.CreationTime,
+                Roles = result.Roles,
             };
         }
     }

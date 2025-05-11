@@ -6,10 +6,12 @@ import { AppConst } from '@shared/app-const';
 import { CustomValidators } from '@shared/custom-validator/form-validation';
 import {
   CreateUserCommand,
+  EditUserCommand,
   PasswordComplexityDTO,
   RoleResponseDTO,
   RoleServiceProxy,
   SecuritySettingsServiceProxy,
+  UserResponseDTO,
   UserServiceProxy,
 } from '@shared/service-proxies';
 import { forkJoin } from 'rxjs';
@@ -20,12 +22,13 @@ export class SelectableRole extends RoleResponseDTO {
 }
 
 @Component({
-  selector: 'app-create-user',
-  templateUrl: './create-user.component.html',
-  styleUrls: ['./create-user.component.scss'],
+  selector: 'app-create-or-edit-user',
+  templateUrl: './create-or-edit-user.component.html',
+  styleUrls: ['./create-or-edit-user.component.scss'],
   standalone: false,
 })
-export class CreateUserComponent extends AppComponentBase implements OnInit {
+export class CreateOrEditUserComponent extends AppComponentBase implements OnInit {
+  isUpdate = false;
   loading = true;
   saving = false;
   form: FormGroup;
@@ -35,21 +38,31 @@ export class CreateUserComponent extends AppComponentBase implements OnInit {
   constructor(
     injector: Injector,
     private dialogRef: MatDialogRef<CreateUserCommand>,
-    @Inject(MAT_DIALOG_DATA) _data: any,
+    @Inject(MAT_DIALOG_DATA) private _data: { user?: UserResponseDTO },
     private userService: UserServiceProxy,
     private roleService: RoleServiceProxy,
     private securitySettingsService: SecuritySettingsServiceProxy,
   ) {
     super(injector);
     this.form = this.fb.group({
+      id: [''],
+      userName: ['', [Validators.required, CustomValidators.checkEnglishAndNumberCharacters]],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      userName: ['', [Validators.required, CustomValidators.checkEnglishAndNumberCharacters]],
       email: ['', [Validators.required, CustomValidators.checkEmail]],
       phoneNumber: ['', [Validators.required]],
       password: ['', [Validators.required]],
       lang: [AppConst.currentLanguage],
+      address: [''],
     });
+    debugger;
+    if (_data.user) {
+      this.isUpdate = true;
+      this.form.patchValue(_data.user);
+      this.form.get('userName')?.disable();
+      this.form.get('password')?.clearValidators();
+      this.form.get('password')?.updateValueAndValidity();
+    }
   }
 
   ngOnInit() {
@@ -63,8 +76,22 @@ export class CreateUserComponent extends AppComponentBase implements OnInit {
           if (this.roles.length === 0) {
             this.notify.warning(this.l('NotExistRoles!'));
             this.dialogRef.close();
+            return;
           }
           this.passwordPolicy = passwordComplexity.data;
+          if (this.isUpdate) {
+            for (let r of this.roles) {
+              if (
+                this._data.user &&
+                this._data.user.roles &&
+                this._data.user.roles.findIndex((x) => x == r.roleName) > -1
+              ) {
+                r.selected = true;
+              } else {
+                r.selected = false;
+              }
+            }
+          }
         },
         error: () => {
           this.dialogRef.close();
@@ -78,7 +105,43 @@ export class CreateUserComponent extends AppComponentBase implements OnInit {
       this.notify.warning(this.l('CompleteFormField'));
       return;
     }
+    if (this.isUpdate) {
+      this.updateUser();
+    } else {
+      this.createNewUser();
+    }
+  }
+
+  createNewUser() {
     const input = new CreateUserCommand();
+    input.init(this.form.value);
+    input.roles = [];
+    for (let item of this.roles) {
+      if (item.selected) {
+        input.roles.push(item.roleName!);
+      }
+    }
+    if (input.roles.length === 0) {
+      this.notify.warning(this.l('NotSelectedAnyRoleForUser'));
+      return;
+    }
+
+    this.saving = true;
+    this.userService
+      .createUser(input)
+      .pipe(finalize(() => (this.saving = false)))
+      .subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.notify.success(this.l('SaveSuccessFully'));
+            this.dialogRef.close(true);
+          }
+        },
+      });
+  }
+
+  updateUser() {
+    const input = new EditUserCommand();
     input.init(this.form.value);
     input.roles = [];
     for (let item of this.roles) {
@@ -92,7 +155,7 @@ export class CreateUserComponent extends AppComponentBase implements OnInit {
     }
     this.saving = true;
     this.userService
-      .createUser(input)
+      .editUser(input)
       .pipe(finalize(() => (this.saving = false)))
       .subscribe({
         next: (response) => {

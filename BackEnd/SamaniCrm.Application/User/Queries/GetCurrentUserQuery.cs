@@ -33,12 +33,12 @@ namespace SamaniCrm.Application.User.Queries
 
             var result = await _identityService.GetUserDetailsAsync(currentUserId);
 
-            if (result.user == null)
+            if (result == null)
             {
                 throw new NotFoundException("User not found.");
             }
 
-            return result.user;
+            return result;
         }
     }
 }

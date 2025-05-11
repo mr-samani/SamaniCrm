@@ -8,30 +8,30 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.User.Commands
 {
-    public class CreateUserCommand : IRequest<int>
+    public class EditUserCommand : IRequest<bool>
     {
+        public Guid Id { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
-        public required string UserName { get; set; }
         public required string Email { get; set; }
         public required string PhoneNumber { get; set; }
         public required string Lang { get; set; }
-        public required string Password { get; set; }
         public string? Address { get; set; }
         public required List<string> Roles { get; set; } = new();
     }
 
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, int>
+    public class EditUserCommandHandler : IRequestHandler<EditUserCommand, bool>
     {
         private readonly IIdentityService _identityService;
-        public CreateUserCommandHandler(IIdentityService identityService)
+
+        public EditUserCommandHandler(IIdentityService identityService)
         {
             _identityService = identityService;
         }
-        public async Task<int> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(EditUserCommand request, CancellationToken cancellationToken)
         {
-            var result = await _identityService.CreateUserAsync(request);
-            return result.isSucceed ? 1 : 0;
+            var result = await _identityService.UpdateUser(request);
+            return result;
         }
     }
 }

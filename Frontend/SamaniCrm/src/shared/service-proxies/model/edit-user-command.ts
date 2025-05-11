@@ -20,32 +20,30 @@
  */
 /* Created with custom template */
 
-/** Interface for CreateUserCommand */
-export interface ICreateUserCommand {
+/** Interface for EditUserCommand */
+export interface IEditUserCommand {
+  id?: string;
   firstName: string;
   lastName: string;
-  userName: string;
   email: string;
   phoneNumber: string;
   lang: string;
-  password: string;
   address?: string;
   roles: Array<string>;
 }
 
-/** Class for CreateUserCommand */
-export class CreateUserCommand implements ICreateUserCommand {
+/** Class for EditUserCommand */
+export class EditUserCommand implements IEditUserCommand {
+  id?: string;
   firstName!: string;
   lastName!: string;
-  userName!: string;
   email!: string;
   phoneNumber!: string;
   lang!: string;
-  password!: string;
   address?: string;
   roles!: Array<string>;
 
-  constructor(data?: ICreateUserCommand) {
+  constructor(data?: IEditUserCommand) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -56,13 +54,12 @@ export class CreateUserCommand implements ICreateUserCommand {
 
 init(data?: any) {
   if (data) {
+    this.id = data["id"];
     this.firstName = data["firstName"];
     this.lastName = data["lastName"];
-    this.userName = data["userName"];
     this.email = data["email"];
     this.phoneNumber = data["phoneNumber"];
     this.lang = data["lang"];
-    this.password = data["password"];
     this.address = data["address"];
     if (Array.isArray(data["roles"])) {
       this.roles = [] as any;
@@ -72,8 +69,8 @@ init(data?: any) {
   }
 }
 
-  static fromJS(data: any): CreateUserCommand {
-    const instance = new CreateUserCommand();
+  static fromJS(data: any): EditUserCommand {
+    const instance = new EditUserCommand();
     instance.init(data);
     return instance;
   }

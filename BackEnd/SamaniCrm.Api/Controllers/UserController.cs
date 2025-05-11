@@ -60,7 +60,7 @@ namespace SamaniCrm.Api.Controllers
 
         [HttpGet("GetUserDetails/{userId}")]
         [Permission(AppPermissions.UserManagement_List)]
-        [ProducesDefaultResponseType(typeof(ApiResponse<UserDetailsResponseDTO>))]
+        [ProducesDefaultResponseType(typeof(ApiResponse<UserResponseDTO>))]
         public async Task<IActionResult> GetUserDetails(Guid userId)
         {
             var result = await _mediator.Send(new GetUserDetailsQuery() { UserId = userId });
@@ -69,7 +69,7 @@ namespace SamaniCrm.Api.Controllers
 
         [HttpGet("GetUserDetailsByUserName/{userName}")]
         [Permission(AppPermissions.UserManagement_List)]
-        [ProducesDefaultResponseType(typeof(ApiResponse<UserDetailsResponseDTO>))]
+        [ProducesDefaultResponseType(typeof(ApiResponse<UserResponseDTO>))]
         public async Task<IActionResult> GetUserDetailsByUserName(string userName)
         {
             var result = await _mediator.Send(new GetUserDetailsByUserNameQuery() { UserName = userName });
@@ -97,20 +97,13 @@ namespace SamaniCrm.Api.Controllers
 
 
 
-        [HttpPut("EditUserProfile/{id}")]
+        [HttpPut("EditUser")]
         [Permission(AppPermissions.UserManagement_EditUserProfile)]
-        [ProducesDefaultResponseType(typeof(ApiResponse<int>))]
-        public async Task<IActionResult> EditUserProfile(string id, [FromBody] EditUserProfileCommand command)
+        [ProducesDefaultResponseType(typeof(ApiResponse<bool>))]
+        public async Task<IActionResult> EditUser([FromBody] EditUserCommand command)
         {
-            if (id == command.Id)
-            {
-                var result = await _mediator.Send(command);
-                return ApiOk(result);
-            }
-            else
-            {
-                return BadRequest();
-            }
+            var result = await _mediator.Send(command);
+            return ApiOk(result);
         }
 
     }
