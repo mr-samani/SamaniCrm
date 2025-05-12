@@ -27,7 +27,8 @@ namespace SamaniCrm.Infrastructure.Cache
     {
         Memory,
         Redis,
-        File
+        File,
+        Hybrid
     }
 
 }

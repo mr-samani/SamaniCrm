@@ -1,5 +1,10 @@
- 
-
+<div class="d-flex justify-content-end my-2">
+  <button mat-stroked-button color="primary" (click)="clearAll()">
+    <i class="fa fa-trash mx-1"></i>
+    <span>{{ 'ClearAll' | translate }}</span>
+    <span>({{ totalSize | fileSize }})</span>
+  </button>
+</div>
 <table-view [list]="cacheKeys" [fields]="fields" [operations]="operations" [loading]="loading"></table-view>
 
 <ng-template #operations let-item>

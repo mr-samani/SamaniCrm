@@ -11,6 +11,7 @@ import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 import { SwitchModule } from '@shared/components/switch/switch.module';
 import { CacheComponent } from './tabs/cache/cahce.component';
 import { MaintenanceServiceProxy } from '@shared/service-proxies';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [MaintenanceComponent, CacheComponent],
@@ -24,6 +25,7 @@ import { MaintenanceServiceProxy } from '@shared/service-proxies';
     MaterialCommonModule,
     TabGroupModule,
     SwitchModule,
+    SharedModule,
   ],
   providers: [MaintenanceServiceProxy],
 })

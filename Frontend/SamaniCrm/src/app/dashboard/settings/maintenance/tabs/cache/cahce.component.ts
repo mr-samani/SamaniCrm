@@ -34,7 +34,7 @@ export class CacheComponent extends AppComponentBase implements OnInit {
     { column: 'expiration', title: this.l('Expiration') },
     { column: 'humanSize', title: this.l('Size'), type: 'text' },
   ];
-
+  totalSize = 0;
   loading = true;
   constructor(
     injector: Injector,
@@ -54,7 +54,11 @@ export class CacheComponent extends AppComponentBase implements OnInit {
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
         this.cacheKeys = response.data ?? [];
-        this.cacheKeys.map((m) => (m.humanSize = humanFileSize(m.sizeInBytes)));
+        this.totalSize = 0;
+        this.cacheKeys.map((m) => {
+          this.totalSize += m.sizeInBytes ?? 0;
+          m.humanSize = humanFileSize(m.sizeInBytes);
+        });
       });
   }
 
@@ -67,6 +71,22 @@ export class CacheComponent extends AppComponentBase implements OnInit {
           .pipe(finalize(() => (item.loading = false)))
           .subscribe((response) => {
             this.notify.success(this.l('DoneSuccessFully') + '(' + response.data + ')');
+            this.getData();
+          });
+      }
+    });
+  }
+
+  clearAll() {
+    this.confirmMessage(this.l('Delete'), this.l('AreYouSureForDelete')).then((result) => {
+      if (result.isConfirmed) {
+        this.showMainLoading();
+        this.maintenanceService
+          .clearAllCahces()
+          .pipe(finalize(() => this.hideMainLoading()))
+          .subscribe((response) => {
+            this.notify.success(this.l('DoneSuccessFully') + '(' + response.data + ')');
+            this.getData();
           });
       }
     });

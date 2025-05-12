@@ -34,6 +34,22 @@ namespace SamaniCrm.Infrastructure.Cache
                     services.AddMemoryCache();
                     services.AddSingleton<ICacheService, MemoryCacheService>();
                     break;
+
+                case "Hybrid":
+                    services.AddMemoryCache();
+
+                    try
+                    {
+                        var multiplexer = ConnectionMultiplexer.Connect($"{settings.Redis.ConnectionString},abortConnect=false");
+                        services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+                        services.AddScoped<ICacheService, HybridCacheService>();
+                    }
+                    catch (RedisConnectionException)
+                    {
+                        // Fallback to memory only
+                        services.AddSingleton<ICacheService, MemoryCacheService>();
+                    }
+                    break;
             }
         }
     }

@@ -8,10 +8,13 @@ using Microsoft.Extensions.Options;
 using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Core.Shared.Interfaces;
 
+
 namespace SamaniCrm.Infrastructure.Cache
 {
+
     public class FileCacheService : ICacheService
     {
+
         private readonly string _basePath;
 
         public FileCacheService(IOptions<CacheSettings> settings)
@@ -20,21 +23,54 @@ namespace SamaniCrm.Infrastructure.Cache
             Directory.CreateDirectory(_basePath);
         }
 
+
+
+        private class CacheWrapper<T>
+        {
+            public T Value { get; set; } = default!;
+            public DateTime? ExpiresAt { get; set; }
+        }
+
+
+
         private string GetPath(string key) => Path.Combine(_basePath, $"{key}.json");
 
         public async Task<T?> GetAsync<T>(string key)
         {
-            var path = GetPath(key);
-            if (!File.Exists(path)) return default;
+            try
+            {
+                var path = GetPath(key);
+                if (!File.Exists(path)) return default;
 
-            var json = await File.ReadAllTextAsync(path);
-            return JsonSerializer.Deserialize<T>(json);
+                var json = await File.ReadAllTextAsync(path);
+                var wrapper = JsonSerializer.Deserialize<CacheWrapper<T>>(json);
+
+                if (wrapper == null) return default;
+
+                if (wrapper.ExpiresAt.HasValue && wrapper.ExpiresAt.Value < DateTime.UtcNow)
+                {
+                    File.Delete(path); // delete expired file
+                    return default;
+                }
+
+
+                return wrapper.Value;
+            }
+            catch
+            {
+                return default;
+            }
         }
 
         public async Task SetAsync<T>(string key, T value, TimeSpan? expiration = null)
         {
             var path = GetPath(key);
-            var json = JsonSerializer.Serialize(value);
+            var wrapper = new CacheWrapper<T>
+            {
+                Value = value,
+                ExpiresAt = expiration.HasValue ? DateTime.UtcNow.Add(expiration.Value) : null
+            };
+            var json = JsonSerializer.Serialize(wrapper);
             await File.WriteAllTextAsync(path, json);
         }
 
@@ -68,21 +104,37 @@ namespace SamaniCrm.Infrastructure.Cache
 
 
 
-        public Task<CacheEntryDto?> GetMetaAsync(string key)
+        public async Task<CacheEntryDto?> GetMetaAsync(string key)
         {
             var path = GetPath(key);
-            if (!File.Exists(path)) return Task.FromResult<CacheEntryDto?>(null);
+            if (!File.Exists(path)) return null;
+
+            var json = await File.ReadAllTextAsync(path);
+            var document = JsonDocument.Parse(json);
+
+            DateTime? expiresAt = null;
+            if (document.RootElement.TryGetProperty("ExpiresAt", out var expiresProp) &&
+                expiresProp.ValueKind == JsonValueKind.String &&
+                DateTime.TryParse(expiresProp.GetString(), out var dt))
+            {
+                expiresAt = dt;
+            }
+
+            TimeSpan? timeToLive = expiresAt.HasValue
+                ? (expiresAt > DateTime.UtcNow ? expiresAt.Value - DateTime.UtcNow : null)
+                : null;
 
             var info = new FileInfo(path);
-            return Task.FromResult<CacheEntryDto?>(new CacheEntryDto
+
+            return new CacheEntryDto
             {
                 Key = key,
                 Provider = "File",
                 SizeInBytes = info.Length,
-                LastModified = info.LastWriteTime
-            });
+                LastModified = info.LastWriteTime,
+                Expiration = timeToLive
+            };
         }
-
 
 
     }
