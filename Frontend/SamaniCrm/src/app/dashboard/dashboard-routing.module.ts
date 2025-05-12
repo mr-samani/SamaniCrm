@@ -36,6 +36,11 @@ const routes: Routes = [
       },
       { path: 'menu', loadChildren: () => import('./settings/menu/menu.module').then((m) => m.MenuModule) },
 
+      {
+        path: 'page-builder',
+        loadChildren: () => import('./page-builder/page-builder.module').then((m) => m.PageBuilderModule),
+      },
+
       // products
       // {
       //   path: 'product',
