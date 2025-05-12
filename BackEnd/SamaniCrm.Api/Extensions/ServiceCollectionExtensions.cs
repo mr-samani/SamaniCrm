@@ -230,7 +230,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ISecuritySettingService, SecuritySettingService>();
 
 
-        // services.AddMemoryCache();
         //چون حافظه ایه Singleton باشه بهتره.
         services.AddSingleton<ICaptchaStore, InMemoryCaptchaStore>();
         services.AddHostedService<CaptchaCleanupBackgroundService>();

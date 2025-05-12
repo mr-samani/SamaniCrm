@@ -15,7 +15,8 @@ namespace SamaniCrm.Core.Shared.Consts
         [Description("List user Permissions")]
         public const string UserPermissions_ = "UserPermissions_";
 
-
+        [Description("Security settings: password complexity,...")]
+        public const string SecuritySettings = "SecuritySettings";
 
     }
 }

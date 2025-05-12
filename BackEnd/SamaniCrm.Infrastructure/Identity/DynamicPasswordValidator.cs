@@ -20,7 +20,8 @@ namespace SamaniCrm.Infrastructure.Identity
 
         public async Task<IdentityResult> ValidateAsync(UserManager<ApplicationUser> manager, ApplicationUser user, string password)
         {
-            var securitySettings = await _settingsService.GetSettingsAsync();
+            CancellationToken cancellationToken = default!;
+            var securitySettings = await _settingsService.GetSettingsAsync(cancellationToken);
             var settings = securitySettings.PasswordComplexity;
             var errors = new List<IdentityError>();
 

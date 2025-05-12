@@ -8,6 +8,6 @@ namespace SamaniCrm.Application.DTOs
 {
     public class SecuritySettingDTO
     {
-        public PasswordComplexityDTO PasswordComplexity { get; set; }
+        public required PasswordComplexityDTO PasswordComplexity { get; set; }
     }
 }

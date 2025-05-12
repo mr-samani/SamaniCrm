@@ -11,6 +11,7 @@ import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 import { GeneralSettingComponent } from './tabs/general-setting/general-setting.component';
 import { SecuritySettingComponent } from './tabs/security-setting/security-setting.component';
 import { SwitchModule } from '@shared/components/switch/switch.module';
+import { SecuritySettingsServiceProxy } from '@shared/service-proxies';
 
 @NgModule({
   declarations: [AppSettingComponent, GeneralSettingComponent, SecuritySettingComponent],
@@ -25,5 +26,6 @@ import { SwitchModule } from '@shared/components/switch/switch.module';
     TabGroupModule,
     SwitchModule,
   ],
+  providers: [SecuritySettingsServiceProxy],
 })
 export class AppSettingModule {}

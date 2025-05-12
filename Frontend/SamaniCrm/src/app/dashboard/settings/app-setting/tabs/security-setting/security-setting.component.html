@@ -1,10 +1,12 @@
-<div *ngIf="settings">
-  <switch [(ngModel)]="settings.requireCaptchaOnLogin" name="requireCaptchaOnLogin">
+<mat-progress-bar *ngIf="loading" class="my-5" [mode]="'indeterminate'"></mat-progress-bar>
+
+<form #frm="ngForm" *ngIf="settings && !loading">
+  <!-- <switch [(ngModel)]="settings.requireCaptchaOnLogin" name="requireCaptchaOnLogin">
     {{ 'RequireCaptchaOnLogin' | translate }}
-  </switch>
+  </switch> -->
   <!-- ---------------------------------------------------- -->
 
-  <h5>
+  <!-- <h5>
     {{ 'TwoFactorAuthentication' | translate }}
   </h5>
   <switch
@@ -20,7 +22,7 @@
     <switch [(ngModel)]="settings.twoFactorAuthentication.viaSMS" name="viaSMS">
       {{ 'TwoFactorAuthenticationViaSMS' | translate }}
     </switch>
-  </div>
+  </div> -->
 
   <!-- ---------------------------------------------------- -->
 
@@ -28,11 +30,11 @@
     {{ 'PasswordComplexity' | translate }}
   </h5>
   <mat-form-field>
-    <mat-label>{{ 'MinLength' | translate }}</mat-label>
+    <mat-label>{{ 'RequiredLength' | translate }}</mat-label>
     <input
       type="number"
       matInput
-      [(ngModel)]="settings.passwordComplexity.minLength"
+      [(ngModel)]="settings.passwordComplexity.requiredLength"
       name="minPass"
       required
       min="3"
@@ -48,7 +50,12 @@
   <switch [(ngModel)]="settings.passwordComplexity.requireUppercase" name="requireUppercase">
     {{ 'PasswordComplexityRequireUppercase' | translate }}
   </switch>
-  <switch [(ngModel)]="settings.passwordComplexity.requireSpecialChar" name="requireSpecialChar">
+  <switch [(ngModel)]="settings.passwordComplexity.requireNonAlphanumeric" name="requireNonAlphanumeric">
     {{ 'PasswordComplexityRequireSpecialChar' | translate }}
   </switch>
-</div>
+  <div class="d-flex align-items-end justify-content-end">
+    <button mat-raised-button color="primary" (click)="save(frm)" [disabled]="isSaving">
+      {{ 'Save' | translate }}
+    </button>
+  </div>
+</form>

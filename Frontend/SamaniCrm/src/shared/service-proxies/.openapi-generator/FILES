@@ -66,11 +66,14 @@ model/role-dto-list-api-response.ts
 model/role-dto.ts
 model/role-permissions-dto-list-api-response.ts
 model/role-permissions-dto.ts
+model/security-setting-dto-api-response.ts
+model/security-setting-dto.ts
 model/string-api-response.ts
 model/token-response-dto-api-response.ts
 model/token-response-dto.ts
 model/update-batch-localize-key-command.ts
 model/update-role-command.ts
+model/update-security-setting-command.ts
 model/user-dto-api-response.ts
 model/user-dto-paginated-result-api-response.ts
 model/user-dto-paginated-result.ts

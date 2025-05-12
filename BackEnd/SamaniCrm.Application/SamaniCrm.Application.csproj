@@ -21,7 +21,6 @@
     <Folder Include="Auth\Events\" />
     <Folder Include="Common\Services\" />
     <Folder Include="Maintenance\Commands\" />
-    <Folder Include="SecuritySetting\Commands\" />
   </ItemGroup>
 
   <ItemGroup>
