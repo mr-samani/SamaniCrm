@@ -5,6 +5,7 @@ import gjsPresetWebpage from 'grapesjs-preset-webpage';
 import gjsPluginForms from 'grapesjs-plugin-forms';
 import gjsPluginFlexBox from 'grapesjs-blocks-flexbox';
 import gjsPluginBlocksBasic from 'grapesjs-blocks-basic';
+import gjsPluginCountDown from 'grapesjs-component-countdown';
 
 @Component({
   selector: 'app-page-builder',
@@ -14,7 +15,6 @@ import gjsPluginBlocksBasic from 'grapesjs-blocks-basic';
 })
 export class PageBuilderComponent extends AppComponentBase implements AfterViewInit {
   editor?: Editor;
-  plugins = ['grapesjs-preset-webpage', 'gjs-blocks-basic'];
   constructor(injector: Injector) {
     super(injector);
   }
@@ -26,8 +26,17 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
       height: 'calc(100vh - 150px)',
       width: 'auto',
       storageManager: { autoload: false },
-      plugins: [gjsPresetWebpage, gjsPluginBlocksBasic, gjsPluginForms, gjsPluginFlexBox],
-      pluginsOpts: {},
+      plugins: [gjsPresetWebpage, gjsPluginBlocksBasic, gjsPluginForms, gjsPluginFlexBox, gjsPluginCountDown],
+      pluginsOpts: {
+        ['gjsPresetWebpage']: {
+          // Optional: تنظیمات پیش‌فرض را override کن
+          blocksBasicOpts: { flexGrid: true },
+          navbarOpts: {},
+          blockManager: {
+            appendTo: '#blocks',
+          },
+        },
+      },
     });
   }
 
