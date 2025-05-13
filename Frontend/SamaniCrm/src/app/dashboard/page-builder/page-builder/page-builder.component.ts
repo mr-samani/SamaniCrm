@@ -8,6 +8,7 @@ import gjsPluginBlocksBasic from 'grapesjs-blocks-basic';
 import gjsPluginCountDown from 'grapesjs-component-countdown';
 import gjsPluginStyleBg from 'grapesjs-style-bg';
 import gjsPluginStyleGradient from 'grapesjs-style-gradient';
+import gjsPluginTyped from 'grapesjs-typed';
 
 @Component({
   selector: 'app-page-builder',
@@ -40,6 +41,7 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
         gjsPluginCountDown,
         gjsPluginStyleBg,
         gjsPluginStyleGradient,
+        gjsPluginTyped,
       ],
       pluginsOpts: {
         ['grapesjs-preset-webpage']: {

@@ -4435,6 +4435,11 @@ grapesjs-style-gradient@^3.0.1:
   dependencies:
     grapick "^0.1.13"
 
+grapesjs-typed@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/grapesjs-typed/-/grapesjs-typed-2.0.1.tgz#efe0a416e93dc8e21b8636bcad31d15fdd08147e"
+  integrity sha512-3Z5hATX/Zp9PkdOv94RtIzqB/n1mMUdTO5X/ZyNUMzSmGZG4CHtTmw3bIQDIkrSTWdbcqInlbFPzvzKYr4rKaw==
+
 grapesjs@^0.22.7:
   version "0.22.7"
   resolved "https://registry.yarnpkg.com/grapesjs/-/grapesjs-0.22.7.tgz#91cc8f208e29221fbae95f8878e17f87782abe08"
