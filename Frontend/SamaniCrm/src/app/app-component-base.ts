@@ -8,6 +8,7 @@ import { NotifyService } from '@shared/services/notify.service';
 import { LanguageService } from '@shared/services/language.service';
 import { NgxAlertModalService } from 'ngx-alert-modal';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
+import { DashboardService } from './dashboard/dashboard/dashboard.service';
 export abstract class AppComponentBase {
   fb: FormBuilder;
   authService: AuthService;
@@ -20,6 +21,8 @@ export abstract class AppComponentBase {
   language: LanguageService;
   alert: NgxAlertModalService;
   breadcrumb: BreadcrumbService;
+
+  dashboardService: DashboardService;
   constructor(injector: Injector) {
     this.mainSpinnerService = injector.get(MainSpinnerService);
     this.authService = injector.get(AuthService);
@@ -32,6 +35,7 @@ export abstract class AppComponentBase {
     this.language = injector.get(LanguageService);
     this.alert = injector.get(NgxAlertModalService);
     this.breadcrumb = injector.get(BreadcrumbService);
+    this.dashboardService = injector.get(DashboardService);
   }
 
   l(key: string, param?: Object) {
