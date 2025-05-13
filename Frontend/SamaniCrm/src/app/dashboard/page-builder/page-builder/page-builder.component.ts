@@ -6,6 +6,9 @@ import gjsPluginForms from 'grapesjs-plugin-forms';
 import gjsPluginFlexBox from 'grapesjs-blocks-flexbox';
 import gjsPluginBlocksBasic from 'grapesjs-blocks-basic';
 import gjsPluginCountDown from 'grapesjs-component-countdown';
+import gjsPluginStyleBg from 'grapesjs-style-bg';
+import gjsPluginStyleGradient from 'grapesjs-style-gradient';
+
 @Component({
   selector: 'app-page-builder',
   templateUrl: './page-builder.component.html',
@@ -29,7 +32,15 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
       width: 'auto',
       fromElement: false,
       storageManager: false, // غیرفعال کردن ذخیره‌سازی پیش‌فرض
-      plugins: [gjsPresetWebpage, gjsPluginForms, gjsPluginFlexBox, gjsPluginBlocksBasic, gjsPluginCountDown],
+      plugins: [
+        gjsPresetWebpage,
+        gjsPluginForms,
+        gjsPluginFlexBox,
+        gjsPluginBlocksBasic,
+        gjsPluginCountDown,
+        gjsPluginStyleBg,
+        gjsPluginStyleGradient,
+      ],
       pluginsOpts: {
         ['grapesjs-preset-webpage']: {
           modalImportTitle: 'Paste your code here',

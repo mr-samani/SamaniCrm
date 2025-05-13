@@ -31,7 +31,6 @@
             ],
             "styles": [
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "./node_modules/grapesjs/dist/css/grapes.min.css",
               "src/styles/styles.scss"
             ],
             "scripts": [
@@ -96,7 +95,6 @@
             ],
             "styles": [
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "./node_modules/grapesjs/dist/css/grapes.min.css",
               "src/styles/styles.scss"
             ],
             "scripts": [
