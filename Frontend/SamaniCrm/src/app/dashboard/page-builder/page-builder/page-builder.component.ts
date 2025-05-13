@@ -10,6 +10,7 @@ import gjsPluginStyleBg from 'grapesjs-style-bg';
 import gjsPluginStyleGradient from 'grapesjs-style-gradient';
 import gjsPluginTyped from 'grapesjs-typed';
 import gjsPluginUiImageEditor from 'grapesjs-tui-image-editor';
+import gjsPluginTooltip from 'grapesjs-tooltip';
 
 @Component({
   selector: 'app-page-builder',
@@ -33,7 +34,16 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
       height: '100vh',
       width: 'auto',
       fromElement: false,
-      storageManager: false, // غیرفعال کردن ذخیره‌سازی پیش‌فرض
+      storageManager: {
+        autosave: true,
+        onStore: (data, editor) => {
+          data['produtId'] = 'ddddddddddwwwwwwwerrr';
+          // console.log(data);
+          return data;
+        },
+        stepsBeforeSave: 1,
+        type: undefined,
+      },
       plugins: [
         gjsPresetWebpage,
         gjsPluginForms,
@@ -44,6 +54,7 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
         gjsPluginStyleGradient,
         gjsPluginTyped,
         gjsPluginUiImageEditor,
+        gjsPluginTooltip,
       ],
       pluginsOpts: {
         ['grapesjs-preset-webpage']: {
@@ -60,7 +71,7 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
       canvas: {
         styles: ['/public-style.css'],
         frameContent: '<!DOCTYPE html><body dir="rtl">',
-      },
+      }
     });
     this.customizeGrapesjs();
   }
@@ -92,12 +103,14 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
     // دستور (command) برای ذخیره
     this.editor.Commands.add('save-page', {
       run(editor) {
-        const html = editor.getHtml();
+        const data = editor.getProjectData();
+        const html = editor.getHtml({ cleanId: true });
         const css = editor.getCss();
         const js = editor.getJs ? editor.getJs() : '';
         console.log('HTML:', html);
         console.log('CSS:', css);
         console.log('JS:', js);
+        console.log('data:', JSON.stringify(data));
         // ذخیره‌سازی دلخواه (ارسال به API، ذخیره محلی و ...)
       },
     });
@@ -133,19 +146,122 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
 
   loadData() {
     if (!this.editor) return;
-    this.editor.setComponents(`
-  <section class="bdg-sect">
-    <h1 class="myheading">متن دلخواه ببببببب
-    </h1>
-    <p class="paragraph">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
-    </p>
-  </section>
-  <script>
-      alert('messages');
-  </script>
-`);
-    this.editor.setStyle(`
-.myheading{float:none;text-align:center;text-shadow:rgb(236, 10, 10) 0px 0px 6px;color:rgb(0, 33, 159);font-family:iranSans;font-size:2em;font-weight:900;border-top-width:2px;border-right-width:2px;border-bottom-width:2px;border-left-width:2px;border-top-style:dotted;border-right-style:dotted;border-bottom-style:dotted;border-left-style:dotted;border-top-color:rgb(224, 124, 0);border-right-color:rgb(224, 124, 0);border-bottom-color:rgb(224, 124, 0);border-left-color:rgb(224, 124, 0);border-image-source:initial;border-image-slice:initial;border-image-width:initial;border-image-outset:initial;border-image-repeat:initial;background-color:#c7c7c7;border-radius:20px 20px 20px 20px;max-width:50%;margin:3em auto 0px auto;}
-`);
+    this.editor.loadData({
+      assets: [],
+      styles: [
+        { selectors: ['countdown'], style: { 'text-align': 'center' }, group: 'cmp:countdown' },
+        {
+          selectors: ['countdown-block'],
+          style: {
+            display: 'inline-block',
+            'margin-top': '0px',
+            'margin-right': '10px',
+            'margin-bottom': '0px',
+            'margin-left': '10px',
+            'padding-top': '10px',
+            'padding-right': '10px',
+            'padding-bottom': '10px',
+            'padding-left': '10px',
+          },
+          group: 'cmp:countdown',
+        },
+        { selectors: ['countdown-digit'], style: { 'font-size': '5rem' }, group: 'cmp:countdown' },
+        { selectors: ['countdown-endtext'], style: { 'font-size': '5rem' }, group: 'cmp:countdown' },
+        { selectors: ['countdown-cont'], style: { display: 'inline-block' }, group: 'cmp:countdown' },
+      ],
+      pages: [
+        {
+          frames: [
+            {
+              component: {
+                type: 'wrapper',
+                stylable: [
+                  'background',
+                  'background-color',
+                  'background-image',
+                  'background-repeat',
+                  'background-attachment',
+                  'background-position',
+                  'background-size',
+                ],
+                components: [
+                  {
+                    type: 'countdown',
+                    classes: ['countdown'],
+                    attributes: { id: 'i3fw' },
+                    startfrom: '2025-05-14',
+                    components: [
+                      {
+                        tagName: 'span',
+                        classes: ['countdown-cont'],
+                        attributes: { 'data-js': 'countdown' },
+                        components: [
+                          {
+                            classes: ['countdown-block'],
+                            components: [
+                              { classes: ['countdown-digit'], attributes: { 'data-js': 'countdown-day' } },
+                              {
+                                type: 'text',
+                                classes: ['countdown-label'],
+                                components: [{ type: 'textnode', content: 'days' }],
+                              },
+                            ],
+                          },
+                          {
+                            classes: ['countdown-block'],
+                            components: [
+                              { classes: ['countdown-digit'], attributes: { 'data-js': 'countdown-hour' } },
+                              {
+                                type: 'text',
+                                classes: ['countdown-label'],
+                                components: [{ type: 'textnode', content: 'hours' }],
+                              },
+                            ],
+                          },
+                          {
+                            classes: ['countdown-block'],
+                            components: [
+                              { classes: ['countdown-digit'], attributes: { 'data-js': 'countdown-minute' } },
+                              {
+                                type: 'text',
+                                classes: ['countdown-label'],
+                                components: [{ type: 'textnode', content: 'minutes' }],
+                              },
+                            ],
+                          },
+                          {
+                            classes: ['countdown-block'],
+                            components: [
+                              { classes: ['countdown-digit'], attributes: { 'data-js': 'countdown-second' } },
+                              {
+                                type: 'text',
+                                classes: ['countdown-label'],
+                                components: [{ type: 'textnode', content: 'seconds' }],
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                      {
+                        tagName: 'span',
+                        classes: ['countdown-endtext'],
+                        attributes: { 'data-js': 'countdown-endtext' },
+                      },
+                    ],
+                  },
+                ],
+                head: { type: 'head' },
+                docEl: { tagName: 'html' },
+              },
+              id: 'B4hrOu9yjyvYU83M',
+            },
+          ],
+          type: 'main',
+          id: 'oL1y3aC7gUCdmwO6',
+        },
+      ],
+      symbols: [],
+      dataSources: [],
+    });
   }
 }
