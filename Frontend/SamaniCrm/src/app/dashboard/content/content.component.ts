@@ -5,6 +5,7 @@ import { AppComponentBase } from '@app/app-component-base';
   selector: 'app-content',
   templateUrl: './content.component.html',
   styleUrl: './content.component.scss',
+  standalone: false,
 })
 export class ContentComponent extends AppComponentBase {
   constructor(injector: Injector) {

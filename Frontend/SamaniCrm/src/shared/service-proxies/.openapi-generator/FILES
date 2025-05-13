@@ -9,6 +9,7 @@ api/common.service.ts
 api/language.service.ts
 api/maintenance.service.ts
 api/menu.service.ts
+api/pages.service.ts
 api/role.service.ts
 api/security-settings.service.ts
 api/user.service.ts
@@ -27,12 +28,15 @@ model/change-active-menu-command.ts
 model/create-or-edit-language-command.ts
 model/create-or-edit-localize-key-command.ts
 model/create-or-edit-menu-command.ts
+model/create-page-command.ts
 model/create-user-command.ts
 model/delete-language-command.ts
 model/delete-localize-key-command.ts
 model/delete-menu-command.ts
+model/delete-page-command.ts
 model/edit-role-permissions-command.ts
 model/edit-user-command.ts
+model/get-filtered-pages-query.ts
 model/get-user-query.ts
 model/guid-api-response.ts
 model/initial-app-dto-api-response.ts
@@ -54,6 +58,10 @@ model/menu-target-enum.ts
 model/menu-translations-dto.ts
 model/meta.ts
 model/models.ts
+model/page-dto-paginated-result-api-response.ts
+model/page-dto-paginated-result.ts
+model/page-dto.ts
+model/page-status-enum.ts
 model/password-complexity-dto-api-response.ts
 model/password-complexity-dto.ts
 model/refresh-token-command.ts
@@ -71,7 +79,9 @@ model/security-setting-dto.ts
 model/string-api-response.ts
 model/token-response-dto-api-response.ts
 model/token-response-dto.ts
+model/unit-api-response.ts
 model/update-batch-localize-key-command.ts
+model/update-page-command.ts
 model/update-role-command.ts
 model/update-security-setting-command.ts
 model/user-dto-api-response.ts

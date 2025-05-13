@@ -41,6 +41,7 @@ const routes: Routes = [
         loadChildren: () => import('./page-builder/page-builder.module').then((m) => m.PageBuilderModule),
       },
 
+      { path: 'content', loadChildren: () => import('./content/content.module').then((m) => m.ContentModule) },
       // products
       // {
       //   path: 'product',
@@ -56,7 +57,6 @@ const routes: Routes = [
       // },
 
       // content
-      // { path: 'content', loadChildren: () => import('./content/content.module').then((m) => m.ContentModule) },
     ],
   },
 ];

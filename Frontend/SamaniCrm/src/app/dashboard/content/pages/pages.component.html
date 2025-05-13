@@ -1,22 +1,51 @@
-<button mat-raised-button color="primary" (click)="openPageDialog()">
-  <i class="fa fa-download mx-1"></i>
-  <span>{{ 'ExportExcel' | translate }}</span>
-</button>
+<div class="tools d-flex justify-content-between align-items-center flex-wrap gap-2">
+  <div class="d-flex gap-2">
+    <button mat-raised-button color="primary" (click)="showFilter = !showFilter">
+      <i class="fa fa-filter mx-1"></i>
+      <span>{{ 'Filter' | translate }}</span>
+    </button>
+  </div>
+  <button mat-raised-button color="primary" (click)="openCreatePageDialog()">
+    <i class="fa fa-user-plus mx-1"></i>
+    <span>{{ 'CreateNewPage' | translate }}</span>
+  </button>
+</div>
+
+<form [formGroup]="form" *filterForm="showFilter" class="filter-form">
+  <div class="row">
+    <mat-form-field class="col-sm-6 col-md-4">
+      <mat-label>{{ 'Filter' | translate }}</mat-label>
+      <input matInput type="text" maxlength="500" formControlName="filter" />
+    </mat-form-field>
+  </div>
+  <div class="d-flex align-items-center justify-content-end gap-2">
+    <button mat-stroked-button color="primary" (click)="resetFilter()" type="reset">
+      <i class="fa fa-times mx-1"></i>
+      <span>{{ 'Reset' | translate }}</span>
+    </button>
+    <button mat-stroked-button color="primary" (click)="reload()" type="submit">
+      <i class="fa fa-refresh mx-1"></i>
+      <span>{{ 'Reload' | translate }}</span>
+    </button>
+  </div>
+</form>
+
 <table-view [list]="list" [fields]="fields" [operations]="operations" [loading]="loading"></table-view>
+
+<pagination [total]="totalCount" [(page)]="page" [(perPage)]="perPage" (change)="onPageChange($event)"></pagination>
 
 <ng-template #operations let-item>
   <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
     <i class="fa fa-ellipsis-v"></i>
   </button>
   <mat-menu #menu="matMenu">
-    <a mat-menu-item (click)="openPageDialog(item)">
+    <a mat-menu-item (click)="updatePage(item)">
       <i class="fa fa-edit mx-1"></i>
-      <span>{{ l('Edit') }}</span>
+      <span>{{ 'Edit' | translate }}</span>
     </a>
-
-    <a mat-menu-item (click)="changeCover(item)">
-      <i class="fa fa-image mx-1"></i>
-      <span>{{ l('ChangeAvatar') }}</span>
+    <a mat-menu-item (click)="remove(item)">
+      <i class="fa fa-trash mx-1"></i>
+      <span>{{ 'Remove' | translate }}</span>
     </a>
   </mat-menu>
 </ng-template>

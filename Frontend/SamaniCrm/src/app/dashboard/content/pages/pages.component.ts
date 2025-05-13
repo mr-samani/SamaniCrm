@@ -1,85 +1,147 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
-import { finalize } from 'rxjs';
+import { finalize, Subscription } from 'rxjs';
 import { PageModel } from '../models/page';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
 import { Apis } from '@shared/apis';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
+import { DeletePageCommand, GetFilteredPagesQuery, PageDto, PagesServiceProxy } from '@shared/service-proxies';
+import { FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@shared/components/pagination/pagination.component';
+import { CreatePageDialogComponent } from '../create-page-dialog/create-page-dialog.component';
+
+export class PageDtoExtended extends PageDto {
+  statusText?: string;
+}
 
 @Component({
   selector: 'pages',
   templateUrl: './pages.component.html',
   styleUrl: './pages.component.scss',
+  standalone: false,
 })
 export class PagesComponent extends AppComponentBase implements OnInit {
   loading = true;
 
-  list: PageModel[] = [];
+  list: PageDtoExtended[] = [];
   totalCount = 0;
 
   fields: FieldsType[] = [
-    { column: 'cover', title: this.l('Cover'), width: 100, type: 'image' },
-    // { column: 'id', title: this.l('Id'), width: 100 },
+    // { column: 'id', title: this.l('id'), width: 100 },
+    { column: 'slag', title: this.l('Slag') },
     { column: 'title', title: this.l('Title') },
-    { column: 'description', title: this.l('Description') },
-    { column: 'creator', title: this.l('Creator') },
-    { column: 'status', title: this.l('Status'), width: 70 },
-    { column: 'active', title: this.l('Active'), width: 70 },
-    { column: 'createdAt', title: this.l('CreationTime'), type: 'dateTime' },
-    { column: 'updatedAt', title: this.l('UpdateTime'), type: 'dateTime' },
+    { column: '_abstract', title: this.l('Abstract') },
+    { column: 'author', title: this.l('Author') },
+    { column: 'created', title: this.l('CreationTime'), type: 'dateTime' },
+    { column: 'status', title: this.l('Status') },
   ];
 
+  form: FormGroup;
+  page = 1;
+  perPage = 10;
+  listSubscription$?: Subscription;
+  showFilter = false;
   constructor(
     injector: Injector,
-    private fileManagerService: FileManagerService,
+    private pageService: PagesServiceProxy,
+    private matDialog: MatDialog,
   ) {
     super(injector);
     this.breadcrumb.list = [
-      { name: this.l('Content'), url: '/dashboard/content' },
-      { name: this.l('Pages'), url: '/dashboard/pages' },
+      { name: this.l('Settings'), url: '/dashboard/setting' },
+      { name: this.l('Users'), url: '/dashboard/users' },
     ];
+    this.form = this.fb.group({
+      filter: [''],
+    });
+    this.page = this.route.snapshot.queryParams['page'] ?? 1;
+    this.perPage = this.route.snapshot.queryParams['perPage'] ?? 10;
   }
 
   ngOnInit(): void {
     this.getList();
   }
 
+  ngOnDestroy(): void {
+    if (this.listSubscription$) {
+      this.listSubscription$.unsubscribe();
+    }
+  }
+
   getList() {
-    // this.loading = true;
-    // this.dataService
-    //   .get<any, PageModel[]>(Apis.pageList, {})
-    //   .pipe(finalize(() => (this.loading = false)))
-    //   .subscribe((response) => {
-    //     this.list = response.data ?? [];
-    //     this.totalCount = response.meta!.total;
-    //   });
+    if (this.listSubscription$) {
+      this.listSubscription$.unsubscribe();
+    }
+    this.loading = true;
+    const input = new GetFilteredPagesQuery();
+    input.title = this.form.get('filter')?.value;
+    input.pageNumber = this.page;
+    input.pageSize = this.perPage;
+    this.listSubscription$ = this.pageService
+      .getAllPages(input)
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe((response) => {
+        this.list = response.data?.items ?? [];
+        this.list = this.list.map((x) => (x.statusText = this.l('PageStatusEnum_') + x.status));
+        this.totalCount = response.data?.totalCount ?? 0;
+      });
   }
 
-  reload() {
+  reload(setFirstPage = true) {
+    if (setFirstPage) {
+      this.page = 1;
+    }
+    this.onPageChange();
+  }
+  resetFilter() {
+    this.showFilter = false;
+    this.form.patchValue({ filter: '' });
+    this.reload();
+  }
+
+  onPageChange(ev?: PageEvent) {
     this.getList();
+    this.router.navigate(['/dashboard/users'], {
+      queryParams: {
+        page: this.page,
+      },
+    });
   }
 
-  changeCover(item: PageModel) {
-    this.fileManagerService
-      .openFileManager({
-        type: 'Image',
-        showPreview: true,
+  openCreatePageDialog() {
+    this.matDialog
+      .open(CreatePageDialogComponent, {
+        data: {},
+        width: '768px',
       })
-      .then((r) => {
-        if (r) {
-          item.loading = true;
-          // this.dataService
-          //   .post(Apis.setPageCover, {
-          //     id: item.id,
-          //     fileId: r,
-          //   })
-          //   .pipe(finalize(() => (item.loading = false)))
-          //   .subscribe((response) => {
-          //     this.reload();
-          //   });
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.reload();
         }
       });
   }
 
-  openPageDialog(item?: PageModel) {}
+  updatePage(item: PageDtoExtended) {}
+
+  remove(item: PageDtoExtended) {
+    this.confirmMessage(`${this.l('Delete')}:${item?.title}`, this.l('AreUseSureForDelete')).then((result) => {
+      if (result.isConfirmed) {
+        this.showMainLoading();
+        const input = new DeletePageCommand({
+          pageId: item.id,
+        });
+        this.pageService
+          .deletePage(input)
+          .pipe(finalize(() => this.hideMainLoading()))
+          .subscribe((response) => {
+            if (response.success) {
+              this.notify.success(this.l('DeletedSuccessfully'));
+              this.reload();
+            }
+          });
+      }
+    });
+  }
 }

@@ -1,3 +1,4 @@
+import { CreatePageDialogComponent } from './create-page-dialog/create-page-dialog.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -10,9 +11,11 @@ import { TranslateModule } from '@ngx-translate/core';
 import { BlogsComponent } from './blogs/blogs.component';
 import { PagesComponent } from './pages/pages.component';
 import { TableViewComponent } from '@shared/components/table-view/table-view.compoenent';
+import { PaginationComponent } from '@shared/components/pagination/pagination.component';
+import { PagesServiceProxy } from '@shared/service-proxies';
 
 @NgModule({
-  declarations: [ContentComponent, BlogsComponent, PagesComponent],
+  declarations: [ContentComponent, BlogsComponent, PagesComponent, CreatePageDialogComponent],
   imports: [
     CommonModule,
     ContentRoutingModule,
@@ -22,6 +25,8 @@ import { TableViewComponent } from '@shared/components/table-view/table-view.com
     ReactiveFormsModule,
     TranslateModule,
     TableViewComponent,
+    PaginationComponent,
   ],
+  providers: [PagesServiceProxy],
 })
 export class ContentModule {}
