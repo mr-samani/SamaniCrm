@@ -4435,6 +4435,11 @@ grapesjs-style-gradient@^3.0.1:
   dependencies:
     grapick "^0.1.13"
 
+grapesjs-tui-image-editor@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/grapesjs-tui-image-editor/-/grapesjs-tui-image-editor-1.0.2.tgz#0e48f68b18e230558feea77a5a5c5bfcf3efe520"
+  integrity sha512-cnKSYzzQV8m5mdvVGhhO9aO5tmtOZLR1O+12z2LqnBcYCvA1eN7ecEYqHT7qpRVH8Q84Nj2mmCn+2t4TvrkI8g==
+
 grapesjs-typed@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/grapesjs-typed/-/grapesjs-typed-2.0.1.tgz#efe0a416e93dc8e21b8636bcad31d15fdd08147e"
