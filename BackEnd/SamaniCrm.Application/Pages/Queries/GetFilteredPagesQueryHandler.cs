@@ -16,16 +16,20 @@ namespace SamaniCrm.Application.Pages.Queries
     public class GetFilteredPagesQueryHandler : IRequestHandler<GetFilteredPagesQuery, PaginatedResult<PageDto>>
     {
         private readonly IApplicationDbContext _context;
+        private readonly ICurrentUserService _currentUserService;
 
-        public GetFilteredPagesQueryHandler(IApplicationDbContext context)
+        public GetFilteredPagesQueryHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
         {
             _context = context;
+            _currentUserService = currentUserService;
         }
 
         public async Task<PaginatedResult<PageDto>> Handle(GetFilteredPagesQuery request, CancellationToken cancellationToken)
         {
+            var currentLanguage = _currentUserService.lang ?? "en-US";
             var query = _context.Pages
-                .Include(p => p.Translations)
+                .Where(x => x.Type == request.Type)
+                .Include(p => p.Translations.Where(x=>x.Culture==currentLanguage))
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(request.Title))
@@ -53,16 +57,16 @@ namespace SamaniCrm.Application.Pages.Queries
                 query = query.OrderBy(sortString);
             }
 
-            var result= await query
+            var result = await query
                 .Select(p => new PageDto
                 {
                     Id = p.Id,
-                    Slag = p.Slag,
                     Status = p.Status,
                     Author = p.CreatedBy,
                     Created = p.CreationTime,
                     Title = p.Translations.FirstOrDefault().Title,
-                    Abstract = p.Translations.FirstOrDefault().Abstract
+                    Abstract = p.Translations.FirstOrDefault().Abstract,
+                    Description = p.Translations.FirstOrDefault().Description
                 }).ToListAsync(cancellationToken);
 
             return new PaginatedResult<PageDto>

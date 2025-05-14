@@ -1,6 +1,41 @@
 <div class="d-flex">
   <div class="menu-list">
-    <a class="menu-item" routerLink="/dashboard/content/pages" routerLinkActive="active">
+    <a class="menu-item" [routerLink]="['/dashboard/content/pages/' + PageTypeEnum.HomePage]" routerLinkActive="active">
+      <div class="icon">
+        <i class="fad fa-memo-circle-info"></i>
+      </div>
+      <div class="content">
+        <div class="title">{{ 'HomePage' | translate }}</div>
+        <div class="description">{{ 'HomePageDescription' | translate }}</div>
+      </div>
+    </a>
+
+    <a class="menu-item" [routerLink]="['/dashboard/content/pages/' + PageTypeEnum.AboutUs]" routerLinkActive="active">
+      <div class="icon">
+        <i class="fad fa-memo-circle-info"></i>
+      </div>
+      <div class="content">
+        <div class="title">{{ 'AboutUs' | translate }}</div>
+        <div class="description">{{ 'AboutUsDescription' | translate }}</div>
+      </div>
+    </a>
+
+    <a
+      class="menu-item"
+      [routerLink]="['/dashboard/content/pages/' + PageTypeEnum.ContactUs]"
+      routerLinkActive="active">
+      <div class="icon">
+        <i class="fad fa-memo-circle-info"></i>
+      </div>
+      <div class="content">
+        <div class="title">{{ 'ContactUs' | translate }}</div>
+        <div class="description">{{ 'ContactUsDescription' | translate }}</div>
+      </div>
+    </a>
+    <a
+      class="menu-item"
+      [routerLink]="['/dashboard/content/pages/' + PageTypeEnum.OtherPages]"
+      routerLinkActive="active">
       <div class="icon">
         <i class="fad fa-file-invoice"></i>
       </div>
@@ -10,7 +45,7 @@
       </div>
     </a>
 
-    <a class="menu-item" routerLink="/dashboard/content/articles" routerLinkActive="active">
+    <a class="menu-item" [routerLink]="['/dashboard/content/pages/' + PageTypeEnum.Article]" routerLinkActive="active">
       <div class="icon">
         <i class="fad fa-file-signature"></i>
       </div>
@@ -20,7 +55,7 @@
       </div>
     </a>
 
-    <a class="menu-item" routerLink="/dashboard/content/blogs" routerLinkActive="active">
+    <a class="menu-item" [routerLink]="['/dashboard/content/pages/' + PageTypeEnum.Blog]" routerLinkActive="active">
       <div class="icon">
         <i class="fad fa-blog"></i>
       </div>
@@ -30,23 +65,13 @@
       </div>
     </a>
 
-    <a class="menu-item" routerLink="/dashboard/content/news" routerLinkActive="active">
+    <a class="menu-item" [routerLink]="['/dashboard/content/pages/' + PageTypeEnum.News]" routerLinkActive="active">
       <div class="icon">
         <i class="fad fa-newspaper"></i>
       </div>
       <div class="content">
         <div class="title">{{ 'News' | translate }}</div>
         <div class="description">{{ 'NewsDescription' | translate }}</div>
-      </div>
-    </a>
-
-    <a class="menu-item" routerLink="/dashboard/content/aboutus" routerLinkActive="active">
-      <div class="icon">
-        <i class="fad fa-memo-circle-info"></i>
-      </div>
-      <div class="content">
-        <div class="title">{{ 'AboutUs' | translate }}</div>
-        <div class="description">{{ 'AboutUsDescription' | translate }}</div>
       </div>
     </a>
   </div>

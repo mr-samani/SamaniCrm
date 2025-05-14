@@ -7,7 +7,6 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { PageStatusEnum } from './page-status-enum';
 
 
 /**
@@ -21,30 +20,28 @@ import { PageStatusEnum } from './page-status-enum';
  */
 /* Created with custom template */
 
-/** Interface for PageDto */
-export interface IPageDto {
+/** Interface for PageMetaData */
+export interface IPageMetaData {
   id?: string;
-  slag?: string;
-  status?: PageStatusEnum;
-  author?: string;
-  created?: string;
-  title: string;
+  culture: string;
+  title?: string;
   _abstract?: string;
   description?: string;
+  metaDescription?: string;
+  metaKeywords?: string;
 }
 
-/** Class for PageDto */
-export class PageDto implements IPageDto {
+/** Class for PageMetaData */
+export class PageMetaData implements IPageMetaData {
   id?: string;
-  slag?: string;
-  status?: PageStatusEnum;
-  author?: string;
-  created?: string;
-  title!: string;
+  culture!: string;
+  title?: string;
   _abstract?: string;
   description?: string;
+  metaDescription?: string;
+  metaKeywords?: string;
 
-  constructor(data?: IPageDto) {
+  constructor(data?: IPageMetaData) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -56,18 +53,17 @@ export class PageDto implements IPageDto {
 init(data?: any) {
   if (data) {
     this.id = data["id"];
-    this.slag = data["slag"];
-    this.status = data["status"];
-    this.author = data["author"];
-    this.created = data["created"];
+    this.culture = data["culture"];
     this.title = data["title"];
     this._abstract = data["abstract"];
     this.description = data["description"];
+    this.metaDescription = data["metaDescription"];
+    this.metaKeywords = data["metaKeywords"];
   }
 }
 
-  static fromJS(data: any): PageDto {
-    const instance = new PageDto();
+  static fromJS(data: any): PageMetaData {
+    const instance = new PageMetaData();
     instance.init(data);
     return instance;
   }

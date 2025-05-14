@@ -14,7 +14,8 @@ namespace SamaniCrm.Application.DTOs
         public PageStatusEnum Status { get; set; }
         public string? Author { get; set; }
         public DateTime Created { get; set; }
-        public string? Title { get; set; }
+        public required string Title { get; set; }
         public string? Abstract { get; set; }
+        public string? Description { get; set; }
     }
 }

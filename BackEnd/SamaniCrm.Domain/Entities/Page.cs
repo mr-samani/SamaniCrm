@@ -13,14 +13,14 @@ namespace SamaniCrm.Domain.Entities;
 public class Page : IAuditableEntity, ISoftDelete
 {
     public Guid Id { get; set; }
-    [MaxLength(200)]
-    public string? Slag { get; set; }
 
 
     public string? CoverImage { get; set; }
     public Guid? AuthorId { get; set; }
     public DateTime? PublishedAt { get; set; }
     public PageStatusEnum Status { get; set; }
+    public PageTypeEnum Type { get; set; }
+
 
 
     public bool IsActive { get; set; } = true;
@@ -48,4 +48,16 @@ public enum PageStatusEnum
     Draft,
     Published,
     Archived
+}
+
+
+public enum PageTypeEnum
+{
+    OtherPages,
+    HomePage,
+    AboutUs,
+    ContactUs,
+    Blog,
+    Article,
+    News
 }

@@ -1,4 +1,3 @@
-import { CreatePageDialogComponent } from './create-page-dialog/create-page-dialog.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -8,14 +7,16 @@ import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { BlogsComponent } from './blogs/blogs.component';
 import { PagesComponent } from './pages/pages.component';
 import { TableViewComponent } from '@shared/components/table-view/table-view.compoenent';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { PagesServiceProxy } from '@shared/service-proxies';
+import { SharedModule } from '@shared/shared.module';
+import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
+import { CreateOrEditPageMetaDataDialogComponent } from './create-or-edit-page-meta-data-dialog/create-or-edit-page-meta-data-dialog.component';
 
 @NgModule({
-  declarations: [ContentComponent, BlogsComponent, PagesComponent, CreatePageDialogComponent],
+  declarations: [ContentComponent, PagesComponent, CreateOrEditPageMetaDataDialogComponent],
   imports: [
     CommonModule,
     ContentRoutingModule,
@@ -26,6 +27,8 @@ import { PagesServiceProxy } from '@shared/service-proxies';
     TranslateModule,
     TableViewComponent,
     PaginationComponent,
+    SharedModule,
+    TabGroupModule,
   ],
   providers: [PagesServiceProxy],
 })

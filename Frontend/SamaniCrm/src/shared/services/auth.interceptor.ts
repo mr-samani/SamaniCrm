@@ -16,6 +16,7 @@ import { AppConst } from '../app-const';
 import { NgxAlertModalService } from 'ngx-alert-modal';
 import { RefreshTokenCommand } from '@shared/service-proxies/model/refresh-token-command';
 import { ApiError } from '@shared/service-proxies/model/api-error';
+import { Router } from '@angular/router';
 export const exceptionUrls = ['background.css', '/i18n/'];
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -28,6 +29,7 @@ export class AuthInterceptor implements HttpInterceptor {
     //private matDialog: MatDialog,
     private translateService: TranslateService,
     private alertService: NgxAlertModalService,
+    private router: Router,
   ) {}
   setHeader(req: HttpRequest<any>): HttpRequest<any> {
     const lang = this.getLang(req);
@@ -132,7 +134,7 @@ export class AuthInterceptor implements HttpInterceptor {
       html: html,
       showCancelButton: false,
       showConfirmButton: true,
-      confirmButtonText: this.translateService.instant('ok'),
+      confirmButtonText: this.translateService.instant('Ok'),
     });
     return throwError(() => err);
   }
@@ -143,7 +145,7 @@ export class AuthInterceptor implements HttpInterceptor {
       title: msg,
       showCancelButton: false,
       showConfirmButton: true,
-      confirmButtonText: this.translateService.instant('ok'),
+      confirmButtonText: this.translateService.instant('Ok'),
     });
     return throwError(() => err);
   }
@@ -153,12 +155,17 @@ export class AuthInterceptor implements HttpInterceptor {
     this.alertService
       .show({
         title: msg,
-        showCancelButton: false,
+        showCancelButton: true,
         showConfirmButton: true,
-        confirmButtonText: this.translateService.instant('ok'),
+        confirmButtonText: this.translateService.instant('Ok'),
+        cancelButtonText: this.translateService.instant('Cancel'),
       })
       .then((r) => {
-        this.authService.logOut();
+        if (r.isConfirmed) {
+          this.authService.logOut();
+        } else {
+          this.router.navigate(['/']);
+        }
       });
     return throwError(() => err);
   }

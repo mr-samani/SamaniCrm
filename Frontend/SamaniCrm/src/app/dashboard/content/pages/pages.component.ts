@@ -5,11 +5,17 @@ import { PageModel } from '../models/page';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
 import { Apis } from '@shared/apis';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
-import { DeletePageCommand, GetFilteredPagesQuery, PageDto, PagesServiceProxy } from '@shared/service-proxies';
+import {
+  DeletePageCommand,
+  GetFilteredPagesQuery,
+  PageDto,
+  PagesServiceProxy,
+  PageTypeEnum,
+} from '@shared/service-proxies';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
-import { CreatePageDialogComponent } from '../create-page-dialog/create-page-dialog.component';
+import { CreateOrEditPageMetaDataDialogComponent } from '../create-or-edit-page-meta-data-dialog/create-or-edit-page-meta-data-dialog.component';
 
 export class PageDtoExtended extends PageDto {
   statusText?: string;
@@ -29,9 +35,9 @@ export class PagesComponent extends AppComponentBase implements OnInit {
 
   fields: FieldsType[] = [
     // { column: 'id', title: this.l('id'), width: 100 },
-    { column: 'slag', title: this.l('Slag') },
     { column: 'title', title: this.l('Title') },
     { column: '_abstract', title: this.l('Abstract') },
+    { column: 'description', title: this.l('AdminDescription') },
     { column: 'author', title: this.l('Author') },
     { column: 'created', title: this.l('CreationTime'), type: 'dateTime' },
     { column: 'status', title: this.l('Status') },
@@ -42,12 +48,17 @@ export class PagesComponent extends AppComponentBase implements OnInit {
   perPage = 10;
   listSubscription$?: Subscription;
   showFilter = false;
+  type: PageTypeEnum = PageTypeEnum.HomePage;
   constructor(
     injector: Injector,
     private pageService: PagesServiceProxy,
     private matDialog: MatDialog,
   ) {
     super(injector);
+    this.route.params.subscribe((p) => {
+      this.type = p['type'];
+      this.resetFilterAndGetList();
+    });
     this.breadcrumb.list = [
       { name: this.l('Settings'), url: '/dashboard/setting' },
       { name: this.l('Users'), url: '/dashboard/users' },
@@ -69,12 +80,18 @@ export class PagesComponent extends AppComponentBase implements OnInit {
     }
   }
 
+  resetFilterAndGetList() {
+    this.resetFilter();
+    this.getList();
+  }
+
   getList() {
     if (this.listSubscription$) {
       this.listSubscription$.unsubscribe();
     }
     this.loading = true;
     const input = new GetFilteredPagesQuery();
+    input.type = this.type;
     input.title = this.form.get('filter')?.value;
     input.pageNumber = this.page;
     input.pageSize = this.perPage;
@@ -102,7 +119,7 @@ export class PagesComponent extends AppComponentBase implements OnInit {
 
   onPageChange(ev?: PageEvent) {
     this.getList();
-    this.router.navigate(['/dashboard/users'], {
+    this.router.navigate(['/dashboard/content/pages/' + this.type], {
       queryParams: {
         page: this.page,
       },
@@ -111,7 +128,7 @@ export class PagesComponent extends AppComponentBase implements OnInit {
 
   openCreatePageDialog() {
     this.matDialog
-      .open(CreatePageDialogComponent, {
+      .open(CreateOrEditPageMetaDataDialogComponent, {
         data: {},
         width: '768px',
       })

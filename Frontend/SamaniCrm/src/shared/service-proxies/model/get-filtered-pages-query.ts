@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PageTypeEnum } from './page-type-enum';
 import { PageStatusEnum } from './page-status-enum';
 
 
@@ -27,6 +28,7 @@ export interface IGetFilteredPagesQuery {
   pageSize?: number;
   sortBy?: string;
   sortDirection?: string;
+  type: PageTypeEnum;
   title?: string;
   _abstract?: string;
   authorName?: string;
@@ -41,6 +43,7 @@ export class GetFilteredPagesQuery implements IGetFilteredPagesQuery {
   pageSize?: number;
   sortBy?: string;
   sortDirection?: string;
+  type!: PageTypeEnum;
   title?: string;
   _abstract?: string;
   authorName?: string;
@@ -63,6 +66,7 @@ init(data?: any) {
     this.pageSize = data["pageSize"];
     this.sortBy = data["sortBy"];
     this.sortDirection = data["sortDirection"];
+    this.type = data["type"];
     this.title = data["title"];
     this._abstract = data["abstract"];
     this.authorName = data["authorName"];
