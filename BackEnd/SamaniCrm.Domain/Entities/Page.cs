@@ -45,7 +45,7 @@ public class Page : IAuditableEntity, ISoftDelete
 
 public enum PageStatusEnum
 {
-    Draft,
+    Draft = 0,
     Published,
     Archived
 }
@@ -53,7 +53,7 @@ public enum PageStatusEnum
 
 public enum PageTypeEnum
 {
-    OtherPages,
+    OtherPages = 0,
     HomePage,
     AboutUs,
     ContactUs,

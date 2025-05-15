@@ -15,7 +15,7 @@ namespace SamaniCrm.Application.DTOs
         public string? Author { get; set; }
         public DateTime Created { get; set; }
         public required string Title { get; set; }
-        public string? Abstract { get; set; }
+        public string? Introduction { get; set; }
         public string? Description { get; set; }
     }
 }

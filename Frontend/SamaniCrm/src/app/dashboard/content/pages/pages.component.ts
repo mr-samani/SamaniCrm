@@ -36,11 +36,11 @@ export class PagesComponent extends AppComponentBase implements OnInit {
   fields: FieldsType[] = [
     // { column: 'id', title: this.l('id'), width: 100 },
     { column: 'title', title: this.l('Title') },
-    { column: '_abstract', title: this.l('Abstract') },
+    { column: 'introduction', title: this.l('Introduction') },
     { column: 'description', title: this.l('AdminDescription') },
     { column: 'author', title: this.l('Author') },
     { column: 'created', title: this.l('CreationTime'), type: 'dateTime' },
-    { column: 'status', title: this.l('Status') },
+    { column: 'statusText', title: this.l('Status') },
   ];
 
   form: FormGroup;
@@ -55,24 +55,24 @@ export class PagesComponent extends AppComponentBase implements OnInit {
     private matDialog: MatDialog,
   ) {
     super(injector);
-    this.route.params.subscribe((p) => {
-      this.type = p['type'];
-      this.resetFilterAndGetList();
-    });
-    this.breadcrumb.list = [
-      { name: this.l('Settings'), url: '/dashboard/setting' },
-      { name: this.l('Users'), url: '/dashboard/users' },
-    ];
     this.form = this.fb.group({
       filter: [''],
     });
     this.page = this.route.snapshot.queryParams['page'] ?? 1;
     this.perPage = this.route.snapshot.queryParams['perPage'] ?? 10;
+    this.route.params.subscribe((p) => {
+      const typeString = p['type'];
+      const type = Object.entries(PageTypeEnum).findIndex((x) => x[1] == typeString);
+      if (type == -1) {
+        this.router.navigate(['/not-found']);
+        return;
+      }
+      this.type = type;
+      this.reload();
+    });
   }
 
-  ngOnInit(): void {
-    this.getList();
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     if (this.listSubscription$) {
@@ -80,13 +80,8 @@ export class PagesComponent extends AppComponentBase implements OnInit {
     }
   }
 
-  resetFilterAndGetList() {
-    this.resetFilter();
-    this.getList();
-  }
-
   getList() {
-    if (this.listSubscription$) {
+    if (this.listSubscription$ && !this.listSubscription$.closed) {
       this.listSubscription$.unsubscribe();
     }
     this.loading = true;
@@ -100,7 +95,9 @@ export class PagesComponent extends AppComponentBase implements OnInit {
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
         this.list = response.data?.items ?? [];
-        this.list = this.list.map((x) => (x.statusText = this.l('PageStatusEnum_') + x.status));
+        for (let item of this.list) {
+          item.statusText = this.l('PageStatusEnum_') + item.status;
+        }
         this.totalCount = response.data?.totalCount ?? 0;
       });
   }
@@ -119,7 +116,7 @@ export class PagesComponent extends AppComponentBase implements OnInit {
 
   onPageChange(ev?: PageEvent) {
     this.getList();
-    this.router.navigate(['/dashboard/content/pages/' + this.type], {
+    this.router.navigate(['/dashboard/content/pages/' + PageTypeEnum[this.type]], {
       queryParams: {
         page: this.page,
       },
@@ -129,7 +126,9 @@ export class PagesComponent extends AppComponentBase implements OnInit {
   openCreatePageDialog() {
     this.matDialog
       .open(CreateOrEditPageMetaDataDialogComponent, {
-        data: {},
+        data: {
+          type: this.type,
+        },
         width: '768px',
       })
       .afterClosed()

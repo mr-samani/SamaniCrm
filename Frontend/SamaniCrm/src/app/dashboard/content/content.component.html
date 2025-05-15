@@ -1,6 +1,9 @@
 <div class="d-flex">
   <div class="menu-list">
-    <a class="menu-item" [routerLink]="['/dashboard/content/pages/' + PageTypeEnum.HomePage]" routerLinkActive="active">
+    <a
+      class="menu-item"
+      [routerLink]="['/dashboard/content/pages/' + PageTypeEnum[PageTypeEnum.HomePage]]"
+      routerLinkActive="active">
       <div class="icon">
         <i class="fad fa-memo-circle-info"></i>
       </div>
@@ -10,7 +13,10 @@
       </div>
     </a>
 
-    <a class="menu-item" [routerLink]="['/dashboard/content/pages/' + PageTypeEnum.AboutUs]" routerLinkActive="active">
+    <a
+      class="menu-item"
+      [routerLink]="['/dashboard/content/pages/' + PageTypeEnum[PageTypeEnum.AboutUs]]"
+      routerLinkActive="active">
       <div class="icon">
         <i class="fad fa-memo-circle-info"></i>
       </div>
@@ -22,7 +28,7 @@
 
     <a
       class="menu-item"
-      [routerLink]="['/dashboard/content/pages/' + PageTypeEnum.ContactUs]"
+      [routerLink]="['/dashboard/content/pages/' + PageTypeEnum[PageTypeEnum.ContactUs]]"
       routerLinkActive="active">
       <div class="icon">
         <i class="fad fa-memo-circle-info"></i>
@@ -34,7 +40,7 @@
     </a>
     <a
       class="menu-item"
-      [routerLink]="['/dashboard/content/pages/' + PageTypeEnum.OtherPages]"
+      [routerLink]="['/dashboard/content/pages/' + PageTypeEnum[PageTypeEnum.OtherPages]]"
       routerLinkActive="active">
       <div class="icon">
         <i class="fad fa-file-invoice"></i>
@@ -45,7 +51,10 @@
       </div>
     </a>
 
-    <a class="menu-item" [routerLink]="['/dashboard/content/pages/' + PageTypeEnum.Article]" routerLinkActive="active">
+    <a
+      class="menu-item"
+      [routerLink]="['/dashboard/content/pages/' + PageTypeEnum[PageTypeEnum.Article]]"
+      routerLinkActive="active">
       <div class="icon">
         <i class="fad fa-file-signature"></i>
       </div>
@@ -55,7 +64,10 @@
       </div>
     </a>
 
-    <a class="menu-item" [routerLink]="['/dashboard/content/pages/' + PageTypeEnum.Blog]" routerLinkActive="active">
+    <a
+      class="menu-item"
+      [routerLink]="['/dashboard/content/pages/' + PageTypeEnum[PageTypeEnum.Blog]]"
+      routerLinkActive="active">
       <div class="icon">
         <i class="fad fa-blog"></i>
       </div>
@@ -65,7 +77,10 @@
       </div>
     </a>
 
-    <a class="menu-item" [routerLink]="['/dashboard/content/pages/' + PageTypeEnum.News]" routerLinkActive="active">
+    <a
+      class="menu-item"
+      [routerLink]="['/dashboard/content/pages/' + PageTypeEnum[PageTypeEnum.News]]"
+      routerLinkActive="active">
       <div class="icon">
         <i class="fad fa-newspaper"></i>
       </div>

@@ -30,7 +30,7 @@ export interface IGetFilteredPagesQuery {
   sortDirection?: string;
   type: PageTypeEnum;
   title?: string;
-  _abstract?: string;
+  introduction?: string;
   authorName?: string;
   fromDate?: string;
   toDate?: string;
@@ -45,7 +45,7 @@ export class GetFilteredPagesQuery implements IGetFilteredPagesQuery {
   sortDirection?: string;
   type!: PageTypeEnum;
   title?: string;
-  _abstract?: string;
+  introduction?: string;
   authorName?: string;
   fromDate?: string;
   toDate?: string;
@@ -68,7 +68,7 @@ init(data?: any) {
     this.sortDirection = data["sortDirection"];
     this.type = data["type"];
     this.title = data["title"];
-    this._abstract = data["abstract"];
+    this.introduction = data["introduction"];
     this.authorName = data["authorName"];
     this.fromDate = data["fromDate"];
     this.toDate = data["toDate"];

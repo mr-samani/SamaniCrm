@@ -15,7 +15,7 @@
       <mat-form-field class="col-md-6" *ngIf="!isUpdate">
         <mat-label>{{ 'Status' | translate }}</mat-label>
         <mat-select formControlName="status">
-          <mat-option [value]="item" *ngFor="let item of PageStatusEnum | enumToArrayStringValue">
+          <mat-option [value]="item" *ngFor="let item of PageStatusEnum | enumToArray">
             {{ 'PageStatusEnum_' + item | translate }}
           </mat-option>
         </mat-select>
@@ -53,8 +53,8 @@
           </mat-form-field>
 
           <mat-form-field class="col-sm-12">
-            <mat-label>{{ 'Abstract' | translate }}</mat-label>
-            <textarea matInput formControlName="_abstract" rows="2"></textarea>
+            <mat-label>{{ 'Introduction' | translate }}</mat-label>
+            <textarea matInput formControlName="introduction" rows="2"></textarea>
           </mat-form-field>
 
           <mat-form-field class="col-sm-12">

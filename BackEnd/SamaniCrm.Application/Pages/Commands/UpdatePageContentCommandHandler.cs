@@ -13,39 +13,16 @@ namespace SamaniCrm.Application.Pages.Commands
 {
     public class UpdatePageContentCommandHandler : IRequestHandler<UpdatePageContentCommand, Unit>
     {
-        private readonly IApplicationDbContext _context;
+        private readonly IPageService _pageService;
 
-        public UpdatePageContentCommandHandler(IApplicationDbContext context)
+        public UpdatePageContentCommandHandler(IPageService pageService)
         {
-            _context = context;
+            _pageService = pageService;
         }
 
         public async Task<Unit> Handle(UpdatePageContentCommand request, CancellationToken cancellationToken)
         {
-            var translation = await _context.PageTranslations
-                .FirstOrDefaultAsync(pt => pt.PageId == request.PageId && pt.Culture == request.Culture, cancellationToken);
-
-            if (translation is null)
-            {
-                translation = new PageTranslation
-                {
-                    Culture = request.Culture,
-                    Data = request.Data,
-                    Html = request.Html,
-                    Styles = request.Styles,
-                    Scripts = request.Scripts,
-                };
-            }
-            else
-            {
-                translation.Data = request.Data;
-                translation.Html = request.Html;
-                translation.Styles = request.Styles;
-                translation.Scripts = request.Scripts;
-            }
-
-            await _context.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
+            return await _pageService.UpdatePageContent(request, cancellationToken);
         }
     }
 }

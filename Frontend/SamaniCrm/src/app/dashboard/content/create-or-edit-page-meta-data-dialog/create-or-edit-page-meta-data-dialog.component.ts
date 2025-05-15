@@ -64,7 +64,7 @@ export class CreateOrEditPageMetaDataDialogComponent extends AppComponentBase im
         new PageMetaDataDto({
           culture: item.culture!,
           title: '',
-          _abstract: '',
+          introduction: '',
           description: '',
           metaDescription: '',
           metaKeywords: '',
@@ -109,7 +109,7 @@ export class CreateOrEditPageMetaDataDialogComponent extends AppComponentBase im
           culture: [translation.culture],
           // data: this.fb.group({
           title: [translation.title, Validators.required],
-          _abstract: [],
+          introduction: [],
           description: [],
           metaDescription: [],
           metaKeywords: [],
@@ -125,6 +125,7 @@ export class CreateOrEditPageMetaDataDialogComponent extends AppComponentBase im
       this.notify.warning(this.l('CompleteFormField'));
       return;
     }
+    debugger
     this.saving = true;
     const input = new CreateOrEditPageMetaDataCommand();
     input.init(this.form.value);

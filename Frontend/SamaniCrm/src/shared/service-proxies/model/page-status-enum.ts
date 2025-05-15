@@ -11,10 +11,10 @@
 
 export enum PageStatusEnum {
 
-    Draft = 'Draft',
+    Draft = 0,
 
-    Published = 'Published',
+    Published = 1,
 
-    Archived = 'Archived'
+    Archived = 2
 }
 

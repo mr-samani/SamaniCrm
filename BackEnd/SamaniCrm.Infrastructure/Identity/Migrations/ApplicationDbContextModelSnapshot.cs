@@ -380,7 +380,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<string>("Abstract")
+                    b.Property<string>("Introduction")
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 

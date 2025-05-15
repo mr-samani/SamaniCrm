@@ -6,6 +6,7 @@ import { LuxonFromNowPipe } from './pipes/luxon-from-now.pipe';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { EnumToArrayPipe, EnumToArrayStringValuePipe } from './pipes/enum-to-array.pipe';
 import { NumberCheckDirective } from './directives/number-check.directive';
+import { FilteFormrDirective } from './directives/filter-form.directive';
 
 const pipes = [
   SanitizerPipe,
@@ -15,6 +16,7 @@ const pipes = [
   EnumToArrayPipe,
   EnumToArrayStringValuePipe,
   NumberCheckDirective,
+  FilteFormrDirective
 ];
 @NgModule({
   declarations: [...pipes],

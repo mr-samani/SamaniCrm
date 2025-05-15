@@ -9,73 +9,23 @@ using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
 using System.Linq.Dynamic.Core;
+using Microsoft.EntityFrameworkCore.Internal;
 
 
 namespace SamaniCrm.Application.Pages.Queries
 {
     public class GetFilteredPagesQueryHandler : IRequestHandler<GetFilteredPagesQuery, PaginatedResult<PageDto>>
     {
-        private readonly IApplicationDbContext _context;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IPageService _pageService;
 
-        public GetFilteredPagesQueryHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
+        public GetFilteredPagesQueryHandler(IPageService pageService)
         {
-            _context = context;
-            _currentUserService = currentUserService;
+            _pageService = pageService;
         }
 
         public async Task<PaginatedResult<PageDto>> Handle(GetFilteredPagesQuery request, CancellationToken cancellationToken)
         {
-            var currentLanguage = _currentUserService.lang ?? "en-US";
-            var query = _context.Pages
-                .Where(x => x.Type == request.Type)
-                .Include(p => p.Translations.Where(x=>x.Culture==currentLanguage))
-                .AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(request.Title))
-                query = query.Where(p => p.Translations.Any(t => t.Title.Contains(request.Title)));
-
-            if (!string.IsNullOrWhiteSpace(request.Abstract))
-                query = query.Where(p => p.Translations.Any(t => t.Abstract.Contains(request.Abstract)));
-
-            if (!string.IsNullOrWhiteSpace(request.AuthorName))
-                query = query.Where(p => p.CreatedBy != null && p.CreatedBy.Contains(request.AuthorName));
-
-            if (request.FromDate.HasValue)
-                query = query.Where(p => p.CreationTime >= request.FromDate);
-
-            if (request.ToDate.HasValue)
-                query = query.Where(p => p.CreationTime <= request.ToDate);
-
-            if (request.Status.HasValue)
-                query = query.Where(p => p.Status == request.Status);
-
-            // Sorting
-            if (!string.IsNullOrEmpty(request.SortBy))
-            {
-                var sortString = $"{request.SortBy} {request.SortDirection}";
-                query = query.OrderBy(sortString);
-            }
-
-            var result = await query
-                .Select(p => new PageDto
-                {
-                    Id = p.Id,
-                    Status = p.Status,
-                    Author = p.CreatedBy,
-                    Created = p.CreationTime,
-                    Title = p.Translations.FirstOrDefault().Title,
-                    Abstract = p.Translations.FirstOrDefault().Abstract,
-                    Description = p.Translations.FirstOrDefault().Description
-                }).ToListAsync(cancellationToken);
-
-            return new PaginatedResult<PageDto>
-            {
-                Items = result,
-                TotalCount = await query.CountAsync(cancellationToken),
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize
-            };
+            return await _pageService.GetPagedList(request, cancellationToken);
         }
     }
 }

@@ -10,37 +10,18 @@ using SamaniCrm.Application.Common.Interfaces;
 
 namespace SamaniCrm.Application.Pages.Commands
 {
-    public class DeletePageCommandHandler : IRequestHandler<DeletePageCommand,Unit>
+    public class DeletePageCommandHandler : IRequestHandler<DeletePageCommand, Unit>
     {
-        private readonly IApplicationDbContext _context;
+        private readonly IPageService _pageService;
 
-        public DeletePageCommandHandler(IApplicationDbContext context)
+        public DeletePageCommandHandler(IPageService pageService)
         {
-            _context = context;
+            _pageService = pageService;
         }
 
         public async Task<Unit> Handle(DeletePageCommand request, CancellationToken cancellationToken)
         {
-            var page = await _context.Pages
-                .Include(p => p.Translations)
-                .FirstOrDefaultAsync(p => p.Id == request.PageId, cancellationToken);
-
-            if (page is null)
-                throw new NotFoundException("Page not found");
-
-            page.IsDeleted = true;
-            page.DeletedBy = request.DeletedBy;
-            page.DeletedTime = DateTime.UtcNow;
-
-            foreach (var t in page.Translations)
-            {
-                t.IsDeleted = true;
-                t.DeletedBy = request.DeletedBy;
-                t.DeletedTime = DateTime.UtcNow;
-            }
-
-            await _context.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
+            return await _pageService.DeletePage(request, cancellationToken);
         }
     }
 }

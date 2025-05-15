@@ -15,7 +15,7 @@ public class PageTranslation : IAuditableEntity, ISoftDelete
     [MaxLength(1000)]
     public string? Title { get; set; }
     [MaxLength(2000)]
-    public string? Abstract { get; set; }
+    public string? Introduction { get; set; }
     [MaxLength(2000)]
     public string? Description { get; set; }
 

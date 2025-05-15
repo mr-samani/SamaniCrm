@@ -9,7 +9,7 @@ const routes: Routes = [
     path: '',
     component: ContentComponent,
     children: [
-      { path: '', redirectTo: 'pages/' + PageTypeEnum.HomePage, pathMatch: 'full' },
+      { path: '', redirectTo: 'pages/' + PageTypeEnum[PageTypeEnum.HomePage], pathMatch: 'full' },
       { path: 'pages/:type', component: PagesComponent },
     ],
   },

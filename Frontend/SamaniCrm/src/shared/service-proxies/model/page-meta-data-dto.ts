@@ -25,7 +25,7 @@ export interface IPageMetaDataDto {
   id?: string;
   culture: string;
   title: string;
-  _abstract?: string;
+  introduction?: string;
   description?: string;
   metaDescription?: string;
   metaKeywords?: string;
@@ -36,7 +36,7 @@ export class PageMetaDataDto implements IPageMetaDataDto {
   id?: string;
   culture!: string;
   title!: string;
-  _abstract?: string;
+  introduction?: string;
   description?: string;
   metaDescription?: string;
   metaKeywords?: string;
@@ -55,7 +55,7 @@ init(data?: any) {
     this.id = data["id"];
     this.culture = data["culture"];
     this.title = data["title"];
-    this._abstract = data["abstract"];
+    this.introduction = data["introduction"];
     this.description = data["description"];
     this.metaDescription = data["metaDescription"];
     this.metaKeywords = data["metaKeywords"];

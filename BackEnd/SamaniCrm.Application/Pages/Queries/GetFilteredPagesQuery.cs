@@ -14,7 +14,7 @@ namespace SamaniCrm.Application.Pages.Queries
     {
         public required PageTypeEnum Type { get; set; }
         public string? Title { get; set; }
-        public string? Abstract { get; set; }
+        public string? Introduction { get; set; }
         public string? AuthorName { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }

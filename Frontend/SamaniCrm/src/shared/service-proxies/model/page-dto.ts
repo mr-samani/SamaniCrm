@@ -29,7 +29,7 @@ export interface IPageDto {
   author?: string;
   created?: string;
   title: string;
-  _abstract?: string;
+  introduction?: string;
   description?: string;
 }
 
@@ -41,7 +41,7 @@ export class PageDto implements IPageDto {
   author?: string;
   created?: string;
   title!: string;
-  _abstract?: string;
+  introduction?: string;
   description?: string;
 
   constructor(data?: IPageDto) {
@@ -61,7 +61,7 @@ init(data?: any) {
     this.author = data["author"];
     this.created = data["created"];
     this.title = data["title"];
-    this._abstract = data["abstract"];
+    this.introduction = data["introduction"];
     this.description = data["description"];
   }
 }

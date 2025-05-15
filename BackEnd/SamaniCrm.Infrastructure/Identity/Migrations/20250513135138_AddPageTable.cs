@@ -50,7 +50,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     Culture = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Abstract = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    Introduction = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
                     Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
                     Data = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Styles = table.Column<string>(type: "nvarchar(max)", nullable: true),

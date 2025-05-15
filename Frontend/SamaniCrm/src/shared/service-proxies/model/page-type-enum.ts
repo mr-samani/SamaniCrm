@@ -11,18 +11,18 @@
 
 export enum PageTypeEnum {
 
-    OtherPages = 'OtherPages',
+    OtherPages = 0,
 
-    HomePage = 'HomePage',
+    HomePage = 1,
 
-    AboutUs = 'AboutUs',
+    AboutUs = 2,
 
-    ContactUs = 'ContactUs',
+    ContactUs = 3,
 
-    Blog = 'Blog',
+    Blog = 4,
 
-    Article = 'Article',
+    Article = 5,
 
-    News = 'News'
+    News = 6
 }
 
