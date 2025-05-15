@@ -1,6 +1,7 @@
 {
   "baseUrl": "https://localhost:4320",
   "apiUrl": "http://localhost:5753",
+  "publicSiteUrl": "https://localhost:44325",
   "tinyMceApiKey": "",
   "appName": "mr-samani"
 }

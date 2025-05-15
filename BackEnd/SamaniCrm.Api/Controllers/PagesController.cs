@@ -31,7 +31,6 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetForEditMetaData")]
-        [Permission(AppPermissions.Pages_Create)]
         [Permission(AppPermissions.Pages_Update)]
         [ProducesResponseType(typeof(ApiResponse<PageForEditDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetForEditMetaData(Guid pageId, CancellationToken cancellationToken)
@@ -39,6 +38,16 @@ namespace SamaniCrm.Api.Controllers
             PageForEditDto result = await _mediator.Send(new GetPageForEditMetaDataQuery(pageId), cancellationToken);
             return ApiOk(result);
         }
+
+        [HttpGet("GetPageInfo")]
+        [Permission(AppPermissions.Pages_Update)]
+        [ProducesResponseType(typeof(ApiResponse<PageDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetPageInfo(Guid pageId, string culture, CancellationToken cancellationToken)
+        {
+            PageDto result = await _mediator.Send(new GetPageInfoQuery(pageId, culture), cancellationToken);
+            return ApiOk(result);
+        }
+
 
 
         [HttpPost("CreateOrEditPageMetaData")]
@@ -64,7 +73,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpPost("DeletePage")]
-        [Permission(AppPermissions.Pages_Delete)] 
+        [Permission(AppPermissions.Pages_Delete)]
         [ProducesResponseType(typeof(ApiResponse<Unit>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeletePage(DeletePageCommand request, CancellationToken cancellationToken)
         {

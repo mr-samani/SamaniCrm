@@ -162,28 +162,27 @@ namespace SamaniCrm.Infrastructure.Services
         public async Task<PageForEditDto> GetPageForEdit(GetPageForEditMetaDataQuery request, CancellationToken cancellationToken)
         {
             var page = await _context.Pages
-                 .Select(s => new PageForEditDto()
-                 {
-                     Id = s.Id,
-                     CoverImage = s.CoverImage,
-                     IsActive = s.IsActive,
-                     IsSystem = s.IsSystem,
-                     Status = s.Status,
-                     Type = s.Type,
-                     Translations = s.Translations.Select(t => new PageMetaDataDto()
-                     {
-                         Id = t.Id,
-                         Title = t.Title,
-                         Culture = t.Culture,
-                         Introduction = t.Introduction,
-                         Description = t.Description,
-                         MetaDescription = t.MetaDescription,
-                         MetaKeywords = t.MetaKeywords,
-                     }).ToList()
-                 })
-                 .Where(x => x.Id == request.pageId)
-                 .Include(x => x.Translations)
-                 .FirstOrDefaultAsync();
+                       .Where(x => x.Id == request.pageId)
+                       .Select(s => new PageForEditDto
+                       {
+                           Id = s.Id,
+                           CoverImage = s.CoverImage,
+                           IsActive = s.IsActive,
+                           IsSystem = s.IsSystem,
+                           Status = s.Status,
+                           Type = s.Type,
+                           Translations = s.Translations.Select(t => new PageMetaDataDto
+                           {
+                               Id = t.Id,
+                               Title = t.Title,
+                               Culture = t.Culture,
+                               Introduction = t.Introduction,
+                               Description = t.Description,
+                               MetaDescription = t.MetaDescription,
+                               MetaKeywords = t.MetaKeywords
+                           }).ToList()
+                       })
+                       .FirstOrDefaultAsync();
             if (page == null)
             {
                 throw new NotFoundException("Page not found");
@@ -191,6 +190,61 @@ namespace SamaniCrm.Infrastructure.Services
 
             return page;
         }
+
+
+        public async Task<PageDto> GetPageInfo(GetPageInfoQuery request, CancellationToken cancellationToken)
+        {
+            var page = await _context.Pages
+                  .Where(w => w.Id == request.PageId)
+                 .Select(s => new
+                 {
+                     s.Id,
+                     s.CoverImage,
+                     s.IsActive,
+                     s.IsSystem,
+                     s.Status,
+                     s.Type,
+                     Translation = s.Translations
+                                 .Where(t => t.Culture == request.Culture)
+                                 .Select(t => new
+                                 {
+                                     t.Culture,
+                                     t.Title,
+                                     t.Description,
+                                     t.MetaDescription,
+                                     t.MetaKeywords,
+                                     t.Html,
+                                     t.Data,
+                                     t.Styles,
+                                     t.Scripts
+                                 }).FirstOrDefault()
+                 })
+                   .FirstOrDefaultAsync();
+            if (page == null)
+            {
+                throw new NotFoundException("Page not found");
+            }
+            return new PageDto()
+            {
+                Id = page.Id,
+                Culture = page.Translation?.Culture ?? "",
+                CoverImage = page.CoverImage,
+                IsActive = page.IsActive,
+                IsSystem = page.IsSystem,
+                Status = page.Status,
+                Type = page.Type,
+                Title = page.Translation?.Title ?? "",
+                Description = page.Translation?.Description,
+                MetaDescription = page.Translation?.MetaDescription,
+                MetaKeywords = page.Translation?.MetaKeywords,
+                Html = page.Translation?.Html,
+                Data = page.Translation?.Data,
+                Styles = page.Translation?.Styles,
+                Scripts = page.Translation?.Scripts,
+            };
+        }
+
+
 
         public async Task<Unit> UpdatePageContent(UpdatePageContentCommand request, CancellationToken cancellationToken)
         {

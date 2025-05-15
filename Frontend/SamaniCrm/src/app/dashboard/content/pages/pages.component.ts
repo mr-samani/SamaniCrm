@@ -139,7 +139,9 @@ export class PagesComponent extends AppComponentBase implements OnInit {
       });
   }
 
-  updatePage(item: PageDtoExtended) {}
+  updatePage(item: PageDtoExtended) {
+    this.router.navigate(['/dashboard/page-builder/' + item.id]);
+  }
 
   remove(item: PageDtoExtended) {
     this.confirmMessage(`${this.l('Delete')}:${item?.title}`, this.l('AreUseSureForDelete')).then((result) => {

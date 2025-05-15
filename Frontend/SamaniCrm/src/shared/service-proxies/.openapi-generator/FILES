@@ -58,6 +58,7 @@ model/menu-target-enum.ts
 model/menu-translations-dto.ts
 model/meta.ts
 model/models.ts
+model/page-dto-api-response.ts
 model/page-dto-paginated-result-api-response.ts
 model/page-dto-paginated-result.ts
 model/page-dto.ts

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,5 +18,20 @@ namespace SamaniCrm.Application.DTOs
         public required string Title { get; set; }
         public string? Introduction { get; set; }
         public string? Description { get; set; }
+
+
+        public PageTypeEnum Type { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsSystem { get; set; }
+        public string? CoverImage { get; set; }
+        public string Culture { get; set; }   
+        [MaxLength(2000)]
+        public string? MetaDescription { get; set; }
+        [MaxLength(2000)]
+        public string? MetaKeywords { get; set; }
+        public string? Data { get; set; }
+        public string? Styles { get; set; }
+        public string? Scripts { get; set; }
+        public string? Html { get; set; }
     }
 }

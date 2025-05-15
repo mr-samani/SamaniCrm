@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PageTypeEnum } from './page-type-enum';
 import { PageStatusEnum } from './page-status-enum';
 
 
@@ -31,6 +32,17 @@ export interface IPageDto {
   title: string;
   introduction?: string;
   description?: string;
+  type?: PageTypeEnum;
+  isActive?: boolean;
+  isSystem?: boolean;
+  coverImage?: string;
+  culture?: string;
+  metaDescription?: string;
+  metaKeywords?: string;
+  data?: string;
+  styles?: string;
+  scripts?: string;
+  html?: string;
 }
 
 /** Class for PageDto */
@@ -43,6 +55,17 @@ export class PageDto implements IPageDto {
   title!: string;
   introduction?: string;
   description?: string;
+  type?: PageTypeEnum;
+  isActive?: boolean;
+  isSystem?: boolean;
+  coverImage?: string;
+  culture?: string;
+  metaDescription?: string;
+  metaKeywords?: string;
+  data?: string;
+  styles?: string;
+  scripts?: string;
+  html?: string;
 
   constructor(data?: IPageDto) {
     if (data) {
@@ -63,6 +86,17 @@ init(data?: any) {
     this.title = data["title"];
     this.introduction = data["introduction"];
     this.description = data["description"];
+    this.type = data["type"];
+    this.isActive = data["isActive"];
+    this.isSystem = data["isSystem"];
+    this.coverImage = data["coverImage"];
+    this.culture = data["culture"];
+    this.metaDescription = data["metaDescription"];
+    this.metaKeywords = data["metaKeywords"];
+    this.data = data["data"];
+    this.styles = data["styles"];
+    this.scripts = data["scripts"];
+    this.html = data["html"];
   }
 }
 

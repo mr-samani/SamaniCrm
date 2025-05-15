@@ -38,6 +38,7 @@ export * from './menu-target-enum';
 export * from './menu-translations-dto';
 export * from './meta';
 export * from './page-dto';
+export * from './page-dto-api-response';
 export * from './page-dto-paginated-result';
 export * from './page-dto-paginated-result-api-response';
 export * from './page-for-edit-dto';

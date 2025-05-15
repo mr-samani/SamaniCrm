@@ -12,7 +12,7 @@
   </div>
   <form [formGroup]="form" *ngIf="!loading">
     <div class="row">
-      <mat-form-field class="col-md-6" *ngIf="!isUpdate">
+      <mat-form-field class="col-md-6" *ngIf="isUpdate">
         <mat-label>{{ 'Status' | translate }}</mat-label>
         <mat-select formControlName="status">
           <mat-option [value]="item" *ngFor="let item of PageStatusEnum | enumToArray">

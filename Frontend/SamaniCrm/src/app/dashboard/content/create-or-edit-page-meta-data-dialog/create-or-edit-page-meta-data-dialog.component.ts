@@ -1,8 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { Component, Inject, Injector, OnInit } from '@angular/core';
-import { FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormGroup, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
+import { TranslateModule } from '@ngx-translate/core';
 import { AppConst } from '@shared/app-const';
+import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
+import { MaterialCommonModule } from '@shared/material/material.common.module';
 import {
   PageStatusEnum,
   PagesServiceProxy,
@@ -10,13 +14,14 @@ import {
   PageMetaDataDto,
   PageTypeEnum,
 } from '@shared/service-proxies';
+import { SharedModule } from '@shared/shared.module';
 import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-create-or-edit-page-meta-data-dialog',
   templateUrl: './create-or-edit-page-meta-data-dialog.component.html',
   styleUrls: ['./create-or-edit-page-meta-data-dialog.component.scss'],
-  standalone: false,
+  imports: [CommonModule, TabGroupModule, ReactiveFormsModule, TranslateModule, SharedModule, MaterialCommonModule],
 })
 export class CreateOrEditPageMetaDataDialogComponent extends AppComponentBase implements OnInit {
   form: FormGroup;
@@ -25,15 +30,15 @@ export class CreateOrEditPageMetaDataDialogComponent extends AppComponentBase im
   isUpdate: boolean;
   translations?: PageMetaDataDto[];
   id: string;
-  type:PageTypeEnum
+  type: PageTypeEnum;
   constructor(
     injector: Injector,
-    @Inject(MAT_DIALOG_DATA) _data: { id: string ,type:PageTypeEnum},
+    @Inject(MAT_DIALOG_DATA) _data: { id: string; type: PageTypeEnum },
     private dialogRef: MatDialogRef<CreateOrEditPageMetaDataDialogComponent>,
     private pageService: PagesServiceProxy,
   ) {
     super(injector);
-    this.type=_data.type;
+    this.type = _data.type;
     this.form = this.fb.group({
       translations: this.fb.array([]),
       isActive: [true],
@@ -125,7 +130,7 @@ export class CreateOrEditPageMetaDataDialogComponent extends AppComponentBase im
       this.notify.warning(this.l('CompleteFormField'));
       return;
     }
-    debugger
+    debugger;
     this.saving = true;
     const input = new CreateOrEditPageMetaDataCommand();
     input.init(this.form.value);

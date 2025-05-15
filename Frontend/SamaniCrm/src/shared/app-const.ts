@@ -1,4 +1,4 @@
-import { LanguageDTO } from "./service-proxies";
+import { LanguageDTO } from './service-proxies';
 
 export class AppConst {
   static appName = '';
@@ -8,6 +8,7 @@ export class AppConst {
   static isRtl: boolean;
   static apiUrl = '';
   static baseUrl = '';
+  static publicSiteUrl = '';
   static tinyMceApiKey = '';
 
   static requireCaptcha: boolean = true;

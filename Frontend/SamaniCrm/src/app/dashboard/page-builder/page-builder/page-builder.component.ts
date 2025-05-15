@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Injector, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import grapesjs, { Editor, Properties } from 'grapesjs';
 import gjsPresetWebpage from 'grapesjs-preset-webpage';
@@ -11,24 +11,54 @@ import gjsPluginStyleGradient from 'grapesjs-style-gradient';
 import gjsPluginTyped from 'grapesjs-typed';
 import gjsPluginUiImageEditor from 'grapesjs-tui-image-editor';
 import gjsPluginTooltip from 'grapesjs-tooltip';
+import { PageDto, PagesServiceProxy, UpdatePageContentCommand } from '@shared/service-proxies';
+import { finalize } from 'rxjs';
+import { AppConst } from '@shared/app-const';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateOrEditPageMetaDataDialogComponent } from '@app/dashboard/content/create-or-edit-page-meta-data-dialog/create-or-edit-page-meta-data-dialog.component';
 
 @Component({
   selector: 'app-page-builder',
   templateUrl: './page-builder.component.html',
   styleUrls: ['./page-builder.component.scss'],
   standalone: false,
+  encapsulation: ViewEncapsulation.None,
 })
-export class PageBuilderComponent extends AppComponentBase implements AfterViewInit, OnInit, OnDestroy {
+export class PageBuilderComponent extends AppComponentBase implements AfterViewInit, OnDestroy {
   editor?: Editor;
-  constructor(injector: Injector) {
+  pageId: string;
+  saving = false;
+  loading = true;
+  pageInfo?: PageDto;
+
+  constructor(
+    injector: Injector,
+    private pageService: PagesServiceProxy,
+    private matDialog: MatDialog,
+  ) {
     super(injector);
     this.dashboardService.showBreadCrumb = false;
+    this.pageId = this.route.snapshot.params['pageId'];
   }
-  ngOnInit(): void {}
+  ngAfterViewInit(): void {
+    this.getPageInfo();
+  }
   ngOnDestroy(): void {
     this.dashboardService.showBreadCrumb = true;
   }
-  ngAfterViewInit() {
+
+  getPageInfo() {
+    this.loading = true;
+    this.pageService
+      .getPageInfo(this.pageId, AppConst.currentLanguage)
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe((response) => {
+        this.pageInfo = response.data;
+        this.setup();
+      });
+  }
+
+  setup() {
     this.editor = grapesjs.init({
       container: '#editor',
       height: '100vh',
@@ -37,7 +67,7 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
       storageManager: {
         autosave: true,
         onStore: (data, editor) => {
-          data['produtId'] = 'ddddddddddwwwwwwwerrr';
+          data['pageId'] = this.pageId;
           // console.log(data);
           return data;
         },
@@ -71,32 +101,41 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
       canvas: {
         styles: ['/public-style.css'],
         frameContent: '<!DOCTYPE html><body dir="rtl">',
-      }
+      },
     });
     this.customizeGrapesjs();
   }
 
   customizeGrapesjs() {
     if (!this.editor) return;
+    var self = this;
     this.editor.Panels.addButton('options', [
       {
         id: 'save-page',
-        label: '<i class="fa fa-save"></i> ذخیره',
+        className: 'fa fa-save',
+        //label: '<i class="fa fa-save"></i> ذخیره',
         command: 'save-page',
         attributes: { title: 'ذخیره صفحه' },
       },
       {
         id: 'preview-custom',
-        label: '<i class="fa fa-eye"></i> پیش‌نمایش',
+        className: 'fa fa-eye',
+        //label: '<i class="fa fa-eye"></i> پیش‌نمایش',
         command: 'custom-preview',
         attributes: { title: 'پیش‌نمایش' },
+      },
+      {
+        id: 'edit-page-meta-data',
+        className: 'fa fa-edit',
+        command: 'edit-page-meta-data',
       },
     ]);
 
     // دستور (command) برای پیش‌نمایش
     this.editor.Commands.add('custom-preview', {
       run(editor) {
-        editor.runCommand('preview'); // استفاده از command داخلی
+        // editor.runCommand('preview');
+        window.open(AppConst.publicSiteUrl + '/page-preview/' + self.pageId, '_blank');
       },
     });
 
@@ -107,13 +146,34 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
         const html = editor.getHtml({ cleanId: true });
         const css = editor.getCss();
         const js = editor.getJs ? editor.getJs() : '';
-        console.log('HTML:', html);
-        console.log('CSS:', css);
-        console.log('JS:', js);
-        console.log('data:', JSON.stringify(data));
-        // ذخیره‌سازی دلخواه (ارسال به API، ذخیره محلی و ...)
+        self.saving = true;
+        const input = new UpdatePageContentCommand({
+          pageId: self.pageId,
+          culture: self.pageInfo?.culture,
+          data: JSON.stringify(data),
+          html: html,
+          scripts: js,
+          styles: css,
+        });
+        self.pageService
+          .updatePageContent(input)
+          .pipe(finalize(() => (self.saving = false)))
+          .subscribe((response) => {
+            self.notify.success(self.l('SavedSuccessfully'));
+          });
       },
     });
+    this.editor.Commands.add('edit-page-meta-data', {
+      run(editor) {
+        self.matDialog.open(CreateOrEditPageMetaDataDialogComponent, {
+          data: {
+            id: self.pageId,
+            type: self.pageInfo?.type,
+          },
+        });
+      },
+    });
+
     const sm = this.editor.StyleManager;
 
     const fontProp = sm.getProperty('typography', 'font-family');
@@ -141,127 +201,13 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
     //     { id: 'Times New Roman, serif', label: 'Times New Roman' },
     //   ],
     // });
-    this.editor.onReady(() => this.loadData());
-  }
-
-  loadData() {
-    if (!this.editor) return;
-    this.editor.loadData({
-      assets: [],
-      styles: [
-        { selectors: ['countdown'], style: { 'text-align': 'center' }, group: 'cmp:countdown' },
-        {
-          selectors: ['countdown-block'],
-          style: {
-            display: 'inline-block',
-            'margin-top': '0px',
-            'margin-right': '10px',
-            'margin-bottom': '0px',
-            'margin-left': '10px',
-            'padding-top': '10px',
-            'padding-right': '10px',
-            'padding-bottom': '10px',
-            'padding-left': '10px',
-          },
-          group: 'cmp:countdown',
-        },
-        { selectors: ['countdown-digit'], style: { 'font-size': '5rem' }, group: 'cmp:countdown' },
-        { selectors: ['countdown-endtext'], style: { 'font-size': '5rem' }, group: 'cmp:countdown' },
-        { selectors: ['countdown-cont'], style: { display: 'inline-block' }, group: 'cmp:countdown' },
-      ],
-      pages: [
-        {
-          frames: [
-            {
-              component: {
-                type: 'wrapper',
-                stylable: [
-                  'background',
-                  'background-color',
-                  'background-image',
-                  'background-repeat',
-                  'background-attachment',
-                  'background-position',
-                  'background-size',
-                ],
-                components: [
-                  {
-                    type: 'countdown',
-                    classes: ['countdown'],
-                    attributes: { id: 'i3fw' },
-                    startfrom: '2025-05-14',
-                    components: [
-                      {
-                        tagName: 'span',
-                        classes: ['countdown-cont'],
-                        attributes: { 'data-js': 'countdown' },
-                        components: [
-                          {
-                            classes: ['countdown-block'],
-                            components: [
-                              { classes: ['countdown-digit'], attributes: { 'data-js': 'countdown-day' } },
-                              {
-                                type: 'text',
-                                classes: ['countdown-label'],
-                                components: [{ type: 'textnode', content: 'days' }],
-                              },
-                            ],
-                          },
-                          {
-                            classes: ['countdown-block'],
-                            components: [
-                              { classes: ['countdown-digit'], attributes: { 'data-js': 'countdown-hour' } },
-                              {
-                                type: 'text',
-                                classes: ['countdown-label'],
-                                components: [{ type: 'textnode', content: 'hours' }],
-                              },
-                            ],
-                          },
-                          {
-                            classes: ['countdown-block'],
-                            components: [
-                              { classes: ['countdown-digit'], attributes: { 'data-js': 'countdown-minute' } },
-                              {
-                                type: 'text',
-                                classes: ['countdown-label'],
-                                components: [{ type: 'textnode', content: 'minutes' }],
-                              },
-                            ],
-                          },
-                          {
-                            classes: ['countdown-block'],
-                            components: [
-                              { classes: ['countdown-digit'], attributes: { 'data-js': 'countdown-second' } },
-                              {
-                                type: 'text',
-                                classes: ['countdown-label'],
-                                components: [{ type: 'textnode', content: 'seconds' }],
-                              },
-                            ],
-                          },
-                        ],
-                      },
-                      {
-                        tagName: 'span',
-                        classes: ['countdown-endtext'],
-                        attributes: { 'data-js': 'countdown-endtext' },
-                      },
-                    ],
-                  },
-                ],
-                head: { type: 'head' },
-                docEl: { tagName: 'html' },
-              },
-              id: 'B4hrOu9yjyvYU83M',
-            },
-          ],
-          type: 'main',
-          id: 'oL1y3aC7gUCdmwO6',
-        },
-      ],
-      symbols: [],
-      dataSources: [],
+    this.editor.onReady(() => {
+      try {
+        let data = JSON.parse(this.pageInfo?.data ?? '');
+        this.editor!.loadData(data);
+      } catch (error) {
+        console.error('Error on parse data:', error);
+      }
     });
   }
 }

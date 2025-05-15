@@ -16,7 +16,7 @@ import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 import { CreateOrEditPageMetaDataDialogComponent } from './create-or-edit-page-meta-data-dialog/create-or-edit-page-meta-data-dialog.component';
 
 @NgModule({
-  declarations: [ContentComponent, PagesComponent, CreateOrEditPageMetaDataDialogComponent],
+  declarations: [ContentComponent, PagesComponent],
   imports: [
     CommonModule,
     ContentRoutingModule,
@@ -29,6 +29,7 @@ import { CreateOrEditPageMetaDataDialogComponent } from './create-or-edit-page-m
     PaginationComponent,
     SharedModule,
     TabGroupModule,
+    CreateOrEditPageMetaDataDialogComponent,
   ],
   providers: [PagesServiceProxy],
 })
