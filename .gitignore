@@ -7,3 +7,7 @@
 /BackEnd/*/obj
 Frontend/SamaniCrm/.angular/cache
 BackEnd/SamaniCrm.Api/CacheFiles/
+/BackEnd/SamaniCrm.Public/SamaniCrm.Public.Client/bin
+/BackEnd/SamaniCrm.Public/SamaniCrm.Public.Client/obj/
+/BackEnd/SamaniCrm.Public/SamaniCrm.Public/obj/
+/BackEnd/SamaniCrm.Public/SamaniCrm.Public/bin
