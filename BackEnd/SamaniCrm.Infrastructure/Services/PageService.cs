@@ -31,20 +31,59 @@ namespace SamaniCrm.Infrastructure.Services
             _currentUserService = currentUserService;
         }
 
-        public async Task<Guid> CreatePage(CreateOrEditPageMetaDataCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> CreateOrEditMetaDataPage(CreateOrEditPageMetaDataCommand request, CancellationToken cancellationToken)
         {
-            Page? page;
+            Page page;
+
             if (request.Id.HasValue)
             {
-                page = await _context.Pages.FindAsync(request.Id.Value, cancellationToken);
+                page = await _context.Pages
+                    .Include(p => p.Translations)
+                    .FirstOrDefaultAsync(p => p.Id == request.Id.Value, cancellationToken);
+
                 if (page == null)
-                {
                     throw new NotFoundException("Page not found");
+
+                // Update translations
+                foreach (var item in request.Translations ?? [])
+                {
+                    var existingTranslation = page.Translations
+                        .FirstOrDefault(t => t.Culture == item.Culture);
+
+                    if (existingTranslation != null)
+                    {
+                        // Update existing translation
+                        existingTranslation.Introduction = item.Introduction;
+                        existingTranslation.Title = item.Title;
+                        existingTranslation.Description = item.Description;
+                        existingTranslation.MetaDescription = item.MetaDescription;
+                        existingTranslation.MetaKeywords = item.MetaKeywords;
+                    }
+                    else
+                    {
+                        // Add new translation
+                        page.Translations.Add(new PageTranslation
+                        {
+                            Culture = item.Culture,
+                            Introduction = item.Introduction,
+                            Title = item.Title,
+                            Description = item.Description,
+                            MetaDescription = item.MetaDescription,
+                            MetaKeywords = item.MetaKeywords
+                        });
+                    }
                 }
+
+                // Update main page properties
+                page.CoverImage = request.CoverImage;
+                page.IsActive = request.IsActive;
+                page.Status = request.Status ?? page.Status;
+                page.Type = request.Type;
             }
             else
             {
-                page = new Page()
+                // New page
+                page = new Page
                 {
                     AuthorId = Guid.Parse(_currentUserService.UserId!),
                     CoverImage = request.CoverImage,
@@ -52,10 +91,7 @@ namespace SamaniCrm.Infrastructure.Services
                     IsSystem = false,
                     Status = request.Status ?? PageStatusEnum.Draft,
                     Type = request.Type,
-                };
-                foreach (var item in request.Translations ?? [])
-                {
-                    page.Translations.Add(new PageTranslation()
+                    Translations = (request.Translations ?? []).Select(item => new PageTranslation
                     {
                         Culture = item.Culture,
                         Introduction = item.Introduction,
@@ -63,10 +99,12 @@ namespace SamaniCrm.Infrastructure.Services
                         Description = item.Description,
                         MetaDescription = item.MetaDescription,
                         MetaKeywords = item.MetaKeywords,
-                    });
-                }
+                    }).ToList()
+                };
+
+                _context.Pages.Add(page);
             }
-            _context.Pages.Add(page);
+
             await _context.SaveChangesAsync(cancellationToken);
             return page.Id;
         }

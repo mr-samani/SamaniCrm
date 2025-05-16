@@ -23,7 +23,7 @@ public class CreateOrEditPageMetaDataCommandHandler : IRequestHandler<CreateOrEd
 
     public async Task<Guid> Handle(CreateOrEditPageMetaDataCommand request, CancellationToken cancellationToken)
     {
-        return await _pageService.CreatePage(request, cancellationToken);
+        return await _pageService.CreateOrEditMetaDataPage(request, cancellationToken);
     }
 
 }

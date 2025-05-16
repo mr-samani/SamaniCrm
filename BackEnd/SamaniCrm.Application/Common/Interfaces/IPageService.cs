@@ -16,7 +16,7 @@ namespace SamaniCrm.Application.Common.Interfaces
         Task<PaginatedResult<PageDto>> GetPagedList(GetFilteredPagesQuery request, CancellationToken cancellationToken);
         Task<PageForEditDto> GetPageForEdit(GetPageForEditMetaDataQuery request, CancellationToken cancellationToken);
         Task<PageDto> GetPageInfo(GetPageInfoQuery request, CancellationToken cancellationToken);
-        Task<Guid> CreatePage(CreateOrEditPageMetaDataCommand request, CancellationToken cancellationToken);
+        Task<Guid> CreateOrEditMetaDataPage(CreateOrEditPageMetaDataCommand request, CancellationToken cancellationToken);
 
         Task<Unit> DeletePage(DeletePageCommand request, CancellationToken cancellationToken);
         Task<Unit> UpdatePageContent(UpdatePageContentCommand request, CancellationToken cancellationToken);

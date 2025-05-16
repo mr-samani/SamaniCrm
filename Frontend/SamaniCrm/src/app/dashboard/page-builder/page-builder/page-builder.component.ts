@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, Injector, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
-import grapesjs, { Editor, Properties } from 'grapesjs';
+import grapesjs, { Editor } from 'grapesjs';
 import gjsPresetWebpage from 'grapesjs-preset-webpage';
 import gjsPluginForms from 'grapesjs-plugin-forms';
 import gjsPluginFlexBox from 'grapesjs-blocks-flexbox';
@@ -40,9 +40,11 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
     this.dashboardService.showBreadCrumb = false;
     this.pageId = this.route.snapshot.params['pageId'];
   }
+
   ngAfterViewInit(): void {
     this.getPageInfo();
   }
+
   ngOnDestroy(): void {
     this.dashboardService.showBreadCrumb = true;
   }
@@ -68,7 +70,6 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
         autosave: true,
         onStore: (data, editor) => {
           data['pageId'] = this.pageId;
-          // console.log(data);
           return data;
         },
         stepsBeforeSave: 1,
@@ -90,9 +91,7 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
         ['grapesjs-preset-webpage']: {
           modalImportTitle: 'Paste your code here',
           modalImportLabel: '',
-          modalImportContent: (editor: Editor) => {
-            return editor.getHtml();
-          },
+          modalImportContent: (editor: Editor) => editor.getHtml(),
           importViewerOptions: {},
           showStylesOnChange: 1,
           textCleanCanvas: 'Are you sure to clean the canvas?',
@@ -103,12 +102,38 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
         frameContent: '<!DOCTYPE html><body dir="rtl">',
       },
     });
+
     this.customizeGrapesjs();
   }
 
   customizeGrapesjs() {
     if (!this.editor) return;
-    var self = this;
+    const self = this;
+
+    this.editor.BlockManager.add('category-list', {
+      label: 'دسته‌بندی محصولات',
+      content: `
+        <div data-component="CategoryList" data-category-id="1" class="component-placeholder">
+          <div style="border: 1px dashed #ccc; padding: 10px;">نمایش دسته‌بندی 1</div>
+        </div>`,
+      category: 'کامپوننت‌ها',
+    });
+
+    this.editor.DomComponents.addType('category-list', {
+      isComponent: (el) => el.dataset && el.dataset['component'] === 'CategoryList',
+      model: {
+        defaults: {
+          traits: [
+            {
+              type: 'number',
+              name: 'category-id',
+              label: 'Category ID',
+            },
+          ],
+        },
+      },
+    });
+
     this.editor.Panels.addButton('options', [
       {
         id: 'save-page',
@@ -120,7 +145,6 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
       {
         id: 'preview-custom',
         className: 'fa fa-eye',
-        //label: '<i class="fa fa-eye"></i> پیش‌نمایش',
         command: 'custom-preview',
         attributes: { title: 'پیش‌نمایش' },
       },
@@ -131,7 +155,6 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
       },
     ]);
 
-    // دستور (command) برای پیش‌نمایش
     this.editor.Commands.add('custom-preview', {
       run(editor) {
         // editor.runCommand('preview');
@@ -158,11 +181,12 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
         self.pageService
           .updatePageContent(input)
           .pipe(finalize(() => (self.saving = false)))
-          .subscribe((response) => {
+          .subscribe(() => {
             self.notify.success(self.l('SavedSuccessfully'));
           });
       },
     });
+
     this.editor.Commands.add('edit-page-meta-data', {
       run(editor) {
         self.matDialog.open(CreateOrEditPageMetaDataDialogComponent, {
@@ -175,7 +199,6 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
     });
 
     const sm = this.editor.StyleManager;
-
     const fontProp = sm.getProperty('typography', 'font-family');
 
     if (fontProp) {
@@ -185,8 +208,7 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
         { id: 'Tahoma, Geneva, sans-serif', label: 'Tahoma' },
         { id: 'Times New Roman, serif', label: 'Times New Roman' },
       ]);
-
-      fontProp.set('defaults', 'iranSans'); // فونت پیش‌فرض
+      fontProp.set('defaults', 'iranSans');
     }
 
     // this.editor.StyleManager.addProperty('typography', {
