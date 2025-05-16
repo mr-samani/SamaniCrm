@@ -70,6 +70,12 @@
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/dashboard/page-builder">
+            <i class="fa fa-page"></i>
+            {{ 'PageBuilder' | translate }}
+          </a>
+        </li>
       </ul>
       <div class="flex-fill"></div>
       <!-- darkmode -->
@@ -94,7 +100,11 @@
         <img [src]="'images/flags/' + currentLang + '.png'" />
       </button>
       <mat-menu #langMnu="matMenu">
-        <button mat-menu-item *ngFor="let lang of languages" (click)="changeLanguage(lang.culture!)" class="language-menu">
+        <button
+          mat-menu-item
+          *ngFor="let lang of languages"
+          (click)="changeLanguage(lang.culture!)"
+          class="language-menu">
           <div class="d-flex align-items-center g-5">
             <!-- <i class="flag" [ngClass]="lang.code"></i> -->
             <img [src]="'images/flags/' + lang.flag + '.png'" />

@@ -38,7 +38,7 @@ export class AppInitializer {
             AppConst.baseUrl = config.baseUrl;
             AppConst.tinyMceApiKey = config.tinyMceApiKey;
             AppConst.appName = config.appName;
-
+            AppConst.publicSiteUrl = config.publicSiteUrl;
             // api initialize
             this.httpClient.get<InitialAppDTOApiResponse>(AppConst.apiUrl + '/api/Common/InitialApp').subscribe({
               next: (resp) => {

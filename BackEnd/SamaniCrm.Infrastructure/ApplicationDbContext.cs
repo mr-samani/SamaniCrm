@@ -32,6 +32,10 @@ namespace SamaniCrm.Infrastructure
         public DbSet<MenuTranslation> MenuTranslations { get; set; }
         public DbSet<SecuritySetting> SecuritySettings { get; set; }
 
+        public DbSet<Page> Pages { get; set; }
+        public DbSet<PageTranslation> PageTranslations { get; set; }
+
+
 
 
 
@@ -59,6 +63,7 @@ namespace SamaniCrm.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
             base.OnModelCreating(builder);
 
             builder.Entity<SecuritySetting>(b =>

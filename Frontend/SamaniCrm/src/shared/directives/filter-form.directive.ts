@@ -1,19 +1,9 @@
-import {
-  AfterViewInit,
-  Directive,
-  ElementRef,
-  HostBinding,
-  Input,
-  OnInit,
-  Renderer2,
-  TemplateRef,
-  ViewContainerRef,
-} from '@angular/core';
+import { Directive, ElementRef, Input, Renderer2, TemplateRef, ViewContainerRef } from '@angular/core';
 
 @Directive({
   selector: '[filterForm]',
-  standalone: true,
   host: {},
+  standalone: false,
 })
 export class FilteFormrDirective {
   private isVisible = false;

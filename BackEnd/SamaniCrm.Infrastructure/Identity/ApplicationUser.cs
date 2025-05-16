@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Interfaces;
 
 namespace SamaniCrm.Infrastructure.Identity

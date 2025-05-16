@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamaniCrm.Api", "SamaniCrm.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamaniCrm.Core.Shared", "SamaniCrm.Core\SamaniCrm.Core.Shared.csproj", "{120AFD5D-A7AF-4D09-B715-5E62828E4AD9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamaniCrm.Public", "SamaniCrm.Public\SamaniCrm.Public\SamaniCrm.Public.csproj", "{6809F6EA-A810-4CF9-BF03-38710D8320CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamaniCrm.Public.Client", "SamaniCrm.Public\SamaniCrm.Public.Client\SamaniCrm.Public.Client.csproj", "{3B6EAF64-7343-49A4-8FFD-11DC353ABFF6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{120AFD5D-A7AF-4D09-B715-5E62828E4AD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{120AFD5D-A7AF-4D09-B715-5E62828E4AD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{120AFD5D-A7AF-4D09-B715-5E62828E4AD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6809F6EA-A810-4CF9-BF03-38710D8320CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6809F6EA-A810-4CF9-BF03-38710D8320CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6809F6EA-A810-4CF9-BF03-38710D8320CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6809F6EA-A810-4CF9-BF03-38710D8320CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B6EAF64-7343-49A4-8FFD-11DC353ABFF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B6EAF64-7343-49A4-8FFD-11DC353ABFF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B6EAF64-7343-49A4-8FFD-11DC353ABFF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B6EAF64-7343-49A4-8FFD-11DC353ABFF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -46,7 +46,9 @@ namespace SamaniCrm.Infrastructure.Services
 
         public async Task<bool> SetSettingsAsync(SecuritySettingDTO input, CancellationToken cancellationToken)
         {
-            var data = await _applicationDbContext.SecuritySettings.FirstAsync();
+            var data = await _applicationDbContext.SecuritySettings
+                                .OrderBy(s => s.Id)
+                                .FirstOrDefaultAsync();
             int result;
             if (data == null)
             {

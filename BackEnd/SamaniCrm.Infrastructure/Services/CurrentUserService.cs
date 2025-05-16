@@ -25,6 +25,6 @@ namespace SamaniCrm.Infrastructure.Services
                 ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue("sub")
                 ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue(JwtRegisteredClaimNames.Sub);
 
-        public string lang => _httpContextAccessor.HttpContext?.User?.FindFirstValue("lang") ?? "";
+        public string lang => _httpContextAccessor.HttpContext?.User?.FindFirstValue("lang") ?? "fa-IR";
     }
 }

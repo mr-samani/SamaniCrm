@@ -1,0 +1,129 @@
+﻿@page "/page-preview/{culture}/{PageIdString}"
+@using MediatR
+@using SamaniCrm.Application.Pages.Queries
+
+@using System.Text.RegularExpressions
+@using Microsoft.AspNetCore.Components.Rendering
+@using SamaniCrm.Public.Components.Categories
+
+
+@inject IMediator Mediator
+
+<PageTitle>@Title</PageTitle>
+
+<h3>@Title</h3>
+
+<style>
+	@((MarkupString)Css)
+</style>
+
+@* <div class="page-content" @ref="contentRef">
+	@((MarkupString)Html)
+</div> *@
+<PageLayout>
+    @foreach (var block in Blocks)
+    {
+        if (block.IsComponent)
+        {
+            <DynamicComponent Type="@block.ComponentType" Parameters="@block.Parameters" />
+        }
+        else
+        {
+            @((MarkupString)block.RawHtml)
+        }
+    }
+</PageLayout>
+
+
+@code {
+    [Parameter]
+    public string Culture { get; set; }
+    [Parameter]
+    public string PageIdString { get; set; } = default!;
+
+    private Guid PageId => Guid.TryParse(PageIdString, out var guid) ? guid : Guid.Empty;
+
+    private List<RenderBlock> Blocks = new();
+
+
+
+    private string? Title;
+    private string? Html;
+    private string? Css;
+    private string? Js;
+
+    private ElementReference contentRef;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await Mediator.Send(new GetPageInfoQuery(PageId, Culture));
+
+        Title = result.Title;
+        Html = result.Html;
+        Css = result.Styles;
+        Js = result.Scripts;
+        ParseHtml(Html);
+
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !string.IsNullOrWhiteSpace(Js))
+        {
+            await JS.InvokeVoidAsync("eval", Js);
+        }
+    }
+
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
+
+
+
+
+
+
+    private void ParseHtml(string html)
+    {
+        var matches = Regex.Matches(html, @"<div\s+data-component=[""']CategoryList[""']\s+data-category-id=[""'](\d+)[""'][^>]*>.*?</div>", RegexOptions.IgnoreCase);
+
+
+ 
+     
+     int lastIndex = 0;
+
+        foreach (Match match in matches)
+        {
+            if (match.Index > lastIndex)
+            {
+                var before = html.Substring(lastIndex, match.Index - lastIndex);
+                Blocks.Add(RenderBlock.Raw(before));
+            }
+
+            var categoryId = int.Parse(match.Groups[1].Value);
+            Blocks.Add(RenderBlock.Component(typeof(CategoryList), new Dictionary<string, object>
+                {
+                    ["CategoryId"] = categoryId
+                }));
+
+            lastIndex = match.Index + match.Length;
+        }
+
+        if (lastIndex < html.Length)
+        {
+            var remaining = html.Substring(lastIndex);
+            Blocks.Add(RenderBlock.Raw(remaining));
+        }
+    }
+
+    record RenderBlock
+    {
+        public bool IsComponent { get; init; }
+        public string RawHtml { get; init; }
+        public Type ComponentType { get; init; }
+        public Dictionary<string, object> Parameters { get; init; }
+
+        public static RenderBlock Raw(string html) => new RenderBlock { IsComponent = false, RawHtml = html };
+        public static RenderBlock Component(Type componentType, Dictionary<string, object> parameters) =>
+            new RenderBlock { IsComponent = true, ComponentType = componentType, Parameters = parameters };
+    }
+}

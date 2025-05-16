@@ -1,0 +1,22 @@
+﻿@code {
+    [Parameter]
+    public int CategoryId { get; set; }
+
+    private List<string> Products = new();
+
+    protected override void OnInitialized()
+    {
+        // به جای این Mock، از API واقعی استفاده کن
+        Products = new List<string> { $"محصول A برای دسته {CategoryId}", $"محصول B برای دسته {CategoryId}" };
+    }
+}
+
+<div class="category-list">
+    <h3>دسته‌بندی: @CategoryId</h3>
+    <ul>
+        @foreach (var product in Products)
+        {
+            <li>@product</li>
+        }
+    </ul>
+</div>

@@ -11,12 +11,12 @@
 
 export enum MenuTargetEnum {
 
-    Self = 'Self',
+    Self = 0,
 
-    Blank = 'Blank',
+    Blank = 1,
 
-    Parent = 'Parent',
+    Parent = 2,
 
-    Top = 'Top'
+    Top = 3
 }
 

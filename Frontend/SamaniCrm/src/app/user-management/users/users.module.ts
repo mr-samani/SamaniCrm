@@ -9,7 +9,6 @@ import { UserListComponent } from './list/list.component';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { FilterComponent } from '@shared/components/filter/filter.component';
-import { FilteFormrDirective } from '@shared/directives/filter-form.directive';
 import { TableViewComponent } from '@shared/components/table-view/table-view.compoenent';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { UserServiceProxy } from '@shared/service-proxies/api/user.service';
@@ -26,7 +25,6 @@ import { CreateOrEditUserComponent } from './create-or-edit-user/create-or-edit-
     UsersRoutingModule,
     TableViewComponent,
     FilterComponent,
-    FilteFormrDirective,
     PaginationComponent,
     TranslateModule,
     FormsModule,

@@ -50,6 +50,12 @@ namespace SamaniCrm.Core.Permissions
         public const string CacheEntries_ClearAll = "Administrator.Maintenance.Cache.ClearAll";
 
 
+        // Pages
+        public const string Pages = "Administrator.Pages";
+        public const string Pages_List = "Administrator.Pages.List";
+        public const string Pages_Create = "Administrator.Pages.Create";
+        public const string Pages_Update = "Administrator.Pages.Update";
+        public const string Pages_Delete = "Administrator.Pages.Delete";
 
 
 

@@ -1,0 +1,25 @@
+@font-face {
+  font-family: 'iranSans';
+  src:
+    url('./fonts/farsiNum/eot/IRANSansXFaNum-UltraLight.eot') format('embedded-opentype'),
+    url('./fonts/farsiNum/otf/IRANSansXFaNum-UltraLight.otf') format('truetype'),
+    url('./fonts/farsiNum/ttf/IRANSansXFaNum-UltraLight.ttf') format('truetype'),
+    url('./fonts/farsiNum/woff/IRANSansXFaNum-UltraLight.woff') format('woff'),
+    url('./fonts/farsiNum/woff2/IRANSansXFaNum-UltraLight.woff2') format('woff2');
+}
+
+body[dir='rtl'] {
+  font-family: iranSans;
+  font-size: 12px !important;
+  direction: rtl;
+}
+body[dir='ltr'] {
+  font-family: 'axiforma', Roboto, 'Helvetica Neue', sans-serif;
+  font-size: 10px !important;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
