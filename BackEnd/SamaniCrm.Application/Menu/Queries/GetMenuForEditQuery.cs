@@ -24,7 +24,6 @@ namespace SamaniCrm.Application.Menu.Queries
         public async Task<MenuDTO> Handle(GetMenuForEditQuery request, CancellationToken cancellationToken)
         {
             var menu = await _dbContext.Menus
-                .Include(m => m.Translations)
                 .FirstOrDefaultAsync(m => m.Id == request.Id, cancellationToken);
 
             if (menu == null)
@@ -36,7 +35,9 @@ namespace SamaniCrm.Application.Menu.Queries
                     Culture = s.Culture,
                     Title = s.Title,
                     MenuId = s.MenuId,
-                }).ToListAsync();
+                })
+                .Where(w=>w.MenuId == menu.Id)
+                .ToListAsync();
 
 
             return new MenuDTO

@@ -25,7 +25,6 @@ namespace SamaniCrm.Application.DTOs
 
         public Guid? ParentId { get; set; }
 
-        [MaxLength(100)]
         public MenuTargetEnum Target { get; set; } = MenuTargetEnum.Self;
 
         public List<MenuDTO> Children { get; set; } = [];

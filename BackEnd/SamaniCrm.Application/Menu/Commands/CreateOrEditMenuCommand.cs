@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
@@ -31,7 +32,9 @@ namespace SamaniCrm.Application.Menu.Commands
 
             if (request.Id.HasValue)
             {
-                menu = await _dbContext.Menus.FindAsync(request.Id.Value, cancellationToken);
+                menu = await _dbContext.Menus
+                     .Include(p => p.Translations)
+                     .FirstOrDefaultAsync(p => p.Id == request.Id.Value, cancellationToken);
                 if (menu == null)
                     throw new NotFoundException("Menu not found.");
             }
@@ -50,7 +53,27 @@ namespace SamaniCrm.Application.Menu.Commands
             menu.LastModifiedTime = DateTime.UtcNow;
             // نباید مقدار سیستمی توسط برنامه قایل تغییر باشد 
             // menu.IsSystem = request.IsSystem;
+            // Update translations
+            foreach (var item in request.Translations ?? [])
+            {
+                var existingTranslation = menu.Translations
+                    .FirstOrDefault(t => t.Culture == item.Culture);
 
+                if (existingTranslation != null)
+                {
+                    // Update existing translation
+                    existingTranslation.Title = item.Title;
+                }
+                else
+                {
+                    // Add new translation
+                    menu.Translations.Add(new MenuTranslation
+                    {
+                        Culture = item.Culture,
+                        Title = item.Title,
+                    });
+                }
+            }
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return menu.Id;

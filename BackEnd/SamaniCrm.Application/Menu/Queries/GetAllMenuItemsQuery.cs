@@ -30,7 +30,7 @@ namespace SamaniCrm.Application.Menu.Queries
 
         public async Task<List<MenuDTO>> Handle(GetAllMenuItemsQuery request, CancellationToken cancellationToken)
         {
-            var currentLanguage = _currentUserService.lang ?? "en-US";
+            var currentLanguage = _currentUserService.lang;
             var allMenus = await _dbContext.Menus
                                 .Include(m => m.Translations)
                                 .Include(m => m.Children)
