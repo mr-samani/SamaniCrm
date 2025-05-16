@@ -1,0 +1,58 @@
+﻿@page "/page-preview/{culture}/{PageIdString}"
+@using MediatR
+@using SamaniCrm.Application.Pages.Queries
+
+
+@inject IMediator Mediator
+
+<PageTitle>@Title</PageTitle>
+
+<h3>@Title</h3>
+
+<style>
+	@((MarkupString)Css)
+</style>
+
+<div class="page-content" @ref="contentRef">
+	@((MarkupString)Html)
+</div>
+
+@code {
+    [Parameter]
+    public string Culture { get; set; }
+    [Parameter]
+    public string PageIdString { get; set; } = default!;
+
+    private Guid PageId => Guid.TryParse(PageIdString, out var guid) ? guid : Guid.Empty;
+     
+
+
+
+    private string? Title;
+    private string? Html;
+    private string? Css;
+    private string? Js;
+
+    private ElementReference contentRef;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await Mediator.Send(new GetPageInfoQuery(PageId, Culture));
+
+        Title = result.Title;
+        Html = result.Html;
+        Css = result.Styles;
+        Js = result.Scripts;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !string.IsNullOrWhiteSpace(Js))
+        {
+            await JS.InvokeVoidAsync("eval", Js);
+        }
+    }
+
+    [Inject]
+    private IJSRuntime JS { get; set; } = default!;
+}

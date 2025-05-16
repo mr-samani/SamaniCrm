@@ -20,9 +20,8 @@ services
     .AddFluentValidation()
     .AddInfrastructure(config)
     .AddSwaggerDocumentation()
-    .AddHangfire(config);
-
-builder.Services.AddCacheService(config);
+    .AddHangfire(config)
+    .AddCacheService(config);
 
 
 var app = builder.Build();

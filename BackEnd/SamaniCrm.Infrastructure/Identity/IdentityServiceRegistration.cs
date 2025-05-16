@@ -24,7 +24,7 @@ namespace SamaniCrm.Infrastructure.Identity
             {
 
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                var securitySetting = dbContext.SecuritySettings.FirstOrDefault(); // یا هر روش دیگه‌ای برای خوندن
+                var securitySetting = dbContext.SecuritySettings.OrderBy(s=>s.Id).FirstOrDefault(); // یا هر روش دیگه‌ای برای خوندن
 
                 if (securitySetting == null)
                     throw new Exception("Security settings not found in the database.");
