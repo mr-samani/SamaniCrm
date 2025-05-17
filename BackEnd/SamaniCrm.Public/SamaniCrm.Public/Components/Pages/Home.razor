@@ -1,7 +1,7 @@
 ﻿@page "/"
-
+@using SamaniCrm.Core.Shared.Interfaces
+@inject ILocalizer L
 <PageTitle>Home</PageTitle>
+<h1>@L["HomePage.Title"]</h1>
+<p>@L["Welcome.Message", "Mohammadreza"]</p>
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.

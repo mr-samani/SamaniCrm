@@ -5,3 +5,8 @@ export class FieldsType {
   width?: number;
   wrap?: boolean;
 }
+
+export class SortEvent {
+  field: string = '';
+  direction: 'asc' | 'desc' = 'asc';
+}

@@ -5,6 +5,7 @@ using SamaniCrm.Host.Middlewares;
 using SamaniCrm.Infrastructure.Extensions;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Cache;
+using SamaniCrm.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -29,7 +30,7 @@ var app = builder.Build();
 var captchaStore = app.Services.GetRequiredService<ICaptchaStore>();
 VerifyCaptchaExtensions.Configure(captchaStore, config);
 
-
+app.UseMiddleware<LanguageMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseMiddleware<ApiExceptionHandlingMiddleware>();
 

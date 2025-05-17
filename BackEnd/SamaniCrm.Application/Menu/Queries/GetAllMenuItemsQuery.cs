@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Core.Shared.Interfaces;
 using MenuEntity = SamaniCrm.Domain.Entities.Menu;
 
 
@@ -20,17 +21,17 @@ namespace SamaniCrm.Application.Menu.Queries
     {
 
         private readonly IApplicationDbContext _dbContext;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ILocalizer L;
 
-        public GetAllMenuItemsQueryHandler(IApplicationDbContext dbContext, ICurrentUserService currentUserService)
+        public GetAllMenuItemsQueryHandler(IApplicationDbContext dbContext, ILocalizer l)
         {
             _dbContext = dbContext;
-            _currentUserService = currentUserService;
+            L = l;
         }
 
         public async Task<List<MenuDTO>> Handle(GetAllMenuItemsQuery request, CancellationToken cancellationToken)
         {
-            var currentLanguage = _currentUserService.lang;
+            var currentLanguage = L.CurrentLanguage;
             var allMenus = await _dbContext.Menus
                                 .Include(m => m.Translations)
                                 .Include(m => m.Children)

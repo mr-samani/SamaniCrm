@@ -230,6 +230,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IRolePermissionService, RolePermissionService>();
         services.AddSingleton(TimeProvider.System);
+        services.AddSingleton<ILocalizer, Localizer>();
+
 
         services.AddScoped<ISecuritySettingService, SecuritySettingService>();
 
