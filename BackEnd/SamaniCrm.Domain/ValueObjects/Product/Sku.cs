@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace SamaniCrm.Domain.ValueObjects.Product
 {
+    [ComplexType]
     public sealed class Sku : IEquatable<Sku>
     {
         public string Value { get; }
@@ -14,11 +17,11 @@ namespace SamaniCrm.Domain.ValueObjects.Product
         public Sku(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException("SKU نمی‌تواند خالی باشد.", nameof(value));
+                throw new ArgumentException("SKU نمی تواند خالی باشد.", nameof(value));
 
             // نمونه اعتبارسنجی ساده: فقط حروف، عدد و خط تیره مجاز است
             if (!Regex.IsMatch(value, @"^[a-zA-Z0-9\-]+$"))
-                throw new ArgumentException("SKU فقط می‌تواند شامل حروف، عدد و خط تیره باشد.", nameof(value));
+                throw new ArgumentException("SKU فقط می تواند شامل حروف، عدد و خط تیره باشد.", nameof(value));
 
             Value = value.ToUpperInvariant();
         }

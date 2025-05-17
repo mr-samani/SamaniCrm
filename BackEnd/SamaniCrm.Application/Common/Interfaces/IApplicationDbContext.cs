@@ -28,6 +28,7 @@ namespace SamaniCrm.Application.Common.Interfaces
 
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductCategoryTranslation> ProductCategoryTranslations { get; set; }
+        public DbSet<Product> Products { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

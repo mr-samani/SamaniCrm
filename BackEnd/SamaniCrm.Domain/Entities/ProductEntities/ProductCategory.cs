@@ -21,7 +21,7 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public virtual Tenant Tenant { get; set; } = default!;
         public virtual ProductCategory? Parent { get; set; }
         public virtual ICollection<ProductCategory> Children { get; set; } = new List<ProductCategory>();
-       // public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+        public virtual ICollection<Product> Products { get; set; } = new List<Product>();
         public virtual ICollection<ProductCategoryTranslation> Translations { get; set; } = new List<ProductCategoryTranslation>();
 
 
