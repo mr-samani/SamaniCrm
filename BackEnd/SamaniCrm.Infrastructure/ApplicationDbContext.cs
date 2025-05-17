@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Domain.Entities.ProductEntities;
 using SamaniCrm.Domain.Interfaces;
 using SamaniCrm.Infrastructure.Identity;
 using RefreshToken = SamaniCrm.Domain.Entities.RefreshToken;
@@ -35,6 +36,8 @@ namespace SamaniCrm.Infrastructure
         public DbSet<Page> Pages { get; set; }
         public DbSet<PageTranslation> PageTranslations { get; set; }
 
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<ProductCategoryTranslation> ProductCategoryTranslations { get; set; }
 
 
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Domain.Entities.ProductEntities;
 using MenuEntity = SamaniCrm.Domain.Entities.Menu;
 using SecuritySettingEntity = SamaniCrm.Domain.Entities.SecuritySetting;
 
@@ -25,6 +26,8 @@ namespace SamaniCrm.Application.Common.Interfaces
         public DbSet<Page> Pages { get; set; }
         public DbSet<PageTranslation> PageTranslations { get; set; }
 
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<ProductCategoryTranslation> ProductCategoryTranslations { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

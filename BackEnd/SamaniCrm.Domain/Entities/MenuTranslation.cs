@@ -8,19 +8,14 @@ using SamaniCrm.Domain.Interfaces;
 
 namespace SamaniCrm.Domain.Entities
 {
-    public class MenuTranslation : IAuditableEntity, ISoftDelete
+    public class MenuTranslation : TranslationBaseClass, IAuditableEntity, ISoftDelete
     {
-        public Guid Id { get; set; }
         public Guid MenuId { get; set; }
-        [MaxLength(10)]
-        public required string Culture { get; set; }
+
 
         public string Title { get; set; } = string.Empty!;
 
-        public virtual Menu Menu { get; set; }
-        public virtual Language Language { get; set; }
-
-
+        public virtual Menu Menu { get; set; } = default!;
 
 
 
@@ -30,7 +25,6 @@ namespace SamaniCrm.Domain.Entities
         public string? CreatedBy { get; set; }
         public DateTime? LastModifiedTime { get; set; }
         public string? LastModifiedBy { get; set; }
-
         // Implementing ISoftDelete properties
         public bool IsDeleted { get; set; }
         public DateTime? DeletedTime { get; set; }
