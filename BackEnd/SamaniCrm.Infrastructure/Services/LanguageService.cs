@@ -62,5 +62,14 @@ namespace SamaniCrm.Infrastructure.Services
              }).ToListAsync();
             return languageList;
         }
+
+        public async Task<Dictionary<string, string>> GetAllValuesAsync(string culture)
+        {
+            var result = await _dbContext.Languages
+                .Where(x => x.Culture == culture)
+                .SelectMany(x => x.Localizations!)
+                .ToDictionaryAsync(x => x.Key, x => x.Value);
+            return result!;
+        }
     }
 }

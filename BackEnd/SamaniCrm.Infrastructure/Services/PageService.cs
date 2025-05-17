@@ -12,6 +12,7 @@ using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Pages.Commands;
 using SamaniCrm.Application.Pages.Queries;
+using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.Extensions;
 using SamaniCrm.Infrastructure.Identity;
@@ -22,13 +23,15 @@ namespace SamaniCrm.Infrastructure.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly ICurrentUserService _currentUserService;
+        private readonly ILocalizer L;
 
 
 
-        public PageService(ApplicationDbContext context, ICurrentUserService currentUserService)
+        public PageService(ApplicationDbContext context, ICurrentUserService currentUserService, ILocalizer l)
         {
             _context = context;
             _currentUserService = currentUserService;
+            L = l;
         }
 
         public async Task<Guid> CreateOrEditMetaDataPage(CreateOrEditPageMetaDataCommand request, CancellationToken cancellationToken)
@@ -135,7 +138,7 @@ namespace SamaniCrm.Infrastructure.Services
 
         public async Task<PaginatedResult<PageDto>> GetPagedList(GetFilteredPagesQuery request, CancellationToken cancellationToken)
         {
-            var currentLanguage = _currentUserService.lang ?? "en-US";
+            var currentLanguage =L.CurrentLanguage;
             var query = from page in _context.Pages
                         where page.Type == request.Type
                         join user in _context.Users
