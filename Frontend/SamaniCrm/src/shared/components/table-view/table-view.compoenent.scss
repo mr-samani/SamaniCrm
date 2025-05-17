@@ -76,8 +76,16 @@
 .thead-mrs .th-mrs {
   padding: 5px 10px;
   flex: 1;
-
   border-right: 1px var(--border-color) solid;
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+  gap: 5px;
+  &:hover {
+    .sort-icon {
+      opacity: 1;
+    }
+  }
 }
 
 .th-mrs:last-child {
@@ -166,4 +174,13 @@
   height: 100%;
   font-size: 2rem;
   opacity: 0.5;
+}
+
+.sort-icon {
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 500ms;
+  &.active {
+    opacity: 1;
+  }
 }

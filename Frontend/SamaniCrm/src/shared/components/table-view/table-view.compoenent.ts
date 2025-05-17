@@ -1,6 +1,6 @@
-import { Component, Injector, Input, Output, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Injector, Input, Output, TemplateRef } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
-import { FieldsType } from './fields-type.model';
+import { FieldsType, SortEvent } from './fields-type.model';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '@shared/shared.module';
@@ -24,7 +24,23 @@ export class TableViewComponent extends AppComponentBase {
   @Input() set loading(val: boolean) {
     this._loading = val;
   }
+
+  sortField = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
+  @Output() sortChange = new EventEmitter<SortEvent>();
   constructor(injector: Injector) {
     super(injector);
+  }
+
+  onSortChange(field: string) {
+    if (this.sortField == field) {
+      this.sortDirection = this.sortDirection == 'asc' ? 'desc' : 'asc';
+    }
+    this.sortField = field;
+    this.sortChange.emit({
+      field: this.sortField,
+      direction: this.sortDirection,
+    });
   }
 }

@@ -21,8 +21,7 @@
       .icon-folder,
       .icon-folder-open,
       .check-all,
-      .un-check-all,
-      .checkbox {
+      .un-check-all {
         background-image: url('../../../../public/images/32px.png');
         display: inline-block;
         width: 24px;
@@ -69,11 +68,25 @@
       }
 
       .checkbox {
-        background-position: -229px -67px;
-      }
-
-      .checkbox.checked {
-        background-position: -198px -67px;
+        background: none;
+        border: 2px #0076df solid;
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
+        margin-left: 6px;
+        &.checked:after {
+          content: ' ';
+          border-right: 3px #33a6c5 solid;
+          border-bottom: 3px #33a6c5 solid;
+          width: 50%;
+          display: inline-block;
+          height: 100%;
+          transform: rotate(45deg);
+          transform-origin: center;
+          bottom: 2px;
+          position: relative;
+          left: -3px;
+        }
       }
 
       .checkbox.indeterminate {
@@ -113,6 +126,12 @@
 
           &.no-child {
             background-position: -68px 0px !important;
+          }
+        }
+        .checkbox {
+          margin: 0 6px 0 0 !important;
+          &.checked:after {
+            left: 5px !important;
           }
         }
       }

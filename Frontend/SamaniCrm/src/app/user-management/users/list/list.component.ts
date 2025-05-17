@@ -7,7 +7,7 @@ import { FileUsageEnum } from '@app/file-manager/image-cropper-dialog/image-crop
 
 import { AppConst } from '@shared/app-const';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
-import { FieldsType } from '@shared/components/table-view/fields-type.model';
+import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
 import { GetUserQuery, UserServiceProxy } from '@shared/service-proxies';
 import { UserDTO } from '@shared/service-proxies/model/user-dto';
 import { DownloadService, DownloadFileType } from '@shared/services/download.service';
@@ -74,7 +74,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
     }
   }
 
-  getList() {
+  getList(ev?: SortEvent) {
     if (this.listSubscription$) {
       this.listSubscription$.unsubscribe();
     }
@@ -83,6 +83,8 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
     input.filter = this.form.get('filter')?.value;
     input.pageNumber = this.page;
     input.pageSize = this.perPage;
+    input.sortBy = ev ? ev.field : '';
+    input.sortDirection = ev ? ev.direction : '';
     this.listSubscription$ = this.userService
       .getAllUser(input)
       .pipe(finalize(() => (this.loading = false)))
@@ -161,6 +163,4 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
       }
     });
   }
-
-
 }

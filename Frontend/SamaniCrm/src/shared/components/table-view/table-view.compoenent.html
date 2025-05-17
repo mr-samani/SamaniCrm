@@ -8,6 +8,13 @@
           [style.max-width.px]="item.width"
           [style.min-width.px]="item.width">
           {{item.title}}
+
+          <i
+            class="fa sort-icon"
+            [class.active]="sortField == item.column"
+            [class.fa-chevron-down]="sortDirection=='asc'"
+            [class.fa-chevron-up]="sortDirection=='desc'"
+            (click)="onSortChange(item.column)"></i>
         </div>
         <div class="th-mrs operations" *ngIf="operations">{{'Operation'|translate}}</div>
       </div>

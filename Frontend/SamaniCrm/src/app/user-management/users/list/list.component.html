@@ -34,7 +34,12 @@
   </div>
 </form>
 
-<table-view [list]="list" [fields]="fields" [operations]="operations" [loading]="loading"></table-view>
+<table-view
+  [list]="list"
+  [fields]="fields"
+  [operations]="operations"
+  [loading]="loading"
+  (sortChange)="getList($event)"></table-view>
 
 <pagination [total]="totalCount" [(page)]="page" [(perPage)]="perPage" (change)="onPageChange($event)"></pagination>
 

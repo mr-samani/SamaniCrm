@@ -1,6 +1,8 @@
 .accordion {
   --bs-accordion-btn-padding-x: 1.25rem;
   --bs-accordion-btn-padding-y: 0.5rem;
+
+  --bs-accordion-active-bg: #cfe2ff5e;
 }
 
 html[dir='rtl'] {
@@ -25,7 +27,9 @@ html[dir='rtl'] {
     border-bottom-right-radius: var(--bs-pagination-border-radius);
   }
 }
-
+.accordion-button:focus {
+  box-shadow: none;
+}
 .dropdown-menu {
   text-align: start;
 }
