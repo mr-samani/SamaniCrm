@@ -12,8 +12,8 @@ using SamaniCrm.Infrastructure;
 namespace SamaniCrm.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250517145932_addProductCategory")]
-    partial class addProductCategory
+    [Migration("20250518155103_product")]
+    partial class product
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -489,6 +489,208 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("Permissions");
                 });
 
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.Product", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ProductTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ProductTypeId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("ProductTypeId");
+
+                    b.HasIndex("ProductTypeId1");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("Products", "product");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductAttribute", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DataType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRequired")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsVariant")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ProductTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductTypeId");
+
+                    b.ToTable("ProductAttributes", "product");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductAttributeTranslation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Culture")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProductAttributeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Culture");
+
+                    b.HasIndex("ProductAttributeId");
+
+                    b.ToTable("ProductAttributeTranslations", "product");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductAttributeValue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AttributeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttributeId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductAttributeValues", "product");
+                });
+
             modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductCategory", b =>
                 {
                     b.Property<Guid>("Id")
@@ -559,11 +761,13 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("Id");
 
@@ -572,6 +776,110 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.HasIndex("Culture");
 
                     b.ToTable("ProductCategoryTranslations", "product");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductTranslation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Culture")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Culture");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductTranslations", "product");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Culture")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Culture");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("ProductTypes", "product");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.RefreshToken", b =>
@@ -675,7 +983,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tenant");
+                    b.ToTable("Tenants", (string)null);
                 });
 
             modelBuilder.Entity("SamaniCrm.Infrastructure.Identity.ApplicationRole", b =>
@@ -934,6 +1242,130 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Page");
                 });
 
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.Product", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.ProductCategory", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.ProductType", "ProductType")
+                        .WithMany()
+                        .HasForeignKey("ProductTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.ProductType", null)
+                        .WithMany("Products")
+                        .HasForeignKey("ProductTypeId1");
+
+                    b.HasOne("SamaniCrm.Domain.Entities.Tenant", "Tenant")
+                        .WithMany("Products")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.OwnsOne("SamaniCrm.Domain.ValueObjects.Product.Sku", "SKU", b1 =>
+                        {
+                            b1.Property<Guid>("ProductId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(1000)
+                                .HasColumnType("nvarchar(1000)")
+                                .HasColumnName("SKU");
+
+                            b1.HasKey("ProductId");
+
+                            b1.ToTable("Products", "product");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductId");
+                        });
+
+                    b.Navigation("Category");
+
+                    b.Navigation("ProductType");
+
+                    b.Navigation("SKU")
+                        .IsRequired();
+
+                    b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductAttribute", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.ProductType", "ProductType")
+                        .WithMany("Attributes")
+                        .HasForeignKey("ProductTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ProductType");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductAttributeTranslation", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("Culture")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.ProductAttribute", "ProductAttribute")
+                        .WithMany("Translations")
+                        .HasForeignKey("ProductAttributeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("ProductAttribute");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductAttributeValue", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.ProductAttribute", "Attribute")
+                        .WithMany("AttributeValues")
+                        .HasForeignKey("AttributeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.Product", "Product")
+                        .WithMany("AttributeValues")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.OwnsOne("SamaniCrm.Domain.ValueObjects.Product.AttributeValue", "Value", b1 =>
+                        {
+                            b1.Property<Guid>("ProductAttributeValueId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("nvarchar(100)")
+                                .HasColumnName("AttributeValue");
+
+                            b1.HasKey("ProductAttributeValueId");
+
+                            b1.ToTable("ProductAttributeValues", "product");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProductAttributeValueId");
+                        });
+
+                    b.Navigation("Attribute");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Value")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductCategory", b =>
                 {
                     b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.ProductCategory", "Parent")
@@ -942,7 +1374,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SamaniCrm.Domain.Entities.Tenant", "Tenant")
-                        .WithMany("Categories")
+                        .WithMany("ProductCategories")
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -969,6 +1401,44 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Language");
 
                     b.Navigation("ProductCategory");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductTranslation", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("Culture")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.Product", "Product")
+                        .WithMany("Translations")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductType", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("Culture")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SamaniCrm.Domain.Entities.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.RolePermission", b =>
@@ -1009,16 +1479,41 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Translations");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductCategory", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.Product", b =>
                 {
-                    b.Navigation("Children");
+                    b.Navigation("AttributeValues");
 
                     b.Navigation("Translations");
                 });
 
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductAttribute", b =>
+                {
+                    b.Navigation("AttributeValues");
+
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductCategory", b =>
+                {
+                    b.Navigation("Children");
+
+                    b.Navigation("Products");
+
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductType", b =>
+                {
+                    b.Navigation("Attributes");
+
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Tenant", b =>
                 {
-                    b.Navigation("Categories");
+                    b.Navigation("ProductCategories");
+
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("SamaniCrm.Infrastructure.Identity.ApplicationRole", b =>

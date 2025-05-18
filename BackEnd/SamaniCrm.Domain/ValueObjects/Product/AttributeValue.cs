@@ -8,6 +8,9 @@ namespace SamaniCrm.Domain.ValueObjects.Product
 {
     public sealed class AttributeValue : IEquatable<AttributeValue>
     {
+        // برای EF Core
+        private AttributeValue() => Value = string.Empty;
+
         public string Value { get; }
 
         public AttributeValue(string value)

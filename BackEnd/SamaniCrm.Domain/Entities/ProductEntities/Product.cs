@@ -10,7 +10,7 @@ using SamaniCrm.Domain.ValueObjects.Product;
 
 namespace SamaniCrm.Domain.Entities.ProductEntities
 {
-    public class Product:IAuditableEntity, ISoftDelete
+    public class Product : IAuditableEntity, ISoftDelete
     {
         public Guid Id { get; set; }
         public Guid TenantId { get; set; }
@@ -19,7 +19,7 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
 
         [Required]
         [MaxLength(100)]
-        public Sku SKU { get; private set; } = default!;
+        public Sku SKU { get; set; } = default!;
         //private Sku _sku;
 
         //public Sku SKU
@@ -29,7 +29,7 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         //}
 
 
-        public string Slug { get; set; } = default!; 
+        public string Slug { get; set; } = default!;
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; }
 
@@ -38,9 +38,9 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public virtual ICollection<ProductTranslation> Translations { get; set; } = new List<ProductTranslation>();
 
 
-        //public ProductType ProductType { get; set; } = default!;
+        public ProductType ProductType { get; set; } = default!;
 
-        //public ICollection<ProductAttributeValue> AttributeValues { get; set; } = new List<ProductAttributeValue>();
+        public ICollection<ProductAttributeValue> AttributeValues { get; set; } = new List<ProductAttributeValue>();
         //public ICollection<ProductVariant> Variants { get; set; } = new List<ProductVariant>();
         //public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
 

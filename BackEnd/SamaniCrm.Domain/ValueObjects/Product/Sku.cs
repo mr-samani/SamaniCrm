@@ -9,30 +9,34 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SamaniCrm.Domain.ValueObjects.Product
 {
-    [ComplexType]
     public sealed class Sku : IEquatable<Sku>
     {
         public string Value { get; }
 
-        public Sku(string value)
+        private Sku(string value)
         {
-            if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException("SKU نمی تواند خالی باشد.", nameof(value));
-
-            // نمونه اعتبارسنجی ساده: فقط حروف، عدد و خط تیره مجاز است
-            if (!Regex.IsMatch(value, @"^[a-zA-Z0-9\-]+$"))
-                throw new ArgumentException("SKU فقط می تواند شامل حروف، عدد و خط تیره باشد.", nameof(value));
-
-            Value = value.ToUpperInvariant();
+            Value = value;
         }
 
-        public override bool Equals(object? obj) => Equals(obj as Sku);
+        public static Sku Create(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("SKU cannot be empty.");
 
-        public bool Equals(Sku? other) => other != null && Value == other.Value;
+            if (!Regex.IsMatch(value, @"^[a-zA-Z0-9_-]{3,100}$"))
+                throw new ArgumentException("Invalid SKU format.");
 
-        public override int GetHashCode() => Value.GetHashCode();
+            return new Sku(value);
+        }
 
         public override string ToString() => Value;
+
+        // برای EF Core
+        private Sku() => Value = string.Empty;
+
+        public bool Equals(Sku? other) => other is not null && Value == other.Value;
+        public override bool Equals(object? obj) => obj is Sku sku && Equals(sku);
+        public override int GetHashCode() => Value.GetHashCode();
     }
 
 }

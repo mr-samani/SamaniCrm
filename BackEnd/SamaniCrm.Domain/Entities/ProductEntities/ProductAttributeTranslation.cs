@@ -7,20 +7,12 @@ using SamaniCrm.Domain.Interfaces;
 
 namespace SamaniCrm.Domain.Entities.ProductEntities
 {
-    public class ProductType:TranslationBaseClass,IAuditableEntity,ISoftDelete
+    public class ProductAttributeTranslation:TranslationBaseClass,IAuditableEntity,ISoftDelete
     {
-        public Guid Id { get; set; }
-        public Guid TenantId { get; set; }
-
+        public Guid ProductAttributeId { get; set; }
         public string Name { get; set; } = default!;
-        public string? Description { get; set; }
 
-        public virtual Tenant Tenant { get; set; } = default!;
-        public virtual ICollection<ProductAttribute> Attributes { get; set; } = new List<ProductAttribute>();
-        public virtual ICollection<Product> Products { get; set; } = new List<Product>();
-
-
-
+        public virtual ProductAttribute ProductAttribute { get; set; } = default!;
 
 
         // Implementing IAuditableEntity properties
@@ -33,7 +25,5 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public bool IsDeleted { get; set; }
         public DateTime? DeletedTime { get; set; }
         public string? DeletedBy { get; set; }
-
     }
-
 }

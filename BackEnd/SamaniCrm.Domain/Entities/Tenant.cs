@@ -14,6 +14,8 @@ namespace SamaniCrm.Domain.Entities
         public string Slug { get; set; } = default!;
         public DateTime CreatedAt { get; set; }
         public bool IsActive { get; set; } = true;
+        public virtual ICollection<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
+        public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
     }
 
