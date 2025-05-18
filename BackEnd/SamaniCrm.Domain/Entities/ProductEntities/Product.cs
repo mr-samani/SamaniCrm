@@ -33,7 +33,7 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; }
 
-        public Tenant Tenant { get; set; } = default!;
+        public virtual Tenant Tenant { get; set; } = default!;
         public ProductCategory Category { get; set; } = default!;
         public virtual ICollection<ProductTranslation> Translations { get; set; } = new List<ProductTranslation>();
 

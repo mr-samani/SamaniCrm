@@ -11,27 +11,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                schema: "product",
-                table: "ProductCategoryTranslations",
-                type: "nvarchar(250)",
-                maxLength: 250,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Description",
-                schema: "product",
-                table: "ProductCategoryTranslations",
-                type: "nvarchar(1000)",
-                maxLength: 1000,
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
-                oldNullable: true);
-
+          
             migrationBuilder.CreateTable(
                 name: "Products",
                 schema: "product",
@@ -61,12 +41,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         column: x => x.CategoryId,
                         principalSchema: "product",
                         principalTable: "ProductCategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Products_Tenant_TenantId",
-                        column: x => x.TenantId,
-                        principalTable: "Tenant",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -106,11 +80,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                 table: "Products",
                 column: "CategoryId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_TenantId",
-                schema: "product",
-                table: "Products",
-                column: "TenantId");
+          
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductTranslations_Culture",
@@ -129,27 +99,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
             migrationBuilder.DropTable(
                 name: "Products",
                 schema: "product");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                schema: "product",
-                table: "ProductCategoryTranslations",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(250)",
-                oldMaxLength: 250);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Description",
-                schema: "product",
-                table: "ProductCategoryTranslations",
-                type: "nvarchar(max)",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(1000)",
-                oldMaxLength: 1000,
-                oldNullable: true);
         }
     }
 }

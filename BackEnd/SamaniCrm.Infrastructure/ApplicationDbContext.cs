@@ -36,6 +36,7 @@ namespace SamaniCrm.Infrastructure
         public DbSet<Page> Pages { get; set; }
         public DbSet<PageTranslation> PageTranslations { get; set; }
 
+        public DbSet<Tenant> Tenants { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductCategoryTranslation> ProductCategoryTranslations { get; set; }
 

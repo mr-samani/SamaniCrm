@@ -758,7 +758,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tenant");
+                    b.ToTable("Tenants");
                 });
 
             modelBuilder.Entity("SamaniCrm.Infrastructure.Identity.ApplicationRole", b =>
@@ -1026,7 +1026,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .IsRequired();
 
                     b.HasOne("SamaniCrm.Domain.Entities.Tenant", "Tenant")
-                        .WithMany("Products")
+                        .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1066,7 +1066,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SamaniCrm.Domain.Entities.Tenant", "Tenant")
-                        .WithMany("Categories")
+                        .WithMany()
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1164,13 +1164,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Products");
 
                     b.Navigation("Translations");
-                });
-
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.Tenant", b =>
-                {
-                    b.Navigation("Categories");
-
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("SamaniCrm.Infrastructure.Identity.ApplicationRole", b =>

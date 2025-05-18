@@ -18,9 +18,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
        // builder.HasIndex(p => new { p.TenantId, p.SKU }).IsUnique();
 
-        builder.HasOne(p => p.Tenant)
-               .WithMany(t => t.Products)
-               .HasForeignKey(p => p.TenantId);
+        //builder.HasOne(p => p.Tenant)
+        //       .WithMany(t => t.Products)
+        //       .HasForeignKey(p => p.TenantId);
 
         builder.HasOne(p => p.Category)
                .WithMany(c => c.Products)

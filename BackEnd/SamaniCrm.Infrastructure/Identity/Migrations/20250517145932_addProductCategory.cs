@@ -15,7 +15,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                 name: "product");
 
             migrationBuilder.CreateTable(
-                name: "Tenant",
+                name: "Tenants",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -59,12 +59,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         principalTable: "ProductCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductCategories_Tenant_TenantId",
-                        column: x => x.TenantId,
-                        principalTable: "Tenant",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -74,8 +68,8 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(250)",maxLength:250, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)",maxLength:1000, nullable: true),
                     Culture = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
                 },
                 constraints: table =>
@@ -102,11 +96,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                 table: "ProductCategories",
                 column: "ParentId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductCategories_TenantId",
-                schema: "product",
-                table: "ProductCategories",
-                column: "TenantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductCategoryTranslations_CategoryId",
