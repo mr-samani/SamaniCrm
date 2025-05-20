@@ -11,6 +11,8 @@ namespace SamaniCrm.Infrastructure.EntityConfiguration;
 
 public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
+
+    //---------------------------پیکربندی جداول مربوط به محصولات--------------------------------------
     public void Configure(EntityTypeBuilder<Product> builder)
     {
         builder.ToTable("Products", "product");
@@ -43,6 +45,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     }
 }
 
+//------------------- ترجمه عنوان و توضیحات محصول / کالا
 public class ProductTranslationConfiguration : IEntityTypeConfiguration<ProductTranslation>
 {
     public void Configure(EntityTypeBuilder<ProductTranslation> builder)
@@ -59,7 +62,7 @@ public class ProductTranslationConfiguration : IEntityTypeConfiguration<ProductT
 
     }
 }
-//________________________________________________________________________________________________
+//___________________________________نوع کالا_____________________________________________________________
 public class ProductTypeConfiguration : IEntityTypeConfiguration<ProductType>
 {
     public void Configure(EntityTypeBuilder<ProductType> builder)
@@ -74,7 +77,7 @@ public class ProductTypeConfiguration : IEntityTypeConfiguration<ProductType>
     }
 }
 
-//________________________________________________________________________________________________
+//_______________________________________ویژگی های کالا_________________________________________________________
 
 public class ProductAttributeConfiguration : IEntityTypeConfiguration<ProductAttribute>
 {
@@ -89,7 +92,7 @@ public class ProductAttributeConfiguration : IEntityTypeConfiguration<ProductAtt
     }
 }
 
-
+//_______________________________________ترجمه ویژگی های کالا_________________________________________________________
 public class ProductAttributeTranslationConfiguration : IEntityTypeConfiguration<ProductAttributeTranslation>
 {
     public void Configure(EntityTypeBuilder<ProductAttributeTranslation> builder)
@@ -106,7 +109,7 @@ public class ProductAttributeTranslationConfiguration : IEntityTypeConfiguration
 
     }
 }
-//____________________________________________________________________________________
+//________________________________مقادیر ویژگی های کالا____________________________________________________
 
 public class ProductAttributeValueConfiguration : IEntityTypeConfiguration<ProductAttributeValue>
 {
@@ -130,6 +133,21 @@ public class ProductAttributeValueConfiguration : IEntityTypeConfiguration<Produ
                 .IsRequired();
         });
 
-
     }
 }
+
+//________________________________مقادیر تصاویر کالا____________________________________________________
+
+public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
+{
+    public void Configure(EntityTypeBuilder<ProductImage> builder)
+    {
+        builder.ToTable("ProductImages", "product");
+        builder.HasKey(pc => pc.Id);
+        builder.HasOne(p => p.Product)
+            .WithMany(c => c.Images)
+            .HasForeignKey(p => p.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);  
+    }
+}
+

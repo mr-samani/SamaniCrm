@@ -45,6 +45,8 @@ namespace SamaniCrm.Infrastructure
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
         public DbSet<ProductAttributeTranslation> ProductAttributeTranslations { get; set; }
         public DbSet<ProductAttributeValue> ProductAttributeValues { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+
 
 
 
