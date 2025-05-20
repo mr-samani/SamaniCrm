@@ -43,6 +43,7 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public ICollection<ProductAttributeValue> AttributeValues { get; set; } = new List<ProductAttributeValue>();
         //public ICollection<ProductVariant> Variants { get; set; } = new List<ProductVariant>();
         public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
+        public ICollection<ProductFile> Files { get; set; } = new List<ProductFile>();
 
 
 
