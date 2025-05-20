@@ -47,7 +47,13 @@
             {{ 'Content' | translate }}
           </a>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/dashboard/products']" routerLinkActive="active">
+            <i class="fa fa-file-contract"></i>
+            {{ 'Products' | translate }}
+          </a>
+        </li>
+        <!-- <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle"
             id="productDropdown"
@@ -69,7 +75,7 @@
             </li>
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
-        </li>
+        </li> -->
         <li class="nav-item">
           <a class="nav-link" routerLink="/dashboard/page-builder">
             <i class="fa fa-page"></i>

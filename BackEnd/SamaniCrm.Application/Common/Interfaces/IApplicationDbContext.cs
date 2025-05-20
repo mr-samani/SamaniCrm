@@ -9,6 +9,7 @@ using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Entities.ProductEntities;
 using MenuEntity = SamaniCrm.Domain.Entities.Menu;
 using SecuritySettingEntity = SamaniCrm.Domain.Entities.SecuritySetting;
+using ProductEntity = SamaniCrm.Domain.Entities.ProductEntities.Product;
 
 
 namespace SamaniCrm.Application.Common.Interfaces
@@ -28,7 +29,7 @@ namespace SamaniCrm.Application.Common.Interfaces
 
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductCategoryTranslation> ProductCategoryTranslations { get; set; }
-        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductEntity> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
         public DbSet<ProductAttributeTranslation> ProductAttributeTranslations { get; set; }

@@ -51,12 +51,12 @@ public static class SeedProductCategoriesFromFile
                             ? categories[parentPath].Id
                             : null,
                         Slug = GenerateSlug(currentName),
-                        SortOrder = level,
+                        OrderIndex = level,
                         IsActive = true,
                         CreatedAt = DateTime.UtcNow,
                         Translations = new List<ProductCategoryTranslation>
                         {
-                            new ProductCategoryTranslation() { Culture = "en-US", Name = currentName }
+                            new ProductCategoryTranslation() { Culture = "en-US", Title = currentName }
                         }
                     };
                     categories[currentPath] = category;

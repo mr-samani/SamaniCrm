@@ -1,14 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, Injector, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
-import { Apis } from '@shared/apis';
-import { ProductCategory } from '../models/product-category';
-import { TreeCategoryComponent } from './tree-category/tree-category.component';
+import { TreeCategoryComponent, TreeNode } from './tree-category/tree-category.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { finalize } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
+import { ProductCategoryDto, ProductServiceProxy } from '@shared/service-proxies';
 
 @Component({
   selector: 'app-product-categories',
@@ -23,12 +22,16 @@ import { MatButtonModule } from '@angular/material/button';
   ],
   templateUrl: './product-categories.component.html',
   styleUrl: './product-categories.component.scss',
+  providers: [ProductServiceProxy],
 })
 export class ProductCategoriesComponent extends AppComponentBase implements OnInit {
-  list: ProductCategory[] = [];
+  list: TreeNode[] = [];
   loading = true;
   isSaving = false;
-  constructor(injector: Injector) {
+  constructor(
+    injector: Injector,
+    private productService: ProductServiceProxy,
+  ) {
     super(injector);
   }
 
@@ -38,22 +41,22 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
 
   getList() {
     this.loading = true;
-    this.dataService
-      .get<any, ProductCategory[]>(Apis.productCategories, {})
+    this.productService
+      .getCategoriesForAdmin()
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.list = response.data ?? [];
+        this.list = response.data ?? ([] as any);
       });
   }
 
   save() {
-    this.isSaving = true;
-    this.dataService
-      .post<{ categories: ProductCategory[] }, null>(Apis.reorderProductCategories, { categories: this.list })
-      .pipe(finalize(() => (this.isSaving = false)))
-      .subscribe((response) => {
-        this.notify.success(this.l('SaveSuccessFully'));
-        this.getList();
-      });
+    // this.isSaving = true;
+    // this.dataService
+    //   .post<{ categories: ProductCategory[] }, null>(Apis.reorderProductCategories, { categories: this.list })
+    //   .pipe(finalize(() => (this.isSaving = false)))
+    //   .subscribe((response) => {
+    //     this.notify.success(this.l('SaveSuccessFully'));
+    //     this.getList();
+    //   });
   }
 }

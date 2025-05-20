@@ -9,6 +9,7 @@ import { LanguageServiceProxy } from './api/language.service';
 import { MaintenanceServiceProxy } from './api/maintenance.service';
 import { MenuServiceProxy } from './api/menu.service';
 import { PagesServiceProxy } from './api/pages.service';
+import { ProductServiceProxy } from './api/product.service';
 import { RoleServiceProxy } from './api/role.service';
 import { SecuritySettingsServiceProxy } from './api/security-settings.service';
 import { UserServiceProxy } from './api/user.service';
@@ -26,6 +27,7 @@ import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
     MaintenanceServiceProxy,
     MenuServiceProxy,
     PagesServiceProxy,
+    ProductServiceProxy,
     RoleServiceProxy,
     SecuritySettingsServiceProxy,
     UserServiceProxy,

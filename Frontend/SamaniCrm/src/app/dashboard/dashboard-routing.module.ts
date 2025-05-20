@@ -43,18 +43,10 @@ const routes: Routes = [
 
       { path: 'content', loadChildren: () => import('./content/content.module').then((m) => m.ContentModule) },
       // products
-      // {
-      //   path: 'product',
-      //   children: [
-      //     {
-      //       path: 'categories',
-      //       loadComponent: () =>
-      //         import('../products/product-categories/product-categories.component').then(
-      //           (c) => c.ProductCategoriesComponent,
-      //         ),
-      //     },
-      //   ],
-      // },
+      {
+        path: 'products',
+        loadChildren: () => import('../products/product.module').then((m) => m.ProductModule),
+      },
 
       // content
     ],

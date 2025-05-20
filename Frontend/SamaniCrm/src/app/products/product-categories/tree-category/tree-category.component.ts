@@ -8,13 +8,13 @@ import { CreateOrEditProductCategoryComponent } from '../create-or-edit/create-o
 import { Apis } from '@shared/apis';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
-import { ProductCategory } from '@app/products/models/product-category';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
+import { ProductCategoryDto } from '@shared/service-proxies/model/product-category-dto';
 
-export interface TreeNode extends ProductCategory {
+export interface TreeNode extends ProductCategoryDto {
   children: TreeNode[];
 
   isExpanded?: boolean;
@@ -31,8 +31,7 @@ export interface DropInfo {
   imports: [
     CommonModule,
     CdkDropList,
-    CdkDrag,
-    CdkDragPlaceholder,
+    CdkDrag, 
     MatButtonModule,
     TranslateModule,
     MatProgressSpinnerModule,
@@ -79,19 +78,19 @@ export class TreeCategoryComponent extends AppComponentBase implements OnInit, O
   }
 
   reload() {
-    this.loading = true;
-    this.dataService
-      .get<any, ProductCategory[]>(Apis.productCategories, {})
-      .pipe(finalize(() => (this.loading = false)))
-      .subscribe((response) => {
-        this.list = response.data ?? [];
-      });
+    // this.loading = true;
+    // this.dataService
+    //   .get<any, ProductCategory[]>(Apis.productCategories, {})
+    //   .pipe(finalize(() => (this.loading = false)))
+    //   .subscribe((response) => {
+    //     this.list = response.data ?? [];
+    //   });
   }
 
   prepareDragDrop(nodes: TreeNode[]) {
     nodes.forEach((node) => {
-      this.dropTargetIds.push(node.id);
-      this.nodeLookup[node.id] = node;
+      this.dropTargetIds.push(node.id!);
+      this.nodeLookup[node.id!] = node;
       this.prepareDragDrop(node.children);
     });
   }
@@ -173,7 +172,7 @@ export class TreeCategoryComponent extends AppComponentBase implements OnInit, O
   getParentNodeId(id: string, nodesToSearch: TreeNode[], parentId: string): string {
     for (let node of nodesToSearch) {
       if (node.id == id) return parentId;
-      let ret = this.getParentNodeId(id, node.children, node.id);
+      let ret = this.getParentNodeId(id, node.children, node.id!);
       if (ret) return ret;
     }
     return '';
@@ -211,18 +210,18 @@ export class TreeCategoryComponent extends AppComponentBase implements OnInit, O
   }
 
   delete(item: TreeNode) {
-    this.confirmMessage('AreYouSureDelete', item.name).then((r) => {
-      if (r.isConfirmed) {
-        this.dataService
-          .delete(Apis.deleteProductCategory, {
-            id: item.id,
-          })
-          .subscribe((response) => {
-            this.notify.success('DeleteSuccessfully');
-            this.deleteFromTree(this.nodes, item.id);
-          });
-      }
-    });
+    // this.confirmMessage('AreYouSureDelete', item.name).then((r) => {
+    //   if (r.isConfirmed) {
+    //     this.dataService
+    //       .delete(Apis.deleteProductCategory, {
+    //         id: item.id,
+    //       })
+    //       .subscribe((response) => {
+    //         this.notify.success('DeleteSuccessfully');
+    //         this.deleteFromTree(this.nodes, item.id);
+    //       });
+    //   }
+    // });
   }
 
   deleteFromTree(tree: TreeNode[], id: string) {
@@ -238,25 +237,25 @@ export class TreeCategoryComponent extends AppComponentBase implements OnInit, O
   }
 
   selectImage(item: TreeNode) {
-    this.fileManagerService
-      .openFileManager({
-        type: 'Image',
-        showPreview: true,
-      })
-      .then((r) => {
-        if (r) {
-          item.loading = true;
-          this.dataService
-            .post(Apis.setImageProductCategory, {
-              id: item.id,
-              fileId: r,
-            })
-            .pipe(finalize(() => (item.loading = false)))
-            .subscribe((response) => {
-              this.reload();
-            });
-        }
-      });
+    // this.fileManagerService
+    //   .openFileManager({
+    //     type: 'Image',
+    //     showPreview: true,
+    //   })
+    //   .then((r) => {
+    //     if (r) {
+    //       item.loading = true;
+    //       this.dataService
+    //         .post(Apis.setImageProductCategory, {
+    //           id: item.id,
+    //           fileId: r,
+    //         })
+    //         .pipe(finalize(() => (item.loading = false)))
+    //         .subscribe((response) => {
+    //           this.reload();
+    //         });
+    //     }
+    //   });
     // this.fileManagerService.selectFile({
     //   usage: FileUsageEnum.PRODUCT_CATEGORY,
     //   previousFileAddress: item.file?.image,
@@ -283,26 +282,26 @@ export class TreeCategoryComponent extends AppComponentBase implements OnInit, O
 
   changeActive(item: TreeNode) {
     item.loading = true;
-    this.dataService
-      .post<any, TreeNode[]>(Apis.changeActiveProductCategory, {
-        id: item.id,
-        isActive: !item.active,
-      })
-      .pipe(finalize(() => (item.loading = false)))
-      .subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.notify.success(this.l('SaveSuccessFully'));
-          } else {
-            let msg = response.message ?? this.l('Message.ErrorOccurred');
-            this.notify.error(msg);
-            item.active = !item.active;
-          }
-        },
-        error: (err) => {
-          item.active = !item.active;
-        },
-      });
+    // this.dataService
+    //   .post<any, TreeNode[]>(Apis.changeActiveProductCategory, {
+    //     id: item.id,
+    //     isActive: !item.active,
+    //   })
+    //   .pipe(finalize(() => (item.loading = false)))
+    //   .subscribe({
+    //     next: (response) => {
+    //       if (response.success) {
+    //         this.notify.success(this.l('SaveSuccessFully'));
+    //       } else {
+    //         let msg = response.message ?? this.l('Message.ErrorOccurred');
+    //         this.notify.error(msg);
+    //         item.active = !item.active;
+    //       }
+    //     },
+    //     error: (err) => {
+    //       item.active = !item.active;
+    //     },
+    //   });
   }
 
   stopPagination(ev: Event) {

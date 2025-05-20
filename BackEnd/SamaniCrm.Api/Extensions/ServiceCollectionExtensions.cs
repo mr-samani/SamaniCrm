@@ -22,6 +22,7 @@ using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.Behaviors;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.InitialApp.Queries;
+using SamaniCrm.Application.Product.Interfaces;
 using SamaniCrm.Application.Queries.Role;
 using SamaniCrm.Application.User.Queries;
 using SamaniCrm.Core.Shared.Interfaces;
@@ -31,6 +32,7 @@ using SamaniCrm.Infrastructure.Captcha;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Services;
+using SamaniCrm.Infrastructure.Services.Product;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace SamaniCrm.Infrastructure.Extensions;
@@ -230,7 +232,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IRolePermissionService, RolePermissionService>();
         services.AddSingleton(TimeProvider.System);
-        services.AddSingleton<ILocalizer, Localizer>();
+        services.AddScoped<ILocalizer, Localizer>();
 
 
         services.AddScoped<ISecuritySettingService, SecuritySettingService>();
@@ -244,6 +246,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserPermissionService, UserPermissionService>();
         services.AddScoped<ILanguageService, LanguageService>();
         services.AddScoped<IPageService, PageService>();
+        services.AddScoped<IProductCategoryService, ProductCategoryService>();
+
 
         services.AddScoped<PermissionFilter>();
 

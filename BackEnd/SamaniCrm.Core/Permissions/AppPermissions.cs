@@ -58,6 +58,14 @@ namespace SamaniCrm.Core.Permissions
         public const string Pages_Delete = "Administrator.Pages.Delete";
 
 
+        // products
+        public const string Products = "Administrator.Products";
+        public const string Products_Category_List = "Administrator.Products.Category.List";
+        public const string Products_Category_Create = "Administrator.Products.Category.Create";
+        public const string Products_Category_Edit = "Administrator.Products.Category.Edit";
+        public const string Products_Category_Delete = "Administrator.Products.Category.Delete";
+
+
 
 
     }

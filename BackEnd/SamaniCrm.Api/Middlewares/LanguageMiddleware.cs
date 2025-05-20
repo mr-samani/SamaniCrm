@@ -12,7 +12,7 @@ public class LanguageMiddleware
     }
 
 
-    public async Task InvokeAsunc(HttpContext httpContext, ICurrentUserService currentUserService)
+    public async Task InvokeAsync(HttpContext httpContext, ICurrentUserService currentUserService)
     {
         var lang = httpContext.Request.Headers["lang"].ToString();
         if (!string.IsNullOrEmpty(lang) && currentUserService.lang != "")

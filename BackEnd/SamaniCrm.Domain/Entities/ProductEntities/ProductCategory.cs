@@ -14,7 +14,8 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public Guid? ParentId { get; set; }
 
         public string Slug { get; set; } = default!;
-        public int SortOrder { get; set; }
+        public string Image { get; set; } = default!;
+        public int OrderIndex { get; set; }
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; }
 

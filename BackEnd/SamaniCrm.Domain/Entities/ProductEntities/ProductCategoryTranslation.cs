@@ -11,7 +11,7 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
     {
         public Guid CategoryId { get; set; }
         [MaxLength(250)]
-        public string Name { get; set; } = default!;
+        public string Title { get; set; } = default!;
         [MaxLength(1000)]
         public string? Description { get; set; }
 

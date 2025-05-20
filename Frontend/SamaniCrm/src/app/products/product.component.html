@@ -1,0 +1,16 @@
+<div class="d-flex">
+  <div class="menu-list">
+    <a class="menu-item" [routerLink]="['/dashboard/products/categories']" routerLinkActive="active">
+      <div class="icon">
+        <i class="fad fa-memo-circle-info"></i>
+      </div>
+      <div class="content">
+        <div class="title">{{ 'Categories' | translate }}</div>
+        <div class="description">{{ 'CategoriesDescription' | translate }}</div>
+      </div>
+    </a>
+  </div>
+  <div class="flex-fill">
+    <router-outlet></router-outlet>
+  </div>
+</div>
