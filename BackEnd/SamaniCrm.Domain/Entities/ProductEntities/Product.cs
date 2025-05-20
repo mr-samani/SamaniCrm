@@ -44,6 +44,7 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         //public ICollection<ProductVariant> Variants { get; set; } = new List<ProductVariant>();
         public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
         public ICollection<ProductFile> Files { get; set; } = new List<ProductFile>();
+        public ICollection<ProductPrice> Prices { get; set; } = new List<ProductPrice>();
 
 
 

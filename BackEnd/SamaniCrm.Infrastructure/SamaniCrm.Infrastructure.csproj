@@ -26,4 +26,8 @@
     <ProjectReference Include="..\SamaniCrm.Core\SamaniCrm.Core.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="seed-data\" />
+  </ItemGroup>
+
 </Project>

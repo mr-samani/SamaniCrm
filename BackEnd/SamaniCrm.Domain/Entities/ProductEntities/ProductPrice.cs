@@ -9,7 +9,7 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
     public class ProductPrice
     {
         public Guid Id { get; set; }
-        public Guid ProductVariantId { get; set; }
+        public Guid ProductId { get; set; }
 
         public string Currency { get; set; } = default!;  // مثلا "USD", "IRR"
         public decimal Price { get; set; }
@@ -17,7 +17,7 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
 
-        public ProductVariant ProductVariant { get; set; } = default!;
+        public Product Product { get; set; } = default!;
     }
 
 }

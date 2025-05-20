@@ -165,3 +165,17 @@ public class ProductFileConfiguration : IEntityTypeConfiguration<ProductFile>
             .OnDelete(DeleteBehavior.Cascade);
     }
 }
+//________________________________قیمت های  کالا____________________________________________________
+public class ProductPriceConfiguration : IEntityTypeConfiguration<ProductPrice>
+{
+    public void Configure(EntityTypeBuilder<ProductPrice> builder)
+    {
+        builder.ToTable("ProductPrices", "product");
+        builder.HasKey(pc => pc.Id);
+        builder.HasOne(p => p.Product)
+            .WithMany(c => c.Prices)
+            .HasForeignKey(p => p.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
+
+}
