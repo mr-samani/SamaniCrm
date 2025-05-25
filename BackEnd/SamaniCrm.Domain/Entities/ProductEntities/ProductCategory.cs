@@ -7,14 +7,14 @@ using SamaniCrm.Domain.Interfaces;
 
 namespace SamaniCrm.Domain.Entities.ProductEntities
 {
-    public class ProductCategory:IAuditableEntity , ISoftDelete
+    public class ProductCategory : IAuditableEntity, ISoftDelete
     {
         public Guid Id { get; set; }
         public Guid TenantId { get; set; }
         public Guid? ParentId { get; set; }
 
         public string Slug { get; set; } = default!;
-        public string Image { get; set; } = default!;
+        public string? Image { get; set; }
         public int OrderIndex { get; set; }
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; }
