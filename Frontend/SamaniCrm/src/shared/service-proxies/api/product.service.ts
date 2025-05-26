@@ -17,7 +17,9 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { ProductCategoryDtoListApiResponse } from '../model/product-category-dto-list-api-response';
+import { GetCategoriesForAdminQuery } from '../model/get-categories-for-admin-query';
+// @ts-ignore
+import { PagedProductCategoryDtoPaginatedResultApiResponse } from '../model/paged-product-category-dto-paginated-result-api-response';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -34,13 +36,14 @@ export class ProductServiceProxy extends BaseService {
     }
 
     /**
+     * @param getCategoriesForAdminQuery 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getCategoriesForAdmin(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductCategoryDtoListApiResponse>;
-    public getCategoriesForAdmin(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductCategoryDtoListApiResponse>>;
-    public getCategoriesForAdmin(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductCategoryDtoListApiResponse>>;
-    public getCategoriesForAdmin(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getCategoriesForAdmin(getCategoriesForAdminQuery?: GetCategoriesForAdminQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedProductCategoryDtoPaginatedResultApiResponse>;
+    public getCategoriesForAdmin(getCategoriesForAdminQuery?: GetCategoriesForAdminQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedProductCategoryDtoPaginatedResultApiResponse>>;
+    public getCategoriesForAdmin(getCategoriesForAdminQuery?: GetCategoriesForAdminQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedProductCategoryDtoPaginatedResultApiResponse>>;
+    public getCategoriesForAdmin(getCategoriesForAdminQuery?: GetCategoriesForAdminQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -61,6 +64,17 @@ export class ProductServiceProxy extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -73,9 +87,10 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetCategoriesForAdmin`;
-        return this.httpClient.request<ProductCategoryDtoListApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<PagedProductCategoryDtoPaginatedResultApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                body: getCategoriesForAdminQuery,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

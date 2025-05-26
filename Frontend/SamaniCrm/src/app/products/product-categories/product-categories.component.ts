@@ -1,62 +1,159 @@
-import { CommonModule } from '@angular/common';
 import { Component, Injector, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
-import { TreeCategoryComponent, TreeNode } from './tree-category/tree-category.component';
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { TranslateModule } from '@ngx-translate/core';
-import { finalize } from 'rxjs';
-import { MatButtonModule } from '@angular/material/button';
-import { ProductCategoryDto, ProductServiceProxy } from '@shared/service-proxies';
+import { finalize, Subscription } from 'rxjs';
+import { ProductServiceProxy } from '@shared/service-proxies/api/product.service';
+import { MatDialog } from '@angular/material/dialog';
+import { FormGroup } from '@angular/forms';
+import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
+import { GetCategoriesForAdminQuery, PagedProductCategoryDto } from '@shared/service-proxies';
+import { PageEvent } from '@shared/components/pagination/pagination.component';
+import { CreateOrEditProductCategoryComponent } from './create-or-edit/create-or-edit.component';
 
 @Component({
   selector: 'app-product-categories',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TreeCategoryComponent,
-    DragDropModule,
-    MatProgressBarModule,
-    TranslateModule,
-    MatButtonModule,
-  ],
   templateUrl: './product-categories.component.html',
   styleUrl: './product-categories.component.scss',
-  providers: [ProductServiceProxy],
+  standalone: false,
 })
 export class ProductCategoriesComponent extends AppComponentBase implements OnInit {
-  list: TreeNode[] = [];
   loading = true;
-  isSaving = false;
+
+  list: PagedProductCategoryDto[] = [];
+  totalCount = 0;
+
+  fields: FieldsType[] = [
+    { column: 'image', title: this.l('Image'), width: 100, type: 'profilePicture' },
+    // { column: 'id', title: this.l('id'), width: 100 },
+    { column: 'title', title: this.l('Title') },
+    { column: 'description', title: this.l('Description') },
+    { column: 'isActive', title: this.l('IsActive'), type: 'yesNo' },
+    { column: 'hasChild', title: this.l('HasChild'), type: 'yesNo' },
+    { column: 'orderIndex', title: this.l('OrderIndex') },
+    { column: 'slug', title: this.l('Slug') },
+    { column: 'childCount', title: this.l('ChildCount') },
+    { column: 'creationTime', title: this.l('CreationTime'), type: 'dateTime' },
+  ];
+
+  form: FormGroup;
+  page = 1;
+  perPage = 10;
+  listSubscription$?: Subscription;
+  showFilter = false;
+
+  parentId = '';
   constructor(
     injector: Injector,
-    private productService: ProductServiceProxy,
+    private productServiceProxy: ProductServiceProxy,
+    private matDialog: MatDialog,
   ) {
     super(injector);
+    this.breadcrumb.list = [
+      { name: this.l('Settings'), url: '/dashboard/setting' },
+      { name: this.l('Users'), url: '/dashboard/users' },
+    ];
+    this.form = this.fb.group({
+      filter: [''],
+    });
+
+    this.route.queryParams.subscribe((p) => {
+      this.parentId = p['parentId'] ?? '';
+      this.page = p['page'] ?? 1;
+      this.perPage = p['perPage'] ?? 10;
+      this.getList();
+    });
   }
 
-  ngOnInit(): void {
-    this.getList();
+  ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    if (this.listSubscription$) {
+      this.listSubscription$.unsubscribe();
+    }
   }
 
-  getList() {
+  getList(ev?: SortEvent) {
+    if (this.listSubscription$) {
+      this.listSubscription$.unsubscribe();
+    }
     this.loading = true;
-    this.productService
-      .getCategoriesForAdmin()
+    const input = new GetCategoriesForAdminQuery();
+    input.parentId = this.parentId == '' ? undefined : this.parentId;
+    input.filter = this.form.get('filter')?.value;
+    input.pageNumber = this.page;
+    input.pageSize = this.perPage;
+    input.sortBy = ev ? ev.field : '';
+    input.sortDirection = ev ? ev.direction : '';
+    this.listSubscription$ = this.productServiceProxy
+      .getCategoriesForAdmin(input)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.list = response.data ?? ([] as any);
+        this.list = response.data?.items ?? [];
+        this.totalCount = response.data?.totalCount ?? 0;
       });
   }
 
-  save() {
-    // this.isSaving = true;
-    // this.dataService
-    //   .post<{ categories: ProductCategory[] }, null>(Apis.reorderProductCategories, { categories: this.list })
-    //   .pipe(finalize(() => (this.isSaving = false)))
-    //   .subscribe((response) => {
-    //     this.notify.success(this.l('SaveSuccessFully'));
-    //     this.getList();
-    //   });
+  reload(setFirstPage = true) {
+    if (setFirstPage) {
+      this.page = 1;
+    }
+    this.onPageChange();
+  }
+  resetFilter() {
+    this.showFilter = false;
+    this.form.patchValue({ filter: '' });
+    this.reload();
+  }
+
+  onPageChange(ev?: PageEvent) {
+    this.getList();
+    this.router.navigate(['/dashboard/products/categories'], {
+      queryParams: {
+        page: this.page,
+        parentId: this.parentId,
+      },
+    });
+  }
+
+  openCreateOrEditDialog(item?: PagedProductCategoryDto) {
+    this.matDialog
+      .open(CreateOrEditProductCategoryComponent, {
+        data: {
+          user: item,
+        },
+        width: '768px',
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.reload();
+        }
+      });
+  }
+
+  remove(item: PagedProductCategoryDto) {
+    this.confirmMessage(`${this.l('Delete')}:${item?.title}`, this.l('AreUseSureForDelete')).then((result) => {
+      if (result.isConfirmed) {
+        this.showMainLoading();
+        // this.productServiceProxy
+        //   .deleteCategory(item.id)
+        //   .pipe(finalize(() => this.hideMainLoading()))
+        //   .subscribe((response) => {
+        //     if (response.success) {
+        //       this.notify.success(this.l('DeletedSuccessfully'));
+        //       this.reload();
+        //     }
+        //   });
+      }
+    });
+  }
+
+  viewSubCategories(item: PagedProductCategoryDto) {
+    this.parentId = item.id!;
+    this.router.navigate(['/dashboard/products/categories'], {
+      queryParams: {
+        page: this.page,
+        parentId: this.parentId,
+      },
+    });
   }
 }

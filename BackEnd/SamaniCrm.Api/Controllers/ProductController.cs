@@ -8,6 +8,7 @@ using SamaniCrm.Application.Product.Dtos;
 using SamaniCrm.Application.Product.Queries;
 using SamaniCrm.Core.Permissions;
 using SamaniCrm.Host.Models;
+using System.Linq.Dynamic.Core;
 
 namespace SamaniCrm.Api.Controllers
 {
@@ -20,13 +21,13 @@ namespace SamaniCrm.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("GetCategoriesForAdmin")]
-        [Permission(AppPermissions.Products_Category_List)]
-        [ProducesResponseType(typeof(ApiResponse<List<ProductCategoryDto>>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetCategoriesForAdmin(CancellationToken cancellationToken)
+        [HttpPost("GetCategoriesForAdmin")]
+        // [Permission(AppPermissions.Products_Category_List)]
+        [ProducesResponseType(typeof(ApiResponse<PaginatedResult<PagedProductCategoryDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetCategoriesForAdmin([FromBody] GetCategoriesForAdminQuery request, CancellationToken cancellationToken)
         {
-            List<ProductCategoryDto> result = await _mediator.Send(new GetCategoriesForAdminQuery(), cancellationToken);
-            return ApiOk<List<ProductCategoryDto>>(result);
+            PaginatedResult<PagedProductCategoryDto> result = await _mediator.Send(request, cancellationToken);
+            return ApiOk(result);
         }
     }
 }

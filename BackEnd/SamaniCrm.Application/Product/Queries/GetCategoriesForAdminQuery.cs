@@ -4,14 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
+using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Product.Dtos;
 using SamaniCrm.Application.Product.Interfaces;
 
 namespace SamaniCrm.Application.Product.Queries
 {
-    public record GetCategoriesForAdminQuery():IRequest<List<ProductCategoryDto>>;
+    public class GetCategoriesForAdminQuery : PaginationRequest, IRequest<PaginatedResult<PagedProductCategoryDto>>
+    {
+        public Guid? ParentId { get; set; }
+        public string? Filter { get; set; }
+    }
 
-    public class GetCategoriesForAdminQueryHandler : IRequestHandler<GetCategoriesForAdminQuery, List<ProductCategoryDto>>
+
+    public class GetCategoriesForAdminQueryHandler : IRequestHandler<GetCategoriesForAdminQuery, PaginatedResult<PagedProductCategoryDto>>
     {
         private readonly IProductCategoryService _productCategoryService;
 
@@ -20,9 +26,9 @@ namespace SamaniCrm.Application.Product.Queries
             _productCategoryService = productCategoryService;
         }
 
-        public Task<List<ProductCategoryDto>> Handle(GetCategoriesForAdminQuery request, CancellationToken cancellationToken)
+        public Task<PaginatedResult<PagedProductCategoryDto>> Handle(GetCategoriesForAdminQuery request, CancellationToken cancellationToken)
         {
-           return _productCategoryService.GetCategoryTree(cancellationToken);
+            return _productCategoryService.GetPagedCategories(request, cancellationToken);
         }
     }
 }

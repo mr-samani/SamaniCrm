@@ -37,6 +37,7 @@ model/delete-menu-command.ts
 model/delete-page-command.ts
 model/edit-role-permissions-command.ts
 model/edit-user-command.ts
+model/get-categories-for-admin-query.ts
 model/get-filtered-pages-query.ts
 model/get-user-query.ts
 model/guid-api-response.ts
@@ -68,11 +69,11 @@ model/page-for-edit-dto.ts
 model/page-meta-data-dto.ts
 model/page-status-enum.ts
 model/page-type-enum.ts
+model/paged-product-category-dto-paginated-result-api-response.ts
+model/paged-product-category-dto-paginated-result.ts
+model/paged-product-category-dto.ts
 model/password-complexity-dto-api-response.ts
 model/password-complexity-dto.ts
-model/product-category-dto-list-api-response.ts
-model/product-category-dto.ts
-model/product-category-translation-dto.ts
 model/refresh-token-command.ts
 model/reorder-item.ts
 model/reorder-menu-command.ts
