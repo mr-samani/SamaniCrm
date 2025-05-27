@@ -22,6 +22,7 @@ index.ts
 model/active-or-deactive-language-command.ts
 model/api-error.ts
 model/boolean-api-response.ts
+model/breadcrumb-result.ts
 model/cache-entry-dto-list-api-response.ts
 model/cache-entry-dto.ts
 model/captcha-dto.ts
@@ -69,8 +70,8 @@ model/page-for-edit-dto.ts
 model/page-meta-data-dto.ts
 model/page-status-enum.ts
 model/page-type-enum.ts
-model/paged-product-category-dto-paginated-result-api-response.ts
-model/paged-product-category-dto-paginated-result.ts
+model/paged-product-categories-dto-api-response.ts
+model/paged-product-categories-dto.ts
 model/paged-product-category-dto.ts
 model/password-complexity-dto-api-response.ts
 model/password-complexity-dto.ts

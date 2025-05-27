@@ -7,6 +7,7 @@ export class BreadcrumbService {
   list: {
     name: string;
     url: string;
+    queryParams?: { [key: string]: string };
   }[] = [];
   constructor() {}
 }

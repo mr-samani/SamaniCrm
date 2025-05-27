@@ -22,11 +22,11 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("GetCategoriesForAdmin")]
-        // [Permission(AppPermissions.Products_Category_List)]
-        [ProducesResponseType(typeof(ApiResponse<PaginatedResult<PagedProductCategoryDto>>), StatusCodes.Status200OK)]
+        [Permission(AppPermissions.Products_Category_List)]
+        [ProducesResponseType(typeof(ApiResponse<PagedProductCategoriesDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCategoriesForAdmin([FromBody] GetCategoriesForAdminQuery request, CancellationToken cancellationToken)
         {
-            PaginatedResult<PagedProductCategoryDto> result = await _mediator.Send(request, cancellationToken);
+            PagedProductCategoriesDto result = await _mediator.Send(request, cancellationToken);
             return ApiOk(result);
         }
     }

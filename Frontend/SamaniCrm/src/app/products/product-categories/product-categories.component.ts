@@ -47,10 +47,7 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
     private matDialog: MatDialog,
   ) {
     super(injector);
-    this.breadcrumb.list = [
-      { name: this.l('Settings'), url: '/dashboard/setting' },
-      { name: this.l('Users'), url: '/dashboard/users' },
-    ];
+    this.breadcrumb.list = [{ name: this.l('Categories'), url: '/dashboard/products/categories' }];
     this.form = this.fb.group({
       filter: [''],
     });
@@ -89,6 +86,20 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
       .subscribe((response) => {
         this.list = response.data?.items ?? [];
         this.totalCount = response.data?.totalCount ?? 0;
+        this.breadcrumb.list = [{ name: this.l('Categories'), url: '/dashboard/products/categories' }];
+        if (response.data?.breadcrumbs) {
+          for (let b of response.data.breadcrumbs) {
+            if (b.id != this.parentId)
+              this.breadcrumb.list.push({
+                name: b.title!,
+                url: '/dashboard/products/categories',
+                queryParams: {
+                  parentId: b.id!,
+                  page: 1 + '',
+                },
+              });
+          }
+        }
       });
   }
 

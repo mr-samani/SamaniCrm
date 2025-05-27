@@ -4,26 +4,16 @@ import { FormArray, FormGroup, ReactiveFormsModule, Validators } from '@angular/
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { TranslateModule } from '@ngx-translate/core';
-import { Apis } from '@shared/apis';
-import { TreeCategoryComponent } from '../tree-category/tree-category.component';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
-import { GetCategoryForEditDto, ProductCategoryTranslation } from '@app/products/models/get-product-category-for-edit';
+import { ProductCategoryTranslation } from '@app/products/models/get-product-category-for-edit';
 import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
-import { finalize } from 'rxjs';
-import { AppConst } from '@shared/app-const';
 
 @Component({
   selector: 'create-or-edit-categorycreate-or-edit',
   templateUrl: './create-or-edit.component.html',
   styleUrls: ['./create-or-edit.component.scss'],
   standalone: true,
-  imports: [
-    CommonModule, 
-    MaterialCommonModule,
-    TranslateModule,
-    ReactiveFormsModule,
-    TabGroupModule,
-  ],
+  imports: [CommonModule, MaterialCommonModule, TranslateModule, ReactiveFormsModule, TabGroupModule],
 })
 export class CreateOrEditProductCategoryComponent extends AppComponentBase implements OnInit {
   form: FormGroup;

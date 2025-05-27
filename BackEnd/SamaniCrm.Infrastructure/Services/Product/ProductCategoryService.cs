@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Interfaces;
@@ -12,9 +13,9 @@ using SamaniCrm.Infrastructure.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Threading.Tasks;
-using System.Linq.Dynamic.Core;
 
 
 namespace SamaniCrm.Infrastructure.Services.Product;
@@ -69,7 +70,7 @@ public class ProductCategoryService : IProductCategoryService
         };
     }
 
-    public async Task<PaginatedResult<PagedProductCategoryDto>> GetPagedCategories(GetCategoriesForAdminQuery request, CancellationToken cancellationToken)
+    public async Task<PagedProductCategoriesDto> GetPagedCategories(GetCategoriesForAdminQuery request, CancellationToken cancellationToken)
     {
 
         var currentLanguage = L.CurrentLanguage;
@@ -121,13 +122,72 @@ public class ProductCategoryService : IProductCategoryService
        .ToListAsync(cancellationToken);
 
 
-        return new PaginatedResult<PagedProductCategoryDto>
+        //Dictionary<Guid, string> breadcrumbs = new();
+        //if (request.ParentId != null)
+        //{
+        //    var id = request.ParentId;
+        //    while (id != null)
+        //    {
+        //        var found = await _context.ProductCategoryTranslations
+        //            .Include(t => t.ProductCategory)
+        //            .Select(s => new
+        //            {
+        //                Id = s.CategoryId,
+        //                Title = s.Title,
+        //                Culture = s.Culture,
+        //                ParentId = s.ProductCategory.ParentId
+        //            })
+        //            .Where(x => x.Id == id && x.Culture == currentLanguage)
+        //            .FirstOrDefaultAsync(cancellationToken);
+        //        if (found != null)
+        //        {
+        //            breadcrumbs.Add(found.Id, found.Title);
+        //            id = found.ParentId;
+        //        }
+        //        else
+        //        {
+        //            break;
+        //        }
+        //    }
+        //}
+
+
+        var sql = @"
+                  WITH CategoryCTE AS (
+                        SELECT pc.Id, pc.ParentId
+                        FROM product.ProductCategories pc
+                        WHERE pc.Id = @parentId
+
+                        UNION ALL
+
+                        SELECT parent.Id, parent.ParentId
+                        FROM product.ProductCategories parent
+                        INNER JOIN CategoryCTE cte ON parent.Id = cte.ParentId
+                    )
+                    SELECT cte.Id, ISNULL(t.Title, '') AS Title
+                    FROM CategoryCTE cte
+                    LEFT JOIN product.ProductCategoryTranslations t 
+                        ON t.CategoryId = cte.Id AND t.Culture = @culture;
+            ";
+
+        var breadcrumbs = await _context.Database
+            .SqlQueryRaw<BreadcrumbResult>(sql,
+                new SqlParameter("@parentId", request.ParentId ?? (object)DBNull.Value),
+                new SqlParameter("@culture", currentLanguage))
+            .ToListAsync(cancellationToken);
+        //.ToDictionaryAsync(d => d.Id, d => d.Title, cancellationToken);
+
+
+        return new PagedProductCategoriesDto()
         {
             Items = items,
             TotalCount = total,
             PageNumber = request.PageNumber,
-            PageSize = request.PageSize
+            PageSize = request.PageSize,
+            Breadcrumbs = breadcrumbs
         };
     }
+
+
 }
 

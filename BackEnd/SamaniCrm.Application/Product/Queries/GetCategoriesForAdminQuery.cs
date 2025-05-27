@@ -10,14 +10,25 @@ using SamaniCrm.Application.Product.Interfaces;
 
 namespace SamaniCrm.Application.Product.Queries
 {
-    public class GetCategoriesForAdminQuery : PaginationRequest, IRequest<PaginatedResult<PagedProductCategoryDto>>
+    public class GetCategoriesForAdminQuery : PaginationRequest, IRequest<PagedProductCategoriesDto>
     {
         public Guid? ParentId { get; set; }
         public string? Filter { get; set; }
     }
 
+    public class PagedProductCategoriesDto : PaginatedResult<PagedProductCategoryDto>
+    {
+        public List<BreadcrumbResult> Breadcrumbs { get; set; } = default!;
+    }
 
-    public class GetCategoriesForAdminQueryHandler : IRequestHandler<GetCategoriesForAdminQuery, PaginatedResult<PagedProductCategoryDto>>
+    public class BreadcrumbResult
+    {
+        public Guid Id { get; set; }
+        public string Title { get; set; } = default!;
+    }
+
+
+    public class GetCategoriesForAdminQueryHandler : IRequestHandler<GetCategoriesForAdminQuery, PagedProductCategoriesDto>
     {
         private readonly IProductCategoryService _productCategoryService;
 
@@ -26,7 +37,7 @@ namespace SamaniCrm.Application.Product.Queries
             _productCategoryService = productCategoryService;
         }
 
-        public Task<PaginatedResult<PagedProductCategoryDto>> Handle(GetCategoriesForAdminQuery request, CancellationToken cancellationToken)
+        public Task<PagedProductCategoriesDto> Handle(GetCategoriesForAdminQuery request, CancellationToken cancellationToken)
         {
             return _productCategoryService.GetPagedCategories(request, cancellationToken);
         }
