@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamaniCrm.Application.Common.DTOs;
-using SamaniCrm.Application.Product.Dtos;
-using SamaniCrm.Application.Product.Queries;
+using SamaniCrm.Application.ProductManagerManager.Dtos;
+using SamaniCrm.Application.ProductManagerManager.Queries;
 
-namespace SamaniCrm.Application.Product.Interfaces
+namespace SamaniCrm.Application.ProductManagerManager.Interfaces
 {
     public interface IProductCategoryService
     {

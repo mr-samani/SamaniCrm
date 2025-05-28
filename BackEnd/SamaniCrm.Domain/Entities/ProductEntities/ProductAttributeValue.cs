@@ -42,6 +42,15 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public bool IsDeleted { get; set; }
         public DateTime? DeletedTime { get; set; }
         public string? DeletedBy { get; set; }
+
+        public void SetValue(string value)
+        {
+            // فرض بر این است که AttributeValue یک سازنده public دارد
+            // و پراپرتی Value فقط getter دارد
+            var field = typeof(AttributeValue).GetField("<Value>k__BackingField", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            if (field != null)
+                field.SetValue(this.Value, value);
+        }
     }
 
 }

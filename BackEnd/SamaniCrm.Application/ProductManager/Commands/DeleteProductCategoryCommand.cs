@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamaniCrm.Application.Product.Commands
+namespace SamaniCrm.Application.ProductManagerManager.Commands
 {
     public record DeleteProductCategoryCommand(Guid Id) :IRequest<bool>;
 

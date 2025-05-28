@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using SamaniCrm.Application.Common.DTOs;
-using SamaniCrm.Application.Product.Dtos;
-using SamaniCrm.Application.Product.Interfaces;
+using SamaniCrm.Application.ProductManagerManager.Dtos;
+using SamaniCrm.Application.ProductManagerManager.Interfaces;
 
-namespace SamaniCrm.Application.Product.Queries
+namespace SamaniCrm.Application.ProductManagerManager.Queries
 {
     public class GetCategoriesForAdminQuery : PaginationRequest, IRequest<PagedProductCategoriesDto>
     {

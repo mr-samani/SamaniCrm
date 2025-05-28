@@ -22,7 +22,7 @@ using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.Behaviors;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.InitialApp.Queries;
-using SamaniCrm.Application.Product.Interfaces;
+using SamaniCrm.Application.ProductManagerManager.Interfaces;
 using SamaniCrm.Application.Queries.Role;
 using SamaniCrm.Application.User.Queries;
 using SamaniCrm.Core.Shared.Interfaces;

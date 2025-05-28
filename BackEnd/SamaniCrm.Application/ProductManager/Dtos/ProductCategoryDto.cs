@@ -8,7 +8,7 @@ using SamaniCrm.Application.DTOs;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Entities.ProductEntities;
 
-namespace SamaniCrm.Application.Product.Dtos
+namespace SamaniCrm.Application.ProductManagerManager.Dtos
 {
     public class ProductCategoryDto
     {

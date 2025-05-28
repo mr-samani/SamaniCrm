@@ -66,6 +66,24 @@ namespace SamaniCrm.Core.Permissions
         public const string Products_Category_Delete = "Administrator.Products.Category.Delete";
 
 
+        public const string Products_List = "Administrator.Products.List";
+        public const string Products_Create = "Administrator.Products.Create";
+        public const string Products_Edit = "Administrator.Products.Edit";
+        public const string Products_Delete = "Administrator.Products.Delete";
+
+
+        public const string Products_Attribute_List = "Administrator.Products.Attribute.List";
+        public const string Products_Attribute_Create = "Administrator.Products.Attribute.Create";
+        public const string Products_Attribute_Edit = "Administrator.Products.Attribute.Edit";
+        public const string Products_Attribute_Delete = "Administrator.Products.Attribute.Delete";
+
+        public const string Products_Type_List = "Administrator.Products.Type.List";
+        public const string Products_Type_Create = "Administrator.Products.Type.Create";
+        public const string Products_Type_Edit = "Administrator.Products.Type.Edit";
+        public const string Products_Type_Delete = "Administrator.Products.Type.Delete";
+
+     
+
 
 
     }

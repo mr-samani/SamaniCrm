@@ -5,9 +5,9 @@ using SamaniCrm.Api.Attributes;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Menu.Commands;
-using SamaniCrm.Application.Product.Commands;
-using SamaniCrm.Application.Product.Dtos;
-using SamaniCrm.Application.Product.Queries;
+using SamaniCrm.Application.ProductManagerManager.Commands;
+using SamaniCrm.Application.ProductManagerManager.Dtos;
+using SamaniCrm.Application.ProductManagerManager.Queries;
 using SamaniCrm.Core.Permissions;
 using SamaniCrm.Host.Models;
 using System.Linq.Dynamic.Core;
@@ -54,6 +54,111 @@ namespace SamaniCrm.Api.Controllers
         [Permission(AppPermissions.Products_Category_Delete)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteProductCategory(DeleteProductCategoryCommand request, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(request, cancellationToken);
+            return ApiOk<bool>(result);
+        }
+
+        [HttpPost("GetProductAttributes")]
+        [Permission(AppPermissions.Products_Attribute_List)]
+        [ProducesResponseType(typeof(ApiResponse<List<ProductAttributeDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetProductAttributes([FromBody] GetProductAttributesQuery request, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(request, cancellationToken);
+            return ApiOk(result);
+        }
+
+        [HttpGet("GetProductAttributeForEdit")]
+        [Permission(AppPermissions.Products_Attribute_Edit)]
+        [ProducesResponseType(typeof(ApiResponse<ProductAttributeDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetProductAttributeForEdit(Guid id, CancellationToken cancellationToken)
+        {
+            return ApiOk(await _mediator.Send(new GetProductAttributeForEditQuery(id), cancellationToken));
+        }
+
+        [HttpPost("CreateOrEditProductAttribute")]
+        [Permission(AppPermissions.Products_Attribute_Edit)]
+        [Permission(AppPermissions.Products_Attribute_Create)]
+        [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> CreateOrEditProductAttribute(CreateOrUpdateProductAttributeCommand request, CancellationToken cancellationToken)
+        {
+            return ApiOk(await _mediator.Send(request, cancellationToken));
+        }
+
+        [HttpPost("DeleteProductAttribute")]
+        [Permission(AppPermissions.Products_Attribute_Delete)]
+        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeleteProductAttribute(DeleteProductAttributeCommand request, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(request, cancellationToken);
+            return ApiOk<bool>(result);
+        }
+
+        [HttpPost("GetProductTypes")]
+        [Permission(AppPermissions.Products_Type_List)]
+        [ProducesResponseType(typeof(ApiResponse<List<ProductTypeDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetProductTypes([FromBody] GetProductTypesQuery request, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(request, cancellationToken);
+            return ApiOk(result);
+        }
+
+        [HttpGet("GetProductTypeForEdit")]
+        [Permission(AppPermissions.Products_Type_Edit)]
+        [ProducesResponseType(typeof(ApiResponse<ProductTypeDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetProductTypeForEdit(Guid id, CancellationToken cancellationToken)
+        {
+            return ApiOk(await _mediator.Send(new GetProductTypeForEditQuery(id), cancellationToken));
+        }
+
+        [HttpPost("CreateOrEditProductType")]
+        [Permission(AppPermissions.Products_Type_Edit)]
+        [Permission(AppPermissions.Products_Type_Create)]
+        [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> CreateOrEditProductType(CreateOrUpdateProductTypeCommand request, CancellationToken cancellationToken)
+        {
+            return ApiOk(await _mediator.Send(request, cancellationToken));
+        }
+
+        [HttpPost("DeleteProductType")]
+        [Permission(AppPermissions.Products_Type_Delete)]
+        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeleteProductType(DeleteProductTypeCommand request, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(request, cancellationToken);
+            return ApiOk<bool>(result);
+        }
+
+        [HttpPost("GetProducts")]
+        [Permission(AppPermissions.Products_List)]
+        [ProducesResponseType(typeof(ApiResponse<List<ProductDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetProducts([FromBody] GetProductsQuery request, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(request, cancellationToken);
+            return ApiOk(result);
+        }
+
+        [HttpGet("GetProductForEdit")]
+        [Permission(AppPermissions.Products_Edit)]
+        [ProducesResponseType(typeof(ApiResponse<ProductDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetProductForEdit(Guid id, CancellationToken cancellationToken)
+        {
+            return ApiOk(await _mediator.Send(new GetProductForEditQuery(id), cancellationToken));
+        }
+
+        [HttpPost("CreateOrEditProduct")]
+        [Permission(AppPermissions.Products_Edit)]
+        [Permission(AppPermissions.Products_Create)]
+        [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> CreateOrEditProduct(CreateOrUpdateProductCommand request, CancellationToken cancellationToken)
+        {
+            return ApiOk(await _mediator.Send(request, cancellationToken));
+        }
+
+        [HttpPost("DeleteProduct")]
+        [Permission(AppPermissions.Products_Delete)]
+        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeleteProduct(DeleteProductCommand request, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(request, cancellationToken);
             return ApiOk<bool>(result);

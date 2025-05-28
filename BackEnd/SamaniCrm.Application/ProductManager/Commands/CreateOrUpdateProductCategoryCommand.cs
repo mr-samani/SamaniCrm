@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
-using SamaniCrm.Application.Product.Dtos;
+using SamaniCrm.Application.ProductManagerManager.Dtos;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Entities.ProductEntities;
 using System;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamaniCrm.Application.Product.Commands
+namespace SamaniCrm.Application.ProductManagerManager.Commands
 {
     public class CreateOrUpdateProductCategoryCommand:ProductCategoryDto,IRequest<Guid>
     {

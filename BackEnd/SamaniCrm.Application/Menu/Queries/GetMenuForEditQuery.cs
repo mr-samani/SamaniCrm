@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
-using SamaniCrm.Application.Product.Dtos;
+using SamaniCrm.Application.ProductManagerManager.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;

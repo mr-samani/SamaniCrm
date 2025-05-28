@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamaniCrm.Application.Product.Dtos
+namespace SamaniCrm.Application.ProductManagerManager.Dtos
 {
     public class PagedProductCategoryDto
     {

@@ -1,0 +1,17 @@
+using System;
+using System.Collections.Generic;
+
+namespace SamaniCrm.Application.ProductManagerManager.Dtos
+{
+    public class ProductTypeDto
+    {
+        public Guid? Id { get; set; }
+        public Guid TenantId { get; set; }
+        public List<ProductAttributeDto>? Attributes { get; set; }
+        public string culture { get; set; }
+        public string Name { get; set; }
+        public string? Description { get; set; }
+    }
+
+
+}
