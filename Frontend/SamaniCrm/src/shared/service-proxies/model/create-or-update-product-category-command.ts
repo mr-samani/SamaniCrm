@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ProductCategoryDto } from './product-category-dto';
 import { ProductCategoryTranslationDto } from './product-category-translation-dto';
 
 
@@ -21,8 +22,8 @@ import { ProductCategoryTranslationDto } from './product-category-translation-dt
  */
 /* Created with custom template */
 
-/** Interface for ProductCategoryDto */
-export interface IProductCategoryDto {
+/** Interface for CreateOrUpdateProductCategoryCommand */
+export interface ICreateOrUpdateProductCategoryCommand {
   id?: string;
   title?: string;
   description?: string;
@@ -36,8 +37,8 @@ export interface IProductCategoryDto {
   translations?: Array<ProductCategoryTranslationDto>;
 }
 
-/** Class for ProductCategoryDto */
-export class ProductCategoryDto implements IProductCategoryDto {
+/** Class for CreateOrUpdateProductCategoryCommand */
+export class CreateOrUpdateProductCategoryCommand implements ICreateOrUpdateProductCategoryCommand {
   id?: string;
   title?: string;
   description?: string;
@@ -50,7 +51,7 @@ export class ProductCategoryDto implements IProductCategoryDto {
   children?: Array<ProductCategoryDto>;
   translations?: Array<ProductCategoryTranslationDto>;
 
-  constructor(data?: IProductCategoryDto) {
+  constructor(data?: ICreateOrUpdateProductCategoryCommand) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -83,8 +84,8 @@ init(data?: any) {
   }
 }
 
-  static fromJS(data: any): ProductCategoryDto {
-    const instance = new ProductCategoryDto();
+  static fromJS(data: any): CreateOrUpdateProductCategoryCommand {
+    const instance = new CreateOrUpdateProductCategoryCommand();
     instance.init(data);
     return instance;
   }

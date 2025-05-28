@@ -11,9 +11,11 @@ import { FilterComponent } from '@shared/components/filter/filter.component';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { ProductCategoriesComponent } from './product-categories/product-categories.component';
 import { ProductServiceProxy } from '@shared/service-proxies/api/product.service';
+import { CreateOrEditProductCategoryComponent } from './product-categories/create-or-edit/create-or-edit.component';
+import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 
 @NgModule({
-  declarations: [ProductComponent, ProductCategoriesComponent],
+  declarations: [ProductComponent, ProductCategoriesComponent, CreateOrEditProductCategoryComponent],
   imports: [
     CommonModule,
     ProductRoutingModule,
@@ -24,6 +26,7 @@ import { ProductServiceProxy } from '@shared/service-proxies/api/product.service
     TableViewComponent,
     FilterComponent,
     MaterialCommonModule,
+    TabGroupModule,
   ],
   providers: [ProductServiceProxy],
 })

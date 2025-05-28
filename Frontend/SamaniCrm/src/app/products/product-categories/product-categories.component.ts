@@ -5,7 +5,11 @@ import { ProductServiceProxy } from '@shared/service-proxies/api/product.service
 import { MatDialog } from '@angular/material/dialog';
 import { FormGroup } from '@angular/forms';
 import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
-import { GetCategoriesForAdminQuery, PagedProductCategoryDto } from '@shared/service-proxies';
+import {
+  DeleteProductCategoryCommand,
+  GetCategoriesForAdminQuery,
+  PagedProductCategoryDto,
+} from '@shared/service-proxies';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { CreateOrEditProductCategoryComponent } from './create-or-edit/create-or-edit.component';
 
@@ -129,7 +133,7 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
     this.matDialog
       .open(CreateOrEditProductCategoryComponent, {
         data: {
-          user: item,
+          id: item?.id,
         },
         width: '768px',
       })
@@ -145,15 +149,15 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
     this.confirmMessage(`${this.l('Delete')}:${item?.title}`, this.l('AreUseSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
-        // this.productServiceProxy
-        //   .deleteCategory(item.id)
-        //   .pipe(finalize(() => this.hideMainLoading()))
-        //   .subscribe((response) => {
-        //     if (response.success) {
-        //       this.notify.success(this.l('DeletedSuccessfully'));
-        //       this.reload();
-        //     }
-        //   });
+        this.productServiceProxy
+          .deleteProductCategory(new DeleteProductCategoryCommand({ id: item.id }))
+          .pipe(finalize(() => this.hideMainLoading()))
+          .subscribe((response) => {
+            if (response.success) {
+              this.notify.success(this.l('DeletedSuccessfully'));
+              this.reload();
+            }
+          });
       }
     });
   }

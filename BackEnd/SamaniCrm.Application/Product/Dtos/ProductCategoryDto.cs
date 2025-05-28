@@ -20,7 +20,7 @@ namespace SamaniCrm.Application.Product.Dtos
         public int OrderIndex { get; set; }
 
         public bool IsActive { get; set; } = true;
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
 
         public Guid? ParentId { get; set; }
@@ -36,7 +36,7 @@ namespace SamaniCrm.Application.Product.Dtos
         public Guid ProductCategoryId { get; set; }
         public required string Culture { get; set; }
         public string Title { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; } = string.Empty;
     }
 
 

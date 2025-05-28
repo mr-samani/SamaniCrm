@@ -1,4 +1,7 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Host.Models;
 using System.Net;
@@ -6,14 +9,9 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
-using FluentValidation.Validators;
 
 namespace SamaniCrm.Host.Middlewares;
 
-
-/// <summary>
-/// Catches exceptions and formats ApiResponse with errors, meta, and optional details in Development.
-/// </summary>
 public class ApiExceptionHandlingMiddleware
 {
     private readonly RequestDelegate _next;
@@ -35,13 +33,13 @@ public class ApiExceptionHandlingMiddleware
         {
             await _next(context);
         }
-        catch (FluentValidation.ValidationException vex)
+        catch (ValidationException ex)
         {
-            await HandleFluentValidationExceptionAsync(context, vex);
+            await HandleValidationExceptionAsync(context, ex);
         }
         catch (CustomValidationException vex)
         {
-            await HandleValidationExceptionAsync(context, vex);
+            await HandleCustomValidationExceptionAsync(context, vex);
         }
         catch (BaseAppException appEx)
         {
@@ -52,71 +50,53 @@ public class ApiExceptionHandlingMiddleware
             await HandleUnknownExceptionAsync(context, ex);
         }
     }
-    private async Task HandleValidationExceptionAsync(HttpContext context, CustomValidationException vex)
+
+    private async Task HandleValidationExceptionAsync(HttpContext context, ValidationException ex)
     {
-        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-        context.Response.ContentType = "application/json; charset=utf-8";
-
-        var errors = vex.Errors.Select(e => new ApiError
-        {
-            Field = e.Key,
-            Message = e.Value.Length > 0 ? e.Value[0] : ""
-        }).ToList();
-
-        var response = ApiResponse<object>.Fail(
-            errors: errors,
-            meta: null
-        );
-
-        await WriteResponseAsync(context, response);
-    }
-    private async Task HandleFluentValidationExceptionAsync(HttpContext context, FluentValidation.ValidationException vex)
-    {
-        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-        context.Response.ContentType = "application/json; charset=utf-8";
-
-        var errors = vex.Errors.Select(e => new ApiError
+        var errors = ex.Errors.Select(e => new ApiError
         {
             Field = e.PropertyName,
             Message = e.ErrorMessage
         }).ToList();
 
-        var response = ApiResponse<object>.Fail(
-            errors: errors,
-            meta: null
-        );
-
-        await WriteResponseAsync(context, response);
+        await WriteResponseAsync(context, HttpStatusCode.BadRequest, ApiResponse<object>.Fail(errors));
     }
 
+    private async Task HandleCustomValidationExceptionAsync(HttpContext context, CustomValidationException vex)
+    {
+        var errors = vex.Errors.Select(e => new ApiError
+        {
+            Field = e.Key,
+            Message = e.Value.FirstOrDefault() ?? ""
+        }).ToList();
+
+        await WriteResponseAsync(context, HttpStatusCode.BadRequest, ApiResponse<object>.Fail(errors));
+    }
+
+    private async Task HandleKnownExceptionAsync(HttpContext context, HttpStatusCode statusCode, string message)
+    {
+        var error = new ApiError { Message = message };
+        await WriteResponseAsync(context, statusCode, ApiResponse<object>.Fail(new List<ApiError> { error }));
+    }
 
     private async Task HandleUnknownExceptionAsync(HttpContext context, Exception ex)
     {
         _logger.LogError(ex, "Unhandled exception");
-        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        context.Response.ContentType = "application/json; charset=utf-8";
 
-        var apiError = new ApiError
+        var error = new ApiError
         {
-            Message = "An unexpected error occurred."
+            Message = "An unexpected error occurred.",
+            Detail = _env.IsDevelopment() ? ex.ToString() : null
         };
 
-        // In Development mode, include exception details
-        if (_env.IsDevelopment())
-        {
-            apiError.Detail = ex.ToString();
-        }
-
-        var response = ApiResponse<object>.Fail(
-            errors: new List<ApiError> { apiError },
-            meta: null
-        );
-
-        await WriteResponseAsync(context, response);
+        await WriteResponseAsync(context, HttpStatusCode.InternalServerError, ApiResponse<object>.Fail(new List<ApiError> { error }));
     }
 
-    private async Task WriteResponseAsync<T>(HttpContext context, ApiResponse<T> response)
+    private async Task WriteResponseAsync<T>(HttpContext context, HttpStatusCode statusCode, ApiResponse<T> response)
     {
+        context.Response.StatusCode = (int)statusCode;
+        context.Response.ContentType = "application/json; charset=utf-8";
+
         var options = new JsonSerializerOptions
         {
             Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
@@ -124,23 +104,7 @@ public class ApiExceptionHandlingMiddleware
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 
-        var payload = JsonSerializer.Serialize(response, options);
-        await context.Response.WriteAsync(payload);
+        var json = JsonSerializer.Serialize(response, options);
+        await context.Response.WriteAsync(json);
     }
-
-    private async Task HandleKnownExceptionAsync(HttpContext context, HttpStatusCode statusCode, string message)
-    {
-        context.Response.StatusCode = (int)statusCode;
-        context.Response.ContentType = "application/json; charset=utf-8";
-
-        var response = ApiResponse<object>.Fail(
-            errors: new List<ApiError> { new ApiError { Message = message } },
-            meta: null
-        );
-
-        await WriteResponseAsync(context, response);
-    }
-
-
 }
-

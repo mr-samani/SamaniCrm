@@ -24,9 +24,9 @@ namespace SamaniCrm.Api.Controllers
         [HttpGet("GetAllMenus")]
         [Permission(AppPermissions.MenuManagement_List)]
         [ProducesResponseType(typeof(ApiResponse<List<MenuDTO>>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllMenus()
+        public async Task<IActionResult> GetAllMenus(CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(new GetAllMenuItemsQuery());
+            var result = await _mediator.Send(new GetAllMenuItemsQuery(), cancellationToken);
             return ApiOk<List<MenuDTO>>(result);
         }
 
@@ -34,9 +34,9 @@ namespace SamaniCrm.Api.Controllers
         [HttpGet("GetForEdit")]
         [Permission(AppPermissions.MenuManagement_List)]
         [ProducesResponseType(typeof(ApiResponse<MenuDTO>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetForEdit(Guid id)
+        public async Task<IActionResult> GetForEdit(Guid id, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(new GetMenuForEditQuery(id));
+            var result = await _mediator.Send(new GetMenuForEditQuery(id), cancellationToken);
             return ApiOk<MenuDTO>(result);
         }
 
@@ -45,36 +45,36 @@ namespace SamaniCrm.Api.Controllers
         [Permission(AppPermissions.MenuManagement_Create)]
         [Permission(AppPermissions.MenuManagement_Edit)]
         [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateOrUpdate(CreateOrEditMenuCommand request)
+        public async Task<IActionResult> CreateOrUpdate(CreateOrEditMenuCommand request, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(request);
+            var result = await _mediator.Send(request, cancellationToken);
             return ApiOk<Guid>(result);
         }
 
         [HttpPost("DeleteMenu")]
         [Permission(AppPermissions.MenuManagement_Delete)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> DeleteMenu(DeleteMenuCommand request)
+        public async Task<IActionResult> DeleteMenu(DeleteMenuCommand request, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(request);
+            var result = await _mediator.Send(request, cancellationToken);
             return ApiOk<bool>(result);
         }
 
         [HttpPost("ReOrderMenu")]
         [Permission(AppPermissions.MenuManagement_ReOrder)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> ReOrderMenu(ReorderMenuCommand request)
+        public async Task<IActionResult> ReOrderMenu(ReorderMenuCommand request, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(request);
+            var result = await _mediator.Send(request, cancellationToken);
             return ApiOk<bool>(result);
         }
 
         [HttpPost("ActiveOrDeactive")]
         [Permission(AppPermissions.MenuManagement_Edit)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> ActiveOrDeactive(ChangeActiveMenuCommand request)
+        public async Task<IActionResult> ActiveOrDeactive(ChangeActiveMenuCommand request, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(request);
+            var result = await _mediator.Send(request, cancellationToken);
             return ApiOk<bool>(result);
         }
 

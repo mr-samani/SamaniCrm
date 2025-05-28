@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Application.Product.Dtos;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.Menu.Queries
 {
@@ -29,15 +30,23 @@ namespace SamaniCrm.Application.Menu.Queries
             if (menu == null)
                 throw new NotFoundException("Menu not found.");
 
-            List<MenuTranslationsDTO> translations = await _dbContext.MenuTranslations
-                .Select(s => new MenuTranslationsDTO()
-                {
-                    Culture = s.Culture,
-                    Title = s.Title,
-                    MenuId = s.MenuId,
-                })
-                .Where(w=>w.MenuId == menu.Id)
-                .ToListAsync();
+
+            List<MenuTranslationsDTO> translations = await _dbContext.Languages
+              .GroupJoin(_dbContext.MenuTranslations.Where(w => w.MenuId == request.Id),
+                lang => lang.Culture,
+                translation => translation.Culture,
+                (lang, trans) => new { lang, trans }
+              )
+              .SelectMany(
+              x => x.trans.DefaultIfEmpty(),
+              (x, trans) => new MenuTranslationsDTO()
+              {
+                  Culture = x.lang.Culture,
+                  MenuId = menu.Id,
+                  Title = trans != null ? trans.Title : "",
+
+              }
+              ).ToListAsync(cancellationToken);
 
 
             return new MenuDTO

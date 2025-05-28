@@ -31,11 +31,13 @@ model/create-or-edit-language-command.ts
 model/create-or-edit-localize-key-command.ts
 model/create-or-edit-menu-command.ts
 model/create-or-edit-page-meta-data-command.ts
+model/create-or-update-product-category-command.ts
 model/create-user-command.ts
 model/delete-language-command.ts
 model/delete-localize-key-command.ts
 model/delete-menu-command.ts
 model/delete-page-command.ts
+model/delete-product-category-command.ts
 model/edit-role-permissions-command.ts
 model/edit-user-command.ts
 model/get-categories-for-admin-query.ts
@@ -75,6 +77,9 @@ model/paged-product-categories-dto.ts
 model/paged-product-category-dto.ts
 model/password-complexity-dto-api-response.ts
 model/password-complexity-dto.ts
+model/product-category-dto-api-response.ts
+model/product-category-dto.ts
+model/product-category-translation-dto.ts
 model/refresh-token-command.ts
 model/reorder-item.ts
 model/reorder-menu-command.ts
