@@ -90,6 +90,8 @@ namespace SamaniCrm.Infrastructure
         public string? UserId => "MigrationUser"; // یا null هم میتونی بدی
 
         public string lang => "fa-IR";
+
+        string ICurrentUserService.lang { get => lang; set => throw new NotImplementedException(); }
     }
 
 }

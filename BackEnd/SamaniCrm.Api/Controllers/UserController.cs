@@ -110,6 +110,12 @@ namespace SamaniCrm.Api.Controllers
 
 
 
-
+        [HttpGet("updateCurrentuserLanguage")]
+        [ProducesDefaultResponseType(typeof(ApiResponse<bool>))]
+        public async Task<IActionResult> updateCurrentuserLanguage(string culture)
+        {
+            var result = await _mediator.Send(new ChangeUserLanguageCommand(culture));
+            return ApiOk(result);
+        }
     }
 }

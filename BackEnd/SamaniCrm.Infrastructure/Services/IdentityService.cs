@@ -1,6 +1,6 @@
-﻿using System.Threading;
-using Azure.Core;
+﻿using Azure.Core;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.DTOs;
@@ -8,12 +8,13 @@ using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Queries.User;
+using SamaniCrm.Application.Role.Commands;
+using SamaniCrm.Application.User.Commands;
+using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.Identity;
 using System.Linq.Dynamic.Core;
-using SamaniCrm.Application.User.Commands;
-using SamaniCrm.Application.Role.Commands;
 using System.Security.Claims;
-using SamaniCrm.Domain.Entities;
+using System.Threading;
 
 
 namespace SamaniCrm.Infrastructure.Services;
@@ -23,13 +24,16 @@ public class IdentityService : IIdentityService
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly ApplicationDbContext _applicationDbContext;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, ApplicationDbContext applicationDbContext)
+
+    public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, ApplicationDbContext applicationDbContext, IHttpContextAccessor httpContextAccessor)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
         _applicationDbContext = applicationDbContext;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<bool> AssignUserToRole(string userName, IList<string> roles)
@@ -466,5 +470,17 @@ public class IdentityService : IIdentityService
         // _logger.LogInformation("Added permissions: {Permissions}", string.Join(", ", permissionsToAdd));
         // TODO:update role cache for users where has this roles
         return true;
+    }
+
+    public async Task<bool> updateUserLanguage(string culture, Guid userId, CancellationToken cancellationToken)
+    {
+        var found = await _applicationDbContext.Users.Where(x => x.Id == userId).FirstOrDefaultAsync(cancellationToken);
+        if (found != null)
+        {
+            found.Lang = culture;
+            var result = await _applicationDbContext.SaveChangesAsync(cancellationToken);
+            return result > 0;
+        }
+        return false;
     }
 }

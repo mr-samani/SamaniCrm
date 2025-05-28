@@ -23,7 +23,8 @@ namespace SamaniCrm.Application.User.Queries
                 .WithMessage("PageSize must be between 1 and 100.");
 
             RuleFor(x => x.SortDirection)
-                .Must(dir => dir!.ToLower() == "asc" || dir.ToLower() == "desc")
+                .Empty()
+                .Must(dir => dir.ToLower() == "asc" || dir.ToLower() == "desc" || dir == "")
                 .WithMessage("SortDirection must be 'asc' or 'desc'.");
 
             RuleFor(x => x.SortBy)

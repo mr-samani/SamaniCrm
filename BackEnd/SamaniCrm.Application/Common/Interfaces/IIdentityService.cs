@@ -43,5 +43,7 @@ namespace SamaniCrm.Application.Common.Interfaces
         Task<Guid> GetUserIdFromRefreshToken(string refreshToken);
         Task<bool> RevokeRefreshToken(string refreshToken, CancellationToken cancellationToken);
         Task<bool> UpdateRolePermissionsAsync(EditRolePermissionsCommand request, CancellationToken cancellationToken);
+
+        Task<bool> updateUserLanguage(string culture, Guid userId, CancellationToken cancellationToken);
     }
 }

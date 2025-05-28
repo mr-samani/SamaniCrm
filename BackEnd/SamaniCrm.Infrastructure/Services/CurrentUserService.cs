@@ -18,13 +18,32 @@ namespace SamaniCrm.Infrastructure.Services
         {
             _httpContextAccessor = httpContextAccessor;
         }
-
+        private string? _overrideLang;
         public string? UserId =>
 
         _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier)
                 ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue("sub")
                 ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue(JwtRegisteredClaimNames.Sub);
 
-        public string lang => _httpContextAccessor.HttpContext?.User?.FindFirstValue("lang") ?? "fa-IR";
+        // public string lang => _httpContextAccessor.HttpContext?.User?.FindFirstValue("lang") ?? "fa-IR";
+
+        public string lang
+        {
+            get
+            {
+                if (_overrideLang == null)
+                {
+                    _overrideLang =
+                        _httpContextAccessor.HttpContext?.Request.Cookies["lang"]
+                        ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue("lang")
+                        ?? "fa-IR"; 
+                }
+                return _overrideLang!;
+            }
+            set
+            {
+                _overrideLang = value;
+            }
+        }
     }
 }

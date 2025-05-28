@@ -4,6 +4,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { AppConst } from '../app-const';
 import { MainSpinnerService } from './main-spinner.service';
 import { isRtl } from '@shared/helper/is-rtl';
+import { UserServiceProxy } from '@shared/service-proxies';
+import { finalize } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +15,7 @@ export class LanguageService {
   constructor(
     public translate: TranslateService,
     @Inject(DOCUMENT) private _document: Document,
-
+    private userService: UserServiceProxy,
     private mainSpinner: MainSpinnerService,
   ) {
     // this.changeLanguage(AppConst.currentLanguage);
@@ -38,14 +40,12 @@ export class LanguageService {
     document.documentElement.dir = this.direction;
     if (dontSave == false) {
       this.mainSpinner.showLoading = true;
-      // this.dataService
-      //   .post<any, UserDTO>(Apis.changeUserLanguage + '/' + AppConst.currentLanguage, {
-      //     lang: AppConst.currentLanguage,
-      //   })
-      //   .pipe(finalize(() => (this.mainSpinner.showLoading = false)))
-      //   .subscribe((r) => {
-      //     location.reload();
-      //   });
+      this.userService
+        .updateCurrentuserLanguage(AppConst.currentLanguage)
+        .pipe(finalize(() => (this.mainSpinner.showLoading = false)))
+        .subscribe((r) => {
+          if (r.data == true) location.reload();
+        });
     }
   }
 

@@ -43,6 +43,7 @@
         }
       }
       <span>{{ node.title }}</span>
+      <span>({{node.url}})</span>
       <div class="actions" (click)="stopPagination($event)">
         <span class="item-notes">({{ node.children.length }})</span>
         <button mat-icon-button (click)="openCreateOrEditDialog(node)">
