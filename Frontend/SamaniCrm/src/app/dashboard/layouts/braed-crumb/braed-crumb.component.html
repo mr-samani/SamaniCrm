@@ -4,8 +4,12 @@
     <span>{{ 'Dashboard' | translate }}</span>
   </a>
   @for (item of breadcrumb.list; track item) {
-    <a [routerLink]="[item.url]" routerLinkActive="active" [queryParams]="item.queryParams">
-      <span>{{ item.name }}</span>
-    </a>
+    @if (item.url) {
+      <a [routerLink]="[item.url]" routerLinkActive="active" [queryParams]="item.queryParams" class="tag">
+        <span>{{ item.name }}</span>
+      </a>
+    } @else {
+      <span class="tag">{{ item.name }}</span>
+    }
   }
 </div>

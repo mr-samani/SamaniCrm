@@ -7,3 +7,6 @@ install java JDK for run code generation from swagger
 ```
 https://www.oracle.com/java/technologies/downloads/?er=221886#jdk24-windows
 ```
+then 
+
+add `JAVA_HOME` to system envoironment variable

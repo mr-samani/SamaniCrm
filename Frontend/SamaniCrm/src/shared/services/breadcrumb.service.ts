@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class BreadcrumbService {
   list: {
     name: string;
-    url: string;
+    url?: string;
     queryParams?: { [key: string]: string };
   }[] = [];
   constructor() {}

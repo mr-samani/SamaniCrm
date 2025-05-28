@@ -7,7 +7,7 @@
   align-items: center;
   gap: 5px;
 
-  a {
+  .tag {
     transition: all 500ms;
 
     &:not(:first-child):before {
@@ -15,9 +15,8 @@
       margin: 0 2px;
       color: #fff !important;
     }
-
-    &:hover {
-      color: rgb(115, 0, 255);
-    }
+  }
+  a.tag:hover {
+    color: rgb(115, 0, 255);
   }
 }

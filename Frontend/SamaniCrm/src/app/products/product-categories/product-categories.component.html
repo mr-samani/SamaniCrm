@@ -44,7 +44,7 @@
     <i class="fa fa-ellipsis-v"></i>
   </button>
   <mat-menu #menu="matMenu">
-    <a mat-menu-item (click)="viewSubCategories(item)">
+    <a *ngIf="item.hasChild" mat-menu-item (click)="viewSubCategories(item)">
       <i class="fa fa-list mx-1"></i>
       <span>{{ 'ViewSubCategories' | translate }}</span>
     </a>

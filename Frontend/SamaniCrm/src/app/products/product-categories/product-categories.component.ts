@@ -92,8 +92,10 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
         this.totalCount = response.data?.totalCount ?? 0;
         this.breadcrumb.list = [{ name: this.l('Categories'), url: '/dashboard/products/categories' }];
         if (response.data?.breadcrumbs) {
-          for (let b of response.data.breadcrumbs) {
-            if (b.id != this.parentId)
+          for (let b of response.data.breadcrumbs.reverse()) {
+            if (b.id == this.parentId) {
+              this.breadcrumb.list.push({ name: b.title! });
+            } else {
               this.breadcrumb.list.push({
                 name: b.title!,
                 url: '/dashboard/products/categories',
@@ -102,6 +104,7 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
                   page: 1 + '',
                 },
               });
+            }
           }
         }
       });
