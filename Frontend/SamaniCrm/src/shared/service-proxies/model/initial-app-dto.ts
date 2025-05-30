@@ -26,7 +26,6 @@ export interface IInitialAppDTO {
   languages?: Array<LanguageDTO>;
   defaultLang?: string;
   requireCaptcha?: boolean;
-  currentLanguage?: string;
 }
 
 /** Class for InitialAppDTO */
@@ -34,7 +33,6 @@ export class InitialAppDTO implements IInitialAppDTO {
   languages?: Array<LanguageDTO>;
   defaultLang?: string;
   requireCaptcha?: boolean;
-  currentLanguage?: string;
 
   constructor(data?: IInitialAppDTO) {
     if (data) {
@@ -54,7 +52,6 @@ init(data?: any) {
     }
     this.defaultLang = data["defaultLang"];
     this.requireCaptcha = data["requireCaptcha"];
-    this.currentLanguage = data["currentLanguage"];
   }
 }
 

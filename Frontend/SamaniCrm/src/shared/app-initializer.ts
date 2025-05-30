@@ -46,8 +46,6 @@ export class AppInitializer {
                   AppConst.languageList = resp.data.languages ?? [];
                   AppConst.defaultLang = resp.data.defaultLang ?? 'fa-IR';
                   AppConst.requireCaptcha = resp.data.requireCaptcha === true;
-                  let lang = resp.data.currentLanguage || AppConst.defaultLang;
-                  this.languageService.changeLanguage(lang, true);
                   resolve(true);
                 } else {
                   reject();

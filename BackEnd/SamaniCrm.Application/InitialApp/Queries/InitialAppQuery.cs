@@ -20,16 +20,14 @@ public record InitialAppQuery() : IRequest<InitialAppDTO>;
 public class InitialAppQueryHandler : IRequestHandler<InitialAppQuery, InitialAppDTO>
 {
     private readonly IApplicationDbContext dbContext;
-    private readonly ICurrentUserService currentUserService;
     private readonly IConfiguration _configuration;
     private readonly ILanguageService _languageService;
 
 
 
-    public InitialAppQueryHandler(IApplicationDbContext dbContext, ICurrentUserService currentUserService, IConfiguration configuration, ILanguageService languageService)
+    public InitialAppQueryHandler(IApplicationDbContext dbContext,  IConfiguration configuration, ILanguageService languageService)
     {
         this.dbContext = dbContext;
-        this.currentUserService = currentUserService;
         _configuration = configuration;
         _languageService = languageService;
     }
@@ -42,7 +40,6 @@ public class InitialAppQueryHandler : IRequestHandler<InitialAppQuery, InitialAp
         return new InitialAppDTO()
         {
             Languages = languages,
-            CurrentLanguage = currentUserService.lang,
             DefaultLang = defaultLanguage,
             RequireCaptcha = requiredCaptcha
         };

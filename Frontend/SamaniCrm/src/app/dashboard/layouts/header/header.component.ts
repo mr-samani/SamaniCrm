@@ -36,4 +36,8 @@ export class HeaderComponent extends AppComponentBase {
   openFileManager() {
     this.fileManager.openFileManager();
   }
+
+  logout() {
+    this.authService.logOut();
+  }
 }
