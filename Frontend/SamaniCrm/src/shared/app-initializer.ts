@@ -23,7 +23,7 @@ export class AppInitializer {
 
   public init(translate: TranslateService): () => Promise<boolean> {
     return () => {
-      AppConst.currentLanguage = localStorage.getItem('lang') || '';
+      // AppConst.currentLanguage = localStorage.getItem('lang') || '';
       return new Promise((resolve, reject) => {
         let baseUrl = this.getDocumentOrigin() + this.getBaseHref();
         if (isDevMode()) {

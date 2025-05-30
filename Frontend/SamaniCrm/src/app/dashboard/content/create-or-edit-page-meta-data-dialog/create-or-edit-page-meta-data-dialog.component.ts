@@ -130,7 +130,6 @@ export class CreateOrEditPageMetaDataDialogComponent extends AppComponentBase im
       this.notify.warning(this.l('CompleteFormField'));
       return;
     }
-    debugger;
     this.saving = true;
     const input = new CreateOrEditPageMetaDataCommand();
     input.init(this.form.value);

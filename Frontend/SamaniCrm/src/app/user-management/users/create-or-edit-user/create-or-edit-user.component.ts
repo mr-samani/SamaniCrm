@@ -55,7 +55,6 @@ export class CreateOrEditUserComponent extends AppComponentBase implements OnIni
       lang: [AppConst.currentLanguage],
       address: [''],
     });
-    debugger;
     if (_data.user) {
       this.isUpdate = true;
       this.form.patchValue(_data.user);

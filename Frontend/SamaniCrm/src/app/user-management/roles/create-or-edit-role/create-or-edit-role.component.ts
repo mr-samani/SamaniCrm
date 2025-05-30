@@ -35,7 +35,6 @@ export class CreateOrEditRoleComponent extends AppComponentBase implements OnIni
       roleName: ['', [Validators.required, CustomValidators.checkEnglishAndNumberCharacters]],
       // displayName: ['', []],
     });
-    debugger;
     if (_data.role) {
       this.isUpdate = true;
       this.form.patchValue(_data.role);
