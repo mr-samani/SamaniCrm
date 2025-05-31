@@ -62,7 +62,12 @@ export class PaginationComponent implements AfterViewInit {
   lastItem = 0;
 
   perPageList = [5, 10, 20, 30, 50, 100, 500, 1000, 5000];
-  constructor(@Inject(PAGINATION_LABELS) public labels: PaginationLabel) {}
+  labels = new PaginationLabel();
+  constructor(@Inject(PAGINATION_LABELS) labels: PaginationLabel) {
+    if (labels) {
+      this.labels = labels;
+    }
+  }
 
   ngAfterViewInit(): void {
     this.init();

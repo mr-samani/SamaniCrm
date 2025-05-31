@@ -12,6 +12,17 @@ export class PaginationLocalize {
   }
 
   getLabels() {
+    // this.labels = {
+    //   previous: this.translate.instant('Pagination.Previous'),
+    //   next: this.translate.instant('Pagination.Next'),
+    //   showing: this.translate.instant('Pagination.Showing'),
+    //   to: this.translate.instant('Pagination.To'),
+    //   of: this.translate.instant('Pagination.Of'),
+    //   results: this.translate.instant('Pagination.Results'),
+    //   first: this.translate.instant('Pagination.First'),
+    //   last: this.translate.instant('Pagination.Last'),
+    //   perPage: this.translate.instant('Pagination.PerPage'),
+    // };
     this.translate
       .get([
         'Pagination.Previous',

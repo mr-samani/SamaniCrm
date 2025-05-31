@@ -13,6 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { BraedCrumbComponent } from './layouts/braed-crumb/braed-crumb.component';
+import { PAGINATION_LABELS } from '@shared/components/pagination/pagination.component';
+import { PaginationLocalize } from '@shared/localize/pagination';
 
 @NgModule({
   declarations: [
@@ -33,5 +35,12 @@ import { BraedCrumbComponent } from './layouts/braed-crumb/braed-crumb.component
     FileManagerModule,
   ],
   exports: [],
+  providers: [
+    {
+      provide: PAGINATION_LABELS,
+      useFactory: (localize: PaginationLocalize) => localize.labels,
+      deps: [PaginationLocalize],
+    },
+  ],
 })
 export class DashboardModule {}
