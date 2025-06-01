@@ -7,18 +7,17 @@ using SamaniCrm.Domain.Interfaces;
 
 namespace SamaniCrm.Domain.Entities.ProductEntities
 {
-    public class ProductType:TranslationBaseClass,IAuditableEntity,ISoftDelete
+    public class ProductType:IAuditableEntity,ISoftDelete
     {
         public Guid Id { get; set; }
         public Guid TenantId { get; set; }
 
-        public string Name { get; set; } = default!;
-        public string? Description { get; set; }
 
         public virtual Tenant Tenant { get; set; } = default!;
         public virtual ICollection<ProductAttribute> Attributes { get; set; } = new List<ProductAttribute>();
         public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
+        public virtual ICollection<ProductTypeTranslation> Translations { get; set; } = new List<ProductTypeTranslation>();
 
 
 

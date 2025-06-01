@@ -15,7 +15,6 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public Guid Id { get; set; }
         public Guid TenantId { get; set; }
         public Guid CategoryId { get; set; }
-        public Guid ProductTypeId { get; set; }
 
         [Required]
         [MaxLength(100)]
@@ -38,13 +37,15 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public virtual ICollection<ProductTranslation> Translations { get; set; } = new List<ProductTranslation>();
 
 
-        public ProductType ProductType { get; set; } = default!;
+        public Guid ProductTypeId { get; set; }
+        [ForeignKey(nameof(ProductTypeId))]
+        public virtual ProductType ProductType { get; set; } = default!;
 
-        public ICollection<ProductAttributeValue> AttributeValues { get; set; } = new List<ProductAttributeValue>();
+        public virtual ICollection<ProductAttributeValue> AttributeValues { get; set; } = new List<ProductAttributeValue>();
         //public ICollection<ProductVariant> Variants { get; set; } = new List<ProductVariant>();
-        public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
-        public ICollection<ProductFile> Files { get; set; } = new List<ProductFile>();
-        public ICollection<ProductPrice> Prices { get; set; } = new List<ProductPrice>();
+        public virtual ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
+        public virtual ICollection<ProductFile> Files { get; set; } = new List<ProductFile>();
+        public virtual ICollection<ProductPrice> Prices { get; set; } = new List<ProductPrice>();
 
 
 

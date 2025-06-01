@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ProductTypeTranslationDto } from './product-type-translation-dto';
 import { ProductAttributeDto } from './product-attribute-dto';
 
 
@@ -29,6 +30,7 @@ export interface IProductTypeDto {
   culture?: string;
   name?: string;
   description?: string;
+  translations?: Array<ProductTypeTranslationDto>;
 }
 
 /** Class for ProductTypeDto */
@@ -39,6 +41,7 @@ export class ProductTypeDto implements IProductTypeDto {
   culture?: string;
   name?: string;
   description?: string;
+  translations?: Array<ProductTypeTranslationDto>;
 
   constructor(data?: IProductTypeDto) {
     if (data) {
@@ -61,6 +64,11 @@ init(data?: any) {
     this.culture = data["culture"];
     this.name = data["name"];
     this.description = data["description"];
+    if (Array.isArray(data["translations"])) {
+      this.translations = [] as any;
+      for (let item of data["translations"])
+        (this.translations as any).push(ProductTypeTranslationDto.fromJS(item));
+    }
   }
 }
 

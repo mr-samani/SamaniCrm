@@ -22,7 +22,7 @@ namespace SamaniCrm.Api.Controllers
         {
             _mediator = mediator;
         }
-
+        #region Category
         [HttpPost("GetCategoriesForAdmin")]
         [Permission(AppPermissions.Products_Category_List)]
         [ProducesResponseType(typeof(ApiResponse<PagedProductCategoriesDto>), StatusCodes.Status200OK)]
@@ -58,6 +58,49 @@ namespace SamaniCrm.Api.Controllers
             var result = await _mediator.Send(request, cancellationToken);
             return ApiOk<bool>(result);
         }
+        #endregion
+        // ________________________________________________________________________________________________________________________
+        #region Types
+
+        [HttpPost("GetProductTypes")]
+        [Permission(AppPermissions.Products_Type_List)]
+        [ProducesResponseType(typeof(ApiResponse<PaginatedResult<ProductTypeDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetProductTypes([FromBody] GetProductTypesQuery request, CancellationToken cancellationToken)
+        {
+            PaginatedResult<ProductTypeDto> result = await _mediator.Send(request, cancellationToken);
+            return ApiOk(result);
+        }
+
+        [HttpGet("GetProductTypeForEdit")]
+        [Permission(AppPermissions.Products_Type_Edit)]
+        [ProducesResponseType(typeof(ApiResponse<ProductTypeDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetProductTypeForEdit(Guid id, CancellationToken cancellationToken)
+        {
+            ProductTypeDto result = await _mediator.Send(new GetProductTypeForEditQuery(id), cancellationToken);
+            return ApiOk(result);
+        }
+
+        [HttpPost("CreateOrEditProductType")]
+        [Permission(AppPermissions.Products_Type_Edit)]
+        [Permission(AppPermissions.Products_Type_Create)]
+        [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> CreateOrEditProductType(CreateOrUpdateProductTypeCommand request, CancellationToken cancellationToken)
+        {
+            return ApiOk(await _mediator.Send(request, cancellationToken));
+        }
+
+        [HttpPost("DeleteProductType")]
+        [Permission(AppPermissions.Products_Type_Delete)]
+        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeleteProductType(DeleteProductTypeCommand request, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(request, cancellationToken);
+            return ApiOk<bool>(result);
+        }
+        #endregion
+        // ________________________________________________________________________________________________________________________
+
+        #region Attributes
 
         [HttpPost("GetProductAttributes")]
         [Permission(AppPermissions.Products_Attribute_List)]
@@ -93,41 +136,10 @@ namespace SamaniCrm.Api.Controllers
             var result = await _mediator.Send(request, cancellationToken);
             return ApiOk<bool>(result);
         }
+        #endregion
+        // ________________________________________________________________________________________________________________________
 
-        [HttpPost("GetProductTypes")]
-        [Permission(AppPermissions.Products_Type_List)]
-        [ProducesResponseType(typeof(ApiResponse<List<ProductTypeDto>>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetProductTypes([FromBody] GetProductTypesQuery request, CancellationToken cancellationToken)
-        {
-            var result = await _mediator.Send(request, cancellationToken);
-            return ApiOk(result);
-        }
-
-        [HttpGet("GetProductTypeForEdit")]
-        [Permission(AppPermissions.Products_Type_Edit)]
-        [ProducesResponseType(typeof(ApiResponse<ProductTypeDto>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetProductTypeForEdit(Guid id, CancellationToken cancellationToken)
-        {
-            return ApiOk(await _mediator.Send(new GetProductTypeForEditQuery(id), cancellationToken));
-        }
-
-        [HttpPost("CreateOrEditProductType")]
-        [Permission(AppPermissions.Products_Type_Edit)]
-        [Permission(AppPermissions.Products_Type_Create)]
-        [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateOrEditProductType(CreateOrUpdateProductTypeCommand request, CancellationToken cancellationToken)
-        {
-            return ApiOk(await _mediator.Send(request, cancellationToken));
-        }
-
-        [HttpPost("DeleteProductType")]
-        [Permission(AppPermissions.Products_Type_Delete)]
-        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> DeleteProductType(DeleteProductTypeCommand request, CancellationToken cancellationToken)
-        {
-            var result = await _mediator.Send(request, cancellationToken);
-            return ApiOk<bool>(result);
-        }
+        #region product 
 
         [HttpPost("GetProducts")]
         [Permission(AppPermissions.Products_List)]
@@ -163,6 +175,8 @@ namespace SamaniCrm.Api.Controllers
             var result = await _mediator.Send(request, cancellationToken);
             return ApiOk<bool>(result);
         }
+        #endregion
+        // ________________________________________________________________________________________________________________________
 
     }
 }

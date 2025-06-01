@@ -1,22 +1,26 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
 using SamaniCrm.Core.Shared.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading;
 using System.Threading.Tasks;
 
+
 namespace SamaniCrm.Application.ProductManagerManager.Queries
 {
-    public class GetProductTypesQuery : IRequest<List<ProductTypeDto>>
+    public class GetProductTypesQuery : PaginationRequest, IRequest<PaginatedResult<ProductTypeDto>>
     {
-        public Guid? TenantId { get; set; }
+        public string? Filter { get; set; }
     }
 
-    public class GetProductTypesQueryHandler : IRequestHandler<GetProductTypesQuery, List<ProductTypeDto>>
+    public class GetProductTypesQueryHandler : IRequestHandler<GetProductTypesQuery, PaginatedResult<ProductTypeDto>>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly ILocalizer L;
@@ -25,25 +29,55 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
             _dbContext = dbContext;
             L = l;
         }
-        public async Task<List<ProductTypeDto>> Handle(GetProductTypesQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<ProductTypeDto>> Handle(GetProductTypesQuery request, CancellationToken cancellationToken)
         {
             var currentLanguage = L.CurrentLanguage;
 
             var query = _dbContext.ProductTypes
-                .Include(x => x.Attributes)
-                .Where(x => x.Culture == currentLanguage)
+                .Include(x => x.Translations.Where(w => w.Culture == currentLanguage))
                 .AsQueryable();
-            if (request.TenantId.HasValue)
-                query = query.Where(x => x.TenantId == request.TenantId.Value);
-            var list = await query.ToListAsync(cancellationToken);
-            return list.Select(entity => new ProductTypeDto
-            {
-                Id = entity.Id,
-                TenantId = entity.TenantId,
-                Name = entity.Name,
-                Description = entity.Description,
 
-            }).ToList();
+
+            if (!string.IsNullOrEmpty(request.Filter))
+            {
+                query = query.Where(c =>
+                            c.Translations.Any(t => t.Culture == currentLanguage &&
+                            (t.Name.Contains(request.Filter) || t.Description.Contains(request.Filter))
+                            )
+                    );
+            }
+
+            // Sorting
+            if (!string.IsNullOrEmpty(request.SortBy))
+            {
+                var sortString = $"{request.SortBy} {request.SortDirection}";
+                query = query.OrderBy(sortString);
+            }
+
+            int total = await query.CountAsync(cancellationToken);
+
+
+
+
+            var items = await query
+                .Skip(request.PageSize * (request.PageNumber - 1))
+                .Take(request.PageSize)
+                .Select(s => new ProductTypeDto()
+                {
+                    Id = s.Id,
+                    TenantId = s.TenantId,
+                    Name = s.Translations.Select(s => s.Name).FirstOrDefault() ?? "",
+                    Description = s.Translations.Select(s => s.Description).FirstOrDefault() ?? "",
+                })
+                .ToListAsync(cancellationToken);
+            return new PaginatedResult<ProductTypeDto>()
+            {
+
+                Items = items,
+                TotalCount = total,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize,
+            };
         }
     }
 }

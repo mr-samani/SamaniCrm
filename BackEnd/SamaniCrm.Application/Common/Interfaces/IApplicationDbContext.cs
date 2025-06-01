@@ -31,6 +31,7 @@ namespace SamaniCrm.Application.Common.Interfaces
         public DbSet<ProductCategoryTranslation> ProductCategoryTranslations { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<ProductTypeTranslation> ProductTypeTranslations { get; set; }
         public DbSet<ProductAttribute> ProductAttributes { get; set; }
         public DbSet<ProductAttributeTranslation> ProductAttributeTranslations { get; set; }
         public DbSet<ProductAttributeValue> ProductAttributeValues { get; set; }

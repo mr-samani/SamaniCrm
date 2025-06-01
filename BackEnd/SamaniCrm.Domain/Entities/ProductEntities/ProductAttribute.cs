@@ -1,9 +1,10 @@
-﻿using System;
+﻿using SamaniCrm.Domain.Interfaces;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SamaniCrm.Domain.Interfaces;
 
 namespace SamaniCrm.Domain.Entities.ProductEntities
 {
@@ -17,6 +18,7 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public bool IsVariant { get; set; }
         public int SortOrder { get; set; }
 
+        [ForeignKey(nameof(ProductTypeId))]
         public virtual ProductType ProductType { get; set; } = default!;
         public virtual ICollection<ProductAttributeTranslation> Translations { get; set; } = new List<ProductAttributeTranslation>();
         public virtual ICollection<ProductAttributeValue> AttributeValues { get; set; } = new List<ProductAttributeValue>();

@@ -1,28 +1,28 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { AppComponentBase } from '@app/app-component-base';
-import { finalize, Subscription } from 'rxjs';
-import { ProductServiceProxy } from '@shared/service-proxies/api/product.service';
-import { MatDialog } from '@angular/material/dialog';
 import { FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { AppComponentBase } from '@app/app-component-base';
+import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
 import {
-  DeleteProductCategoryCommand,
-  GetCategoriesForAdminQuery,
-  PagedProductCategoryDto,
+  ProductTypeDto,
+  ProductServiceProxy,
+  GetProductTypesQuery,
+  DeleteProductTypeCommand,
 } from '@shared/service-proxies';
-import { PageEvent } from '@shared/components/pagination/pagination.component';
-import { CreateOrEditProductCategoryComponent } from './create-or-edit/create-or-edit.component';
+import { Subscription, finalize } from 'rxjs';
+import { CreateOrEditProductTypeComponent } from './create-or-edit/create-or-edit.component';
 
 @Component({
-  selector: 'app-product-categories',
-  templateUrl: './product-categories.component.html',
-  styleUrl: './product-categories.component.scss',
+  selector: 'app-product-types',
+  templateUrl: './product-types.component.html',
+  styleUrls: ['./product-types.component.scss'],
   standalone: false,
 })
-export class ProductCategoriesComponent extends AppComponentBase implements OnInit {
+export class ProductTypesComponent extends AppComponentBase implements OnInit {
   loading = true;
 
-  list: PagedProductCategoryDto[] = [];
+  list: ProductTypeDto[] = [];
   totalCount = 0;
 
   fields: FieldsType[] = [
@@ -44,20 +44,18 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
   listSubscription$?: Subscription;
   showFilter = false;
 
-  parentId = '';
   constructor(
     injector: Injector,
     private productServiceProxy: ProductServiceProxy,
     private matDialog: MatDialog,
   ) {
     super(injector);
-    this.breadcrumb.list = [{ name: this.l('ProductCategories'), url: '/dashboard/products/categories' }];
+    this.breadcrumb.list = [{ name: this.l('ProductTypes'), url: '/dashboard/products/types' }];
     this.form = this.fb.group({
       filter: [''],
     });
 
     this.route.queryParams.subscribe((p) => {
-      this.parentId = p['parentId'] ?? '';
       this.page = p['page'] ?? 1;
       this.perPage = p['perPage'] ?? 10;
       this.getList();
@@ -77,36 +75,18 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
       this.listSubscription$.unsubscribe();
     }
     this.loading = true;
-    const input = new GetCategoriesForAdminQuery();
-    input.parentId = this.parentId == '' ? undefined : this.parentId;
+    const input = new GetProductTypesQuery();
     input.filter = this.form.get('filter')?.value;
     input.pageNumber = this.page;
     input.pageSize = this.perPage;
     input.sortBy = ev ? ev.field : '';
     input.sortDirection = ev ? ev.direction : '';
     this.listSubscription$ = this.productServiceProxy
-      .getCategoriesForAdmin(input)
+      .getProductTypes(input)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
         this.list = response.data?.items ?? [];
         this.totalCount = response.data?.totalCount ?? 0;
-        this.breadcrumb.list = [{ name: this.l('Categories'), url: '/dashboard/products/categories' }];
-        if (response.data?.breadcrumbs) {
-          for (let b of response.data.breadcrumbs.reverse()) {
-            if (b.id == this.parentId) {
-              this.breadcrumb.list.push({ name: b.title! });
-            } else {
-              this.breadcrumb.list.push({
-                name: b.title!,
-                url: '/dashboard/products/categories',
-                queryParams: {
-                  parentId: b.id!,
-                  page: 1 + '',
-                },
-              });
-            }
-          }
-        }
       });
   }
 
@@ -124,17 +104,16 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
 
   onPageChange(ev?: PageEvent) {
     this.getList();
-    this.router.navigate(['/dashboard/products/categories'], {
+    this.router.navigate(['/dashboard/products/types'], {
       queryParams: {
         page: this.page,
-        parentId: this.parentId,
       },
     });
   }
 
-  openCreateOrEditDialog(item?: PagedProductCategoryDto) {
+  openCreateOrEditDialog(item?: ProductTypeDto) {
     this.matDialog
-      .open(CreateOrEditProductCategoryComponent, {
+      .open(CreateOrEditProductTypeComponent, {
         data: {
           id: item?.id,
         },
@@ -148,12 +127,12 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
       });
   }
 
-  remove(item: PagedProductCategoryDto) {
-    this.confirmMessage(`${this.l('Delete')}:${item?.title}`, this.l('AreUseSureForDelete')).then((result) => {
+  remove(item: ProductTypeDto) {
+    this.confirmMessage(`${this.l('Delete')}:${item?.name}`, this.l('AreUseSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
         this.productServiceProxy
-          .deleteProductCategory(new DeleteProductCategoryCommand({ id: item.id }))
+          .deleteProductType(new DeleteProductTypeCommand({ id: item.id }))
           .pipe(finalize(() => this.hideMainLoading()))
           .subscribe((response) => {
             if (response.success) {
@@ -165,13 +144,7 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
     });
   }
 
-  viewSubCategories(item: PagedProductCategoryDto) {
-    this.parentId = item.id!;
-    this.router.navigate(['/dashboard/products/categories'], {
-      queryParams: {
-        page: this.page,
-        parentId: this.parentId,
-      },
-    });
+  viewAttributes(item: ProductTypeDto) {
+    this.router.navigate(['/dashboard/products/attributes/' + item.id]);
   }
 }

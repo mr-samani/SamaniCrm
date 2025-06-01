@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ProductTypeDto } from './product-type-dto';
 
 
 /**
@@ -20,24 +21,22 @@
  */
 /* Created with custom template */
 
-/** Interface for GetProductTypesQuery */
-export interface IGetProductTypesQuery {
+/** Interface for ProductTypeDtoPaginatedResult */
+export interface IProductTypeDtoPaginatedResult {
+  items?: Array<ProductTypeDto>;
+  totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
-  sortBy?: string;
-  sortDirection?: string;
-  filter?: string;
 }
 
-/** Class for GetProductTypesQuery */
-export class GetProductTypesQuery implements IGetProductTypesQuery {
+/** Class for ProductTypeDtoPaginatedResult */
+export class ProductTypeDtoPaginatedResult implements IProductTypeDtoPaginatedResult {
+  items?: Array<ProductTypeDto>;
+  totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
-  sortBy?: string;
-  sortDirection?: string;
-  filter?: string;
 
-  constructor(data?: IGetProductTypesQuery) {
+  constructor(data?: IProductTypeDtoPaginatedResult) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -48,16 +47,19 @@ export class GetProductTypesQuery implements IGetProductTypesQuery {
 
 init(data?: any) {
   if (data) {
+    if (Array.isArray(data["items"])) {
+      this.items = [] as any;
+      for (let item of data["items"])
+        (this.items as any).push(ProductTypeDto.fromJS(item));
+    }
+    this.totalCount = data["totalCount"];
     this.pageNumber = data["pageNumber"];
     this.pageSize = data["pageSize"];
-    this.sortBy = data["sortBy"];
-    this.sortDirection = data["sortDirection"];
-    this.filter = data["filter"];
   }
 }
 
-  static fromJS(data: any): GetProductTypesQuery {
-    const instance = new GetProductTypesQuery();
+  static fromJS(data: any): ProductTypeDtoPaginatedResult {
+    const instance = new ProductTypeDtoPaginatedResult();
     instance.init(data);
     return instance;
   }

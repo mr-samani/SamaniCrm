@@ -29,10 +29,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                .HasForeignKey(p => p.CategoryId)
                .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(p => p.ProductType)
-               .WithMany()
-               .HasForeignKey(p => p.ProductTypeId)
-               .OnDelete(DeleteBehavior.Cascade); 
 
         builder.OwnsOne(p => p.SKU, sku =>
         {
@@ -41,7 +37,15 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                 .HasMaxLength(1000)
                 .IsRequired();
         });
-       // builder.HasIndex(p => new { p.TenantId, p.SKU }).IsUnique();
+
+        builder.HasOne(p => p.ProductType)
+              .WithMany(t=>t.Products)
+              .HasForeignKey(p => p.ProductTypeId)
+              .OnDelete(DeleteBehavior.Restrict)
+              .IsRequired();
+
+
+        // builder.HasIndex(p => new { p.TenantId, p.SKU }).IsUnique();
     }
 }
 
@@ -69,14 +73,24 @@ public class ProductTypeConfiguration : IEntityTypeConfiguration<ProductType>
     {
         builder.ToTable("ProductTypes", "product");
         builder.HasKey(pc => pc.Id);
-      
+    }
+}
+public class ProductTypeTranslationConfiguration : IEntityTypeConfiguration<ProductTypeTranslation>
+{
+    public void Configure(EntityTypeBuilder<ProductTypeTranslation> builder)
+    {
+        builder.ToTable("ProductTypeTranslations", "product");
+        builder.HasKey(pc => pc.Id);
+        builder.HasOne(p => p.ProductType)
+            .WithMany(c => c.Translations)
+            .HasForeignKey(p => p.ProductTypeId)
+            .OnDelete(DeleteBehavior.Restrict);
         builder.HasOne(x => x.Language)
                  .WithMany().HasForeignKey(x => x.Culture)
                  .OnDelete(DeleteBehavior.Cascade);
 
     }
 }
-
 //_______________________________________ویژگی های کالا_________________________________________________________
 
 public class ProductAttributeConfiguration : IEntityTypeConfiguration<ProductAttribute>
@@ -122,7 +136,7 @@ public class ProductAttributeValueConfiguration : IEntityTypeConfiguration<Produ
             .HasForeignKey(p => p.ProductId)
             .OnDelete(DeleteBehavior.Restrict);
         builder.HasOne(x => x.Attribute)
-                 .WithMany(c=>c.AttributeValues).HasForeignKey(x => x.AttributeId)
+                 .WithMany(c => c.AttributeValues).HasForeignKey(x => x.AttributeId)
                  .OnDelete(DeleteBehavior.Cascade);
 
         builder.OwnsOne(p => p.Value, attributeValue =>
@@ -147,7 +161,7 @@ public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
         builder.HasOne(p => p.Product)
             .WithMany(c => c.Images)
             .HasForeignKey(p => p.ProductId)
-            .OnDelete(DeleteBehavior.Cascade);  
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
 
@@ -172,6 +186,8 @@ public class ProductPriceConfiguration : IEntityTypeConfiguration<ProductPrice>
     {
         builder.ToTable("ProductPrices", "product");
         builder.HasKey(pc => pc.Id);
+        builder.Property(p => p.Price)
+            .HasPrecision(18, 2); // 18 رقم با 2 رقم اعشار
         builder.HasOne(p => p.Product)
             .WithMany(c => c.Prices)
             .HasForeignKey(p => p.ProductId)

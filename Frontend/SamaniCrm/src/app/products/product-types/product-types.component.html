@@ -7,7 +7,7 @@
   </div>
   <button mat-raised-button color="primary" (click)="openCreateOrEditDialog()">
     <i class="fa fa-user-plus mx-1"></i>
-    <span>{{ 'CreateNewCategory' | translate }}</span>
+    <span>{{ 'CreateNewType' | translate }}</span>
   </button>
 </div>
 
@@ -44,9 +44,9 @@
     <i class="fa fa-ellipsis-v"></i>
   </button>
   <mat-menu #menu="matMenu">
-    <a *ngIf="item.hasChild" mat-menu-item (click)="viewSubCategories(item)">
+    <a *ngIf="item.hasChild" mat-menu-item (click)="viewAttributes(item)">
       <i class="fa fa-list mx-1"></i>
-      <span>{{ 'ViewSubCategories' | translate }}</span>
+      <span>{{ 'ViewAttributes' | translate }}</span>
     </a>
     <a mat-menu-item (click)="openCreateOrEditDialog(item)">
       <i class="fa fa-edit mx-1"></i>

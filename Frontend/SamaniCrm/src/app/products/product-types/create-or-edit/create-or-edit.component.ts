@@ -5,38 +5,33 @@ import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
 import {
   ProductServiceProxy,
-  CreateOrUpdateProductCategoryCommand,
+  ProductTypeTranslationDto,
+  CreateOrUpdateProductTypeCommand,
 } from '@shared/service-proxies';
 import { finalize } from 'rxjs';
-import { ProductCategoryTranslationDto } from '@shared/service-proxies/model/product-category-translation-dto';
 
 @Component({
-  selector: 'create-or-edit-category',
+  selector: 'create-or-edit-product-type',
   templateUrl: './create-or-edit.component.html',
   styleUrls: ['./create-or-edit.component.scss'],
   standalone: false,
 })
-export class CreateOrEditProductCategoryComponent extends AppComponentBase implements OnInit {
+export class CreateOrEditProductTypeComponent extends AppComponentBase implements OnInit {
   form: FormGroup;
   loading = false;
   saving = false;
   isUpdate: boolean;
-  translations?: ProductCategoryTranslationDto[];
+  translations?: ProductTypeTranslationDto[];
   id: string;
   constructor(
     injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: { id: string },
-    private dialogRef: MatDialogRef<CreateOrEditProductCategoryComponent>,
+    private dialogRef: MatDialogRef<CreateOrEditProductTypeComponent>,
     private productService: ProductServiceProxy,
   ) {
     super(injector);
     this.form = this.fb.group({
-      slug: ['', [Validators.maxLength(100)]],
-      orderIndex: [0, [Validators.required]],
-      image: [''],
-      parentId: [],
       translations: this.fb.array([]),
-      isActive: [true],
     });
     this.id = _data.id;
 
@@ -55,11 +50,11 @@ export class CreateOrEditProductCategoryComponent extends AppComponentBase imple
     this.translations = [];
     for (let item of AppConst.languageList ?? []) {
       this.translations.push(
-        new ProductCategoryTranslationDto({
+        new ProductTypeTranslationDto({
           culture: item.culture!,
-          title: '',
+          name: '',
           description: '',
-          productCategoryId: this.id,
+          productTypeId: this.id,
         }),
       );
     }
@@ -69,7 +64,7 @@ export class CreateOrEditProductCategoryComponent extends AppComponentBase imple
   getForEdit(id: string) {
     this.loading = true;
     this.productService
-      .getProductCategoryForEdit(id)
+      .getProductTypeForEdit(id)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
         next: (response) => {
@@ -100,9 +95,9 @@ export class CreateOrEditProductCategoryComponent extends AppComponentBase imple
         this.fb.group({
           culture: [translation.culture],
           // data: this.fb.group({
-          title: [translation.title, Validators.required],
+          name: [translation.name, Validators.required],
           description: [translation.description],
-          productCategoryId: [translation.productCategoryId],
+          productTypeId: [translation.productTypeId],
           //})
         }),
       );
@@ -116,11 +111,11 @@ export class CreateOrEditProductCategoryComponent extends AppComponentBase imple
       return;
     }
     this.saving = true;
-    const input = new CreateOrUpdateProductCategoryCommand();
+    const input = new CreateOrUpdateProductTypeCommand();
     input.init(this.form.value);
     input.id = this.id;
     this.productService
-      .createOrEditProductCategory(input)
+      .createOrEditProductType(input)
       .pipe(finalize(() => (this.saving = false)))
       .subscribe({
         next: (response) => {

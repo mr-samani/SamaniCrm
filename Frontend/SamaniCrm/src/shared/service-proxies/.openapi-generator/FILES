@@ -102,8 +102,10 @@ model/product-image-dto.ts
 model/product-price-dto.ts
 model/product-translation-dto.ts
 model/product-type-dto-api-response.ts
-model/product-type-dto-list-api-response.ts
+model/product-type-dto-paginated-result-api-response.ts
+model/product-type-dto-paginated-result.ts
 model/product-type-dto.ts
+model/product-type-translation-dto.ts
 model/refresh-token-command.ts
 model/reorder-item.ts
 model/reorder-menu-command.ts

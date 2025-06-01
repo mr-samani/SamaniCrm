@@ -1,24 +1,21 @@
 ﻿using SamaniCrm.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SamaniCrm.Domain.Entities.ProductEntities
 {
-    public class ProductPrice : IAuditableEntity, ISoftDelete
+    public class ProductTypeTranslation : TranslationBaseClass, IAuditableEntity, ISoftDelete
     {
-        public Guid Id { get; set; }
-        public Guid ProductId { get; set; }
+        public Guid ProductTypeId { get; set; }
+        public string Name { get; set; } = default!;
+        public string? Description { get; set; }
 
-        public string Currency { get; set; } = default!;  // مثلا "USD", "IRR"
-        public decimal Price { get; set; }
-
-        public DateTime StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
-
-        public Product Product { get; set; } = default!;
+        [ForeignKey(nameof(ProductTypeId))]
+        public virtual ProductType ProductType { get; set; }= default!;
 
 
         // Implementing IAuditableEntity properties
@@ -32,5 +29,4 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public DateTime? DeletedTime { get; set; }
         public string? DeletedBy { get; set; }
     }
-
 }
