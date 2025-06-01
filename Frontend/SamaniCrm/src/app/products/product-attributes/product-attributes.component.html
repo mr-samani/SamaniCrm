@@ -7,7 +7,7 @@
   </div>
   <button mat-raised-button color="primary" (click)="openCreateOrEditDialog()">
     <i class="fa fa-user-plus mx-1"></i>
-    <span>{{ 'CreateNewType' | translate }}</span>
+    <span>{{ 'CreateNewAttribute' | translate }}</span>
   </button>
 </div>
 
@@ -44,14 +44,6 @@
     <i class="fa fa-ellipsis-v"></i>
   </button>
   <mat-menu #menu="matMenu">
-    <a
-      *ngIf="item.hasChild"
-      mat-menu-item
-      [routerLink]="['/dashboard/products/attributes/' + item.id]"
-      [queryParams]="{ name: item.name }">
-      <i class="fa fa-list mx-1"></i>
-      <span>{{ 'ViewAttributes' | translate }}</span>
-    </a>
     <a mat-menu-item (click)="openCreateOrEditDialog(item)">
       <i class="fa fa-edit mx-1"></i>
       <span>{{ 'Edit' | translate }}</span>

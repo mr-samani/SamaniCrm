@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ProductAttributeDataTypeEnum } from './product-attribute-data-type-enum';
 import { ProductAttributeTranslationDto } from './product-attribute-translation-dto';
 
 
@@ -25,7 +26,8 @@ import { ProductAttributeTranslationDto } from './product-attribute-translation-
 export interface IProductAttributeDto {
   id?: string;
   productTypeId?: string;
-  dataType?: string;
+  name?: string;
+  dataType?: ProductAttributeDataTypeEnum;
   isRequired?: boolean;
   isVariant?: boolean;
   sortOrder?: number;
@@ -36,7 +38,8 @@ export interface IProductAttributeDto {
 export class ProductAttributeDto implements IProductAttributeDto {
   id?: string;
   productTypeId?: string;
-  dataType?: string;
+  name?: string;
+  dataType?: ProductAttributeDataTypeEnum;
   isRequired?: boolean;
   isVariant?: boolean;
   sortOrder?: number;
@@ -55,6 +58,7 @@ init(data?: any) {
   if (data) {
     this.id = data["id"];
     this.productTypeId = data["productTypeId"];
+    this.name = data["name"];
     this.dataType = data["dataType"];
     this.isRequired = data["isRequired"];
     this.isVariant = data["isVariant"];

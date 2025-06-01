@@ -5,32 +5,41 @@ import { AppComponentBase } from '@app/app-component-base';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
 import {
-  ProductTypeDto,
-  ProductServiceProxy,
-  GetProductTypesQuery,
+  DeleteProductAttributeCommand,
   DeleteProductTypeCommand,
+  GetProductAttributesQuery,
+  GetProductTypesQuery,
+  ProductAttributeDto,
+  ProductServiceProxy,
+  ProductTypeDto,
 } from '@shared/service-proxies';
-import { Subscription, finalize } from 'rxjs';
-import { CreateOrEditProductTypeComponent } from './create-or-edit/create-or-edit.component';
+import { finalize } from 'rxjs';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { CreateOrEditProductTypeComponent } from '../product-types/create-or-edit/create-or-edit.component';
+import { CreateOrEditProductAttributeComponent } from './create-or-edit/create-or-edit.component';
 
 @Component({
-  selector: 'app-product-types',
-  templateUrl: './product-types.component.html',
-  styleUrls: ['./product-types.component.scss'],
+  selector: 'app-product-attributes',
+  templateUrl: './product-attributes.component.html',
+  styleUrls: ['./product-attributes.component.scss'],
   standalone: false,
 })
-export class ProductTypesComponent extends AppComponentBase implements OnInit {
+export class ProductAttributesComponent extends AppComponentBase implements OnInit {
   loading = true;
 
-  list: ProductTypeDto[] = [];
+  list: ProductAttributeDto[] = [];
   totalCount = 0;
 
   fields: FieldsType[] = [
     // { column: 'id', title: this.l('id'), width: 100 },
     { column: 'name', title: this.l('Name') },
-    { column: 'description', title: this.l('Description') },
+    { column: 'dataType', title: this.l('DataType') },
+    { column: 'isRequired', title: this.l('IsRequired'), type: 'yesNo' },
+    { column: 'isVariant', title: this.l('IsVariant'), type: 'yesNo' },
+    { column: 'sortOrder', title: this.l('SortOrder') },
     { column: 'creationTime', title: this.l('CreationTime'), type: 'dateTime' },
-  ];
+  ]; 
+
 
   form: FormGroup;
   page = 1;
@@ -38,13 +47,20 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
   listSubscription$?: Subscription;
   showFilter = false;
 
+  productTypeId = '';
+  productTypeName = '';
+
   constructor(
     injector: Injector,
     private productServiceProxy: ProductServiceProxy,
     private matDialog: MatDialog,
   ) {
     super(injector);
-    this.breadcrumb.list = [{ name: this.l('ProductTypes'), url: '/dashboard/products/types' }];
+    this.productTypeName = this.route.snapshot.queryParams['name'];
+    this.breadcrumb.list = [
+      { name: this.l('ProductTypes'), url: '/dashboard/products/types' },
+      { name: this.productTypeName },
+    ];
     this.form = this.fb.group({
       filter: [''],
     });
@@ -69,14 +85,15 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
       this.listSubscription$.unsubscribe();
     }
     this.loading = true;
-    const input = new GetProductTypesQuery();
+    const input = new GetProductAttributesQuery();
     input.filter = this.form.get('filter')?.value;
+    input.productTypeId = this.productTypeId;
     input.pageNumber = this.page;
     input.pageSize = this.perPage;
     input.sortBy = ev ? ev.field : '';
     input.sortDirection = ev ? ev.direction : '';
     this.listSubscription$ = this.productServiceProxy
-      .getProductTypes(input)
+      .getProductAttributes(input)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
         this.list = response.data?.items ?? [];
@@ -98,16 +115,17 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
 
   onPageChange(ev?: PageEvent) {
     this.getList();
-    this.router.navigate(['/dashboard/products/types'], {
+    this.router.navigate(['/dashboard/products/attributes/' + this.productTypeId], {
       queryParams: {
         page: this.page,
+        name: this.productTypeName,
       },
     });
   }
 
-  openCreateOrEditDialog(item?: ProductTypeDto) {
+  openCreateOrEditDialog(item?: ProductAttributeDto) {
     this.matDialog
-      .open(CreateOrEditProductTypeComponent, {
+      .open(CreateOrEditProductAttributeComponent, {
         data: {
           id: item?.id,
         },
@@ -121,12 +139,12 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
       });
   }
 
-  remove(item: ProductTypeDto) {
+  remove(item: ProductAttributeDto) {
     this.confirmMessage(`${this.l('Delete')}:${item?.name}`, this.l('AreUseSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
         this.productServiceProxy
-          .deleteProductType(new DeleteProductTypeCommand({ id: item.id }))
+          .deleteProductAttribute(new DeleteProductAttributeCommand({ id: item.id }))
           .pipe(finalize(() => this.hideMainLoading()))
           .subscribe((response) => {
             if (response.success) {
@@ -137,5 +155,6 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
       }
     });
   }
- 
+
+
 }

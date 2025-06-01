@@ -104,10 +104,10 @@ namespace SamaniCrm.Api.Controllers
 
         [HttpPost("GetProductAttributes")]
         [Permission(AppPermissions.Products_Attribute_List)]
-        [ProducesResponseType(typeof(ApiResponse<List<ProductAttributeDto>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<PaginatedResult<ProductAttributeDto>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetProductAttributes([FromBody] GetProductAttributesQuery request, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(request, cancellationToken);
+            PaginatedResult<ProductAttributeDto> result = await _mediator.Send(request, cancellationToken);
             return ApiOk(result);
         }
 

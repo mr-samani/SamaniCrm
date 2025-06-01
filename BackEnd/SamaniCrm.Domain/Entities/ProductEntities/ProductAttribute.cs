@@ -1,6 +1,7 @@
 ﻿using SamaniCrm.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -8,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Domain.Entities.ProductEntities
 {
-    public class ProductAttribute:IAuditableEntity,ISoftDelete
+    public class ProductAttribute : IAuditableEntity, ISoftDelete
     {
         public Guid Id { get; set; }
         public Guid ProductTypeId { get; set; }
 
-        public string DataType { get; set; } = default!; // string, int, decimal, bool...
+        public ProductAttributeDataTypeEnum DataType { get; set; } = default!; // string, int, decimal, bool...
         public bool IsRequired { get; set; }
         public bool IsVariant { get; set; }
         public int SortOrder { get; set; }
@@ -35,6 +36,20 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public bool IsDeleted { get; set; }
         public DateTime? DeletedTime { get; set; }
         public string? DeletedBy { get; set; }
+    }
+
+
+
+    public enum ProductAttributeDataTypeEnum
+    {
+        [Description("String")]
+        String = 0,
+        [Description("Int")]
+        Int,
+        [Description("Decimal")]
+        Decimal,
+        [Description("Bool")]
+        Bool
     }
 
 }

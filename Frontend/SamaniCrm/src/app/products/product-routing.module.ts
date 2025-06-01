@@ -18,6 +18,9 @@ const routes: Routes = [
         path: 'types',
         component: ProductTypesComponent,
       },
+      {
+        path: 'attributes/:productTypeId',
+      },
     ],
   },
 ];

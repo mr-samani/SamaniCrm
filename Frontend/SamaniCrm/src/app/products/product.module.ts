@@ -1,3 +1,4 @@
+import { ProductAttributesComponent } from './product-attributes/product-attributes.component';
 import { ProductTypesComponent } from './product-types/product-types.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -15,6 +16,7 @@ import { ProductServiceProxy } from '@shared/service-proxies/api/product.service
 import { CreateOrEditProductCategoryComponent } from './product-categories/create-or-edit/create-or-edit.component';
 import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 import { CreateOrEditProductTypeComponent } from './product-types/create-or-edit/create-or-edit.component';
+import { CreateOrEditProductAttributeComponent } from './product-attributes/create-or-edit/create-or-edit.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,8 @@ import { CreateOrEditProductTypeComponent } from './product-types/create-or-edit
     CreateOrEditProductCategoryComponent,
     ProductTypesComponent,
     CreateOrEditProductTypeComponent,
+    ProductAttributesComponent,
+    CreateOrEditProductAttributeComponent
   ],
   imports: [
     CommonModule,

@@ -1,11 +1,14 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using SamaniCrm.Core.Shared.Helpers;
+using SamaniCrm.Domain.Entities;
+using SamaniCrm.Domain.Entities.ProductEntities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
-using SamaniCrm.Domain.Entities.ProductEntities;
 
 namespace SamaniCrm.Infrastructure.EntityConfiguration;
 
@@ -103,6 +106,13 @@ public class ProductAttributeConfiguration : IEntityTypeConfiguration<ProductAtt
             .WithMany(c => c.Attributes)
             .HasForeignKey(p => p.ProductTypeId)
             .OnDelete(DeleteBehavior.Restrict);
+
+
+        var converter = new ValueConverter<ProductAttributeDataTypeEnum, string>(
+                            v => EnumHelper.GetDescription(v),
+                            v => EnumHelper.GetValueFromDescription<ProductAttributeDataTypeEnum>(v, ProductAttributeDataTypeEnum.String)
+                        );
+        builder.Property(b => b.DataType).HasConversion(converter);
     }
 }
 

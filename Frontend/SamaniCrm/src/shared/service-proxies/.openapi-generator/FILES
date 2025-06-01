@@ -86,8 +86,10 @@ model/paged-product-categories-dto.ts
 model/paged-product-category-dto.ts
 model/password-complexity-dto-api-response.ts
 model/password-complexity-dto.ts
+model/product-attribute-data-type-enum.ts
 model/product-attribute-dto-api-response.ts
-model/product-attribute-dto-list-api-response.ts
+model/product-attribute-dto-paginated-result-api-response.ts
+model/product-attribute-dto-paginated-result.ts
 model/product-attribute-dto.ts
 model/product-attribute-translation-dto.ts
 model/product-attribute-value-dto.ts

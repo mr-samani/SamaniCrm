@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ProductAttributeDto } from './product-attribute-dto';
 
 
 /**
@@ -20,26 +21,22 @@
  */
 /* Created with custom template */
 
-/** Interface for GetProductAttributesQuery */
-export interface IGetProductAttributesQuery {
+/** Interface for ProductAttributeDtoPaginatedResult */
+export interface IProductAttributeDtoPaginatedResult {
+  items?: Array<ProductAttributeDto>;
+  totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
-  sortBy?: string;
-  sortDirection?: string;
-  filter?: string;
-  productTypeId?: string;
 }
 
-/** Class for GetProductAttributesQuery */
-export class GetProductAttributesQuery implements IGetProductAttributesQuery {
+/** Class for ProductAttributeDtoPaginatedResult */
+export class ProductAttributeDtoPaginatedResult implements IProductAttributeDtoPaginatedResult {
+  items?: Array<ProductAttributeDto>;
+  totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
-  sortBy?: string;
-  sortDirection?: string;
-  filter?: string;
-  productTypeId?: string;
 
-  constructor(data?: IGetProductAttributesQuery) {
+  constructor(data?: IProductAttributeDtoPaginatedResult) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -50,17 +47,19 @@ export class GetProductAttributesQuery implements IGetProductAttributesQuery {
 
 init(data?: any) {
   if (data) {
+    if (Array.isArray(data["items"])) {
+      this.items = [] as any;
+      for (let item of data["items"])
+        (this.items as any).push(ProductAttributeDto.fromJS(item));
+    }
+    this.totalCount = data["totalCount"];
     this.pageNumber = data["pageNumber"];
     this.pageSize = data["pageSize"];
-    this.sortBy = data["sortBy"];
-    this.sortDirection = data["sortDirection"];
-    this.filter = data["filter"];
-    this.productTypeId = data["productTypeId"];
   }
 }
 
-  static fromJS(data: any): GetProductAttributesQuery {
-    const instance = new GetProductAttributesQuery();
+  static fromJS(data: any): ProductAttributeDtoPaginatedResult {
+    const instance = new ProductAttributeDtoPaginatedResult();
     instance.init(data);
     return instance;
   }

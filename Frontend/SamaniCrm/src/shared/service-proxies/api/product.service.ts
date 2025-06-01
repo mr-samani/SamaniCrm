@@ -49,7 +49,7 @@ import { PagedProductCategoriesDtoApiResponse } from '../model/paged-product-cat
 // @ts-ignore
 import { ProductAttributeDtoApiResponse } from '../model/product-attribute-dto-api-response';
 // @ts-ignore
-import { ProductAttributeDtoListApiResponse } from '../model/product-attribute-dto-list-api-response';
+import { ProductAttributeDtoPaginatedResultApiResponse } from '../model/product-attribute-dto-paginated-result-api-response';
 // @ts-ignore
 import { ProductCategoryDtoApiResponse } from '../model/product-category-dto-api-response';
 // @ts-ignore
@@ -733,9 +733,9 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProductAttributes(getProductAttributesQuery?: GetProductAttributesQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductAttributeDtoListApiResponse>;
-    public getProductAttributes(getProductAttributesQuery?: GetProductAttributesQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductAttributeDtoListApiResponse>>;
-    public getProductAttributes(getProductAttributesQuery?: GetProductAttributesQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductAttributeDtoListApiResponse>>;
+    public getProductAttributes(getProductAttributesQuery?: GetProductAttributesQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductAttributeDtoPaginatedResultApiResponse>;
+    public getProductAttributes(getProductAttributesQuery?: GetProductAttributesQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductAttributeDtoPaginatedResultApiResponse>>;
+    public getProductAttributes(getProductAttributesQuery?: GetProductAttributesQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductAttributeDtoPaginatedResultApiResponse>>;
     public getProductAttributes(getProductAttributesQuery?: GetProductAttributesQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -780,7 +780,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetProductAttributes`;
-        return this.httpClient.request<ProductAttributeDtoListApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ProductAttributeDtoPaginatedResultApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: getProductAttributesQuery,
