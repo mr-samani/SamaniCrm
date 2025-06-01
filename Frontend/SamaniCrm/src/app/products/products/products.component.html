@@ -7,7 +7,7 @@
   </div>
   <button mat-raised-button color="primary" (click)="openCreateOrEditDialog()">
     <i class="fa fa-user-plus mx-1"></i>
-    <span>{{ 'CreateNewCategory' | translate }}</span>
+    <span>{{ 'CreateNewProduct' | translate }}</span>
   </button>
 </div>
 
@@ -17,6 +17,12 @@
       <mat-label>{{ 'Filter' | translate }}</mat-label>
       <input matInput type="text" maxlength="500" formControlName="filter" />
     </mat-form-field>
+
+    <auto-complete-product-category
+      class="col-sm-6 col-md-4"
+      formControlName="productCategory"></auto-complete-product-category>
+      
+    <auto-complete-product-type class="col-sm-6 col-md-4" formControlName="productType"></auto-complete-product-type>
   </div>
   <div class="d-flex align-items-center justify-content-end gap-2">
     <button mat-stroked-button color="primary" (click)="resetFilter()" type="reset">
@@ -44,20 +50,6 @@
     <i class="fa fa-ellipsis-v"></i>
   </button>
   <mat-menu #menu="matMenu">
-    <a
-      mat-menu-item
-      [routerLink]="['/dashboard/products/product-list']"
-      [queryParams]="{
-        categoryId: item.id,
-        categoryTitle: item.title,
-      }">
-      <i class="fa fa-product mx-1"></i>
-      <span>{{ 'Products' | translate }}</span>
-    </a>
-    <a *ngIf="item.hasChild" mat-menu-item (click)="viewSubCategories(item)">
-      <i class="fa fa-list mx-1"></i>
-      <span>{{ 'ViewSubCategories' | translate }}</span>
-    </a>
     <a mat-menu-item (click)="openCreateOrEditDialog(item)">
       <i class="fa fa-edit mx-1"></i>
       <span>{{ 'Edit' | translate }}</span>

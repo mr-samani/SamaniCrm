@@ -1,3 +1,4 @@
+import { ProductsComponent } from './products/products.component';
 import { ProductAttributesComponent } from './product-attributes/product-attributes.component';
 import { ProductTypesComponent } from './product-types/product-types.component';
 import { NgModule } from '@angular/core';
@@ -17,6 +18,9 @@ import { CreateOrEditProductCategoryComponent } from './product-categories/creat
 import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 import { CreateOrEditProductTypeComponent } from './product-types/create-or-edit/create-or-edit.component';
 import { CreateOrEditProductAttributeComponent } from './product-attributes/create-or-edit/create-or-edit.component';
+import { CreateOrEditProductComponent } from './products/create-or-edit/create-or-edit.component';
+import { AutoCompleteProductCategoryComponent } from './auto-completes/auto-complete-category/auto-complete-category.component';
+import { AutoCompleteProductTypeComponent } from './auto-completes/auto-complete-product-type/auto-complete-product-type.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +30,9 @@ import { CreateOrEditProductAttributeComponent } from './product-attributes/crea
     ProductTypesComponent,
     CreateOrEditProductTypeComponent,
     ProductAttributesComponent,
-    CreateOrEditProductAttributeComponent
+    CreateOrEditProductAttributeComponent,
+    ProductsComponent,
+    CreateOrEditProductComponent,
   ],
   imports: [
     CommonModule,
@@ -39,6 +45,8 @@ import { CreateOrEditProductAttributeComponent } from './product-attributes/crea
     FilterComponent,
     MaterialCommonModule,
     TabGroupModule,
+    AutoCompleteProductCategoryComponent,
+    AutoCompleteProductTypeComponent,
   ],
   providers: [ProductServiceProxy],
 })

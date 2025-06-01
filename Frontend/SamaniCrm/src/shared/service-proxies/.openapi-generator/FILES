@@ -53,6 +53,8 @@ model/get-product-types-query.ts
 model/get-products-query.ts
 model/get-user-query.ts
 model/guid-api-response.ts
+model/guid-auto-complete-dto-list-api-response.ts
+model/guid-auto-complete-dto.ts
 model/initial-app-dto-api-response.ts
 model/initial-app-dto.ts
 model/input-captcha-dto.ts
@@ -97,7 +99,8 @@ model/product-category-dto-api-response.ts
 model/product-category-dto.ts
 model/product-category-translation-dto.ts
 model/product-dto-api-response.ts
-model/product-dto-list-api-response.ts
+model/product-dto-paginated-result-api-response.ts
+model/product-dto-paginated-result.ts
 model/product-dto.ts
 model/product-file-dto.ts
 model/product-image-dto.ts

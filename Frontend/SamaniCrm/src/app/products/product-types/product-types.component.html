@@ -45,6 +45,16 @@
   </button>
   <mat-menu #menu="matMenu">
     <a
+      mat-menu-item
+      [routerLink]="['/dashboard/products/product-list']"
+      [queryParams]="{
+        typeId: item.id,
+        typeTitle: item.name,
+      }">
+      <i class="fa fa-product mx-1"></i>
+      <span>{{ 'Products' | translate }}</span>
+    </a>
+    <a
       *ngIf="item.hasChild"
       mat-menu-item
       [routerLink]="['/dashboard/products/attributes/' + item.id]"

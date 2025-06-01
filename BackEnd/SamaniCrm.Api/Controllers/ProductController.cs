@@ -5,6 +5,7 @@ using SamaniCrm.Api.Attributes;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Menu.Commands;
+using SamaniCrm.Application.ProductManager.Queries;
 using SamaniCrm.Application.ProductManagerManager.Commands;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
 using SamaniCrm.Application.ProductManagerManager.Queries;
@@ -58,6 +59,18 @@ namespace SamaniCrm.Api.Controllers
             var result = await _mediator.Send(request, cancellationToken);
             return ApiOk<bool>(result);
         }
+
+
+
+        [HttpGet("GetAutoCompleteProductCategory")]
+        [Permission(AppPermissions.Products_Category_List)]
+        [ProducesResponseType(typeof(ApiResponse<List<AutoCompleteDto<Guid>>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAutoCompleteProductCategory(string? filter, CancellationToken cancellationToken)
+        {
+            List<AutoCompleteDto<Guid>> result = await _mediator.Send(new GetAutoCompleteProductCategoryQuery(filter), cancellationToken);
+            return ApiOk(result);
+        }
+
         #endregion
         // ________________________________________________________________________________________________________________________
         #region Types
@@ -96,6 +109,16 @@ namespace SamaniCrm.Api.Controllers
         {
             var result = await _mediator.Send(request, cancellationToken);
             return ApiOk<bool>(result);
+        }
+
+
+        [HttpGet("GetAutoCompleteProductType")]
+        [Permission(AppPermissions.Products_Type_List)]
+        [ProducesResponseType(typeof(ApiResponse<List<AutoCompleteDto<Guid>>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAutoCompleteProductType(string? filter, CancellationToken cancellationToken)
+        {
+            List<AutoCompleteDto<Guid>> result = await _mediator.Send(new GetAutoCompleteProductTypeQuery(filter), cancellationToken);
+            return ApiOk(result);
         }
         #endregion
         // ________________________________________________________________________________________________________________________
@@ -143,10 +166,10 @@ namespace SamaniCrm.Api.Controllers
 
         [HttpPost("GetProducts")]
         [Permission(AppPermissions.Products_List)]
-        [ProducesResponseType(typeof(ApiResponse<List<ProductDto>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<PaginatedResult<ProductDto>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetProducts([FromBody] GetProductsQuery request, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(request, cancellationToken);
+            PaginatedResult<ProductDto> result = await _mediator.Send(request, cancellationToken);
             return ApiOk(result);
         }
 

@@ -1,0 +1,54 @@
+<mat-form-field class="w-100" *ngIf="theme == 'material'">
+  <mat-label>{{ 'ProductCategory' | translate }}</mat-label>
+  <input
+    type="text"
+    matInput
+    [formControl]="myControl"
+    required
+    [matAutocomplete]="autoGroup"
+    #trigger="matAutocompleteTrigger"
+    (click)="openPanel(trigger)"
+    (change)="onChangeTextBox()" />
+  <mat-autocomplete #autoGroup="matAutocomplete" [displayWith]="displayFn.bind(this)" (optionSelected)="onChange()">
+    <mat-option disabled *ngIf="isEmpty">
+      {{ 'NotACase' | translate }}
+    </mat-option>
+    <ng-container *ngFor="let item of filteredOptions | async">
+      <mat-option [value]="item">
+        <span>{{ item.title }}</span>
+      </mat-option>
+    </ng-container>
+  </mat-autocomplete>
+  <mat-spinner diameter="20" color="primary" *ngIf="loading" matSuffix></mat-spinner>
+  <button mat-icon-button matSuffix *ngIf="myControl.value && !loading" (click)="reset()">
+    <i class="fa fa-times"></i>
+  </button>
+</mat-form-field>
+
+<mat-form-field class="w-100" *ngIf="theme == 'bootstrap'">
+  <div class="d-flex">
+    <input
+      type="text"
+      matInput
+      [formControl]="myControl"
+      required
+      [matAutocomplete]="autoGroup"
+      #trigger="matAutocompleteTrigger"
+      (click)="openPanel(trigger)"
+      (change)="onChangeTextBox()" />
+    <mat-autocomplete #autoGroup="matAutocomplete" [displayWith]="displayFn.bind(this)" (optionSelected)="onChange()">
+      <mat-option disabled *ngIf="isEmpty">
+        {{ 'NotACase' | translate }}
+      </mat-option>
+      <ng-container *ngFor="let item of filteredOptions | async">
+        <mat-option [value]="item">
+          <span>{{ item.title }}</span>
+        </mat-option>
+      </ng-container>
+    </mat-autocomplete>
+    <mat-spinner diameter="20" color="primary" *ngIf="loading" matSuffix></mat-spinner>
+    <button mat-icon-button matSuffix *ngIf="myControl.value && !loading" (click)="reset()">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+</mat-form-field>

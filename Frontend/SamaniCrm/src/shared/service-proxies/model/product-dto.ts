@@ -31,6 +31,10 @@ export interface IProductDto {
   tenantId?: string;
   categoryId?: string;
   productTypeId?: string;
+  title?: string;
+  description?: string;
+  categoryTitle?: string;
+  productTypeTitle?: string;
   sku: string;
   slug?: string;
   isActive?: boolean;
@@ -48,6 +52,10 @@ export class ProductDto implements IProductDto {
   tenantId?: string;
   categoryId?: string;
   productTypeId?: string;
+  title?: string;
+  description?: string;
+  categoryTitle?: string;
+  productTypeTitle?: string;
   sku!: string;
   slug?: string;
   isActive?: boolean;
@@ -73,6 +81,10 @@ init(data?: any) {
     this.tenantId = data["tenantId"];
     this.categoryId = data["categoryId"];
     this.productTypeId = data["productTypeId"];
+    this.title = data["title"];
+    this.description = data["description"];
+    this.categoryTitle = data["categoryTitle"];
+    this.productTypeTitle = data["productTypeTitle"];
     this.sku = data["sku"];
     this.slug = data["slug"];
     this.isActive = data["isActive"];

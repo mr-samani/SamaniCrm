@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ProductDto } from './product-dto';
 
 
 /**
@@ -20,28 +21,22 @@
  */
 /* Created with custom template */
 
-/** Interface for GetProductsQuery */
-export interface IGetProductsQuery {
+/** Interface for ProductDtoPaginatedResult */
+export interface IProductDtoPaginatedResult {
+  items?: Array<ProductDto>;
+  totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
-  sortBy?: string;
-  sortDirection?: string;
-  filter?: string;
-  categoryId?: string;
-  productTypeId?: string;
 }
 
-/** Class for GetProductsQuery */
-export class GetProductsQuery implements IGetProductsQuery {
+/** Class for ProductDtoPaginatedResult */
+export class ProductDtoPaginatedResult implements IProductDtoPaginatedResult {
+  items?: Array<ProductDto>;
+  totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
-  sortBy?: string;
-  sortDirection?: string;
-  filter?: string;
-  categoryId?: string;
-  productTypeId?: string;
 
-  constructor(data?: IGetProductsQuery) {
+  constructor(data?: IProductDtoPaginatedResult) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -52,18 +47,19 @@ export class GetProductsQuery implements IGetProductsQuery {
 
 init(data?: any) {
   if (data) {
+    if (Array.isArray(data["items"])) {
+      this.items = [] as any;
+      for (let item of data["items"])
+        (this.items as any).push(ProductDto.fromJS(item));
+    }
+    this.totalCount = data["totalCount"];
     this.pageNumber = data["pageNumber"];
     this.pageSize = data["pageSize"];
-    this.sortBy = data["sortBy"];
-    this.sortDirection = data["sortDirection"];
-    this.filter = data["filter"];
-    this.categoryId = data["categoryId"];
-    this.productTypeId = data["productTypeId"];
   }
 }
 
-  static fromJS(data: any): GetProductsQuery {
-    const instance = new GetProductsQuery();
+  static fromJS(data: any): ProductDtoPaginatedResult {
+    const instance = new ProductDtoPaginatedResult();
     instance.init(data);
     return instance;
   }

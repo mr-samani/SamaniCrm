@@ -10,6 +10,14 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
         public Guid TenantId { get; set; }
         public Guid CategoryId { get; set; }
         public Guid ProductTypeId { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string? Description { get; set; }
+
+        public string? CategoryTitle { get; set; }
+        public string? ProductTypeTitle { get; set; }   
+
+
+
         [Required]
         [MaxLength(100)]
         public string SKU { get; set; } = string.Empty;
