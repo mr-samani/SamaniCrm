@@ -12,7 +12,7 @@ using SamaniCrm.Infrastructure;
 namespace SamaniCrm.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250601071122_Product")]
+    [Migration("20250601152142_Product")]
     partial class Product
     {
         /// <inheritdoc />
@@ -532,16 +532,11 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("ProductTypeId");
-
-                    b.HasIndex("TenantId");
 
                     b.ToTable("Products", "product");
                 });
@@ -732,14 +727,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ParentId");
-
-                    b.HasIndex("TenantId");
 
                     b.ToTable("ProductCategories", "product");
                 });
@@ -1020,12 +1010,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<DateTime?>("LastModifiedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TenantId");
 
                     b.ToTable("ProductTypes", "product");
                 });
@@ -1158,31 +1143,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SecuritySettings");
-                });
-
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.Tenant", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tenants", (string)null);
                 });
 
             modelBuilder.Entity("SamaniCrm.Infrastructure.Identity.ApplicationRole", b =>
@@ -1455,12 +1415,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SamaniCrm.Domain.Entities.Tenant", "Tenant")
-                        .WithMany("Products")
-                        .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.OwnsOne("SamaniCrm.Domain.ValueObjects.Product.Sku", "SKU", b1 =>
                         {
                             b1.Property<Guid>("ProductId")
@@ -1486,8 +1440,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Navigation("SKU")
                         .IsRequired();
-
-                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductAttribute", b =>
@@ -1568,15 +1520,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("SamaniCrm.Domain.Entities.Tenant", "Tenant")
-                        .WithMany("ProductCategories")
-                        .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Parent");
-
-                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductCategoryTranslation", b =>
@@ -1648,17 +1592,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Language");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductType", b =>
-                {
-                    b.HasOne("SamaniCrm.Domain.Entities.Tenant", "Tenant")
-                        .WithMany()
-                        .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductTypeTranslation", b =>
@@ -1754,13 +1687,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Products");
 
                     b.Navigation("Translations");
-                });
-
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.Tenant", b =>
-                {
-                    b.Navigation("ProductCategories");
-
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("SamaniCrm.Infrastructure.Identity.ApplicationRole", b =>

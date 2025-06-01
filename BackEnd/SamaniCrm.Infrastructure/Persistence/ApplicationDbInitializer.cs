@@ -95,7 +95,7 @@ namespace SamaniCrm.Infrastructure.Persistence
             await SeedLocalization.TrySeedAsync(_context);
             await SeedDefaultUsers.TrySeedAsync(_context,_logger,_userManager,_roleManager);
             await SeedSecuritySettings.TrySeedAsync(_context);
-            await SeedTenants.TrySeedAsync(_context);
+            await SeedProductCategoriesFromFile.TrySeedAsync(_context);
 
         }
     }

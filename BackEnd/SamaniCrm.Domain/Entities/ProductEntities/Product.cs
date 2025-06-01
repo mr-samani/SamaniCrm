@@ -13,7 +13,6 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
     public class Product : IAuditableEntity, ISoftDelete
     {
         public Guid Id { get; set; }
-        public Guid TenantId { get; set; }
         public Guid CategoryId { get; set; }
 
         [Required]
@@ -32,7 +31,6 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; }
 
-        public virtual Tenant Tenant { get; set; } = default!;
         public ProductCategory Category { get; set; } = default!;
         public virtual ICollection<ProductTranslation> Translations { get; set; } = new List<ProductTranslation>();
 

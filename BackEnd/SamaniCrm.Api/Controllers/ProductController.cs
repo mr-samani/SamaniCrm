@@ -46,7 +46,7 @@ namespace SamaniCrm.Api.Controllers
         [Permission(AppPermissions.Products_Category_Edit)]
         [Permission(AppPermissions.Products_Category_Create)]
         [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateOrEditProductCategory(CreateOrUpdateProductCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateOrEditProductCategory([FromBody] CreateOrUpdateProductCategoryCommand request, CancellationToken cancellationToken)
         {
             return ApiOk(await _mediator.Send(request, cancellationToken));
         }
@@ -97,7 +97,7 @@ namespace SamaniCrm.Api.Controllers
         [Permission(AppPermissions.Products_Type_Edit)]
         [Permission(AppPermissions.Products_Type_Create)]
         [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateOrEditProductType(CreateOrUpdateProductTypeCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateOrEditProductType([FromBody] CreateOrUpdateProductTypeCommand request, CancellationToken cancellationToken)
         {
             return ApiOk(await _mediator.Send(request, cancellationToken));
         }
@@ -146,7 +146,7 @@ namespace SamaniCrm.Api.Controllers
         [Permission(AppPermissions.Products_Attribute_Edit)]
         [Permission(AppPermissions.Products_Attribute_Create)]
         [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateOrEditProductAttribute(CreateOrUpdateProductAttributeCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateOrEditProductAttribute([FromBody] CreateOrUpdateProductAttributeCommand request, CancellationToken cancellationToken)
         {
             return ApiOk(await _mediator.Send(request, cancellationToken));
         }
@@ -185,7 +185,7 @@ namespace SamaniCrm.Api.Controllers
         [Permission(AppPermissions.Products_Edit)]
         [Permission(AppPermissions.Products_Create)]
         [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateOrEditProduct(CreateOrUpdateProductCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateOrEditProduct([FromBody] CreateOrUpdateProductCommand request, CancellationToken cancellationToken)
         {
             return ApiOk(await _mediator.Send(request, cancellationToken));
         }

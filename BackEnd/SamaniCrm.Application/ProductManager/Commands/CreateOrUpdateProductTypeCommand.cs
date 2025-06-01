@@ -37,7 +37,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                 entity = new ProductType();
                 _dbContext.ProductTypes.Add(entity);
             }
-            entity.TenantId = request.TenantId;
             entity.LastModifiedTime = DateTime.UtcNow;
             // Handle translations
             if (request != null)

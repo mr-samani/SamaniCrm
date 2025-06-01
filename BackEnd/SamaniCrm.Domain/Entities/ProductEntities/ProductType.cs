@@ -10,10 +10,7 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
     public class ProductType:IAuditableEntity,ISoftDelete
     {
         public Guid Id { get; set; }
-        public Guid TenantId { get; set; }
 
-
-        public virtual Tenant Tenant { get; set; } = default!;
         public virtual ICollection<ProductAttribute> Attributes { get; set; } = new List<ProductAttribute>();
         public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 

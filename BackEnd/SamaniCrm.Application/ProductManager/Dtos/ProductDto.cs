@@ -7,7 +7,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
     public class ProductDto
     {
         public Guid? Id { get; set; }
-        public Guid TenantId { get; set; }
         public Guid CategoryId { get; set; }
         public Guid ProductTypeId { get; set; }
         public string Title { get; set; } = string.Empty;

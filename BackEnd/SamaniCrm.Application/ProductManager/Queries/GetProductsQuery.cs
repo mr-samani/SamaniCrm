@@ -76,7 +76,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
                 .Select(s => new ProductDto
                 {
                     Id = s.Id,
-                    TenantId = s.TenantId,
                     CategoryId = s.CategoryId,
                     ProductTypeId = s.ProductTypeId,
                     SKU = s.SKU.Value,

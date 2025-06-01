@@ -10,7 +10,6 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
     public class ProductCategory : IAuditableEntity, ISoftDelete
     {
         public Guid Id { get; set; }
-        public Guid TenantId { get; set; }
         public Guid? ParentId { get; set; }
 
         public string Slug { get; set; } = default!;
@@ -19,7 +18,6 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; }
 
-        public virtual Tenant Tenant { get; set; } = default!;
         public virtual ProductCategory? Parent { get; set; }
         public virtual ICollection<ProductCategory> Children { get; set; } = new List<ProductCategory>();
         public virtual ICollection<Product> Products { get; set; } = new List<Product>();

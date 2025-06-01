@@ -41,7 +41,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                 entity = new Product();
                 _dbContext.Products.Add(entity);
             }
-            entity.TenantId = request.TenantId;
             entity.CategoryId = request.CategoryId;
             entity.ProductTypeId = request.ProductTypeId;
             entity.Slug = request.Slug;

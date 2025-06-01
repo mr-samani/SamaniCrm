@@ -14,7 +14,7 @@
     "PerPage": "در هر صفحه"
   },
   "Message": {
-    "AccessDenied":"خطای دسترسی",
+    "AccessDenied": "خطای دسترسی",
     "DataNotFound{value}": "داده‌ای یافت نشد برای: '{{value}}'",
     "NotFoundResult": "موردی یافت نشد",
     "Error": "خطا",
@@ -29,8 +29,9 @@
     "PleaseLogin": "لطفاً وارد حساب کاربری خود شوید",
     "LoginSuccess": "ورود با موفقیت انجام شد",
     "EnterUsernameAndPassword": "نام کاربری و کلمه عبور خود را وارد کنید",
-    "UsernameOrPasswordIsInvalid":"نام کاربری یا کلمه عبور صحیح نیست!",
-    "AccessDeniedMessage":"اعتبار دسترسی شما به اتمام رسیده است. لطفاً مجددا وارد حساب کاربری خود شوید."
+    "UsernameOrPasswordIsInvalid": "نام کاربری یا کلمه عبور صحیح نیست!",
+    "AccessDeniedMessage": "اعتبار دسترسی شما به اتمام رسیده است. لطفاً مجددا وارد حساب کاربری خود شوید.",
+    "InvalidYourRequest": "درخواست نامعتبر"
   },
   "ShowMore": "اطلاعات بیشتر",
   "ReturnToHome": "بازگشت به صفحه اصلی",
@@ -81,7 +82,7 @@
   "MobileNumber": "شماره موبایل",
   "PhoneNumber": "شماره تلفن",
   "CaptchaCode": "کد امنیتی",
-  "RememberMe":"مرا به خاطر بسپار",
+  "RememberMe": "مرا به خاطر بسپار",
   "News": "اخبار",
   "Type": "نوع",
   "Name": "نام",

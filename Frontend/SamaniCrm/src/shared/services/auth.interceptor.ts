@@ -124,11 +124,21 @@ export class AuthInterceptor implements HttpInterceptor {
 
   handleBadRequestError(err: any) {
     const msg = err?.message ?? this.translateService.instant('Message.InvalidYourRequest');
-    const errorList: Array<ApiError> = err?.errors && Array.isArray(err.errors) ? err.errors : (err.request ?? []);
-    let html = '';
-    for (let item of errorList) {
-      html += `<p>${item.field}: ${item.message}</p>`;
+    let errorList = [];
+    if (err?.errors && Array.isArray(err.errors)) {
+      errorList = err.errors;
+    } else if (err.request) {
+      errorList = err.request;
+    } else if (typeof err.errors == 'object') {
+      errorList = Object.entries(err.errors).map((m) => {
+        return { field: m[0], message: m[1] };
+      });
     }
+    let html = '<ol class="text-start">';
+    for (let item of errorList) {
+      html += `<li>${item.field}: ${item.message}</li>`;
+    }
+    html += '</ol>';
     this.alertService.show({
       title: msg,
       html: html,

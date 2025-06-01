@@ -20,7 +20,7 @@ import { ProductServiceProxy, GuidAutoCompleteDto } from '@shared/service-proxie
 import { Observable, startWith, debounceTime, distinctUntilChanged, switchMap, of, finalize, map } from 'rxjs';
 
 @Component({
-  selector: 'app-auto-complete-product-type',
+  selector: 'auto-complete-product-type',
   templateUrl: './auto-complete-product-type.component.html',
   styleUrls: ['./auto-complete-product-type.component.scss'],
   standalone: true,

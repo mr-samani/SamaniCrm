@@ -5,6 +5,7 @@ import { ProductCategoriesComponent } from './product-categories/product-categor
 import { ProductTypesComponent } from './product-types/product-types.component';
 import { ProductsComponent } from './products/products.component';
 import { ProductAttributesComponent } from './product-attributes/product-attributes.component';
+import { CreateOrEditProductComponent } from './products/create-or-edit/create-or-edit.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,14 @@ const routes: Routes = [
       {
         path: 'product-list',
         component: ProductsComponent,
+      },
+      {
+        path: 'new-product',
+        component: CreateOrEditProductComponent,
+      },
+      {
+        path: 'update-product/:id',
+        component: CreateOrEditProductComponent,
       },
     ],
   },

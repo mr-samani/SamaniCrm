@@ -22,11 +22,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.HasKey(p => p.Id);
 
 
-        builder.HasOne(p => p.Tenant)
-               .WithMany(t => t.Products)
-               .HasForeignKey(p => p.TenantId)
-               .OnDelete(DeleteBehavior.Restrict);
-
         builder.HasOne(p => p.Category)
                .WithMany(c => c.Products)
                .HasForeignKey(p => p.CategoryId)
@@ -48,7 +43,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
               .IsRequired();
 
 
-        // builder.HasIndex(p => new { p.TenantId, p.SKU }).IsUnique();
     }
 }
 

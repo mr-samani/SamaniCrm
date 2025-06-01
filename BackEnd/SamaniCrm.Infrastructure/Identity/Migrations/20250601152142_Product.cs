@@ -15,27 +15,11 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                 name: "product");
 
             migrationBuilder.CreateTable(
-                name: "Tenants",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Slug = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tenants", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ProductCategories",
                 schema: "product",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Slug = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -60,12 +44,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         principalTable: "ProductCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProductCategories_Tenants_TenantId",
-                        column: x => x.TenantId,
-                        principalTable: "Tenants",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -74,7 +52,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModifiedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -86,12 +63,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductTypes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductTypes_Tenants_TenantId",
-                        column: x => x.TenantId,
-                        principalTable: "Tenants",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -167,7 +138,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SKU = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     Slug = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -197,12 +167,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         column: x => x.ProductTypeId,
                         principalSchema: "product",
                         principalTable: "ProductTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Products_Tenants_TenantId",
-                        column: x => x.TenantId,
-                        principalTable: "Tenants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -477,12 +441,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductCategories_TenantId",
-                schema: "product",
-                table: "ProductCategories",
-                column: "TenantId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProductCategoryTranslations_CategoryId",
                 schema: "product",
                 table: "ProductCategoryTranslations",
@@ -525,12 +483,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                 column: "ProductTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_TenantId",
-                schema: "product",
-                table: "Products",
-                column: "TenantId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProductTranslations_Culture",
                 schema: "product",
                 table: "ProductTranslations",
@@ -541,12 +493,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                 schema: "product",
                 table: "ProductTranslations",
                 column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductTypes_TenantId",
-                schema: "product",
-                table: "ProductTypes",
-                column: "TenantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductTypeTranslations_Culture",
@@ -611,9 +557,6 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
             migrationBuilder.DropTable(
                 name: "ProductTypes",
                 schema: "product");
-
-            migrationBuilder.DropTable(
-                name: "Tenants");
         }
     }
 }

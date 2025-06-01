@@ -132,19 +132,11 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
   }
 
   openCreateOrEditDialog(item?: ProductDto) {
-    this.matDialog
-      .open(CreateOrEditProductComponent, {
-        data: {
-          id: item?.id,
-        },
-        width: '768px',
-      })
-      .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.reload();
-        }
-      });
+    if (item) {
+      this.router.navigate(['/dashboard/products/update-product/' + item.id]);
+    } else {
+      this.router.navigate(['/dashboard/products/new-product']);
+    }
   }
 
   remove(item: ProductTypeDto) {

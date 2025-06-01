@@ -32,7 +32,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
             var dto = new ProductDto
             {
                 Id = entity.Id,
-                TenantId = entity.TenantId,
                 CategoryId = entity.CategoryId,
                 ProductTypeId = entity.ProductTypeId,
                 SKU = entity.SKU.ToString(),

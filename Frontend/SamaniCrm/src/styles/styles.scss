@@ -85,7 +85,12 @@ a {
 .fa {
   font-size: var(--fa-size);
 }
-
+.text-start {
+  text-align: start !important;
+}
+.text-end {
+  text-align: end !important;
+}
 /*notify */
 .notify-success {
   background-color: #00bb73;

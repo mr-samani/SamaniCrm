@@ -6,20 +6,18 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
     public class ProductTypeDto
     {
         public Guid? Id { get; set; }
-        public Guid TenantId { get; set; }
         public List<ProductAttributeDto>? Attributes { get; set; }
-        public string culture { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public string? Description { get; set; }
+        public DateTime? CreationTime { get; set; }
 
         public List<ProductTypeTranslationDto>? Translations { get; set; }
     }
 
     public class ProductTypeTranslationDto
     {
-        public Guid ProductTypeId { get; set; }
+        public Guid? ProductTypeId { get; set; }
         public required string Culture { get; set; }
-
         public string Name { get; set; }
         public string? Description { get; set; }
     }

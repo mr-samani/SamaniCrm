@@ -1,12 +1,12 @@
 import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { FormArray, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
 import {
   ProductServiceProxy,
   ProductTypeTranslationDto,
-  CreateOrUpdateProductTypeCommand,
+  CreateOrUpdateProductCommand,
+  ProductTranslationDto,
 } from '@shared/service-proxies';
 import { finalize } from 'rxjs';
 
@@ -21,20 +21,20 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
   loading = false;
   saving = false;
   isUpdate: boolean;
-  translations?: ProductTypeTranslationDto[];
+  translations?: ProductTranslationDto[];
   id: string;
 
   constructor(
     injector: Injector,
-    @Inject(MAT_DIALOG_DATA) _data: { id: string },
-    private dialogRef: MatDialogRef<CreateOrEditProductComponent>,
     private productService: ProductServiceProxy,
   ) {
     super(injector);
+    this.breadcrumb.list = [{ name: this.l('Products'), url: '/dashboard/products/product-list' }];
+
     this.form = this.fb.group({
       translations: this.fb.array([]),
     });
-    this.id = _data.id;
+    this.id = this.route.snapshot.params['id'];
 
     if (this.id) {
       this.isUpdate = true;
@@ -51,11 +51,11 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
     this.translations = [];
     for (let item of AppConst.languageList ?? []) {
       this.translations.push(
-        new ProductTypeTranslationDto({
+        new ProductTranslationDto({
           culture: item.culture!,
-          name: '',
+          title: '',
           description: '',
-          productTypeId: this.id,
+          productId: this.id,
         }),
       );
     }
@@ -65,7 +65,7 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
   getForEdit(id: string) {
     this.loading = true;
     this.productService
-      .getProductTypeForEdit(id)
+      .getProductForEdit(id)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
         next: (response) => {
@@ -74,11 +74,11 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
             this.translations = response.data.translations;
             this.setTranslations();
           } else {
-            this.dialogRef.close();
+            window.history.back();
           }
         },
         error: (err) => {
-          this.dialogRef.close();
+          window.history.back();
         },
       });
   }
@@ -96,9 +96,9 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
         this.fb.group({
           culture: [translation.culture],
           // data: this.fb.group({
-          name: [translation.name, Validators.required],
+          title: [translation.title, Validators.required],
           description: [translation.description],
-          productTypeId: [translation.productTypeId],
+          productId: [translation.productId],
           //})
         }),
       );
@@ -112,17 +112,17 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
       return;
     }
     this.saving = true;
-    const input = new CreateOrUpdateProductTypeCommand();
+    const input = new CreateOrUpdateProductCommand();
     input.init(this.form.value);
     input.id = this.id;
     this.productService
-      .createOrEditProductType(input)
+      .createOrEditProduct(input)
       .pipe(finalize(() => (this.saving = false)))
       .subscribe({
         next: (response) => {
           if (response.success) {
             this.notify.success(this.l('SaveSuccessFully'));
-            this.dialogRef.close(true);
+            this.router.navigate(['/app/dashboard/products/product-list']);
           }
         },
       });

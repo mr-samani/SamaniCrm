@@ -34,7 +34,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
             var currentLanguage = L.CurrentLanguage;
 
             var query = _dbContext.ProductTypes
-                .Include(x => x.Translations.Where(w => w.Culture == currentLanguage))
+                .Include(x => x.Translations)
                 .AsQueryable();
 
 
@@ -65,9 +65,9 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
                 .Select(s => new ProductTypeDto()
                 {
                     Id = s.Id,
-                    TenantId = s.TenantId,
-                    Name = s.Translations.Select(s => s.Name).FirstOrDefault() ?? "",
-                    Description = s.Translations.Select(s => s.Description).FirstOrDefault() ?? "",
+                    Name = s.Translations.Where(w => w.Culture == currentLanguage).Select(s => s.Name).FirstOrDefault() ?? "",
+                    Description = s.Translations.Where(w => w.Culture == currentLanguage).Select(s => s.Description).FirstOrDefault() ?? "",
+                    CreationTime = s.CreationTime,
                 })
                 .ToListAsync(cancellationToken);
             return new PaginatedResult<ProductTypeDto>()

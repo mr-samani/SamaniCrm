@@ -10,7 +10,7 @@ public static class SeedProductCategoriesFromFile
 {
     private const string FilePath = "seed-data/taxonomy-with-ids.en-US.txt";
 
-    public static async Task TrySeedAsync(ApplicationDbContext dbContext, Guid tenantId)
+    public static async Task TrySeedAsync(ApplicationDbContext dbContext)
     {
         Console.WriteLine("Seeding product categories from taxonomy file...");
 
@@ -46,7 +46,6 @@ public static class SeedProductCategoriesFromFile
                     var category = new ProductCategory
                     {
                         Id = Guid.NewGuid(),
-                        TenantId = tenantId,
                         ParentId = parentPath != null && categories.ContainsKey(parentPath)
                             ? categories[parentPath].Id
                             : null,

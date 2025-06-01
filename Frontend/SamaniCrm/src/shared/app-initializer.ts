@@ -26,10 +26,11 @@ export class AppInitializer {
       // AppConst.currentLanguage = localStorage.getItem('lang') || '';
       return new Promise((resolve, reject) => {
         let baseUrl = this.getDocumentOrigin() + this.getBaseHref();
+        const rnd = Math.round(Math.random() * 1000);
         if (isDevMode()) {
-          baseUrl = baseUrl + 'appconfig.json';
+          baseUrl = baseUrl + 'appconfig.json?v=' + rnd;
         } else {
-          baseUrl = baseUrl + 'appconfig.production.json';
+          baseUrl = baseUrl + 'appconfig.production.json?v=' + rnd;
         }
         // app config
         this.httpClient.get(baseUrl).subscribe({
