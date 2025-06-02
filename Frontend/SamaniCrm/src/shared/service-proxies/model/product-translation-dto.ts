@@ -26,6 +26,7 @@ export interface IProductTranslationDto {
   culture?: string;
   title?: string;
   description?: string;
+  content?: string;
 }
 
 /** Class for ProductTranslationDto */
@@ -34,6 +35,7 @@ export class ProductTranslationDto implements IProductTranslationDto {
   culture?: string;
   title?: string;
   description?: string;
+  content?: string;
 
   constructor(data?: IProductTranslationDto) {
     if (data) {
@@ -50,6 +52,7 @@ init(data?: any) {
     this.culture = data["culture"];
     this.title = data["title"];
     this.description = data["description"];
+    this.content = data["content"];
   }
 }
 

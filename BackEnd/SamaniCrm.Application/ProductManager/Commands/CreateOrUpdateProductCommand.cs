@@ -86,6 +86,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                     {
                         existingTranslation.Title = t.Title;
                         existingTranslation.Description = t.Description;
+                        existingTranslation.Content = t.Content;
                     }
                     else
                     {
@@ -95,6 +96,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                             Culture = t.Culture,
                             Title = t.Title,
                             Description = t.Description,
+                            Content = t.Content,
                             CreationTime = DateTime.UtcNow
                         });
                     }

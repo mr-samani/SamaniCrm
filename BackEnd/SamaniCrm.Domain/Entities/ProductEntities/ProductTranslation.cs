@@ -17,6 +17,8 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         [MaxLength(1000)]
         public string? Description { get; set; }
 
+        public string? Content { get; set; }
+
         public virtual Product Product { get; set; } = default!;
 
 

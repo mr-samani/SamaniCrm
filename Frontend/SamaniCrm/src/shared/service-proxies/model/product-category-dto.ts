@@ -30,7 +30,7 @@ export interface IProductCategoryDto {
   slug?: string;
   orderIndex?: number;
   isActive?: boolean;
-  createdAt?: string;
+  createdTime?: string;
   parentId?: string;
   children?: Array<ProductCategoryDto>;
   translations?: Array<ProductCategoryTranslationDto>;
@@ -45,7 +45,7 @@ export class ProductCategoryDto implements IProductCategoryDto {
   slug?: string;
   orderIndex?: number;
   isActive?: boolean;
-  createdAt?: string;
+  createdTime?: string;
   parentId?: string;
   children?: Array<ProductCategoryDto>;
   translations?: Array<ProductCategoryTranslationDto>;
@@ -68,7 +68,7 @@ init(data?: any) {
     this.slug = data["slug"];
     this.orderIndex = data["orderIndex"];
     this.isActive = data["isActive"];
-    this.createdAt = data["createdAt"];
+    this.createdTime = data["createdTime"];
     this.parentId = data["parentId"];
     if (Array.isArray(data["children"])) {
       this.children = [] as any;

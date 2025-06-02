@@ -48,14 +48,15 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
                 SKU = entity.SKU.ToString(),
                 Slug = entity.Slug,
                 IsActive = entity.IsActive,
-                Tags = entity.Tags,
+                Tags = entity.Tags, 
                 // Translations mapping
                 Translations = entity.Translations.Select(t => new ProductTranslationDto
                 {
                     ProductId = t.ProductId,
                     Culture = t.Culture,
                     Title = t.Title,
-                    Description = t.Description
+                    Description = t.Description,
+                    Content= t.Content,
                 }).ToList(),
                 Images = entity.Images.Select(img => new ProductImageDto
                 {

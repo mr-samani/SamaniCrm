@@ -17,7 +17,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
 
         public string? Tags { get; set; }
 
-
         [Required]
         [MaxLength(100)]
         public string SKU { get; set; } = string.Empty;
@@ -37,6 +36,9 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
         public string Culture { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
+        public string? Content { get; set; }
+
+
     }
 
     //public class ProductImageDto

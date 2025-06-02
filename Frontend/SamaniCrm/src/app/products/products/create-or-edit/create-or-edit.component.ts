@@ -70,6 +70,7 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
           culture: item.culture!,
           title: '',
           description: '',
+          content: '',
           productId: this.id,
         }),
       );
@@ -128,6 +129,7 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
           // data: this.fb.group({
           title: [translation.title, Validators.required],
           description: [translation.description],
+          content: [translation.content],
           productId: [translation.productId],
           //})
         }),
