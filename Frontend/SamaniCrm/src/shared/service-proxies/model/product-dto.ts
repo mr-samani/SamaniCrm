@@ -28,7 +28,6 @@ import { ProductTranslationDto } from './product-translation-dto';
 /** Interface for ProductDto */
 export interface IProductDto {
   id?: string;
-  tenantId?: string;
   categoryId?: string;
   productTypeId?: string;
   title?: string;
@@ -49,7 +48,6 @@ export interface IProductDto {
 /** Class for ProductDto */
 export class ProductDto implements IProductDto {
   id?: string;
-  tenantId?: string;
   categoryId?: string;
   productTypeId?: string;
   title?: string;
@@ -78,7 +76,6 @@ export class ProductDto implements IProductDto {
 init(data?: any) {
   if (data) {
     this.id = data["id"];
-    this.tenantId = data["tenantId"];
     this.categoryId = data["categoryId"];
     this.productTypeId = data["productTypeId"];
     this.title = data["title"];

@@ -25,22 +25,20 @@ import { ProductAttributeDto } from './product-attribute-dto';
 /** Interface for ProductTypeDto */
 export interface IProductTypeDto {
   id?: string;
-  tenantId?: string;
   attributes?: Array<ProductAttributeDto>;
-  culture?: string;
   name?: string;
   description?: string;
+  creationTime?: string;
   translations?: Array<ProductTypeTranslationDto>;
 }
 
 /** Class for ProductTypeDto */
 export class ProductTypeDto implements IProductTypeDto {
   id?: string;
-  tenantId?: string;
   attributes?: Array<ProductAttributeDto>;
-  culture?: string;
   name?: string;
   description?: string;
+  creationTime?: string;
   translations?: Array<ProductTypeTranslationDto>;
 
   constructor(data?: IProductTypeDto) {
@@ -55,15 +53,14 @@ export class ProductTypeDto implements IProductTypeDto {
 init(data?: any) {
   if (data) {
     this.id = data["id"];
-    this.tenantId = data["tenantId"];
     if (Array.isArray(data["attributes"])) {
       this.attributes = [] as any;
       for (let item of data["attributes"])
         (this.attributes as any).push(ProductAttributeDto.fromJS(item));
     }
-    this.culture = data["culture"];
     this.name = data["name"];
     this.description = data["description"];
+    this.creationTime = data["creationTime"];
     if (Array.isArray(data["translations"])) {
       this.translations = [] as any;
       for (let item of data["translations"])

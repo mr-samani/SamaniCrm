@@ -46,6 +46,8 @@ model/delete-product-command.ts
 model/delete-product-type-command.ts
 model/edit-role-permissions-command.ts
 model/edit-user-command.ts
+model/export-all-localization-value-dto-list-api-response.ts
+model/export-all-localization-value-dto.ts
 model/get-categories-for-admin-query.ts
 model/get-filtered-pages-query.ts
 model/get-product-attributes-query.ts

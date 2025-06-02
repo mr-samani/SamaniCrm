@@ -25,6 +25,8 @@ export * from './delete-product-command';
 export * from './delete-product-type-command';
 export * from './edit-role-permissions-command';
 export * from './edit-user-command';
+export * from './export-all-localization-value-dto';
+export * from './export-all-localization-value-dto-list-api-response';
 export * from './get-categories-for-admin-query';
 export * from './get-filtered-pages-query';
 export * from './get-product-attributes-query';

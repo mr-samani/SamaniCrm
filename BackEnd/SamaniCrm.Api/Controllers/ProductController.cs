@@ -5,6 +5,7 @@ using SamaniCrm.Api.Attributes;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Menu.Commands;
+using SamaniCrm.Application.ProductManager.Commands;
 using SamaniCrm.Application.ProductManager.Queries;
 using SamaniCrm.Application.ProductManagerManager.Commands;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
@@ -68,6 +69,23 @@ namespace SamaniCrm.Api.Controllers
         public async Task<IActionResult> GetAutoCompleteProductCategory(string? filter, CancellationToken cancellationToken)
         {
             List<AutoCompleteDto<Guid>> result = await _mediator.Send(new GetAutoCompleteProductCategoryQuery(filter), cancellationToken);
+            return ApiOk(result);
+        }
+
+        [HttpGet("GetAllProductCategoryTranslations")]
+        [Permission(AppPermissions.Products_Category_List)]
+        [ProducesResponseType(typeof(ApiResponse<List<ExportAllLocalizationValueDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllProductCategoryTranslations(CancellationToken cancellationToken)
+        {
+            List<ExportAllLocalizationValueDto> result = await _mediator.Send(new GetAllProductCategoryTranslationQuery(), cancellationToken);
+            return ApiOk(result);
+        }
+        [HttpPost("ImportProductCategoryLocalization")]
+        [Permission(AppPermissions.Products_Category_List)]
+        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> ImportProductCategoryLocalization([FromBody] List<ExportAllLocalizationValueDto> data, CancellationToken cancellationToken)
+        {
+            bool result = await _mediator.Send(new ImportProductCategoryLocalizationCommand(data), cancellationToken);
             return ApiOk(result);
         }
 

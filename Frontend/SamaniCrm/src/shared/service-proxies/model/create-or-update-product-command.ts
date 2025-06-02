@@ -28,7 +28,6 @@ import { ProductTranslationDto } from './product-translation-dto';
 /** Interface for CreateOrUpdateProductCommand */
 export interface ICreateOrUpdateProductCommand {
   id?: string;
-  tenantId?: string;
   categoryId?: string;
   productTypeId?: string;
   title?: string;
@@ -49,7 +48,6 @@ export interface ICreateOrUpdateProductCommand {
 /** Class for CreateOrUpdateProductCommand */
 export class CreateOrUpdateProductCommand implements ICreateOrUpdateProductCommand {
   id?: string;
-  tenantId?: string;
   categoryId?: string;
   productTypeId?: string;
   title?: string;
@@ -78,7 +76,6 @@ export class CreateOrUpdateProductCommand implements ICreateOrUpdateProductComma
 init(data?: any) {
   if (data) {
     this.id = data["id"];
-    this.tenantId = data["tenantId"];
     this.categoryId = data["categoryId"];
     this.productTypeId = data["productTypeId"];
     this.title = data["title"];

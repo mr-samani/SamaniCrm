@@ -5,10 +5,20 @@
       <span>{{ 'Filter' | translate }}</span>
     </button>
   </div>
-  <button mat-raised-button color="primary" (click)="openCreateOrEditDialog()">
-    <i class="fa fa-circle-plus mx-1"></i>
-    <span>{{ 'CreateNewCategory' | translate }}</span>
-  </button>
+  <div class="d-flex gap-2">
+    <button mat-raised-button color="primary" (click)="openCreateOrEditDialog()">
+      <i class="fa fa-circle-plus mx-1"></i>
+      <span>{{ 'CreateNewCategory' | translate }}</span>
+    </button>
+    <button mat-raised-button color="primary" (click)="exportAllLocalizations()">
+      <i class="fa fa-circle-plus mx-1"></i>
+      <span>{{ 'ExportAllLocalizations' | translate }}</span>
+    </button>
+    <button mat-raised-button color="primary" (click)="importLocalizations()">
+      <i class="fa fa-circle-plus mx-1"></i>
+      <span>{{ 'ImportAllLocalizations' | translate }}</span>
+    </button>
+  </div>
 </div>
 
 <form [formGroup]="form" *filterForm="showFilter" class="filter-form">

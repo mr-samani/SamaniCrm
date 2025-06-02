@@ -7,11 +7,15 @@ import { FormGroup } from '@angular/forms';
 import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
 import {
   DeleteProductCategoryCommand,
+  ExportAllLocalizationValueDto,
   GetCategoriesForAdminQuery,
   PagedProductCategoryDto,
 } from '@shared/service-proxies';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { CreateOrEditProductCategoryComponent } from './create-or-edit/create-or-edit.component';
+import { DownloadService } from '@shared/services/download.service';
+import { AppConst } from '@shared/app-const';
+import { JsonFileReaderService } from '@shared/services/json-file-reader.service';
 
 @Component({
   selector: 'app-product-categories',
@@ -47,8 +51,10 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
   parentId = '';
   constructor(
     injector: Injector,
-    private productServiceProxy: ProductServiceProxy,
+    private productService: ProductServiceProxy,
     private matDialog: MatDialog,
+    private downloadService: DownloadService,
+    private jsonFileReaderService: JsonFileReaderService,
   ) {
     super(injector);
     this.breadcrumb.list = [{ name: this.l('ProductCategories'), url: '/dashboard/products/categories' }];
@@ -84,7 +90,7 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
     input.pageSize = this.perPage;
     input.sortBy = ev ? ev.field : '';
     input.sortDirection = ev ? ev.direction : '';
-    this.listSubscription$ = this.productServiceProxy
+    this.listSubscription$ = this.productService
       .getCategoriesForAdmin(input)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
@@ -152,7 +158,7 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
     this.confirmMessage(`${this.l('Delete')}:${item?.title}`, this.l('AreUseSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
-        this.productServiceProxy
+        this.productService
           .deleteProductCategory(new DeleteProductCategoryCommand({ id: item.id }))
           .pipe(finalize(() => this.hideMainLoading()))
           .subscribe((response) => {
@@ -169,9 +175,40 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
     this.parentId = item.id!;
     this.router.navigate(['/dashboard/products/categories'], {
       queryParams: {
-        page: this.page,
+        page: 1,
         parentId: this.parentId,
       },
+    });
+  }
+
+  exportAllLocalizations() {
+    this.showMainLoading();
+    this.productService
+      .getAllProductCategoryTranslations()
+      .pipe(finalize(() => this.hideMainLoading()))
+      .subscribe((result) => {
+        const data = result.data ?? {};
+        debugger;
+        this.downloadService.generateDownloadJson(data, 'category_' + AppConst.currentLanguage + '.json');
+      });
+  }
+
+  importLocalizations() {
+    this.jsonFileReaderService.selectAndReadJson().then((data: ExportAllLocalizationValueDto[]) => {
+      console.table(data);
+      try {
+        this.showMainLoading();
+        this.productService
+          .importProductCategoryLocalization(data)
+          .pipe(finalize(() => this.hideMainLoading()))
+          .subscribe((result) => {
+            if (result) {
+              this.reload();
+            }
+          });
+      } catch (e) {
+        this.notify.error(this.l('JsonFileIsInvalid'));
+      }
     });
   }
 }
