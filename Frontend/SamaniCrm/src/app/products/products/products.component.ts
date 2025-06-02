@@ -38,7 +38,7 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
     { column: 'sku', title: this.l('Sku') },
     { column: 'slug', title: this.l('Slug') },
     { column: 'isActive', title: this.l('IsActive'), type: 'yesNo' },
-    { column: 'createdAt', title: this.l('CreationTime'), type: 'dateTime' },
+    { column: 'creationTime', title: this.l('CreationTime'), type: 'dateTime' },
   ];
 
   form: FormGroup;

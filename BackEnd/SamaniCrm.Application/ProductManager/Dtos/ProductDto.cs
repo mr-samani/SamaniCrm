@@ -22,7 +22,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
         public string SKU { get; set; } = string.Empty;
         public string Slug { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
-        public DateTime? CreatedAt { get; set; }
+        public DateTime? CreationTime { get; set; }
         public List<ProductTranslationDto>? Translations { get; set; }
         public List<ProductImageDto>? Images { get; set; }
         public List<ProductFileDto>? Files { get; set; }
@@ -32,7 +32,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
 
     public class ProductTranslationDto
     {
-        public Guid ProductId { get; set; }
+        public Guid? ProductId { get; set; }
         public string Culture { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }

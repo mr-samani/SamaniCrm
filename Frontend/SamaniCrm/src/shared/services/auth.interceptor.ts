@@ -106,6 +106,7 @@ export class AuthInterceptor implements HttpInterceptor {
             }),
             catchError((err) => {
               this.isRefreshing = false;
+              debugger
               this.authService.logOut();
               // this.matDialog.closeAll();
               return throwError(() => err);

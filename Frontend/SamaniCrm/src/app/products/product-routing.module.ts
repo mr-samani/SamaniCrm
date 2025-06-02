@@ -29,15 +29,15 @@ const routes: Routes = [
         path: 'product-list',
         component: ProductsComponent,
       },
-      {
-        path: 'new-product',
-        component: CreateOrEditProductComponent,
-      },
-      {
-        path: 'update-product/:id',
-        component: CreateOrEditProductComponent,
-      },
     ],
+  },
+  {
+    path: 'new-product',
+    component: CreateOrEditProductComponent,
+  },
+  {
+    path: 'update-product/:id',
+    component: CreateOrEditProductComponent,
   },
 ];
 

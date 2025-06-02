@@ -4,13 +4,32 @@ using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
 using SamaniCrm.Domain.Entities.ProductEntities;
+using SamaniCrm.Domain.ValueObjects.Product;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace SamaniCrm.Application.ProductManagerManager.Commands
 {
-    public class CreateOrUpdateProductCommand : ProductDto, IRequest<Guid>
+    public class CreateOrUpdateProductCommand : IRequest<Guid>
     {
+        public Guid? Id { get; set; }
+        public Guid CategoryId { get; set; }
+        public Guid ProductTypeId { get; set; }
+        [Required]
+        [MaxLength(100)]
+        public string SKU { get; set; } = string.Empty;
+        public string Slug { get; set; } = string.Empty;
+        public bool IsActive { get; set; } = true;
+        public List<ProductImageDto>? Images { get; set; } = new List<ProductImageDto>();
+
+        public List<ProductFileDto>? Files { get; set; } = new List<ProductFileDto>();
+        public List<ProductPriceDto>? Prices { get; set; } = new List<ProductPriceDto>();
+        public List<ProductTranslationDto>? Translations { get; set; } = new List<ProductTranslationDto>();
+
+        public List<ProductAttributeValueDto>? AttributeValues { get; set; } = new List<ProductAttributeValueDto>();
+
     }
+
 
 
 
@@ -44,6 +63,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             entity.CategoryId = request.CategoryId;
             entity.ProductTypeId = request.ProductTypeId;
             entity.Slug = request.Slug;
+            entity.SKU = Sku.Create(request.SKU);
             entity.IsActive = request.IsActive;
             entity.LastModifiedTime = DateTime.UtcNow;
 

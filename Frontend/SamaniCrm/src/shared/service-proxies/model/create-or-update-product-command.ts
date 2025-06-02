@@ -30,18 +30,13 @@ export interface ICreateOrUpdateProductCommand {
   id?: string;
   categoryId?: string;
   productTypeId?: string;
-  title?: string;
-  description?: string;
-  categoryTitle?: string;
-  productTypeTitle?: string;
   sku: string;
   slug?: string;
   isActive?: boolean;
-  createdAt?: string;
-  translations?: Array<ProductTranslationDto>;
   images?: Array<ProductImageDto>;
   files?: Array<ProductFileDto>;
   prices?: Array<ProductPriceDto>;
+  translations?: Array<ProductTranslationDto>;
   attributeValues?: Array<ProductAttributeValueDto>;
 }
 
@@ -50,18 +45,13 @@ export class CreateOrUpdateProductCommand implements ICreateOrUpdateProductComma
   id?: string;
   categoryId?: string;
   productTypeId?: string;
-  title?: string;
-  description?: string;
-  categoryTitle?: string;
-  productTypeTitle?: string;
   sku!: string;
   slug?: string;
   isActive?: boolean;
-  createdAt?: string;
-  translations?: Array<ProductTranslationDto>;
   images?: Array<ProductImageDto>;
   files?: Array<ProductFileDto>;
   prices?: Array<ProductPriceDto>;
+  translations?: Array<ProductTranslationDto>;
   attributeValues?: Array<ProductAttributeValueDto>;
 
   constructor(data?: ICreateOrUpdateProductCommand) {
@@ -78,19 +68,9 @@ init(data?: any) {
     this.id = data["id"];
     this.categoryId = data["categoryId"];
     this.productTypeId = data["productTypeId"];
-    this.title = data["title"];
-    this.description = data["description"];
-    this.categoryTitle = data["categoryTitle"];
-    this.productTypeTitle = data["productTypeTitle"];
     this.sku = data["sku"];
     this.slug = data["slug"];
     this.isActive = data["isActive"];
-    this.createdAt = data["createdAt"];
-    if (Array.isArray(data["translations"])) {
-      this.translations = [] as any;
-      for (let item of data["translations"])
-        (this.translations as any).push(ProductTranslationDto.fromJS(item));
-    }
     if (Array.isArray(data["images"])) {
       this.images = [] as any;
       for (let item of data["images"])
@@ -105,6 +85,11 @@ init(data?: any) {
       this.prices = [] as any;
       for (let item of data["prices"])
         (this.prices as any).push(ProductPriceDto.fromJS(item));
+    }
+    if (Array.isArray(data["translations"])) {
+      this.translations = [] as any;
+      for (let item of data["translations"])
+        (this.translations as any).push(ProductTranslationDto.fromJS(item));
     }
     if (Array.isArray(data["attributeValues"])) {
       this.attributeValues = [] as any;

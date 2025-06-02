@@ -7,6 +7,71 @@
   <mat-spinner color="primary" diameter="25"></mat-spinner>
 </div>
 <form [formGroup]="form" *ngIf="!loading">
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <auto-complete-product-category
+              class="col-sm-6 col-md-3"
+              formControlName="category"></auto-complete-product-category>
+
+            <auto-complete-product-type
+              class="col-sm-6 col-md-3"
+              formControlName="productType"></auto-complete-product-type>
+            <div class="col-sm-6 col-md-3">
+              <mat-form-field>
+                <mat-label>{{ 'Slug' | translate }}</mat-label>
+                <input matInput formControlName="slug" />
+                <mat-error *ngIf="form.get('slug')?.hasError('required')">
+                  {{ 'IsRequired' | translate: { value: ('Slug' | translate) } }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6 col-md-3">
+              <mat-form-field class="col-sm-6 col-md-3">
+                <mat-label>{{ 'Sku' | translate }}</mat-label>
+                <input matInput formControlName="sku" numberCheck type="number" />
+                <mat-error *ngIf="form.get('sku')?.hasError('required')">
+                  {{ 'IsRequired' | translate: { value: ('Sku' | translate) } }}
+                </mat-error>
+                <mat-error *ngIf="form.get('sku')?.hasError('minlenght')">
+                  {{ 'MinLenghtError' | translate: { value: 3 } }}
+                </mat-error>
+                <mat-error *ngIf="form.get('sku')?.hasError('maxlenght')">
+                  {{ 'MaxLenghtError' | translate: { value: 100 } }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <p>
+            <mat-checkbox formControlName="isActive" color="primary">
+              {{ 'IsActive' | translate }}
+            </mat-checkbox>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-header">{{ 'Images' | translate }}</div>
+        <div class="card-body"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">{{ 'Files' | translate }}</div>
+        <div class="card-body"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">{{ 'Price' | translate }}</div>
+        <div class="card-body"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">{{ 'Tags' | translate }}</div>
+        <div class="card-body"></div>
+      </div>
+    </div>
+  </div>
+
   <tab-group>
     <tab-item
       [title]="translation.get('culture')?.value"
@@ -14,8 +79,8 @@
       *ngFor="let translation of translationsArray.controls; let i = index">
       <div [formGroupName]="i" class="row">
         <mat-form-field class="col-sm-12">
-          <mat-label>{{ 'Name' | translate }}</mat-label>
-          <input matInput formControlName="name" />
+          <mat-label>{{ 'Title' | translate }}</mat-label>
+          <input matInput formControlName="title" />
         </mat-form-field>
         <mat-form-field class="col-sm-12">
           <mat-label>{{ 'Description' | translate }}</mat-label>

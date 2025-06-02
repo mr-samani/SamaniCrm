@@ -37,7 +37,7 @@ export interface IProductDto {
   sku: string;
   slug?: string;
   isActive?: boolean;
-  createdAt?: string;
+  creationTime?: string;
   translations?: Array<ProductTranslationDto>;
   images?: Array<ProductImageDto>;
   files?: Array<ProductFileDto>;
@@ -57,7 +57,7 @@ export class ProductDto implements IProductDto {
   sku!: string;
   slug?: string;
   isActive?: boolean;
-  createdAt?: string;
+  creationTime?: string;
   translations?: Array<ProductTranslationDto>;
   images?: Array<ProductImageDto>;
   files?: Array<ProductFileDto>;
@@ -85,7 +85,7 @@ init(data?: any) {
     this.sku = data["sku"];
     this.slug = data["slug"];
     this.isActive = data["isActive"];
-    this.createdAt = data["createdAt"];
+    this.creationTime = data["creationTime"];
     if (Array.isArray(data["translations"])) {
       this.translations = [] as any;
       for (let item of data["translations"])

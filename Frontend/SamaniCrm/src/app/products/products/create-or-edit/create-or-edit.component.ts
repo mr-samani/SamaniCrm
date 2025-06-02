@@ -7,6 +7,10 @@ import {
   ProductTypeTranslationDto,
   CreateOrUpdateProductCommand,
   ProductTranslationDto,
+  ProductAttributeValueDto,
+  ProductFileDto,
+  ProductImageDto,
+  ProductPriceDto,
 } from '@shared/service-proxies';
 import { finalize } from 'rxjs';
 
@@ -23,7 +27,10 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
   isUpdate: boolean;
   translations?: ProductTranslationDto[];
   id: string;
-
+  attributeValues?: Array<ProductAttributeValueDto>;
+  images?: Array<ProductImageDto>;
+  files?: Array<ProductFileDto>;
+  prices?: Array<ProductPriceDto>;
   constructor(
     injector: Injector,
     private productService: ProductServiceProxy,
@@ -32,8 +39,14 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
     this.breadcrumb.list = [{ name: this.l('Products'), url: '/dashboard/products/product-list' }];
 
     this.form = this.fb.group({
+      category: ['', [Validators.required]],
+      productType: ['', [Validators.required]],
+      sku: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+      slug: ['', [Validators.required]],
+      isActive: [true, [Validators.required]],
       translations: this.fb.array([]),
     });
+
     this.id = this.route.snapshot.params['id'];
 
     if (this.id) {
@@ -71,7 +84,20 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
         next: (response) => {
           if (response.success && response.data) {
             this.form.patchValue(response.data);
+            this.form.get('category')?.patchValue({
+              id: response.data.categoryId,
+              title: response.data.categoryTitle,
+            });
+            this.form.get('productType')?.patchValue({
+              id: response.data.productTypeId,
+              title: response.data.productTypeTitle,
+            });
             this.translations = response.data.translations;
+            this.attributeValues = response.data.attributeValues ?? [];
+            this.files = response.data.files ?? [];
+            this.images = response.data.images ?? [];
+            this.prices = response.data.prices ?? [];
+
             this.setTranslations();
           } else {
             window.history.back();
@@ -112,9 +138,17 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
       return;
     }
     this.saving = true;
+    const formValue = this.form.value;
     const input = new CreateOrUpdateProductCommand();
-    input.init(this.form.value);
+    input.init(formValue);
     input.id = this.id;
+    input.categoryId = formValue.category.id;
+    input.productTypeId = formValue.productType.id;
+    input.files = this.files;
+    input.attributeValues = this.attributeValues;
+    input.images = this.images;
+    input.prices = this.prices;
+
     this.productService
       .createOrEditProduct(input)
       .pipe(finalize(() => (this.saving = false)))
@@ -122,7 +156,7 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
         next: (response) => {
           if (response.success) {
             this.notify.success(this.l('SaveSuccessFully'));
-            this.router.navigate(['/app/dashboard/products/product-list']);
+            this.router.navigate(['/dashboard/products/product-list']);
           }
         },
       });

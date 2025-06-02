@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
+using SamaniCrm.Core.Shared.Interfaces;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,18 +15,26 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
     public class GetProductForEditQueryHandler : IRequestHandler<GetProductForEditQuery, ProductDto>
     {
         private readonly IApplicationDbContext _dbContext;
-        public GetProductForEditQueryHandler(IApplicationDbContext dbContext)
+        private readonly ILocalizer L;
+        public GetProductForEditQueryHandler(IApplicationDbContext dbContext, ILocalizer l)
         {
             _dbContext = dbContext;
+            L = l;
         }
         public async Task<ProductDto> Handle(GetProductForEditQuery request, CancellationToken cancellationToken)
         {
+            var currentLangugage=L.CurrentLanguage;
             var entity = await _dbContext.Products
+                .Include(x=>x.Category)
+                    .ThenInclude(x=>x.Translations)
+                .Include(x=>x.ProductType)
+                    .ThenInclude(x=>x.Translations)
                 .Include(x => x.Translations)
                 .Include(x => x.Images)
                 .Include(x => x.Files)
                 .Include(x => x.Prices)
                 .Include(x => x.AttributeValues)
+                // .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (entity == null)
                 throw new NotFoundException("Product not found.");
@@ -33,11 +42,12 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
             {
                 Id = entity.Id,
                 CategoryId = entity.CategoryId,
+                CategoryTitle = entity.Category.Translations.Where(w => w.Culture == currentLangugage).Select(x => x.Title).FirstOrDefault(),
                 ProductTypeId = entity.ProductTypeId,
+                ProductTypeTitle = entity.ProductType.Translations.Where(w => w.Culture == currentLangugage).Select(x => x.Name).FirstOrDefault(),
                 SKU = entity.SKU.ToString(),
                 Slug = entity.Slug,
                 IsActive = entity.IsActive,
-                CreatedAt = entity.CreatedAt,
                 // Translations mapping
                 Translations = entity.Translations.Select(t => new ProductTranslationDto
                 {
