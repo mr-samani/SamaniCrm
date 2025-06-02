@@ -24,9 +24,10 @@ export class CreateOrEditProductAttributeComponent extends AppComponentBase impl
   isUpdate: boolean;
   translations?: ProductAttributeTranslationDto[];
   id: string;
+  productTypeId: string;
   constructor(
     injector: Injector,
-    @Inject(MAT_DIALOG_DATA) _data: { id: string },
+    @Inject(MAT_DIALOG_DATA) _data: { id: string; productTypeId: string },
     private dialogRef: MatDialogRef<CreateOrEditProductAttributeComponent>,
     private productService: ProductServiceProxy,
   ) {
@@ -39,6 +40,7 @@ export class CreateOrEditProductAttributeComponent extends AppComponentBase impl
       translations: this.fb.array([]),
     });
     this.id = _data.id;
+    this.productTypeId = _data.productTypeId;
 
     if (this.id) {
       this.isUpdate = true;
@@ -121,6 +123,7 @@ export class CreateOrEditProductAttributeComponent extends AppComponentBase impl
     const input = new CreateOrUpdateProductAttributeCommand();
     input.init(this.form.value);
     input.id = this.id;
+    input.productTypeId = this.productTypeId;
     this.productService
       .createOrEditProductAttribute(input)
       .pipe(finalize(() => (this.saving = false)))

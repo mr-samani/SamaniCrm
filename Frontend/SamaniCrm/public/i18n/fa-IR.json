@@ -43,7 +43,7 @@
   "UploadImage": "آپلود تصویر",
   "Delete": "حذف",
   "Yes": "بله",
-  "Cancel": "لغو",
+  "Cancel": "انصراف",
   "Search": "جستجو",
   "AddNewCategory": "اضافه کردن دسته‌بندی جدید",
   "EditCategory": "ویرایش دسته‌بندی",
@@ -140,5 +140,9 @@
   "ChangeAvatar": "تغییر تصویر",
   "PleaseWait": "لطفا منتظر بمانید...",
   "Reset": "پاک کردن",
-  "Reload": "بروز رسانی"
+  "Reload": "بروز رسانی",
+  "ProductAttributeDataTypeEnum_0":"String",
+  "ProductAttributeDataTypeEnum_1":"Int",
+  "ProductAttributeDataTypeEnum_2":"Decimal",
+  "ProductAttributeDataTypeEnum_3":"Bool"
 }

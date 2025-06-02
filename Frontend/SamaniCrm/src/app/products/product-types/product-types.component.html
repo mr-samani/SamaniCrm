@@ -55,7 +55,6 @@
       <span>{{ 'Products' | translate }}</span>
     </a>
     <a
-      *ngIf="item.hasChild"
       mat-menu-item
       [routerLink]="['/dashboard/products/attributes/' + item.id]"
       [queryParams]="{ name: item.name }">

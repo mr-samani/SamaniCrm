@@ -38,8 +38,7 @@ export class ProductAttributesComponent extends AppComponentBase implements OnIn
     { column: 'isVariant', title: this.l('IsVariant'), type: 'yesNo' },
     { column: 'sortOrder', title: this.l('SortOrder') },
     { column: 'creationTime', title: this.l('CreationTime'), type: 'dateTime' },
-  ]; 
-
+  ];
 
   form: FormGroup;
   page = 1;
@@ -57,6 +56,7 @@ export class ProductAttributesComponent extends AppComponentBase implements OnIn
   ) {
     super(injector);
     this.productTypeName = this.route.snapshot.queryParams['name'];
+    this.productTypeId = this.route.snapshot.params['productTypeId'];
     this.breadcrumb.list = [
       { name: this.l('ProductTypes'), url: '/dashboard/products/types' },
       { name: this.productTypeName },
@@ -128,6 +128,7 @@ export class ProductAttributesComponent extends AppComponentBase implements OnIn
       .open(CreateOrEditProductAttributeComponent, {
         data: {
           id: item?.id,
+          productTypeId: this.productTypeId,
         },
         width: '768px',
       })
@@ -155,6 +156,4 @@ export class ProductAttributesComponent extends AppComponentBase implements OnIn
       }
     });
   }
-
-
 }
