@@ -7,6 +7,7 @@ import { AppComponentBase } from '@app/app-component-base';
 export enum FileUsageEnum {
   USER_AVATAR = 1,
   PRODUCT_CATEGORY = 2,
+  HTML_EDITOR = 3,
 }
 export interface ImageCropperDialogData {
   maxFileSizeKB?: number;

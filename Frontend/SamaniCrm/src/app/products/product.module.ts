@@ -22,6 +22,7 @@ import { CreateOrEditProductComponent } from './products/create-or-edit/create-o
 import { AutoCompleteProductCategoryComponent } from './auto-completes/auto-complete-category/auto-complete-category.component';
 import { AutoCompleteProductTypeComponent } from './auto-completes/auto-complete-product-type/auto-complete-product-type.component';
 import { MatChipsModule } from '@angular/material/chips';
+import { HtmlEditorModule } from '@shared/components/html-editor/html-editor.module';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { MatChipsModule } from '@angular/material/chips';
     AutoCompleteProductCategoryComponent,
     AutoCompleteProductTypeComponent,
     MatChipsModule,
+    HtmlEditorModule
   ],
   providers: [ProductServiceProxy],
 })

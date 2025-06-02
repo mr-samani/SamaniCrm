@@ -1,0 +1,48 @@
+<input
+    type="file"
+    name="voicefileselector"
+    id="voicefileselector"
+    #file
+    (change)="selectFile($event, ['.mp3'])"
+    [accept]="'.mp3'"
+    class="dont-show-file-choser" />
+<input
+    type="file"
+    name="videofileselector"
+    id="videofileselector"
+    #file
+    (change)="selectFile($event, ['.mp4'])"
+    [accept]="'.mp4'"
+    class="dont-show-file-choser" />
+
+<input
+    type="file"
+    name="pdffileselector"
+    id="pdffileselector"
+    #file
+    (change)="selectFile($event, ['.pdf'])"
+    [accept]="'.pdf'"
+    class="dont-show-file-choser" />
+
+<div [hidden]="!tusUploadService.uploading">
+    <div class="progress progress-xs bg-primary-o-60 mt-4">
+        <div class="progress-bar bg-primary" role="progressbar" [style.width]="tusUploadService.progress + '%'"></div>
+    </div>
+    <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="text-muted mx-2 font-size-sm fw-bold">
+            {{ 'CompletedPercentage' | translate }}
+        </span>
+        <span class="text-muted font-size-sm fw-bold">
+            <span class="counterup">{{ tusUploadService.progress }}</span>
+            %
+        </span>
+    </div>
+</div>
+
+<editor
+    [init]="tinymceInit"
+    [(ngModel)]="content"
+    [disabled]="disabled"
+    [licenseKey]="'gpl'"
+    (ngModelChange)="change($event)"
+    (onInit)="onInitTinyMce($event)"></editor>
