@@ -49,7 +49,9 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         [Description("Decimal")]
         Decimal,
         [Description("Bool")]
-        Bool
+        Bool,
+        [Description("Color")]
+        Color
     }
 
 }

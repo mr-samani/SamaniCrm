@@ -187,7 +187,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                     var existingAttr = entity.AttributeValues.FirstOrDefault(x => x.AttributeId == attr.AttributeId);
                     if (existingAttr != null)
                     {
-                        existingAttr.SetValue(attr.Value);
+                        existingAttr.Value = new AttributeValue(attr.Value);
                     }
                     else
                     {
@@ -195,7 +195,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                         {
                             AttributeId = attr.AttributeId
                         };
-                        newAttr.SetValue(attr.Value);
+                        newAttr.Value = new AttributeValue(attr.Value);
                         entity.AttributeValues.Add(newAttr);
                     }
                 }

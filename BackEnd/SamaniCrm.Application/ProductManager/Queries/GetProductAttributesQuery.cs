@@ -38,6 +38,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
 
             var query = _dbContext.ProductAttributes
                 .Include(x => x.Translations)
+                .OrderBy(x => x.SortOrder)
                 .AsQueryable();
             if (request.ProductTypeId.HasValue)
                 query = query.Where(x => x.ProductTypeId == request.ProductTypeId.Value);
@@ -76,7 +77,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
                     IsRequired = s.IsRequired,
                     IsVariant = s.IsVariant,
                     SortOrder = s.SortOrder,
-                    Name = s.Translations.Select(s => s.Name).FirstOrDefault() ?? "",
+                    Name = s.Translations.Where(w => w.Culture == currentLanguage).Select(s => s.Name).FirstOrDefault() ?? "",
                 })
                 .ToListAsync(cancellationToken);
             return new PaginatedResult<ProductAttributeDto>()

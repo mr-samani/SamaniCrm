@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SamaniCrm.Domain.ValueObjects.Product
 {
@@ -11,15 +7,17 @@ namespace SamaniCrm.Domain.ValueObjects.Product
         // برای EF Core
         private AttributeValue() => Value = string.Empty;
 
-        public string Value { get; }
-
+        // این constructor عمومی برای استفاده‌های معمولی
         public AttributeValue(string value)
         {
-            if (value == null)
+            if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentNullException(nameof(value));
 
             Value = value;
         }
+
+        // EF Core به این setter نیاز داره (می‌تونه private/internal باشه)
+        public string Value { get; private set; } = string.Empty;
 
         public T As<T>()
         {
@@ -34,5 +32,4 @@ namespace SamaniCrm.Domain.ValueObjects.Product
 
         public override string ToString() => Value;
     }
-
 }

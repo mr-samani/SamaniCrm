@@ -17,6 +17,8 @@ export enum ProductAttributeDataTypeEnum {
 
     Decimal = 2,
 
-    Bool = 3
+    Bool = 3,
+
+    Color = 4
 }
 

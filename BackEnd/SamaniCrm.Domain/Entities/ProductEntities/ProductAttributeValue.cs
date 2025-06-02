@@ -1,11 +1,12 @@
-﻿using System;
+﻿using SamaniCrm.Domain.Interfaces;
+using SamaniCrm.Domain.ValueObjects.Product;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using SamaniCrm.Domain.Interfaces;
-using SamaniCrm.Domain.ValueObjects.Product;
 
 namespace SamaniCrm.Domain.Entities.ProductEntities
 {
@@ -17,7 +18,7 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
 
         // public string Value { get; set; } = default!;
         [MaxLength(1000)]
-        public AttributeValue Value { get; private set; } = default!;
+        public AttributeValue Value { get; set; } = default!;
 
         // private AttributeValue _value;
 
@@ -43,14 +44,6 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public DateTime? DeletedTime { get; set; }
         public string? DeletedBy { get; set; }
 
-        public void SetValue(string value)
-        {
-            // فرض بر این است که AttributeValue یک سازنده public دارد
-            // و پراپرتی Value فقط getter دارد
-            var field = typeof(AttributeValue).GetField("<Value>k__BackingField", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-            if (field != null)
-                field.SetValue(this.Value, value);
-        }
     }
 
 }

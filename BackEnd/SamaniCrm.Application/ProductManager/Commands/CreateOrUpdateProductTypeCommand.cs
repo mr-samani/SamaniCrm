@@ -41,16 +41,30 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             // Handle translations
             if (request != null)
             {
-                entity.Translations.Clear();
-                foreach (var t in request.Translations)
+                var toRemove = entity.Translations.Where(t => !(request.Translations.Any(rt => rt.Culture == t.Culture))).ToList();
+                foreach (var t in toRemove)
+                    entity.Translations.Remove(t);
+                foreach (var item in request.Translations ?? [])
                 {
-                    entity.Translations.Add(new ProductTypeTranslation
+                    var existingTranslation = entity.Translations
+                        .FirstOrDefault(t => t.Culture == item.Culture);
+
+                    if (existingTranslation != null)
                     {
-                        ProductTypeId = entity.Id,
-                        Culture = t.Culture,
-                        Name = t.Name,
-                        Description = t.Description
-                    });
+                        // Update existing translation
+                        existingTranslation.Name = item.Name;
+                        existingTranslation.Description = item.Description;
+                    }
+                    else
+                    {
+                        // Add new translation
+                        entity.Translations.Add(new ProductTypeTranslation
+                        {
+                            Culture = item.Culture,
+                            Name = item.Name,
+                            Description = item.Description,
+                        });
+                    }
                 }
             }
             await _dbContext.SaveChangesAsync(cancellationToken);

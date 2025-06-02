@@ -51,26 +51,33 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             cat.ParentId = request.ParentId;
 
             cat.LastModifiedTime = DateTime.UtcNow;
-            foreach (var item in request.Translations ?? [])
+            if (request.Translations != null)
             {
-                var existingTranslation = cat.Translations
-                    .FirstOrDefault(t => t.Culture == item.Culture);
+                var toRemove = cat.Translations.Where(t => !(request.Translations.Any(rt => rt.Culture == t.Culture))).ToList();
+                foreach (var t in toRemove)
+                    cat.Translations.Remove(t);
 
-                if (existingTranslation != null)
+                foreach (var item in request.Translations ?? [])
                 {
-                    // Update existing translation
-                    existingTranslation.Title = item.Title;
-                    existingTranslation.Description = item.Description;
-                }
-                else
-                {
-                    // Add new translation
-                    cat.Translations.Add(new ProductCategoryTranslation
+                    var existingTranslation = cat.Translations
+                        .FirstOrDefault(t => t.Culture == item.Culture);
+
+                    if (existingTranslation != null)
                     {
-                        Culture = item.Culture,
-                        Title = item.Title,
-                        Description= item.Description,
-                    });
+                        // Update existing translation
+                        existingTranslation.Title = item.Title;
+                        existingTranslation.Description = item.Description;
+                    }
+                    else
+                    {
+                        // Add new translation
+                        cat.Translations.Add(new ProductCategoryTranslation
+                        {
+                            Culture = item.Culture,
+                            Title = item.Title,
+                            Description = item.Description,
+                        });
+                    }
                 }
             }
             await _dbContext.SaveChangesAsync(cancellationToken);

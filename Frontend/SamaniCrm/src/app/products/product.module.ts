@@ -1,3 +1,4 @@
+import { AddOrUpdateProductAttributesComponent } from './products/create-or-edit/add-or-update-product-attributes/add-or-update-product-attributes.component';
 import { ProductsComponent } from './products/products.component';
 import { ProductAttributesComponent } from './product-attributes/product-attributes.component';
 import { ProductTypesComponent } from './product-types/product-types.component';
@@ -6,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { ProductRoutingModule } from './product-routing.module';
 import { ProductComponent } from './product.component';
 import { TranslateModule } from '@ngx-translate/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@shared/shared.module';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { TableViewComponent } from '@shared/components/table-view/table-view.compoenent';
@@ -35,6 +36,7 @@ import { HtmlEditorModule } from '@shared/components/html-editor/html-editor.mod
     CreateOrEditProductAttributeComponent,
     ProductsComponent,
     CreateOrEditProductComponent,
+    AddOrUpdateProductAttributesComponent,
   ],
   imports: [
     CommonModule,
@@ -50,7 +52,8 @@ import { HtmlEditorModule } from '@shared/components/html-editor/html-editor.mod
     AutoCompleteProductCategoryComponent,
     AutoCompleteProductTypeComponent,
     MatChipsModule,
-    HtmlEditorModule
+    HtmlEditorModule,
+    FormsModule,
   ],
   providers: [ProductServiceProxy],
 })
