@@ -25,12 +25,12 @@ namespace SamaniCrm.Infrastructure.Cache
         private class CacheItemWrapper<T>
         {
             public T Value { get; set; } = default!;
-            public DateTime CreatedAt { get; set; }
+            public DateTime CreatedTime { get; set; }
             public TimeSpan? Expiration { get; set; }
 
             public DateTime? GetExpiresAt()
             {
-                return Expiration.HasValue ? CreatedAt.Add(Expiration.Value) : null;
+                return Expiration.HasValue ? CreatedTime.Add(Expiration.Value) : null;
             }
 
             public TimeSpan? GetTimeToLive()
@@ -59,7 +59,7 @@ namespace SamaniCrm.Infrastructure.Cache
             var wrapper = new CacheItemWrapper<T>
             {
                 Value = value,
-                CreatedAt = DateTime.UtcNow,
+                CreatedTime = DateTime.UtcNow,
                 Expiration = expiration
             };
 

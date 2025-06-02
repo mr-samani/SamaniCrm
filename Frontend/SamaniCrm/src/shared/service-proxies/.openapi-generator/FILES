@@ -101,11 +101,12 @@ model/product-category-dto-api-response.ts
 model/product-category-dto.ts
 model/product-category-translation-dto.ts
 model/product-dto-api-response.ts
-model/product-dto-paginated-result-api-response.ts
-model/product-dto-paginated-result.ts
 model/product-dto.ts
 model/product-file-dto.ts
 model/product-image-dto.ts
+model/product-list-dto-paginated-result-api-response.ts
+model/product-list-dto-paginated-result.ts
+model/product-list-dto.ts
 model/product-price-dto.ts
 model/product-translation-dto.ts
 model/product-type-dto-api-response.ts

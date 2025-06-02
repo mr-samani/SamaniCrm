@@ -16,7 +16,6 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public string? Image { get; set; }
         public int OrderIndex { get; set; }
         public bool IsActive { get; set; } = true;
-        public DateTime CreatedAt { get; set; }
 
         public virtual ProductCategory? Parent { get; set; }
         public virtual ICollection<ProductCategory> Children { get; set; } = new List<ProductCategory>();

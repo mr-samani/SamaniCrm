@@ -20,6 +20,8 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
         public string SKU { get; set; } = string.Empty;
         public string Slug { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
+        public string? Tags { get; set; }
+
         public List<ProductImageDto>? Images { get; set; } = new List<ProductImageDto>();
 
         public List<ProductFileDto>? Files { get; set; } = new List<ProductFileDto>();
@@ -27,7 +29,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
         public List<ProductTranslationDto>? Translations { get; set; } = new List<ProductTranslationDto>();
 
         public List<ProductAttributeValueDto>? AttributeValues { get; set; } = new List<ProductAttributeValueDto>();
-
     }
 
 
@@ -66,6 +67,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             entity.SKU = Sku.Create(request.SKU);
             entity.IsActive = request.IsActive;
             entity.LastModifiedTime = DateTime.UtcNow;
+            entity.Tags = request.Tags;
 
             // Handle SKU
             // اگر نیاز به تبدیل خاصی برای SKU دارید اینجا انجام دهید
@@ -74,73 +76,126 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             // Handle Translations
             if (request.Translations != null)
             {
-                entity.Translations.Clear();
+                var toRemove = entity.Translations.Where(t => !(request.Translations.Any(rt => rt.Culture == t.Culture))).ToList();
+                foreach (var t in toRemove)
+                    entity.Translations.Remove(t);
                 foreach (var t in request.Translations)
                 {
-                    entity.Translations.Add(new ProductTranslation
+                    var existingTranslation = entity.Translations.FirstOrDefault(x => x.Culture == t.Culture);
+                    if (existingTranslation != null)
                     {
-                        ProductId = entity.Id,
-                        Culture = t.Culture,
-                        Title = t.Title,
-                        Description = t.Description,
-                        CreationTime = DateTime.UtcNow
-                    });
+                        existingTranslation.Title = t.Title;
+                        existingTranslation.Description = t.Description;
+                    }
+                    else
+                    {
+                        entity.Translations.Add(new ProductTranslation
+                        {
+                            ProductId = entity.Id,
+                            Culture = t.Culture,
+                            Title = t.Title,
+                            Description = t.Description,
+                            CreationTime = DateTime.UtcNow
+                        });
+                    }
                 }
             }
             // Handle Images
             if (request.Images != null)
             {
-                entity.Images.Clear();
+                var toRemove = entity.Images.Where(img => !(request.Images.Any(rimg => rimg.Url == img.Url))).ToList();
+                foreach (var img in toRemove)
+                    entity.Images.Remove(img);
                 foreach (var img in request.Images)
                 {
-                    entity.Images.Add(new ProductImage
+                    var existingImage = entity.Images.FirstOrDefault(x => x.Url == img.Url);
+                    if (existingImage != null)
                     {
-                        Url = img.Url,
-                        IsMain = img.IsMain,
-                        SortOrder = img.SortOrder
-                    });
+                        existingImage.IsMain = img.IsMain;
+                        existingImage.SortOrder = img.SortOrder;
+                    }
+                    else
+                    {
+                        entity.Images.Add(new ProductImage
+                        {
+                            Url = img.Url,
+                            IsMain = img.IsMain,
+                            SortOrder = img.SortOrder
+                        });
+                    }
                 }
             }
             // Handle Files
             if (request.Files != null)
             {
-                entity.Files.Clear();
+                var toRemove = entity.Files.Where(f => !(request.Files.Any(rf => rf.FileUrl == f.FileUrl))).ToList();
+                foreach (var f in toRemove)
+                    entity.Files.Remove(f);
                 foreach (var file in request.Files)
                 {
-                    entity.Files.Add(new ProductFile
+                    var existingFile = entity.Files.FirstOrDefault(x => x.FileUrl == file.FileUrl);
+                    if (existingFile != null)
                     {
-                        FileUrl = file.FileUrl,
-                        FileType = file.FileType
-                    });
+                        existingFile.FileType = file.FileType;
+                    }
+                    else
+                    {
+                        entity.Files.Add(new ProductFile
+                        {
+                            FileUrl = file.FileUrl,
+                            FileType = file.FileType
+                        });
+                    }
                 }
             }
             // Handle Prices
             if (request.Prices != null)
             {
-                entity.Prices.Clear();
+                var toRemove = entity.Prices.Where(p => !(request.Prices.Any(rp => rp.Currency == p.Currency && rp.StartDate == p.StartDate))).ToList();
+                foreach (var p in toRemove)
+                    entity.Prices.Remove(p);
                 foreach (var price in request.Prices)
                 {
-                    entity.Prices.Add(new ProductPrice
+                    var existingPrice = entity.Prices.FirstOrDefault(x => x.Currency == price.Currency && x.StartDate == price.StartDate);
+                    if (existingPrice != null)
                     {
-                        Currency = price.Currency,
-                        Price = price.Price,
-                        StartDate = price.StartDate,
-                        EndDate = price.EndDate
-                    });
+                        existingPrice.Price = price.Price;
+                        existingPrice.EndDate = price.EndDate;
+                    }
+                    else
+                    {
+                        entity.Prices.Add(new ProductPrice
+                        {
+                            Currency = price.Currency,
+                            Price = price.Price,
+                            StartDate = price.StartDate,
+                            EndDate = price.EndDate
+                        });
+                    }
                 }
             }
             // Handle AttributeValues
             if (request.AttributeValues != null)
             {
-                entity.AttributeValues.Clear();
+                var toRemove = entity.AttributeValues.Where(a => !(request.AttributeValues.Any(ra => ra.AttributeId == a.AttributeId))).ToList();
+                foreach (var a in toRemove)
+                    entity.AttributeValues.Remove(a);
                 foreach (var attr in request.AttributeValues)
                 {
-                    entity.AttributeValues.Add(new ProductAttributeValue
+                    var existingAttr = entity.AttributeValues.FirstOrDefault(x => x.AttributeId == attr.AttributeId);
+                    if (existingAttr != null)
                     {
-                        AttributeId = attr.AttributeId
-                        // مقداردهی Value با setter ممکن نیست، باید بعد از ساخت شیء انجام شود
-                    });
-                    entity.AttributeValues.Last().SetValue(attr.Value); // متد public جدید برای مقداردهی
+                        existingAttr.SetValue(attr.Value);
+                    }
+                    else
+                    {
+                        var newAttr = new ProductAttributeValue
+                        {
+                            AttributeId = attr.AttributeId
+                        };
+                        newAttr.SetValue(attr.Value);
+                        entity.AttributeValues.Add(newAttr);
+                    }
                 }
             }
             await _dbContext.SaveChangesAsync(cancellationToken);

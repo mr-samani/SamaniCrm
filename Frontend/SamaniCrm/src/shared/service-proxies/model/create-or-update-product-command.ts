@@ -33,6 +33,7 @@ export interface ICreateOrUpdateProductCommand {
   sku: string;
   slug?: string;
   isActive?: boolean;
+  tags?: string;
   images?: Array<ProductImageDto>;
   files?: Array<ProductFileDto>;
   prices?: Array<ProductPriceDto>;
@@ -48,6 +49,7 @@ export class CreateOrUpdateProductCommand implements ICreateOrUpdateProductComma
   sku!: string;
   slug?: string;
   isActive?: boolean;
+  tags?: string;
   images?: Array<ProductImageDto>;
   files?: Array<ProductFileDto>;
   prices?: Array<ProductPriceDto>;
@@ -71,6 +73,7 @@ init(data?: any) {
     this.sku = data["sku"];
     this.slug = data["slug"];
     this.isActive = data["isActive"];
+    this.tags = data["tags"];
     if (Array.isArray(data["images"])) {
       this.images = [] as any;
       for (let item of data["images"])

@@ -28,8 +28,7 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
 
 
         public string Slug { get; set; } = default!;
-        public bool IsActive { get; set; } = true;
-        public DateTime CreatedAt { get; set; }
+        public bool IsActive { get; set; } = true; 
 
         public ProductCategory Category { get; set; } = default!;
         public virtual ICollection<ProductTranslation> Translations { get; set; } = new List<ProductTranslation>();
@@ -44,6 +43,7 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public virtual ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
         public virtual ICollection<ProductFile> Files { get; set; } = new List<ProductFile>();
         public virtual ICollection<ProductPrice> Prices { get; set; } = new List<ProductPrice>();
+        public string? Tags { get; set; }
 
 
 

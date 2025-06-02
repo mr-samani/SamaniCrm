@@ -21,6 +21,7 @@ import { CreateOrEditProductAttributeComponent } from './product-attributes/crea
 import { CreateOrEditProductComponent } from './products/create-or-edit/create-or-edit.component';
 import { AutoCompleteProductCategoryComponent } from './auto-completes/auto-complete-category/auto-complete-category.component';
 import { AutoCompleteProductTypeComponent } from './auto-completes/auto-complete-product-type/auto-complete-product-type.component';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { AutoCompleteProductTypeComponent } from './auto-completes/auto-complete
     TabGroupModule,
     AutoCompleteProductCategoryComponent,
     AutoCompleteProductTypeComponent,
+    MatChipsModule,
   ],
   providers: [ProductServiceProxy],
 })

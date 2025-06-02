@@ -184,10 +184,10 @@ namespace SamaniCrm.Api.Controllers
 
         [HttpPost("GetProducts")]
         [Permission(AppPermissions.Products_List)]
-        [ProducesResponseType(typeof(ApiResponse<PaginatedResult<ProductDto>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<PaginatedResult<ProductListDto>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetProducts([FromBody] GetProductsQuery request, CancellationToken cancellationToken)
         {
-            PaginatedResult<ProductDto> result = await _mediator.Send(request, cancellationToken);
+            PaginatedResult<ProductListDto> result = await _mediator.Send(request, cancellationToken);
             return ApiOk(result);
         }
 

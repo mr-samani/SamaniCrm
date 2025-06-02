@@ -20,7 +20,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
         public int OrderIndex { get; set; }
 
         public bool IsActive { get; set; } = true;
-        public DateTime? CreatedAt { get; set; }
+        public DateTime? CreatedTime { get; set; }
 
 
         public Guid? ParentId { get; set; }

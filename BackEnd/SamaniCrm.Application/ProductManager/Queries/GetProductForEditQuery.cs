@@ -48,6 +48,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
                 SKU = entity.SKU.ToString(),
                 Slug = entity.Slug,
                 IsActive = entity.IsActive,
+                Tags = entity.Tags,
                 // Translations mapping
                 Translations = entity.Translations.Select(t => new ProductTranslationDto
                 {

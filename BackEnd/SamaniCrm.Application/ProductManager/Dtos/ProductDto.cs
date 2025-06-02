@@ -15,6 +15,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
         public string? CategoryTitle { get; set; }
         public string? ProductTypeTitle { get; set; }   
 
+        public string? Tags { get; set; }
 
 
         [Required]

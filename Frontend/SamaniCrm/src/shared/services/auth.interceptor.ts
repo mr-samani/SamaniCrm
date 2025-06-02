@@ -104,10 +104,12 @@ export class AuthInterceptor implements HttpInterceptor {
               this.refreshTokenSubject.next(token);
               return next.handle(this.setHeader(request));
             }),
-            catchError((err) => {
+            catchError((err: HttpErrorResponse) => {
               this.isRefreshing = false;
-              debugger
-              this.authService.logOut();
+              debugger;
+              if (err.status == 401) {
+                this.authService.logOut();
+              }
               // this.matDialog.closeAll();
               return throwError(() => err);
             }),

@@ -7,15 +7,12 @@ import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type
 import {
   ProductTypeDto,
   ProductServiceProxy,
-  GetProductTypesQuery,
-  DeleteProductTypeCommand,
   ProductDto,
   GetProductsQuery,
   DeleteProductCommand,
+  ProductListDto,
 } from '@shared/service-proxies';
 import { Subscription, finalize } from 'rxjs';
-import { CreateOrEditProductTypeComponent } from '../product-types/create-or-edit/create-or-edit.component';
-import { CreateOrEditProductComponent } from './create-or-edit/create-or-edit.component';
 
 @Component({
   selector: 'app-products',
@@ -26,7 +23,7 @@ import { CreateOrEditProductComponent } from './create-or-edit/create-or-edit.co
 export class ProductsComponent extends AppComponentBase implements OnInit {
   loading = true;
 
-  list: ProductDto[] = [];
+  list: ProductListDto[] = [];
   totalCount = 0;
 
   fields: FieldsType[] = [

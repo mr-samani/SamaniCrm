@@ -52,7 +52,6 @@ public static class SeedProductCategoriesFromFile
                         Slug = GenerateSlug(currentName),
                         OrderIndex = level,
                         IsActive = true,
-                        CreatedAt = DateTime.UtcNow,
                         Translations = new List<ProductCategoryTranslation>
                         {
                             new ProductCategoryTranslation() { Culture = "en-US", Title = currentName }

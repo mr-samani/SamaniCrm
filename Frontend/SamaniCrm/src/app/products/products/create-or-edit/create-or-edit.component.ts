@@ -1,5 +1,6 @@
 import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { FormArray, FormGroup, Validators } from '@angular/forms';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
 import {
@@ -31,6 +32,7 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
   images?: Array<ProductImageDto>;
   files?: Array<ProductFileDto>;
   prices?: Array<ProductPriceDto>;
+  tagList: string[] = [];
   constructor(
     injector: Injector,
     private productService: ProductServiceProxy,
@@ -97,7 +99,9 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
             this.files = response.data.files ?? [];
             this.images = response.data.images ?? [];
             this.prices = response.data.prices ?? [];
-
+            if (response.data.tags) {
+              this.tagList = response.data.tags.split(',');
+            }
             this.setTranslations();
           } else {
             window.history.back();
@@ -131,6 +135,28 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
     });
   }
 
+  removeTag(tag: string) {
+    const index = this.tagList.indexOf(tag);
+    if (index > -1) {
+      this.tagList.splice(index, 1);
+    }
+  }
+
+  addTag(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    // Add our keyword
+    if (value) {
+      const index = this.tagList.findIndex((x) => x.toLowerCase() == value.toLowerCase());
+      if (index > -1) {
+        this.notify.warning(this.l('TagIsDuplicated'));
+        return;
+      }
+    }
+    this.tagList.push(value);
+    // Clear the input value
+    event.chipInput!.clear();
+  }
   save() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -148,7 +174,7 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
     input.attributeValues = this.attributeValues;
     input.images = this.images;
     input.prices = this.prices;
-
+    input.tags = this.tagList.join(',');
     this.productService
       .createOrEditProduct(input)
       .pipe(finalize(() => (this.saving = false)))

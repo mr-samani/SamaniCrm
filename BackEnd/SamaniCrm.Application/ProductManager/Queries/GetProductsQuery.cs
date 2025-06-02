@@ -13,14 +13,14 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.ProductManagerManager.Queries
 {
-    public class GetProductsQuery : PaginationRequest, IRequest<PaginatedResult<ProductDto>>
+    public class GetProductsQuery : PaginationRequest, IRequest<PaginatedResult<ProductListDto>>
     {
         public string? Filter { get; set; }
         public Guid? CategoryId { get; set; }
         public Guid? ProductTypeId { get; set; }
     }
 
-    public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, PaginatedResult<ProductDto>>
+    public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, PaginatedResult<ProductListDto>>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly ILocalizer L;
@@ -29,7 +29,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
             _dbContext = dbContext;
             L = l;
         }
-        public async Task<PaginatedResult<ProductDto>> Handle(GetProductsQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<ProductListDto>> Handle(GetProductsQuery request, CancellationToken cancellationToken)
         {
             var currentLanguage = L.CurrentLanguage;
 
@@ -73,7 +73,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
             var items = await query
                 .Skip(request.PageSize * (request.PageNumber - 1))
                 .Take(request.PageSize)
-                .Select(s => new ProductDto
+                .Select(s => new ProductListDto
                 {
                     Id = s.Id,
                     CategoryId = s.CategoryId,
@@ -81,7 +81,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
                     SKU = s.SKU.Value,
                     Slug = s.Slug,
                     IsActive = s.IsActive,
-                    CreationTime = s.CreatedAt.ToUniversalTime(),
+                    CreationTime = s.CreationTime.ToUniversalTime(),
                     Title = s.Translations.FirstOrDefault(x => x.Culture == currentLanguage).Title ?? "",
                     Description = s.Translations.FirstOrDefault(x => x.Culture == currentLanguage).Description ?? "",
                     CategoryTitle = s.Category.Translations.Where(w => w.Culture == currentLanguage).Select(s => s.Title).FirstOrDefault() ?? "",
@@ -89,7 +89,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
                   
                 })
                 .ToListAsync(cancellationToken);
-            return new PaginatedResult<ProductDto>()
+            return new PaginatedResult<ProductListDto>()
             {
 
                 Items = items,
