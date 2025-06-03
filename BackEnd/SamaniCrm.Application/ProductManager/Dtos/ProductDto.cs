@@ -28,6 +28,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
         public List<ProductFileDto>? Files { get; set; }
         public List<ProductPriceDto>? Prices { get; set; }
         public List<ProductAttributeValueDto>? AttributeValues { get; set; }
+        public string Content { get; set; }
     }
 
     public class ProductTranslationDto

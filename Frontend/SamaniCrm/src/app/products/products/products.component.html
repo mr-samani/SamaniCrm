@@ -50,6 +50,10 @@
     <i class="fa fa-ellipsis-v"></i>
   </button>
   <mat-menu #menu="matMenu">
+    <a mat-menu-item [href]="publicSiteUrl + '/product/' + item.slug" target="_blank">
+      <i class="fa fa-eye mx-1"></i>
+      <span>{{ 'ViewProduct' | translate }}</span>
+    </a>
     <a mat-menu-item (click)="openCreateOrEditDialog(item)">
       <i class="fa fa-edit mx-1"></i>
       <span>{{ 'Edit' | translate }}</span>

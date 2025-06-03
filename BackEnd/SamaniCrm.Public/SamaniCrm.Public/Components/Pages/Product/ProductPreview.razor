@@ -1,0 +1,29 @@
+﻿@page "/product/{culture}/{Slug}"
+@page "/product/{Slug}"
+
+@using MediatR
+@using SamaniCrm.Application.ProductManager.Queries
+@using SamaniCrm.Application.ProductManagerManager.Dtos
+@inject IMediator Mediator
+
+
+<PageTitle>@product.Title</PageTitle>
+
+<h3>@product.Description</h3>
+
+@((MarkupString)product.Content)
+
+
+
+@code {
+    [Parameter]
+    public string? Culture { get; set; }
+    [Parameter]
+    public string Slug { get; set; } = "";
+    ProductDto product= new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        product = await Mediator.Send(new GetProductInfoQuery(Slug, Culture));
+    }
+}

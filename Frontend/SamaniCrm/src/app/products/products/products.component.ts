@@ -2,6 +2,7 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
+import { AppConst } from '@shared/app-const';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
 import {
@@ -25,7 +26,7 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
 
   list: ProductListDto[] = [];
   totalCount = 0;
-
+  publicSiteUrl = AppConst.publicSiteUrl;
   fields: FieldsType[] = [
     // { column: 'id', title: this.l('id'), width: 100 },
     { column: 'title', title: this.l('Title') },
