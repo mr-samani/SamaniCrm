@@ -29,7 +29,8 @@ namespace SamaniCrm.Public.Extensions
         {
             // ✅ DbContext
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(config.GetConnectionString("DefaultConnection")),
+                ServiceLifetime.Transient);
             return services;
         }
 
@@ -79,7 +80,7 @@ namespace SamaniCrm.Public.Extensions
         public static IServiceCollection AddCustomServices(this IServiceCollection services)
         {
             services.AddHttpContextAccessor();
-            services.AddScoped<IApplicationDbContext, ApplicationDbContext>();  
+            services.AddTransient<IApplicationDbContext, ApplicationDbContext>();  
             services.AddSingleton(TimeProvider.System);
             services.AddScoped<ISecuritySettingService, SecuritySettingService>();
             services.AddScoped<IIdentityService, IdentityService>();

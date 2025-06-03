@@ -25,8 +25,11 @@ namespace SamaniCrm.Infrastructure
 
             var services = new ServiceCollection();
 
+            // ✅ DbContext
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")),
+                ServiceLifetime.Transient
+            );
 
             services.AddLogging(logging => logging.AddConsole());
 

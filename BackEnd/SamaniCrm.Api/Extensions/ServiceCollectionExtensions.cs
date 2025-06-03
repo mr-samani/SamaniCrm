@@ -45,7 +45,8 @@ public static class ServiceCollectionExtensions
     {
         // ✅ DbContext
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(config.GetConnectionString("DefaultConnection")),
+            ServiceLifetime.Transient);
         return services;
     }
 
@@ -228,7 +229,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCustomServices(this IServiceCollection services)
     {
         services.AddHttpContextAccessor();
-        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+        services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
         services.AddScoped<ITokenGenerator, TokenGenerator>();
         services.AddScoped<IIdentityService, IdentityService>();
