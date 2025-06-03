@@ -1,19 +1,22 @@
-﻿using System;
+﻿using Duende.IdentityServer.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using SamaniCrm.Core.Shared.Consts;
+using SamaniCrm.Core.Shared.DTOs;
+using SamaniCrm.Core.Shared.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using SamaniCrm.Core.Shared.Consts;
-using SamaniCrm.Core.Shared.DTOs;
-using SamaniCrm.Core.Shared.Interfaces;
 
-namespace SamaniCrm.Infrastructure.Services
+namespace SamaniCrm.Infrastructure.Localizer
 {
     public class LanguageService : ILanguageService
     {
         private readonly ICacheService _cacheService;
         private readonly ApplicationDbContext _dbContext;
+
 
         public LanguageService(ICacheService cacheService, ApplicationDbContext dbContext)
         {
@@ -63,13 +66,57 @@ namespace SamaniCrm.Infrastructure.Services
             return languageList;
         }
 
-        public async Task<Dictionary<string, string>> GetAllValuesAsync(string culture)
+
+
+        public async Task<string> GetAsync(string key, string culture)
         {
-            var result = await _dbContext.Languages
-                .Where(x => x.Culture == culture)
-                .SelectMany(x => x.Localizations!)
-                .ToDictionaryAsync(x => x.Key, x => x.Value);
-            return result!;
+            var all = await GetAllLocalizatonsAsync(culture);
+            return all.TryGetValue(key, out var value) ? value : key;
         }
+
+
+        public async Task<Dictionary<string, string>> GetAllLocalizatonsAsync(string culture)
+        {
+            //var result = await _dbContext.Languages
+            //    .Where(x => x.Culture == culture)
+            //    .SelectMany(x => x.Localizations!)
+            //    .ToDictionaryAsync(x => x.Key, x => x.Value);
+
+
+            var cacheKey = CacheKeys.GetLocalizationCacheKey(culture);
+            var cached = await _cacheService.GetAsync<Dictionary<string, string>>(cacheKey);
+            if (cached is not null)
+                return cached;
+
+            var items = await _dbContext.Localizations
+                .Where(x => x.Culture == culture)
+                .ToDictionaryAsync(x => x.Key, x => x.Value);
+
+            await _cacheService.SetAsync(cacheKey, items, TimeSpan.FromHours(12)); 
+
+            return items;
+        }
+
+
+
+
+        public static async Task PreloadAllLocalizationsAsync(IServiceProvider provider)
+        {
+            using var scope = provider.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var cache = scope.ServiceProvider.GetRequiredService<LocalizationMemoryCache>();
+
+            var data = await db.Localizations
+                .GroupBy(x => x.Culture)
+                .ToListAsync();
+
+            foreach (var group in data)
+            {
+                var dict = group.ToDictionary(x => x.Key, x => x.Value);
+                cache.SetCulture(group.Key, dict);
+            }
+        }
+
+
     }
 }

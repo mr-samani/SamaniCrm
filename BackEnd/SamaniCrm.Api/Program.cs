@@ -6,6 +6,7 @@ using SamaniCrm.Infrastructure.Extensions;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Cache;
 using SamaniCrm.Api.Middlewares;
+using SamaniCrm.Infrastructure.Localizer;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -53,5 +54,7 @@ app.MapControllers();
 // Hangfire Dashboard
 app.UseHangfireDashboard("/hangfire");
 
+
+await LanguageService.PreloadAllLocalizationsAsync(app.Services);
 
 app.Run();

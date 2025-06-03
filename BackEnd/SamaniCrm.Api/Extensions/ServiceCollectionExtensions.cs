@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Text.Unicode;
-using FluentValidation;
+﻿using FluentValidation;
 using Hangfire;
 using Hangfire.SqlServer;
 using MediatR;
@@ -15,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Localization;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using SamaniCrm.Api.Middlewares;
@@ -31,9 +23,19 @@ using SamaniCrm.Infrastructure.BackgroundServices;
 using SamaniCrm.Infrastructure.Captcha;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.Identity;
+using SamaniCrm.Infrastructure.Localizer;
 using SamaniCrm.Infrastructure.Services;
 using SamaniCrm.Infrastructure.Services.Product;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Unicode;
 
 namespace SamaniCrm.Infrastructure.Extensions;
 public static class ServiceCollectionExtensions
@@ -232,7 +234,11 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IRolePermissionService, RolePermissionService>();
         services.AddSingleton(TimeProvider.System);
-        services.AddScoped<ILocalizer, Localizer>();
+
+        services.AddScoped<ILanguageService, LanguageService>();
+        services.AddSingleton<LocalizationMemoryCache>();
+        services.AddScoped<ILocalizer, CachedStringLocalizer>();
+
 
 
         services.AddScoped<ISecuritySettingService, SecuritySettingService>();
@@ -244,7 +250,6 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IUserPermissionService, UserPermissionService>();
-        services.AddScoped<ILanguageService, LanguageService>();
         services.AddScoped<IPageService, PageService>();
         services.AddScoped<IProductCategoryService, ProductCategoryService>();
 
@@ -302,5 +307,5 @@ public class AddEnumNamesSchemaFilter : ISchemaFilter
 }
 
 
-  
+
 

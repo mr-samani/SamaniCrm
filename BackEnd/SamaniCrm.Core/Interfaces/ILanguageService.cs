@@ -15,7 +15,9 @@ namespace SamaniCrm.Core.Shared.Interfaces
         Task<List<LanguageDTO>> GetAllLanguagesForAdmin();
 
 
-        Task<Dictionary<string, string>> GetAllValuesAsync(string culture);
+        Task<Dictionary<string, string>> GetAllLocalizatonsAsync(string culture);
+
+        Task<string> GetAsync(string key, string culture);
 
     }
 }

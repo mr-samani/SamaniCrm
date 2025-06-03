@@ -1,5 +1,6 @@
 ﻿using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Core;
+using System.Globalization;
 
 namespace SamaniCrm.Api.Middlewares;
 public class LanguageMiddleware
@@ -12,17 +13,17 @@ public class LanguageMiddleware
     }
 
 
-    public async Task InvokeAsync(HttpContext httpContext, ICurrentUserService currentUserService)
+    public async Task InvokeAsync(HttpContext context)
     {
-        var lang = httpContext.Request.Headers["lang"].ToString();
-        if (string.IsNullOrEmpty(lang) && currentUserService.lang != "")
-        {
-            lang = currentUserService.lang;
-        }
-        lang ??= AppConsts.DefaultLanguage;
-        httpContext.Items["lang"] = lang;
+        var lang = context.Request.Headers["lang"].ToString() ??
+            context.Request.Cookies["lang"] ??
+            AppConsts.DefaultLanguage;
 
-        await _next(httpContext);
+        context.Items["lang"] = lang;
+        var culture = new CultureInfo(lang);
+        CultureInfo.CurrentCulture = culture;
+        CultureInfo.CurrentUICulture = culture;
+        await _next(context);
     }
 }
 

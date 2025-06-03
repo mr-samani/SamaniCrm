@@ -1,18 +1,21 @@
-﻿using System.Reflection;
-using SamaniCrm.Application;
+﻿using SamaniCrm.Application;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.Menu.Queries;
 using SamaniCrm.Application.Pages.Queries;
 using SamaniCrm.Infrastructure.Cache;
+using SamaniCrm.Infrastructure.Localizer;
 using SamaniCrm.Infrastructure.Services;
 using SamaniCrm.Public.Client.Pages;
 using SamaniCrm.Public.Components;
 using SamaniCrm.Public.Extensions;
+using SamaniCrm.Public.Middlewares;
+using System.Reflection;
 
 namespace SamaniCrm.Public
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
@@ -26,8 +29,11 @@ namespace SamaniCrm.Public
                 services
                     .AddCustomServices()
                     .AddDbContext(config);
-
-                services.AddCustomMediatR()
+                builder.Services.AddCustomMediatR(
+                    typeof(GetAllMenuItemsQuery).Assembly,
+                    typeof(GetPageInfoQuery).Assembly
+                );
+                services
                     .AddInfrastructure(config)
                     .AddCacheService(config)
                    ;
@@ -35,6 +41,9 @@ namespace SamaniCrm.Public
 
 
                 var app = builder.Build();
+                await LanguageService.PreloadAllLocalizationsAsync(app.Services);
+
+
                 // برای اینکه از همان instance ICaptchaStore استفاده کنم و یک نمون جدید نسازد این جا مقدار دهی میکنم
                 var captchaStore = app.Services.GetRequiredService<ICaptchaStore>();
                 VerifyCaptchaExtensions.Configure(captchaStore, config);
@@ -61,6 +70,7 @@ namespace SamaniCrm.Public
                 app.UseHttpsRedirection();
 
                 app.UseAntiforgery();
+                app.UseMiddleware<LanguageMiddleware>();
 
                 app.MapStaticAssets();
                 app.MapRazorComponents<App>()
