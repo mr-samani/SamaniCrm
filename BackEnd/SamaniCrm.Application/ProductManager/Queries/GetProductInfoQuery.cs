@@ -4,6 +4,7 @@ using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
 using SamaniCrm.Core.Shared.Interfaces;
+using SamaniCrm.Domain.Entities.ProductEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,10 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.ProductManager.Queries
 {
-    public record GetProductInfoQuery(string Slug, string? Culture) : IRequest<ProductDto>;
+    public record GetProductInfoQuery(string Slug, string? Culture) : IRequest<ProductInfoDto>;
 
 
-    public class GetProductInfoQueryHandler : IRequestHandler<GetProductInfoQuery, ProductDto>
+    public class GetProductInfoQueryHandler : IRequestHandler<GetProductInfoQuery, ProductInfoDto>
     {
         private readonly ILocalizer L;
         private readonly IApplicationDbContext _dbContext;
@@ -28,10 +29,12 @@ namespace SamaniCrm.Application.ProductManager.Queries
         }
 
 
-        public async Task<ProductDto> Handle(GetProductInfoQuery request, CancellationToken cancellationToken)
+        public async Task<ProductInfoDto> Handle(GetProductInfoQuery request, CancellationToken cancellationToken)
         {
-            var currentLangugage = request.Culture ?? L.CurrentLanguage;
+            var currentLanguage = request.Culture ?? L.CurrentLanguage;
+
             var entity = await _dbContext.Products
+                .AsNoTracking()
                 .Include(x => x.Category)
                     .ThenInclude(x => x.Translations)
                 .Include(x => x.ProductType)
@@ -41,55 +44,65 @@ namespace SamaniCrm.Application.ProductManager.Queries
                 .Include(x => x.Files)
                 .Include(x => x.Prices)
                 .Include(x => x.AttributeValues)
-                // .AsNoTracking()
+                    .ThenInclude(x => x.Attribute)
+                        .ThenInclude(x => x.Translations)
                 .FirstOrDefaultAsync(x => x.Slug == request.Slug, cancellationToken);
+
             if (entity == null)
                 throw new NotFoundException("Product not found.");
-            var dto = new ProductDto
+
+            var translation = entity.Translations.FirstOrDefault(x => x.Culture == currentLanguage);
+            var categoryTranslation = entity.Category?.Translations.FirstOrDefault(x => x.Culture == currentLanguage);
+            var typeTranslation = entity.ProductType?.Translations.FirstOrDefault(x => x.Culture == currentLanguage);
+
+            var dto = new ProductInfoDto
             {
                 Id = entity.Id,
-                CategoryId = entity.CategoryId,
-                CategoryTitle = entity.Category.Translations.Where(w => w.Culture == currentLangugage).Select(x => x.Title).FirstOrDefault(),
-                ProductTypeId = entity.ProductTypeId,
-                ProductTypeTitle = entity.ProductType.Translations.Where(w => w.Culture == currentLangugage).Select(x => x.Name).FirstOrDefault(),
-                SKU = entity.SKU.ToString(),
+                CategoryTitle = categoryTranslation?.Title ?? "",
+                ProductTypeTitle = typeTranslation?.Name ?? "",
+                SKU = entity.SKU?.ToString() ?? "",
                 Slug = entity.Slug,
                 IsActive = entity.IsActive,
-                Tags = entity.Tags,
-                Title = entity.Translations.Where(w => w.Culture == currentLangugage).Select(x => x.Title).FirstOrDefault() ?? "",
-                Description = entity.Translations.Where(w => w.Culture == currentLangugage).Select(x => x.Description).FirstOrDefault() ?? "",
-                Content = entity.Translations.Where(w => w.Culture == currentLangugage).Select(x => x.Content).FirstOrDefault() ?? "",
+                Tags = entity.Tags ?? "",
+                Title = translation?.Title ?? "",
+                Description = translation?.Description ?? "",
+                Content = translation?.Content ?? "",
 
-
-                Images = entity.Images.Select(img => new ProductImageDto
+                Images = entity.Images?.Select(img => new ProductImageDto
                 {
                     Id = img.Id,
                     Url = img.Url,
                     IsMain = img.IsMain,
                     SortOrder = img.SortOrder
-                }).ToList(),
-                Files = entity.Files.Select(file => new ProductFileDto
+                }).ToList() ?? new(),
+
+                Files = entity.Files?.Select(file => new ProductFileDto
                 {
                     Id = file.Id,
                     FileUrl = file.FileUrl,
                     FileType = file.FileType
-                }).ToList(),
-                Prices = entity.Prices.Select(price => new ProductPriceDto
+                }).ToList() ?? new(),
+
+                Prices = entity.Prices?.Select(price => new ProductPriceDto
                 {
                     Id = price.Id,
                     Currency = price.Currency,
                     Price = price.Price,
                     StartDate = price.StartDate,
                     EndDate = price.EndDate
-                }).ToList(),
-                AttributeValues = entity.AttributeValues.Select(attr => new ProductAttributeValueDto
+                }).ToList() ?? new(),
+
+                AttributeValues = entity.AttributeValues?.Select(attr => new ProductAttributeInfoDto
                 {
-                    Id = attr.Id,
                     AttributeId = attr.AttributeId,
-                    Value = attr.Value.Value
-                }).ToList()
+                    Title = attr.Attribute?.Translations?.FirstOrDefault(x => x.Culture == currentLanguage)?.Name ?? "",
+                    Value = attr.Value?.Value ?? "",
+                    DataType = attr.Attribute?.DataType ?? ProductAttributeDataTypeEnum.String,
+                }).ToList() ?? new()
             };
+
             return dto;
         }
     }
+
 }

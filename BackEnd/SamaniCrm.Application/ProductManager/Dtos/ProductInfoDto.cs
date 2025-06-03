@@ -1,20 +1,19 @@
+using SamaniCrm.Domain.Entities.ProductEntities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace SamaniCrm.Application.ProductManagerManager.Dtos
 {
-    public class ProductDto
+    public class ProductInfoDto
     {
-        public Guid? Id { get; set; }
-        public Guid CategoryId { get; set; }
-        public Guid ProductTypeId { get; set; }
+        public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
-        public string Content { get; set; }
 
         public string? CategoryTitle { get; set; }
-        public string? ProductTypeTitle { get; set; }   
+        public string? ProductTypeTitle { get; set; }
+        public string Content { get; set; } = string.Empty;
 
         public string? Tags { get; set; }
 
@@ -24,23 +23,13 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
         public string Slug { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
         public DateTime? CreationTime { get; set; }
-        public List<ProductTranslationDto>? Translations { get; set; }
-        public List<ProductImageDto>? Images { get; set; }
-        public List<ProductFileDto>? Files { get; set; }
-        public List<ProductPriceDto>? Prices { get; set; }
-        public List<ProductAttributeValueDto>? AttributeValues { get; set; }
+        public List<ProductImageDto> Images { get; set; } = new List<ProductImageDto>();
+        public List<ProductFileDto> Files { get; set; } = new List<ProductFileDto>();
+        public List<ProductPriceDto> Prices { get; set; } = new List<ProductPriceDto>();
+        public List<ProductAttributeInfoDto> AttributeValues { get; set; } = new List<ProductAttributeInfoDto>();
     }
 
-    public class ProductTranslationDto
-    {
-        public Guid? ProductId { get; set; }
-        public string Culture { get; set; } = string.Empty;
-        public string Title { get; set; } = string.Empty;
-        public string? Description { get; set; }
-        public string? Content { get; set; }
 
-
-    }
 
     //public class ProductImageDto
     //{
@@ -66,10 +55,11 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
     //    public DateTime? EndDate { get; set; }
     //}
 
-    //public class ProductAttributeValueDto
-    //{
-    //    public Guid? Id { get; set; }
-    //    public Guid AttributeId { get; set; }
-    //    public string Value { get; set; } = string.Empty;
-    //}
+    public class ProductAttributeInfoDto
+    {
+        public Guid AttributeId { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Value { get; set; } = string.Empty;
+        public ProductAttributeDataTypeEnum DataType { get; set; }
+    }
 }

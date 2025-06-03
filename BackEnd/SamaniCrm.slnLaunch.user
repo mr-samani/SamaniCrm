@@ -9,10 +9,6 @@
       {
         "Path": "SamaniCrm.Public\\SamaniCrm.Public\\SamaniCrm.Public.csproj",
         "Action": "Start"
-      },
-      {
-        "Path": "SamaniCrm.Public\\SamaniCrm.Public.Client\\SamaniCrm.Public.Client.csproj",
-        "Action": "Start"
       }
     ]
   }

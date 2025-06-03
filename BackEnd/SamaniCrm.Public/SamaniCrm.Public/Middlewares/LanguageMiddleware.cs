@@ -22,14 +22,15 @@ public class LanguageMiddleware
             !path.StartsWithSegments("/_framework") &&
             !path.StartsWithSegments("/favicon") &&
             !path.StartsWithSegments("/css") &&
-            !path.StartsWithSegments("/js") && 
+            !path.StartsWithSegments("/js") &&
             !path.StartsWithSegments("/lib"))
         {
             var lang = context.Request.Headers["lang"].ToString() ??
             context.Request.Cookies["lang"] ??
             AppConsts.DefaultLanguage;
+            lang = lang == string.Empty ? AppConsts.DefaultLanguage : lang;
 
-            context.Items["lang"] = lang == string.Empty ? AppConsts.DefaultLanguage : lang;
+            context.Items["lang"] = lang;
             var culture = new CultureInfo(lang);
             CultureInfo.CurrentCulture = culture;
             CultureInfo.CurrentUICulture = culture;

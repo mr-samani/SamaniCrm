@@ -27,8 +27,9 @@ public class CachedStringLocalizer : ILocalizer
 
     private string GetCulture()
     {
-        return _httpContextAccessor.HttpContext?.Items["lang"]?.ToString()
-               ?? CultureInfo.CurrentUICulture.Name ?? AppConsts.DefaultLanguage;
+        //return _httpContextAccessor.HttpContext?.Items["lang"]?.ToString()
+        //       ?? CultureInfo.CurrentUICulture.Name ?? AppConsts.DefaultLanguage;
+        return  CultureInfo.CurrentUICulture.Name ?? AppConsts.DefaultLanguage;
     }
 
 
