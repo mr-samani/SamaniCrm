@@ -31,7 +31,7 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
   attributeValues?: Array<ProductAttributeValueDto>;
   images?: Array<ProductImageDto>;
   files?: Array<ProductFileDto>;
-  prices?: Array<ProductPriceDto>;
+  prices: Array<ProductPriceDto> = [];
   tagList: string[] = [];
   constructor(
     injector: Injector,

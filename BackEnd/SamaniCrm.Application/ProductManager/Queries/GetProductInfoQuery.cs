@@ -83,14 +83,7 @@ namespace SamaniCrm.Application.ProductManager.Queries
                     FileType = file.FileType
                 }).ToList() ?? new(),
 
-                Prices = entity.Prices?.Select(price => new ProductPriceDto
-                {
-                    Id = price.Id,
-                    Currency = price.CurrencyCode,
-                    Price = price.Price,
-                    StartDate = price.StartDate,
-                    EndDate = price.EndDate
-                }).ToList() ?? new(),
+                Price = entity.Prices?.Where(w => w.EndDate >= DateTime.Now).Select(p => p.Price).FirstOrDefault() ?? 0,
 
                 AttributeValues = entity.AttributeValues?.Select(attr => new ProductAttributeInfoDto
                 {

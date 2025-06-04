@@ -25,7 +25,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
         public DateTime? CreationTime { get; set; }
         public List<ProductImageDto> Images { get; set; } = new List<ProductImageDto>();
         public List<ProductFileDto> Files { get; set; } = new List<ProductFileDto>();
-        public List<ProductPriceDto> Prices { get; set; } = new List<ProductPriceDto>();
+        public decimal Price { get; set; } = 0;
         public List<ProductAttributeInfoDto> AttributeValues { get; set; } = new List<ProductAttributeInfoDto>();
     }
 

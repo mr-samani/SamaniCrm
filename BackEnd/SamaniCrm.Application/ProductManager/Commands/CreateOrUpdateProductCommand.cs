@@ -171,7 +171,8 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                             CurrencyCode = price.Currency,
                             Price = price.Price,
                             StartDate = price.StartDate,
-                            EndDate = price.EndDate
+                            EndDate = price.EndDate,
+                            Type = price.Type
                         });
                     }
                 }

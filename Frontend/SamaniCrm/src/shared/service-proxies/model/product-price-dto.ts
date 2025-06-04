@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PriceTypeEnum } from './price-type-enum';
 
 
 /**
@@ -28,6 +29,7 @@ export interface IProductPriceDto {
   price?: number;
   startDate?: string;
   endDate?: string;
+  type?: PriceTypeEnum;
 }
 
 /** Class for ProductPriceDto */
@@ -38,6 +40,7 @@ export class ProductPriceDto implements IProductPriceDto {
   price?: number;
   startDate?: string;
   endDate?: string;
+  type?: PriceTypeEnum;
 
   constructor(data?: IProductPriceDto) {
     if (data) {
@@ -56,6 +59,7 @@ init(data?: any) {
     this.price = data["price"];
     this.startDate = data["startDate"];
     this.endDate = data["endDate"];
+    this.type = data["type"];
   }
 }
 

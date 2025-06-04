@@ -1,0 +1,135 @@
+<form [formGroup]="form">
+  <div class=" ">{{ 'PriceHistory' | translate }}</div>
+
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <td>{{ 'Code' | translate }}</td>
+          <td>{{ 'Price' | translate }}</td>
+          <td>{{ 'Type' | translate }}</td>
+          <td>{{ 'StartDate' | translate }}</td>
+          <td>{{ 'EndDate' | translate }}</td>
+          <td></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="input-group">
+              <mat-select class="form-control" formControlName="currency" [placeholder]="'Currency' | translate">
+                <mat-option [value]="item.id" *ngFor="let item of currencyList">
+                  {{ item.title }} ({{ item.id }})
+                </mat-option>
+                <mat-option disabled *ngIf="!loadingCurrency && currencyList.length == 0">
+                  {{ 'NotACase' | translate }}
+                </mat-option>
+              </mat-select>
+              <span class="input-group-text" *ngIf="loadingCurrency">
+                <mat-spinner color="primary" diameter="20"></mat-spinner>
+              </span>
+            </div>
+            <span class="text-danger" *ngIf="form.get('currency')?.hasError('required')">
+              {{ 'IsRequired' | translate: { value: 'Currency' | translate } }}
+            </span>
+          </td>
+          <td>
+            <input
+              class="form-control"
+              type="number"
+              numberCheck
+              formControlName="price"
+              [placeholder]="'Price' | translate" />
+            <span class="text-danger" *ngIf="form.get('price')?.hasError('required')">
+              {{ 'IsRequired' | translate: { value: 'Price' | translate } }}
+            </span>
+          </td>
+          <td>
+            <div class="input-group">
+              <mat-select class="form-control" formControlName="type" [placeholder]="'Type' | translate">
+                <mat-option [value]="item" *ngFor="let item of PriceTypeEnum | enumToArray">
+                  {{ 'PriceTypeEnum_' + item | translate }}
+                </mat-option>
+              </mat-select>
+            </div>
+            <span class="text-danger" *ngIf="form.get('type')?.hasError('required')">
+              {{ 'IsRequired' | translate: { value: 'Type' | translate } }}
+            </span>
+          </td>
+          <td>
+            <div class="input-group">
+              <input
+                class="form-control"
+                [matDatepicker]="dpS"
+                formControlName="startDate"
+                [placeholder]="'StartDate' | translate"
+                [max]="form.get('endDate')?.value"
+                readonly
+                (click)="dpS.open()" />
+              <mat-datepicker-toggle class="input-group-text" [for]="dpS"></mat-datepicker-toggle>
+              <mat-datepicker #dpS></mat-datepicker>
+            </div>
+            <span class="text-danger" *ngIf="form.get('startDate')?.hasError('required')">
+              {{ 'IsRequired' | translate: { value: ('StartDate' | translate) } }}
+            </span>
+            <span
+              class="text-danger"
+              *ngIf="
+                form.get('startDate')?.hasError('matDatepickerMin') ||
+                form.get('startDate')?.hasError('matDatepickerMax')
+              ">
+              {{ 'InvalidStartAndEndDate' | translate }}
+            </span>
+            <span class="text-danger" *ngIf="form.get('startDate')?.hasError('matDatepickerParse')">
+              {{ 'InvalidDateFormat' | translate }}
+            </span>
+          </td>
+          <td>
+            <div class="input-group">
+              <input
+                class="form-control"
+                [matDatepicker]="dpE"
+                formControlName="endDate"
+                [placeholder]="'EndDate' | translate"
+                [min]="form.get('startDate')?.value"
+                readonly
+                (click)="dpE.open()" />
+              <mat-datepicker-toggle class="input-group-text" [for]="dpE"></mat-datepicker-toggle>
+              <mat-datepicker #dpE></mat-datepicker>
+            </div>
+            <span class="text-danger" *ngIf="form.get('endDate')?.hasError('required')">
+              {{ 'IsRequired' | translate: { value: ('EndDate' | translate) } }}
+            </span>
+            <span
+              class="text-danger"
+              *ngIf="
+                form.get('endDate')?.hasError('matDatepickerMin') || form.get('endDate')?.hasError('matDatepickerMax')
+              ">
+              {{ 'InvalidStartAndEndDate' | translate }}
+            </span>
+            <span class="text-danger" *ngIf="form.get('endDate')?.hasError('matDatepickerParse')">
+              {{ 'InvalidDateFormat' | translate }}
+            </span>
+          </td>
+          <td>
+            <button mat-icon-button (click)="save()">
+              <i class="fa fa-save"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngFor="let item of prices; let i = index">
+          <td>{{ item.currency }}</td>
+          <td>{{ item.price | number }}</td>
+          <td>{{ 'PriceTypeEnum_' + item.type | translate }}</td>
+          <td>{{ item.startDate | luxonFormat: 'F' }}</td>
+          <td>{{ item.endDate | luxonFormat: 'F' }}</td>
+          <td>
+            <button mat-icon-button (click)="remove(i)">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</form>

@@ -5,7 +5,7 @@ import { ConvertNumbersToLatin } from '../helper/conver-number-to-latin.helper';
 import { Calendars } from './Calendars';
 @Pipe({ name: 'luxonFormat', standalone: false })
 export class LuxonFormatPipe implements PipeTransform {
-  transform(value: DateTime | string | number, format: string) {
+  transform(value: DateTime | string | number | undefined, format: string) {
     if (!value) {
       return '';
     }

@@ -229,7 +229,14 @@ namespace SamaniCrm.Api.Controllers
             List<CurrencyDto> result = await _mediator.Send(new GetCurrenciesQuery(), cancellationToken);
             return ApiOk(result);
         }
-
+ [HttpGet("GetActiveCurrencies")]
+        [Permission(AppPermissions.Products_Currency_List)]
+        [ProducesResponseType(typeof(ApiResponse<List<AutoCompleteDto<string>>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetActiveCurrencies(CancellationToken cancellationToken)
+        {
+            List<AutoCompleteDto<string>> result = await _mediator.Send(new GetActiveCurrenciesQuery(), cancellationToken);
+            return ApiOk(result);
+        }
 
         [HttpPost("CreateOrEditCurrency")]
         [Permission(AppPermissions.Products_Currency_Edit)]

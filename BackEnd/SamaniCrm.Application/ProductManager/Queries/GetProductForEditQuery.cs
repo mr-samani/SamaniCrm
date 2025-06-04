@@ -23,12 +23,12 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
         }
         public async Task<ProductDto> Handle(GetProductForEditQuery request, CancellationToken cancellationToken)
         {
-            var currentLangugage=L.CurrentLanguage;
+            var currentLangugage = L.CurrentLanguage;
             var entity = await _dbContext.Products
-                .Include(x=>x.Category)
-                    .ThenInclude(x=>x.Translations)
-                .Include(x=>x.ProductType)
-                    .ThenInclude(x=>x.Translations)
+                .Include(x => x.Category)
+                    .ThenInclude(x => x.Translations)
+                .Include(x => x.ProductType)
+                    .ThenInclude(x => x.Translations)
                 .Include(x => x.Translations)
                 .Include(x => x.Images)
                 .Include(x => x.Files)
@@ -48,7 +48,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
                 SKU = entity.SKU.ToString(),
                 Slug = entity.Slug,
                 IsActive = entity.IsActive,
-                Tags = entity.Tags, 
+                Tags = entity.Tags,
                 // Translations mapping
                 Translations = entity.Translations.Select(t => new ProductTranslationDto
                 {
@@ -56,7 +56,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
                     Culture = t.Culture,
                     Title = t.Title,
                     Description = t.Description,
-                    Content= t.Content,
+                    Content = t.Content,
                 }).ToList(),
                 Images = entity.Images.Select(img => new ProductImageDto
                 {
@@ -76,6 +76,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
                     Id = price.Id,
                     Currency = price.CurrencyCode,
                     Price = price.Price,
+                    Type = price.Type,
                     StartDate = price.StartDate,
                     EndDate = price.EndDate
                 }).ToList(),

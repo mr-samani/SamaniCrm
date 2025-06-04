@@ -23,6 +23,7 @@ import { CdkDrag, CdkDragPlaceholder, CdkDropList, DragDropModule } from '@angul
 import { MatSelectModule } from '@angular/material/select';
 import { BidiModule } from '@angular/cdk/bidi';
 import { DragPreviewRtlDirective } from './drag-preview-rtl.directive';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 export function getLanguage(localizationService: TranslateService) {
   return localizationService.currentLang;
@@ -60,6 +61,7 @@ const shared = [
   CdkDrag,
   CdkDragPlaceholder,
   MatSelectModule,
+  MatDatepickerModule,
 ];
 @NgModule({
   imports: [...shared],

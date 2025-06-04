@@ -28,9 +28,9 @@ export class RegisterComponent extends AppComponentBase implements OnInit {
   ngOnInit(): void {}
 
   signUp() {
-    if (this.registerForm.invalid) {
+     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
-      this.notify.warning('اطلاعات فرم را کامل کنید');
+      this.notify.warning(this.l('CompleteFormField'));
       return;
     }
     this.loading = true;

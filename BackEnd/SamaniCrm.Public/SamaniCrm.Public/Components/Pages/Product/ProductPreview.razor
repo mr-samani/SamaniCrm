@@ -11,6 +11,19 @@
 
 
 <PageTitle>@product.Title</PageTitle>
+<h1>@L["HomePage.Title"]</h1>
+<h2> 
+  <span>@L["Price"]:</span>  
+  @if ( product.Price>0)
+       {
+ 
+        <b>@(product.Price.ToString(product.Price % 1 == 0 ? "N0" : "N"))</b>
+    }
+    else
+    {
+        <b>@L["Free"]</b>
+    }
+</h2>
 
 <h3>@product.Description</h3>
 <div class="tag-list">

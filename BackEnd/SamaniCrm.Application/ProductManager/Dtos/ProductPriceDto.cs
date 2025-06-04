@@ -1,3 +1,4 @@
+using SamaniCrm.Domain.Entities.ProductEntities;
 using System;
 using System.Collections.Generic;
 
@@ -11,5 +12,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
         public decimal Price { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public PriceTypeEnum Type { get; set; }
     }
 }

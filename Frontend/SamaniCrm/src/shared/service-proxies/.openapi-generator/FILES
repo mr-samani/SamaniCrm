@@ -94,6 +94,7 @@ model/paged-product-categories-dto.ts
 model/paged-product-category-dto.ts
 model/password-complexity-dto-api-response.ts
 model/password-complexity-dto.ts
+model/price-type-enum.ts
 model/product-attribute-data-type-enum.ts
 model/product-attribute-dto-api-response.ts
 model/product-attribute-dto-paginated-result-api-response.ts
@@ -131,6 +132,8 @@ model/role-permissions-dto.ts
 model/security-setting-dto-api-response.ts
 model/security-setting-dto.ts
 model/string-api-response.ts
+model/string-auto-complete-dto-list-api-response.ts
+model/string-auto-complete-dto.ts
 model/token-response-dto-api-response.ts
 model/token-response-dto.ts
 model/unit-api-response.ts

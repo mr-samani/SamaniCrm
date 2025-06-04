@@ -1,3 +1,4 @@
+import { ProductPricesComponent } from './products/create-or-edit/product-prices/product-prices.component';
 import { CurrenciesComponent } from './currencies/currencies.component';
 import { AddOrUpdateProductAttributesComponent } from './products/create-or-edit/add-or-update-product-attributes/add-or-update-product-attributes.component';
 import { ProductsComponent } from './products/products.component';
@@ -28,20 +29,7 @@ import { HtmlEditorModule } from '@shared/components/html-editor/html-editor.mod
 import { CreateOrEditCurrencyComponent } from './currencies/create-or-edit/create-or-edit.component';
 
 @NgModule({
-  declarations: [
-    ProductComponent,
-    ProductCategoriesComponent,
-    CreateOrEditProductCategoryComponent,
-    ProductTypesComponent,
-    CreateOrEditProductTypeComponent,
-    ProductAttributesComponent,
-    CreateOrEditProductAttributeComponent,
-    ProductsComponent,
-    CreateOrEditProductComponent,
-    AddOrUpdateProductAttributesComponent,
-    CurrenciesComponent,
-    CreateOrEditCurrencyComponent,
-  ],
+  declarations: [ProductComponent, ProductCategoriesComponent, CreateOrEditProductCategoryComponent, ProductTypesComponent, CreateOrEditProductTypeComponent, ProductAttributesComponent, CreateOrEditProductAttributeComponent, ProductsComponent, CreateOrEditProductComponent, AddOrUpdateProductAttributesComponent, CurrenciesComponent, CreateOrEditCurrencyComponent, ProductPricesComponent],
   imports: [
     CommonModule,
     ProductRoutingModule,
