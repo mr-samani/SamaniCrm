@@ -37,7 +37,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         });
 
         builder.HasOne(p => p.ProductType)
-              .WithMany(t=>t.Products)
+              .WithMany(t => t.Products)
               .HasForeignKey(p => p.ProductTypeId)
               .OnDelete(DeleteBehavior.Restrict)
               .IsRequired();
@@ -199,3 +199,38 @@ public class ProductPriceConfiguration : IEntityTypeConfiguration<ProductPrice>
     }
 
 }
+
+
+//___________________________________ واحد ارزی -----------------------------------------------
+public class CurrencyConfiguration : IEntityTypeConfiguration<Currency>
+{
+    public void Configure(EntityTypeBuilder<Currency> builder)
+    {
+        builder.ToTable("Currencies", "product");
+        builder.HasKey(pc => pc.Id);
+        builder.HasAlternateKey(c => c.CurrencyCode);
+        builder.HasIndex(h => h.CurrencyCode).IsUnique();
+
+        builder.Property(p => p.ExchangeRateToBase).HasPrecision(18, 2);
+
+        builder.HasMany(p => p.ProductPrices)
+            .WithOne(c => c.Currency)
+            .HasForeignKey(p => p.CurrencyCode)
+            .HasPrincipalKey(c => c.CurrencyCode)
+            .OnDelete(DeleteBehavior.Cascade);
+
+    }
+}
+
+//___________________________________ تخفیف ها -----------------------------------------------
+public class DiscountConfiguration : IEntityTypeConfiguration<Discount>
+{
+    public void Configure(EntityTypeBuilder<Discount> builder)
+    {
+        builder.ToTable("Discounts", "Product");
+        builder.HasKey(p => p.Id);
+        builder.Property(p => p.Value).HasPrecision(18, 2);
+    }
+}
+
+

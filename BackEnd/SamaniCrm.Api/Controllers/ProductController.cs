@@ -6,6 +6,7 @@ using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Menu.Commands;
 using SamaniCrm.Application.ProductManager.Commands;
+using SamaniCrm.Application.ProductManager.Dtos;
 using SamaniCrm.Application.ProductManager.Queries;
 using SamaniCrm.Application.ProductManagerManager.Commands;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
@@ -218,6 +219,38 @@ namespace SamaniCrm.Api.Controllers
         }
         #endregion
         // ________________________________________________________________________________________________________________________
+
+        #region Currency
+        [HttpGet("GetCurrencies")]
+        [Permission(AppPermissions.Products_Currency_List)]
+        [ProducesResponseType(typeof(ApiResponse<List<CurrencyDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetCurrencies(CancellationToken cancellationToken)
+        {
+            List<CurrencyDto> result = await _mediator.Send(new GetCurrenciesQuery(), cancellationToken);
+            return ApiOk(result);
+        }
+
+
+        [HttpPost("CreateOrEditCurrency")]
+        [Permission(AppPermissions.Products_Currency_Edit)]
+        [Permission(AppPermissions.Products_Currency_Create)]
+        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> CreateOrEditCurrency([FromBody] CreateOrUpdateCurrencyCommand request, CancellationToken cancellationToken)
+        {
+            bool result =await _mediator.Send(request, cancellationToken);
+            return ApiOk(result);
+        }
+
+        [HttpPost("DeleteCurrency")]
+        [Permission(AppPermissions.Products_Currency_Delete)]
+        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeleteCurrency(DeleteCurrencyCommand request, CancellationToken cancellationToken)
+        {
+            bool result = await _mediator.Send(request, cancellationToken);
+            return ApiOk<bool>(result);
+        }
+        #endregion
+
 
     }
 }

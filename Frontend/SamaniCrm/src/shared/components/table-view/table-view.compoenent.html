@@ -49,6 +49,10 @@
                 <span>{{item[f.column]|luxonFormat:'HH:ss'}}</span>
               </ng-container>
 
+              <ng-container *ngSwitchCase="'number'">
+                <span>{{item[f.column]|number}}</span>
+              </ng-container>
+
               <ng-container *ngSwitchCase="'dateTime'">
                 <span class="text-wrap">{{item[f.column]|luxonFormat:'F'}}</span>
               </ng-container>

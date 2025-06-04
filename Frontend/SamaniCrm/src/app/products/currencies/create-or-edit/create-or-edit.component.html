@@ -1,0 +1,55 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title" *ngIf="!isUpdate">{{ 'CreateCurrency' | translate }}</span>
+  <span cdkDragHandle class="title" *ngIf="isUpdate">{{ 'EditCurrency' | translate }}</span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <div class="row">
+      <mat-form-field class="col-sm-6">
+        <mat-label>{{ 'Code' | translate }}</mat-label>
+        <input matInput type="text" formControlName="currencyCode" maxlength="5" />
+        <mat-error *ngIf="form.get('currencyCode')?.hasError('required')">
+          {{ 'IsRequired' | translate: { value: ('Code' | translate) } }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="col-sm-6">
+        <mat-label>{{ 'Name' | translate }}</mat-label>
+        <input matInput type="text" formControlName="name" maxlength="100" />
+        <mat-error *ngIf="form.get('name')?.hasError('required')">
+          {{ 'IsRequired' | translate: { value: ('Name' | translate) } }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="col-sm-6">
+        <mat-label>{{ 'Symbol' | translate }}</mat-label>
+        <input matInput type="text" formControlName="symbol" maxlength="100" />
+        <mat-error *ngIf="form.get('symbol')?.hasError('required')">
+          {{ 'IsRequired' | translate: { value: ('Symbol' | translate) } }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="col-sm-6">
+        <mat-label>{{ 'ExchangeRateToBase' | translate }}</mat-label>
+        <input matInput type="number" formControlName="exchangeRateToBase" numberCheck [isDecimal]="true" />
+        <mat-error *ngIf="form.get('exchangeRateToBase')?.hasError('required')">
+          {{ 'IsRequired' | translate: { value: ('ExchangeRateToBase' | translate) } }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <p>
+      <mat-checkbox color="primary" formControlName="isDefault">{{ 'IsDefault' | translate }}</mat-checkbox>
+    </p>
+    <p>
+      <mat-checkbox color="primary" formControlName="isActive">{{ 'IsActive' | translate }}</mat-checkbox>
+    </p>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="saving">
+    <mat-spinner *ngIf="saving" color="primary" diameter="25"></mat-spinner>
+    <span>{{ 'Save' | translate }}</span>
+  </button>
+</mat-dialog-actions>

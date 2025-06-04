@@ -86,7 +86,7 @@ namespace SamaniCrm.Application.ProductManager.Queries
                 Prices = entity.Prices?.Select(price => new ProductPriceDto
                 {
                     Id = price.Id,
-                    Currency = price.Currency,
+                    Currency = price.CurrencyCode,
                     Price = price.Price,
                     StartDate = price.StartDate,
                     EndDate = price.EndDate

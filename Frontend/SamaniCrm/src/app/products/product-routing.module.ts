@@ -6,6 +6,7 @@ import { ProductTypesComponent } from './product-types/product-types.component';
 import { ProductsComponent } from './products/products.component';
 import { ProductAttributesComponent } from './product-attributes/product-attributes.component';
 import { CreateOrEditProductComponent } from './products/create-or-edit/create-or-edit.component';
+import { CurrenciesComponent } from './currencies/currencies.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,10 @@ const routes: Routes = [
       {
         path: 'product-list',
         component: ProductsComponent,
+      },
+      {
+        path: 'currencies',
+        component: CurrenciesComponent,
       },
     ],
   },

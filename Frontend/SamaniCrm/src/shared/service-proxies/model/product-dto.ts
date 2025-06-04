@@ -32,6 +32,7 @@ export interface IProductDto {
   productTypeId?: string;
   title?: string;
   description?: string;
+  content?: string;
   categoryTitle?: string;
   productTypeTitle?: string;
   tags?: string;
@@ -53,6 +54,7 @@ export class ProductDto implements IProductDto {
   productTypeId?: string;
   title?: string;
   description?: string;
+  content?: string;
   categoryTitle?: string;
   productTypeTitle?: string;
   tags?: string;
@@ -82,6 +84,7 @@ init(data?: any) {
     this.productTypeId = data["productTypeId"];
     this.title = data["title"];
     this.description = data["description"];
+    this.content = data["content"];
     this.categoryTitle = data["categoryTitle"];
     this.productTypeTitle = data["productTypeTitle"];
     this.tags = data["tags"];

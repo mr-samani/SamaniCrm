@@ -82,7 +82,13 @@ namespace SamaniCrm.Core.Permissions
         public const string Products_Type_Edit = "Administrator.Products.Type.Edit";
         public const string Products_Type_Delete = "Administrator.Products.Type.Delete";
 
-     
+
+
+        public const string Products_Currency_List = "Administrator.Products.Currency.List";
+        public const string Products_Currency_Create = "Administrator.Products.Currency.Create";
+        public const string Products_Currency_Edit = "Administrator.Products.Currency.Edit";
+        public const string Products_Currency_Delete = "Administrator.Products.Currency.Delete";
+
 
 
 

@@ -153,12 +153,12 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             // Handle Prices
             if (request.Prices != null)
             {
-                var toRemove = entity.Prices.Where(p => !(request.Prices.Any(rp => rp.Currency == p.Currency && rp.StartDate == p.StartDate))).ToList();
+                var toRemove = entity.Prices.Where(p => !(request.Prices.Any(rp => rp.Currency == p.CurrencyCode && rp.StartDate == p.StartDate))).ToList();
                 foreach (var p in toRemove)
                     entity.Prices.Remove(p);
                 foreach (var price in request.Prices)
                 {
-                    var existingPrice = entity.Prices.FirstOrDefault(x => x.Currency == price.Currency && x.StartDate == price.StartDate);
+                    var existingPrice = entity.Prices.FirstOrDefault(x => x.CurrencyCode == price.Currency && x.StartDate == price.StartDate);
                     if (existingPrice != null)
                     {
                         existingPrice.Price = price.Price;
@@ -168,7 +168,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                     {
                         entity.Prices.Add(new ProductPrice
                         {
-                            Currency = price.Currency,
+                            CurrencyCode = price.Currency,
                             Price = price.Price,
                             StartDate = price.StartDate,
                             EndDate = price.EndDate

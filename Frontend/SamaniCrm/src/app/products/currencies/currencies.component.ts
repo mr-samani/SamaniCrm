@@ -4,34 +4,31 @@ import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
-import {
-  ProductTypeDto,
-  ProductServiceProxy,
-  GetProductTypesQuery,
-  DeleteProductTypeCommand,
-} from '@shared/service-proxies';
-import { Subscription, finalize } from 'rxjs';
-import { CreateOrEditProductTypeComponent } from './create-or-edit/create-or-edit.component';
+import { CurrencyDto, DeleteCurrencyCommand, ProductServiceProxy } from '@shared/service-proxies';
+import { finalize, Subscription } from 'rxjs';
+import { CreateOrEditCurrencyComponent } from './create-or-edit/create-or-edit.component';
 
 @Component({
-  selector: 'app-product-types',
-  templateUrl: './product-types.component.html',
-  styleUrls: ['./product-types.component.scss'],
+  selector: 'app-currencies',
+  templateUrl: './currencies.component.html',
+  styleUrls: ['./currencies.component.scss'],
   standalone: false,
 })
-export class ProductTypesComponent extends AppComponentBase implements OnInit {
+export class CurrenciesComponent extends AppComponentBase implements OnInit {
   loading = true;
 
-  list: ProductTypeDto[] = [];
+  list: CurrencyDto[] = [];
   totalCount = 0;
-
   fields: FieldsType[] = [
     // { column: 'id', title: this.l('id'), width: 100 },
+    { column: 'currencyCode', title: this.l('Code') },
     { column: 'name', title: this.l('Name') },
-    { column: 'description', title: this.l('Description') },
-    { column: 'creationTime', title: this.l('CreationTime'), type: 'dateTime' },
+    { column: 'symbol', title: this.l('Symbol') },
+    { column: 'exchangeRateToBase', title: this.l('ExchangeRateToBase'), type: 'number' },
+    { column: 'isDefault', title: this.l('isDefault'), type: 'yesNo' },
+    { column: 'isActive', title: this.l('IsActive'), type: 'yesNo' },
+    // { column: 'creationTime', title: this.l('CreationTime'), type: 'dateTime' },
   ];
-
   form: FormGroup;
   page = 1;
   perPage = 10;
@@ -44,7 +41,7 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
     private matDialog: MatDialog,
   ) {
     super(injector);
-    this.breadcrumb.list = [{ name: this.l('ProductTypes'), url: '/dashboard/products/types' }];
+    this.breadcrumb.list = [{ name: this.l('Currencies'), url: '/dashboard/products/currencies' }];
     this.form = this.fb.group({
       filter: [''],
     });
@@ -52,6 +49,7 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
     this.route.queryParams.subscribe((p) => {
       this.page = p['page'] ?? 1;
       this.perPage = p['perPage'] ?? 10;
+
       this.getList();
     });
   }
@@ -69,18 +67,12 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
       this.listSubscription$.unsubscribe();
     }
     this.loading = true;
-    const input = new GetProductTypesQuery();
-    input.filter = this.form.get('filter')?.value;
-    input.pageNumber = this.page;
-    input.pageSize = this.perPage;
-    input.sortBy = ev ? ev.field : '';
-    input.sortDirection = ev ? ev.direction : '';
-    this.listSubscription$ = this.productService
-      .getProductTypes(input)
+    this.productService
+      .getCurrencies()
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.list = response.data?.items ?? [];
-        this.totalCount = response.data?.totalCount ?? 0;
+        this.list = response.data ?? [];
+        this.totalCount = this.list.length;
       });
   }
 
@@ -98,19 +90,17 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
 
   onPageChange(ev?: PageEvent) {
     this.getList();
-    this.router.navigate(['/dashboard/products/types'], {
+    this.router.navigate(['/dashboard/products/currencies'], {
       queryParams: {
         page: this.page,
       },
     });
   }
 
-  openCreateOrEditDialog(item?: ProductTypeDto) {
+  openCreateOrEditDialog(item?: CurrencyDto) {
     this.matDialog
-      .open(CreateOrEditProductTypeComponent, {
-        data: {
-          id: item?.id,
-        },
+      .open(CreateOrEditCurrencyComponent, {
+        data: item,
         width: '768px',
       })
       .afterClosed()
@@ -121,12 +111,12 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
       });
   }
 
-  remove(item: ProductTypeDto) {
+  remove(item: CurrencyDto) {
     this.confirmMessage(`${this.l('Delete')}:${item?.name}`, this.l('AreUseSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
         this.productService
-          .deleteProductType(new DeleteProductTypeCommand({ id: item.id }))
+          .deleteCurrency(new DeleteCurrencyCommand({ id: item.id }))
           .pipe(finalize(() => this.hideMainLoading()))
           .subscribe((response) => {
             if (response.success) {
@@ -137,5 +127,4 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
       }
     });
   }
- 
 }

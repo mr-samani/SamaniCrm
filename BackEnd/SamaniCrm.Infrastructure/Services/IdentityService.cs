@@ -452,6 +452,7 @@ public class IdentityService : IIdentityService
         var permissionsToAdd = newPermissions.Except(currentPermissions, StringComparer.OrdinalIgnoreCase).ToList();
         if (permissionsToAdd.Any())
         {
+            // نکته: با اضافه کردن پرمیژن به کد باید حتما update-database زده شود
             var permissionsMustBeAdded = await _applicationDbContext.Permissions
                   .Select(s => new { s.Id, s.Name })
                   .Where(w => permissionsToAdd.Contains(w.Name)).ToListAsync();

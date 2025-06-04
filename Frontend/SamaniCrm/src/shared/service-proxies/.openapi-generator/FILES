@@ -31,11 +31,15 @@ model/create-or-edit-language-command.ts
 model/create-or-edit-localize-key-command.ts
 model/create-or-edit-menu-command.ts
 model/create-or-edit-page-meta-data-command.ts
+model/create-or-update-currency-command.ts
 model/create-or-update-product-attribute-command.ts
 model/create-or-update-product-category-command.ts
 model/create-or-update-product-command.ts
 model/create-or-update-product-type-command.ts
 model/create-user-command.ts
+model/currency-dto-list-api-response.ts
+model/currency-dto.ts
+model/delete-currency-command.ts
 model/delete-language-command.ts
 model/delete-localize-key-command.ts
 model/delete-menu-command.ts

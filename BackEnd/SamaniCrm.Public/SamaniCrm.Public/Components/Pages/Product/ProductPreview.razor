@@ -32,14 +32,17 @@
                         {
                             <span style="background-color:@item.Value" class="tag-color"></span>
                         }
-                        else if ( item.DataType == ProductAttributeDataTypeEnum.Decimal)
+                        else if (item.DataType == ProductAttributeDataTypeEnum.Decimal || item.DataType == ProductAttributeDataTypeEnum.Int)
                         {
-                            <span>@(String.Format("{0:N}", (item.Value)))</span>
+                            if (decimal.TryParse(item.Value, out var numVal))
+                            {
+                                <span>@(numVal.ToString(item.DataType == ProductAttributeDataTypeEnum.Int || numVal % 1 == 0 ? "N0" : "N"))</span>
+                            }
+                            else
+                            {
+                                <span>@item.Value</span>
+                            }
                         }  
-                        else if (item.DataType == ProductAttributeDataTypeEnum.Int )
-                        {
-                            <span>@(String.Format("{0:N0}", int.Parse(item.Value)))</span>
-                        }
                         else if(item.DataType == ProductAttributeDataTypeEnum.Bool){
                             <span>
                                 @if(item.Value is "true")

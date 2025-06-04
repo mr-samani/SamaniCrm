@@ -1,3 +1,4 @@
+import { CurrenciesComponent } from './currencies/currencies.component';
 import { AddOrUpdateProductAttributesComponent } from './products/create-or-edit/add-or-update-product-attributes/add-or-update-product-attributes.component';
 import { ProductsComponent } from './products/products.component';
 import { ProductAttributesComponent } from './product-attributes/product-attributes.component';
@@ -24,6 +25,7 @@ import { AutoCompleteProductCategoryComponent } from './auto-completes/auto-comp
 import { AutoCompleteProductTypeComponent } from './auto-completes/auto-complete-product-type/auto-complete-product-type.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { HtmlEditorModule } from '@shared/components/html-editor/html-editor.module';
+import { CreateOrEditCurrencyComponent } from './currencies/create-or-edit/create-or-edit.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { HtmlEditorModule } from '@shared/components/html-editor/html-editor.mod
     ProductsComponent,
     CreateOrEditProductComponent,
     AddOrUpdateProductAttributesComponent,
+    CurrenciesComponent,
+    CreateOrEditCurrencyComponent,
   ],
   imports: [
     CommonModule,

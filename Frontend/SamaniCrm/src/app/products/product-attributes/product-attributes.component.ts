@@ -51,7 +51,7 @@ export class ProductAttributesComponent extends AppComponentBase implements OnIn
 
   constructor(
     injector: Injector,
-    private productServiceProxy: ProductServiceProxy,
+    private productService: ProductServiceProxy,
     private matDialog: MatDialog,
   ) {
     super(injector);
@@ -92,7 +92,7 @@ export class ProductAttributesComponent extends AppComponentBase implements OnIn
     input.pageSize = this.perPage;
     input.sortBy = ev ? ev.field : '';
     input.sortDirection = ev ? ev.direction : '';
-    this.listSubscription$ = this.productServiceProxy
+    this.listSubscription$ = this.productService
       .getProductAttributes(input)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
@@ -144,7 +144,7 @@ export class ProductAttributesComponent extends AppComponentBase implements OnIn
     this.confirmMessage(`${this.l('Delete')}:${item?.name}`, this.l('AreUseSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
-        this.productServiceProxy
+        this.productService
           .deleteProductAttribute(new DeleteProductAttributeCommand({ id: item.id }))
           .pipe(finalize(() => this.hideMainLoading()))
           .subscribe((response) => {

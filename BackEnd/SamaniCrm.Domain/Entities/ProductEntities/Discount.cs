@@ -1,28 +1,24 @@
 ﻿using SamaniCrm.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SamaniCrm.Domain.Entities.ProductEntities
 {
-    public class ProductPrice : IAuditableEntity, ISoftDelete
+    public class Discount : IAuditableEntity, ISoftDelete
     {
         public Guid Id { get; set; }
-        public Guid ProductId { get; set; }
+        public string? Name { get; set; }
 
-        [MaxLength(5)]
-        public string CurrencyCode { get; set; } = default!;  // مثلا "USD", "IRR"
-        public decimal Price { get; set; }
+        public DiscountTypeEnum DiscountType { get; set; }
+        public decimal Value { get; set; }
 
         public DateTime StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
-        public PriceTypeEnum Type { get; set; }
+        public DateTime EndDate { get; set; }
 
-        public virtual Product Product { get; set; } = default!;
-        public virtual Currency Currency { get; set; } = default!;
+        public bool Expired { get; set; }
 
 
         // Implementing IAuditableEntity properties
@@ -38,12 +34,10 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
     }
 
 
-    public enum PriceTypeEnum
-    {
-        Reqular,
-        WholeSale,
-        Discounted,
-        FlashSale
-    }
 
+    public enum DiscountTypeEnum
+    {
+        StaticPriceValue,
+        PercetageValue,
+    }
 }

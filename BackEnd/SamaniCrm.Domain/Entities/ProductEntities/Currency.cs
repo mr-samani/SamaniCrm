@@ -1,6 +1,8 @@
 ﻿using SamaniCrm.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -8,21 +10,23 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Domain.Entities.ProductEntities
 {
-    public class ProductPrice : IAuditableEntity, ISoftDelete
+    public class Currency : IAuditableEntity, ISoftDelete
     {
         public Guid Id { get; set; }
-        public Guid ProductId { get; set; }
-
         [MaxLength(5)]
-        public string CurrencyCode { get; set; } = default!;  // مثلا "USD", "IRR"
-        public decimal Price { get; set; }
+        public required string CurrencyCode { get; set; }
+        [MaxLength(100)]    
+        public required string Name { get; set; }
+        [MaxLength(100)]
+        public string Symbol { get; set; } = string.Empty; // $ , ريال
 
-        public DateTime StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
-        public PriceTypeEnum Type { get; set; }
+        [Description("rate for convert base to this")]
+        public decimal ExchangeRateToBase { get; set; }
+        public virtual Collection<ProductPrice>? ProductPrices { get; set; }
 
-        public virtual Product Product { get; set; } = default!;
-        public virtual Currency Currency { get; set; } = default!;
+        public bool IsDefault { get; set; }
+        public bool IsActive { get; set; }
+
 
 
         // Implementing IAuditableEntity properties
@@ -38,12 +42,5 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
     }
 
 
-    public enum PriceTypeEnum
-    {
-        Reqular,
-        WholeSale,
-        Discounted,
-        FlashSale
-    }
 
 }

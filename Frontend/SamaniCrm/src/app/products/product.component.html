@@ -30,6 +30,17 @@
         <div class="description">{{ 'ProductsDescription' | translate }}</div>
       </div>
     </a>
+
+    <a class="menu-item" [routerLink]="['/dashboard/products/currencies']" routerLinkActive="active">
+      <div class="icon">
+        <i class="fad fa-money-bills"></i>
+      </div>
+
+      <div class="content">
+        <div class="title">{{ 'Currencies' | translate }}</div>
+        <div class="description">{{ 'CurrenciesDescription' | translate }}</div>
+      </div>
+    </a>
   </div>
   <div class="flex-fill">
     <router-outlet></router-outlet>

@@ -47,7 +47,7 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
 
   constructor(
     injector: Injector,
-    private productServiceProxy: ProductServiceProxy,
+    private productService: ProductServiceProxy,
     private matDialog: MatDialog,
   ) {
     super(injector);
@@ -99,7 +99,7 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
     input.pageSize = this.perPage;
     input.sortBy = ev ? ev.field : '';
     input.sortDirection = ev ? ev.direction : '';
-    this.listSubscription$ = this.productServiceProxy
+    this.listSubscription$ = this.productService
       .getProducts(input)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
@@ -141,7 +141,7 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
     this.confirmMessage(`${this.l('Delete')}:${item?.name}`, this.l('AreUseSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
-        this.productServiceProxy
+        this.productService
           .deleteProduct(new DeleteProductCommand({ id: item.id }))
           .pipe(finalize(() => this.hideMainLoading()))
           .subscribe((response) => {
