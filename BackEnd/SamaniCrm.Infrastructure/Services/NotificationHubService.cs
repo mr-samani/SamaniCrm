@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.DTOs;
 using SamaniCrm.Infrastructure.Hubs;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace SamaniCrm.Infrastructure.Services
             _hubContext = hubContext;
         }
 
-        public async Task SendToUserAsync(Guid userId, string message)
+        public async Task SendToUserAsync(Guid userId, NotificationDto message)
         {
             await _hubContext.Clients.User(userId.ToString()).SendAsync("ReceiveNotification", message);
         }

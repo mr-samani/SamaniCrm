@@ -85,6 +85,7 @@ model/menu-translations-dto.ts
 model/meta.ts
 model/models.ts
 model/notification-dto-api-response.ts
+model/notification-dto-list-api-response.ts
 model/notification-dto-paginated-result-api-response.ts
 model/notification-dto-paginated-result.ts
 model/notification-dto.ts

@@ -7,7 +7,6 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { UserDTO } from './user-dto';
 import { NotificationPeriorityEnum } from './notification-periority-enum';
 import { NotificationTypeEnum } from './notification-type-enum';
 
@@ -25,8 +24,6 @@ export interface IGetAllNotificationQuery {
   toDate?: string;
   type?: Array<NotificationTypeEnum>;
   periority?: Array<NotificationPeriorityEnum>;
-  ttttt?: Array<UserDTO>;
-  num?: Array<number>;
 }
 
 /** Class for GetAllNotificationQuery */
@@ -40,8 +37,6 @@ export class GetAllNotificationQuery implements IGetAllNotificationQuery {
   toDate?: string;
   type?: Array<NotificationTypeEnum>;
   periority?: Array<NotificationPeriorityEnum>;
-  ttttt?: Array<UserDTO>;
-  num?: Array<number>;
 
   constructor(data?: IGetAllNotificationQuery) {
     if (data) {
@@ -70,16 +65,6 @@ init(data?: any) {
       this.periority = [] as any;
       for (let item of data["periority"])
         (this.periority as any).push(item);
-    }
-    if (Array.isArray(data["ttttt"])) {
-      this.ttttt = [] as any;
-      for (let item of data["ttttt"])
-        (this.ttttt as any).push(UserDTO.fromJS(item));
-    }
-    if (Array.isArray(data["num"])) {
-      this.num = [] as any;
-      for (let item of data["num"])
-        (this.num as any).push(item);
     }
   }
 }

@@ -9,14 +9,14 @@
   <div class="py-5 my-5 text-center" *ngIf="loading">
     <mat-spinner color="primary" diameter="25"></mat-spinner>
   </div>
-  <div class="notify-info" *ngIf="!loading && notifyInfo">
+  <div class="notification-info" *ngIf="!loading && notifyInfo">
     <h3>{{ notifyInfo.title }}</h3>
 
     <div class="row">
       <div class="col-sm-6">{{ 'NotificationPeriorityEnum_' + notifyInfo.periority | translate }}</div>
       <div class="col-sm-6">
         <span>{{ 'Sender' | translate }}:</span>
-        <s>{{ notifyInfo.senderName }}</s>
+        <b>{{ notifyInfo.senderName }}</b>
       </div>
     </div>
 

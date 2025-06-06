@@ -8,7 +8,9 @@ import {
   DeleteNotificationCommand,
   GetAllNotificationQuery,
   NotificationDto,
+  NotificationPeriorityEnum,
   NotificationServiceProxy,
+  NotificationTypeEnum,
 } from '@shared/service-proxies';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { finalize } from 'rxjs/operators';
@@ -48,6 +50,8 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
     this.breadcrumb.list = [{ name: this.l('Notifications'), url: '/dashboard/notifications' }];
     this.form = this.fb.group({
       filter: [''],
+      type: [[]],
+      periority: [[]],
     });
 
     this.route.queryParams.subscribe((p) => {
@@ -60,6 +64,12 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
 
   ngOnInit(): void {}
 
+  public get NotificationPeriorityEnum(): typeof NotificationPeriorityEnum {
+    return NotificationPeriorityEnum;
+  }
+  public get NotificationTypeEnum(): typeof NotificationTypeEnum {
+    return NotificationTypeEnum;
+  }
   ngOnDestroy(): void {
     if (this.listSubscription$) {
       this.listSubscription$.unsubscribe();
@@ -71,7 +81,11 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
       this.listSubscription$.unsubscribe();
     }
     this.loading = true;
+    const formValue = this.form.value;
     const input = new GetAllNotificationQuery();
+    input.filter = formValue.filter;
+    input.type = formValue.type;
+    input.periority = formValue.periority;
     this.notificationService
       .getAllNotifications(input)
       .pipe(finalize(() => (this.loading = false)))
@@ -119,8 +133,13 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
     });
   }
   view(item: NotificationDto) {
-    this.matDialog.open(NotificationInfoComponent, {
-      data: item,
-    });
+    this.matDialog
+      .open(NotificationInfoComponent, {
+        data: item,
+      })
+      .afterClosed()
+      .subscribe((r) => {
+        item.read = true;
+      });
   }
 }

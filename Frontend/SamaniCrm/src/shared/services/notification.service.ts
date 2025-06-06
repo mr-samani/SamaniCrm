@@ -4,6 +4,7 @@ import * as signalR from '@microsoft/signalr';
 import { AuthService } from './auth.service';
 import { TokenService } from './token.service';
 import { AppConst } from '@shared/app-const';
+import { NotificationDto } from '@shared/service-proxies/model/notification-dto';
 
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
@@ -48,8 +49,8 @@ export class NotificationService {
     if (!this.hubConnection) {
       return;
     }
-    this.hubConnection.on('ReceiveNotification', (msg: string) => {
-      console.log('📨 Notification:', msg);
+    this.hubConnection.on('ReceiveNotification', (msg: NotificationDto) => {
+      console.log('📨 Notification:', msg.title);
       if (callBack) {
         callBack(msg);
       }

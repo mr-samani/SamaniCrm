@@ -24,9 +24,7 @@ namespace SamaniCrm.Application.NotificationManager.Queries
         public DateTime? ToDate { get; set; }
 
         public List<NotificationTypeEnum> Type { get; set; } = [];
-        public List<NotificationPeriorityEnum> Periority { get; set; } = [];
-        public List<UserDTO> ttttt { get; set; } = [];
-        public List<int> num { get; set; } = [];
+        public List<NotificationPeriorityEnum> Periority { get; set; } = []; 
     }
 
     public class GetAllNotificationQueryHandler : IRequestHandler<GetAllNotificationQuery, PaginatedResult<NotificationDto>>

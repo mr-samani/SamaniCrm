@@ -21,6 +21,7 @@ export class NotificationInfoComponent extends AppComponentBase implements OnIni
     private notificationService: NotificationServiceProxy,
   ) {
     super(injector);
+    this.id = _data.id!;
   }
 
   ngOnInit() {

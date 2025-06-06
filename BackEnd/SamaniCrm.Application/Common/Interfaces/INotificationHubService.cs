@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamaniCrm.Application.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace SamaniCrm.Application.Common.Interfaces
 {
     public interface INotificationHubService
     {
-        Task SendToUserAsync(Guid userId, string message);
+        Task SendToUserAsync(Guid userId, NotificationDto message);
     }
 
 }

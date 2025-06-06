@@ -16,9 +16,19 @@ import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { BraedCrumbComponent } from './layouts/braed-crumb/braed-crumb.component';
 import { PAGINATION_LABELS } from '@shared/components/pagination/pagination.component';
 import { PaginationLocalize } from '@shared/localize/pagination';
+import { SharedModule } from '@shared/shared.module';
+import { NotificationServiceProxy } from '@shared/service-proxies';
 
 @NgModule({
-  declarations: [DashboardComponent, HeaderComponent, SideMenuComponent, MenuDynamicComponent, FooterComponent, BraedCrumbComponent, LastNotificationsComponent],
+  declarations: [
+    DashboardComponent,
+    HeaderComponent,
+    SideMenuComponent,
+    MenuDynamicComponent,
+    FooterComponent,
+    BraedCrumbComponent,
+    LastNotificationsComponent,
+  ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
@@ -27,6 +37,7 @@ import { PaginationLocalize } from '@shared/localize/pagination';
     MatMenuModule,
     MatButtonModule,
     FileManagerModule,
+    SharedModule,
   ],
   exports: [],
   providers: [
@@ -35,6 +46,7 @@ import { PaginationLocalize } from '@shared/localize/pagination';
       useFactory: (localize: PaginationLocalize) => localize.labels,
       deps: [PaginationLocalize],
     },
+    NotificationServiceProxy,
   ],
 })
 export class DashboardModule {}

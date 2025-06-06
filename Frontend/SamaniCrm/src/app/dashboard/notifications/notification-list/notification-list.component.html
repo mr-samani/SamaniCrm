@@ -4,7 +4,7 @@
       <i class="fa fa-filter mx-1"></i>
       <span>{{ 'Filter' | translate }}</span>
     </button>
-  </div> 
+  </div>
 </div>
 
 <form [formGroup]="form" *filterForm="showFilter" class="filter-form">
@@ -12,6 +12,24 @@
     <mat-form-field class="col-sm-6 col-md-4">
       <mat-label>{{ 'Filter' | translate }}</mat-label>
       <input matInput type="text" maxlength="500" formControlName="filter" />
+    </mat-form-field>
+
+    <mat-form-field class="col-sm-6 col-md-4">
+      <mat-label>{{ 'Type' | translate }}</mat-label>
+      <mat-select formControlName="type" multiple>
+        <mat-option *ngFor="let item of NotificationTypeEnum | enumToArray" [value]="+item">
+          {{ 'NotificationTypeEnum_' + item | translate }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="col-sm-6 col-md-4">
+      <mat-label>{{ 'Periority' | translate }}</mat-label>
+      <mat-select formControlName="periority" multiple>
+        <mat-option *ngFor="let item of NotificationPeriorityEnum | enumToArray" [value]="+item">
+          {{ 'NotificationPeriorityEnum_' + item | translate }}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
   </div>
   <div class="d-flex align-items-center justify-content-end gap-2">

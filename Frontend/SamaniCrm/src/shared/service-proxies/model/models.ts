@@ -63,6 +63,7 @@ export * from './menu-translations-dto';
 export * from './meta';
 export * from './notification-dto';
 export * from './notification-dto-api-response';
+export * from './notification-dto-list-api-response';
 export * from './notification-dto-paginated-result';
 export * from './notification-dto-paginated-result-api-response';
 export * from './notification-periority-enum';

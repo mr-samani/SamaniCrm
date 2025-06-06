@@ -11,12 +11,17 @@
       <div class="px-2 py-5 my-5 text-center" *ngIf="notificationList.length == 0">
         {{ 'NotACase' | translate }}
       </div>
-      <div class="notify-item" *ngFor="let item of notificationList">
-        {{ item }}
+      <div class="notify-item" *ngFor="let item of notificationList" (click)="openNotify(item)">
+        <div class="title">
+          {{ item.title }}
+        </div>
+        <div class="time">
+          {{ item.creationTime | luxonFromNow }}
+        </div>
       </div>
     </div>
     <div class="d-flex p-2 align-items-center justify-content-between">
-      <button class="btn btn-sm btn-primary">
+      <button class="btn btn-sm btn-primary" (click)="markAllAsRead()">
         {{ 'MarkAllAsRead' | translate }}
       </button>
 

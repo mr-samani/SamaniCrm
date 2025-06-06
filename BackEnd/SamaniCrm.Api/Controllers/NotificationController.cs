@@ -22,7 +22,7 @@ namespace SamaniCrm.Api.Controllers
             _mediator = mediator;
         }
 
-  
+
 
         [HttpPost("signal")]
         [ProducesResponseType(typeof(ApiResponse<Unit>), StatusCodes.Status200OK)]
@@ -31,9 +31,9 @@ namespace SamaniCrm.Api.Controllers
             Unit result = await _mediator.Send(request);
             return ApiOk(result);
 
-        }  
-        
-        
+        }
+
+
         [HttpPost("GetAllNotifications")]
         [Permission(AppPermissions.Notification_List)]
         [ProducesResponseType(typeof(ApiResponse<PaginatedResult<NotificationDto>>), StatusCodes.Status200OK)]
@@ -67,9 +67,9 @@ namespace SamaniCrm.Api.Controllers
         [HttpPost("MarkAllAsRead")]
         [Permission(AppPermissions.Notification_List)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> MarkAllAsRead([FromBody] MarkAllAsReadCommand command)
+        public async Task<IActionResult> MarkAllAsRead( )
         {
-            bool result = await _mediator.Send(command);
+            bool result = await _mediator.Send(new MarkAllAsReadCommand());
             return ApiOk(result);
         }
 
@@ -82,5 +82,14 @@ namespace SamaniCrm.Api.Controllers
             return ApiOk(result);
         }
 
+
+        [HttpGet("GetLastUnReadNotifications")]
+        [Permission(AppPermissions.Notification_List)]
+        [ProducesResponseType(typeof(ApiResponse<List<NotificationDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetLastUnReadNotifications()
+        {
+            List<NotificationDto> result = await _mediator.Send(new GetLastUnReadNotificationsQuery());
+            return ApiOk(result);
+        }
     }
 }
