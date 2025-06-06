@@ -49,7 +49,11 @@
   [fields]="fields"
   [operations]="operations"
   [loading]="loading"
-  (sortChange)="getList($event)"></table-view>
+  (sortChange)="getList($event)">
+  <ng-template tableCell="read" let-item>
+    <span [class.read]="item.read">{{ item.read ? 'Read' : 'Unread' }}</span>
+  </ng-template>
+</table-view>
 
 <pagination [total]="totalCount" [(page)]="page" [(perPage)]="perPage" (change)="onPageChange($event)"></pagination>
 

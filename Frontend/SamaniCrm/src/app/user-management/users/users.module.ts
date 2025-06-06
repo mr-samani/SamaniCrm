@@ -9,7 +9,7 @@ import { UserListComponent } from './list/list.component';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { FilterComponent } from '@shared/components/filter/filter.component';
-import { TableViewComponent } from '@shared/components/table-view/table-view.compoenent';
+import { TableViewModule } from '@shared/components/table-view/table-view.module';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { UserServiceProxy } from '@shared/service-proxies/api/user.service';
 import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
@@ -23,7 +23,7 @@ import { CreateOrEditUserComponent } from './create-or-edit-user/create-or-edit-
   imports: [
     CommonModule,
     UsersRoutingModule,
-    TableViewComponent,
+    TableViewModule,
     FilterComponent,
     PaginationComponent,
     TranslateModule,

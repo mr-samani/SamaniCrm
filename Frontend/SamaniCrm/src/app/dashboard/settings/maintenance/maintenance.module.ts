@@ -5,7 +5,7 @@ import { MaintenanceRoutingModule } from './maintenance-routing.module';
 import { FormsModule } from '@angular/forms';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { TranslateModule } from '@ngx-translate/core';
-import { TableViewComponent } from '@shared/components/table-view/table-view.compoenent';
+import { TableViewModule } from '@shared/components/table-view/table-view.module';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 import { SwitchModule } from '@shared/components/switch/switch.module';
@@ -18,7 +18,7 @@ import { SharedModule } from '@shared/shared.module';
   imports: [
     CommonModule,
     MaintenanceRoutingModule,
-    TableViewComponent,
+    TableViewModule,
     TranslateModule,
     FormsModule,
     FileManagerModule,

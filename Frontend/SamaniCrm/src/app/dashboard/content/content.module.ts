@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { PagesComponent } from './pages/pages.component';
-import { TableViewComponent } from '@shared/components/table-view/table-view.compoenent';
+import { TableViewModule } from '@shared/components/table-view/table-view.module';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { PagesServiceProxy } from '@shared/service-proxies';
 import { SharedModule } from '@shared/shared.module';
@@ -25,7 +25,7 @@ import { CreateOrEditPageMetaDataDialogComponent } from './create-or-edit-page-m
     FormsModule,
     ReactiveFormsModule,
     TranslateModule,
-    TableViewComponent,
+    TableViewModule,
     PaginationComponent,
     SharedModule,
     TabGroupModule,

@@ -30,9 +30,9 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
   fields: FieldsType[] = [
     // { column: 'id', title: this.l('id'), width: 100 },
     { column: 'title', title: this.l('Title') },
-    { column: 'type', title: this.l('Type') },
-    { column: 'periority', title: this.l('Periority') },
-    { column: 'read', title: this.l('Read'), type: 'yesNo' },
+    { column: 'type', title: this.l('Type'), type: 'localize', localizeKey: 'NotificationTypeEnum_' },
+    { column: 'periority', title: this.l('Periority'), type: 'localize', localizeKey: 'NotificationPeriorityEnum_' },
+    { column: 'read', title: this.l('Read'), type: 'template' },
     { column: 'creationTime', title: this.l('CreationTime'), type: 'dateTime' },
   ];
   form: FormGroup;
@@ -86,6 +86,9 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
     input.filter = formValue.filter;
     input.type = formValue.type;
     input.periority = formValue.periority;
+
+    input.sortBy = ev ? ev.field : '';
+    input.sortDirection = ev ? ev.direction : '';
     this.notificationService
       .getAllNotifications(input)
       .pipe(finalize(() => (this.loading = false)))

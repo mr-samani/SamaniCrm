@@ -1,18 +1,25 @@
-import { Component, EventEmitter, Injector, Input, Output, TemplateRef } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  ContentChildren,
+  EventEmitter,
+  Injector,
+  Input,
+  Output,
+  QueryList,
+  TemplateRef,
+} from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
-import { FieldsType, SortEvent } from './fields-type.model';
-import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
-import { SharedModule } from '@shared/shared.module';
+import { FieldsType, SortEvent } from '../fields-type.model';
+import { TableCellDirective } from '../directives/table-cell.directive';
 
 @Component({
   selector: 'table-view',
   templateUrl: './table-view.compoenent.html',
   styleUrls: ['./table-view.compoenent.scss'],
-  standalone: true,
-  imports: [CommonModule, TranslateModule, SharedModule],
+  standalone: false,
 })
-export class TableViewComponent extends AppComponentBase {
+export class TableViewComponent extends AppComponentBase implements AfterContentInit {
   [x: string]: any;
   @Input() fields: FieldsType[] = [];
   @Input() operations?: TemplateRef<any>;
@@ -43,4 +50,19 @@ export class TableViewComponent extends AppComponentBase {
       direction: this.sortDirection,
     });
   }
+
+  @ContentChildren(TableCellDirective) cellTemplates!: QueryList<TableCellDirective>;
+  templateMap: Map<string, TemplateRef<any>> = new Map();
+
+  ngAfterContentInit(): void {
+    this.templateMap.clear();
+    this.cellTemplates.forEach((cell) => {
+      console.log(cell.columnName, cell.template);
+      this.templateMap.set(cell.columnName, cell.template);
+    });
+  }
+
+  // getTemplate(column: string): TemplateRef<any> | null {
+  //   return this.templateMap.get(column) ?? null;
+  // }
 }

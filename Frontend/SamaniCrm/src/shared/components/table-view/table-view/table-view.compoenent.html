@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="tbody-mrs">
-      <div class="no-data" *ngIf="!_loading && _list.length ===0">{{'NoData'|translate}}</div>
+      <div class="no-data" *ngIf="!_loading && _list.length === 0">{{'NoData'|translate}}</div>
       <div class="tr-mrs" *ngFor="let item of _list">
         <div
           class="td-mrs"
@@ -59,6 +59,17 @@
               <ng-container *ngSwitchCase="'yesNo'">
                 <span *ngIf="item[f.column]" class="label label-success">{{'Yes'|translate}}</span>
                 <span *ngIf="!item[f.column]" class="label label-success">{{'No'|translate}}</span>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'localize'">
+                <span class="text-wrap">{{f.localizeKey + item[f.column]| translate }}</span>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'template'">
+                <ng-container
+                  *ngIf="templateMap.has(f.column)"
+                  [ngTemplateOutlet]="templateMap.get(f.column)!"
+                  [ngTemplateOutletContext]="{ $implicit: item }"></ng-container>
               </ng-container>
 
               <ng-container *ngSwitchDefault>{{item[f.column]}}</ng-container>

@@ -12,7 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@shared/shared.module';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
-import { TableViewComponent } from '@shared/components/table-view/table-view.compoenent';
+import { TableViewModule } from '@shared/components/table-view/table-view.module';
 import { FilterComponent } from '@shared/components/filter/filter.component';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { ProductCategoriesComponent } from './product-categories/product-categories.component';
@@ -37,7 +37,7 @@ import { CreateOrEditCurrencyComponent } from './currencies/create-or-edit/creat
     ReactiveFormsModule,
     SharedModule,
     PaginationComponent,
-    TableViewComponent,
+    TableViewModule,
     FilterComponent,
     MaterialCommonModule,
     TabGroupModule,

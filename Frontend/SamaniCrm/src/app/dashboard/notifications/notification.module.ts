@@ -6,11 +6,11 @@ import { NotificationRoutingModule } from './notification-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
-import { TableViewComponent } from '@shared/components/table-view/table-view.compoenent';
+import { TableViewModule } from '@shared/components/table-view/table-view.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { NotificationServiceProxy } from '@shared/service-proxies';
 import { FilterComponent } from '@shared/components/filter/filter.component';
-import { SharedModule } from '@shared/shared.module';
+import { SharedModule } from '@shared/shared.module'; 
 
 @NgModule({
   declarations: [NotificationListComponent, NotificationInfoComponent],
@@ -20,10 +20,10 @@ import { SharedModule } from '@shared/shared.module';
     ReactiveFormsModule,
     MaterialCommonModule,
     PaginationComponent,
-    TableViewComponent,
+    TableViewModule,
     TranslateModule,
     FilterComponent,
-    SharedModule
+    SharedModule,
   ],
   providers: [NotificationServiceProxy],
 })
