@@ -42,6 +42,7 @@ namespace SamaniCrm.Application.Common.Interfaces
         public DbSet<Currency> Currency { get; set; }
         public DbSet<Discount> Discount { get; set; }
 
+        public DbSet<Notification> Notifications { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

@@ -64,7 +64,7 @@ export class RoleListComponent extends AppComponentBase implements OnInit {
   }
 
   remove(item: RoleDTO) {
-    this.confirmMessage(`${this.l('Delete')}:${item?.roleName}`, this.l('AreUseSureForDelete')).then((result) => {
+    this.confirmMessage(`${this.l('Delete')}:${item?.roleName}`, this.l('AreYouSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
         this.roleService

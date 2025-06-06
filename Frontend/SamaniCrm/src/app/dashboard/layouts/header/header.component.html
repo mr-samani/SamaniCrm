@@ -44,6 +44,12 @@
           </a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/dashboard/notifications']" routerLinkActive="active">
+            <i class="fa fa-gear"></i>
+            {{ 'Notifications' | translate }}
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" [routerLink]="['/dashboard/setting']" routerLinkActive="active">
             <i class="fa fa-gear"></i>
             {{ 'Settings' | translate }}
@@ -98,6 +104,9 @@
         </li>
       </ul>
       <div class="flex-fill"></div>
+
+    
+      <last-notifications></last-notifications>
       <!-- darkmode -->
       <label class="switch">
         <input

@@ -68,7 +68,7 @@ export class ProductPricesComponent extends AppComponentBase implements OnInit {
   }
 
   remove(i: number) {
-    this.confirmMessage(`${this.l('Delete')}:${this.prices[i].price}`, this.l('AreUseSureForDelete')).then((result) => {
+    this.confirmMessage(`${this.l('Delete')}:${this.prices[i].price}`, this.l('AreYouSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.prices.splice(i, 1);
         this.onChange.emit(this.prices);

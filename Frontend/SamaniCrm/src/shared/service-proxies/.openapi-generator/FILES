@@ -9,6 +9,7 @@ api/common.service.ts
 api/language.service.ts
 api/maintenance.service.ts
 api/menu.service.ts
+api/notification.service.ts
 api/pages.service.ts
 api/product.service.ts
 api/role.service.ts
@@ -43,6 +44,7 @@ model/delete-currency-command.ts
 model/delete-language-command.ts
 model/delete-localize-key-command.ts
 model/delete-menu-command.ts
+model/delete-notification-command.ts
 model/delete-page-command.ts
 model/delete-product-attribute-command.ts
 model/delete-product-category-command.ts
@@ -52,6 +54,7 @@ model/edit-role-permissions-command.ts
 model/edit-user-command.ts
 model/export-all-localization-value-dto-list-api-response.ts
 model/export-all-localization-value-dto.ts
+model/get-all-notification-query.ts
 model/get-categories-for-admin-query.ts
 model/get-filtered-pages-query.ts
 model/get-product-attributes-query.ts
@@ -73,6 +76,7 @@ model/localization-key-dto.ts
 model/login-command.ts
 model/login-result-api-response.ts
 model/login-result.ts
+model/mark-as-read-command.ts
 model/menu-dto-api-response.ts
 model/menu-dto-list-api-response.ts
 model/menu-dto.ts
@@ -80,6 +84,12 @@ model/menu-target-enum.ts
 model/menu-translations-dto.ts
 model/meta.ts
 model/models.ts
+model/notification-dto-api-response.ts
+model/notification-dto-paginated-result-api-response.ts
+model/notification-dto-paginated-result.ts
+model/notification-dto.ts
+model/notification-periority-enum.ts
+model/notification-type-enum.ts
 model/page-dto-api-response.ts
 model/page-dto-paginated-result-api-response.ts
 model/page-dto-paginated-result.ts
@@ -131,6 +141,7 @@ model/role-permissions-dto-list-api-response.ts
 model/role-permissions-dto.ts
 model/security-setting-dto-api-response.ts
 model/security-setting-dto.ts
+model/send-notification-command.ts
 model/string-api-response.ts
 model/string-auto-complete-dto-list-api-response.ts
 model/string-auto-complete-dto.ts

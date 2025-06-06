@@ -1,0 +1,44 @@
+#notificationDropdown {
+  position: relative;
+  padding: 18px;
+  i.fa-bell {
+    font-size: 24px;
+  }
+  .badge {
+    background: #00ffa1;
+    padding: 6px;
+    position: absolute;
+    bottom: -5px;
+    transform: translateX(50%);
+    color: #000;
+    border: 1px #b3b3b3 solid;
+  }
+}
+.notify-dropdown-menu {
+  width: 330px;
+  left: 0 !important;
+  right: auto !important;
+  padding-bottom: 0;
+}
+.notify-list-container {
+  max-height: 300px;
+  overflow: auto;
+}
+
+.notify-item {
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+  padding: 5px 15px;
+  border-bottom: 1px #6868683b solid;
+}
+
+::ng-deep {
+  body[dir='ltr'] {
+    .notify-dropdown-menu {
+      right: 0 !important;
+      left: auto !important;
+    }
+  }
+}
