@@ -10,7 +10,9 @@ html[dir='rtl'] {
     margin-right: auto;
     margin-left: 0;
   }
-
+  .dropdown-menu {
+    --bs-dropdown-font-size: 0.8rem;
+  }
   .dropdown-menu[data-bs-popper] {
     left: auto;
     right: 0;

@@ -8,6 +8,7 @@ import { CommonServiceProxy } from './api/common.service';
 import { LanguageServiceProxy } from './api/language.service';
 import { MaintenanceServiceProxy } from './api/maintenance.service';
 import { MenuServiceProxy } from './api/menu.service';
+import { NotificationServiceProxy } from './api/notification.service';
 import { PagesServiceProxy } from './api/pages.service';
 import { ProductServiceProxy } from './api/product.service';
 import { RoleServiceProxy } from './api/role.service';
@@ -26,6 +27,7 @@ import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
     LanguageServiceProxy,
     MaintenanceServiceProxy,
     MenuServiceProxy,
+    NotificationServiceProxy,
     PagesServiceProxy,
     ProductServiceProxy,
     RoleServiceProxy,

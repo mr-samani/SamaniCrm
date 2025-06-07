@@ -1,9 +1,7 @@
 <nav
   class="navbar navbar-expand-lg fixed-top"
   [class.navbar-dark]="AppConst.isDarkMode"
-  [class.navbar-light]="!AppConst.isDarkMode"
-  [class.bg-dark]="AppConst.isDarkMode"
-  [class.bg-light]="!AppConst.isDarkMode">
+  [class.navbar-light]="!AppConst.isDarkMode">
   <div class="container-fluid">
     <button
       class="navbar-toggler"
@@ -41,6 +39,12 @@
           <a class="nav-link" [routerLink]="['/dashboard']" routerLinkActive="active">
             <i class="fa fa-desktop"></i>
             {{ 'Dashboard' | translate }}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/dashboard/notifications']" routerLinkActive="active">
+            <i class="fa fa-gear"></i>
+            {{ 'Notifications' | translate }}
           </a>
         </li>
         <li class="nav-item">
@@ -98,6 +102,8 @@
         </li>
       </ul>
       <div class="flex-fill"></div>
+
+      <last-notifications></last-notifications>
       <!-- darkmode -->
       <label class="switch">
         <input

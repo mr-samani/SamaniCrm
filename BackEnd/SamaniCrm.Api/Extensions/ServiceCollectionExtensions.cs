@@ -256,11 +256,16 @@ public static class ServiceCollectionExtensions
 
 
         services.AddScoped<PermissionFilter>();
-
         services.AddControllers(options =>
         {
             options.Filters.Add<PermissionFilter>();
         });
+
+        services.AddScoped<INotificationHubService, NotificationHubService>();
+        services.AddScoped<INotificationService, NotificationService>();
+
+
+
         return services;
     }
 

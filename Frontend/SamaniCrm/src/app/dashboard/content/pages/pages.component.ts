@@ -144,7 +144,7 @@ export class PagesComponent extends AppComponentBase implements OnInit {
   }
 
   remove(item: PageDtoExtended) {
-    this.confirmMessage(`${this.l('Delete')}:${item?.title}`, this.l('AreUseSureForDelete')).then((result) => {
+    this.confirmMessage(`${this.l('Delete')}:${item?.title}`, this.l('AreYouSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
         const input = new DeletePageCommand({

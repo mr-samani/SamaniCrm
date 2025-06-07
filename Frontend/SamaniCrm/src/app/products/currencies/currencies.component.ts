@@ -112,7 +112,7 @@ export class CurrenciesComponent extends AppComponentBase implements OnInit {
   }
 
   remove(item: CurrencyDto) {
-    this.confirmMessage(`${this.l('Delete')}:${item?.name}`, this.l('AreUseSureForDelete')).then((result) => {
+    this.confirmMessage(`${this.l('Delete')}:${item?.name}`, this.l('AreYouSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
         this.productService

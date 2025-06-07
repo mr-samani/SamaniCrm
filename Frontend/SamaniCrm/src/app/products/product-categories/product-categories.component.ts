@@ -155,7 +155,7 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
   }
 
   remove(item: PagedProductCategoryDto) {
-    this.confirmMessage(`${this.l('Delete')}:${item?.title}`, this.l('AreUseSureForDelete')).then((result) => {
+    this.confirmMessage(`${this.l('Delete')}:${item?.title}`, this.l('AreYouSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
         this.productService

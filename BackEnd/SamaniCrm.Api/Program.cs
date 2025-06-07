@@ -1,11 +1,12 @@
 ﻿using Hangfire;
-using SamaniCrm.Application.Common.Interfaces;
-using SamaniCrm.Application;
-using SamaniCrm.Host.Middlewares;
-using SamaniCrm.Infrastructure.Extensions;
-using SamaniCrm.Infrastructure.Identity;
-using SamaniCrm.Infrastructure.Cache;
 using SamaniCrm.Api.Middlewares;
+using SamaniCrm.Application;
+using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Host.Middlewares;
+using SamaniCrm.Infrastructure.Cache;
+using SamaniCrm.Infrastructure.Extensions;
+using SamaniCrm.Infrastructure.Hubs;
+using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Localizer;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,8 @@ services
     .AddSwaggerDocumentation()
     .AddHangfire(config)
     .AddCacheService(config);
+
+services.AddSignalR();
 
 
 var app = builder.Build();
@@ -56,5 +59,9 @@ app.UseHangfireDashboard("/hangfire");
 
 
 await LanguageService.PreloadAllLocalizationsAsync(app.Services);
+
+app.MapHub<NotificationHub>("/hubs/notifications");
+
+
 
 app.Run();

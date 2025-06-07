@@ -122,7 +122,7 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
   }
 
   remove(item: ProductTypeDto) {
-    this.confirmMessage(`${this.l('Delete')}:${item?.name}`, this.l('AreUseSureForDelete')).then((result) => {
+    this.confirmMessage(`${this.l('Delete')}:${item?.name}`, this.l('AreYouSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
         this.productService

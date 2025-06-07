@@ -52,6 +52,8 @@ namespace SamaniCrm.Infrastructure
         public DbSet<Currency> Currency { get; set; }
         public DbSet<Discount> Discount { get; set; }
 
+        public DbSet<Notification> Notifications { get; set; }
+
 
 
 

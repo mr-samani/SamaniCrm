@@ -148,7 +148,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
   }
 
   remove(item: UserDTO) {
-    this.confirmMessage(`${this.l('Delete')}:${item?.fullName}`, this.l('AreUseSureForDelete')).then((result) => {
+    this.confirmMessage(`${this.l('Delete')}:${item?.fullName}`, this.l('AreYouSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
         this.userService

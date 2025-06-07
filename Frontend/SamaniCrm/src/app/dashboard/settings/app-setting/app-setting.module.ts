@@ -5,7 +5,7 @@ import { AppSettingRoutingModule } from './app-setting-routing.module';
 import { FormsModule } from '@angular/forms';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { TranslateModule } from '@ngx-translate/core';
-import { TableViewComponent } from '@shared/components/table-view/table-view.compoenent';
+import { TableViewModule } from '@shared/components/table-view/table-view.module';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 import { GeneralSettingComponent } from './tabs/general-setting/general-setting.component';
@@ -18,7 +18,7 @@ import { SecuritySettingsServiceProxy } from '@shared/service-proxies';
   imports: [
     CommonModule,
     AppSettingRoutingModule,
-    TableViewComponent,
+    TableViewModule,
     TranslateModule,
     FormsModule,
     FileManagerModule,

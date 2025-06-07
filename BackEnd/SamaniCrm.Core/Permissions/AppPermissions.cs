@@ -90,7 +90,9 @@ namespace SamaniCrm.Core.Permissions
         public const string Products_Currency_Delete = "Administrator.Products.Currency.Delete";
 
 
-
+        // Notification
+        public const string Notification_List = "Administrator.Notification.List";
+        public const string Notification_Delete = "Administrator.Notification.Delete";
 
     }
 

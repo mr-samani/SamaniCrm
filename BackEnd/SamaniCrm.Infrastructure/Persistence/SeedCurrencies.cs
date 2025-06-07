@@ -1,4 +1,5 @@
-﻿using SamaniCrm.Domain.Entities.ProductEntities;
+﻿using Microsoft.EntityFrameworkCore;
+using SamaniCrm.Domain.Entities.ProductEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,10 +43,14 @@ namespace SamaniCrm.Infrastructure.Persistence
             };
 
 
+            var existingCurrency = await dbContext.Currency.ToListAsync();
+            if (!existingCurrency.Any())
+            {
+                await dbContext.Currency.AddRangeAsync(IRR, TMN, USD);
+                await dbContext.SaveChangesAsync();
+            }
 
 
-            await dbContext.Currency.AddRangeAsync(IRR,TMN, USD);
-            await dbContext.SaveChangesAsync();
             Console.WriteLine("seed currenies ended");
         }
     }

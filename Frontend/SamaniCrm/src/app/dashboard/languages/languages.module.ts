@@ -7,7 +7,7 @@ import { LanguagesRoutingModule } from './languages-routing.module';
 import { LanguageListComponent } from './language-list/language-list.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TableViewComponent } from '@shared/components/table-view/table-view.compoenent';
+import { TableViewModule } from '@shared/components/table-view/table-view.module';
 import { LanguageServiceProxy } from '@shared/service-proxies/api/language.service';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
@@ -25,7 +25,7 @@ import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
   imports: [
     CommonModule,
     LanguagesRoutingModule,
-    TableViewComponent,
+    TableViewModule,
     TranslateModule,
     FormsModule,
     MaterialCommonModule,

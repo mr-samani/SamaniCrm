@@ -111,7 +111,19 @@ namespace SamaniCrm.Infrastructure.Identity
                                     var result = JsonSerializer.Serialize(new { error = "Unauthorized - No Token" });
                                     await context.Response.WriteAsync(result);
                                 }
-                            }
+                            },
+
+                            // SignalR
+                             OnMessageReceived = context =>
+                             {
+                                 var accessToken = context.Request.Query["access_token"];
+                                 var path = context.HttpContext.Request.Path;
+                                 if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/notifications"))
+                                 {
+                                     context.Token = accessToken;
+                                 }
+                                 return Task.CompletedTask;
+                             }
                         };
                     });
 

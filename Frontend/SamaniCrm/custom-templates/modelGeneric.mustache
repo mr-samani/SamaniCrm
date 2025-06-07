@@ -1,5 +1,4 @@
-{{>licenseInfo}}
-/* Created with custom template */
+/* Created with custom template by mohammadreza SAMANI*/
 {{#models}}
 {{#model}}
 
@@ -37,7 +36,12 @@ init(data?: any) {
     if (Array.isArray(data["{{baseName}}"])) {
       this.{{name}} = [] as any;
       for (let item of data["{{baseName}}"])
+      {{^items.isEnumRef}}
         (this.{{name}} as any).push({{#complexType}}{{{complexType}}}.fromJS(item){{/complexType}}{{^complexType}}item{{/complexType}});
+      {{/items.isEnumRef}}
+      {{#items.isEnumRef}}
+        (this.{{name}} as any).push(item);
+      {{/items.isEnumRef}}
     }
     {{/isArray}}
     {{^isArray}}

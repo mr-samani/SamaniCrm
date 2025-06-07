@@ -35,6 +35,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
 
             var query = _dbContext.Products
                 .Include(x => x.Category)
+                    .ThenInclude(ct=>ct.Translations)
                 .Include(x => x.ProductType)
                 .Include(x => x.Images)
                 .AsNoTracking()
