@@ -66,56 +66,54 @@
           <div class="icon-container">
             <img [src]="item.icon" />
           </div>
-          <span class="file-name">{{ item.filename }}</span>
+          <span class="file-name">{{ item.name }}</span>
         </div>
       </div>
     </div>
 
-    <div class="file-info">
-      <ng-container *ngIf="selectedFileInfo">
-        <div class="preview">
-          <img *ngIf="imageExtensions.indexOf(selectedFileInfo.extension ?? '') === -1" [src]="selectedFileInfo.icon" />
-          <img
-            *ngIf="imageExtensions.indexOf(selectedFileInfo.extension ?? '') > -1"
-            [src]="cdnUrl + selectedFileInfo.id" />
-        </div>
-        <button (click)="selectIcon()" *ngIf="selectedFileInfo.isDirectory">
-          {{ 'ChangeIcon' | translate }}
-        </button>
-        <button (click)="delete()" mat-icon-button *ngIf="selectedFileInfo.id">
-          <i class="fa fa-trash"></i>
-        </button>
-        <table>
-          <tr>
-            <td colspan="2">{{ selectedFileInfo.filename }}</td>
-          </tr>
-          <tr>
-            <td>{{ 'Extension' | translate }}:</td>
-            <td>{{ selectedFileInfo.extension }}</td>
-          </tr>
-          <tr>
-            <td>{{ 'Size' | translate }}:</td>
-            <td>{{ selectedFileInfo.size | fileSize }}</td>
-          </tr>
-          <tr>
-            <td>{{ 'CreationTime' | translate }}:</td>
-            <td>{{ selectedFileInfo.creationTime | luxonFormat: 'F' }}</td>
-          </tr>
-          <tr>
-            <td>{{ 'LastModifiedTime' | translate }}:</td>
-            <td>{{ selectedFileInfo.lastModifiedTime | luxonFormat: 'F' }}</td>
-          </tr>
-        </table>
-        <button
-          class="w-100"
-          mat-raised-button
-          color="primary"
-          (click)="chooseThisFile()"
-          *ngIf="!selectedFileInfo.isDirectory">
-          <i class="fa fa-check"></i>
-          <span>{{ 'ChooseThisFile' }}</span>
-        </button>
-      </ng-container>
+    <div class="file-info" *ngIf="selectedFileInfo">
+      <div class="preview">
+        <img *ngIf="imageExtensions.indexOf(selectedFileInfo.extension ?? '') === -1" [src]="selectedFileInfo.icon" />
+        <img
+          *ngIf="imageExtensions.indexOf(selectedFileInfo.extension ?? '') > -1"
+          [src]="cdnUrl + selectedFileInfo.id" />
+      </div>
+      <button (click)="selectIcon()" *ngIf="selectedFileInfo.isFolder">
+        {{ 'ChangeIcon' | translate }}
+      </button>
+      <button (click)="delete()" mat-icon-button *ngIf="selectedFileInfo.id">
+        <i class="fa fa-trash"></i>
+      </button>
+      <table>
+        <tr>
+          <td colspan="2">{{ selectedFileInfo.name }}</td>
+        </tr>
+        <tr>
+          <td>{{ 'Extension' | translate }}:</td>
+          <td>{{ selectedFileInfo.extension }}</td>
+        </tr>
+        <tr>
+          <td>{{ 'Size' | translate }}:</td>
+          <td>{{ selectedFileInfo.size | fileSize }}</td>
+        </tr>
+        <tr>
+          <td>{{ 'CreationTime' | translate }}:</td>
+          <td>{{ selectedFileInfo.creationTime | luxonFormat: 'F' }}</td>
+        </tr>
+        <tr>
+          <td>{{ 'LastModifiedTime' | translate }}:</td>
+          <td>{{ selectedFileInfo.lastModifiedTime | luxonFormat: 'F' }}</td>
+        </tr>
+      </table>
+      <button
+        class="w-100"
+        mat-raised-button
+        color="primary"
+        (click)="chooseThisFile()"
+        *ngIf="!selectedFileInfo.isFolder">
+        <i class="fa fa-check"></i>
+        <span>{{ 'ChooseThisFile' }}</span>
+      </button>
     </div>
   </div>
 </div>

@@ -13,6 +13,8 @@ import {
 import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
 import { IOptions } from '../options.interface';
+import { FileManagerService } from '../file-manager.service';
+import { FileManagerServiceProxy } from '@shared/service-proxies';
 
 @Component({
   selector: 'app-file-manager',
@@ -43,6 +45,7 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
     private dialogRef: MatDialogRef<FileManagerComponent>,
     @Inject(MAT_DIALOG_DATA) _data: IOptions,
     private matDialog: MatDialog,
+    private fileManagerService: FileManagerServiceProxy,
   ) {
     super(injector);
   }
@@ -59,13 +62,12 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
   }
 
   getTreeFolders() {
-    // this.loadingFolders = true;
-    // this.dataService
-    //   .get<any, FileManagerDto[]>(Apis.getFolders, {})
-    //   .pipe(finalize(() => (this.loadingFolders = false)))
-    //   .subscribe((result) => {
-    //     this.folders = result.result ?? [];
-    //   });
+    this.loadingFolders = true;
+    this.fileManagerService.getTreeFolders()
+      .pipe(finalize(() => (this.loadingFolders = false)))
+      .subscribe((result) => {
+        this.folders = result.data ?? [] as any;
+      });
   }
 
   private initGetFolderDetails() {
@@ -130,7 +132,10 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
           // this.onUploadFinished.emit(event.body);
         }
       },
-      error: (err: HttpErrorResponse) => console.log(err),
+      error: (err: HttpErrorResponse) => {
+        console.log(err);
+        this.progress = 0;
+      },
     });
   };
 
@@ -154,7 +159,7 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
   }
 
   selectIcon() {
-    if (!this.selectedFileInfo || !this.selectedFileInfo.isDirectory) {
+    if (!this.selectedFileInfo || !this.selectedFileInfo.isFolder) {
       return;
     }
     this.matDialog
@@ -175,7 +180,7 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
   }
 
   dblClickFile(item: FileManagerDto) {
-    if (item.isDirectory) {
+    if (item.isFolder) {
       this.openFolder(item);
     }
   }

@@ -14,6 +14,7 @@ import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { AddressBarComponent } from './file-manager/address-bar/address-bar.component';
 import { SharedModule } from '@shared/shared.module';
 import { TusUploadService } from './tus-upload.service';
+import { FileManagerServiceProxy } from '@shared/service-proxies';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,6 @@ import { TusUploadService } from './tus-upload.service';
     AddressBarComponent,
   ],
   imports: [CommonModule, FormsModule, MaterialCommonModule, ImageCropperComponent, TranslateModule, SharedModule],
-  providers: [TusUploadService, FileManagerService],
+  providers: [TusUploadService, FileManagerService, FileManagerServiceProxy],
 })
 export class FileManagerModule {}

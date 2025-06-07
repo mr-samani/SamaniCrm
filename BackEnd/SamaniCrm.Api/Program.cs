@@ -8,12 +8,14 @@ using SamaniCrm.Infrastructure.Extensions;
 using SamaniCrm.Infrastructure.Hubs;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Localizer;
+using SamaniCrm.Infrastructure.FileManager;
+
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var config = builder.Configuration;
 
-services 
+services
     .AddCustomServices()
     .AddDbContext(config);
 services
@@ -24,7 +26,8 @@ services
     .AddInfrastructure(config)
     .AddSwaggerDocumentation()
     .AddHangfire(config)
-    .AddCacheService(config);
+    .AddCacheService(config)
+    .AddFileManagerService(config);
 
 services.AddSignalR();
 

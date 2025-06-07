@@ -6,6 +6,8 @@ import { CreateFolderRequest } from '../models/create-folder-request';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
+import { FileManagerServiceProxy } from '@shared/service-proxies/api/file-manager.service';
+import { CreateFolderCommand } from '@shared/service-proxies/model/create-folder-command';
 
 @Component({
   selector: 'app-create-folder',
@@ -22,24 +24,27 @@ export class CreateFolderDialogComponent extends AppComponentBase implements OnI
     injector: Injector,
     private matDialogRef: MatDialogRef<CreateFolderDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: any,
+    private fileManagerService: FileManagerServiceProxy,
   ) {
     super(injector);
-    this.parentId = data.parentId ?? '';
+    this.parentId = data.parentId;
   }
 
   ngOnInit(): void {}
 
   createFolder() {
     this.loading = true;
-    // this.dataService
-    //   .post<CreateFolderRequest, FileManagerDto[]>(Apis.createDirectory, {
-    //     name: this.folderName,
-    //     parentId: this.parentId,
-    //   })
-    //   .pipe(finalize(() => (this.loading = false)))
-    //   .subscribe((response) => {
-    //     this.notify.success(this.l('Message.SaveSuccessfully'));
-    //     this.matDialogRef.close(response.data);
-    //   });
+    this.fileManagerService
+      .createFolder(
+        new CreateFolderCommand({
+          name: this.folderName,
+          parentId: this.parentId,
+        }),
+      )
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe((response) => {
+        this.notify.success(this.l('Message.SaveSuccessfully'));
+        this.matDialogRef.close(response.data);
+      });
   }
 }

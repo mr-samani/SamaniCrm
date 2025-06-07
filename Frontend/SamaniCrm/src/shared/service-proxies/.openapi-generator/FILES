@@ -6,6 +6,7 @@ api/account.service.ts
 api/api.ts
 api/captcha.service.ts
 api/common.service.ts
+api/file-manager.service.ts
 api/language.service.ts
 api/maintenance.service.ts
 api/menu.service.ts
@@ -28,6 +29,7 @@ model/cache-entry-dto-list-api-response.ts
 model/cache-entry-dto.ts
 model/captcha-dto.ts
 model/change-active-menu-command.ts
+model/create-folder-command.ts
 model/create-or-edit-language-command.ts
 model/create-or-edit-localize-key-command.ts
 model/create-or-edit-menu-command.ts
@@ -54,6 +56,8 @@ model/edit-role-permissions-command.ts
 model/edit-user-command.ts
 model/export-all-localization-value-dto-list-api-response.ts
 model/export-all-localization-value-dto.ts
+model/file-node-dto-list-api-response.ts
+model/file-node-dto.ts
 model/get-all-notification-query.ts
 model/get-categories-for-admin-query.ts
 model/get-filtered-pages-query.ts

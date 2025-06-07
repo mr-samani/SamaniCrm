@@ -375,7 +375,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<bool>("Read")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("RecieverUserId")
+                    b.Property<Guid>("RecieverUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("SenderUserId")

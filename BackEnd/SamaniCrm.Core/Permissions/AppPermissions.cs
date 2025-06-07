@@ -94,6 +94,15 @@ namespace SamaniCrm.Core.Permissions
         public const string Notification_List = "Administrator.Notification.List";
         public const string Notification_Delete = "Administrator.Notification.Delete";
 
+
+        // file manager
+        public const string FileManager_List = "Administrator.FileManager.List";
+
+        public const string FileManager_CreateFolder = "Administrator.FileManager.CreateFolder";
+        public const string FileManager_DeleteFolder = "Administrator.FileManager.DeleteFolder";
+        public const string FileManager_CreateFile = "Administrator.FileManager.CreateFile";
+        public const string FileManager_DEleteFile = "Administrator.FileManager.DeleteFile";
+
     }
 
 
