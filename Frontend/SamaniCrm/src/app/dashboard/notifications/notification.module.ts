@@ -1,4 +1,3 @@
-import { NotificationInfoComponent } from './notification-info/notification-info.component';
 import { NotificationListComponent } from './notification-list/notification-list.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -13,7 +12,7 @@ import { FilterComponent } from '@shared/components/filter/filter.component';
 import { SharedModule } from '@shared/shared.module'; 
 
 @NgModule({
-  declarations: [NotificationListComponent, NotificationInfoComponent],
+  declarations: [NotificationListComponent],
   imports: [
     CommonModule,
     NotificationRoutingModule,
