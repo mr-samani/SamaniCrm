@@ -1,6 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
+import { TranslateModule } from '@ngx-translate/core';
+import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { NotificationDto, NotificationServiceProxy } from '@shared/service-proxies';
 import { finalize } from 'rxjs';
 
@@ -8,7 +11,9 @@ import { finalize } from 'rxjs';
   selector: 'app-notification-info',
   templateUrl: './notification-info.component.html',
   styleUrls: ['./notification-info.component.scss'],
-  standalone: false,
+  standalone: true,
+  providers: [NotificationServiceProxy],
+  imports: [CommonModule, MaterialCommonModule, TranslateModule],
 })
 export class NotificationInfoComponent extends AppComponentBase implements OnInit {
   loading = true;

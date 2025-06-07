@@ -1,10 +1,8 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
-import { NotificationInfoComponent } from '@app/dashboard/notifications/notification-info/notification-info.component';
 import { NotificationDto, NotificationServiceProxy } from '@shared/service-proxies';
 import { NotificationService } from '@shared/services/notification.service';
-import { DateTime } from 'luxon';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -18,7 +16,7 @@ export class LastNotificationsComponent extends AppComponentBase implements OnIn
 
   notificationList: NotificationDto[] = [];
   loading = true;
-
+  showHaveNewMessage = false;
   constructor(
     injector: Injector,
     notificationService: NotificationService,
@@ -38,6 +36,7 @@ export class LastNotificationsComponent extends AppComponentBase implements OnIn
   recieveMessage(msg: NotificationDto) {
     this.notificationList.unshift(msg);
     this.count = this.notificationList.length;
+    this.showNewMessage();
   }
 
   getLastNotifications() {
@@ -47,6 +46,7 @@ export class LastNotificationsComponent extends AppComponentBase implements OnIn
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((result) => {
         this.notificationList = result.data ?? [];
+        this.count = this.notificationList.length;
       });
   }
 
@@ -54,14 +54,27 @@ export class LastNotificationsComponent extends AppComponentBase implements OnIn
     this.notificationServiceProxy.markAllAsRead().subscribe();
   }
 
-  openNotify(item: NotificationDto) {
+  async openNotify(item: NotificationDto) {
+    const { NotificationInfoComponent } = await import(
+      '@app/dashboard/notifications/notification-info/notification-info.component'
+    );
     this.matDialog
       .open(NotificationInfoComponent, {
         data: item,
       })
       .afterClosed()
       .subscribe((r) => {
-        item.read = true;
+        if (item.read == false) {
+          item.read = true;
+          if (this.count > 0) this.count--;
+        }
       });
+  }
+
+  showNewMessage() {
+    this.showHaveNewMessage = true;
+    setTimeout(() => {
+      this.showHaveNewMessage = false;
+    }, 5000);
   }
 }

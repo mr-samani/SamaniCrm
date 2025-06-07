@@ -1,8 +1,11 @@
 <div class="dropdown">
-  <a id="notificationDropdown" role="button" data-bs-toggle="dropdown">
+  <a id="notificationDropdown" role="button" data-bs-toggle="dropdown" (click)="showHaveNewMessage = false">
     <i class="fa fa-bell"></i>
     <span class="badge" *ngIf="count > 0">{{ count }}</span>
   </a>
+  <div class="have-new-message" *ngIf="showHaveNewMessage">
+    {{ 'YouHaveNewMessage' | translate }}
+  </div>
   <div class="dropdown-menu notify-dropdown-menu" aria-labelledby="notificationDropdown">
     <div class="p-2">
       {{ 'LastNotifications' | translate }}

@@ -43,7 +43,10 @@ body {
 
 body {
   margin: 0;
-  &.dark-mode {
+  background: #eef0f8;
+  --border-color: #e1e1e1;
+  &.color-scheme-dark {
+    --border-color: #383838;
     background-color: #252222;
     color: #eee;
 
