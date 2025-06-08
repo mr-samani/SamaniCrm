@@ -43,6 +43,7 @@ model/create-user-command.ts
 model/currency-dto-list-api-response.ts
 model/currency-dto.ts
 model/delete-currency-command.ts
+model/delete-file-or-folder-command.ts
 model/delete-language-command.ts
 model/delete-localize-key-command.ts
 model/delete-menu-command.ts
@@ -147,9 +148,11 @@ model/role-permissions-dto.ts
 model/security-setting-dto-api-response.ts
 model/security-setting-dto.ts
 model/send-notification-command.ts
+model/set-folder-icon-command.ts
 model/string-api-response.ts
 model/string-auto-complete-dto-list-api-response.ts
 model/string-auto-complete-dto.ts
+model/string-list-api-response.ts
 model/token-response-dto-api-response.ts
 model/token-response-dto.ts
 model/unit-api-response.ts

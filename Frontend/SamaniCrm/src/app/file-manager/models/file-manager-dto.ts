@@ -9,21 +9,15 @@ import { FileNodeDto } from '@shared/service-proxies/model/file-node-dto';
  * description
  */
 export class FileManagerDto extends FileNodeDto {
-  override children: FileManagerDto[] = [];
-  creationTime?: any;
-  extension?: any;
-  icon?: any;
-  id?: any;
+  override children?: FileManagerDto[] = [];
+
+
 
   /**
    * for front end
    */
   isOpen?: any;
   lastModifiedTime?: any;
-  parentId?: any;
-  path?: any;
-  size?: any;
-  thumbnails?: ThumbnailsDto;
-  type?: any;
+  thumbnailsDto?: ThumbnailsDto;
   user?: UserDTO;
 }

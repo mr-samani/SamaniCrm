@@ -33,6 +33,16 @@ namespace SamaniCrm.Api.Controllers;
     }
 
 
+    [HttpGet("GetFolderDetails")]
+    [Permission(AppPermissions.FileManager_List)]
+    [ProducesResponseType(typeof(ApiResponse<List<FileNodeDto>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetFolderDetails(Guid parentId)
+    {
+        List<FileNodeDto> result = await _mediator.Send(new GetFolderDetailsQuery(parentId));
+        return ApiOk(result);
+    }
+
+
     [HttpPost("CreateFolder")]
     [Permission(AppPermissions.FileManager_CreateFolder)]
     [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
@@ -41,4 +51,39 @@ namespace SamaniCrm.Api.Controllers;
         bool result = await _mediator.Send(request);
         return ApiOk(result);
     }
+
+
+    [HttpPost("DeleteFileOrFolder")]
+    [Permission(AppPermissions.FileManager_Delete)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> DeleteFileOrFolder(DeleteFileOrFolderCommand request)
+    {
+        bool result = await _mediator.Send(request);
+        return ApiOk(result);
+    }
+
+
+
+
+    [HttpGet("GetFileManagerIcons")]
+    [Permission(AppPermissions.FileManager_List)]
+    [ProducesResponseType(typeof(ApiResponse<List<string>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetFileManagerIcons()
+    {
+        List<string> result = await _mediator.Send(new GetFileManagerIconsQuery());
+        return ApiOk(result);
+    }
+
+
+    [HttpPost("SetFolderIcon")]
+    [Permission(AppPermissions.FileManager_Delete)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> SetFolderIcon(SetFolderIconCommand request)
+    {
+        bool result = await _mediator.Send(request);
+        return ApiOk(result);
+    }
+
+
+
 }

@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.FileManager.Commands;
 
-public record CreateFolderCommand(string Name, Guid? ParentId) : IRequest<bool>;
+public record CreateFolderCommand(string Name, bool IsPublic, Guid? ParentId) : IRequest<bool>;
 
 
 public class CreateFolderCommandHandler : IRequestHandler<CreateFolderCommand, bool>
 {
-    private readonly IFileManagerService _FileManagerService;
+    private readonly IFileManagerService _fileManagerService;
 
     public CreateFolderCommandHandler(IFileManagerService fileManagerService)
     {
-        _FileManagerService = fileManagerService;
+        _fileManagerService = fileManagerService;
     }
 
     public Task<bool> Handle(CreateFolderCommand request, CancellationToken cancellationToken)
     {
-        return _FileManagerService.CreateFolder(request.Name, request.ParentId);
+        return _fileManagerService.CreateFolder(request.Name, request.IsPublic, request.ParentId, cancellationToken);
     }
 }

@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Injector, Input, OnInit, Output, forwardRef } from '@angular/core';
-import { FileManagerService } from '../file-manager.service';
 import {
   NG_VALUE_ACCESSOR,
   NG_VALIDATORS,
@@ -8,10 +7,12 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { FileManagerOptions, IOptions } from '../options.interface';
-import { FileManagerDto } from '../models/file-manager-dto';
 import { AppComponentBase } from '@app/app-component-base';
+import { FileManagerService } from '@app/file-manager/file-manager.service';
+import { FileManagerDto } from '@app/file-manager/models/file-manager-dto';
+import { FileManagerOptions } from '@app/file-manager/options.interface';
 import { AppConst } from '@shared/app-const';
+import { IOptions } from 'grapesjs-tui-image-editor';
 
 @Component({
   selector: 'file-selector',

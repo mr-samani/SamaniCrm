@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FileManagerDto } from '@app/file-manager/models/file-manager-dto';
+import { FolderBreadcrumb } from '@app/file-manager/models/folder-breadcrumb';
 
 @Component({
   selector: 'address-bar',
@@ -13,8 +14,8 @@ export class AddressBarComponent {
   @Input() set folders(val: FileManagerDto[]) {
     this._folders = this.createHierarchy(val);
   }
-  @Input() set folderId(val: string) {
-    this._folderId = val;
+  @Input() set folderId(val: string | undefined) {
+    this._folderId = val ?? '';
     this.initBreadcrumb();
   }
   @Output() selectionChange = new EventEmitter<FileManagerDto>();
@@ -35,12 +36,13 @@ export class AddressBarComponent {
     }
   }
 
-  private createHierarchy(nodes: FolderBreadcrumb[], parentIds = ''): FolderBreadcrumb[] {
+  private createHierarchy(nodes: FileManagerDto[], parentIds = ''): FolderBreadcrumb[] {
     let flatList: FolderBreadcrumb[] = [];
     for (let node of nodes) {
       let currentId = parentIds ? `${parentIds}.${node.id}` : `${node.id}`;
-      node.hierarchy = currentId;
-      flatList.push(node);
+      var f = new FolderBreadcrumb(node);
+      f.hierarchy = currentId;
+      flatList.push(f);
       if (node.children && node.children.length > 0) {
         flatList = flatList.concat(this.createHierarchy(node.children, currentId));
       }
@@ -49,7 +51,4 @@ export class AddressBarComponent {
   }
 }
 
-export class FolderBreadcrumb extends FileManagerDto {
-  hierarchy?: string;
-  declare  children: FolderBreadcrumb[];
-}
+

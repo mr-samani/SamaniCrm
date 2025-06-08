@@ -1,6 +1,14 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Duende.IdentityModel;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using SamaniCrm.Application.Common.Exceptions;
+using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.FileManager.Dtos;
 using SamaniCrm.Application.FileManager.Interfaces;
+using SamaniCrm.Application.ProductManagerManager.Dtos;
+using SamaniCrm.Domain.Entities;
+using SamaniCrm.Domain.Entities.ProductEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,17 +19,56 @@ namespace SamaniCrm.Infrastructure.FileManager
 {
     public class LocaleFileManagerService : IFileManagerService
     {
+        private readonly IApplicationDbContext _dbContext;
         private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _env;
+
         private FileManagerSetting settings;
         private string publicRootPath;
-        public LocaleFileManagerService(IConfiguration configuration)
+        public LocaleFileManagerService(IConfiguration configuration, IApplicationDbContext dbContext, IWebHostEnvironment env)
         {
             settings = configuration.GetSection("FileManager").Get<FileManagerSetting>() ?? new FileManagerSetting();
             publicRootPath = settings.PublicFolderPath;
             _configuration = configuration;
+            _dbContext = dbContext;
+            _env = env;
         }
 
-        public async Task<List<FileNodeDto>> GetFolderTreeAsync(string? rootPath)
+        public async Task<List<FileNodeDto>> GetFolderTreeAsync(string? rootPath = null)
+        {
+            var all = await _dbContext.FileFolders
+                            .Include(m => m.Children)
+                            .ToListAsync();
+            var roots = all.Where(m => m.ParentId == null).ToList();
+            var result = roots.Select(m => MapToDtoRecursive(m)).ToList();
+            return result ?? [];
+        }
+        private static FileNodeDto MapToDtoRecursive(FileFolder item)
+        {
+            return new FileNodeDto
+            {
+                Id = item.Id,
+                Name = item.Name,
+                ByteSize = item.ByteSize,
+                ContentType = item.ContentType,
+                Extension = item.Extension,
+                Icon = item.Icon,
+                IsFolder = item.IsFolder,
+                IsPublic = item.IsPublic,
+                IsStatic = item.IsStatic,
+                ParentId = item.ParentId,
+                RelativePath = item.RelativePath,
+                Thumbnails = item.Thumbnails,
+                Children = item.Children?
+                    .Select(c => MapToDtoRecursive(c))
+                    .ToList() ?? [],
+                CreationTime = item.CreationTime.ToUniversalTime(),
+            };
+        }
+
+
+
+        private async Task<List<FileNodeDto>> GetFolderTreeFromDiscAsync(string? rootPath)
         {
             if (rootPath == null)
                 rootPath = publicRootPath;
@@ -33,9 +80,9 @@ namespace SamaniCrm.Infrastructure.FileManager
                 var node = new FileNodeDto
                 {
                     Name = Path.GetFileName(dir),
-                    FullPath = dir,
+                    RelativePath = dir,
                     IsFolder = true,
-                    Children = await GetFolderTreeAsync(dir)
+                    Children = await GetFolderTreeFromDiscAsync(dir)
                 };
                 result.Add(node);
             }
@@ -45,7 +92,7 @@ namespace SamaniCrm.Infrastructure.FileManager
                 result.Add(new FileNodeDto
                 {
                     Name = Path.GetFileName(file),
-                    FullPath = file,
+                    RelativePath = file,
                     IsFolder = false
                 });
             }
@@ -57,13 +104,116 @@ namespace SamaniCrm.Infrastructure.FileManager
 
 
 
-        public async Task<bool> CreateFolder(string name, Guid? parentId)
+        public async Task<bool> CreateFolder(string name, bool isPublic, Guid? parentId, CancellationToken cancellationToken)
         {
+            if (parentId != null)
+            {
+                var parent = await _dbContext.FileFolders.Where(x => x.Id == parentId).FirstOrDefaultAsync(cancellationToken);
+                if (parent == null)
+                {
+                    throw new NotFoundException("Parent not found");
+                }
+            }
             var path = Path.Combine(publicRootPath, name);
-            var result = Directory.CreateDirectory(path);
-            return result != null;
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            var folder = new FileFolder()
+            {
+                Name = name,
+                IsFolder = true,
+                IsPublic = isPublic,
+                IsStatic = false,
+                ContentType = "Directory",
+                Extension = "",
+                RelativePath = path,
+            };
+            if (parentId != null)
+            {
+                folder.ParentId = parentId.Value;
+            }
+
+            _dbContext.FileFolders.Add(folder);
+            var result = _dbContext.SaveChanges();
+
+            return result > 0;
         }
 
 
+
+        public async Task<List<FileNodeDto>> GetFolderDetails(Guid ParentId, CancellationToken cancellationToken)
+        {
+            var parent = await _dbContext.FileFolders.FindAsync(ParentId, cancellationToken);
+            if (parent == null)
+            {
+                throw new NotFoundException("Parent not found");
+            }
+            var result = await _dbContext.FileFolders.Where(x => x.ParentId == ParentId)
+                .Select(item => new FileNodeDto()
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    ByteSize = item.ByteSize,
+                    ContentType = item.ContentType,
+                    Extension = item.Extension,
+                    Icon = item.Icon,
+                    IsFolder = item.IsFolder,
+                    IsPublic = item.IsPublic,
+                    IsStatic = item.IsStatic,
+                    ParentId = item.ParentId,
+                    RelativePath = item.RelativePath,
+                    Thumbnails = item.Thumbnails,
+                    CreationTime = item.CreationTime.ToUniversalTime(),
+                })
+                .ToListAsync(cancellationToken);
+
+            return result;
+        }
+
+        public async Task<bool> DeleteFileOrFolder(Guid Id, CancellationToken cancellationToken)
+        {
+            var found = await _dbContext.FileFolders.FindAsync(Id, cancellationToken);
+            if (found == null)
+            {
+                throw new NotFoundException("Parent not found");
+            }
+
+            found.IsDeleted = true;
+            found.DeletedTime = DateTime.UtcNow;
+            var result = await _dbContext.SaveChangesAsync(cancellationToken);
+            // چون softDelete می باشد - اصل فایل از روی دیسک حذف نمی شود
+            return result > 0;
+        }
+
+        public async Task<List<string>> GetFileManagerIcons(CancellationToken cancellationToken)
+        {
+            var wwwrootPath = Path.Combine(_env.WebRootPath);
+            var path = Path.Combine(wwwrootPath, "Images\\folder-icons");
+            var files = Directory.GetFiles(path);
+            var relativePaths = new List<string>();
+            foreach (var file in files)
+            {
+                // var relativePath = Path.GetRelativePath("./", file);
+                var relativePath = file.Replace(wwwrootPath , string.Empty);
+                relativePaths.Add(relativePath);
+            }
+
+            return relativePaths.ToList();
+        }
+
+        public async Task<bool> SetFolderIcon(Guid Id, string Icon, CancellationToken cancellationToken)
+        {
+            var found = await _dbContext.FileFolders.FindAsync(Id, cancellationToken);
+            if (found == null)
+            {
+                throw new NotFoundException("Parent not found");
+            }
+
+            found.Icon = Icon;
+            found.LastModifiedTime = DateTime.UtcNow;
+            var result = await _dbContext.SaveChangesAsync(cancellationToken);
+            return result > 0;
+        }
     }
 }

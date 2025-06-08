@@ -13,18 +13,38 @@
 
 /** Interface for FileNodeDto */
 export interface IFileNodeDto {
+  id?: string;
+  parentId?: string;
   name?: string;
-  fullPath?: string;
+  relativePath?: string;
+  icon?: string;
   isFolder?: boolean;
+  isPublic?: boolean;
+  isStatic?: boolean;
+  extension?: string;
+  contentType?: string;
+  byteSize?: number;
+  thumbnails?: string;
   children?: Array<FileNodeDto>;
+  creationTime?: string;
 }
 
 /** Class for FileNodeDto */
 export class FileNodeDto implements IFileNodeDto {
+  id?: string;
+  parentId?: string;
   name?: string;
-  fullPath?: string;
+  relativePath?: string;
+  icon?: string;
   isFolder?: boolean;
+  isPublic?: boolean;
+  isStatic?: boolean;
+  extension?: string;
+  contentType?: string;
+  byteSize?: number;
+  thumbnails?: string;
   children?: Array<FileNodeDto>;
+  creationTime?: string;
 
   constructor(data?: IFileNodeDto) {
     if (data) {
@@ -37,14 +57,24 @@ export class FileNodeDto implements IFileNodeDto {
 
 init(data?: any) {
   if (data) {
+    this.id = data["id"];
+    this.parentId = data["parentId"];
     this.name = data["name"];
-    this.fullPath = data["fullPath"];
+    this.relativePath = data["relativePath"];
+    this.icon = data["icon"];
     this.isFolder = data["isFolder"];
+    this.isPublic = data["isPublic"];
+    this.isStatic = data["isStatic"];
+    this.extension = data["extension"];
+    this.contentType = data["contentType"];
+    this.byteSize = data["byteSize"];
+    this.thumbnails = data["thumbnails"];
     if (Array.isArray(data["children"])) {
       this.children = [] as any;
       for (let item of data["children"])
         (this.children as any).push(FileNodeDto.fromJS(item));
     }
+    this.creationTime = data["creationTime"];
   }
 }
 

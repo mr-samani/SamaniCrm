@@ -1,8 +1,5 @@
-import { Component, EventEmitter, Inject, Injector, Input, OnInit, Output } from '@angular/core';
+import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { finalize } from 'rxjs';
-import { Apis } from '@shared/apis';
-import { FileManagerDto } from '../models/file-manager-dto';
-import { CreateFolderRequest } from '../models/create-folder-request';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';

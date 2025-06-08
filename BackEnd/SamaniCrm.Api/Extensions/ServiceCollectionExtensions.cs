@@ -22,6 +22,7 @@ using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.BackgroundServices;
 using SamaniCrm.Infrastructure.Captcha;
 using SamaniCrm.Infrastructure.Email;
+using SamaniCrm.Infrastructure.FileManager;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Localizer;
 using SamaniCrm.Infrastructure.Services;
@@ -263,6 +264,7 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<INotificationHubService, NotificationHubService>();
         services.AddScoped<INotificationService, NotificationService>();
+        services.AddScoped<FileDirectoryInitializer>();
 
 
 

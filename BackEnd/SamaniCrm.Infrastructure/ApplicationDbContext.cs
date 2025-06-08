@@ -54,6 +54,8 @@ namespace SamaniCrm.Infrastructure
 
         public DbSet<Notification> Notifications { get; set; }
 
+        public DbSet<FileFolder> FileFolders { get; set; }
+
 
 
 

@@ -58,13 +58,17 @@
         (selectionChange)="openFolder($event)"></address-bar>
 
       <div class="file-list">
-        <div *ngIf="loading">loading...</div>
+        <mat-spinner *ngIf="loading" color="primary" diameter="25"></mat-spinner>
         <p class="text-center my-5 py-5 w-100" *ngIf="fileList.length === 0 && loading === false">
           {{ 'Message.NotFoundResult' | translate }}
         </p>
         <div class="file" *ngFor="let item of fileList" (click)="selectFile(item)" (dblclick)="dblClickFile(item)">
           <div class="icon-container">
-            <img [src]="item.icon" />
+            @if (item.icon) {
+              <img [src]="baseUrl + '/' + item.icon" />
+            } @else {
+              <img [src]="item.isFolder ? defaultFolderIcon : defaultFileIcon" />
+            }
           </div>
           <span class="file-name">{{ item.name }}</span>
         </div>
@@ -73,12 +77,13 @@
 
     <div class="file-info" *ngIf="selectedFileInfo">
       <div class="preview">
-        <img *ngIf="imageExtensions.indexOf(selectedFileInfo.extension ?? '') === -1" [src]="selectedFileInfo.icon" />
-        <img
-          *ngIf="imageExtensions.indexOf(selectedFileInfo.extension ?? '') > -1"
-          [src]="cdnUrl + selectedFileInfo.id" />
+        @if (selectedFileInfo.icon) {
+          <img [src]="baseUrl + '/' + selectedFileInfo.icon" />
+        } @else {
+          <img [src]="selectedFileInfo.isFolder ? defaultFolderIcon : defaultFileIcon" />
+        }
       </div>
-      <button (click)="selectIcon()" *ngIf="selectedFileInfo.isFolder">
+      <button mat-stroked-button color="primary" (click)="selectIcon()" *ngIf="selectedFileInfo.isFolder">
         {{ 'ChangeIcon' | translate }}
       </button>
       <button (click)="delete()" mat-icon-button *ngIf="selectedFileInfo.id">
@@ -94,7 +99,7 @@
         </tr>
         <tr>
           <td>{{ 'Size' | translate }}:</td>
-          <td>{{ selectedFileInfo.size | fileSize }}</td>
+          <td>{{ selectedFileInfo.byteSize | fileSize }}</td>
         </tr>
         <tr>
           <td>{{ 'CreationTime' | translate }}:</td>

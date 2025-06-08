@@ -7,11 +7,9 @@
           [class.isOpen]="item.isOpen"
           [class.no-child]="!item.children || item.children.length == 0"></span>
         @if (item.icon) {
-          <img [src]="baseUrl + item.icon" class="folder-icon" />
+          <img [src]="baseUrl + '/' + item.icon" class="folder-icon" />
         } @else {
-          <img
-            [src]="baseUrl + '/images/folder-icons/default-folder' + (item.isOpen ? '-open' : '') + '.svg'"
-            class="folder-icon" />
+          <img [src]="item.isOpen ? defaultFolderIcon : defaultOpenFolderIcon" class="folder-icon" />
         }
         <span>{{ item.name }}</span>
       </li>

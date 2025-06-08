@@ -1,8 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpEventType } from '@angular/common/http';
 import { Component, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
 import { Subject, catchError, debounceTime, distinctUntilChanged, finalize, map, of, switchMap } from 'rxjs';
-import { SelectIconDialogComponent } from '../select-icon/select-icon.component';
-import { CreateFolderDialogComponent } from '../create-folder/create-folder.component';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FileManagerDto } from '../models/file-manager-dto';
 import { Apis } from '@shared/apis';
@@ -14,7 +12,14 @@ import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
 import { IOptions } from '../options.interface';
 import { FileManagerService } from '../file-manager.service';
-import { FileManagerServiceProxy } from '@shared/service-proxies';
+import {
+  DeleteFileOrFolderCommand,
+  FileManagerServiceProxy,
+  FileNodeDtoListApiResponse,
+} from '@shared/service-proxies';
+import { FileManagetConsts } from '../consts/file-manager-consts';
+import { CreateFolderDialogComponent } from '../components/create-folder/create-folder.component';
+import { SelectIconDialogComponent } from '../components/select-icon/select-icon.component';
 
 @Component({
   selector: 'app-file-manager',
@@ -35,10 +40,14 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
   /** پوشه انتخاب شده برای نمایش جزئیات در سمت راست */
   selectedFileInfo?: FileManagerDto;
 
-  imageExtensions = ['.jpg', '.png', '.jpeg', '.tif', '.gif', '.bmp'];
-  cdnUrl = AppConst.apiUrl;
+  baseUrl = AppConst.apiUrl;
 
   getDetailsRequest$ = new Subject<{ id: string }>();
+
+  defaultOpenFolderIcon = AppConst.apiUrl + FileManagetConsts.DefaultOpenFolderIcon;
+  defaultFolderIcon = AppConst.apiUrl + FileManagetConsts.DefaultFolderIcon;
+  defaultFileIcon = AppConst.apiUrl + FileManagetConsts.DefaultFileIcon;
+
   constructor(
     injector: Injector,
     private http: HttpClient,
@@ -63,33 +72,34 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
 
   getTreeFolders() {
     this.loadingFolders = true;
-    this.fileManagerService.getTreeFolders()
+    this.fileManagerService
+      .getTreeFolders()
       .pipe(finalize(() => (this.loadingFolders = false)))
       .subscribe((result) => {
-        this.folders = result.data ?? [] as any;
+        this.folders = result.data ?? ([] as any);
       });
   }
 
   private initGetFolderDetails() {
-    // this.getDetailsRequest$
-    //   .pipe(
-    //     debounceTime(500),
-    //     distinctUntilChanged(),
-    //     switchMap((input) => {
-    //       this.loading = true;
-    //       this.fileList = [];
-    //       return this.dataService.get<any, FileManagerDto[]>(Apis.getFileDetails, input).pipe(
-    //         catchError((err, caught) => {
-    //           return of(new ApiResult<FileManagerDto[]>());
-    //         }),
-    //         map((response) => response.data ?? []),
-    //         finalize(() => (this.loading = false)),
-    //       );
-    //     }),
-    //   )
-    //   .subscribe((result) => {
-    //     this.fileList = result ?? [];
-    //   });
+    this.getDetailsRequest$
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        switchMap((input) => {
+          this.loading = true;
+          this.fileList = [];
+          return this.fileManagerService.getFolderDetails(input.id).pipe(
+            catchError((err, caught) => {
+              return of(new FileNodeDtoListApiResponse());
+            }),
+            map((response) => response.data ?? []),
+            finalize(() => (this.loading = false)),
+          );
+        }),
+      )
+      .subscribe((result) => {
+        this.fileList = result;
+      });
   }
 
   reload() {
@@ -153,9 +163,12 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
   }
 
   openFolder(item: FileManagerDto) {
+    if (this.selectedFileInfo?.id == item.id) {
+      return;
+    }
     this.openedFolder = item;
     this.selectedFileInfo = item;
-    this.getDetailsRequest$.next({ id: item.id });
+    this.getDetailsRequest$.next({ id: item.id! });
   }
 
   selectIcon() {
@@ -165,6 +178,7 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
     this.matDialog
       .open(SelectIconDialogComponent, {
         data: this.selectedFileInfo,
+        width: '768px',
       })
       .afterClosed()
       .subscribe((result) => {
@@ -201,31 +215,23 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
   }
 
   delete() {
-    if (!this.selectedFileInfo) {
+    if (!this.selectedFileInfo || !this.selectedFileInfo.id) {
       return;
     }
-    this.alert
-      .show({
-        title: this.l('Delete'),
-        text: this.l('AreYouSureDelete'),
-        showConfirmButton: true,
-        showCancelButton: true,
-        confirmButtonText: this.l('Yes'),
-        cancelButtonText: this.l('Cancel'),
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          // this.showMainLoading();
-          // this.fileManagerProxy.delete(this.selectedFileInfo?.id)
-          //   .pipe(finalize(() => this.hideMainLoading()))
-          //   .subscribe(response => {
-          //     if (response.data == true) {
-          //       this.notify.success(this.l('DeleteSuccessfully'));
-          //       this.reload();
-          //     }
-          //   });
-        }
-      });
+    this.confirmMessage(this.l('Delete'), this.l('AreYouSureDelete')).then((result) => {
+      if (result.isConfirmed) {
+        this.showMainLoading();
+        this.fileManagerService
+          .deleteFileOrFolder(new DeleteFileOrFolderCommand({ id: this.selectedFileInfo?.id }))
+          .pipe(finalize(() => this.hideMainLoading()))
+          .subscribe((response) => {
+            if (response.data == true) {
+              this.notify.success(this.l('DeleteSuccessfully'));
+              this.reload();
+            }
+          });
+      }
+    });
   }
 
   chooseThisFile() {

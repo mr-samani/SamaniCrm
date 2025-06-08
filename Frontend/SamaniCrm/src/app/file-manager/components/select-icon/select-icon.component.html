@@ -11,7 +11,7 @@
   </div>
   <div class="list-icon">
     <div class="icon" *ngFor="let item of list" [class.selected]="item == selected" (click)="selected = item">
-      <img [src]="item" />
+      <img [src]="baseUrl + item" />
     </div>
   </div>
 </mat-dialog-content>

@@ -31,7 +31,7 @@ public static class FileManagerFactory
         switch (settings.Provider)
         {
             case "locale":
-                services.AddSingleton<IFileManagerService, LocaleFileManagerService>();
+                services.AddScoped<IFileManagerService, LocaleFileManagerService>();
                 break;
         }
         return services;

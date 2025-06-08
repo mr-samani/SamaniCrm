@@ -17,16 +17,16 @@ public record GetTreeFoldersQuery : IRequest<List<FileNodeDto>>;
 public class GetTreeFoldersQueryHandler : IRequestHandler<GetTreeFoldersQuery, List<FileNodeDto>>
 {
 
-    private readonly IFileManagerService _FileManagerService;
+    private readonly IFileManagerService _fileManagerService;
 
     public GetTreeFoldersQueryHandler(IFileManagerService fileManagerService)
     {
-        _FileManagerService = fileManagerService;
+        _fileManagerService = fileManagerService;
     }
 
     public Task<List<FileNodeDto>> Handle(GetTreeFoldersQuery request, CancellationToken cancellationToken)
     {
-        var result = _FileManagerService.GetFolderTreeAsync();
+        var result = _fileManagerService.GetFolderTreeAsync();
         return result;
     }
 

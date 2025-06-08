@@ -14,12 +14,14 @@
 /** Interface for CreateFolderCommand */
 export interface ICreateFolderCommand {
   name?: string;
+  isPublic?: boolean;
   parentId?: string;
 }
 
 /** Class for CreateFolderCommand */
 export class CreateFolderCommand implements ICreateFolderCommand {
   name?: string;
+  isPublic?: boolean;
   parentId?: string;
 
   constructor(data?: ICreateFolderCommand) {
@@ -34,6 +36,7 @@ export class CreateFolderCommand implements ICreateFolderCommand {
 init(data?: any) {
   if (data) {
     this.name = data["name"];
+    this.isPublic = data["isPublic"];
     this.parentId = data["parentId"];
   }
 }

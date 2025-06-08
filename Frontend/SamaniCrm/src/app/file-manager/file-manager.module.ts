@@ -5,16 +5,16 @@ import { FormsModule } from '@angular/forms';
 import { ImageCropperComponent } from 'ngx-image-cropper';
 import { TranslateModule } from '@ngx-translate/core';
 import { FileManagerService } from './file-manager.service';
-import { FileSelectorComponent } from './file-selector/file-selector.component';
-import { CreateFolderDialogComponent } from './create-folder/create-folder.component';
 import { FileManagerComponent } from './file-manager/file-manager.component';
-import { SelectIconDialogComponent } from './select-icon/select-icon.component';
-import { TreeFolderComponent } from './tree-folder/tree-folder.component';
+import { SelectIconDialogComponent } from './components/select-icon/select-icon.component';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { AddressBarComponent } from './file-manager/address-bar/address-bar.component';
 import { SharedModule } from '@shared/shared.module';
 import { TusUploadService } from './tus-upload.service';
 import { FileManagerServiceProxy } from '@shared/service-proxies';
+import { CreateFolderDialogComponent } from './components/create-folder/create-folder.component';
+import { FileSelectorComponent } from './components/file-selector/file-selector.component';
+import { TreeFolderComponent } from './components/tree-folder/tree-folder.component';
 
 @NgModule({
   declarations: [
