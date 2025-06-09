@@ -1,0 +1,13 @@
+<div class="card">
+  <div class="card-header">{{ 'Images' | translate }}</div>
+  <div class="card-body">
+    <file-selector (change)="onSelectFile($event)" [options]="fileSelectorOptions"></file-selector>
+    <div class="image-list">
+      @for (item of images; track $index) {
+        <div class="image-item">
+          <img [src]="fileServerUrl + '/' + item.url" />
+        </div>
+      }
+    </div>
+  </div>
+</div>

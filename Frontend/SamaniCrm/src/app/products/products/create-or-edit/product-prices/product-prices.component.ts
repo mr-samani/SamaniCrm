@@ -18,7 +18,7 @@ import { finalize } from 'rxjs/operators';
 })
 export class ProductPricesComponent extends AppComponentBase implements OnInit {
   @Input() prices: ProductPriceDto[] = [];
-  @Output() onChange = new EventEmitter<ProductPriceDto[]>();
+  @Output() pricesChange = new EventEmitter<ProductPriceDto[]>();
 
   currencyList: StringAutoCompleteDto[] = [];
   loadingCurrency = true;
@@ -63,7 +63,7 @@ export class ProductPricesComponent extends AppComponentBase implements OnInit {
       return;
     }
     this.prices.unshift(this.form.value);
-    this.onChange.emit(this.prices);
+    this.pricesChange.emit(this.prices);
     this.form.reset();
   }
 
@@ -71,7 +71,7 @@ export class ProductPricesComponent extends AppComponentBase implements OnInit {
     this.confirmMessage(`${this.l('Delete')}:${this.prices[i].price}`, this.l('AreYouSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.prices.splice(i, 1);
-        this.onChange.emit(this.prices);
+        this.pricesChange.emit(this.prices);
       }
     });
   }

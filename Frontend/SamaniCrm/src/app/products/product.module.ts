@@ -1,3 +1,4 @@
+import { ProductImagesComponent } from './products/create-or-edit/product-images/product-images.component';
 import { ProductPricesComponent } from './products/create-or-edit/product-prices/product-prices.component';
 import { CurrenciesComponent } from './currencies/currencies.component';
 import { AddOrUpdateProductAttributesComponent } from './products/create-or-edit/add-or-update-product-attributes/add-or-update-product-attributes.component';
@@ -27,9 +28,25 @@ import { AutoCompleteProductTypeComponent } from './auto-completes/auto-complete
 import { MatChipsModule } from '@angular/material/chips';
 import { HtmlEditorModule } from '@shared/components/html-editor/html-editor.module';
 import { CreateOrEditCurrencyComponent } from './currencies/create-or-edit/create-or-edit.component';
+import { FileManagerModule } from '@app/file-manager/file-manager.module';
 
 @NgModule({
-  declarations: [ProductComponent, ProductCategoriesComponent, CreateOrEditProductCategoryComponent, ProductTypesComponent, CreateOrEditProductTypeComponent, ProductAttributesComponent, CreateOrEditProductAttributeComponent, ProductsComponent, CreateOrEditProductComponent, AddOrUpdateProductAttributesComponent, CurrenciesComponent, CreateOrEditCurrencyComponent, ProductPricesComponent],
+  declarations: [
+    ProductComponent,
+    ProductCategoriesComponent,
+    CreateOrEditProductCategoryComponent,
+    ProductTypesComponent,
+    CreateOrEditProductTypeComponent,
+    ProductAttributesComponent,
+    CreateOrEditProductAttributeComponent,
+    ProductsComponent,
+    CreateOrEditProductComponent,
+    AddOrUpdateProductAttributesComponent,
+    CurrenciesComponent,
+    CreateOrEditCurrencyComponent,
+    ProductPricesComponent,
+    ProductImagesComponent,
+  ],
   imports: [
     CommonModule,
     ProductRoutingModule,
@@ -46,6 +63,7 @@ import { CreateOrEditCurrencyComponent } from './currencies/create-or-edit/creat
     MatChipsModule,
     HtmlEditorModule,
     FormsModule,
+    FileManagerModule,
   ],
   providers: [ProductServiceProxy],
 })

@@ -1,0 +1,19 @@
+.image-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  .image-item {
+    width: 130px;
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #b3b3b336;
+    border-radius: 5px;
+    overflow: hidden;
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+}

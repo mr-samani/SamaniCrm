@@ -30,5 +30,6 @@ import { FileListComponent } from './components/file-list/file-list.component';
   ],
   imports: [CommonModule, FormsModule, MaterialCommonModule, ImageCropperComponent, TranslateModule, SharedModule],
   providers: [TusUploadService, FileManagerService, FileManagerServiceProxy],
+  exports: [FileSelectorComponent],
 })
 export class FileManagerModule {}

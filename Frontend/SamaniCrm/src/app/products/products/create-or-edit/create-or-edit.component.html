@@ -55,21 +55,17 @@
             [attributeValues]="attributeValues"
             (onChange)="attributeValues = $event"></add-or-update-product-attributes>
 
-
-          <product-prices [prices]="prices" (onChange)="prices = $event"></product-prices>
-
-          </div>
+          <product-prices [(prices)]="prices"></product-prices>
+        </div>
       </div>
     </div>
     <div class="col-sm-4 d-flex flex-column gap-3">
-      <div class="card">
-        <div class="card-header">{{ 'Images' | translate }}</div>
-        <div class="card-body"></div>
-      </div>
+      <product-images [(images)]="images"></product-images>
+
       <div class="card">
         <div class="card-header">{{ 'Files' | translate }}</div>
         <div class="card-body"></div>
-      </div> 
+      </div>
       <div class="card">
         <div class="card-header">{{ 'Tags' | translate }}</div>
         <div class="card-body">

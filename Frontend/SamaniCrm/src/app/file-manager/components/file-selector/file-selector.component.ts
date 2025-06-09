@@ -10,9 +10,8 @@ import {
 import { AppComponentBase } from '@app/app-component-base';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { FileManagerDto } from '@app/file-manager/models/file-manager-dto';
-import { FileManagerOptions } from '@app/file-manager/options.interface';
+import { FileManagerOptions, IOptions } from '@app/file-manager/options.interface';
 import { AppConst } from '@shared/app-const';
-import { IOptions } from 'grapesjs-tui-image-editor';
 
 @Component({
   selector: 'file-selector',
