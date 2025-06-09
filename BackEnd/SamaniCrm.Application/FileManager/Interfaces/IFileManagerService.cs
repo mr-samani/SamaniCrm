@@ -21,4 +21,7 @@ public interface IFileManagerService
     Task<bool> SetFolderIcon(Guid Id, string Icon, CancellationToken cancellationToken);
 
     Task<Guid> UploadFile(Guid ParentId, Stream fileStream, string fileName, CancellationToken cancellationToken);
+
+    Task<FileNodeDto?> GetFileInfo(Guid Id, CancellationToken cancellationToken);    
+
 }

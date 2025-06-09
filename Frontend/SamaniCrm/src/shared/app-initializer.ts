@@ -40,6 +40,7 @@ export class AppInitializer {
             AppConst.tinyMceApiKey = config.tinyMceApiKey;
             AppConst.appName = config.appName;
             AppConst.publicSiteUrl = config.publicSiteUrl;
+            AppConst.fileServerUrl = config.fileServerUrl;
             // api initialize
             this.httpClient.get<InitialAppDTOApiResponse>(AppConst.apiUrl + '/api/Common/InitialApp').subscribe({
               next: (resp) => {

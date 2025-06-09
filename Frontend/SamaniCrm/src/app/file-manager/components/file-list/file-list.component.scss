@@ -1,0 +1,59 @@
+:host {
+  display: flex;
+  // address bar is 30px
+  height: calc(100% - 30px);
+}
+.file-list {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px;
+  flex: auto;
+  align-items: self-start;
+  .file {
+    border: 1px #f1f1f1 solid;
+    width: 100px;
+    text-align: center;
+    transition: all 300ms;
+    .icon-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+    .file-name {
+      word-break: break-word;
+    }
+    &:hover,
+    &.active {
+      cursor: pointer;
+      background-color: rgba(0, 119, 255, 0.178);
+    }
+  }
+}
+
+.file-info {
+  border-left: 1px #d1d1d1 solid;
+  padding: 15px;
+  max-width: 250px;
+  .preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 150px;
+    min-width: 200px;
+    max-width: 200px;
+    border-bottom: 1px #d1d1d1 solid;
+    img,
+    video {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+  table {
+    font-size: 10px;
+  }
+}

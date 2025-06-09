@@ -11,8 +11,6 @@ import { FileNodeDto } from '@shared/service-proxies/model/file-node-dto';
 export class FileManagerDto extends FileNodeDto {
   override children?: FileManagerDto[] = [];
 
-
-
   /**
    * for front end
    */
@@ -20,4 +18,6 @@ export class FileManagerDto extends FileNodeDto {
   lastModifiedTime?: any;
   thumbnailsDto?: ThumbnailsDto;
   user?: UserDTO;
+  isImage?: boolean;
+  isVideo?: boolean;
 }

@@ -1,27 +1,19 @@
-import { HttpClient, HttpErrorResponse, HttpEventType } from '@angular/common/http';
-import { Component, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
-import { Subject, catchError, debounceTime, distinctUntilChanged, finalize, map, of, switchMap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Component, Inject, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { finalize } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FileManagerDto } from '../models/file-manager-dto';
-import { Apis } from '@shared/apis';
 import {
   FileUsageEnum,
   ImageCropperDialogComponent,
   ImageCropperDialogData,
 } from '../image-cropper-dialog/image-cropper-dialog.component';
 import { AppComponentBase } from '@app/app-component-base';
-import { AppConst } from '@shared/app-const';
 import { IOptions } from '../options.interface';
-import { FileManagerService } from '../file-manager.service';
-import {
-  DeleteFileOrFolderCommand,
-  FileManagerServiceProxy,
-  FileNodeDtoListApiResponse,
-} from '@shared/service-proxies';
-import { FileManagetConsts } from '../consts/file-manager-consts';
+import { FileManagerServiceProxy } from '@shared/service-proxies';
 import { CreateFolderDialogComponent } from '../components/create-folder/create-folder.component';
-import { SelectIconDialogComponent } from '../components/select-icon/select-icon.component';
 import { TusUploadService } from '../tus-upload.service';
+import { FileListComponent } from '../components/file-list/file-list.component';
 
 @Component({
   selector: 'app-file-manager',
@@ -34,21 +26,12 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
   message = '';
   loadingFolders = true;
   folders: FileManagerDto[] = [];
-  fileList: FileManagerDto[] = [];
   loading = false;
 
   /** پوشه فعال */
   openedFolder?: FileManagerDto;
-  /** پوشه انتخاب شده برای نمایش جزئیات در سمت راست */
-  selectedFileInfo?: FileManagerDto;
 
-  baseUrl = AppConst.apiUrl;
-
-  getDetailsRequest$ = new Subject<{ id: string }>();
-
-  defaultOpenFolderIcon = AppConst.apiUrl + FileManagetConsts.DefaultOpenFolderIcon;
-  defaultFolderIcon = AppConst.apiUrl + FileManagetConsts.DefaultFolderIcon;
-  defaultFileIcon = AppConst.apiUrl + FileManagetConsts.DefaultFileIcon;
+  @ViewChild('fileList', { static: false }) _fileList?: FileListComponent;
 
   constructor(
     injector: Injector,
@@ -64,14 +47,9 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
 
   ngOnInit(): void {
     this.getTreeFolders();
-    this.initGetFolderDetails();
   }
 
-  ngOnDestroy(): void {
-    if (this.getDetailsRequest$) {
-      this.getDetailsRequest$.unsubscribe();
-    }
-  }
+  ngOnDestroy(): void {}
 
   getTreeFolders() {
     this.loadingFolders = true;
@@ -101,32 +79,10 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
     return false;
   }
 
-  private initGetFolderDetails() {
-    this.getDetailsRequest$
-      .pipe(
-        debounceTime(500),
-        distinctUntilChanged(),
-        switchMap((input) => {
-          this.loading = true;
-          this.fileList = [];
-          return this.fileManagerService.getFolderDetails(input.id).pipe(
-            catchError((err, caught) => {
-              return of(new FileNodeDtoListApiResponse());
-            }),
-            map((response) => response.data ?? []),
-            finalize(() => (this.loading = false)),
-          );
-        }),
-      )
-      .subscribe((result) => {
-        this.fileList = result;
-      });
-  }
-
-  reload(reloadFolder = false) {
-    if (reloadFolder) this.getTreeFolders();
-    if (this.openedFolder) {
-      this.openFolder(this.openedFolder, true);
+  reload(reloadFolderView = false) {
+    this.getTreeFolders();
+    if (reloadFolderView && this._fileList) {
+      this._fileList.reload();
     }
   }
 
@@ -136,9 +92,10 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
       return;
     }
     let filesToUpload: FileList = files;
+    let parentId = this.openedFolder.isFolder ? this.openedFolder.id : this.openedFolder.parentId;
     Array.from(filesToUpload).map((file, index) => {
       this.tusUpoadService
-        .uploadFile(file, '', FileUsageEnum.FILE_MANAGER, '', this.openedFolder?.id)
+        .uploadFile(file, '', FileUsageEnum.FILE_MANAGER, '', parentId)
         .then((result) => {
           // this.progress = Math.round((100 * event.loaded) / (event.total ?? 0));
           this.notify.success(this.l('Message.UploadedSuccessFully'));
@@ -159,46 +116,8 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
       })
       .afterClosed()
       .subscribe((result) => {
-        this.reload();
+        this.reload(true);
       });
-  }
-
-  openFolder(item: FileManagerDto, force = false) {
-    if (this.selectedFileInfo?.id == item.id && !force) {
-      return;
-    }
-    this.openedFolder = item;
-    this.selectedFileInfo = item;
-    this.fileList = [];
-    this.getDetailsRequest$.next({ id: item.id! });
-  }
-
-  selectIcon() {
-    if (!this.selectedFileInfo || !this.selectedFileInfo.isFolder) {
-      return;
-    }
-    this.matDialog
-      .open(SelectIconDialogComponent, {
-        data: this.selectedFileInfo,
-        width: '768px',
-      })
-      .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.selectedFileInfo = result;
-          this.reload();
-        }
-      });
-  }
-
-  selectFile(item: FileManagerDto) {
-    this.selectedFileInfo = item;
-  }
-
-  dblClickFile(item: FileManagerDto) {
-    if (item.isFolder) {
-      this.openFolder(item);
-    }
   }
 
   createFolder() {
@@ -216,30 +135,8 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
       });
   }
 
-  delete() {
-    if (!this.selectedFileInfo || !this.selectedFileInfo.id) {
-      return;
-    }
-    this.confirmMessage(this.l('Delete'), this.l('AreYouSureDelete')).then((result) => {
-      if (result.isConfirmed) {
-        this.showMainLoading();
-        this.fileManagerService
-          .deleteFileOrFolder(new DeleteFileOrFolderCommand({ id: this.selectedFileInfo?.id }))
-          .pipe(finalize(() => this.hideMainLoading()))
-          .subscribe((response) => {
-            if (response.data == true) {
-              this.notify.success(this.l('DeleteSuccessfully'));
-              this.reload();
-            }
-          });
-      }
-    });
-  }
-
-  chooseThisFile() {
-    if (this.selectedFileInfo) {
-      // todo: validate choosed file
-      this.dialogRef.close(this.selectedFileInfo.id);
-    }
+  onSelectFile(ev: FileManagerDto) {
+    // todo: validate choosed file
+    this.dialogRef.close(ev.id);
   }
 }

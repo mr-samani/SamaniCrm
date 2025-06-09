@@ -54,22 +54,26 @@ namespace SamaniCrm.Api.TUS
                     {
                         tusdotnet.Interfaces.ITusFile file = await eventContext.GetFileAsync();
                         Dictionary<string, tusdotnet.Models.Metadata> metadata = await file.GetMetadataAsync(eventContext.CancellationToken);
-                        using Stream content = await file.GetContentAsync(eventContext.CancellationToken);
                         metadata.TryGetValue("parentId", out var parentId);
-                        var id = Guid.Parse(file.Id);
-                        var size = content.Length;
-                        UploadFileCommand input = new UploadFileCommand()
+
+                        await using (Stream content = await file.GetContentAsync(eventContext.CancellationToken))
                         {
-                            FileStreem = content,
-                            FolderId = parentId!.GetString(UTF8Encoding.UTF8),
-                            FileName = metadata["filename"].GetString(UTF8Encoding.UTF8),
-                            filetype = metadata["filetype"].GetString(UTF8Encoding.UTF8)
+                            var id = Guid.Parse(file.Id);
+                            var size = content.Length;
+                            UploadFileCommand input = new UploadFileCommand()
+                            {
+                                FileStreem = content,
+                                FolderId = parentId!.GetString(UTF8Encoding.UTF8),
+                                FileName = metadata["filename"].GetString(UTF8Encoding.UTF8),
+                                filetype = metadata["filetype"].GetString(UTF8Encoding.UTF8)
 
-                        };
+                            };
+                            var mediator = eventContext.HttpContext.RequestServices.GetRequiredService<IMediator>();
+                            Guid result = await mediator.Send(input, eventContext.CancellationToken);
 
-                        var mediator = eventContext.HttpContext.RequestServices.GetRequiredService<IMediator>();
-                        Guid result = await mediator.Send(input, eventContext.CancellationToken);
-                        eventContext.HttpContext.Response.Headers.Append("FileId", result.ToString());
+                            eventContext.HttpContext.Response.Headers.Append("FileId", result.ToString());
+                        }
+
                         // 🔥 حذف فایل chunk
                         if (eventContext.Store is TusDiskStore store)
                         {

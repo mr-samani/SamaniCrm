@@ -2,7 +2,6 @@
   border-bottom: 1px darkgrey solid;
   display: flex;
   height: 30px;
-
   i {
     font-style: normal;
     margin: 0px 5px;
@@ -21,7 +20,10 @@
       transition: all 300ms;
       cursor: pointer;
       border-radius: 3px;
-
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       &:hover {
         background-color: rgba(52, 52, 52, 0.219);
       }

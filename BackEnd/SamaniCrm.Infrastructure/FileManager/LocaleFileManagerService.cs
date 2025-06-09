@@ -1,7 +1,11 @@
 ﻿using Duende.IdentityModel;
+using HeyRed.Mime;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using MimeDetective;
+using MimeDetective.Engine;
+using Pipelines.Sockets.Unofficial.Arenas;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.FileManager.Dtos;
@@ -9,15 +13,13 @@ using SamaniCrm.Application.FileManager.Interfaces;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Entities.ProductEntities;
+using SamaniCrm.Infrastructure.FileManager.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HeyRed.Mime;
-using MimeDetective;
-using MimeDetective.Engine;
-using SamaniCrm.Infrastructure.FileManager.Helper;
+using static MimeDetective.Definitions.DefaultDefinitions;
 
 
 
@@ -280,7 +282,7 @@ namespace SamaniCrm.Infrastructure.FileManager
             var finalFilePath = Path.Combine(destinationFolder, finalFileName);
 
             await File.WriteAllBytesAsync(finalFilePath, fileBytes, cancellationToken);
-            var relativePath = finalFilePath.Replace("\\", "/");
+            var relativePath = finalFilePath.Replace(publicRootPath, "").Replace("\\", "/");
             if (relativePath.StartsWith("/"))
             {
                 relativePath = relativePath.Substring(1);
@@ -308,9 +310,28 @@ namespace SamaniCrm.Infrastructure.FileManager
             return fileId;
         }
 
-
-
-
-
+        public async Task<FileNodeDto?> GetFileInfo(Guid Id, CancellationToken cancellationToken)
+        {
+            var entity = await _dbContext.FileFolders
+                .AsNoTracking()
+                .Where(x => x.Id == Id && !x.IsFolder)
+                .Select(s => new FileNodeDto
+                {
+                    Id = s.Id,
+                    ByteSize = s.ByteSize,
+                    ContentType = s.ContentType,
+                    Extension = s.Extension,
+                    IsFolder = s.IsFolder,
+                    IsStatic = s.IsStatic,
+                    Name = s.Name,
+                    IsPublic = s.IsPublic,
+                    RelativePath = s.RelativePath,
+                    ParentId = s.ParentId,
+                    Icon = s.Icon,
+                    Thumbnails = s.Thumbnails
+                })
+                .FirstOrDefaultAsync(cancellationToken);
+            return entity;
+        }
     }
 }
