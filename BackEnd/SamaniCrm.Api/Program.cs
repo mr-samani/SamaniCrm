@@ -9,6 +9,7 @@ using SamaniCrm.Infrastructure.Hubs;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Localizer;
 using SamaniCrm.Infrastructure.FileManager;
+using SamaniCrm.Api.TUS;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -71,6 +72,6 @@ using (var scope = app.Services.CreateScope())
     var initializer = scope.ServiceProvider.GetRequiredService<FileDirectoryInitializer>();
     await initializer.EnsureBaseDirectoriesAsync();
 }
-
+app.InitializeTUS(config);
 
 app.Run();

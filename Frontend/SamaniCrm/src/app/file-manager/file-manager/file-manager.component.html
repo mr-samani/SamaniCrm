@@ -17,7 +17,7 @@
       <i class="fa fa-sort"></i>
       {{ 'SortBy' | translate }}
     </button>
-    <button (click)="reload()">
+    <button (click)="reload(true)">
       <i class="fa fa-refresh"></i>
       {{ 'Refresh' | translate }}
     </button>
@@ -59,9 +59,6 @@
 
       <div class="file-list">
         <mat-spinner *ngIf="loading" color="primary" diameter="25"></mat-spinner>
-        <p class="text-center my-5 py-5 w-100" *ngIf="fileList.length === 0 && loading === false">
-          {{ 'Message.NotFoundResult' | translate }}
-        </p>
         <div class="file" *ngFor="let item of fileList" (click)="selectFile(item)" (dblclick)="dblClickFile(item)">
           <div class="icon-container">
             @if (item.icon) {

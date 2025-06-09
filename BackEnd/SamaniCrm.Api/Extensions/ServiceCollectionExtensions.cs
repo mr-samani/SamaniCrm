@@ -118,7 +118,8 @@ public static class ServiceCollectionExtensions
             {
                 policy.WithOrigins("https://localhost:44342", "http://localhost:5753", "https://localhost:5753")
                       .AllowAnyHeader()
-                      .AllowAnyMethod();
+                      .AllowAnyMethod()
+                      .WithExposedHeaders("Location", "Upload-Offset", "Tus-Resumable", "Upload-Length", "Fileid");
             });
         });
 

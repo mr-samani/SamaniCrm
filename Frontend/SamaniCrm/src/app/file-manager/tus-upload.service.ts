@@ -34,13 +34,15 @@ export class TusUploadService extends AppComponentBase {
       this.uploadedUrl = '';
       this.progress = 0;
       this.uploading = true;
+      var filetype = file.name.split('.').pop() ?? '';
       let metadata = {
-        name: file.name,
+        filename: file.name,
+        filetype: filetype,
         emptyMetaKey: '',
         size: file.size + '',
         chunkSize: this.chunckSize + '',
-        usage: usage + '',
-        additionalId: additionalId + '',
+        usage: usage ? usage + '' : '',
+        additionalId: additionalId ? additionalId + '' : '',
         parentId: parentId + '',
       };
       console.info('tus metadata', metadata);

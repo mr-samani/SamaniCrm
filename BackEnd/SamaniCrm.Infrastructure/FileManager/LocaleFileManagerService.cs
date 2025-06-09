@@ -14,6 +14,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HeyRed.Mime;
+using MimeDetective;
+using MimeDetective.Engine;
+using SamaniCrm.Infrastructure.FileManager.Helper;
+
+
 
 namespace SamaniCrm.Infrastructure.FileManager
 {
@@ -22,6 +28,7 @@ namespace SamaniCrm.Infrastructure.FileManager
         private readonly IApplicationDbContext _dbContext;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _env;
+        private readonly ImageResizeService _imageResizeService = new ImageResizeService();
 
         private FileManagerSetting settings;
         private string publicRootPath;
@@ -37,7 +44,8 @@ namespace SamaniCrm.Infrastructure.FileManager
         public async Task<List<FileNodeDto>> GetFolderTreeAsync(string? rootPath = null)
         {
             var all = await _dbContext.FileFolders
-                            .Include(m => m.Children)
+                            .Where(x => x.IsFolder == true)
+                            .Include(m => m.Children.Where(x => x.IsFolder == true))
                             .ToListAsync();
             var roots = all.Where(m => m.ParentId == null).ToList();
             var result = roots.Select(m => MapToDtoRecursive(m)).ToList();
@@ -106,18 +114,26 @@ namespace SamaniCrm.Infrastructure.FileManager
 
         public async Task<bool> CreateFolder(string name, bool isPublic, Guid? parentId, CancellationToken cancellationToken)
         {
-            if (parentId != null)
+
+
+            var parent = await _dbContext.FileFolders.Where(x => x.Id == parentId).FirstOrDefaultAsync(cancellationToken);
+            if (parent == null)
             {
-                var parent = await _dbContext.FileFolders.Where(x => x.Id == parentId).FirstOrDefaultAsync(cancellationToken);
-                if (parent == null)
-                {
-                    throw new NotFoundException("Parent not found");
-                }
+                throw new NotFoundException("Parent not found");
             }
-            var path = Path.Combine(publicRootPath, name);
+            if (parent.RelativePath.StartsWith("/"))
+            {
+                parent.RelativePath = parent.RelativePath.Substring(1);
+            }
+            var path = Path.Combine(publicRootPath, parent.RelativePath, name);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
+            }
+            var relativePath = path.Replace(publicRootPath, "").Replace("\\", "/");
+            if (relativePath.StartsWith("/"))
+            {
+                relativePath = relativePath.Substring(1);
             }
             var folder = new FileFolder()
             {
@@ -127,7 +143,7 @@ namespace SamaniCrm.Infrastructure.FileManager
                 IsStatic = false,
                 ContentType = "Directory",
                 Extension = "",
-                RelativePath = path,
+                RelativePath = relativePath,
             };
             if (parentId != null)
             {
@@ -189,13 +205,13 @@ namespace SamaniCrm.Infrastructure.FileManager
         public async Task<List<string>> GetFileManagerIcons(CancellationToken cancellationToken)
         {
             var wwwrootPath = Path.Combine(_env.WebRootPath);
-            var path = Path.Combine(wwwrootPath, "Images\\folder-icons");
+            var path = Path.Combine(wwwrootPath, "Images", "folder-icons");
             var files = Directory.GetFiles(path);
             var relativePaths = new List<string>();
             foreach (var file in files)
             {
                 // var relativePath = Path.GetRelativePath("./", file);
-                var relativePath = file.Replace(wwwrootPath , string.Empty);
+                var relativePath = file.Replace(wwwrootPath, string.Empty);
                 relativePaths.Add(relativePath);
             }
 
@@ -215,5 +231,86 @@ namespace SamaniCrm.Infrastructure.FileManager
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
             return result > 0;
         }
+
+        public async Task<Guid> UploadFile(Guid parentId, Stream fileStream, string fileName, CancellationToken cancellationToken)
+        {
+            // بررسی وجود پوشه پدر
+            var parent = await _dbContext.FileFolders
+                .FirstOrDefaultAsync(x => x.Id == parentId && x.IsFolder, cancellationToken);
+
+            if (parent == null)
+                throw new NotFoundException("Parent folder not found");
+            if (parent.RelativePath.StartsWith("/"))
+            {
+                parent.RelativePath = parent.RelativePath.Substring(1);
+            }
+            // مسیر نهایی ذخیره‌سازی
+            var destinationFolder = Path.Combine(publicRootPath, parent.RelativePath);
+
+            if (!Directory.Exists(destinationFolder))
+                Directory.CreateDirectory(destinationFolder);
+
+            // خواندن فایل در حافظه برای تشخیص MIME
+            using var ms = new MemoryStream();
+            await fileStream.CopyToAsync(ms, cancellationToken);
+            var fileBytes = ms.ToArray();
+
+            // تشخیص MIME type
+            var inspector = new ContentInspectorBuilder
+            {
+                Definitions = MimeDetective.Definitions.DefaultDefinitions.All()
+            }.Build();
+
+            var result = inspector.Inspect(fileBytes);
+
+            if (result == null || result.Count() == 0)
+                throw new UserFriendlyException("Could not determine file type");
+
+            var mime = result.First().Definition.File.MimeType;           // مانند image/png
+            var extension = result.First().Definition.File.Extensions.First(); // مانند png
+
+            // بررسی مجاز بودن نوع فایل
+            var allowedMimeTypes = new[] { "image/png", "image/jpeg", "image/tiff" };
+            if (!allowedMimeTypes.Contains(mime))
+                throw new UserFriendlyException($"File type {mime} is not allowed");
+
+            // تولید نام نهایی فایل
+            var fileId = Guid.NewGuid();
+            var finalFileName = $"{fileId}.{extension}";
+            var finalFilePath = Path.Combine(destinationFolder, finalFileName);
+
+            await File.WriteAllBytesAsync(finalFilePath, fileBytes, cancellationToken);
+            var relativePath = finalFilePath.Replace("\\", "/");
+            if (relativePath.StartsWith("/"))
+            {
+                relativePath = relativePath.Substring(1);
+            }
+            var thumbnails = await _imageResizeService.GenerateThumbnailsAsync(fileId, fileStream, extension, destinationFolder, cancellationToken);
+            var entity = new FileFolder
+            {
+                Id = fileId,
+                ByteSize = fileBytes.Length,
+                ContentType = mime,
+                Extension = extension,
+                IsFolder = false,
+                IsStatic = false,
+                Name = fileName,
+                IsPublic = parent.IsPublic,
+                RelativePath = relativePath,
+                ParentId = parent.Id,
+                Icon = FileIcon.GetIcon(extension),
+                Thumbnails = thumbnails != null ? thumbnails.ToString() : null
+            };
+
+            await _dbContext.FileFolders.AddAsync(entity, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            return fileId;
+        }
+
+
+
+
+
     }
 }

@@ -20,6 +20,7 @@ namespace SamaniCrm.Infrastructure.FileManager
                        IsFolder = true,
                        Icon ="Images/folder-icons/default-folder-network.svg",
                        IsStatic = true,
+                       RelativePath = "Publics"
                    },
                    new FileFolder()
                    {
@@ -27,6 +28,7 @@ namespace SamaniCrm.Infrastructure.FileManager
                        IsFolder = true,
                        Icon ="Images/folder-icons/folder-documents.svg",
                        IsStatic = true,
+                       RelativePath = "Documents"
                    },
                    new FileFolder()
                    {
@@ -34,6 +36,7 @@ namespace SamaniCrm.Infrastructure.FileManager
                        IsFolder = true,
                        Icon ="Images/folder-icons/default-folder-pictures.svg",
                        IsStatic = true,
+                       RelativePath = "Pictures"
                    },
                    new FileFolder()
                    {
@@ -41,6 +44,7 @@ namespace SamaniCrm.Infrastructure.FileManager
                        IsFolder = true,
                        Icon ="Images/folder-icons/folders-videos.svg",
                        IsStatic = true,
+                       RelativePath = "Videos"
                    },
                    new FileFolder()
                    {
@@ -48,6 +52,7 @@ namespace SamaniCrm.Infrastructure.FileManager
                        IsFolder = true,
                        Icon ="Images/folder-icons/default-folder-music.svg",
                        IsStatic = true,
+                       RelativePath = "Music"
                    },
                    new FileFolder()
                    {
@@ -55,6 +60,7 @@ namespace SamaniCrm.Infrastructure.FileManager
                        IsFolder = true,
                        Icon ="Images/folder-icons/favorites.svg",
                        IsStatic = true,
+                       RelativePath = "Favorites"
                    }
                 ];
     }

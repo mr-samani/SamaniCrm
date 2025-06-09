@@ -77,7 +77,25 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
       .pipe(finalize(() => (this.loadingFolders = false)))
       .subscribe((result) => {
         this.folders = result.data ?? ([] as any);
+        if (this.openedFolder && this.openedFolder.id) {
+          this.tryOpenFolderInTree(this.folders, this.openedFolder.id);
+        }
       });
+  }
+
+  tryOpenFolderInTree(tree: FileManagerDto[], id: string): boolean {
+    for (const f of tree) {
+      if (f.id === id) {
+        f.isOpen = true;
+        return true;
+      }
+
+      if (f.children && this.tryOpenFolderInTree(f.children, id)) {
+        f.isOpen = true;
+        return true;
+      }
+    }
+    return false;
   }
 
   private initGetFolderDetails() {
@@ -102,10 +120,10 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
       });
   }
 
-  reload() {
-    this.getTreeFolders();
+  reload(reloadFolder = false) {
+    if (reloadFolder) this.getTreeFolders();
     if (this.openedFolder) {
-      this.openFolder(this.openedFolder);
+      this.openFolder(this.openedFolder, true);
     }
   }
 
@@ -162,12 +180,13 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
       });
   }
 
-  openFolder(item: FileManagerDto) {
-    if (this.selectedFileInfo?.id == item.id) {
+  openFolder(item: FileManagerDto, force = false) {
+    if (this.selectedFileInfo?.id == item.id && !force) {
       return;
     }
     this.openedFolder = item;
     this.selectedFileInfo = item;
+    this.fileList = [];
     this.getDetailsRequest$.next({ id: item.id! });
   }
 
@@ -209,7 +228,7 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.reload();
+          this.reload(true);
         }
       });
   }

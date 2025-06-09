@@ -19,4 +19,6 @@ public interface IFileManagerService
     Task<bool> DeleteFileOrFolder(Guid Id, CancellationToken cancellationToken);
 
     Task<bool> SetFolderIcon(Guid Id, string Icon, CancellationToken cancellationToken);
+
+    Task<Guid> UploadFile(Guid ParentId, Stream fileStream, string fileName, CancellationToken cancellationToken);
 }
