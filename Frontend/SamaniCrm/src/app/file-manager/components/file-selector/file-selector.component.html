@@ -4,7 +4,7 @@
 
 <div class="file-preview" *ngIf="fileInfo && _options.showPreview">
   <div class="image-container">
-    <img [src]="cdnUrl + fileInfo.id" [alt]="fileInfo.extension" />
+    <img [src]="fileServerUrl + '/' + fileInfo.id" [alt]="fileInfo.extension" />
   </div>
   <div class="name">
     {{ fileInfo.name }}

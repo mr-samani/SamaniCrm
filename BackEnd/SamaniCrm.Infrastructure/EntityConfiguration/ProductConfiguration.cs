@@ -166,6 +166,16 @@ public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
             .WithMany(c => c.Images)
             .HasForeignKey(p => p.ProductId)
             .OnDelete(DeleteBehavior.Cascade);
+
+
+        builder.HasAlternateKey(p => p.FileId);
+        builder.HasIndex(p => p.FileId).IsUnique();
+
+        builder.HasOne(p => p.File)
+            .WithMany()
+            .HasForeignKey(p => p.FileId)
+            .OnDelete(DeleteBehavior.Cascade);
+
     }
 }
 
@@ -180,6 +190,14 @@ public class ProductFileConfiguration : IEntityTypeConfiguration<ProductFile>
         builder.HasOne(p => p.Product)
             .WithMany(c => c.Files)
             .HasForeignKey(p => p.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasAlternateKey(p => p.FileId);
+        builder.HasIndex(p => p.FileId).IsUnique();
+
+        builder.HasOne(p => p.File)
+            .WithMany()
+            .HasForeignKey(p => p.FileId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

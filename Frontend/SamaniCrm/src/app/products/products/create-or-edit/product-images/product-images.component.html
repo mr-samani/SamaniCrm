@@ -2,10 +2,17 @@
   <div class="card-header">{{ 'Images' | translate }}</div>
   <div class="card-body">
     <file-selector (change)="onSelectFile($event)" [options]="fileSelectorOptions"></file-selector>
-    <div class="image-list">
+    <div class="image-list mt-3">
       @for (item of images; track $index) {
-        <div class="image-item">
-          <img [src]="fileServerUrl + '/' + item.url" />
+        <div class="image-item" (click)="setAsDefault(item)">
+          <img [src]="fileServerUrl + '/' + item.fileId" />
+          <span class="default" *ngIf="item.isMain">
+            <i class="fa fa-circle-check"></i>
+            {{ 'Default' | translate }}
+          </span>
+          <span class="delete" (click)="removeFile($event, item)">
+            <i class="fa fa-times"></i>
+          </span>
         </div>
       }
     </div>

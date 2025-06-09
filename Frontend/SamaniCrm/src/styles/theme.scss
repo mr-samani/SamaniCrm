@@ -92,3 +92,10 @@ mat-form-field.mat-mdc-form-field {
   display: flex;
   gap: 10px;
 }
+
+.mat-mdc-icon-button {
+  .fa {
+    font-weight: 400;
+    font-size: 18px;
+  }
+}

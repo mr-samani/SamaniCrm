@@ -15,7 +15,7 @@
 export interface IProductImageDto {
   id?: string;
   productId?: string;
-  url?: string;
+  fileId?: string;
   isMain?: boolean;
   sortOrder?: number;
 }
@@ -24,7 +24,7 @@ export interface IProductImageDto {
 export class ProductImageDto implements IProductImageDto {
   id?: string;
   productId?: string;
-  url?: string;
+  fileId?: string;
   isMain?: boolean;
   sortOrder?: number;
 
@@ -41,7 +41,7 @@ init(data?: any) {
   if (data) {
     this.id = data["id"];
     this.productId = data["productId"];
-    this.url = data["url"];
+    this.fileId = data["fileId"];
     this.isMain = data["isMain"];
     this.sortOrder = data["sortOrder"];
   }

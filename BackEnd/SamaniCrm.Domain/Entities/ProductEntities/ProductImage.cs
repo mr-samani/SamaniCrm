@@ -12,11 +12,12 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public Guid Id { get; set; }
         public Guid ProductId { get; set; }
 
-        public string Url { get; set; } = default!;
+        public Guid FileId { get; set; } 
         public bool IsMain { get; set; }
         public int SortOrder { get; set; }
 
-        public Product Product { get; set; } = default!;
+        public virtual Product Product { get; set; } = default!;
+        public virtual FileFolder File { get; set; } = default!;
 
 
         // Implementing IAuditableEntity properties

@@ -30,7 +30,7 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
   id: string;
   attributeValues?: Array<ProductAttributeValueDto>;
   images: Array<ProductImageDto> = [];
-  files?: Array<ProductFileDto>;
+  files: Array<ProductFileDto> = [];
   prices: Array<ProductPriceDto> = [];
   tagList: string[] = [];
   constructor(

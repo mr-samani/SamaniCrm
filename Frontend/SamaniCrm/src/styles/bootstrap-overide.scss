@@ -42,3 +42,14 @@ html[dir='rtl'] {
     font-size: 0.8rem;
   }
 }
+
+body[dir='rtl'] {
+  .input-group {
+    :first-child {
+      border-radius: 0px var(--bs-border-radius) var(--bs-border-radius) 0px !important;
+    }
+    :last-child {
+      border-radius: var(--bs-border-radius) 0 0 var(--bs-border-radius) !important;
+    }
+  }
+}

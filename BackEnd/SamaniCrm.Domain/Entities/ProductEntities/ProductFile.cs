@@ -1,6 +1,7 @@
 ﻿using SamaniCrm.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,10 +13,12 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
         public Guid Id { get; set; }
         public Guid ProductId { get; set; }
 
-        public string FileUrl { get; set; } = default!;
-        public string FileType { get; set; } = default!;  // مثلا "pdf", "exe", "epub"
+        public Guid FileId { get; set; } 
+        [MaxLength(1000)]
+        public string? Description { get; set; } 
 
-        public Product Product { get; set; } = default!;
+        public virtual Product Product { get; set; } = default!;
+        public virtual FileFolder File { get; set; } = default!;
 
 
 

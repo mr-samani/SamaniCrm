@@ -7,6 +7,7 @@ api/api.ts
 api/captcha.service.ts
 api/common.service.ts
 api/file-manager.service.ts
+api/file-serve.service.ts
 api/language.service.ts
 api/maintenance.service.ts
 api/menu.service.ts

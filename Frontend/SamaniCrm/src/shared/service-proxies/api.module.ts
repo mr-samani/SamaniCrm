@@ -6,6 +6,7 @@ import { AccountServiceProxy } from './api/account.service';
 import { CaptchaServiceProxy } from './api/captcha.service';
 import { CommonServiceProxy } from './api/common.service';
 import { FileManagerServiceProxy } from './api/file-manager.service';
+import { FileServeServiceProxy } from './api/file-serve.service';
 import { LanguageServiceProxy } from './api/language.service';
 import { MaintenanceServiceProxy } from './api/maintenance.service';
 import { MenuServiceProxy } from './api/menu.service';
@@ -26,6 +27,7 @@ import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
     CaptchaServiceProxy,
     CommonServiceProxy,
     FileManagerServiceProxy,
+    FileServeServiceProxy,
     LanguageServiceProxy,
     MaintenanceServiceProxy,
     MenuServiceProxy,

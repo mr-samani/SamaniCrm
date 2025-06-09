@@ -35,7 +35,6 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
 
   constructor(
     injector: Injector,
-    private http: HttpClient,
     private dialogRef: MatDialogRef<FileManagerComponent>,
     @Inject(MAT_DIALOG_DATA) _data: IOptions,
     private matDialog: MatDialog,
@@ -137,6 +136,6 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
 
   onSelectFile(ev: FileManagerDto) {
     // todo: validate choosed file
-    this.dialogRef.close(ev.id);
+    this.dialogRef.close(ev);
   }
 }

@@ -36,16 +36,16 @@ export class FileSelectorComponent extends AppComponentBase implements OnInit, C
   @Input() set options(config: IOptions) {
     this._options = { ...this._options, ...config };
   }
-  @Output() change = new EventEmitter<string>();
+  @Output() change = new EventEmitter<FileManagerDto>();
 
   loading = false;
   disabled = false;
   required = false;
-  fileId: string = '';
+  file?: FileManagerDto;
   fileInfo?: FileManagerDto;
-  cdnUrl = AppConst.apiUrl;
+  fileServerUrl = AppConst.fileServerUrl;
 
-  private _onChange = (t: string) => {};
+  private _onChange = (t: FileManagerDto) => {};
   private _onTouched = () => {};
   constructor(
     injector: Injector,
@@ -58,7 +58,7 @@ export class FileSelectorComponent extends AppComponentBase implements OnInit, C
 
   validate(control: AbstractControl): ValidationErrors | null {
     const content = control.value;
-    if (!this.fileId && this.required) {
+    if (!this.file && this.required) {
       return { required: true };
     } else {
       return null;
@@ -66,8 +66,8 @@ export class FileSelectorComponent extends AppComponentBase implements OnInit, C
   }
 
   writeValue(value: any): void {
-    if (value && value !== this.fileId) {
-      this.fileId = value;
+    if (value && value !== this.file) {
+      this.file = value;
       this.getInfo();
     }
   }
@@ -83,17 +83,18 @@ export class FileSelectorComponent extends AppComponentBase implements OnInit, C
 
   openFileManager() {
     this.fileManagerService.openFileManager(this._options).then((result) => {
-      this.fileId = result;
+      this.file = result;
       this.getInfo();
-      this._onChange(this.fileId);
-      this.change.emit(this.fileId);
+      this._onChange(this.file);
+      this.change.emit(this.file);
     });
   }
 
   getInfo() {
-    if (!this.fileId || !this._options.showPreview) {
+    if (!this.file || !this._options.showPreview) {
       return;
     }
+    this.fileInfo = this.file;
     // this.loading = true;
     // this.fileManagerProxy.getInfo(this.fileId)
     //   .pipe(finalize(() => this.loading = false))

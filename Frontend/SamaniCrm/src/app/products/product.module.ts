@@ -29,6 +29,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { HtmlEditorModule } from '@shared/components/html-editor/html-editor.module';
 import { CreateOrEditCurrencyComponent } from './currencies/create-or-edit/create-or-edit.component';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
+import { ProductFilesComponent } from './products/create-or-edit/product-files/product-files.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { FileManagerModule } from '@app/file-manager/file-manager.module';
     CreateOrEditCurrencyComponent,
     ProductPricesComponent,
     ProductImagesComponent,
+    ProductFilesComponent,
   ],
   imports: [
     CommonModule,

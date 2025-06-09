@@ -1,0 +1,24 @@
+<div class="card">
+  <div class="card-header">{{ 'Files' | translate }}</div>
+  <div class="card-body">
+    <file-selector (change)="onSelectFile($event)" [options]="fileSelectorOptions"></file-selector>
+
+    @for (item of files; track $index) {
+      <div class="input-group mt-3">
+        <a class="input-group-text" [href]="fileServerUrl + '/' + item.fileId" target="_blank">
+          <i class="fa fa-eye"></i>
+        </a>
+        <input
+          class="form-control"
+          type="text"
+          name="desc"
+          [(ngModel)]="item.description"
+          maxlength="500"
+          [placeholder]="'Description' | translate" />
+        <button class="input-group-text" (click)="removeFile($event, item)">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+    }
+  </div>
+</div>
