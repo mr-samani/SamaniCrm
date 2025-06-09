@@ -55,7 +55,7 @@ export class TusUploadService extends AppComponentBase {
           // TODO
           let status = 0; // error.originalResponse ? error.originalResponse.getStatus() : 0;
           // Do not retry if the status is a 403.
-          if ([417, 403, 401].indexOf(status) > -1) {
+          if ([417, 403, 401, 400].indexOf(status) > -1) {
             return false;
           }
           return true;
@@ -68,7 +68,7 @@ export class TusUploadService extends AppComponentBase {
         onError: (error) => {
           this.alert.show({
             title: this.l('FileUpload'),
-            text: this.l('Message.ErrorOccurred'),
+            text: this.l('Message.ErrorOccurred') + '\n' + error.message,
           });
           console.error('Failed because: ' + error);
           this.uploading = false;

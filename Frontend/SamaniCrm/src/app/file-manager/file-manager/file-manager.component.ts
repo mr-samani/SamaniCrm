@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { FileManagerDto } from '../models/file-manager-dto';
 import { Apis } from '@shared/apis';
 import {
+  FileUsageEnum,
   ImageCropperDialogComponent,
   ImageCropperDialogData,
 } from '../image-cropper-dialog/image-cropper-dialog.component';
@@ -20,6 +21,7 @@ import {
 import { FileManagetConsts } from '../consts/file-manager-consts';
 import { CreateFolderDialogComponent } from '../components/create-folder/create-folder.component';
 import { SelectIconDialogComponent } from '../components/select-icon/select-icon.component';
+import { TusUploadService } from '../tus-upload.service';
 
 @Component({
   selector: 'app-file-manager',
@@ -55,6 +57,7 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
     @Inject(MAT_DIALOG_DATA) _data: IOptions,
     private matDialog: MatDialog,
     private fileManagerService: FileManagerServiceProxy,
+    public tusUpoadService: TusUploadService,
   ) {
     super(injector);
   }
@@ -129,41 +132,21 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
 
   uploadFile = (fileInput: HTMLInputElement) => {
     let files = fileInput.files;
-    if (!files || files.length === 0) {
+    if (!files || files.length === 0 || !this.openedFolder || !this.openedFolder.id) {
       return;
     }
     let filesToUpload: FileList = files;
-    const formData = new FormData();
-    var parentId = '';
-
-    if (this.openedFolder && this.openedFolder.id) {
-      parentId = this.openedFolder.id;
-      formData.append('parentId', parentId);
-    }
     Array.from(filesToUpload).map((file, index) => {
-      return formData.append('file', file, file.name);
-    });
-
-    this.http.post(AppConst.apiUrl + Apis.uploadFile, formData, { reportProgress: true, observe: 'events' }).subscribe({
-      next: (event) => {
-        if (event.type === HttpEventType.UploadProgress)
-          this.progress = Math.round((100 * event.loaded) / (event.total ?? 0));
-        else if (event.type === HttpEventType.Response) {
-          this.message = 'Upload success.';
-          if (this.openedFolder) {
-            this.openFolder(this.openedFolder);
-          }
-          setTimeout(() => {
-            this.progress = 0;
-            this.message = '';
-          }, 1000);
-          // this.onUploadFinished.emit(event.body);
-        }
-      },
-      error: (err: HttpErrorResponse) => {
-        console.log(err);
-        this.progress = 0;
-      },
+      this.tusUpoadService
+        .uploadFile(file, '', FileUsageEnum.FILE_MANAGER, '', this.openedFolder?.id)
+        .then((result) => {
+          // this.progress = Math.round((100 * event.loaded) / (event.total ?? 0));
+          this.notify.success(this.l('Message.UploadedSuccessFully'));
+          this.reload();
+        })
+        .catch((error) => {
+          this.notify.error(this.l('Message.AnErrorOccurred'));
+        });
     });
   };
 
