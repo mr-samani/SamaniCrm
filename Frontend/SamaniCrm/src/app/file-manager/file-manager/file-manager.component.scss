@@ -12,6 +12,7 @@
   direction: ltr;
   text-align: left;
   width: 80vw;
+  height: 90vh;
   .explorer-header {
     border-bottom: 1px darkgrey solid;
     display: flex;
@@ -39,48 +40,6 @@
     }
     .folder-view {
       flex: auto;
-
-      .file-list {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        padding: 10px;
-        .file {
-          border: 1px #f1f1f1 solid;
-          width: 100px;
-          text-align: center;
-          .icon-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            img {
-              max-width: 100%;
-              max-height: 100%;
-            }
-          }
-          .file-name {
-            word-break: break-word;
-          }
-        }
-      }
-    }
-
-    .file-info {
-      border-left: 1px #d1d1d1 solid;
-      padding: 15px;
-      max-width: 250px;
-      .preview {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 150px;
-        min-width: 200px;
-        max-width: 200px;
-        border-bottom: 1px #d1d1d1 solid;
-      }
-      table {
-        font-size: 10px;
-      }
     }
   }
 }
@@ -90,8 +49,6 @@
     flex: auto;
     border: none;
     padding: 5px;
-  }
-  .button-search {
   }
 }
 .uploader-progressbar {

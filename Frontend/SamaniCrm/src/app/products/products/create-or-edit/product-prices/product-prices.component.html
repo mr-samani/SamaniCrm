@@ -45,7 +45,7 @@
             </span>
           </td>
           <td>
-            <div class="input-group">
+            <div class="">
               <mat-select class="form-control" formControlName="type" [placeholder]="'Type' | translate">
                 <mat-option [value]="item" *ngFor="let item of PriceTypeEnum | enumToArray">
                   {{ 'PriceTypeEnum_' + item | translate }}
@@ -66,8 +66,8 @@
                 [max]="form.get('endDate')?.value"
                 readonly
                 (click)="dpS.open()" />
-              <mat-datepicker-toggle class="input-group-text" [for]="dpS"></mat-datepicker-toggle>
               <mat-datepicker #dpS></mat-datepicker>
+              <mat-datepicker-toggle class="input-group-text py-0 px-1" [for]="dpS"></mat-datepicker-toggle>
             </div>
             <span class="text-danger" *ngIf="form.get('startDate')?.hasError('required')">
               {{ 'IsRequired' | translate: { value: ('StartDate' | translate) } }}
@@ -94,8 +94,8 @@
                 [min]="form.get('startDate')?.value"
                 readonly
                 (click)="dpE.open()" />
-              <mat-datepicker-toggle class="input-group-text" [for]="dpE"></mat-datepicker-toggle>
               <mat-datepicker #dpE></mat-datepicker>
+              <mat-datepicker-toggle class="input-group-text py-0 px-1" [for]="dpE"></mat-datepicker-toggle>
             </div>
             <span class="text-danger" *ngIf="form.get('endDate')?.hasError('required')">
               {{ 'IsRequired' | translate: { value: ('EndDate' | translate) } }}

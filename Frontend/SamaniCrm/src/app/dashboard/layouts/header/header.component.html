@@ -123,7 +123,7 @@
       <!-- language -->
       <button mat-icon-button [matMenuTriggerFor]="langMnu" class="pt-2">
         <!-- <i class="flag" [ngClass]="currentLang"></i> -->
-        <img [src]="'images/flags/' + currentLang + '.png'" />
+        <img [src]="baseUrl+'/images/flags/' + currentLang + '.png'" />
       </button>
       <mat-menu #langMnu="matMenu">
         <button
@@ -133,7 +133,7 @@
           class="language-menu">
           <div class="d-flex align-items-center g-5">
             <!-- <i class="flag" [ngClass]="lang.code"></i> -->
-            <img [src]="'images/flags/' + lang.flag + '.png'" />
+            <img [src]="baseUrl+'/images/flags/' + lang.flag + '.png'" />
             <span>{{ lang.name }}</span>
           </div>
         </button>

@@ -7,6 +7,7 @@ export class AppConst {
   static defaultLang = '';
   static isRtl: boolean;
   static apiUrl = '';
+  static fileServerUrl = '';
   static baseUrl = '';
   static publicSiteUrl = '';
   static tinyMceApiKey = '';

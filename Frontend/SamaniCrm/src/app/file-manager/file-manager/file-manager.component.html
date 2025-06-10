@@ -1,23 +1,26 @@
 <div class="explorer">
   <div class="explorer-header">
-    <button (click)="createFolder()">
-      <i class="fa fa-folder"></i>
-      {{ 'NewFolder' | translate }}
-    </button>
-    <input type="file" #file placeholder="Choose file" (change)="uploadFile(file)" style="display: none" />
-    <button (click)="file.click()">
-      <i class="fa fa-upload"></i>
-      {{ 'Upload' | translate }}
-    </button>
-    <button (click)="uploadImage()">
-      <i class="fa fa-upload"></i>
-      {{ 'UploadImage' | translate }}
-    </button>
+    @if (openedFolder) {
+      <button (click)="createFolder()">
+        <i class="fa fa-folder"></i>
+        {{ 'NewFolder' | translate }}
+      </button>
+      <input type="file" #file placeholder="Choose file" (change)="uploadFile(file)" style="display: none" />
+      <button (click)="file.click()">
+        <i class="fa fa-upload"></i>
+        {{ 'Upload' | translate }}
+      </button>
+      <button (click)="uploadImage()">
+        <i class="fa fa-upload"></i>
+        {{ 'UploadImage' | translate }}
+      </button>
+    }
+
     <button [disabled]="true">
       <i class="fa fa-sort"></i>
       {{ 'SortBy' | translate }}
     </button>
-    <button (click)="reload()">
+    <button (click)="reload(true)">
       <i class="fa fa-refresh"></i>
       {{ 'Refresh' | translate }}
     </button>
@@ -49,73 +52,15 @@
         {{ 'Message.notFoundResult' | translate }}
       </p>
       <mat-spinner color="primary" *ngIf="loadingFolders" diameter="25"></mat-spinner>
-      <tree-folder [folders]="folders" (openFolder)="openFolder($event)"></tree-folder>
+      <tree-folder [folders]="folders" (openFolder)="openedFolder = $event"></tree-folder>
     </div>
     <div class="folder-view">
       <address-bar
         [folderId]="openedFolder?.id"
         [folders]="folders"
-        (selectionChange)="openFolder($event)"></address-bar>
+        (selectionChange)="openedFolder = $event"></address-bar>
 
-      <div class="file-list">
-        <div *ngIf="loading">loading...</div>
-        <p class="text-center my-5 py-5 w-100" *ngIf="fileList.length === 0 && loading === false">
-          {{ 'Message.NotFoundResult' | translate }}
-        </p>
-        <div class="file" *ngFor="let item of fileList" (click)="selectFile(item)" (dblclick)="dblClickFile(item)">
-          <div class="icon-container">
-            <img [src]="item.icon" />
-          </div>
-          <span class="file-name">{{ item.filename }}</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="file-info">
-      <ng-container *ngIf="selectedFileInfo">
-        <div class="preview">
-          <img *ngIf="imageExtensions.indexOf(selectedFileInfo.extension ?? '') === -1" [src]="selectedFileInfo.icon" />
-          <img
-            *ngIf="imageExtensions.indexOf(selectedFileInfo.extension ?? '') > -1"
-            [src]="cdnUrl + selectedFileInfo.id" />
-        </div>
-        <button (click)="selectIcon()" *ngIf="selectedFileInfo.isDirectory">
-          {{ 'ChangeIcon' | translate }}
-        </button>
-        <button (click)="delete()" mat-icon-button *ngIf="selectedFileInfo.id">
-          <i class="fa fa-trash"></i>
-        </button>
-        <table>
-          <tr>
-            <td colspan="2">{{ selectedFileInfo.filename }}</td>
-          </tr>
-          <tr>
-            <td>{{ 'Extension' | translate }}:</td>
-            <td>{{ selectedFileInfo.extension }}</td>
-          </tr>
-          <tr>
-            <td>{{ 'Size' | translate }}:</td>
-            <td>{{ selectedFileInfo.size | fileSize }}</td>
-          </tr>
-          <tr>
-            <td>{{ 'CreationTime' | translate }}:</td>
-            <td>{{ selectedFileInfo.creationTime | luxonFormat: 'F' }}</td>
-          </tr>
-          <tr>
-            <td>{{ 'LastModifiedTime' | translate }}:</td>
-            <td>{{ selectedFileInfo.lastModifiedTime | luxonFormat: 'F' }}</td>
-          </tr>
-        </table>
-        <button
-          class="w-100"
-          mat-raised-button
-          color="primary"
-          (click)="chooseThisFile()"
-          *ngIf="!selectedFileInfo.isDirectory">
-          <i class="fa fa-check"></i>
-          <span>{{ 'ChooseThisFile' }}</span>
-        </button>
-      </ng-container>
+      <file-list #fileList (onSelectFile)="onSelectFile($event)" [(openFolder)]="openedFolder"></file-list>
     </div>
   </div>
 </div>

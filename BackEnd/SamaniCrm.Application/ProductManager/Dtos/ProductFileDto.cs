@@ -7,7 +7,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
     {
         public Guid? Id { get; set; }
         public Guid? ProductId { get; set; }
-        public string FileUrl { get; set; } = string.Empty;
-        public string FileType { get; set; } = string.Empty;
+        public Guid FileId { get; set; }
+        public string? Description { get; set; } = string.Empty;
     }
 }

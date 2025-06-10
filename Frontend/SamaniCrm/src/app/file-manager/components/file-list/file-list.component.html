@@ -1,0 +1,65 @@
+<div class="file-list">
+  <mat-spinner *ngIf="loading" color="primary" diameter="25"></mat-spinner>
+  <div
+    class="file"
+    *ngFor="let item of fileList"
+    (click)="selectFile(item)"
+    (dblclick)="dblClickFile(item)"
+    [class.active]="item.id == selectedFileInfo?.id">
+    <div class="icon-container">
+      @if (item.icon) {
+        <img [src]="baseUrl + '/' + item.icon" />
+      } @else {
+        <img [src]="item.isFolder ? defaultFolderIcon : defaultFileIcon" />
+      }
+    </div>
+    <span class="file-name">{{ item.name }}</span>
+  </div>
+</div>
+<!-- --------------------------------------------------------------------- -->
+<div class="file-info" *ngIf="selectedFileInfo">
+  <div class="preview">
+    @if (selectedFileInfo.isImage) {
+      <img [src]="fileServerUrl + '/' + selectedFileInfo.id" />
+    } @else if (selectedFileInfo.isVideo) {
+      <video>
+        <source [src]="fileServerUrl + '/' + selectedFileInfo.id" />
+      </video>
+    } @else if (selectedFileInfo.icon) {
+      <img [src]="baseUrl + '/' + selectedFileInfo.icon" />
+    } @else {
+      <img [src]="selectedFileInfo.isFolder ? defaultFolderIcon : defaultFileIcon" />
+    }
+  </div>
+  <button mat-stroked-button color="primary" (click)="selectIcon()" *ngIf="selectedFileInfo.isFolder">
+    {{ 'ChangeIcon' | translate }}
+  </button>
+  <button (click)="deleteFileOrFolder()" mat-icon-button *ngIf="selectedFileInfo.id">
+    <i class="fa fa-trash"></i>
+  </button>
+  <table>
+    <tr>
+      <td colspan="2">{{ selectedFileInfo.name }}</td>
+    </tr>
+    <tr>
+      <td>{{ 'Extension' | translate }}:</td>
+      <td>{{ selectedFileInfo.extension }}</td>
+    </tr>
+    <tr>
+      <td>{{ 'Size' | translate }}:</td>
+      <td>{{ selectedFileInfo.byteSize | fileSize }}</td>
+    </tr>
+    <tr>
+      <td>{{ 'CreationTime' | translate }}:</td>
+      <td>{{ selectedFileInfo.creationTime | luxonFormat: 'F' }}</td>
+    </tr>
+    <tr>
+      <td>{{ 'LastModifiedTime' | translate }}:</td>
+      <td>{{ selectedFileInfo.lastModifiedTime | luxonFormat: 'F' }}</td>
+    </tr>
+  </table>
+  <button class="w-100" mat-raised-button color="primary" (click)="chooseThisFile()" *ngIf="!selectedFileInfo.isFolder">
+    <i class="fa fa-check"></i>
+    <span>{{ 'ChooseThisFile' }}</span>
+  </button>
+</div>

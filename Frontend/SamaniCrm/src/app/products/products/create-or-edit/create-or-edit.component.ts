@@ -29,8 +29,8 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
   translations?: ProductTranslationDto[];
   id: string;
   attributeValues?: Array<ProductAttributeValueDto>;
-  images?: Array<ProductImageDto>;
-  files?: Array<ProductFileDto>;
+  images: Array<ProductImageDto> = [];
+  files: Array<ProductFileDto> = [];
   prices: Array<ProductPriceDto> = [];
   tagList: string[] = [];
   constructor(

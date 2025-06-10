@@ -15,7 +15,7 @@ export class HeaderComponent extends AppComponentBase {
   user?: UserDTO;
   currentLang = AppConst.currentLanguage;
   languages = AppConst.languageList;
-  backEndUrl = AppConst.apiUrl;
+  baseUrl = AppConst.apiUrl;
   AppConst = AppConst;
   constructor(
     injector: Injector,

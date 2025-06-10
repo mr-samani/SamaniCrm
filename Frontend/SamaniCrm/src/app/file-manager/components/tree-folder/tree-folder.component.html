@@ -1,0 +1,23 @@
+<div class="tree" [class.close-child]="!isOpen">
+  <ul>
+    <ng-container *ngFor="let item of folders; let i = index">
+      <li class="node" (click)="openCloseFolder(item)">
+        <span
+          class="tree-icon"
+          [class.isOpen]="item.isOpen"
+          [class.no-child]="!item.children || item.children.length == 0"></span>
+        @if (item.icon) {
+          <img [src]="baseUrl + '/' + item.icon" class="folder-icon" />
+        } @else {
+          <img [src]="item.isOpen ? defaultFolderIcon : defaultOpenFolderIcon" class="folder-icon" />
+        }
+        <span>{{ item.name }}</span>
+      </li>
+      <tree-folder
+        *ngIf="item.children"
+        [isOpen]="item.isOpen"
+        [folders]="item.children"
+        (openFolder)="onChildOpenFolder($event)"></tree-folder>
+    </ng-container>
+  </ul>
+</div>

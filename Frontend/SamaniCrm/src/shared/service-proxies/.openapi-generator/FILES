@@ -6,6 +6,8 @@ api/account.service.ts
 api/api.ts
 api/captcha.service.ts
 api/common.service.ts
+api/file-manager.service.ts
+api/file-serve.service.ts
 api/language.service.ts
 api/maintenance.service.ts
 api/menu.service.ts
@@ -28,6 +30,7 @@ model/cache-entry-dto-list-api-response.ts
 model/cache-entry-dto.ts
 model/captcha-dto.ts
 model/change-active-menu-command.ts
+model/create-folder-command.ts
 model/create-or-edit-language-command.ts
 model/create-or-edit-localize-key-command.ts
 model/create-or-edit-menu-command.ts
@@ -41,6 +44,7 @@ model/create-user-command.ts
 model/currency-dto-list-api-response.ts
 model/currency-dto.ts
 model/delete-currency-command.ts
+model/delete-file-or-folder-command.ts
 model/delete-language-command.ts
 model/delete-localize-key-command.ts
 model/delete-menu-command.ts
@@ -54,6 +58,8 @@ model/edit-role-permissions-command.ts
 model/edit-user-command.ts
 model/export-all-localization-value-dto-list-api-response.ts
 model/export-all-localization-value-dto.ts
+model/file-node-dto-list-api-response.ts
+model/file-node-dto.ts
 model/get-all-notification-query.ts
 model/get-categories-for-admin-query.ts
 model/get-filtered-pages-query.ts
@@ -143,9 +149,11 @@ model/role-permissions-dto.ts
 model/security-setting-dto-api-response.ts
 model/security-setting-dto.ts
 model/send-notification-command.ts
+model/set-folder-icon-command.ts
 model/string-api-response.ts
 model/string-auto-complete-dto-list-api-response.ts
 model/string-auto-complete-dto.ts
+model/string-list-api-response.ts
 model/token-response-dto-api-response.ts
 model/token-response-dto.ts
 model/unit-api-response.ts

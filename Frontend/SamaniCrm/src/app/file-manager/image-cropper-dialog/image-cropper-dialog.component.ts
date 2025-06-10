@@ -5,6 +5,7 @@ import { TusUploadService } from '../tus-upload.service';
 import { AppComponentBase } from '@app/app-component-base';
 
 export enum FileUsageEnum {
+  FILE_MANAGER = 0,
   USER_AVATAR = 1,
   PRODUCT_CATEGORY = 2,
   HTML_EDITOR = 3,
@@ -124,10 +125,11 @@ export class ImageCropperDialogComponent extends AppComponentBase implements OnI
             this.tusUpoadService
               .uploadFile(compressedResult, '', this.usage, this.additionalId, this.parentId)
               .then((result) => {
+                this.notify.success(this.l('Message.UploadedSuccessFully'));
                 this.matDialogRef.close(result);
               })
               .catch((error) => {
-                this.notify.error(this.l('AnErrorOccurred'));
+                this.notify.error(this.l('Message.AnErrorOccurred'));
               });
           } else {
             //convert file to base 64

@@ -12,7 +12,7 @@ namespace SamaniCrm.Infrastructure.Cache
 {
     public static class CacheServiceFactory
     {
-        public static void AddCacheService(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddCacheService(this IServiceCollection services, IConfiguration config)
         {
             var settings = config.GetSection("CacheSettings").Get<CacheSettings>();
 
@@ -51,6 +51,7 @@ namespace SamaniCrm.Infrastructure.Cache
                     }
                     break;
             }
+            return services;
         }
     }
 

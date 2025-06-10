@@ -15,16 +15,16 @@
 export interface IProductFileDto {
   id?: string;
   productId?: string;
-  fileUrl?: string;
-  fileType?: string;
+  fileId?: string;
+  description?: string;
 }
 
 /** Class for ProductFileDto */
 export class ProductFileDto implements IProductFileDto {
   id?: string;
   productId?: string;
-  fileUrl?: string;
-  fileType?: string;
+  fileId?: string;
+  description?: string;
 
   constructor(data?: IProductFileDto) {
     if (data) {
@@ -39,8 +39,8 @@ init(data?: any) {
   if (data) {
     this.id = data["id"];
     this.productId = data["productId"];
-    this.fileUrl = data["fileUrl"];
-    this.fileType = data["fileType"];
+    this.fileId = data["fileId"];
+    this.description = data["description"];
   }
 }
 

@@ -61,15 +61,15 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
                 Images = entity.Images.Select(img => new ProductImageDto
                 {
                     Id = img.Id,
-                    Url = img.Url,
+                    FileId = img.FileId,
                     IsMain = img.IsMain,
                     SortOrder = img.SortOrder
                 }).ToList(),
                 Files = entity.Files.Select(file => new ProductFileDto
                 {
                     Id = file.Id,
-                    FileUrl = file.FileUrl,
-                    FileType = file.FileType
+                    FileId = file.FileId,
+                    Description = file.Description
                 }).ToList(),
                 Prices = entity.Prices.Select(price => new ProductPriceDto
                 {

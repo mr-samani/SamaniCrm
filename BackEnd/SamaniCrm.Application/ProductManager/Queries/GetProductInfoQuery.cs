@@ -71,7 +71,7 @@ namespace SamaniCrm.Application.ProductManager.Queries
                 Images = entity.Images?.Select(img => new ProductImageDto
                 {
                     Id = img.Id,
-                    Url = img.Url,
+                    FileId = img.FileId,
                     IsMain = img.IsMain,
                     SortOrder = img.SortOrder
                 }).ToList() ?? new(),
@@ -79,8 +79,8 @@ namespace SamaniCrm.Application.ProductManager.Queries
                 Files = entity.Files?.Select(file => new ProductFileDto
                 {
                     Id = file.Id,
-                    FileUrl = file.FileUrl,
-                    FileType = file.FileType
+                    FileId = file.FileId,
+                    Description = file.Description
                 }).ToList() ?? new(),
 
                 Price = entity.Prices?.Where(w => w.EndDate >= DateTime.Now).Select(p => p.Price).FirstOrDefault() ?? 0,

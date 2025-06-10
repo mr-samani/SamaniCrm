@@ -11,6 +11,7 @@ import {
 import { finalize } from 'rxjs/operators';
 import { LocalizationKeysComponent } from '../localization-keys/localization-keys.component';
 import { CreateOrEditLanguageComponent } from '../create-or-edit-language/create-or-edit-language.component';
+import { AppConst } from '@shared/app-const';
 
 export class LanguageDTOExtended extends LanguageDTO {
   loading?: boolean;
@@ -57,7 +58,7 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
       .subscribe((response) => {
         this.list = response.data ?? [];
         this.list.map((x) => {
-          x.flag = 'images/flags/' + x.flag + '.png';
+          x.flag =AppConst.apiUrl +'/images/flags/' + x.flag + '.png';
           x.direction = x.isRtl ? 'RTL' : 'LTR';
         });
       });

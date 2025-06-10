@@ -43,6 +43,7 @@ namespace SamaniCrm.Application.Common.Interfaces
         public DbSet<Discount> Discount { get; set; }
 
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<FileFolder> FileFolders { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

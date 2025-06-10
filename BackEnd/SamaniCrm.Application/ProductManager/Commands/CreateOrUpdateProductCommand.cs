@@ -105,12 +105,12 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             // Handle Images
             if (request.Images != null)
             {
-                var toRemove = entity.Images.Where(img => !(request.Images.Any(rimg => rimg.Url == img.Url))).ToList();
+                var toRemove = entity.Images.Where(img => !(request.Images.Any(rimg => rimg.FileId == img.FileId))).ToList();
                 foreach (var img in toRemove)
                     entity.Images.Remove(img);
                 foreach (var img in request.Images)
                 {
-                    var existingImage = entity.Images.FirstOrDefault(x => x.Url == img.Url);
+                    var existingImage = entity.Images.FirstOrDefault(x => x.FileId == img.FileId);
                     if (existingImage != null)
                     {
                         existingImage.IsMain = img.IsMain;
@@ -120,7 +120,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                     {
                         entity.Images.Add(new ProductImage
                         {
-                            Url = img.Url,
+                            FileId = img.FileId,
                             IsMain = img.IsMain,
                             SortOrder = img.SortOrder
                         });
@@ -130,22 +130,22 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             // Handle Files
             if (request.Files != null)
             {
-                var toRemove = entity.Files.Where(f => !(request.Files.Any(rf => rf.FileUrl == f.FileUrl))).ToList();
+                var toRemove = entity.Files.Where(f => !(request.Files.Any(rf => rf.FileId == f.FileId))).ToList();
                 foreach (var f in toRemove)
                     entity.Files.Remove(f);
                 foreach (var file in request.Files)
                 {
-                    var existingFile = entity.Files.FirstOrDefault(x => x.FileUrl == file.FileUrl);
+                    var existingFile = entity.Files.FirstOrDefault(x => x.FileId == file.FileId);
                     if (existingFile != null)
                     {
-                        existingFile.FileType = file.FileType;
+                        existingFile.Description = file.Description;
                     }
                     else
                     {
                         entity.Files.Add(new ProductFile
                         {
-                            FileUrl = file.FileUrl,
-                            FileType = file.FileType
+                            FileId = file.FileId,
+                            Description = file.Description
                         });
                     }
                 }

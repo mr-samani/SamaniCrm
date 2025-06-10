@@ -22,6 +22,7 @@ using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.BackgroundServices;
 using SamaniCrm.Infrastructure.Captcha;
 using SamaniCrm.Infrastructure.Email;
+using SamaniCrm.Infrastructure.FileManager;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Localizer;
 using SamaniCrm.Infrastructure.Services;
@@ -117,7 +118,8 @@ public static class ServiceCollectionExtensions
             {
                 policy.WithOrigins("https://localhost:44342", "http://localhost:5753", "https://localhost:5753")
                       .AllowAnyHeader()
-                      .AllowAnyMethod();
+                      .AllowAnyMethod()
+                      .WithExposedHeaders("Location", "Upload-Offset", "Tus-Resumable", "Upload-Length", "Fileid");
             });
         });
 
@@ -263,6 +265,7 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<INotificationHubService, NotificationHubService>();
         services.AddScoped<INotificationService, NotificationService>();
+        services.AddScoped<FileDirectoryInitializer>();
 
 
 

@@ -1,18 +1,19 @@
-import { HttpClient, HttpErrorResponse, HttpEventType } from '@angular/common/http';
-import { Component, Inject, Injector, OnDestroy, OnInit } from '@angular/core';
-import { Subject, catchError, debounceTime, distinctUntilChanged, finalize, map, of, switchMap } from 'rxjs';
-import { SelectIconDialogComponent } from '../select-icon/select-icon.component';
-import { CreateFolderDialogComponent } from '../create-folder/create-folder.component';
+import { HttpClient } from '@angular/common/http';
+import { Component, Inject, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { finalize } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FileManagerDto } from '../models/file-manager-dto';
-import { Apis } from '@shared/apis';
 import {
+  FileUsageEnum,
   ImageCropperDialogComponent,
   ImageCropperDialogData,
 } from '../image-cropper-dialog/image-cropper-dialog.component';
 import { AppComponentBase } from '@app/app-component-base';
-import { AppConst } from '@shared/app-const';
 import { IOptions } from '../options.interface';
+import { FileManagerServiceProxy } from '@shared/service-proxies';
+import { CreateFolderDialogComponent } from '../components/create-folder/create-folder.component';
+import { TusUploadService } from '../tus-upload.service';
+import { FileListComponent } from '../components/file-list/file-list.component';
 
 @Component({
   selector: 'app-file-manager',
@@ -25,112 +26,83 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
   message = '';
   loadingFolders = true;
   folders: FileManagerDto[] = [];
-  fileList: FileManagerDto[] = [];
   loading = false;
 
   /** پوشه فعال */
   openedFolder?: FileManagerDto;
-  /** پوشه انتخاب شده برای نمایش جزئیات در سمت راست */
-  selectedFileInfo?: FileManagerDto;
 
-  imageExtensions = ['.jpg', '.png', '.jpeg', '.tif', '.gif', '.bmp'];
-  cdnUrl = AppConst.apiUrl;
+  @ViewChild('fileList', { static: false }) _fileList?: FileListComponent;
 
-  getDetailsRequest$ = new Subject<{ id: string }>();
   constructor(
     injector: Injector,
-    private http: HttpClient,
     private dialogRef: MatDialogRef<FileManagerComponent>,
     @Inject(MAT_DIALOG_DATA) _data: IOptions,
     private matDialog: MatDialog,
+    private fileManagerService: FileManagerServiceProxy,
+    public tusUpoadService: TusUploadService,
   ) {
     super(injector);
   }
 
   ngOnInit(): void {
     this.getTreeFolders();
-    this.initGetFolderDetails();
   }
 
-  ngOnDestroy(): void {
-    if (this.getDetailsRequest$) {
-      this.getDetailsRequest$.unsubscribe();
-    }
-  }
+  ngOnDestroy(): void {}
 
   getTreeFolders() {
-    // this.loadingFolders = true;
-    // this.dataService
-    //   .get<any, FileManagerDto[]>(Apis.getFolders, {})
-    //   .pipe(finalize(() => (this.loadingFolders = false)))
-    //   .subscribe((result) => {
-    //     this.folders = result.result ?? [];
-    //   });
+    this.loadingFolders = true;
+    this.fileManagerService
+      .getTreeFolders()
+      .pipe(finalize(() => (this.loadingFolders = false)))
+      .subscribe((result) => {
+        this.folders = result.data ?? ([] as any);
+        if (this.openedFolder && this.openedFolder.id) {
+          this.tryOpenFolderInTree(this.folders, this.openedFolder.id);
+        }
+      });
   }
 
-  private initGetFolderDetails() {
-    // this.getDetailsRequest$
-    //   .pipe(
-    //     debounceTime(500),
-    //     distinctUntilChanged(),
-    //     switchMap((input) => {
-    //       this.loading = true;
-    //       this.fileList = [];
-    //       return this.dataService.get<any, FileManagerDto[]>(Apis.getFileDetails, input).pipe(
-    //         catchError((err, caught) => {
-    //           return of(new ApiResult<FileManagerDto[]>());
-    //         }),
-    //         map((response) => response.data ?? []),
-    //         finalize(() => (this.loading = false)),
-    //       );
-    //     }),
-    //   )
-    //   .subscribe((result) => {
-    //     this.fileList = result ?? [];
-    //   });
+  tryOpenFolderInTree(tree: FileManagerDto[], id: string): boolean {
+    for (const f of tree) {
+      if (f.id === id) {
+        f.isOpen = true;
+        return true;
+      }
+
+      if (f.children && this.tryOpenFolderInTree(f.children, id)) {
+        f.isOpen = true;
+        return true;
+      }
+    }
+    return false;
   }
 
-  reload() {
+  reload(reloadFolderView = false) {
     this.getTreeFolders();
-    if (this.openedFolder) {
-      this.openFolder(this.openedFolder);
+    if (reloadFolderView && this._fileList) {
+      this._fileList.reload();
     }
   }
 
   uploadFile = (fileInput: HTMLInputElement) => {
     let files = fileInput.files;
-    if (!files || files.length === 0) {
+    if (!files || files.length === 0 || !this.openedFolder || !this.openedFolder.id) {
       return;
     }
     let filesToUpload: FileList = files;
-    const formData = new FormData();
-    var parentId = '';
-
-    if (this.openedFolder && this.openedFolder.id) {
-      parentId = this.openedFolder.id;
-      formData.append('parentId', parentId);
-    }
+    let parentId = this.openedFolder.isFolder ? this.openedFolder.id : this.openedFolder.parentId;
     Array.from(filesToUpload).map((file, index) => {
-      return formData.append('file', file, file.name);
-    });
-
-    this.http.post(AppConst.apiUrl + Apis.uploadFile, formData, { reportProgress: true, observe: 'events' }).subscribe({
-      next: (event) => {
-        if (event.type === HttpEventType.UploadProgress)
-          this.progress = Math.round((100 * event.loaded) / (event.total ?? 0));
-        else if (event.type === HttpEventType.Response) {
-          this.message = 'Upload success.';
-          if (this.openedFolder) {
-            this.openFolder(this.openedFolder);
-          }
-          setTimeout(() => {
-            this.progress = 0;
-            this.message = '';
-          }, 1000);
-          // this.onUploadFinished.emit(event.body);
-        }
-      },
-      error: (err: HttpErrorResponse) => console.log(err),
+      this.tusUpoadService
+        .uploadFile(file, '', FileUsageEnum.FILE_MANAGER, '', parentId)
+        .then((result) => {
+          // this.progress = Math.round((100 * event.loaded) / (event.total ?? 0));
+          this.notify.success(this.l('Message.UploadedSuccessFully'));
+          this.reload();
+        })
+        .catch((error) => {
+          this.notify.error(this.l('Message.AnErrorOccurred'));
+        });
     });
   };
 
@@ -143,41 +115,8 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
       })
       .afterClosed()
       .subscribe((result) => {
-        this.reload();
+        this.reload(true);
       });
-  }
-
-  openFolder(item: FileManagerDto) {
-    this.openedFolder = item;
-    this.selectedFileInfo = item;
-    this.getDetailsRequest$.next({ id: item.id });
-  }
-
-  selectIcon() {
-    if (!this.selectedFileInfo || !this.selectedFileInfo.isDirectory) {
-      return;
-    }
-    this.matDialog
-      .open(SelectIconDialogComponent, {
-        data: this.selectedFileInfo,
-      })
-      .afterClosed()
-      .subscribe((result) => {
-        if (result) {
-          this.selectedFileInfo = result;
-          this.reload();
-        }
-      });
-  }
-
-  selectFile(item: FileManagerDto) {
-    this.selectedFileInfo = item;
-  }
-
-  dblClickFile(item: FileManagerDto) {
-    if (item.isDirectory) {
-      this.openFolder(item);
-    }
   }
 
   createFolder() {
@@ -190,43 +129,13 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.reload();
+          this.reload(true);
         }
       });
   }
 
-  delete() {
-    if (!this.selectedFileInfo) {
-      return;
-    }
-    this.alert
-      .show({
-        title: this.l('Delete'),
-        text: this.l('AreYouSureDelete'),
-        showConfirmButton: true,
-        showCancelButton: true,
-        confirmButtonText: this.l('Yes'),
-        cancelButtonText: this.l('Cancel'),
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          // this.showMainLoading();
-          // this.fileManagerProxy.delete(this.selectedFileInfo?.id)
-          //   .pipe(finalize(() => this.hideMainLoading()))
-          //   .subscribe(response => {
-          //     if (response.data == true) {
-          //       this.notify.success(this.l('DeleteSuccessfully'));
-          //       this.reload();
-          //     }
-          //   });
-        }
-      });
-  }
-
-  chooseThisFile() {
-    if (this.selectedFileInfo) {
-      // todo: validate choosed file
-      this.dialogRef.close(this.selectedFileInfo.id);
-    }
+  onSelectFile(ev: FileManagerDto) {
+    // todo: validate choosed file
+    this.dialogRef.close(ev);
   }
 }

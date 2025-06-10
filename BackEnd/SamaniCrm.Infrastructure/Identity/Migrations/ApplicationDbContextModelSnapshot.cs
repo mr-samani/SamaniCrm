@@ -125,6 +125,78 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.FileFolder", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("ByteSize")
+                        .HasPrecision(20, 10)
+                        .HasColumnType("decimal(20,10)");
+
+                    b.Property<string>("ContentType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Extension")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFolder")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsStatic")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RelativePath")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("Thumbnails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("FileFolders", "file");
+                });
+
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Language", b =>
                 {
                     b.Property<string>("Culture")
@@ -375,7 +447,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<bool>("Read")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("RecieverUserId")
+                    b.Property<Guid>("RecieverUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("SenderUserId")
@@ -968,13 +1040,12 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FileType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
-                    b.Property<string>("FileUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -989,6 +1060,11 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("FileId");
+
+                    b.HasIndex("FileId")
+                        .IsUnique();
 
                     b.HasIndex("ProductId");
 
@@ -1013,6 +1089,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("FileId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -1031,11 +1110,12 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<int>("SortOrder")
                         .HasColumnType("int");
 
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("FileId");
+
+                    b.HasIndex("FileId")
+                        .IsUnique();
 
                     b.HasIndex("ProductId");
 
@@ -1508,6 +1588,16 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.FileFolder", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.FileFolder", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Parent");
+                });
+
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Localization", b =>
                 {
                     b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
@@ -1716,22 +1806,38 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductFile", b =>
                 {
+                    b.HasOne("SamaniCrm.Domain.Entities.FileFolder", "File")
+                        .WithMany()
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.Product", "Product")
                         .WithMany("Files")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("File");
+
                     b.Navigation("Product");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductImage", b =>
                 {
+                    b.HasOne("SamaniCrm.Domain.Entities.FileFolder", "File")
+                        .WithMany()
+                        .HasForeignKey("FileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.Product", "Product")
                         .WithMany("Images")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("File");
 
                     b.Navigation("Product");
                 });
@@ -1813,6 +1919,11 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .IsRequired();
 
                     b.Navigation("Permission");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.FileFolder", b =>
+                {
+                    b.Navigation("Children");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Language", b =>

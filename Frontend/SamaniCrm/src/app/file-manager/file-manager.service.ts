@@ -6,6 +6,7 @@ import {
 } from './image-cropper-dialog/image-cropper-dialog.component';
 import { IOptions } from './options.interface';
 import { FileManagerComponent } from './file-manager/file-manager.component';
+import { FileManagerDto } from './models/file-manager-dto';
 
 @Injectable()
 export class FileManagerService {
@@ -34,8 +35,8 @@ export class FileManagerService {
    *
    * @returns Guid file
    */
-  public openFileManager(options?: IOptions): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
+  public openFileManager(options?: IOptions): Promise<FileManagerDto> {
+    return new Promise<FileManagerDto>((resolve, reject) => {
       this.matDialog
         .open(FileManagerComponent, {
           data: options,

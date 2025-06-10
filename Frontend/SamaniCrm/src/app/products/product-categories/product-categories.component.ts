@@ -188,7 +188,6 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
       .pipe(finalize(() => this.hideMainLoading()))
       .subscribe((result) => {
         const data = result.data ?? {};
-        debugger;
         this.downloadService.generateDownloadJson(data, 'category_' + AppConst.currentLanguage + '.json');
       });
   }
