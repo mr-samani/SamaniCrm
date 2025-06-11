@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --open --port=5754 --ssl",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:SamaniPublicSite": "node dist/SamaniPublicSite/server/server.mjs"
+    "serve:ssr:SamaniPublicSite": "node dist/SamaniPublicSite/server/server.mjs",
+    "generate-api": "set JAVA_OPTS=-Djavax.net.ssl.trustStoreType=Windows-ROOT -Dlog.level=error&& openapi-generator-cli generate -g typescript-angular -o src/shared/service-proxies -c open-api-config.json --skip-validate-spec"
   },
   "private": true,
   "dependencies": {
@@ -27,6 +28,7 @@
     "@angular/build": "^20.0.1",
     "@angular/cli": "^20.0.1",
     "@angular/compiler-cli": "^20.0.0",
+    "@openapitools/openapi-generator-cli": "^2.20.2",
     "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.17.19",
