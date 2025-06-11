@@ -50,8 +50,8 @@ export const appConfig: ApplicationConfig = {
     UserServiceProxy,
     {
       provide: APP_INITIALIZER,
-      useFactory: (appInitializer: AppInitializer, translate: TranslateService) => appInitializer.init(translate),
-      deps: [AppInitializer, TranslateService],
+      useFactory: (appInitializer: AppInitializer) => appInitializer.init(),
+      deps: [AppInitializer],
       multi: true,
     },
     {

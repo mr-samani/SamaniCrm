@@ -1,0 +1,23 @@
+{
+  "generatorName": "typescript-angular",
+  "inputSpec": "https://localhost:44342/swagger/v1/swagger.json",
+  "output": "src/shared/service-proxies",
+  "templateDir": "custom-templates",
+  "additionalProperties": {
+    "ngVersion": "19.2.0",
+    "apiModulePrefix": "Samani",
+    "providedIn": "none",
+    "stringEnums": true,
+    "modelSuffix": "",
+    "serviceSuffix": "ServiceProxy",
+    "fileNaming": "kebab-case",
+    "enumNameSuffix": "Enum",
+    "withInterfaces": false,
+    "useSingleRequestParameter": false,
+    "useOperationId": true,
+    "operationIdNaming": "camelCase",
+    "supportsES6": "true",
+    "logLevel": "error",
+    "trustStoreType": "Windows-ROOT"
+  }
+}

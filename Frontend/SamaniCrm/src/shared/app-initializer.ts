@@ -1,7 +1,6 @@
 import { PlatformLocation } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, isDevMode } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { AppConst } from './app-const';
 import { ColorSchemaService } from './services/color-schema.service';
 import { LanguageService } from './services/language.service';
@@ -21,7 +20,7 @@ export class AppInitializer {
     this.colorSchemeService.load();
   }
 
-  public init(translate: TranslateService): () => Promise<boolean> {
+  public init(): () => Promise<boolean> {
     return () => {
       // AppConst.currentLanguage = localStorage.getItem('lang') || '';
       return new Promise((resolve, reject) => {

@@ -116,7 +116,7 @@ public static class ServiceCollectionExtensions
         {
             options.AddPolicy("DefaultCors", policy =>
             {
-                policy.WithOrigins("https://localhost:44342", "http://localhost:5753", "https://localhost:5753")
+                policy.WithOrigins("https://localhost:44342", "http://localhost:5753", "https://localhost:5753", "https://localhost:5754")
                       .AllowAnyHeader()
                       .AllowAnyMethod()
                       .WithExposedHeaders("Location", "Upload-Offset", "Tus-Resumable", "Upload-Length", "Fileid");

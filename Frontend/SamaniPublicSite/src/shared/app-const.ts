@@ -8,5 +8,6 @@ export class AppConst {
   static apiUrl = '';
   static fileServerUrl = '';
   static baseUrl = '';
+  static dashboardUrl = '';
   static isDarkMode: boolean;
 }
