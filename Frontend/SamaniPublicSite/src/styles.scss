@@ -1,1 +1,25 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: 'iranSans';
+  src: url('../public/fonts/farsiNum/eot/IRANSansXFaNum-Regular.eot') format('embedded-opentype'),
+    url('../public/fonts/farsiNum/otf/IRANSansXFaNum-Regular.otf') format('truetype'),
+    url('../public/fonts/farsiNum/ttf/IRANSansXFaNum-Regular.ttf') format('truetype'),
+    url('../public/fonts/farsiNum/woff/IRANSansXFaNum-Regular.woff') format('woff'),
+    url('../public/fonts/farsiNum/woff2/IRANSansXFaNum-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'axiforma';
+  src: url('../public/fonts/Axiforma/Axiforma-Regular.eot') format('embedded-opentype'),
+    url('../public/fonts/Axiforma/Axiforma-Regular.ttf') format('truetype'),
+    url('../public/fonts/Axiforma/Axiforma-Regular.woff') format('woff'),
+}
+
+:root {
+  // font awosome weigth
+  --fa-style: 200;
+  // font awosome size
+  --fa-size: 16px;
+}
+html {
+  overflow-y: scroll;
+}
