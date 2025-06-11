@@ -12,22 +12,22 @@ using SamaniCrm.Core.Shared.Interfaces;
 
 namespace SamaniCrm.Application.Localize.Queries
 {
-    public record GetAllLanguageQuery() : IRequest<List<LanguageDTO>>;
+    public record GetAllActiveLanguageQuery() : IRequest<List<LanguageDTO>>;
 
-    public class GetAllLanguageQueryHandler : IRequestHandler<GetAllLanguageQuery, List<LanguageDTO>>
+    public class GetAllActiveLanguageQueryHandler : IRequestHandler<GetAllActiveLanguageQuery, List<LanguageDTO>>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly ILanguageService _languageService;
 
-        public GetAllLanguageQueryHandler(IApplicationDbContext dbContext, ILanguageService languageService)
+        public GetAllActiveLanguageQueryHandler(IApplicationDbContext dbContext, ILanguageService languageService)
         {
             _dbContext = dbContext;
             _languageService = languageService;
         }
 
-        public async Task<List<LanguageDTO>> Handle(GetAllLanguageQuery request, CancellationToken cancellationToken)
+        public async Task<List<LanguageDTO>> Handle(GetAllActiveLanguageQuery request, CancellationToken cancellationToken)
         {
-            var result = await _languageService.GetAllLanguagesForAdmin();
+            var result = await _languageService.GetAllActiveLanguages();
             return result;
         }
     }

@@ -30,7 +30,7 @@ namespace SamaniCrm.Api.Controllers
         [ProducesResponseType(typeof(ApiResponse<List<LanguageDTO>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllLanguages()
         {
-            var result = await _mediator.Send(new GetAllLanguageQuery());
+            var result = await _mediator.Send(new GetAllLanguageForAdminQuery());
             return ApiOk<List<LanguageDTO>>(result);
         }
 

@@ -89,6 +89,13 @@ namespace SamaniCrm.Infrastructure.Persistence
                 },
                 new Menu
                 {
+                    Icon = "fa fa-package",
+                    Url = "/products",
+                    OrderIndex = 0,
+                    IsSystem = true,
+                },
+                new Menu
+                {
                     Icon = "fa fa-company",
                     Url = "/about-us",
                     OrderIndex = 2,
