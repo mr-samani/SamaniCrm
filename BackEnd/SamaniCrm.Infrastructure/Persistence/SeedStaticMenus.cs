@@ -86,6 +86,16 @@ namespace SamaniCrm.Infrastructure.Persistence
                     Url = "/",
                     OrderIndex = 0,
                     IsSystem = true,
+                    Translations=[
+                            new MenuTranslation(){
+                                Culture = "en-US",
+                                Title = "Home",
+                            },
+                              new MenuTranslation(){
+                                Culture = "fa-IR",
+                                Title = "صفحه اصلی",
+                            },
+                        ]
                 },
                 new Menu
                 {
@@ -93,6 +103,16 @@ namespace SamaniCrm.Infrastructure.Persistence
                     Url = "/products",
                     OrderIndex = 0,
                     IsSystem = true,
+                    Translations=[
+                            new MenuTranslation(){
+                                Culture = "en-US",
+                                Title = "Products",
+                            },
+                              new MenuTranslation(){
+                                Culture = "fa-IR",
+                                Title = "محصولات",
+                            },
+                        ]
                 },
                 new Menu
                 {
@@ -100,6 +120,16 @@ namespace SamaniCrm.Infrastructure.Persistence
                     Url = "/about-us",
                     OrderIndex = 2,
                     IsSystem = true,
+                    Translations=[
+                            new MenuTranslation(){
+                                Culture = "en-US",
+                                Title = "About us",
+                            },
+                              new MenuTranslation(){
+                                Culture = "fa-IR",
+                                Title = "درباره ما",
+                            },
+                        ]
                 },
                 new Menu
                 {
@@ -107,12 +137,32 @@ namespace SamaniCrm.Infrastructure.Persistence
                     Url = "/contact-us",
                     OrderIndex = 1,
                     IsSystem = true,
+                    Translations=[
+                            new MenuTranslation(){
+                                Culture = "en-US",
+                                Title = "Contact us",
+                            },
+                              new MenuTranslation(){
+                                Culture = "fa-IR",
+                                Title = "تماس با ما",
+                            },
+                        ]
                 },
                 new Menu
                 {
                     Icon = "fa fa-book",
                     Url = "/blogs",
                     OrderIndex = 3,
+                    Translations=[
+                            new MenuTranslation(){
+                                Culture = "en-US",
+                                Title = "Blog",
+                            },
+                              new MenuTranslation(){
+                                Culture = "fa-IR",
+                                Title = "بلاگ",
+                            },
+                        ],
                     Children = new List<Menu>
                     {
                         new Menu { Url = "/blogs/1" },

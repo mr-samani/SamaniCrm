@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
+import { BaseComponent } from '@app/base-components';
 import { AppConst } from '@shared/app-const';
 
 @Component({
@@ -8,8 +9,10 @@ import { AppConst } from '@shared/app-const';
   styleUrls: ['./home.component.scss'],
   imports: [CommonModule],
 })
-export class HomeComponent implements OnInit {
-  constructor() {}
+export class HomeComponent extends BaseComponent implements OnInit {
+  constructor(injector: Injector) {
+    super(injector);
+  }
 
   ngOnInit() {}
 }

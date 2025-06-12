@@ -22,4 +22,8 @@ body[dir='ltr'] {
 }
 body {
   margin: 0;
+  background: #eef0f8;
+}
+.ltr {
+  direction: ltr;
 }

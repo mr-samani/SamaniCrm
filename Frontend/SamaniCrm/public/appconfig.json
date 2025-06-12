@@ -2,7 +2,7 @@
   "baseUrl": "https://localhost:5753",
   "apiUrl": "https://localhost:44342",
   "fileServerUrl": "https://localhost:44342/file",
-  "publicSiteUrl": "https://localhost:7015",
+  "publicSiteUrl": "https://localhost:5754",
   "tinyMceApiKey": "",
   "appName": "mr-samani"
 }

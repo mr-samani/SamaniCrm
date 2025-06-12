@@ -14,13 +14,13 @@
   <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
     @for (child of item.children; track $index) {
     <li>
-      <a class="dropdown-item" href="#">{{ child.title }}</a>
+      <a class="dropdown-item" href="#">{{ child.title ? child.title : item.url }}</a>
     </li>
     }
   </ul>
 </li>
 }@else {
 <li class="nav-item">
-  <a class="nav-link">{{ item.title }}</a>
+  <a class="nav-link">{{ item.title ? item.title : item.url }}</a>
 </li>
 } }

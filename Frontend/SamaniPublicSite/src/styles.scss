@@ -1,3 +1,5 @@
+@use '../../SamaniCrm/src/styles/bootstrap-overide.scss';
+
 @font-face {
   font-family: 'iranSans';
   src: url('../public/fonts/farsiNum/eot/IRANSansXFaNum-Regular.eot') format('embedded-opentype'),
@@ -11,7 +13,7 @@
   font-family: 'axiforma';
   src: url('../public/fonts/Axiforma/Axiforma-Regular.eot') format('embedded-opentype'),
     url('../public/fonts/Axiforma/Axiforma-Regular.ttf') format('truetype'),
-    url('../public/fonts/Axiforma/Axiforma-Regular.woff') format('woff'),
+    url('../public/fonts/Axiforma/Axiforma-Regular.woff') format('woff');
 }
 
 :root {
@@ -22,4 +24,48 @@
 }
 html {
   overflow-y: scroll;
+}
+
+body {
+  margin: 0;
+  background: #eef0f8;
+  --border-color: #e1e1e1;
+  &.color-scheme-dark {
+    --border-color: #383838;
+    background-color: #252222;
+    color: #eee;
+
+    .ngx-alert-container {
+      &.has-backdrop {
+        background: #a9a9a954 !important;
+      }
+
+      .ngx-alert-inner {
+        background-color: #252222 !important;
+        color: #eee;
+      }
+
+      .ngx-alert-title,
+      .ngx-alert-body {
+        word-wrap: break-word;
+      }
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+body[dir='rtl'] {
+  font-family: iranSans;
+  font-size: 12px !important;
+}
+body[dir='ltr'] {
+  font-family: 'axiforma', Roboto, 'Helvetica Neue', sans-serif;
+  font-size: 10px !important;
+}
+
+a:not(:disabled) {
+  cursor: pointer;
 }

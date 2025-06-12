@@ -1,5 +1,6 @@
 ﻿using System.Linq.Dynamic.Core;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SamaniCrm.Api.Attributes;
@@ -40,7 +41,8 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetPageInfo")]
-        [Permission(AppPermissions.Pages_Update)]
+        //[Permission(AppPermissions.Pages_Update)]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(ApiResponse<PageDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPageInfo(Guid pageId, string culture, CancellationToken cancellationToken)
         {

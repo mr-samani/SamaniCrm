@@ -6,12 +6,14 @@ import { finalize } from 'rxjs';
 import { MenuItemsComponent } from '../menu-items/menu-items.component';
 import { PublicServiceProxy } from '@shared/service-proxies/api/public.service';
 import { LanguageDTO } from '@shared/service-proxies';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  imports: [MenuItemsComponent],
+  imports: [CommonModule, MenuItemsComponent, FormsModule],
 
   providers: [PublicServiceProxy],
 })

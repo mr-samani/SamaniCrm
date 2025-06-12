@@ -17,9 +17,28 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarScroll">
-      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px">
+      <ul class="navbar-nav my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px">
         <menu-items [menuList]="menuList()"></menu-items>
       </ul>
+      <div class="flex-fill"></div>
+      
+      <!-- darkmode -->
+      <label class="switch">
+        <input
+          class="switch__input"
+          type="checkbox"
+          [ngModel]="AppConst.isDarkMode"
+          (change)="colorSchemaService.toggleMode()" />
+        <span class="switch__background">
+          <span class="switch__toggle">
+            <span class="switch__moon"></span>
+          </span>
+          <span class="switch__stars"></span>
+          <span class="switch__clouds"></span>
+        </span>
+      </label>
+      <!-- //darkmode -->
+
       <div class="nav-item dropdown">
         <a
           class="nav-link dropdown-toggle"
