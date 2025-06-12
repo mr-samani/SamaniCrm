@@ -1,49 +1,62 @@
-import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { inject, Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { AppConst } from '../app-const';
 import { isRtl } from '@shared/helper/is-rtl';
-import { UserServiceProxy } from '@shared/service-proxies';
 import { finalize } from 'rxjs/operators';
 import { MainSpinnerService } from './main-spinner.service';
+import { UserServiceProxy } from '@shared/service-proxies/api/user.service';
+import { StoreService } from './localstore.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LanguageService {
   direction: string = 'ltr';
+  //userService: UserServiceProxy;
   constructor(
     @Inject(DOCUMENT) private _document: Document,
-    private userService: UserServiceProxy,
     private mainSpinner: MainSpinnerService,
+    private storeService: StoreService
   ) {
+    // this.userService = inject(UserServiceProxy);
     // this.changeLanguage(AppConst.currentLanguage);
     // this.translate.onLangChange.subscribe(param => {
     //     AppConst.currentLanguage = param.lang;
-    //     localStorage.setItem('lang', param.lang);
+    //     this.storeService.setItem('lang', param.lang);
     //     // setTimeout(() => {
     //     //     location.reload();
     //     // }, 100);
     // });
   }
 
-  changeLanguage(lang: string, dontSave = false) {
+  init() {
+    let lang = this.storeService.getItem<string>('lang') || AppConst.defaultLang;
+    this.changeLanguage(lang, true, true);
+  }
+
+  changeLanguage(lang: string, dontSave = false, isInit = false) {
     lang = this.validateLanguage(lang);
-    localStorage.setItem('lang', lang);
+
+    this.storeService.setItem('lang', lang);
+
     AppConst.currentLanguage = lang;
     AppConst.isRtl = isRtl(lang);
     this.direction = AppConst.isRtl ? 'rtl' : 'ltr';
     //this.translate.use(lang);
     this._document.body.dir = this.direction;
-   // document.documentElement.lang = this.translate.currentLang;
-    document.documentElement.dir = this.direction;
+    this._document.documentElement.lang = lang.substring(0, 2);
+    this._document.documentElement.dir = this.direction;
     if (dontSave == false) {
       this.mainSpinner.showLoading = true;
-      this.userService
-        .updateCurrentuserLanguage(AppConst.currentLanguage)
-        .pipe(finalize(() => (this.mainSpinner.showLoading = false)))
-        .subscribe((r) => {
-          if (r.data == true) location.reload();
-        });
+      // this.userService
+      //   .updateCurrentuserLanguage(AppConst.currentLanguage)
+      //   .pipe(finalize(() => (this.mainSpinner.showLoading = false)))
+      //   .subscribe((r) => {
+      //     if (r.data == true) location.reload();
+      //   });
+      if (!isInit) this._document.location.reload();
+    } else {
+      if (!isInit) this._document.location.reload();
     }
   }
 

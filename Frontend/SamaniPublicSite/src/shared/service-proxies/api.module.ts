@@ -13,6 +13,7 @@ import { MenuServiceProxy } from './api/menu.service';
 import { NotificationServiceProxy } from './api/notification.service';
 import { PagesServiceProxy } from './api/pages.service';
 import { ProductServiceProxy } from './api/product.service';
+import { PublicServiceProxy } from './api/public.service';
 import { RoleServiceProxy } from './api/role.service';
 import { SecuritySettingsServiceProxy } from './api/security-settings.service';
 import { UserServiceProxy } from './api/user.service';
@@ -34,6 +35,7 @@ import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
     NotificationServiceProxy,
     PagesServiceProxy,
     ProductServiceProxy,
+    PublicServiceProxy,
     RoleServiceProxy,
     SecuritySettingsServiceProxy,
     UserServiceProxy,

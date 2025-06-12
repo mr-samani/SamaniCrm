@@ -4,12 +4,13 @@ import { DOCUMENT, inject, isDevMode, PLATFORM_ID } from '@angular/core';
 import { AppConst } from './app-const';
 import { ColorSchemaService } from './services/color-schema.service';
 import { InitialAppDTOApiResponse } from './service-proxies/model/initial-app-dto-api-response';
-import { platformBrowser } from '@angular/platform-browser';
+import { LanguageService } from './services/language.service';
 
 export function appInit(): Promise<boolean> {
   return new Promise((resolve, reject) => {
     const httpClient = inject(HttpClient);
     const colorSchemeService = inject(ColorSchemaService);
+    const languageService = inject(LanguageService);
     colorSchemeService.load();
     let baseUrl = getDocumentOrigin() + getBaseHref();
     const rnd = Math.round(Math.random() * 1000);
@@ -34,6 +35,7 @@ export function appInit(): Promise<boolean> {
             if (resp.success && resp.data) {
               AppConst.languageList = resp.data.languages ?? [];
               AppConst.defaultLang = resp.data.defaultLang ?? 'fa-IR';
+              languageService.init();
               resolve(true);
             } else {
               reject();

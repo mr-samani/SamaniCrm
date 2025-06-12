@@ -4,16 +4,21 @@ import {
   provideZonelessChangeDetection,
   isDevMode,
   provideAppInitializer,
-  EnvironmentInjector,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { TranslocoHttpLoader } from './transloco-loader';
 import { provideTransloco } from '@jsverse/transloco';
 import { appInit } from '@shared/app-initializer';
+import { Configuration } from '@shared/service-proxies/configuration';
+import { AppConst } from '@shared/app-const';
+import { AppInterceptor } from '@shared/services/app.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,7 +27,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withInterceptors([AppInterceptor])),
     provideTransloco({
       config: {
         availableLangs: ['en-US', 'fa-IR', 'ar'],
@@ -33,5 +38,12 @@ export const appConfig: ApplicationConfig = {
       },
       loader: TranslocoHttpLoader,
     }),
+
+    { provide: Configuration, useFactory: configurationFactory },
   ],
 };
+function configurationFactory() {
+  var config = new Configuration();
+  config.basePath = AppConst.apiUrl; //'https://localhost:44342';
+  return config;
+}

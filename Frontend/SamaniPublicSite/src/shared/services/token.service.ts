@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { StoreService } from './localstore.service';
 export class TokenModel {
   accessToken?: string;
   refreshToken?: string;
@@ -10,7 +11,7 @@ export class TokenService {
   private accessTokenName = 'access_token';
   private refreshTokenName = 'refresh_token';
   private basicTokenName = 'auth';
-  constructor() {}
+  constructor(private storeService: StoreService) {}
 
   /**
    * store token on client
@@ -19,27 +20,27 @@ export class TokenService {
    * @param expire expire day
    */
   set(token: TokenModel) {
-    localStorage.setItem(this.accessTokenName, token.accessToken ?? '');
-    localStorage.setItem(this.refreshTokenName, token.refreshToken ?? '');
+    this.storeService.setItem(this.accessTokenName, token.accessToken ?? '');
+    this.storeService.setItem(this.refreshTokenName, token.refreshToken ?? '');
   }
 
   get(): TokenModel {
     const token = {
-      accessToken: localStorage.getItem(this.accessTokenName) || '',
-      refreshToken: localStorage.getItem(this.refreshTokenName) || '',
+      accessToken: this.storeService.getItem<string>(this.accessTokenName) || '',
+      refreshToken: this.storeService.getItem<string>(this.refreshTokenName) || '',
     };
     return token;
   }
 
   remove(): Promise<void> {
     return new Promise((resolve, reject) => {
-      localStorage.removeItem(this.accessTokenName);
-      localStorage.removeItem(this.refreshTokenName);
-      localStorage.removeItem(this.basicTokenName);
+      this.storeService.removeItem(this.accessTokenName);
+      this.storeService.removeItem(this.refreshTokenName);
+      this.storeService.removeItem(this.basicTokenName);
       sessionStorage.removeItem(this.accessTokenName);
       sessionStorage.removeItem(this.refreshTokenName);
       sessionStorage.removeItem(this.basicTokenName);
-      localStorage.removeItem('rememberMe');
+      this.storeService.removeItem('rememberMe');
 
       setTimeout(() => {
         resolve();

@@ -1,20 +1,21 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, Injector } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { DOCUMENT, Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, catchError, map, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable } from 'rxjs';
 import { Buffer } from 'buffer';
 import { NgxAlertModalService } from 'ngx-alert-modal';
 import { LanguageService } from './language.service';
 import {
-  AccountServiceProxy,
-  LoginCommand,
   RefreshTokenCommand,
   RevokeRefreshTokenCommand,
+  StringApiResponse,
+  TokenResponseDtoApiResponse,
   UserDTO,
-  UserServiceProxy,
+  UserDTOApiResponse,
 } from '@shared/service-proxies';
 import { AppConst } from '@shared/app-const';
 import { TokenService } from './token.service';
+import { TranslocoService } from '@jsverse/transloco';
 @Injectable({
   providedIn: 'root',
 })
@@ -23,18 +24,16 @@ export class AuthService {
     undefined
   );
   public currentUser: Observable<UserDTO | undefined>;
-  accountService: AccountServiceProxy;
-  userService: UserServiceProxy;
+
   constructor(
     private router: Router,
     private tokenService: TokenService,
-
+    private http: HttpClient,
     private alert: NgxAlertModalService,
-    injector: Injector,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private translateService: TranslocoService,
+    @Inject(DOCUMENT) private _document: Document
   ) {
-    this.accountService = injector.get(AccountServiceProxy);
-    this.userService = injector.get(UserServiceProxy);
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
@@ -43,15 +42,16 @@ export class AuthService {
   }
 
   logOut(gotoLogin = false) {
-    this.accountService
-      .revoke(
+    this.http
+      .post<StringApiResponse>(
+        AppConst.apiUrl + '/api/Account/revoke',
         new RevokeRefreshTokenCommand({
           token: this.tokenService.get().accessToken,
         })
       )
       .subscribe();
     this.tokenService.remove();
-    const returnUrl = window.location.href;
+    const returnUrl = this._document.location.href;
     if (gotoLogin) {
       this.router.navigate(['/account/login'], {
         queryParams: { returnUrl },
@@ -61,7 +61,7 @@ export class AuthService {
 
   getCurrentUserValue() {
     return new Promise((resolve, reject) => {
-      return this.userService.getCurrentUser().subscribe({
+      return this.http.get<UserDTOApiResponse>(AppConst.apiUrl + '/api/User/GetCurrentUser').subscribe({
         next: (response) => {
           if (response.success && response.data) {
             this.currentUserSubject.next(response.data);
@@ -82,6 +82,37 @@ export class AuthService {
         },
       });
     });
+  }
+
+  refreshToken(input: RefreshTokenCommand) {
+    return this.http.post<TokenResponseDtoApiResponse>(AppConst.apiUrl + '/api/Account/refresh', input).pipe(
+      map((response) => {
+        if (response.success && response.data && response.data.accessToken) {
+          this.tokenService.set(response.data);
+          return response.data.accessToken;
+        } else {
+          this.logOut();
+          this.alert
+            .show({
+              title: this.translateService.translate('Message.AccessDenied'),
+              text: this.translateService.translate('Message.AccessDeniedMessage'),
+              showConfirmButton: true,
+              // showCancelButton: true,
+              confirmButtonText: this.translateService.translate('Ok'),
+              // cancelButtonText: 'انصراف'
+            })
+            .then((result) => {
+              // if (result.isConfirmed) {
+              this.router.navigate(['/account/login']);
+              // }
+            });
+        }
+        return '';
+      }),
+      catchError((err: any, caught: Observable<any>) => {
+        return err;
+      })
+    );
   }
 }
 

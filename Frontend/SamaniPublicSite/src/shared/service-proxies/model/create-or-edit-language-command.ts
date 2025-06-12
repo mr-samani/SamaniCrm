@@ -13,8 +13,8 @@
 
 /** Interface for CreateOrEditLanguageCommand */
 export interface ICreateOrEditLanguageCommand {
-  culture?: string;
-  name?: string;
+  culture: string;
+  name: string;
   isRtl?: boolean;
   flag?: string;
   isDefault?: boolean;
@@ -23,8 +23,8 @@ export interface ICreateOrEditLanguageCommand {
 
 /** Class for CreateOrEditLanguageCommand */
 export class CreateOrEditLanguageCommand implements ICreateOrEditLanguageCommand {
-  culture?: string;
-  name?: string;
+  culture!: string;
+  name!: string;
   isRtl?: boolean;
   flag?: string;
   isDefault?: boolean;

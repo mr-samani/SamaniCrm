@@ -1,7 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
 import { DOCUMENT, inject, Inject, Injectable, PLATFORM_ID, Renderer2, RendererFactory2 } from '@angular/core';
 import { AppConst } from '@shared/app-const';
-
+import { StoreService } from './localstore.service';
+import { MediaMatcher } from '@angular/cdk/layout';
 declare type ColorMode = 'dark' | 'light';
 
 @Injectable({
@@ -12,9 +13,13 @@ export class ColorSchemaService {
   private colorScheme: ColorMode | '' = '';
   // Define prefix for clearer and more readable class names in scss files
   private colorSchemePrefix = 'color-scheme-';
-  platformId = inject(PLATFORM_ID);
 
-  constructor(rendererFactory: RendererFactory2, @Inject(DOCUMENT) private _document: Document) {
+  constructor(
+    rendererFactory: RendererFactory2,
+    @Inject(DOCUMENT) private _document: Document,
+    private mediaMatcher: MediaMatcher,
+    private storeService: StoreService
+  ) {
     // Create new renderer from renderFactory, to make it possible to use renderer2 in a service
     this.renderer = rendererFactory.createRenderer(null, null);
   }
@@ -22,9 +27,9 @@ export class ColorSchemaService {
   _detectPrefersColorScheme() {
     let schema: ColorMode = 'dark';
     // Detect if prefers-color-scheme is supported
-    if (window.matchMedia('(prefers-color-scheme)').media !== 'not all') {
+    if (this.mediaMatcher.matchMedia('(prefers-color-scheme)').media !== 'not all') {
       // Set colorScheme to Dark if prefers-color-scheme is dark. Otherwise, set it to Light.
-      schema = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      schema = this.mediaMatcher.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
     this._setColorScheme(schema);
   }
@@ -33,23 +38,16 @@ export class ColorSchemaService {
     this.colorScheme = scheme;
     AppConst.isDarkMode = scheme === 'dark';
 
-    // Save prefers-color-scheme to localStorage
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('prefers-color', scheme);
-    }
+    // Save prefers-color-scheme
+    this.storeService.setItem('prefers-color', scheme);
   }
 
   _getColorScheme() {
-    if (isPlatformBrowser(this.platformId)) {
-      const localStorageColorScheme: ColorMode = localStorage.getItem('prefers-color') as ColorMode;
-      // Check if any prefers-color-scheme is stored in localStorage
-      if (localStorageColorScheme) {
-        // Save prefers-color-scheme from localStorage
-        this.colorScheme = localStorageColorScheme;
-      } else {
-        // If no prefers-color-scheme is stored in localStorage, try to detect OS default prefers-color-scheme
-        this._detectPrefersColorScheme();
-      }
+    const colorScheme: ColorMode = this.storeService.getItem('prefers-color') as ColorMode;
+    if (colorScheme) {
+      this.colorScheme = colorScheme;
+    } else {
+      this._detectPrefersColorScheme();
     }
   }
 

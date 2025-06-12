@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 README.md
 api.base.service.ts
 api.module.ts
@@ -15,6 +14,7 @@ api/menu.service.ts
 api/notification.service.ts
 api/pages.service.ts
 api/product.service.ts
+api/public.service.ts
 api/role.service.ts
 api/security-settings.service.ts
 api/user.service.ts

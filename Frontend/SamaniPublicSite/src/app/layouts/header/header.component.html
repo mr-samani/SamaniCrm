@@ -1,0 +1,48 @@
+<nav
+  class="navbar navbar-expand-lg"
+  [class.bg-dark]="AppConst.isDarkMode"
+  [class.navbar-dark]="AppConst.isDarkMode"
+  [class.bg-light]="!AppConst.isDarkMode"
+  [class.navbar-light]="!AppConst.isDarkMode">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">{{ AppConst.appName }}</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarScroll"
+      aria-controls="navbarScroll"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarScroll">
+      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px">
+        <menu-items [menuList]="menuList()"></menu-items>
+      </ul>
+      <div class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="langDropdown"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false">
+          <!-- {{ currentLanguage }} -->
+          <img [src]="apiUrl + '/images/flags/' + currentLanguage + '.png'" class="lang-img" [alt]="currentLanguage" />
+        </a>
+        <div class="dropdown-menu" aria-labelledby="langDropdown" [class.dropdown-menu-end]="!isRtl">
+          @for (lang of languages; track $index) {
+          <div (click)="changeLanguage(lang)">
+            <div class="dropdown-item d-flex align-items-center g-5">
+              <!-- <i class="flag" [ngClass]="lang.code"></i> -->
+              <img [src]="apiUrl + '/images/flags/' + lang.flag + '.png'" class="lang-img" />
+              <span>{{ lang.name }}</span>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

@@ -9,23 +9,25 @@ ECHO.
 
 ECHO [1]. Start FrontEnd dashboard
 ECHO [2]. Start public site
-ECHO [3]. Run open api generation
-ECHO [4]. Update database with seeds
-ECHO [5]. Open dashboard in VScode
-ECHO [6]. Open public site in VScode
-ECHO [7]. Exit
+ECHO [3]. Run open api generation Dashboard
+ECHO [4]. Run open api generation PublicSite
+ECHO [5]. Update database with seeds
+ECHO [6]. Open dashboard in VScode
+ECHO [7]. Open public site in VScode
+ECHO [8]. Exit
 ECHO.
 
-CHOICE /C 1234567 /M "Enter your choice:"
+CHOICE /C 12345678 /M "Enter your choice:"
 
 ECHO.
 
 :: Note - list ERRORLEVELS in decreasing order
-IF ERRORLEVEL 7 GOTO ExitCMD
-IF ERRORLEVEL 6 GOTO OpenPublicVsCode
-IF ERRORLEVEL 5 GOTO OpenDashboardVsCode
-IF ERRORLEVEL 4 GOTO UpdateDbWithSeed
-IF ERRORLEVEL 3 GOTO RunOpenApiGen
+IF ERRORLEVEL 8 GOTO ExitCMD
+IF ERRORLEVEL 7 GOTO OpenPublicVsCode
+IF ERRORLEVEL 6 GOTO OpenDashboardVsCode
+IF ERRORLEVEL 5 GOTO UpdateDbWithSeed
+IF ERRORLEVEL 4 GOTO RunOpenApiGenPublicSite
+IF ERRORLEVEL 3 GOTO RunOpenApiGenDashboard
 IF ERRORLEVEL 2 GOTO StartPublicSite
 IF ERRORLEVEL 1 GOTO StartDashboardFrontEnd
 
@@ -56,12 +58,18 @@ call seed-database.bat
 GOTO End
 
 ::---------------------------------------------------------
-:RunOpenApiGen
+:RunOpenApiGenDashboard
 ECHO *** Generate Services and model from swagger ***
 CD /D "%currentDirector%\Frontend\SamaniCrm"
 call npm run generate-api
 GOTO End
 
+::---------------------------------------------------------
+:RunOpenApiGenPublicSite
+ECHO *** Generate Services and model from swagger ***
+CD /D "%currentDirector%\Frontend\SamaniPublicSite"
+call npm run generate-api
+GOTO End
 ::---------------------------------------------------------
 :StartDashboardFrontEnd
 ECHO *** Serve Frontend Dashboard***

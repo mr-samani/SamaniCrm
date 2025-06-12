@@ -50,7 +50,7 @@ export class AuthInterceptor implements HttpInterceptor {
     if (AppConst.currentLanguage !== '') {
       return AppConst.currentLanguage;
     } else {
-      return localStorage.getItem('lang') || '';
+      return localStorage.getItem('lang') || AppConst.defaultLang;
     }
   }
 

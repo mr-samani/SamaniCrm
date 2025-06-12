@@ -12,6 +12,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/cdk": "^20.0.3",
     "@angular/common": "^20.0.0",
     "@angular/compiler": "^20.0.0",
     "@angular/core": "^20.0.0",
@@ -35,6 +36,7 @@
     "@angular/cli": "^20.0.1",
     "@angular/compiler-cli": "^20.0.0",
     "@openapitools/openapi-generator-cli": "^2.20.2",
+    "@popperjs/core": "^2.11.8",
     "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",
     "@types/lodash-es": "^4.17.12",
