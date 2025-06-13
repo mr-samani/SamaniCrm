@@ -3,7 +3,6 @@ import { AppComponentBase } from '@app/app-component-base';
 import grapesjs, { Editor } from 'grapesjs';
 import gjsPresetWebpage from 'grapesjs-preset-webpage';
 import gjsPluginForms from 'grapesjs-plugin-forms';
-import gjsPluginFlexBox from 'grapesjs-blocks-flexbox';
 import gjsPluginBlocksBasic from 'grapesjs-blocks-basic';
 import gjsPluginCountDown from 'grapesjs-component-countdown';
 import gjsPluginStyleBg from 'grapesjs-style-bg';
@@ -16,6 +15,7 @@ import { finalize } from 'rxjs';
 import { AppConst } from '@shared/app-const';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateOrEditPageMetaDataDialogComponent } from '@app/dashboard/content/create-or-edit-page-meta-data-dialog/create-or-edit-page-meta-data-dialog.component';
+import { ProductCategoryElement } from '../blocks/product-category/product-category.element.ts';
 
 @Component({
   selector: 'app-page-builder',
@@ -78,7 +78,6 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
       plugins: [
         gjsPresetWebpage,
         gjsPluginForms,
-        gjsPluginFlexBox,
         gjsPluginBlocksBasic,
         gjsPluginCountDown,
         gjsPluginStyleBg,
@@ -110,14 +109,7 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
     if (!this.editor) return;
     const self = this;
 
-    this.editor.BlockManager.add('category-list', {
-      label: 'دسته‌بندی محصولات',
-      content: `
-        <div data-component="CategoryList" data-category-id="1" class="component-placeholder">
-          <div style="border: 1px dashed #ccc; padding: 10px;">نمایش دسته‌بندی 1</div>
-        </div>`,
-      category: 'کامپوننت‌ها',
-    });
+    this.editor.BlockManager.add('category-list', ProductCategoryElement);
 
     this.editor.DomComponents.addType('category-list', {
       isComponent: (el) => el.dataset && el.dataset['component'] === 'CategoryList',

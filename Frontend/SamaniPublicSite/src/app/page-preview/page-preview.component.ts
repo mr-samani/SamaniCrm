@@ -5,6 +5,7 @@ import {
   Inject,
   Injector,
   PLATFORM_ID,
+  signal,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -28,7 +29,7 @@ export class PagePreviewComponent extends BaseComponent implements AfterViewInit
   id: string;
   culture: string;
   pageInfo = new PageDto();
-  loading?: boolean;
+  loading = signal(false);
 
   @ViewChild('container', { static: false }) container!: ElementRef;
 
@@ -44,13 +45,13 @@ export class PagePreviewComponent extends BaseComponent implements AfterViewInit
   }
 
   ngAfterViewInit() {
-    this.loading = true;
+    this.loading.set(true);
     this.pageService
       .getPageInfo(this.id, this.culture)
       .pipe(
         finalize(() => {
-          this.loading = false;
-          this.cd.detectChanges();
+          this.loading.set(false);
+          // this.cd.detectChanges();
         })
       )
       .subscribe((result) => {

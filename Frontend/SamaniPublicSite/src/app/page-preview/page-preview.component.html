@@ -1,10 +1,10 @@
 <div class="page-content">
-  <loading *ngIf="loading == true"></loading>
+  @if(loading()){
+  <loading></loading>
+  }
   <h1 class="text-center">{{ pageInfo.title }}</h1>
 
   <p class="text-justify">{{ pageInfo.description }}</p>
 
-  <div class="row">
-    <div class="content" #container></div>
-  </div>
+  <div class="content" #container></div>
 </div>
