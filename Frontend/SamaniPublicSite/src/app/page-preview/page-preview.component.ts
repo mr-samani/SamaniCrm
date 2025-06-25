@@ -17,11 +17,12 @@ import { finalize } from 'rxjs';
 import { componentCss } from './componentCss';
 import { SharedModule } from '@shared/shared.module';
 import * as DOMPurify from 'dompurify';
+import { SsrRendererComponent } from './ssr-renderer.component';
 @Component({
   selector: 'app-page-preview',
   templateUrl: './page-preview.component.html',
   styleUrls: ['./page-preview.component.scss'],
-  imports: [SharedModule, CommonModule],
+  imports: [SharedModule, CommonModule, SsrRendererComponent],
   encapsulation: ViewEncapsulation.None, // 👈 مهم برای SSR
   providers: [PagesServiceProxy],
 })
@@ -31,6 +32,11 @@ export class PagePreviewComponent extends BaseComponent implements AfterViewInit
   pageInfo = new PageDto();
   loading = signal(false);
 
+
+  page:any={};
+
+
+  
   @ViewChild('container', { static: false }) container!: ElementRef;
 
   constructor(

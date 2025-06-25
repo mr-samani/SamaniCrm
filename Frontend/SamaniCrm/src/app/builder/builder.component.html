@@ -1,0 +1,26 @@
+<pre dir="ltr">{{ b.dragTargetIds() | json }}</pre>
+<div class="builder">
+  <div
+    class="toolbox"
+    id="toolBox"
+    cdkDropList
+    cdkDropListSortingDisabled
+    [cdkDropListData]="b.blocksList"
+    [cdkDropListConnectedTo]="b.dragTargetIds()">
+    <button *ngFor="let block of b.blocksList" cdkDrag (dblclick)="b.addBlock(block.type)">
+      {{ BlockTypeEnum[block.type] | translate }}
+    </button>
+    <div class="custom-drag-placeholder" *cdkDragPlaceholder></div>
+  </div>
+
+  <div class="canvas" id="canvas" cdkDropList [cdkDropListData]="b.blocks" (cdkDropListDropped)="drop($event)">
+    <div class="block-wrapper" *ngFor="let block of b.blocks; let i = index" cdkDrag>
+      <app-dynamic-renderer [blocks]="[block]" [index]="i" />
+    </div>
+    <div class="custom-drag-placeholder" *cdkDragPlaceholder></div>
+  </div>
+
+  <div class="properties">
+    <span class="title">{{ 'Peroperties' | translate }}</span>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<div class="row">
+  @for (c of cols; track $index) {
+    <div
+      class="col cell"
+      cdkDropList
+      [cdkDropListData]="childs"
+      [cdkDropListConnectedTo]="b.dragTargetIds()"
+      (cdkDropListDropped)="drop($event)"
+      [attr.id]="c.id"
+      (cdkDropListEntered)="enter($event)">
+      {{ c.id }}
+      <div class="block-wrapper" *ngFor="let block of childs; let i = index">
+        <app-dynamic-renderer [blocks]="[block]" [index]="i" />
+        <div class="custom-drag-placeholder" *cdkDragPlaceholder></div>
+      </div>
+    </div>
+  }
+</div>

@@ -7,4 +7,6 @@
   <p class="text-justify">{{ pageInfo.description }}</p>
 
   <div class="content" #container></div>
+  <app-ssr-renderer [blocks]="page.blocks"></app-ssr-renderer>
+
 </div>
