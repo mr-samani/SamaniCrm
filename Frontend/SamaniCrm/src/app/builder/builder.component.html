@@ -1,21 +1,21 @@
+<toolbar></toolbar>
 <div class="builder">
-  <div class="toolbox" id="toolBox" ngxDropList [disableSort]="true" [data]="b.blocksList">
-    <button *ngFor="let block of b.blocksList" ngxDraggable (dblclick)="b.addBlock(block.type)">
-      {{ BlockTypeEnum[block.type] | translate }}
-    </button>
-  </div>
-
+  <toolbox></toolbox>
   <div ngxDropList class="canvas" (drop)="drop($event)" [data]="b.blocks">
-    @for (item of b.blocks; track item.id; let i = $index) {
-      <div ngxDraggable>
-        <div class="children" ngxDropList (drop)="drop($event)" [data]="item.children">
-          <app-dynamic-renderer [blocks]="[item]" [index]="i" />
+    <div class="container-fluid">
+      @for (item of b.blocks; track item.id; let i = $index) {
+        <div ngxDraggable>
+          <div class="children" ngxDropList (drop)="drop($event)" [data]="item.children">
+            <app-dynamic-renderer [blocks]="[item]" />
+          </div>
         </div>
-      </div>
-    }
+      }
+    </div>
   </div>
 
   <div class="properties">
     <span class="title">{{ 'Peroperties' | translate }}</span>
   </div>
 </div>
+
+<pre dir="ltr">{{ b.blocks | json }}</pre>

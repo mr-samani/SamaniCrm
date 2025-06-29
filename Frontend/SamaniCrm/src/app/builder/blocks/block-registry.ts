@@ -16,7 +16,7 @@ export const BLOCK_REGISTRY: IBlockDefinition[] = [
   {
     type: BlockTypeEnum.ProductCategory,
     component: BlockProductCategoryComponent,
-    defaultData: {
+    data: {
       title: 'Welcome to our Store!',
       subtitle: 'Find the best deals here.',
     },
@@ -24,13 +24,13 @@ export const BLOCK_REGISTRY: IBlockDefinition[] = [
   {
     type: BlockTypeEnum.Row,
     component: BlockRowComponent,
-    defaultData: {},
+    data: {},
     children: [],
   },
   {
     type: BlockTypeEnum.ProductCategory,
     component: BlockProductCategoryComponent,
-    defaultData: {
+    data: {
       title: 'Welcome to our Store!',
       subtitle: 'Find the best deals here.',
     },
@@ -38,7 +38,7 @@ export const BLOCK_REGISTRY: IBlockDefinition[] = [
   {
     type: BlockTypeEnum.HeroBanner,
     component: BlockHeroBannerComponent,
-    defaultData: {
+    data: {
       title: 'Welcome to our Store!',
       subtitle: 'Find the best deals here.',
     },
@@ -49,7 +49,6 @@ export class IBlockDefinition {
   rowNumber?: number;
   type: BlockTypeEnum = BlockTypeEnum.Row;
   component?: Type<any>;
-  defaultData?: any;
   data?: any;
   children?: IBlockDefinition[] = [];
 }
@@ -57,7 +56,6 @@ export class BlockDefinition {
   id: string = guid();
   type: BlockTypeEnum = BlockTypeEnum.Row;
   component?: Type<any>;
-  defaultData?: any;
   data?: any;
   children: BlockDefinition[] = [];
   rowNumber!: number;

@@ -14,31 +14,11 @@ import { IDropEvent, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
   styleUrl: './row.component.scss',
 })
 export class BlockRowComponent implements OnInit {
-  @Input() index: number = 0;
-
   @Input() block?: BlockDefinition;
 
   constructor(public b: FormBuilderService) {}
 
-  @Input() data: any;
-
   ngOnInit(): void {}
-  drop(event: IDropEvent<BlockDefinition[]>, cell: BlockDefinition) {
-    // اگر در همان cell جابجا شد
-    if (event.previousContainer === event.container) {
-      // moveItemInArray(cell.children, event.previousIndex, event.currentIndex);
-      return;
-    } else {
-      // جابجایی بین cellها
-      if (event.previousContainer.data && event.container.data) {
-        const item = event.previousContainer.data[event.previousIndex];
-        event.previousContainer.data.splice(event.previousIndex, 1);
-        event.container.data.splice(event.currentIndex, 0, item);
-      }
-    }
-  }
 
-  enter(ev: any) {
-    console.log('enter', ev);
-  }
+
 }

@@ -12,8 +12,6 @@ import { BLOCK_REGISTRY, BlockDefinition } from './block-registry';
 })
 export class DynamicRendererComponent implements OnChanges {
   @Input() blocks: BlockDefinition[] = [];
-  @Input() index: number = 0;
-
   private vcr = inject(ViewContainerRef);
 
   async ngOnChanges(_: SimpleChanges) {
@@ -24,8 +22,6 @@ export class DynamicRendererComponent implements OnChanges {
         const { component } = def!;
         const cmpRef: ComponentRef<any> = this.vcr.createComponent(component!);
         cmpRef.instance.block = block;
-        cmpRef.instance.data = block.data;
-        cmpRef.instance.index = this.index;
       }
     }
   }

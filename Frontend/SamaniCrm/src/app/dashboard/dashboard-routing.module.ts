@@ -53,7 +53,7 @@ const routes: Routes = [
         loadChildren: () => import('./notifications/notification.module').then((m) => m.NotificationModule),
       },
 
-      { path: 'builder', loadComponent: () => import('../builder/builder.component').then((c) => c.BuilderComponent) },
+      { path: 'builder', loadChildren: () => import('../builder/builder.module').then((m) => m.BuilderModule) },
     ],
   },
 ];

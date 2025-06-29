@@ -1,0 +1,5 @@
+  <div class="toolbox" id="toolBox" ngxDropList [disableSort]="true" [data]="b.blocksList">
+    <button *ngFor="let block of b.blocksList" ngxDraggable (dblclick)="b.addBlock(block.type)">
+      {{ BlockTypeEnum[block.type] | translate }}
+    </button>
+  </div>
