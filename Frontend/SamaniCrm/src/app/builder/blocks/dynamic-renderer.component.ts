@@ -23,6 +23,7 @@ export class DynamicRendererComponent implements OnChanges {
       if (def) {
         const { component } = def!;
         const cmpRef: ComponentRef<any> = this.vcr.createComponent(component!);
+        cmpRef.instance.block = block;
         cmpRef.instance.data = block.data;
         cmpRef.instance.index = this.index;
       }

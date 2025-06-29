@@ -8,9 +8,7 @@ export class FormBuilderService {
   blocks: BlockDefinition[] = [];
   blocksList = BLOCK_REGISTRY;
 
-  dragTargetIds = signal<string[]>([]);
   constructor(private cd: ChangeDetectorRef) {
-    this.prepareDragDrop(this.blocks);
   }
 
   addBlock(type: BlockTypeEnum, index?: number, parentChildren?: BlockDefinition[]) {
@@ -31,22 +29,8 @@ export class FormBuilderService {
       parentChildren.splice(index, 0, b);
     }
     this.updateRowNumber(this.blocks);
-    setTimeout(() => {
-      this.prepareDragDrop(this.blocks);
-      console.log(this.blocks);
-    }, 1000);
   }
 
-  private prepareDragDrop(blocks: BlockDefinition[], list = ['canvas', 'toolBox'], parent?: BlockDefinition) {
-    for (let item of blocks) {
-      if (item.type === BlockTypeEnum.Div) list.push('blc_' + item.rowNumber); // هر cell باید DropList باشد
-      if (item.children && item.children.length > 0) {
-        this.prepareDragDrop(item.children, list, item);
-      }
-    }
-    this.dragTargetIds.set(list);
-    // this.cd.detectChanges();
-  }
 
   private updateRowNumber(list: BlockDefinition[], rowNumber = 1) {
     for (let block of list) {

@@ -1,34 +1,18 @@
-<pre dir="ltr">{{ b.dragTargetIds() | json }}</pre>
 <div class="builder">
-  <div
-    class="toolbox"
-    id="toolBox"
-    cdkDropList
-    cdkDropListSortingDisabled
-    [cdkDropListData]="b.blocksList"
-    [cdkDropListConnectedTo]="b.dragTargetIds()">
-    <button *ngFor="let block of b.blocksList" cdkDrag (dblclick)="b.addBlock(block.type)">
+  <div class="toolbox" id="toolBox" ngxDropList [disableSort]="true" [data]="b.blocksList">
+    <button *ngFor="let block of b.blocksList" ngxDraggable (dblclick)="b.addBlock(block.type)">
       {{ BlockTypeEnum[block.type] | translate }}
     </button>
-    <div class="order-custom-placeholder" *cdkDragPlaceholder></div>
   </div>
 
-  <div
-    class="canvas"
-    id="canvas"
-    cdkDropList
-    [cdkDropListData]="b.blocks"
-    (cdkDropListDropped)="drop($event)"
-    [cdkDropListConnectedTo]="b.dragTargetIds()">
-    <div class="order-custom-placeholder" *cdkDragPlaceholder></div>
-
-    <div class="block-wrapper" *ngFor="let block of b.blocks; let i = index" cdkDrag [id]="'blc_' + block.rowNumber">
-      @if (block.type === BlockTypeEnum.Row) {
-        <block-row [children]="block.children"></block-row>
-      } @else {
-        <app-dynamic-renderer [blocks]="[block]" [index]="i" />
-      }
-    </div>
+  <div ngxDropList class="canvas" (drop)="drop($event)" [data]="b.blocks">
+    @for (item of b.blocks; track item.id; let i = $index) {
+      <div ngxDraggable>
+        <div class="children" ngxDropList (drop)="drop($event)" [data]="item.children">
+          <app-dynamic-renderer [blocks]="[item]" [index]="i" />
+        </div>
+      </div>
+    }
   </div>
 
   <div class="properties">
