@@ -2,20 +2,30 @@ import { BlockHeroBannerComponent } from './banner/hero-banner.component';
 import { BlockProductCategoryComponent } from './product-category/product-category.component';
 import { Type } from '@angular/core';
 import { BlockRowComponent } from './row/row.component';
+import { guid } from '@shared/helper/guid';
+import { BlockDivComponent } from './div/div.component';
 
 export enum BlockTypeEnum {
-  ProductCategory = 1,
+  Div = 1,
+  ProductCategory,
   HeroBanner,
   Row,
 }
 
-export const BLOCK_REGISTRY: BlockDefinition[] = [
+export const BLOCK_REGISTRY: IBlockDefinition[] = [
+  {
+    type: BlockTypeEnum.ProductCategory,
+    component: BlockProductCategoryComponent,
+    defaultData: {
+      title: 'Welcome to our Store!',
+      subtitle: 'Find the best deals here.',
+    },
+  },
   {
     type: BlockTypeEnum.Row,
     component: BlockRowComponent,
-    defaultData: {
-      cols: 2,
-    },
+    defaultData: {},
+    children: [],
   },
   {
     type: BlockTypeEnum.ProductCategory,
@@ -34,10 +44,39 @@ export const BLOCK_REGISTRY: BlockDefinition[] = [
     },
   },
 ];
-
-export interface BlockDefinition {
-  type: BlockTypeEnum;
+export class IBlockDefinition {
+  id?: string = guid();
+  rowNumber?: number;
+  type: BlockTypeEnum = BlockTypeEnum.Row;
   component?: Type<any>;
   defaultData?: any;
   data?: any;
+  children?: IBlockDefinition[] = [];
+}
+export class BlockDefinition {
+  id: string = guid();
+  type: BlockTypeEnum = BlockTypeEnum.Row;
+  component?: Type<any>;
+  defaultData?: any;
+  data?: any;
+  children: BlockDefinition[] = [];
+  rowNumber!: number;
+
+  constructor(data?: IBlockDefinition) {
+    if (data) {
+      for (let property in data) {
+        if (data.hasOwnProperty(property)) (this as any)[property] = (data as any)[property];
+      }
+      if (!data.id) {
+        data.id = guid();
+      }
+      if (!data.children) {
+        data.children = [];
+      } else {
+        for (let child of data.children) {
+          child = new BlockDefinition(child);
+        }
+      }
+    }
+  }
 }

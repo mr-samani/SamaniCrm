@@ -1,9 +1,10 @@
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { BlockDefinition } from '../block-registry';
+import { Component, Input, OnInit } from '@angular/core';
+import { BlockDefinition, BlockTypeEnum } from '../block-registry';
 import { FormBuilderService } from '@app/builder/form-builder.service';
 import { DynamicRendererComponent } from '../dynamic-renderer.component';
+import { BlockDivComponent } from '../div/div.component';
 
 @Component({
   selector: 'block-row',
@@ -11,31 +12,27 @@ import { DynamicRendererComponent } from '../dynamic-renderer.component';
   imports: [CommonModule, DragDropModule, DynamicRendererComponent],
   templateUrl: './row.component.html',
   styleUrl: './row.component.scss',
-  providers: [FormBuilderService],
 })
-export class BlockRowComponent {
+export class BlockRowComponent implements OnInit {
   @Input() index: number = 0;
-  cols: { id: string }[] = [];
 
-  childs: BlockDefinition[] = [];
+  @Input() children: BlockDefinition[] = [];
 
   constructor(public b: FormBuilderService) {}
 
-  @Input() set data(val: { cols: number }) {
-    if (val.cols) {
-      for (let i = 0; i < val.cols; i++) {
-        this.cols.push({ id: `cell_${this.index}_${i}` });
-      }
-    }
-  }
+  @Input() data: any;
 
-  drop(event: CdkDragDrop<BlockDefinition[]>) {
-    debugger;
+  ngOnInit(): void {}
+  drop(event: CdkDragDrop<BlockDefinition[]>, cell: BlockDefinition) {
+    // اگر در همان cell جابجا شد
     if (event.previousContainer === event.container) {
+      // moveItemInArray(cell.children, event.previousIndex, event.currentIndex);
       return;
     } else {
-      this.b.addBlock(this.b.blocksList[event.previousIndex].type, event.currentIndex);
-      // moveItemInArray(this.blocks, event.previousIndex, event.currentIndex);
+      // جابجایی بین cellها
+      const item = event.previousContainer.data[event.previousIndex];
+      event.previousContainer.data.splice(event.previousIndex, 1);
+      event.container.data.splice(event.currentIndex, 0, item);
     }
   }
 

@@ -18,7 +18,8 @@ import { BlockRowComponent } from './blocks/row/row.component';
 export class BuilderComponent implements OnInit {
   constructor(public b: FormBuilderService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   public get BlockTypeEnum(): typeof BlockTypeEnum {
     return BlockTypeEnum;

@@ -35,13 +35,21 @@
   margin-bottom: 8px;
   background: #f9f9f9;
 }
-.custom-drag-placeholder {
-  background: rgb(228, 227, 227);
-  border: dotted 2px #999;
-  min-height: 30px;
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+
+::ng-deep {
+  .custom-drag-placeholder {
+    background: rgb(228, 227, 227);
+    border: dotted 2px #999;
+    min-height: 30px;
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .order-custom-placeholder {
+    border: dotted 2px #999;
+    min-height: 30px;
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
 }

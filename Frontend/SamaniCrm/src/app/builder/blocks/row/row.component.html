@@ -1,18 +1,21 @@
 <div class="row">
-  @for (c of cols; track $index) {
+  @for (c of children; track $index) {
     <div
       class="col cell"
       cdkDropList
-      [cdkDropListData]="childs"
+      [cdkDropListData]="c.children"
       [cdkDropListConnectedTo]="b.dragTargetIds()"
-      (cdkDropListDropped)="drop($event)"
-      [attr.id]="c.id"
+      (cdkDropListDropped)="drop($event, c)"
+      [id]="'blc_' + c.rowNumber"
       (cdkDropListEntered)="enter($event)">
-      {{ c.id }}
-      <div class="block-wrapper" *ngFor="let block of childs; let i = index">
+      <div class="order-custom-placeholder" *cdkDragPlaceholder></div>
+
+      {{ 'blc_' + c.rowNumber }}
+      <div class="block-wrapper" *ngFor="let block of c.children; let i = index" cdkDrag>
         <app-dynamic-renderer [blocks]="[block]" [index]="i" />
         <div class="custom-drag-placeholder" *cdkDragPlaceholder></div>
       </div>
     </div>
   }
 </div>
+{{ b.dragTargetIds() | json }}

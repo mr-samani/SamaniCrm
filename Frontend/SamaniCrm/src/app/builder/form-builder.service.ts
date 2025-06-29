@@ -1,36 +1,62 @@
-import { Injectable, signal } from '@angular/core';
+import { ChangeDetectorRef, Injectable, signal } from '@angular/core';
 import { BlockTypeEnum, BLOCK_REGISTRY, BlockDefinition } from './blocks/block-registry';
 import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
+import { BlockDivComponent } from './blocks/div/div.component';
 
 @Injectable()
 export class FormBuilderService {
   blocks: BlockDefinition[] = [];
   blocksList = BLOCK_REGISTRY;
 
-  dragTargetIds = signal<string[]>(['canvas', 'toolBox']);
+  dragTargetIds = signal<string[]>([]);
+  constructor(private cd: ChangeDetectorRef) {
+    this.prepareDragDrop(this.blocks);
+  }
 
-  addBlock(type: BlockTypeEnum, index?: number) {
+  addBlock(type: BlockTypeEnum, index?: number, parentChildren?: BlockDefinition[]) {
+    if (!parentChildren) parentChildren = this.blocks;
     if (index == undefined) {
-      index = this.blocks.length;
+      index = parentChildren.length;
     }
     const def = BLOCK_REGISTRY.find((b) => b.type === type);
     if (def) {
-      this.blocks.splice(index, 0, { type: def.type, data: { ...def.defaultData } });
+      let b = new BlockDefinition({ type: def.type, data: { ...def.defaultData } });
+      if (b.type == BlockTypeEnum.Row && (!b.children || b.children.length < 1)) {
+        // هر Row باید دو cell (Div) داشته باشد که هرکدام children آرایه‌ای خالی دارند
+        b.children = [
+          new BlockDefinition({ type: BlockTypeEnum.Div, component: BlockDivComponent, children: [] }),
+          new BlockDefinition({ type: BlockTypeEnum.Div, component: BlockDivComponent, children: [] }),
+        ];
+      }
+      parentChildren.splice(index, 0, b);
     }
-
-    this.prepareDragDrop();
+    this.updateRowNumber(this.blocks);
+    setTimeout(() => {
+      this.prepareDragDrop(this.blocks);
+      console.log(this.blocks);
+    }, 1000);
   }
 
-  prepareDragDrop() {
-    let list = ['canvas', 'toolBox'];
-    for (let c = 0; c < this.blocks.length; c++) {
-      if (this.blocks[c].type == BlockTypeEnum.Row) {
-        for (let i = 0; i < (this.blocks[c].data as any).cols; i++) {
-          list.push(`cell_${c}_${i}`);
-        }
+  private prepareDragDrop(blocks: BlockDefinition[], list = ['canvas', 'toolBox'], parent?: BlockDefinition) {
+    for (let item of blocks) {
+      if (item.type === BlockTypeEnum.Div) list.push('blc_' + item.rowNumber); // هر cell باید DropList باشد
+      if (item.children && item.children.length > 0) {
+        this.prepareDragDrop(item.children, list, item);
       }
     }
     this.dragTargetIds.set(list);
+    // this.cd.detectChanges();
+  }
+
+  private updateRowNumber(list: BlockDefinition[], rowNumber = 1) {
+    for (let block of list) {
+      block.rowNumber = rowNumber;
+      rowNumber++;
+      if (block.children) {
+        rowNumber = this.updateRowNumber(block.children, rowNumber);
+      }
+    }
+    return rowNumber;
   }
 }
 
