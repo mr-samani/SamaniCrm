@@ -12,23 +12,34 @@ export enum BlockTypeEnum {
   Row,
 }
 
+export declare type BlockCategory = 'Container' | 'Banner' | 'Product' | 'Other';
+
+export class FormTools {
+  category!: BlockCategory;
+  items: IBlockDefinition[] = [];
+}
+
 export const BLOCK_REGISTRY: IBlockDefinition[] = [
   {
+    category: 'Container',
     type: BlockTypeEnum.Row,
     component: BlockRowComponent,
     canChild: true,
   },
   {
+    category: 'Container',
     type: BlockTypeEnum.Div,
     component: BlockDivComponent,
     canChild: true,
   },
   {
+    category: 'Product',
     type: BlockTypeEnum.ProductCategory,
     component: BlockProductCategoryComponent,
     data: { title: 'Welcome to our Store!', categories: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] },
   },
   {
+    category: 'Banner',
     type: BlockTypeEnum.HeroBanner,
     component: BlockHeroBannerComponent,
     data: {},
@@ -36,6 +47,7 @@ export const BLOCK_REGISTRY: IBlockDefinition[] = [
 ];
 export class IBlockDefinition {
   id?: string = guid();
+  category?: BlockCategory;
   hidden?: boolean;
   rowNumber?: number;
   type: BlockTypeEnum = BlockTypeEnum.Row;
@@ -47,6 +59,7 @@ export class IBlockDefinition {
 }
 export class BlockDefinition {
   id: string = guid();
+  category?: BlockCategory;
   hidden = false;
   type: BlockTypeEnum = BlockTypeEnum.Row;
   component?: Type<any>;

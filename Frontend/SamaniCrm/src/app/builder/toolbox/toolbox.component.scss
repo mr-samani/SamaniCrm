@@ -1,1 +1,19 @@
-/* custom styles toolbox */
+.tools-container {
+  .tool-category {
+    font-weight: bold;
+  }
+  .items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 0 8px;
+  }
+  .toolbox {
+    border: 1px rgba(60, 60, 60, 0.2784313725) solid;
+    width: calc(50% - 4px);
+    padding: 6px;
+    cursor: pointer;
+    height: 90px;
+    overflow: hidden;
+  }
+}

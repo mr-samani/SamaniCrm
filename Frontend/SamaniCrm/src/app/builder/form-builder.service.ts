@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import { BlockTypeEnum, BLOCK_REGISTRY, BlockDefinition } from './blocks/block-registry';
+import { BlockTypeEnum, BLOCK_REGISTRY, BlockDefinition, FormTools } from './blocks/block-registry';
 import { BlockDivComponent } from './blocks/div/div.component';
 import { IDropEvent, moveItemInArray } from 'ngx-drag-drop-kit';
 import { ViewModeEnum } from './models/view-mode.enum';
 import { NgxAlertModalService } from 'ngx-alert-modal';
+import { createTreeFormTools } from './helpers/tools';
 
 @Injectable()
 export class FormBuilderService {
   blocks: BlockDefinition[] = [];
-  blocksList = BLOCK_REGISTRY;
+  tools: FormTools[] = [];
   viewMode = ViewModeEnum.Desktop;
 
   selectedBlock?: BlockDefinition;
@@ -22,7 +23,9 @@ export class FormBuilderService {
    */
   showLayouts = false;
 
-  constructor(private alert: NgxAlertModalService) {}
+  constructor(private alert: NgxAlertModalService) {
+    this.tools = createTreeFormTools(BLOCK_REGISTRY);
+  }
 
   addBlock(type: BlockTypeEnum, index?: number, parentChildren?: BlockDefinition[]) {
     if (!parentChildren) parentChildren = this.blocks;
