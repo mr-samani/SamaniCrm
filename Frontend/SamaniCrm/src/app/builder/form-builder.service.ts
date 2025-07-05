@@ -3,6 +3,7 @@ import { BlockTypeEnum, BLOCK_REGISTRY, BlockDefinition } from './blocks/block-r
 import { BlockDivComponent } from './blocks/div/div.component';
 import { IDropEvent, moveItemInArray } from 'ngx-drag-drop-kit';
 import { ViewModeEnum } from './models/view-mode.enum';
+import { NgxAlertModalService } from 'ngx-alert-modal';
 
 @Injectable()
 export class FormBuilderService {
@@ -14,7 +15,7 @@ export class FormBuilderService {
 
   showBorder = true;
 
-  constructor() {}
+  constructor(private alert: NgxAlertModalService) {}
 
   addBlock(type: BlockTypeEnum, index?: number, parentChildren?: BlockDefinition[]) {
     if (!parentChildren) parentChildren = this.blocks;
@@ -69,6 +70,31 @@ export class FormBuilderService {
   onSelect(block: BlockDefinition, ev: Event) {
     ev.stopPropagation();
     this.selectedBlock = block;
+  }
+
+  deleteBlock(block: BlockDefinition, parent?: BlockDefinition) {
+    this.alert
+      .show({
+        title: 'Delete: ' + BlockTypeEnum[block.type],
+        text: 'Are you sure delete?',
+        showConfirmButton: true,
+        showCancelButton: true,
+      })
+      .then((r) => {
+        if (r.isConfirmed) {
+          if (!parent) {
+            const foundedIndex = this.blocks.findIndex((x) => x == block);
+            if (foundedIndex > -1) {
+              this.blocks.splice(foundedIndex, 1);
+            }
+          } else {
+            const foundedIndex = parent.children.findIndex((x) => x == block);
+            if (foundedIndex > -1) {
+              parent.children.splice(foundedIndex, 1);
+            }
+          }
+        }
+      });
   }
 }
 

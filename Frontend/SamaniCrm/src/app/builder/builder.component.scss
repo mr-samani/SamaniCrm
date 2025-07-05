@@ -24,7 +24,8 @@
     border-color: rgb(0, 140, 255);
   }
   &.show-bordered {
-    .block-item {
+    .block-item,
+    .cell {
       border: 1px dashed #b1b1b1;
     }
   }
@@ -32,13 +33,6 @@
 .properties {
   width: 200px;
   border: 1px #3c3c3c47 solid;
-}
-.block-wrapper {
-  position: relative;
-  padding: 12px;
-  border: 1px solid #ddd;
-  margin-bottom: 8px;
-  background: #f9f9f9;
 }
 
 /*--------------- view mode --------------*/

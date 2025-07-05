@@ -8,7 +8,7 @@ import { BlockBase } from '../block-base';
   imports: [CommonModule],
   template: `
     Category
-    <section *ngIf="block" (click)="b.onSelect(block, $event)" [class.fb-selected]="b.selectedBlock == block">
+    <section>
       <h3>{{ block.data.title }}</h3>
       <ul>
         <li *ngFor="let c of block.data.categories">{{ c }}</li>

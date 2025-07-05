@@ -30,18 +30,12 @@
       <div class="custom-placeholder" *ngxPlaceholder></div>
 
       @for (item of b.blocks; track item.id; let i = $index) {
-        <div ngxDraggable class="block-item">
-          <app-dynamic-renderer [blocks]="[item]" />
-        </div>
+        <dynamic-renderer [block]="item" ngxDraggable />
       }
     </div>
-
-    <h3>end</h3>
   </div>
 
   <div class="properties">
     <properties></properties>
   </div>
 </div>
-
-<pre dir="ltr">{{ b.blocks | json }}</pre>

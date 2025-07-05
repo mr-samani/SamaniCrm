@@ -8,13 +8,7 @@ import { BlockBase } from '../block-base';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div
-      class="hero-banner"
-      *ngIf="block"
-      (click)="b.onSelect(block, $event)"
-      [class.fb-selected]="b.selectedBlock == block">
-      Banner
-    </div>
+    <div class="hero-banner">Banner</div>
   `,
 })
 export class BlockHeroBannerComponent extends BlockBase {
