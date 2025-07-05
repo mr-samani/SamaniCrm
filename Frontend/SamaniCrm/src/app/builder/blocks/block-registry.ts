@@ -14,34 +14,24 @@ export enum BlockTypeEnum {
 
 export const BLOCK_REGISTRY: IBlockDefinition[] = [
   {
-    type: BlockTypeEnum.ProductCategory,
-    component: BlockProductCategoryComponent,
-    data: {
-      title: 'Welcome to our Store!',
-      subtitle: 'Find the best deals here.',
-    },
-  },
-  {
     type: BlockTypeEnum.Row,
     component: BlockRowComponent,
-    data: {},
-    children: [],
+    canChild: true,
+  },
+  {
+    type: BlockTypeEnum.Div,
+    component: BlockDivComponent,
+    canChild: true,
   },
   {
     type: BlockTypeEnum.ProductCategory,
     component: BlockProductCategoryComponent,
-    data: {
-      title: 'Welcome to our Store!',
-      subtitle: 'Find the best deals here.',
-    },
+    data: { title: 'Welcome to our Store!', categories: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] },
   },
   {
     type: BlockTypeEnum.HeroBanner,
     component: BlockHeroBannerComponent,
-    data: {
-      title: 'Welcome to our Store!',
-      subtitle: 'Find the best deals here.',
-    },
+    data: {},
   },
 ];
 export class IBlockDefinition {
@@ -51,6 +41,8 @@ export class IBlockDefinition {
   component?: Type<any>;
   data?: any;
   children?: IBlockDefinition[] = [];
+  /** المنت هایی که می توانند فرزند داشته باشند */
+  canChild?: boolean;
 }
 export class BlockDefinition {
   id: string = guid();
@@ -58,6 +50,7 @@ export class BlockDefinition {
   component?: Type<any>;
   data?: any;
   children: BlockDefinition[] = [];
+  canChild?: boolean;
   rowNumber!: number;
 
   constructor(data?: IBlockDefinition) {

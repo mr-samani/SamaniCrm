@@ -2,11 +2,17 @@ import { Injectable } from '@angular/core';
 import { BlockTypeEnum, BLOCK_REGISTRY, BlockDefinition } from './blocks/block-registry';
 import { BlockDivComponent } from './blocks/div/div.component';
 import { IDropEvent, moveItemInArray } from 'ngx-drag-drop-kit';
+import { ViewModeEnum } from './models/view-mode.enum';
 
 @Injectable()
 export class FormBuilderService {
   blocks: BlockDefinition[] = [];
   blocksList = BLOCK_REGISTRY;
+  viewMode = ViewModeEnum.Desktop;
+
+  selectedBlock?: BlockDefinition;
+
+  showBorder = true;
 
   constructor() {}
 
@@ -40,7 +46,7 @@ export class FormBuilderService {
       // جابجایی بین cellها
       if (event.previousContainer.data && event.container.data) {
         const item = event.previousContainer.data[event.previousIndex];
-        if (event.previousContainer._el.id != 'toolBox') {
+        if (event.previousContainer.el.id != 'toolBox') {
           event.previousContainer.data.splice(event.previousIndex, 1);
         }
         this.addBlock(item.type, event.currentIndex, event.container.data);
@@ -58,6 +64,11 @@ export class FormBuilderService {
       }
     }
     return rowNumber;
+  }
+
+  onSelect(block: BlockDefinition, ev: Event) {
+    ev.stopPropagation();
+    this.selectedBlock = block;
   }
 }
 

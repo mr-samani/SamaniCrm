@@ -1,15 +1,11 @@
-<div class="row m-0">
-  @for (c of block?.children; track $index) {
-    <div
-      class="col cell"
-      ngxDropList
-      [data]="c.children"
-      (drop)="b.drop($event)"
-      [id]="'blc_' + c.rowNumber">
-      {{ 'blc_' + c.rowNumber }}
-      <div class="block-wrapper" *ngFor="let block of c.children; let i = index" ngxDraggable>
-        <app-dynamic-renderer [blocks]="[block]" />
+<div *ngIf="block" (click)="b.onSelect(block, $event)" class="div" [class.fb-selected]="b.selectedBlock == block">
+  @if (block.children) {
+    @for (c of block.children; track $index) {
+      <div class="block-wrapper" ngxDropList [data]="c.children" (drop)="b.drop($event)" [id]="'blc_' + c.rowNumber">
+        <div class="custom-placeholder2" *ngxPlaceholder></div>
+
+        <app-dynamic-renderer [blocks]="[block]" *ngFor="let block of c.children; let i = index" ngxDraggable />
       </div>
-    </div>
+    }
   }
 </div>

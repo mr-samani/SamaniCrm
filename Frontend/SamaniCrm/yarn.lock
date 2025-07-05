@@ -5767,10 +5767,10 @@ ngx-alert-modal@^1.0.1:
   dependencies:
     tslib "^2.3.0"
 
-ngx-drag-drop-kit@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/ngx-drag-drop-kit/-/ngx-drag-drop-kit-0.0.1.tgz#70a8a2e59fd2eb449cc52a01185c297626878d10"
-  integrity sha512-SxefbCNVSxtPKgBTCzKK0OcVGVGB5wcR6SvfFNnqj+Cna+ngEl1KPJOMJx5q7ETTaybbhWKn1ccZrnAFTaFX+w==
+ngx-drag-drop-kit@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/ngx-drag-drop-kit/-/ngx-drag-drop-kit-0.2.1.tgz#d14e236844dc4f1487b947fc966bbd7cc61a77a2"
+  integrity sha512-cYTIpjedF5JhIOSBxXTOdqxksAh6Nf81BV8tPkNYOv1yuK7CVWYJyccj/X1o3CpG7gMkaJA4igXxOa54Rq3Z+Q==
   dependencies:
     tslib "^2.3.0"
 

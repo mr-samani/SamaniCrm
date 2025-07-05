@@ -1,18 +1,24 @@
-import { Component, Input } from '@angular/core';
+import { Component, Injector, Input } from '@angular/core';
 import { BlockDefinition } from '../block-registry';
 import { CommonModule } from '@angular/common';
+import { BlockBase } from '../block-base';
 
 @Component({
   selector: 'block-hero-banner',
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="hero" *ngIf="block">
-      <h1>{{ block.data?.title }}</h1>
-      <p>{{ block.data?.subtitle }}</p>
+    <div
+      class="hero-banner"
+      *ngIf="block"
+      (click)="b.onSelect(block, $event)"
+      [class.fb-selected]="b.selectedBlock == block">
+      Banner
     </div>
   `,
 })
-export class BlockHeroBannerComponent {
-  @Input() block?: BlockDefinition;
+export class BlockHeroBannerComponent extends BlockBase {
+  constructor(injector: Injector) {
+    super(injector);
+  }
 }

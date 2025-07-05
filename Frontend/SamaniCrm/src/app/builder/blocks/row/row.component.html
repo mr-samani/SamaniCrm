@@ -1,9 +1,13 @@
-<div class="row">
-  @for (c of block?.children; track $index) {
-    <div class="col cell" ngxDropList [data]="c.children" (drop)="b.drop($event)" [id]="'blc_' + c.rowNumber">
-      <div class="block-wrapper" *ngFor="let block of c.children; let i = index" ngxDraggable>
-        <app-dynamic-renderer [blocks]="[block]" />
+<div class="row gx-0" (click)="b.onSelect(block, $event)" [class.fb-selected]="b.selectedBlock == block">
+  @if (block && block.children) {
+    @for (c of block.children; track $index) {
+      <div class="col cell" ngxDropList [data]="c.children" (drop)="b.drop($event)" [id]="'blc_' + c.rowNumber">
+        <div class="custom-placeholder2" *ngxPlaceholder></div>
+
+        <div class="block-wrapper" *ngFor="let block of c.children; let i = index" ngxDraggable>
+          <app-dynamic-renderer [blocks]="[block]" />
+        </div>
       </div>
-    </div>
+    }
   }
 </div>

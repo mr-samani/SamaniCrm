@@ -1,20 +1,46 @@
 <toolbar></toolbar>
 <div class="builder">
-  <toolbox></toolbox>
-  <div ngxDropList class="canvas" (drop)="drop($event)" [data]="b.blocks">
-    <div class="container-fluid">
+  <div>
+    <div>
+      <div class="group-buttons stretch">
+        <button type="button" (click)="showLayouts = true" [class.active]="showLayouts">
+          <i class="fa fa-layer-group"></i>
+          {{ 'Layouts' | translate }}
+        </button>
+        <button type="button" (click)="showLayouts = false" [class.active]="!showLayouts">
+          <i class="fa fa-grid-2-plus"></i>
+          {{ 'ToolBox' | translate }}
+        </button>
+      </div>
+    </div>
+    <toolbox *ngIf="showLayouts === false"></toolbox>
+    <layouts *ngIf="showLayouts"></layouts>
+  </div>
+
+  <div class="canvas" [class.show-bordered]="b.showBorder">
+    <div
+      class="container-fluid"
+      ngxDropList
+      id="main-page"
+      (drop)="drop($event)"
+      [data]="b.blocks"
+      [class.tablet-view]="b.viewMode === ViewModeEnum.Tablet"
+      [class.desktop-view]="b.viewMode === ViewModeEnum.Desktop"
+      [class.mobile-view]="b.viewMode === ViewModeEnum.Mobile">
+      <div class="custom-placeholder" *ngxPlaceholder></div>
+
       @for (item of b.blocks; track item.id; let i = $index) {
-        <div ngxDraggable>
-          <div class="children" ngxDropList (drop)="drop($event)" [data]="item.children">
-            <app-dynamic-renderer [blocks]="[item]" />
-          </div>
+        <div ngxDraggable class="block-item">
+          <app-dynamic-renderer [blocks]="[item]" />
         </div>
       }
     </div>
+
+    <h3>end</h3>
   </div>
 
   <div class="properties">
-    <span class="title">{{ 'Peroperties' | translate }}</span>
+    <properties></properties>
   </div>
 </div>
 

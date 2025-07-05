@@ -1,1 +1,35 @@
-<p>toolbar works!</p>
+<div class="tool-bar group-buttons">
+  <button type="button" (click)="save()">
+    <i class="fa fa-save"></i>
+    {{ 'Save' | translate }}
+  </button>
+  <button type="button" (click)="preview()">
+    <i class="fa fa-display"></i>
+    {{ 'Preview' | translate }}
+  </button>
+
+  <button type="button" (click)="b.showBorder = !b.showBorder">
+    <i class="fa fa-square-dashed"></i>
+  </button>
+  <button type="button">
+    <i class="fa fa-code"></i>
+  </button>
+  <button type="button">
+    <i class="fa fa-gear"></i>
+  </button>
+
+  <div class="spacer"></div>
+
+  <button type="button" (click)="b.viewMode = ViewModeEnum.Mobile" [class.active]="b.viewMode === ViewModeEnum.Mobile">
+    <i class="fa fa-mobile"></i>
+  </button>
+  <button type="button" (click)="b.viewMode = ViewModeEnum.Tablet" [class.active]="b.viewMode === ViewModeEnum.Tablet">
+    <i class="fa fa-tablet"></i>
+  </button>
+  <button
+    type="button"
+    (click)="b.viewMode = ViewModeEnum.Desktop"
+    [class.active]="b.viewMode === ViewModeEnum.Desktop">
+    <i class="fa fa-display"></i>
+  </button>
+</div>

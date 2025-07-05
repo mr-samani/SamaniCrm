@@ -1,1 +1,6 @@
 <p>properties works!</p>
+<div *ngIf="b.selectedBlock">
+  <p>ID: {{ b.selectedBlock.id }}</p>
+  <p>Type: {{ BlockTypeEnum[b.selectedBlock.type] }}</p>
+  <p>RowNumber: {{ b.selectedBlock.rowNumber }}</p>
+</div>

@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { BlockDefinition } from '../block-registry';
+import { Component, Injector } from '@angular/core';
+import { BlockBase } from '../block-base';
 
 @Component({
   selector: 'block-product-category',
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section *ngIf="block">
+    Category
+    <section *ngIf="block" (click)="b.onSelect(block, $event)" [class.fb-selected]="b.selectedBlock == block">
       <h3>{{ block.data.title }}</h3>
       <ul>
         <li *ngFor="let c of block.data.categories">{{ c }}</li>
@@ -15,6 +16,8 @@ import { BlockDefinition } from '../block-registry';
     </section>
   `,
 })
-export class BlockProductCategoryComponent {
-  @Input() block?: BlockDefinition;
+export class BlockProductCategoryComponent extends BlockBase {
+  constructor(injector: Injector) {
+    super(injector);
+  }
 }
