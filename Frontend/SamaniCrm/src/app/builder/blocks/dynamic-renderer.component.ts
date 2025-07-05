@@ -8,7 +8,11 @@ import { FormBuilderService } from '../form-builder.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="block-item" (click)="b.onSelect(block, $event)" [class.fb-selected]="b.selectedBlock == block">
+    <div
+      class="block-item"
+      (click)="b.onSelect(block, $event)"
+      [class.fb-selected]="b.selectedBlock == block"
+      [class.hidden]="block.hidden">
       <div class="actions">
         <button (click)="b.deleteBlock(block, parent)">
           <i class="fa fa-trash"></i>
@@ -41,6 +45,9 @@ import { FormBuilderService } from '../form-builder.service';
     .block-item.fb-selected > .actions {
       display: block;
     }
+    .block-item.hidden {
+      display: none;
+    }
   `,
 })
 export class DynamicRendererComponent {
@@ -49,12 +56,16 @@ export class DynamicRendererComponent {
   @Input() parent?: BlockDefinition;
   @Input('block') set renderBlock(value: BlockDefinition) {
     this.block = value;
-    this.vcr.clear();
-    const def = BLOCK_REGISTRY.find((b) => b.type === this.block.type);
-    if (def) {
-      const { component } = def!;
-      const cmpRef: ComponentRef<any> = this.vcr.createComponent(component!);
-      cmpRef.instance.block = this.block;
+    if (!this.block.hidden) {
+      this.vcr.clear();
+      const def = BLOCK_REGISTRY.find((b) => b.type === this.block.type);
+      if (def) {
+        const { component } = def!;
+        const cmpRef: ComponentRef<any> = this.vcr.createComponent(component!);
+        cmpRef.instance.block = this.block;
+      }
+    } else {
+      this.vcr.clear();
     }
   }
   constructor(public b: FormBuilderService) {}

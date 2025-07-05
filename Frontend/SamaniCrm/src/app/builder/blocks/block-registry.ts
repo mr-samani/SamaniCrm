@@ -36,6 +36,7 @@ export const BLOCK_REGISTRY: IBlockDefinition[] = [
 ];
 export class IBlockDefinition {
   id?: string = guid();
+  hidden?: boolean;
   rowNumber?: number;
   type: BlockTypeEnum = BlockTypeEnum.Row;
   component?: Type<any>;
@@ -46,6 +47,7 @@ export class IBlockDefinition {
 }
 export class BlockDefinition {
   id: string = guid();
+  hidden = false;
   type: BlockTypeEnum = BlockTypeEnum.Row;
   component?: Type<any>;
   data?: any;

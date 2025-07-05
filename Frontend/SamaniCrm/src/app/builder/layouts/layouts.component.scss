@@ -1,1 +1,26 @@
-/* custom styles layouts */
+.layouts {
+  direction: ltr;
+  > .node {
+    padding: 0 !important;
+  }
+}
+.node {
+  padding-left: 14px;
+  display: none;
+  &.show {
+    display: block;
+  }
+  .name {
+    border-bottom: 1px solid #ececec;
+    display: flex;
+    gap: 4px;
+    padding: 2px 4px;
+    align-items: center;
+    i {
+      font-weight: bold;
+    }
+    &.selected {
+      background-color: #3b97e3;
+    }
+  }
+}

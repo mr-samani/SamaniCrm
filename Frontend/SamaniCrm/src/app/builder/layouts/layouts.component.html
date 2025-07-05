@@ -1,1 +1,39 @@
-<p>layouts works!</p>
+<div class="layouts">
+  <div class="node show">
+    <div class="name">
+      <i class="fa" [class.fa-chevron-right]="!open" [class.fa-chevron-down]="open" (click)="open = !open"></i>
+      Layouts
+    </div>
+    @for (item of b.blocks; track $index) {
+      <ng-container [ngTemplateOutlet]="node" [ngTemplateOutletContext]="{ item, open }"></ng-container>
+    }
+  </div>
+</div>
+
+<ng-template #node let-item="item" let-open="open">
+  <div class="node" [class.show]="open">
+    <div class="name" [class.selected]="b.selectedBlock == item">
+      <i
+        class="fa"
+        [class.fa-chevron-right]="!item.open"
+        [class.fa-chevron-down]="item.open"
+        *ngIf="item.children && item.children.length"
+        (click)="item.open = !item.open"></i>
+      <i
+        class="fa"
+        [class.fa-eye]="!item.hidden"
+        [class.fa-eye-slash]="item.hidden"
+        (click)="item.hidden = !item.hidden"></i>
+      <span (click)="b.onSelect(item, $event)">
+        {{ BlockTypeEnum[item.type] }}
+      </span>
+    </div>
+    @if (item.children) {
+      @for (child of item.children; track $index) {
+        <ng-container
+          [ngTemplateOutlet]="node"
+          [ngTemplateOutletContext]="{ item: child, open: item.open }"></ng-container>
+      }
+    }
+  </div>
+</ng-template>
