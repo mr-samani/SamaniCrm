@@ -2,6 +2,7 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { ViewModeEnum } from '../models/view-mode.enum';
 import { FormBuilderService } from '../form-builder.service';
+import { FormBuilderBackendService } from '../backend.service';
 
 @Component({
   selector: 'toolbar',
@@ -12,6 +13,7 @@ import { FormBuilderService } from '../form-builder.service';
 export class ToolbarComponent extends AppComponentBase implements OnInit {
   constructor(
     public b: FormBuilderService,
+    public backendService: FormBuilderBackendService,
     injector: Injector,
   ) {
     super(injector);
@@ -22,7 +24,4 @@ export class ToolbarComponent extends AppComponentBase implements OnInit {
   public get ViewModeEnum(): typeof ViewModeEnum {
     return ViewModeEnum;
   }
-  save() {}
-
-  preview() {}
 }

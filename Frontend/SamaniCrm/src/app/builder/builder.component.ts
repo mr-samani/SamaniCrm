@@ -5,6 +5,7 @@ import { FormBuilderService } from './form-builder.service';
 import { IDropEvent, transferArrayItem } from 'ngx-drag-drop-kit';
 import { AppComponentBase } from '@app/app-component-base';
 import { ViewModeEnum } from './models/view-mode.enum';
+import { FormBuilderBackendService } from './backend.service';
 
 @Component({
   standalone: false,
@@ -16,12 +17,16 @@ import { ViewModeEnum } from './models/view-mode.enum';
 export class BuilderComponent extends AppComponentBase implements OnInit {
   constructor(
     public b: FormBuilderService,
+    private backendService: FormBuilderBackendService,
     injector: Injector,
   ) {
     super(injector);
+    this.backendService.pageId = this.route.snapshot.params['pageId'];
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.backendService.getPageInfo();
+  }
   public get ViewModeEnum(): typeof ViewModeEnum {
     return ViewModeEnum;
   }

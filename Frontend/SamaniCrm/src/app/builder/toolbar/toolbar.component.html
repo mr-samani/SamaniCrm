@@ -9,11 +9,11 @@
       {{ 'ToolBox' | translate }}
     </button>
   </div>
-  <button type="button" (click)="save()">
+  <button type="button" (click)="backendService.save()" [disabled]="backendService.saving">
     <i class="fa fa-save"></i>
     {{ 'Save' | translate }}
   </button>
-  <button type="button" (click)="preview()">
+  <button type="button" (click)="backendService.preview()" [disabled]="backendService.saving">
     <i class="fa fa-display"></i>
     {{ 'Preview' | translate }}
   </button>
