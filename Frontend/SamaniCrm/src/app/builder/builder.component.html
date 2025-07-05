@@ -1,20 +1,8 @@
 <toolbar></toolbar>
 <div class="builder">
-  <div>
-    <div>
-      <div class="group-buttons stretch">
-        <button type="button" (click)="showLayouts = true" [class.active]="showLayouts">
-          <i class="fa fa-layer-group"></i>
-          {{ 'Layouts' | translate }}
-        </button>
-        <button type="button" (click)="showLayouts = false" [class.active]="!showLayouts">
-          <i class="fa fa-grid-2-plus"></i>
-          {{ 'ToolBox' | translate }}
-        </button>
-      </div>
-    </div>
-    <toolbox *ngIf="showLayouts === false"></toolbox>
-    <layouts *ngIf="showLayouts"></layouts>
+  <div class="right-side">
+    <toolbox *ngIf="b.showLayouts === false"></toolbox>
+    <layouts *ngIf="b.showLayouts"></layouts>
   </div>
 
   <div class="canvas" [class.show-bordered]="b.showBorder">

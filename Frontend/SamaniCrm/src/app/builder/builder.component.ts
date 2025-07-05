@@ -14,7 +14,6 @@ import { ViewModeEnum } from './models/view-mode.enum';
   encapsulation: ViewEncapsulation.None,
 })
 export class BuilderComponent extends AppComponentBase implements OnInit {
-  showLayouts = false;
   constructor(
     public b: FormBuilderService,
     injector: Injector,

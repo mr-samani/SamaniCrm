@@ -1,4 +1,14 @@
 <div class="tool-bar group-buttons">
+  <div class="layout-action">
+    <button type="button" (click)="b.showLayouts = true" [class.active]="b.showLayouts">
+      <i class="fa fa-layer-group"></i>
+      {{ 'Layouts' | translate }}
+    </button>
+    <button type="button" (click)="b.showLayouts = false" [class.active]="!b.showLayouts">
+      <i class="fa fa-grid-2-plus"></i>
+      {{ 'ToolBox' | translate }}
+    </button>
+  </div>
   <button type="button" (click)="save()">
     <i class="fa fa-save"></i>
     {{ 'Save' | translate }}

@@ -15,6 +15,13 @@ export class FormBuilderService {
 
   showBorder = true;
 
+  /**
+   * show layput or tools
+   * - false: show tools
+   * - true: show layouts
+   */
+  showLayouts = false;
+
   constructor(private alert: NgxAlertModalService) {}
 
   addBlock(type: BlockTypeEnum, index?: number, parentChildren?: BlockDefinition[]) {

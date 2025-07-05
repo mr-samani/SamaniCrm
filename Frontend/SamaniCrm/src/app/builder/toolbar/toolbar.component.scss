@@ -1,1 +1,7 @@
-
+.layout-action {
+  width: var(--rightSideWidth);
+  display: flex;
+  button {
+    flex: auto;
+  }
+}

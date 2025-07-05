@@ -1,5 +1,11 @@
+app-builder {
+  --rightSideWidth: 220px;
+}
 .builder {
   display: flex;
+}
+.right-side {
+  width: var(--rightSideWidth);
 }
 .toolbox {
   width: 170px;
