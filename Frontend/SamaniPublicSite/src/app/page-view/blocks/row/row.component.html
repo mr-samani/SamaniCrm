@@ -1,0 +1,7 @@
+<div class="row gx-0">
+  @for (item of block.children; track $index) {
+  <div class="col">
+    <dynamic-renderer [block]="item"></dynamic-renderer>
+  </div>
+  }
+</div>
