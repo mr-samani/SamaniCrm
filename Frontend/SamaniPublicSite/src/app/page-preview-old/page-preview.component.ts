@@ -26,7 +26,7 @@ import { SsrRendererComponent } from './ssr-renderer.component';
   encapsulation: ViewEncapsulation.None, // 👈 مهم برای SSR
   providers: [PagesServiceProxy],
 })
-export class PagePreviewComponent extends BaseComponent implements AfterViewInit {
+export class PagePreviewOldComponent extends BaseComponent implements AfterViewInit {
   id: string;
   culture: string;
   pageInfo = new PageDto();

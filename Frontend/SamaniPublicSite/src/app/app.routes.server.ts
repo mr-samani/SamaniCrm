@@ -6,8 +6,16 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client,
   },
   {
-    path: 'page-preview/:culture/:id',
+    path: 'page-preview-old/:culture/:id',
     renderMode: RenderMode.Client,
+  },
+  {
+    path: 'page/preview/:culture/:pageId',
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: 'page/:culture/:slug',
+    renderMode: RenderMode.Prerender,
   },
   {
     path: '**',

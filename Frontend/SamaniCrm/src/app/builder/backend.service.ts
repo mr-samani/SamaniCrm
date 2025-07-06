@@ -54,6 +54,6 @@ export class FormBuilderBackendService extends AppComponentBase {
 
   preview() {
     if (this.pageInfo)
-      window.open(AppConst.publicSiteUrl + '/page-preview/' + this.pageInfo.culture + '/' + this.pageId, '_blank');
+      window.open(AppConst.publicSiteUrl + '/page/preview/' + this.pageInfo.culture + '/' + this.pageId, '_blank');
   }
 }
