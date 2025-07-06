@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Injector, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Injector, OnInit, signal, ViewChild } from '@angular/core';
 import { BaseComponent } from '@app/base-components';
 import { AppConst } from '@shared/app-const';
 import { MenuDTO } from '@shared/service-proxies/model/menu-dto';
@@ -8,7 +8,7 @@ import { PublicServiceProxy } from '@shared/service-proxies/api/public.service';
 import { LanguageDTO } from '@shared/service-proxies';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+declare var bootstrap: any;
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -24,6 +24,8 @@ export class HeaderComponent extends BaseComponent implements OnInit {
   loading = true;
   apiUrl = AppConst.apiUrl;
   isRtl = AppConst.isRtl;
+
+  @ViewChild('navbarCollapse') navbarCollapse!: ElementRef;
   public get AppConst() {
     return AppConst;
   }
@@ -53,5 +55,12 @@ export class HeaderComponent extends BaseComponent implements OnInit {
   changeLanguage(lang: LanguageDTO) {
     this.languageService.changeLanguage(lang.culture);
     this.currentLanguage = lang.culture;
+  }
+
+  closeNavbar() {
+    const collapse = new bootstrap.Collapse(this.navbarCollapse.nativeElement, {
+      toggle: false,
+    });
+    collapse.hide();
   }
 }

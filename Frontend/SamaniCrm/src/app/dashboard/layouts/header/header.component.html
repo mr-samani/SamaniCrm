@@ -13,14 +13,14 @@
       aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01" #navbarCollapse>
       <div class="user-block navbar-brand" [mat-menu-trigger-for]="userMenu">
         <img *ngIf="user?.profilePicture" [src]="user?.profilePicture" [alt]="user?.userName" />
         <img *ngIf="!user?.profilePicture" src="/images/profile-picture.jpg" [alt]="user?.userName" />
         <span>{{ user?.userName }}</span>
       </div>
       <mat-menu #userMenu="matMenu">
-        <button mat-menu-item>
+        <button mat-menu-item (click)="closeNavbar()">
           <i class="fa fa-user mx-1"></i>
           {{ 'Profile' | translate }}
         </button>
@@ -28,7 +28,7 @@
           <i class="fa fa-lock mx-1"></i>
           {{ 'ChangePassword' | translate }}
         </button>
-        <button mat-menu-item (click)="logout()">
+        <button mat-menu-item (click)="logout(); closeNavbar()">
           <i class="fa fa-power-off mx-1"></i>
           {{ 'Logout' | translate }}
         </button>
@@ -36,37 +36,41 @@
 
       <ul class="navbar-nav mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/dashboard']" routerLinkActive="active">
+          <a class="nav-link" [routerLink]="['/dashboard']" routerLinkActive="active" (click)="closeNavbar()">
             <i class="fa fa-desktop"></i>
             {{ 'Dashboard' | translate }}
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/dashboard/notifications']" routerLinkActive="active">
+          <a
+            class="nav-link"
+            [routerLink]="['/dashboard/notifications']"
+            routerLinkActive="active"
+            (click)="closeNavbar()">
             <i class="fa fa-gear"></i>
             {{ 'Notifications' | translate }}
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/dashboard/setting']" routerLinkActive="active">
+          <a class="nav-link" [routerLink]="['/dashboard/setting']" routerLinkActive="active" (click)="closeNavbar()">
             <i class="fa fa-gear"></i>
             {{ 'Settings' | translate }}
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" (click)="openFileManager()">
+          <a class="nav-link" (click)="openFileManager(); closeNavbar()">
             <i class="fa fa-folder-image"></i>
             {{ 'Media' | translate }}
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/dashboard/content']" routerLinkActive="active">
+          <a class="nav-link" [routerLink]="['/dashboard/content']" routerLinkActive="active" (click)="closeNavbar()">
             <i class="fa fa-file-contract"></i>
             {{ 'Content' | translate }}
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/dashboard/products']" routerLinkActive="active">
+          <a class="nav-link" [routerLink]="['/dashboard/products']" routerLinkActive="active" (click)="closeNavbar()">
             <i class="fa fa-file-contract"></i>
             {{ 'Products' | translate }}
           </a>
@@ -95,7 +99,7 @@
           </ul>
         </li> -->
         <li class="nav-item">
-          <a class="nav-link" routerLink="/dashboard/builder">
+          <a class="nav-link" routerLink="/dashboard/builder" routerLinkActive="active" (click)="closeNavbar()">
             <i class="fa fa-page"></i>
             {{ 'PageBuilder' | translate }}
           </a>
@@ -123,7 +127,7 @@
       <!-- language -->
       <button mat-icon-button [matMenuTriggerFor]="langMnu" class="pt-2">
         <!-- <i class="flag" [ngClass]="currentLang"></i> -->
-        <img [src]="baseUrl+'/images/flags/' + currentLang + '.png'" />
+        <img [src]="baseUrl + '/images/flags/' + currentLang + '.png'" />
       </button>
       <mat-menu #langMnu="matMenu">
         <button
@@ -133,7 +137,7 @@
           class="language-menu">
           <div class="d-flex align-items-center g-5">
             <!-- <i class="flag" [ngClass]="lang.code"></i> -->
-            <img [src]="baseUrl+'/images/flags/' + lang.flag + '.png'" />
+            <img [src]="baseUrl + '/images/flags/' + lang.flag + '.png'" />
             <span>{{ lang.name }}</span>
           </div>
         </button>

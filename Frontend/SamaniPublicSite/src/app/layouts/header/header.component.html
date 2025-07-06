@@ -16,12 +16,12 @@
       aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarScroll">
+    <div class="collapse navbar-collapse" id="navbarScroll" #navbarCollapse>
       <ul class="navbar-nav my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px">
-        <menu-items [menuList]="menuList()"></menu-items>
+        <menu-items [menuList]="menuList()" (closeNavBar)="closeNavbar()"></menu-items>
       </ul>
       <div class="flex-fill"></div>
-      
+
       <!-- darkmode -->
       <label class="switch">
         <input

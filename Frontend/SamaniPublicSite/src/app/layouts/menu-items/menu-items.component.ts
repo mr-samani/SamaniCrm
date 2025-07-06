@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, input, OnInit } from '@angular/core';
+import { Component, Input, input, OnInit, output } from '@angular/core';
 import { MenuDTO } from '@shared/service-proxies/model/menu-dto';
 
 @Component({
@@ -10,9 +10,13 @@ import { MenuDTO } from '@shared/service-proxies/model/menu-dto';
 })
 export class MenuItemsComponent implements OnInit {
   menuList = input.required<MenuDTO[]>();
+  closeNavBar = output<void>();
 
   constructor() {}
 
-  ngOnInit() { 
+  ngOnInit() {}
+
+  closeMenu() {
+    this.closeNavBar.emit();
   }
 }
