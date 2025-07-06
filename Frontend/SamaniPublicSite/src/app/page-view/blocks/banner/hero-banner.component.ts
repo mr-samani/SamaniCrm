@@ -9,6 +9,11 @@ import { BlockBase } from '../block-base';
   template: `
     <div class="hero-banner">Banner</div>
   `,
+  styles: `
+  :host{
+    display:block;
+  }
+  `,
 })
 export class BlockHeroBannerComponent extends BlockBase {
   constructor(injector: Injector) {

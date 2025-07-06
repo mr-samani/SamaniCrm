@@ -4,7 +4,8 @@
     ngxDropList
     [data]="block.children"
     (drop)="b.drop($event)"
-    [id]="'blc_' + block.rowNumber">
+    [id]="'blc_' + block.rowNumber"
+    [style]="block.data.css">
     <div class="custom-placeholder2" *ngxPlaceholder></div>
 
     <dynamic-renderer

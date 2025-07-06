@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Injector } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { BlockBase } from '../block-base';
 
 @Component({
@@ -8,16 +8,21 @@ import { BlockBase } from '../block-base';
   imports: [CommonModule],
   template: `
     Category
-    <section>
-      <h3>{{ block.data.title }}</h3>
+    <section [style]="block.data.css">
+      <h3>{{ data.title }}</h3>
       <ul>
-        <li *ngFor="let c of block.data.categories">{{ c }}</li>
+        <li *ngFor="let c of data.categories">{{ c }}</li>
       </ul>
     </section>
   `,
 })
-export class BlockProductCategoryComponent extends BlockBase {
+export class BlockProductCategoryComponent extends BlockBase implements OnInit {
+  data: any;
   constructor(injector: Injector) {
     super(injector);
+  }
+
+  ngOnInit(): void {
+    this.data = this.block.data;
   }
 }

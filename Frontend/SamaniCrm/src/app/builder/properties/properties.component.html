@@ -3,4 +3,11 @@
   <p>ID: {{ b.selectedBlock.id }}</p>
   <p>Type: {{ BlockTypeEnum[b.selectedBlock.type] }}</p>
   <p>RowNumber: {{ b.selectedBlock.rowNumber }}</p>
+  <details>
+    <summary>Border</summary>
+    <style-border
+      [(ngModel)]="b.selectedBlock.data.style.border"
+      (css)="b.selectedBlock.data.css = $event"></style-border>
+    {{ b.selectedBlock.data.css }}
+  </details>
 </div>

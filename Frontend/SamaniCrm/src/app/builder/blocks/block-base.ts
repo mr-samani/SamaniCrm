@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, Injector, Input, OnInit } from '@
 import { FormBuilderService } from '../form-builder.service';
 import { BlockDefinition } from './block-registry';
 
-export abstract class BlockBase {
+export class BlockBase {
   block!: BlockDefinition;
   b: FormBuilderService;
   el: ElementRef<HTMLElement>;

@@ -1,0 +1,68 @@
+<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+  <input
+    type="radio"
+    class="btn-check"
+    name="btnradio"
+    id="forAll"
+    autocomplete="off"
+    [(ngModel)]="value.forAll"
+    [value]="true"
+    (change)="onChangeAll()" />
+  <label class="btn btn-outline-primary" for="forAll">All</label>
+
+  <input
+    type="radio"
+    class="btn-check"
+    name="btnradio"
+    id="Seprate"
+    autocomplete="off"
+    [(ngModel)]="value.forAll"
+    [value]="false"
+    (change)="onChangeAll()" />
+  <label class="btn btn-outline-primary" for="Seprate">Seprate</label>
+</div>
+{{ value.forAll }}
+@if (value.forAll) {
+  <ng-container [ngTemplateOutlet]="BORDER" [ngTemplateOutletContext]="{ border: value.border }"></ng-container>
+} @else {
+  <ng-container
+    [ngTemplateOutlet]="BORDER"
+    [ngTemplateOutletContext]="{ border: value.borderTop, title: 'BorderTop' }"></ng-container>
+  <ng-container
+    [ngTemplateOutlet]="BORDER"
+    [ngTemplateOutletContext]="{ border: value.borderRight, title: 'BorderRight' }"></ng-container>
+  <ng-container
+    [ngTemplateOutlet]="BORDER"
+    [ngTemplateOutletContext]="{ border: value.borderBottom, title: 'BorderBottom' }"></ng-container>
+  <ng-container
+    [ngTemplateOutlet]="BORDER"
+    [ngTemplateOutletContext]="{ border: value.borderLeft, title: 'BorderLeft' }"></ng-container>
+}
+
+<ng-template #BORDER let-border="border" let-title="title">
+  <div>{{ title }}</div>
+  <table *ngIf="border">
+    <tr>
+      <td>Width</td>
+      <td>
+        <input type="number" class="form-control" [(ngModel)]="border.width" (change)="onUiChange()" />
+      </td>
+    </tr>
+    <tr>
+      <td>Color</td>
+      <td>
+        <input type="color" class="form-control" [(ngModel)]="border.color" (change)="onUiChange()" />
+      </td>
+    </tr>
+    <tr>
+      <td>Type</td>
+      <td>
+        <select class="form-control" [(ngModel)]="border.type" (change)="onUiChange()">
+          <option [value]="val" *ngFor="let val of borderTypeList">
+            {{ val }}
+          </option>
+        </select>
+      </td>
+    </tr>
+  </table>
+</ng-template>

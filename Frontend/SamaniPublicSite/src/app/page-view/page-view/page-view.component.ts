@@ -1,4 +1,14 @@
-import { AfterViewInit, Component, Injector, OnInit, signal, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  DOCUMENT,
+  Inject,
+  Injector,
+  OnInit,
+  signal,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { BaseComponent } from '@app/base-components';
 import { PageDto, PagesServiceProxy } from '@shared/service-proxies';
 import { finalize } from 'rxjs/operators';
@@ -19,7 +29,12 @@ export class PageViewComponent extends BaseComponent implements OnInit, AfterVie
   loading = signal(false);
   pageInfo?: PageDto;
   @ViewChild('container', { read: ViewContainerRef, static: false }) vcr?: ViewContainerRef;
-  constructor(injector: Injector, private pageService: PagesServiceProxy, public b: FormBuilderService) {
+  constructor(
+    injector: Injector,
+    private pageService: PagesServiceProxy,
+    public b: FormBuilderService,
+    @Inject(DOCUMENT) private _document: Document
+  ) {
     super(injector);
 
     this.culture = this.route.snapshot.params['culture'];
@@ -46,6 +61,13 @@ export class PageViewComponent extends BaseComponent implements OnInit, AfterVie
         const pageData = this.initBlocks(JSON.parse(this.pageInfo.data ?? '[]'));
         console.log(pageData);
         this.renderNode(pageData);
+
+        if (this.pageInfo.styles) {
+          let style = this._document.createElement('style');
+          style.id = this.pageInfo.id + '';
+          style.innerHTML = this.pageInfo.styles;
+          this._document.head.appendChild(style);
+        }
         this.cd.detectChanges();
       });
   }
@@ -57,7 +79,7 @@ export class PageViewComponent extends BaseComponent implements OnInit, AfterVie
       }
       item = new BlockDefinition(item);
       if (item.children && item.children.length) {
-        this.initBlocks(item.children);
+        item.children = this.initBlocks(item.children);
       }
     }
     return list;

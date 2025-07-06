@@ -11,6 +11,7 @@ export function CreateBlock(vcr: ViewContainerRef, block: BlockDefinition) {
     if (comp) {
       const cmpRef: ComponentRef<any> = vcr.createComponent(comp);
       cmpRef.instance.block = block;
+      cmpRef.instance.el.nativeElement.id = block.id;
     }
   }
 }

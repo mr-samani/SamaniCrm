@@ -5,6 +5,8 @@ import { finalize } from 'rxjs/operators';
 import { FormBuilderService } from './form-builder.service';
 import { AppConst } from '@shared/app-const';
 import { AppComponentBase } from '@app/app-component-base';
+import { BlockDefinition } from './blocks/block-registry';
+import { generateCSSFromBlocks } from './helpers/generate-css-block';
 
 @Injectable()
 export class FormBuilderBackendService extends AppComponentBase {
@@ -30,19 +32,26 @@ export class FormBuilderBackendService extends AppComponentBase {
       .subscribe((response) => {
         this.pageInfo = response.data;
         if (this.pageInfo && this.pageInfo.data) {
-          this.b.blocks = JSON.parse(this.pageInfo.data);
+          this.b.blocks = this.initBlocks(JSON.parse(this.pageInfo.data ?? '[]'));
+          console.log(this.b.blocks);
         }
       });
   }
 
+  private initBlocks(list: BlockDefinition[]) {
+    return list.map((item) => new BlockDefinition(item));
+  }
+
   save() {
     const data = JSON.stringify(this.b.blocks);
+    const css = generateCSSFromBlocks(this.b.blocks);
 
     this.saving = true;
     const input = new UpdatePageContentCommand({
       pageId: this.pageId,
       culture: this.pageInfo?.culture,
       data,
+      styles: css,
     });
     this.pageService
       .updatePageContent(input)

@@ -1,4 +1,4 @@
-import { Component, Input, ViewContainerRef, ComponentRef, ViewChild } from '@angular/core';
+import { Component, Input, ViewContainerRef, ComponentRef, ViewChild, inject, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BLOCK_REGISTRY, BlockDefinition } from './block-registry';
 import { FormBuilderService } from '../form-builder.service';
@@ -53,6 +53,7 @@ import { FormBuilderService } from '../form-builder.service';
 export class DynamicRendererComponent {
   block!: BlockDefinition;
   @ViewChild('container', { read: ViewContainerRef, static: true }) vcr!: ViewContainerRef;
+  renderer = inject(Renderer2);
   @Input() parent?: BlockDefinition;
   @Input('block') set renderBlock(value: BlockDefinition) {
     this.block = value;

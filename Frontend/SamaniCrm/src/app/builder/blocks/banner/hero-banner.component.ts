@@ -7,7 +7,7 @@ import { BlockBase } from '../block-base';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="hero-banner">Banner</div>
+    <div class="hero-banner" [style]="block.data.css">Banner</div>
   `,
 })
 export class BlockHeroBannerComponent extends BlockBase {

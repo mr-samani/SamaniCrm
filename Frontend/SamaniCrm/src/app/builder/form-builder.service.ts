@@ -38,8 +38,8 @@ export class FormBuilderService {
       if (b.type == BlockTypeEnum.Row && (!b.children || b.children.length < 1)) {
         // هر Row باید دو cell (Div) داشته باشد که هرکدام children آرایه‌ای خالی دارند
         b.children = [
-          new BlockDefinition({ type: BlockTypeEnum.Div, component: BlockDivComponent, children: [] }),
-          new BlockDefinition({ type: BlockTypeEnum.Div, component: BlockDivComponent, children: [] }),
+          new BlockDefinition({ type: BlockTypeEnum.Div, component: BlockDivComponent  }),
+          new BlockDefinition({ type: BlockTypeEnum.Div, component: BlockDivComponent  }),
         ];
       }
       parentChildren.splice(index, 0, b);

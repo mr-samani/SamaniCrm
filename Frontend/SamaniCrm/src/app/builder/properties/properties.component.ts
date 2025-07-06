@@ -1,7 +1,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { FormBuilderService } from '../form-builder.service';
-import { BlockTypeEnum } from '../blocks/block-registry';
+import { BlockTypeEnum } from '../blocks/block-registry'; 
 
 @Component({
   selector: 'properties',
@@ -10,6 +10,7 @@ import { BlockTypeEnum } from '../blocks/block-registry';
   standalone: false,
 })
 export class PropertiesComponent extends AppComponentBase implements OnInit {
+ 
   constructor(
     injector: Injector,
     public b: FormBuilderService,
