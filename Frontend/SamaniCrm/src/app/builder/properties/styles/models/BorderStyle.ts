@@ -8,9 +8,9 @@ export interface BorderStyle {
 }
 
 export interface Border {
-  prefix: 'px' | '%' | 'rem' | 'em';
+  prefix?: SizePrefix;
   width?: number;
-  type: BorderType;
+  type?: BorderType;
   color?: string;
 
   /** 'inset' | 'outset' */
@@ -28,3 +28,6 @@ export const BorderTypeList: readonly BorderType[] = [
   'groove',
   'ridge',
 ] as const;
+
+export declare type SizePrefix = 'px' | '%' | 'rem' | 'em';
+export const SizePrefixList: readonly SizePrefix[] = ['px', '%', 'rem', 'em'] as const;

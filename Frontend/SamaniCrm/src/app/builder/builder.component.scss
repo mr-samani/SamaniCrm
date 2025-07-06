@@ -1,5 +1,7 @@
 app-builder {
   --rightSideWidth: 220px;
+  --leftSideWidth: 340px;
+  --primaryColor: #008cff;
 }
 .builder {
   display: flex;
@@ -24,9 +26,10 @@ app-builder {
   }
 }
 .properties {
-  width: 200px;
+  width: var(--leftSideWidth);
   border: 1px #3c3c3c47 solid;
   direction: ltr;
+  padding: 10px;
 }
 
 /*--------------- view mode --------------*/
