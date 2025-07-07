@@ -1,15 +1,17 @@
+import { SizeUnit } from './SizeUnit';
+
 export interface BorderStyle {
   forAll: boolean;
   border?: Border;
-  borderTop?: Border;
-  borderRight?: Border;
-  borderBottom?: Border;
-  borderLeft?: Border;
+  top?: Border;
+  right?: Border;
+  bottom?: Border;
+  left?: Border;
 }
 
 export interface Border {
-  prefix?: SizePrefix;
-  width?: number;
+  unit?: SizeUnit;
+  size?: number;
   type?: BorderType;
   color?: string;
 
@@ -28,6 +30,3 @@ export const BorderTypeList: readonly BorderType[] = [
   'groove',
   'ridge',
 ] as const;
-
-export declare type SizePrefix = 'px' | '%' | 'rem' | 'em';
-export const SizePrefixList: readonly SizePrefix[] = ['px', '%', 'rem', 'em'] as const;

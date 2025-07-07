@@ -14,15 +14,17 @@ ECHO [4]. Run open api generation PublicSite
 ECHO [5]. Update database with seeds
 ECHO [6]. Open dashboard in VScode
 ECHO [7]. Open public site in VScode
-ECHO [8]. Exit
+ECHO [8]. Start Host api
+ECHO [9]. Exit
 ECHO.
 
-CHOICE /C 12345678 /M "Enter your choice:"
+CHOICE /C 123456789 /M "Enter your choice:"
 
 ECHO.
 
 :: Note - list ERRORLEVELS in decreasing order
-IF ERRORLEVEL 8 GOTO ExitCMD
+IF ERRORLEVEL 9 GOTO ExitCMD
+IF ERRORLEVEL 8 GOTO StartHostApi
 IF ERRORLEVEL 7 GOTO OpenPublicVsCode
 IF ERRORLEVEL 6 GOTO OpenDashboardVsCode
 IF ERRORLEVEL 5 GOTO UpdateDbWithSeed
@@ -77,6 +79,12 @@ CD /D "%currentDirector%\Frontend\SamaniCrm"
 call npm run start
 GOTO End
 
+::---------------------------------------------------------
+:StartHostApi
+ECHO *** Start Dotnet Host Api***
+CD /D "%currentDirector%\BackEnd\SamaniCrm.Api"
+call dotnet run --project ./SamaniCrm.Api.csproj --launch-profile https
+GOTO End
 ::---------------------------------------------------------
 :StartPublicSite
 ECHO *** Serve Frontend Public site ***

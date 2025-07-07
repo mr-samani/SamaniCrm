@@ -4,10 +4,19 @@
   <p>Type: {{ BlockTypeEnum[b.selectedBlock.type] }}</p>
   <p>RowNumber: {{ b.selectedBlock.rowNumber }}</p>
   <details>
-    <summary>Border</summary>
-    <style-border
-      [(ngModel)]="b.selectedBlock.data.style.border"
-      (css)="b.selectedBlock.data.css = $event"></style-border>
-    {{ b.selectedBlock.data.css }}
+    <summary>Layout</summary>
+    <p>Padding</p>
+    <style-spacing [(ngModel)]="b.selectedBlock.data.style.padding" (ngModelChange)="updateCss()"></style-spacing>
+    <p>Margin</p>
+    <style-spacing [(ngModel)]="b.selectedBlock.data.style.margin" (ngModelChange)="updateCss()"></style-spacing>
   </details>
+
+  <details>
+    <summary>Border</summary>
+    <style-border [(ngModel)]="b.selectedBlock.data.style.border" (css)="borderCss=$event; updateCss()"></style-border>
+  </details>
+
+  <pre class="cssStyles">
+      {{ b.selectedBlock.data.css }}
+  </pre>
 </div>

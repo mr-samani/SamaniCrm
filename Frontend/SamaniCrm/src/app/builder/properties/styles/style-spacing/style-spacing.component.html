@@ -1,0 +1,65 @@
+<div class="input-panel">
+  <div class="input-group">
+    <input
+      type="text"
+      class="form-control"
+      name="spacing"
+      #spacing="ngModel"
+      [(ngModel)]="spacingString"
+      (ngModelChange)="stringChange()"
+      [pattern]="spacingRegex" />
+    <button class="input-group-text" (click)="togglePanel()">
+      <i class="fa fa-border-outer"></i>
+    </button>
+  </div>
+  <p *ngIf="spacing.hasError('pattern')">Invalid spacing value</p>
+  <div class="panel-back-drop" *ngIf="showPanel" (click)="showPanel = false"></div>
+  <div class="panel" *ngIf="showPanel">
+    <div class="place-top">
+      <ng-container
+        [ngTemplateOutlet]="SPACING"
+        [ngTemplateOutletContext]="{
+          $implicit: value.top,
+          title: 'Top',
+        }"></ng-container>
+    </div>
+    <div class="place-left-right">
+      <ng-container
+        [ngTemplateOutlet]="SPACING"
+        [ngTemplateOutletContext]="{
+          $implicit: value.left,
+          title: 'Left',
+        }"></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="SPACING"
+        [ngTemplateOutletContext]="{
+          $implicit: value.right,
+          title: 'Right',
+        }"></ng-container>
+    </div>
+    <div class="place-bottom">
+      <ng-container
+        [ngTemplateOutlet]="SPACING"
+        [ngTemplateOutletContext]="{
+          $implicit: value.bottom,
+          title: 'Bottom',
+        }"></ng-container>
+    </div>
+  </div>
+</div>
+
+<ng-template #SPACING let-spacing let-title="title">
+  <div class="mb-3">
+    <div>
+      <b>{{ title }}</b>
+    </div>
+    <div class="input-group" *ngIf="spacing">
+      <input type="number" class="form-control input-size" [(ngModel)]="spacing.size" (change)="onUiChange()" />
+      <select class="form-control select-unit" [(ngModel)]="spacing.unit" (change)="onUiChange()">
+        <option [value]="val" *ngFor="let val of sizeUnitList">
+          {{ val }}
+        </option>
+      </select>
+    </div>
+  </div>
+</ng-template>

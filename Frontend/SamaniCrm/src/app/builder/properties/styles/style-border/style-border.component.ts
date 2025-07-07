@@ -1,8 +1,9 @@
 import { Component, EventEmitter, forwardRef, Injector, Input, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
-import { Border, BorderStyle, BorderTypeList, SizePrefixList } from '../models/BorderStyle';
+import { Border, BorderStyle, BorderTypeList } from '../models/BorderStyle';
 import { cloneDeep } from 'lodash-es';
+import { SizeUnitList } from '../models/SizeUnit';
 
 @Component({
   selector: 'style-border',
@@ -19,14 +20,14 @@ import { cloneDeep } from 'lodash-es';
 })
 export class StyleBorderComponent extends AppComponentBase implements OnInit, ControlValueAccessor {
   borderTypeList = BorderTypeList;
-  sizePrefixList = SizePrefixList;
+  sizeUnitList = SizeUnitList;
 
   value?: BorderStyle;
 
   defaultBorder: Border = {
     color: '#ececec',
     inset: false,
-    prefix: 'px',
+    unit: 'px',
     type: 'solid',
   };
 
@@ -70,10 +71,10 @@ export class StyleBorderComponent extends AppComponentBase implements OnInit, Co
     if (this.value.forAll && !this.value.border) {
       this.value.border = cloneDeep(this.defaultBorder);
     } else {
-      this.value.borderTop ??= cloneDeep(this.value.border);
-      this.value.borderRight ??= cloneDeep(this.value.border);
-      this.value.borderBottom ??= cloneDeep(this.value.border);
-      this.value.borderLeft ??= cloneDeep(this.value.border);
+      this.value.top ??= cloneDeep(this.value.border);
+      this.value.right ??= cloneDeep(this.value.border);
+      this.value.bottom ??= cloneDeep(this.value.border);
+      this.value.left ??= cloneDeep(this.value.border);
     }
     this.emitChange();
   }
@@ -89,21 +90,13 @@ export class StyleBorderComponent extends AppComponentBase implements OnInit, Co
    */
   public getCssFromBorderStyle(b?: BorderStyle): string {
     if (!b) return '';
-    if (b.forAll && b.border?.width) {
-      return `border: ${b.border.width}${b.border.prefix} ${b.border.type} ${b.border.color};`;
+    if (b.forAll && b.border?.size) {
+      return `border: ${b.border.size}${b.border.unit} ${b.border.type} ${b.border.color};`;
     } else {
-      const top = b.borderTop?.width
-        ? `${b.borderTop.width}${b.borderTop.prefix} ${b.borderTop.type} ${b.borderTop.color}`
-        : 'none';
-      const right = b.borderRight?.width
-        ? `${b.borderRight.width}${b.borderRight.prefix} ${b.borderRight.type} ${b.borderRight.color}`
-        : 'none';
-      const bottom = b.borderBottom?.width
-        ? `${b.borderBottom.width}${b.borderBottom.prefix} ${b.borderBottom.type} ${b.borderBottom.color}`
-        : 'none';
-      const left = b.borderLeft?.width
-        ? `${b.borderLeft.width}${b.borderLeft.prefix} ${b.borderLeft.type} ${b.borderLeft.color}`
-        : 'none';
+      const top = b.top?.size ? `${b.top.size}${b.top.unit} ${b.top.type} ${b.top.color}` : 'none';
+      const right = b.right?.size ? `${b.right.size}${b.right.unit} ${b.right.type} ${b.right.color}` : 'none';
+      const bottom = b.bottom?.size ? `${b.bottom.size}${b.bottom.unit} ${b.bottom.type} ${b.bottom.color}` : 'none';
+      const left = b.left?.size ? `${b.left.size}${b.left.unit} ${b.left.type} ${b.left.color}` : 'none';
       return `border-top: ${top}; border-right: ${right}; border-bottom: ${bottom}; border-left: ${left};`;
     }
   }

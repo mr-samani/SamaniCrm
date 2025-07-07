@@ -16,24 +16,24 @@
 } @else if (value && !value.forAll) {
   <ng-container
     [ngTemplateOutlet]="BORDER"
-    [ngTemplateOutletContext]="{ $implicit: value.borderTop, title: 'BorderTop', name: 'borderTop' }"></ng-container>
+    [ngTemplateOutletContext]="{ $implicit: value.top, title: 'BorderTop', name: 'top' }"></ng-container>
   <ng-container
     [ngTemplateOutlet]="BORDER"
     [ngTemplateOutletContext]="{
-      $implicit: value.borderRight,
+      $implicit: value.right,
       title: 'BorderRight',
-      name: 'borderRight',
+      name: 'right',
     }"></ng-container>
   <ng-container
     [ngTemplateOutlet]="BORDER"
     [ngTemplateOutletContext]="{
-      $implicit: value.borderBottom,
+      $implicit: value.bottom,
       title: 'BorderBottom',
-      name: 'borderBottom',
+      name: 'bottom',
     }"></ng-container>
   <ng-container
     [ngTemplateOutlet]="BORDER"
-    [ngTemplateOutletContext]="{ $implicit: value.borderLeft, title: 'BorderLeft', name: 'borderLeft' }"></ng-container>
+    [ngTemplateOutletContext]="{ $implicit: value.left, title: 'BorderLeft', name: 'left' }"></ng-container>
 }
 
 <ng-template #BORDER let-border let-title="title" let-name="name">
@@ -47,9 +47,9 @@
     <div class="col">
       <span>Width</span>
       <div class="input-group">
-        <input type="number" class="form-control" [(ngModel)]="border.width" (change)="onUiChange()" />
-        <select class="form-control sel-prefix" [(ngModel)]="border.prefix" (change)="onUiChange()">
-          <option [value]="val" *ngFor="let val of sizePrefixList">
+        <input type="number" class="form-control" [(ngModel)]="border.size" (change)="onUiChange()" />
+        <select class="form-control select-unit" [(ngModel)]="border.unit" (change)="onUiChange()">
+          <option [value]="val" *ngFor="let val of sizeUnitList">
             {{ val }}
           </option>
         </select>

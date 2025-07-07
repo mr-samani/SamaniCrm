@@ -1,0 +1,33 @@
+.input-panel {
+  position: relative;
+}
+.panel-back-drop{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.082);
+}
+.panel {
+  background-color: var(--bs-body-bg);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 12px;
+  margin-top: 8px;
+  position: absolute;
+  width: 280px;
+  right: 0;
+  z-index: 1000;
+
+  .place-top,
+  .place-bottom {
+    display: flex;
+    justify-content: center;
+  }
+  .place-left-right {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+}

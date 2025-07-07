@@ -11,6 +11,8 @@ import { BlockTypeEnum } from '../blocks/block-registry';
   encapsulation: ViewEncapsulation.None,
 })
 export class PropertiesComponent extends AppComponentBase implements OnInit {
+  borderCss = '';
+
   constructor(
     injector: Injector,
     public b: FormBuilderService,
@@ -22,5 +24,15 @@ export class PropertiesComponent extends AppComponentBase implements OnInit {
 
   public get BlockTypeEnum(): typeof BlockTypeEnum {
     return BlockTypeEnum;
+  }
+
+  updateCss() {
+    if (!this.b.selectedBlock) return;
+
+    this.b.selectedBlock.data.css = `
+  ${this.borderCss}
+  ${this.b.selectedBlock.data.style.padding ? 'padding:' + this.b.selectedBlock.data.style.padding + ';' : ''}
+  ${this.b.selectedBlock.data.style.margin ? 'margin:' + this.b.selectedBlock.data.style.margin + ';' : ''}
+    `;
   }
 }
