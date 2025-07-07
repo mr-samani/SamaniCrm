@@ -23,6 +23,17 @@
     <summary>Shadow</summary>
     <style-shadow [(ngModel)]="b.selectedBlock.data.style.boxShadow" (ngModelChange)="updateCss()"></style-shadow>
   </details>
+
+  <details>
+    <summary>Background</summary>
+    <input
+      type="text"
+      readonly
+      ngxInputColor
+      [(ngModel)]="b.selectedBlock.data.style.backgroundColor"
+      (ngModelChange)="updateCss()" />
+  </details>
+
   <pre class="cssStyles">
       {{ b.selectedBlock.data.css }}
   </pre>

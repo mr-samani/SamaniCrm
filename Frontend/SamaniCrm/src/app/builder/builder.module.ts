@@ -14,6 +14,7 @@ import { FormBuilderBackendService } from './backend.service';
 import { PagesServiceProxy } from '@shared/service-proxies';
 import { StyleProperties } from './properties/styles/style.module';
 import { FormsModule } from '@angular/forms';
+import { NgxInputColorModule } from 'ngx-input-color';
 
 @NgModule({
   declarations: [BuilderComponent, PropertiesComponent, LayoutsComponent, ToolbarComponent, ToolboxComponent],
@@ -25,6 +26,7 @@ import { FormsModule } from '@angular/forms';
     BuilderRoutingModule,
     StyleProperties,
     FormsModule,
+    NgxInputColorModule,
   ],
   providers: [FormBuilderService, FormBuilderBackendService, PagesServiceProxy],
 })

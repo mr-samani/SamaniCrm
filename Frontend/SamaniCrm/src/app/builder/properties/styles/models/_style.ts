@@ -7,4 +7,7 @@ export interface BlockStyle {
   margin?: string;
 
   boxShadow?: string;
+
+  backgroundColor?: string;
+  
 }
