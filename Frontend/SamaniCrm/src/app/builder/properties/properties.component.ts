@@ -33,6 +33,7 @@ export class PropertiesComponent extends AppComponentBase implements OnInit {
   ${this.borderCss}
   ${this.b.selectedBlock.data.style.padding ? 'padding:' + this.b.selectedBlock.data.style.padding + ';' : ''}
   ${this.b.selectedBlock.data.style.margin ? 'margin:' + this.b.selectedBlock.data.style.margin + ';' : ''}
+  ${this.b.selectedBlock.data.style.borderRadius ? 'border-radius:' + this.b.selectedBlock.data.style.borderRadius + ';' : ''}
   ${this.b.selectedBlock.data.style.boxShadow ? 'box-shadow:' + this.b.selectedBlock.data.style.boxShadow + ';' : ''}
     `;
   }

@@ -12,10 +12,12 @@
   </details>
 
   <details>
-    <summary>Border</summary>
+    <summary>Border & Radius</summary>
     <style-border
       [(ngModel)]="b.selectedBlock.data.style.border"
       (css)="borderCss = $event; updateCss()"></style-border>
+    <p>Border Radius</p>
+    <style-spacing [(ngModel)]="b.selectedBlock.data.style.borderRadius" (ngModelChange)="updateCss()"></style-spacing>
   </details>
   <details>
     <summary>Shadow</summary>
