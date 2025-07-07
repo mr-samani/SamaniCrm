@@ -1,7 +1,7 @@
-import { Component, EventEmitter, forwardRef, Injector, Input, OnInit, Output } from '@angular/core';
+import { Component, forwardRef, Injector, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
-import { parseSpacing, spacingRegex } from '../helper/parse-spacing';
+import { getCssFromSpacingStyle, parseSpacing, spacingRegex } from '../helper/parse-spacing';
 import { SizeUnitList } from '../models/SizeUnit';
 import { Spacing } from '../models/Spacing';
 
@@ -22,7 +22,7 @@ export class StyleSpacingComponent extends AppComponentBase implements OnInit, C
   sizeUnitList = SizeUnitList;
   spacingRegex = spacingRegex;
 
-  value: Spacing = {};
+  value: Spacing | null = null;
   spacingString = '';
 
   onChangeFn = (val: string) => {};
@@ -54,20 +54,8 @@ export class StyleSpacingComponent extends AppComponentBase implements OnInit, C
   }
 
   emitChange() {
-    this.spacingString = this.getCssFromSpacingStyle(this.value);
+    this.spacingString = getCssFromSpacingStyle(this.value);
     this.onChangeFn(this.spacingString);
-  }
-
-  /**
-   * Optional helper to generate CSS string
-   */
-  private getCssFromSpacingStyle(p?: Spacing): string {
-    if (!p) return '';
-    const top = p.top ? `${p.top.size ?? 0}${p.top.unit}` : '0';
-    const right = p.right ? `${p.right.size ?? 0}${p.right.unit}` : '0';
-    const bottom = p.bottom ? `${p.bottom.size ?? 0}${p.bottom.unit}` : '0';
-    const left = p.left ? `${p.left.size ?? 0}${p.left.unit}` : '0';
-    return `${top} ${right} ${bottom} ${left}`;
   }
 
   stringChange(): void {
@@ -83,6 +71,13 @@ export class StyleSpacingComponent extends AppComponentBase implements OnInit, C
   }
 
   togglePanel() {
+    if (!this.value) {
+      this.value = {};
+    }
+    this.value.top ??= {};
+    this.value.bottom ??= {};
+    this.value.left ??= {};
+    this.value.right ??= {};
     this.showPanel = !this.showPanel;
   }
 }

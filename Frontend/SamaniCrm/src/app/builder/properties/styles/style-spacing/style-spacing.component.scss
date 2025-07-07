@@ -1,13 +1,13 @@
 .input-panel {
   position: relative;
 }
-.panel-back-drop{
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.082);
+.panel-back-drop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.082);
 }
 .panel {
   background-color: var(--bs-body-bg);
@@ -30,4 +30,10 @@
     justify-content: space-between;
     gap: 10px;
   }
+}
+
+.fw-100px {
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px;
 }

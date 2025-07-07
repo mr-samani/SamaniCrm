@@ -1,57 +1,83 @@
 import { SizeUnit } from '../models/SizeUnit';
-import { Spacing } from '../models/Spacing';
+import { Spacing, SpacingValue } from '../models/Spacing';
 
-// ✅ Regex برای تشخیص مقدارهای margin/padding مشابه مرورگر
-export const spacingRegex = /^(\d+(\.\d+)?)(px|em|rem|vw|vh|%)?(\s+(\d+(\.\d+)?)(px|em|rem|vw|vh|%)?){0,3}$/;
+export const spacingRegex = /^((\d+(\.\d+)?(px|em|rem|vw|vh|%)?|auto)(\s+)?){1,4}$/;
 
-export function parseSpacing(input: string): Spacing {
-  if (!spacingRegex.test(input.trim()))
-    return {
-      top: { size: 0, unit: 'px' },
-      right: { size: 0, unit: 'px' },
-      bottom: { size: 0, unit: 'px' },
-      left: { size: 0, unit: 'px' },
-    };
+export function parseSpacing(input: string): Spacing | null {
+  const trimmed = input.trim();
+  if (!spacingRegex.test(trimmed)) return null;
 
-  const parts = input.trim().split(/\s+/);
-  const values: any[] = parts.map((p) => {
-    const match = p.match(/^(\d+(\.\d+)?)(px|em|rem|vw|vh|%)?$/);
-    if (!match) return { size: 0, unit: 'px' }; // fallback
-    return {
-      size: parseFloat(match[1]),
-      unit: match[3] || 'px',
-    };
-  });
+  const parts = trimmed.split(/\s+/);
+  const values: SpacingValue[] = [];
 
-  const get = (i: number) => values[i] || values[0];
+  for (const p of parts) {
+    if (p === 'auto') {
+      values.push({ size: 'auto', unit: 'auto' });
+    } else {
+      const match = p.match(/^(\d+(\.\d+)?)(px|em|rem|vw|vh|%)?$/);
+      if (!match) return null;
+      values.push({
+        size: parseFloat(match[1]),
+        unit: (match[3] as SizeUnit) || 'px',
+      });
+    }
+  }
 
-  if (values.length === 1) {
-    return {
-      top: get(0),
-      right: get(0),
-      bottom: get(0),
-      left: get(0),
-    };
-  } else if (values.length === 2) {
-    return {
-      top: get(0),
-      right: get(1),
-      bottom: get(0),
-      left: get(1),
-    };
-  } else if (values.length === 3) {
-    return {
-      top: get(0),
-      right: get(1),
-      bottom: get(2),
-      left: get(1),
-    };
+  const get = (i: number): SpacingValue => {
+    const base = values[i] || values[0];
+    return base ? { ...base } : { size: 0, unit: 'px' }; // clone
+  };
+
+  switch (values.length) {
+    case 1:
+      return { top: get(0), right: get(0), bottom: get(0), left: get(0) };
+    case 2:
+      return { top: get(0), right: get(1), bottom: get(0), left: get(1) };
+    case 3:
+      return { top: get(0), right: get(1), bottom: get(2), left: get(1) };
+    case 4:
+      return { top: get(0), right: get(1), bottom: get(2), left: get(3) };
+    default:
+      return null;
+  }
+}
+
+/*
+        parseSpacing("5px auto")
+        // ✅ { top: 5px, right: auto, bottom: 5px, left: auto }
+
+        parseSpacing("10px 15px 20px auto")
+        // ✅ { top: 10px, right: 15px, bottom: 20px, left: auto }
+
+        parseSpacing("auto")
+        // ✅ همه جهات auto
+
+        parseSpacing("15px")
+        // ✅ همه جهات 15px
+*/
+/*-------------------------------------------------------------------------------------------------*/
+
+export function getCssFromSpacingStyle(p?: Spacing | null): string {
+  if (!p) return '';
+
+  const toStr = (val?: SpacingValue): string => {
+    if (!val) return '0';
+    if (val.size === 'auto') return 'auto';
+    return `${val.size}${val.unit}`;
+  };
+
+  const t = toStr(p.top);
+  const r = toStr(p.right);
+  const b = toStr(p.bottom);
+  const l = toStr(p.left);
+
+  if (t === r && t === b && t === l) {
+    return t;
+  } else if (t === b && r === l) {
+    return `${t} ${r}`;
+  } else if (r === l) {
+    return `${t} ${r} ${b}`;
   } else {
-    return {
-      top: get(0),
-      right: get(1),
-      bottom: get(2),
-      left: get(3),
-    };
+    return `${t} ${r} ${b} ${l}`;
   }
 }

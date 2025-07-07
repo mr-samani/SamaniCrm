@@ -1,8 +1,13 @@
 import { SizeUnit } from './SizeUnit';
 
+export class SpacingValue {
+  size?: number | 'auto';
+  unit?: SizeUnit;
+}
+
 export class Spacing {
-  top?: { size: number; unit: SizeUnit };
-  right?: { size: number; unit: SizeUnit };
-  bottom?: { size: number; unit: SizeUnit };
-  left?: { size: number; unit: SizeUnit };
+  top?: SpacingValue;
+  right?: SpacingValue;
+  bottom?: SpacingValue;
+  left?: SpacingValue;
 }
