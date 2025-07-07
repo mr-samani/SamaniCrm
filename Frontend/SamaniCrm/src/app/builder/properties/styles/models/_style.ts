@@ -4,4 +4,6 @@ export interface BlockStyle {
   border?: BorderStyle;
   padding?: string;
   margin?: string;
+
+  boxShadow?: string;
 }

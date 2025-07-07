@@ -13,9 +13,14 @@
 
   <details>
     <summary>Border</summary>
-    <style-border [(ngModel)]="b.selectedBlock.data.style.border" (css)="borderCss=$event; updateCss()"></style-border>
+    <style-border
+      [(ngModel)]="b.selectedBlock.data.style.border"
+      (css)="borderCss = $event; updateCss()"></style-border>
   </details>
-
+  <details>
+    <summary>Shadow</summary>
+    <style-shadow [(ngModel)]="b.selectedBlock.data.style.boxShadow" (ngModelChange)="updateCss()"></style-shadow>
+  </details>
   <pre class="cssStyles">
       {{ b.selectedBlock.data.css }}
   </pre>
