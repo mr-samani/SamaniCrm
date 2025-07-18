@@ -5,33 +5,60 @@
   <p>RowNumber: {{ b.selectedBlock.rowNumber }}</p>
   <details>
     <summary>Layout</summary>
-    <p>Padding</p>
-    <style-spacing [(ngModel)]="b.selectedBlock.data.style.padding" (ngModelChange)="updateCss()"></style-spacing>
-    <p>Margin</p>
-    <style-spacing [(ngModel)]="b.selectedBlock.data.style.margin" (ngModelChange)="updateCss()"></style-spacing>
-  </details>
-
-  <details>
-    <summary>Border & Radius</summary>
-    <style-border
-      [(ngModel)]="b.selectedBlock.data.style.border"
-      (css)="borderCss = $event; updateCss()"></style-border>
-    <p>Border Radius</p>
-    <style-spacing [(ngModel)]="b.selectedBlock.data.style.borderRadius" (ngModelChange)="updateCss()"></style-spacing>
-  </details>
-  <details>
-    <summary>Shadow</summary>
-    <style-shadow [(ngModel)]="b.selectedBlock.data.style.boxShadow" (ngModelChange)="updateCss()"></style-shadow>
+    <table>
+      <tr>
+        <th>Padding</th>
+        <td>
+          <style-spacing [(ngModel)]="b.selectedBlock.data.style.padding" (ngModelChange)="updateCss()"></style-spacing>
+        </td>
+      </tr>
+      <tr>
+        <th>Margin</th>
+        <td>
+          <style-spacing [(ngModel)]="b.selectedBlock.data.style.margin" (ngModelChange)="updateCss()"></style-spacing>
+        </td>
+      </tr>
+      >
+      <tr>
+        <th>Border</th>
+        <td>
+          <style-border
+            [(ngModel)]="b.selectedBlock.data.style.border"
+            (css)="borderCss = $event; updateCss()"></style-border>
+        </td>
+      </tr>
+      <tr>
+        <th>Radius</th>
+        <td>
+          <style-spacing
+            [(ngModel)]="b.selectedBlock.data.style.borderRadius"
+            (ngModelChange)="updateCss()"></style-spacing>
+        </td>
+      </tr>
+      <tr>
+        <th>Shadow</th>
+        <td>
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-danger" (click)="clearStyle('boxShadow')">
+              <i class="fa fa-times"></i>
+            </button>
+            <button
+              type="button"
+              class="btn btn-success"
+              ngxInputBoxShadow
+              [(ngModel)]="b.selectedBlock.data.style.boxShadow"
+              (ngModelChange)="updateCss()">
+              <i class="fa fa-boxes"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </table>
   </details>
 
   <details>
     <summary>Background</summary>
-    <input
-      type="text"
-      readonly
-      ngxInputColor
-      [(ngModel)]="b.selectedBlock.data.style.backgroundColor"
-      (ngModelChange)="updateCss()" />
+    <style-background [style]="b.selectedBlock.data.style" (styleChange)="updateCss()"></style-background>
   </details>
 
   <pre class="cssStyles">

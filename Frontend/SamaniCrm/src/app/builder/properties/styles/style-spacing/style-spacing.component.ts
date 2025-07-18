@@ -37,7 +37,7 @@ export class StyleSpacingComponent extends AppComponentBase implements OnInit, C
   ngOnInit() {}
 
   writeValue(val: string | undefined): void {
-    this.spacingString = val ?? '';
+    this.spacingString = val ?? '0px';
     this.value = parseSpacing(this.spacingString);
   }
 

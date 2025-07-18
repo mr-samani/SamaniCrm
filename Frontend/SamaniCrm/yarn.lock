@@ -5781,10 +5781,10 @@ ngx-image-cropper@^9.1.5:
   dependencies:
     tslib "^2.3.0"
 
-ngx-input-color@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/ngx-input-color/-/ngx-input-color-1.0.1.tgz#9c20fd2c07dd12f77b8f3179df3cd4b8ecf6ca9f"
-  integrity sha512-osJ7fOeCYxEFIxJQkpNgu+2zPVyf4kyEdQdwpxY8XHMbGmmuUoxNttitY0iiGYSDBdb+sRq/cNm5MSN6kmta3g==
+ngx-input-color@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/ngx-input-color/-/ngx-input-color-3.1.0.tgz#4600ce7f16af08ead37392642ba0ebd8bb4b85ab"
+  integrity sha512-yMcpImux8HosQWBrhI/XL/UJ9bsjRn1mGrkeapMAf0LyyWHGWnrBOe4UDBcIx0VxhQerJ1fQmHXbQbJKx2QYRw==
   dependencies:
     tslib "^2.3.0"
 

@@ -13,6 +13,8 @@
     </button>
   </div>
   <p *ngIf="spacing.hasError('pattern')" class="text-danger">Invalid spacing value</p>
+
+  
   <div class="panel-back-drop" *ngIf="showPanel" (click)="showPanel = false"></div>
   <div class="panel" *ngIf="showPanel && value">
     <div class="place-top">

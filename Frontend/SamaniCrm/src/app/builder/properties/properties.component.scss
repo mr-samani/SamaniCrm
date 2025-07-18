@@ -50,3 +50,31 @@
     font-size: 24px;
   }
 }
+
+table {
+  width: 100%;
+  tr {
+    td,
+    th {
+      vertical-align: middle;
+    }
+    td:last-child {
+      text-align: end;
+    }
+  }
+}
+
+.img-container {
+  width: 120px;
+  height: 75px;
+  background-color: #a7a6a6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  overflow: hidden;
+  img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
