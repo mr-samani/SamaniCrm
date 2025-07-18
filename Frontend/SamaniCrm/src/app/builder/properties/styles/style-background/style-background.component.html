@@ -11,7 +11,7 @@
           autocomplete="off"
           [(ngModel)]="style.backgroundType"
           value="none" />
-        <label class="btn btn-outline-primary" for="bgTypeNone" (click)="clearBackground()">
+        <label class="btn" for="bgTypeNone" (click)="clearBackground()">
           <i class="fa fa-times"></i>
         </label>
 
@@ -24,7 +24,7 @@
           [(ngModel)]="style.backgroundType"
           (change)="update()"
           value="gradient" />
-        <label class="btn btn-outline-primary" for="gradient">
+        <label class="btn" for="gradient">
           <i class="fa fa-fill-drip"></i>
         </label>
 
@@ -37,7 +37,7 @@
           [(ngModel)]="style.backgroundType"
           (change)="update()"
           value="image" />
-        <label class="btn btn-outline-primary" for="image">
+        <label class="btn" for="image">
           <i class="fa fa-image"></i>
         </label>
       </div>
@@ -46,16 +46,30 @@
   </tr>
 
   <tr>
-    <th>Color</th>
+    <th>Background Color</th>
     <td>
-      <input type="text" readonly ngxInputColor [(ngModel)]="style.backgroundColor" (ngModelChange)="update()" />
+      <input
+        type="text"
+        [id]="'prp-bgc' + block.id"
+        readonly
+        ngxInputColor
+        [(ngModel)]="style.backgroundColor"
+        (ngModelChange)="update()"
+        class="color-control" />
       {{ style.backgroundColor }}
     </td>
   </tr>
   <tr *ngIf="style.backgroundType == 'gradient'">
-    <th>Color</th>
+    <th>Gradient</th>
     <td>
-      <input type="text" readonly ngxInputGradient [(ngModel)]="style.backgroundGradient" (ngModelChange)="update()" />
+      <input
+        type="text"
+        [id]="'prp-bgg' + block.id"
+        readonly
+        ngxInputGradient
+        [(ngModel)]="style.backgroundGradient"
+        (ngModelChange)="update()"
+        class="color-control" />
       {{ style.backgroundGradient }}
     </td>
   </tr>
@@ -83,7 +97,7 @@
             [(ngModel)]="style.backgroundSize"
             (ngModelChange)="update()"
             value="cover" />
-          <label class="btn btn-outline-primary" for="bgCover">
+          <label class="btn" for="bgCover">
             <i class="fa fa-resize"></i>
           </label>
 
@@ -96,7 +110,7 @@
             [(ngModel)]="style.backgroundSize"
             (ngModelChange)="update()"
             value="contain" />
-          <label class="btn btn-outline-primary" for="bgContain">
+          <label class="btn" for="bgContain">
             <i class="fa fa-expand"></i>
           </label>
 
@@ -109,7 +123,7 @@
             [(ngModel)]="style.backgroundSize"
             (ngModelChange)="update()"
             value="auto" />
-          <label class="btn btn-outline-primary" for="bgAuto">
+          <label class="btn" for="bgAuto">
             <i class="fa fa-auto"></i>
           </label>
         </div>
@@ -129,7 +143,7 @@
             [(ngModel)]="style.backgroundRepeat"
             (ngModelChange)="update()"
             value="repeat" />
-          <label class="btn btn-outline-primary" for="bgRepeat">
+          <label class="btn" for="bgRepeat">
             <i class="fa fa-redo"></i>
           </label>
 
@@ -142,7 +156,7 @@
             [(ngModel)]="style.backgroundRepeat"
             (ngModelChange)="update()"
             value="no-repeat" />
-          <label class="btn btn-outline-primary" for="bgNoRepeat">
+          <label class="btn" for="bgNoRepeat">
             <i class="fa fa-repeat"></i>
           </label>
         </div>

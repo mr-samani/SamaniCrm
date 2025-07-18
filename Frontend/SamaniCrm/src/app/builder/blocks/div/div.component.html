@@ -5,7 +5,8 @@
     [data]="block.children"
     (drop)="b.drop($event)"
     [id]="'blc_' + block.rowNumber"
-    [style]="block.data.css">
+    [style]="block.data.css"
+    ngxResizable>
     <div class="custom-placeholder2" *ngxPlaceholder></div>
 
     <dynamic-renderer

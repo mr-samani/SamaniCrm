@@ -2,6 +2,7 @@ import { Component, Input, ViewContainerRef, ComponentRef, ViewChild, inject, Re
 import { CommonModule } from '@angular/common';
 import { BLOCK_REGISTRY, BlockDefinition } from './block-registry';
 import { FormBuilderService } from '../form-builder.service';
+import { NgxResizableDirective } from 'ngx-drag-drop-kit';
 
 @Component({
   selector: 'dynamic-renderer',

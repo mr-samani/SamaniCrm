@@ -58,7 +58,11 @@
 
   <details>
     <summary>Background</summary>
-    <style-background [style]="b.selectedBlock.data.style" (styleChange)="updateCss()"></style-background>
+    <style-background
+      [id]="'prp-' + b.selectedBlock.id"
+      [block]="b.selectedBlock"
+      [style]="b.selectedBlock.data.style"
+      (styleChange)="updateCss()"></style-background>
   </details>
 
   <pre class="cssStyles">

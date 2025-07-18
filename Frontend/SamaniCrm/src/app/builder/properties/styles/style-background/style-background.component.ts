@@ -3,6 +3,7 @@ import { BlockStyle } from '../models/_style';
 import { AppConst } from '@shared/app-const';
 import { IOptions } from '@app/file-manager/options.interface';
 import { FileManagerDto } from '@app/file-manager/models/file-manager-dto';
+import { BlockDefinition } from '@app/builder/blocks/block-registry';
 declare const EyeDropper: any;
 @Component({
   selector: 'style-background',
@@ -12,6 +13,7 @@ declare const EyeDropper: any;
 })
 export class StyleBackgroundComponent implements OnInit {
   @Input() style!: BlockStyle;
+  @Input() block!: BlockDefinition;
   @Output() styleChange = new EventEmitter<BlockStyle>();
   baseUrl = AppConst.fileServerUrl;
   fileSelectorOptions: IOptions = {
@@ -41,8 +43,8 @@ export class StyleBackgroundComponent implements OnInit {
     switch (this.style.backgroundType) {
       case 'none':
         this.clearBackground();
-        this.style.backgroundColor= 'none';
-        this.style.backgroundImage= 'none';
+        this.style.backgroundColor = 'none';
+        this.style.backgroundImage = 'none';
         break;
       case 'image':
         this.style.backgroundImage = `url('${this.baseUrl + '/' + this.style.imageId}')`;
