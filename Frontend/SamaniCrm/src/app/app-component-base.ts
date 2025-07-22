@@ -9,6 +9,7 @@ import { LanguageService } from '@shared/services/language.service';
 import { NgxAlertModalService } from 'ngx-alert-modal';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { DashboardService } from './dashboard/dashboard/dashboard.service';
+import { DOCUMENT } from '@angular/common';
 export abstract class AppComponentBase {
   fb: FormBuilder;
   authService: AuthService;
@@ -23,6 +24,8 @@ export abstract class AppComponentBase {
   breadcrumb: BreadcrumbService;
 
   dashboardService: DashboardService;
+
+  doc: Document;
   constructor(injector: Injector) {
     this.mainSpinnerService = injector.get(MainSpinnerService);
     this.authService = injector.get(AuthService);
@@ -36,6 +39,7 @@ export abstract class AppComponentBase {
     this.alert = injector.get(NgxAlertModalService);
     this.breadcrumb = injector.get(BreadcrumbService);
     this.dashboardService = injector.get(DashboardService);
+    this.doc = injector.get(DOCUMENT) as Document;
   }
 
   l(key: string, param?: Object) {

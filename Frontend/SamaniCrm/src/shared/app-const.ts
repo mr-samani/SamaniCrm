@@ -15,4 +15,6 @@ export class AppConst {
   static requireCaptcha: boolean = true;
 
   static isDarkMode: boolean;
+
+  static mainHeaderFixedTop: boolean = true;
 }

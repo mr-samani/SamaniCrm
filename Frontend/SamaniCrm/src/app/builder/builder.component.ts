@@ -1,11 +1,12 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { BlockDefinition, BlockTypeEnum, FormTools } from './blocks/block-registry';
 import { FormBuilderService } from './form-builder.service';
 import { IDropEvent, transferArrayItem } from 'ngx-drag-drop-kit';
 import { AppComponentBase } from '@app/app-component-base';
 import { ViewModeEnum } from './models/view-mode.enum';
 import { FormBuilderBackendService } from './backend.service';
+import { AppConst } from '@shared/app-const';
 
 @Component({
   standalone: false,
@@ -14,7 +15,8 @@ import { FormBuilderBackendService } from './backend.service';
   styleUrls: ['./builder.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class BuilderComponent extends AppComponentBase implements OnInit {
+export class BuilderComponent extends AppComponentBase implements OnInit, AfterViewInit, OnDestroy {
+  previousMainHeaderFixedTop: boolean = AppConst.mainHeaderFixedTop;
   constructor(
     public b: FormBuilderService,
     private backendService: FormBuilderBackendService,
@@ -27,6 +29,14 @@ export class BuilderComponent extends AppComponentBase implements OnInit {
   ngOnInit(): void {
     this.backendService.getPageInfo();
   }
+  ngAfterViewInit(): void {
+    AppConst.mainHeaderFixedTop = false;
+    this.doc.querySelector('.builder-container')?.scrollIntoView();
+  }
+  ngOnDestroy(): void {
+    AppConst.mainHeaderFixedTop = this.previousMainHeaderFixedTop;
+  }
+
   public get ViewModeEnum(): typeof ViewModeEnum {
     return ViewModeEnum;
   }

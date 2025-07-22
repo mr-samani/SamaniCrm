@@ -1,5 +1,6 @@
 import { Component, Injector, ViewEncapsulation } from '@angular/core';
-import { AppComponentBase } from '@app/app-component-base'; 
+import { AppComponentBase } from '@app/app-component-base';
+import { AppConst } from '@shared/app-const';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,10 +10,8 @@ import { AppComponentBase } from '@app/app-component-base';
   standalone: false,
 })
 export class DashboardComponent extends AppComponentBase {
-  constructor(
-    injector: Injector,
-  ) {
+  AppConst = AppConst;
+  constructor(injector: Injector) {
     super(injector);
   }
-
 }

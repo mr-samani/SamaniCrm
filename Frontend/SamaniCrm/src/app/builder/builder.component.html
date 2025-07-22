@@ -1,29 +1,31 @@
-<toolbar></toolbar>
-<div class="builder">
-  <div class="right-side">
-    <toolbox *ngIf="b.showLayouts === false"></toolbox>
-    <layouts *ngIf="b.showLayouts"></layouts>
-  </div>
-
-  <div id="builderCanvas" class="canvas" [class.show-bordered]="b.showBorder">
-    <div
-      class="container-fluid"
-      ngxDropList
-      id="main-page"
-      (drop)="drop($event)"
-      [data]="b.blocks"
-      [class.tablet-view]="b.viewMode === ViewModeEnum.Tablet"
-      [class.desktop-view]="b.viewMode === ViewModeEnum.Desktop"
-      [class.mobile-view]="b.viewMode === ViewModeEnum.Mobile">
-      <div class="custom-placeholder" *ngxPlaceholder></div>
-
-      @for (item of b.blocks; track item.id; let i = $index) {
-        <dynamic-renderer [block]="item" ngxDraggable />
-      }
+<div class="builder-container">
+  <toolbar></toolbar>
+  <div class="builder">
+    <div class="right-side">
+      <toolbox *ngIf="b.showLayouts === false"></toolbox>
+      <layouts *ngIf="b.showLayouts"></layouts>
     </div>
-  </div>
 
-  <div class="properties">
-    <properties dir="ltr"></properties>
+    <div id="builderCanvas" class="canvas" [class.show-bordered]="b.showBorder">
+      <div
+        class="container-fluid"
+        ngxDropList
+        id="main-page"
+        (drop)="drop($event)"
+        [data]="b.blocks"
+        [class.tablet-view]="b.viewMode === ViewModeEnum.Tablet"
+        [class.desktop-view]="b.viewMode === ViewModeEnum.Desktop"
+        [class.mobile-view]="b.viewMode === ViewModeEnum.Mobile">
+        <div class="custom-placeholder" *ngxPlaceholder></div>
+
+        @for (item of b.blocks; track item.id; let i = $index) {
+          <dynamic-renderer [block]="item" ngxDraggable />
+        }
+      </div>
+    </div>
+
+    <div class="properties">
+      <properties dir="ltr"></properties>
+    </div>
   </div>
 </div>

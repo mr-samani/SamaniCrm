@@ -3,13 +3,20 @@ app-builder {
   --leftSideWidth: 340px;
   --primaryColor: #008cff;
 }
+.builder-container {
+  height: 98vh;
+}
 .builder {
   display: flex;
+  // 32px is height of toolbar
+  height: calc(100% - 32px);
 }
 .right-side {
   width: var(--rightSideWidth);
 }
-
+#main-page {
+  overflow-y: auto;
+}
 .canvas {
   flex: auto;
   border: 1px solid #ccc;
@@ -30,6 +37,8 @@ app-builder {
   border: 1px #3c3c3c47 solid;
   direction: ltr;
   padding: 10px;
+  overflow: auto;
+  height: 100%;
 }
 
 /*--------------- view mode --------------*/
