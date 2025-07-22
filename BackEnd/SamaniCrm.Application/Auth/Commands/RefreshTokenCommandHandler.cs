@@ -7,6 +7,7 @@ using MediatR;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
+using UnauthorizedAccessException = SamaniCrm.Application.Common.Exceptions.UnauthorizedAccessException;
 
 namespace SamaniCrm.Application.Auth.Commands
 {
@@ -25,7 +26,7 @@ namespace SamaniCrm.Application.Auth.Commands
         {
             var result = await _identityService.GetUserIdFromRefreshToken(request.RefreshToken);
             if (result.Equals(Guid.Empty))
-                throw new ForbiddenAccessException();
+                throw new UnauthorizedAccessException();
 
             DTOs.UserDTO  userData = await _identityService.GetUserDetailsAsync(result);
             var accessToken = _tokenGenerator.GenerateAccessToken(userData.Id, userData.UserName, userData.Lang, userData.Roles);

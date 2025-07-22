@@ -59,13 +59,13 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
     return next.handle(this.setHeader(req)).pipe(
-      catchError((err: any) => {
+      catchError((err: HttpErrorResponse) => {
         return this.handleError(err, req, next);
       }),
     );
   }
 
-  private handleError(error: any, request: HttpRequest<any>, next: HttpHandler) {
+  private handleError(error: HttpErrorResponse, request: HttpRequest<any>, next: HttpHandler) {
     switch (error.status) {
       case 401:
         if (
@@ -106,7 +106,6 @@ export class AuthInterceptor implements HttpInterceptor {
             }),
             catchError((err: HttpErrorResponse) => {
               this.isRefreshing = false;
-              debugger;
               if (err.status == 401) {
                 this.authService.logOut();
               }

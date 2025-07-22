@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.Common.Exceptions
 {
-    public class ForbiddenAccessException: BaseAppException
+    public class UnauthorizedAccessException: BaseAppException
     {
-        public ForbiddenAccessException() : base("Invalid Token!") { }
+        public UnauthorizedAccessException() : base("Invalid Token!", System.Net.HttpStatusCode.Unauthorized) { }
 
     }
 }
