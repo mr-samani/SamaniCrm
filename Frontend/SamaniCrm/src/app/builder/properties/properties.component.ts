@@ -30,17 +30,7 @@ export class PropertiesComponent extends AppComponentBase implements OnInit {
 
   updateCss() {
     if (!this.b.selectedBlock) return;
-    this.b.selectedBlock.data.css = `
-  ${this.borderCss}
-  ${this.b.selectedBlock.data.style.padding ? 'padding:' + this.b.selectedBlock.data.style.padding + ';' : ''}
-  ${this.b.selectedBlock.data.style.margin ? 'margin:' + this.b.selectedBlock.data.style.margin + ';' : ''}
-  ${this.b.selectedBlock.data.style.borderRadius ? 'border-radius:' + this.b.selectedBlock.data.style.borderRadius + ';' : ''}
-  ${this.b.selectedBlock.data.style.boxShadow ? 'box-shadow:' + this.b.selectedBlock.data.style.boxShadow + ';' : ''}
-  ${this.b.selectedBlock.data.style.backgroundColor ? 'background-color:' + this.b.selectedBlock.data.style.backgroundColor + ';' : ''}
-   ${this.b.selectedBlock.data.style.backgroundImage ? 'background-image:' + this.b.selectedBlock.data.style.backgroundImage + ';' : ''}
-  ${this.b.selectedBlock.data.style.backgroundSize ? 'background-size:' + this.b.selectedBlock.data.style.backgroundSize + ';' : ''}
-  ${this.b.selectedBlock.data.style.backgroundRepeat ? 'background-repeat:' + this.b.selectedBlock.data.style.backgroundRepeat + ';' : ''}
-  `;
+    this.b.updateCss();
     this.ch.detectChanges();
   }
 

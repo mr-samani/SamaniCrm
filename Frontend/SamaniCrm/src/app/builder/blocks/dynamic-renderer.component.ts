@@ -1,20 +1,26 @@
-import { Component, Input, ViewContainerRef, ComponentRef, ViewChild, inject, Renderer2 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, ViewContainerRef, ComponentRef, ViewChild, inject, Renderer2, Inject } from '@angular/core';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { BLOCK_REGISTRY, BlockDefinition } from './block-registry';
 import { FormBuilderService } from '../form-builder.service';
-import { NgxResizableDirective } from 'ngx-drag-drop-kit';
+import { IResizableOutput, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 
 @Component({
   selector: 'dynamic-renderer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgxDragDropKitModule],
   template: `
     <div
       class="block-item"
-      (click)="b.onSelect(block, $event)"
+      (click)="onBlockClick(block, $event)"
       [class.fb-selected]="b.selectedBlock == block"
-      [class.hidden]="block.hidden">
-      <div class="actions">
+      [class.hidden]="block.hidden"
+      ngxResizable
+      (resizeEnd)="onResizeEnd($event)"
+      [style]="block.data.css">
+      <div
+        class="actions"
+        [class.actions-top]="actionsPosition === 'top'"
+        [class.actions-bottom]="actionsPosition === 'bottom'">
         <button (click)="b.deleteBlock(block, parent)">
           <i class="fa fa-trash"></i>
         </button>
@@ -33,7 +39,6 @@ import { NgxResizableDirective } from 'ngx-drag-drop-kit';
       color: #fff;
       padding: 4px 6px;
       display: none;
-      top: -28px;
       height: 28px;
       button {
         background: none;
@@ -41,6 +46,12 @@ import { NgxResizableDirective } from 'ngx-drag-drop-kit';
         border: none;
         cursor: pointer;
         color: inherit;
+      }
+      &.actions-top {
+        top: -28px;
+      }
+      &.actions-bottom {
+        bottom: -28px;
       }
     }
     .block-item.fb-selected > .actions {
@@ -52,6 +63,7 @@ import { NgxResizableDirective } from 'ngx-drag-drop-kit';
   `,
 })
 export class DynamicRendererComponent {
+  actionsPosition: 'top' | 'bottom' = 'top';
   block!: BlockDefinition;
   @ViewChild('container', { read: ViewContainerRef, static: true }) vcr!: ViewContainerRef;
   renderer = inject(Renderer2);
@@ -70,5 +82,37 @@ export class DynamicRendererComponent {
       this.vcr.clear();
     }
   }
-  constructor(public b: FormBuilderService) {}
+  constructor(
+    public b: FormBuilderService,
+    @Inject(DOCUMENT) private doc: Document,
+  ) {}
+
+  onBlockClick(block: BlockDefinition, event: Event) {
+    this.updateActionsPosition(event.currentTarget as HTMLElement);
+    this.b.onSelect(block, event);
+  }
+
+  updateActionsPosition(target: HTMLElement) {
+    const el: HTMLElement | null = this.doc.querySelector('#builderCanvas');
+    if (!el) return;
+    const blockRect = target.getBoundingClientRect();
+    const rect = el.getBoundingClientRect();
+
+    this.actionsPosition = blockRect.top - 40 > rect.top ? 'top' : 'bottom';
+  }
+  onResizeEnd(event: IResizableOutput) {
+    if (!this.b.selectedBlock) return;
+
+    if (!this.b.selectedBlock.data.style.position) {
+      this.b.selectedBlock.data.style.position = 'relative';
+    }
+
+    this.b.selectedBlock.data.style.width = event.width;
+    this.b.selectedBlock.data.style.height = event.height;
+    // must be change in drag
+    //this.b.selectedBlock.data.style.left = event.left;
+    //this.b.selectedBlock.data.style.top = event.top;
+
+    this.b.updateCss();
+  }
 }

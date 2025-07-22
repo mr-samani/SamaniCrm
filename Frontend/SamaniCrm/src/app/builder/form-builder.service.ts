@@ -38,8 +38,8 @@ export class FormBuilderService {
       if (b.type == BlockTypeEnum.Row && (!b.children || b.children.length < 1)) {
         // هر Row باید دو cell (Div) داشته باشد که هرکدام children آرایه‌ای خالی دارند
         b.children = [
-          new BlockDefinition({ type: BlockTypeEnum.Div, component: BlockDivComponent  }),
-          new BlockDefinition({ type: BlockTypeEnum.Div, component: BlockDivComponent  }),
+          new BlockDefinition({ type: BlockTypeEnum.Div, component: BlockDivComponent }),
+          new BlockDefinition({ type: BlockTypeEnum.Div, component: BlockDivComponent }),
         ];
       }
       parentChildren.splice(index, 0, b);
@@ -103,8 +103,81 @@ export class FormBuilderService {
               parent.children.splice(foundedIndex, 1);
             }
           }
+          this.selectedBlock = undefined;
         }
       });
+  }
+
+  updateCss() {
+    if (!this.selectedBlock) return;
+    this.selectedBlock.data.css = `
+  ${this.selectedBlock.data.style.border ? 'border:' + this.selectedBlock.data.style.border + ';' : ''}
+  ${this.selectedBlock.data.style.padding ? 'padding:' + this.selectedBlock.data.style.padding + ';' : ''}
+  ${this.selectedBlock.data.style.margin ? 'margin:' + this.selectedBlock.data.style.margin + ';' : ''}
+  ${this.selectedBlock.data.style.borderRadius ? 'border-radius:' + this.selectedBlock.data.style.borderRadius + ';' : ''}
+  ${this.selectedBlock.data.style.boxShadow ? 'box-shadow:' + this.selectedBlock.data.style.boxShadow + ';' : ''}
+  ${this.selectedBlock.data.style.backgroundColor ? 'background-color:' + this.selectedBlock.data.style.backgroundColor + ';' : ''}
+  ${this.selectedBlock.data.style.backgroundImage ? 'background-image:' + this.selectedBlock.data.style.backgroundImage + ';' : ''}
+  ${this.selectedBlock.data.style.backgroundSize ? 'background-size:' + this.selectedBlock.data.style.backgroundSize + ';' : ''}
+  ${this.selectedBlock.data.style.backgroundRepeat ? 'background-repeat:' + this.selectedBlock.data.style.backgroundRepeat + ';' : ''}`;
+
+    /* dimensions */
+    this.selectedBlock.data.css += `
+  ${this.selectedBlock.data.style.width ? 'width:' + this.selectedBlock.data.style.width + 'px;' : ''}
+  ${this.selectedBlock.data.style.height ? 'height:' + this.selectedBlock.data.style.height + 'px;' : ''}
+  ${this.selectedBlock.data.style.minWidth ? 'min-width:' + this.selectedBlock.data.style.minWidth + 'px;' : ''}
+  ${this.selectedBlock.data.style.minHeight ? 'min-height:' + this.selectedBlock.data.style.minHeight + 'px;' : ''}
+  ${this.selectedBlock.data.style.maxWidth ? 'max-width:' + this.selectedBlock.data.style.maxWidth + 'px;' : ''}
+  ${this.selectedBlock.data.style.maxHeight ? 'max-height:' + this.selectedBlock.data.style.maxHeight + 'px;' : ''}`;
+
+    /* position */
+    this.selectedBlock.data.css += `
+  ${this.selectedBlock.data.style.position ? 'position:' + this.selectedBlock.data.style.position + ';' : ''}
+  ${this.selectedBlock.data.style.top ? 'top:' + this.selectedBlock.data.style.top + 'px;' : ''}
+  ${this.selectedBlock.data.style.right ? 'right:' + this.selectedBlock.data.style.right + 'px;' : ''}
+  ${this.selectedBlock.data.style.left ? 'left:' + this.selectedBlock.data.style.left + 'px;' : ''}
+  ${this.selectedBlock.data.style.bottom ? 'bottom:' + this.selectedBlock.data.style.bottom + 'px;' : ''}
+  ${this.selectedBlock.data.style.zIndex ? 'z-index:' + this.selectedBlock.data.style.zIndex + ';' : ''}
+  `;
+
+    /* flex */
+    this.selectedBlock.data.css += `
+  ${this.selectedBlock.data.style.flex ? 'flex:' + this.selectedBlock.data.style.flex + ';' : ''}
+  ${this.selectedBlock.data.style.flexGrow ? 'flex-grow:' + this.selectedBlock.data.style.flexGrow + ';' : ''}
+  ${this.selectedBlock.data.style.flexShrink ? 'flex-shrink:' + this.selectedBlock.data.style.flexShrink + ';' : ''}
+  ${this.selectedBlock.data.style.flexBasis ? 'flex-basis:' + this.selectedBlock.data.style.flexBasis + ';' : ''}
+  ${this.selectedBlock.data.style.flexDirection ? 'flex-direction:' + this.selectedBlock.data.style.flexDirection + ';' : ''}
+  ${this.selectedBlock.data.style.flexWrap ? 'flex-wrap:' + this.selectedBlock.data.style.flexWrap + ';' : ''}
+  ${this.selectedBlock.data.style.justifyContent ? 'justify-content:' + this.selectedBlock.data.style.justifyContent + ';' : ''}
+  ${this.selectedBlock.data.style.alignItems ? 'align-items:' + this.selectedBlock.data.style.alignItems + ';' : ''}
+  ${this.selectedBlock.data.style.alignContent ? 'align-content:' + this.selectedBlock.data.style.alignContent + ';' : ''}
+  `;
+    /* overflow */
+    this.selectedBlock.data.css += `
+  ${this.selectedBlock.data.style.overflow ? 'overflow:' + this.selectedBlock.data.style.overflow + ';' : ''}
+  ${this.selectedBlock.data.style.overflowX ? 'overflow-x:' + this.selectedBlock.data.style.overflowX + ';' : ''}
+  ${this.selectedBlock.data.style.overflowY ? 'overflow-y:' + this.selectedBlock.data.style.overflowY + ';' : ''}
+  `;
+
+    /* opacity */
+    this.selectedBlock.data.css += `
+  ${this.selectedBlock.data.style.opacity ? 'opacity:' + this.selectedBlock.data.style.opacity + ';' : ''}
+  `;
+
+    /* visibility */
+    this.selectedBlock.data.css += `
+  ${this.selectedBlock.data.style.visibility ? 'visibility:' + this.selectedBlock.data.style.visibility + ';' : ''}
+  `;
+
+    /* display */
+    this.selectedBlock.data.css += `
+  ${this.selectedBlock.data.style.display ? 'display:' + this.selectedBlock.data.style.display + ';' : ''}
+  `;
+
+    /* cursor */
+    this.selectedBlock.data.css += `
+  ${this.selectedBlock.data.style.cursor ? 'cursor:' + this.selectedBlock.data.style.cursor + ';' : ''}
+  `;
   }
 }
 

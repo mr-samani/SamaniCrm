@@ -1,4 +1,4 @@
-<div class="row gx-0" [style]="block.data.css">
+<div class="row gx-0" >
   @if (block && block.children) {
     @for (c of block.children; track $index) {
       <div class="col cell" ngxDropList [data]="c.children" (drop)="b.drop($event)" [id]="'blc_' + c.rowNumber">

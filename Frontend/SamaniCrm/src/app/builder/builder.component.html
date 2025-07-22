@@ -5,7 +5,7 @@
     <layouts *ngIf="b.showLayouts"></layouts>
   </div>
 
-  <div class="canvas" [class.show-bordered]="b.showBorder">
+  <div id="builderCanvas" class="canvas" [class.show-bordered]="b.showBorder">
     <div
       class="container-fluid"
       ngxDropList
@@ -18,7 +18,7 @@
       <div class="custom-placeholder" *ngxPlaceholder></div>
 
       @for (item of b.blocks; track item.id; let i = $index) {
-        <dynamic-renderer [block]="item" ngxDraggable  />
+        <dynamic-renderer [block]="item" ngxDraggable />
       }
     </div>
   </div>

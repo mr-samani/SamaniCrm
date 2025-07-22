@@ -7,8 +7,15 @@ import { StyleSpacingComponent } from './style-spacing/style-spacing.component';
 import { StyleBackgroundComponent } from './style-background/style-background.component';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { NgxInputColorModule, NgxInputGradientModule } from 'ngx-input-color';
+import { StyleDimensionsComponent } from './style-dimensions/style-dimensions.component';
 
-const comp = [StyleBorderComponent, StyleSpacingComponent, StyleShadowComponent, StyleBackgroundComponent];
+const comp = [
+  StyleBorderComponent,
+  StyleSpacingComponent,
+  StyleShadowComponent,
+  StyleBackgroundComponent,
+  StyleDimensionsComponent,
+];
 @NgModule({
   declarations: [...comp],
   imports: [CommonModule, FormsModule, FileManagerModule, NgxInputColorModule, NgxInputGradientModule],

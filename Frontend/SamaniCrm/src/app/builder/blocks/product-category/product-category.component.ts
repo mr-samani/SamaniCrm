@@ -8,7 +8,7 @@ import { BlockBase } from '../block-base';
   imports: [CommonModule],
   template: `
     Category
-    <section [style]="block.data.css">
+    <section >
       <h3>{{ data.title }}</h3>
       <ul>
         <li *ngFor="let c of data.categories">{{ c }}</li>

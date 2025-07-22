@@ -58,10 +58,18 @@
   <details>
     <summary>Background</summary>
     <style-background
-      [id]="'prp-' + b.selectedBlock.id"
+      [id]="'prpbg-' + b.selectedBlock.id"
       [block]="b.selectedBlock"
       [style]="b.selectedBlock.data.style"
       (styleChange)="updateCss()"></style-background>
+  </details>
+  <details>
+    <summary>Dimenstions</summary>
+    <style-dimensions
+      [id]="'prpdim-' + b.selectedBlock.id"
+      [block]="b.selectedBlock"
+      [style]="b.selectedBlock.data.style"
+      (styleChange)="updateCss()"></style-dimensions>
   </details>
 
   <pre class="cssStyles">
