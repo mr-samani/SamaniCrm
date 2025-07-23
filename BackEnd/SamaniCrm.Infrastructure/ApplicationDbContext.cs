@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Domain.Entities.PageBuilderEntities;
 using SamaniCrm.Domain.Entities.ProductEntities;
 using SamaniCrm.Domain.Interfaces;
 using SamaniCrm.Infrastructure.Identity;
@@ -36,6 +37,9 @@ namespace SamaniCrm.Infrastructure
         public DbSet<Page> Pages { get; set; }
         public DbSet<PageTranslation> PageTranslations { get; set; }
 
+
+        #region Products
+
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductCategoryTranslation> ProductCategoryTranslations { get; set; }
 
@@ -51,11 +55,13 @@ namespace SamaniCrm.Infrastructure
         public DbSet<ProductPrice> ProductPrices { get; set; }
         public DbSet<Currency> Currency { get; set; }
         public DbSet<Discount> Discount { get; set; }
+        #endregion 
 
         public DbSet<Notification> Notifications { get; set; }
 
         public DbSet<FileFolder> FileFolders { get; set; }
 
+        public DbSet<CustomBlock> CustomBlocks { get; set; }
 
 
 

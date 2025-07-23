@@ -1,0 +1,59 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title" *ngIf="!isUpdate">{{ 'SaveAsNewBlock' | translate }}</span>
+  <span cdkDragHandle class="title" *ngIf="isUpdate">{{ 'EditBlock' | translate }}</span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+  <div class="d-flex align-items-center justify-content-center py-5" *ngIf="loading">
+    <mat-spinner color="primary" diameter="25"></mat-spinner>
+  </div>
+  <form [formGroup]="form">
+    <div class="row">
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>{{ 'Title' | translate }}</mat-label>
+        <input matInput formControlName="name" maxlength="100" />
+        <mat-error *ngIf="form.get('name')?.hasError('required')">
+          {{ 'IsRequired' | translate: { value: ('Title' | translate) } }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>{{ 'Icon' | translate }}</mat-label>
+        <input matInput formControlName="icon" maxlength="100" />
+        <mat-error *ngIf="form.get('icon')?.hasError('required')">
+          {{ 'IsRequired' | translate: { value: ('icon' | translate) } }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>{{ 'Category' | translate }}</mat-label>
+        <input matInput formControlName="categoryName" maxlength="100" />
+        <mat-error *ngIf="form.get('categoryName')?.hasError('required')">
+          {{ 'IsRequired' | translate: { value: ('categoryName' | translate) } }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col-sm-12">
+        <mat-label>{{ 'Description' | translate }}</mat-label>
+        <textarea matInput formControlName="description" maxlength="500" rows="2"></textarea>
+        <mat-error *ngIf="form.get('description')?.hasError('required')">
+          {{ 'IsRequired' | translate: { value: ('Description' | translate) } }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+
+  <pre dir="ltr" style="text-align: left; overflow: auto; max-width: 100%; max-height: 200px">
+    {{ form.get('data')?.value | json }}
+  </pre>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
+    <mat-spinner *ngIf="saving" color="primary" diameter="25"></mat-spinner>
+    <span>{{ 'Save' | translate }}</span>
+  </button>
+</mat-dialog-actions>

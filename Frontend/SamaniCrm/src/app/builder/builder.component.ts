@@ -47,7 +47,7 @@ export class BuilderComponent extends AppComponentBase implements OnInit, AfterV
   drop(event: IDropEvent<BlockDefinition[]>) {
     if (event.previousContainer.data && event.previousContainer.el.id === 'toolBox') {
       let source = event.previousContainer.data[event.previousIndex];
-      this.b.addBlock(source.type, event.currentIndex);
+      this.b.addBlock(source, event.currentIndex);
     } else {
       let source = event.previousContainer.data!;
       let destination = event.container.data ?? this.b.blocks;

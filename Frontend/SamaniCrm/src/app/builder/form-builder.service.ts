@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BlockTypeEnum, BLOCK_REGISTRY, BlockDefinition, FormTools } from './blocks/block-registry';
+import { BlockTypeEnum, BLOCK_REGISTRY, BlockDefinition, FormTools, IBlockDefinition } from './blocks/block-registry';
 import { BlockDivComponent } from './blocks/div/div.component';
 import { IDropEvent, moveItemInArray } from 'ngx-drag-drop-kit';
 import { ViewModeEnum } from './models/view-mode.enum';
 import { NgxAlertModalService } from 'ngx-alert-modal';
 import { createTreeFormTools } from './helpers/tools';
+import { PageBuilderServiceProxy } from '@shared/service-proxies';
+import { finalize } from 'rxjs';
 
 @Injectable()
 export class FormBuilderService {
@@ -23,18 +25,42 @@ export class FormBuilderService {
    */
   showLayouts = false;
 
-  constructor(private alert: NgxAlertModalService) {
-    this.tools = createTreeFormTools(BLOCK_REGISTRY);
+  loadingCustomBlocks = true;
+
+  constructor(
+    private alert: NgxAlertModalService,
+    private pageBuilderService: PageBuilderServiceProxy,
+  ) {
+    this.getCustomBlocks();
   }
 
-  addBlock(type: BlockTypeEnum, index?: number, parentChildren?: BlockDefinition[]) {
+  getCustomBlocks() {
+    this.tools = createTreeFormTools(BLOCK_REGISTRY);
+
+    this.loadingCustomBlocks = true;
+    this.pageBuilderService
+      .getCustomBlocks()
+      .pipe(finalize(() => (this.loadingCustomBlocks = false)))
+      .subscribe((result) => {
+        const list = result.data ?? [];
+        const customBlocks: IBlockDefinition[] = [];
+        for (let item of list) {
+          if (item.data) customBlocks.push(JSON.parse(item.data ?? '{}'));
+        }
+        const blocks = createTreeFormTools(customBlocks);
+        console.log('customBlocks', blocks);
+        this.tools.push(...blocks);
+      });
+  }
+
+  addBlock(source: BlockDefinition | IBlockDefinition, index?: number, parentChildren?: BlockDefinition[]) {
     if (!parentChildren) parentChildren = this.blocks;
     if (index == undefined) {
       index = parentChildren.length;
     }
-    const def = BLOCK_REGISTRY.find((b) => b.type === type);
+    const def = BLOCK_REGISTRY.find((b) => b.type === source.type);
     if (def) {
-      let b = new BlockDefinition({ type: def.type, data: def.data });
+      let b = new BlockDefinition({ type: def.type, data: { ...def.data, ...source.data } });
       if (b.type == BlockTypeEnum.Row && (!b.children || b.children.length < 1)) {
         // هر Row باید دو cell (Div) داشته باشد که هرکدام children آرایه‌ای خالی دارند
         b.children = [
@@ -44,6 +70,13 @@ export class FormBuilderService {
       }
       parentChildren.splice(index, 0, b);
     }
+    // is customBlock
+    else {
+      // TODO: test
+      debugger;
+      parentChildren.splice(index, 0, new BlockDefinition(def));
+    }
+
     this.updateRowNumber(this.blocks);
   }
 
@@ -60,7 +93,7 @@ export class FormBuilderService {
         if (event.previousContainer.el.id != 'toolBox') {
           event.previousContainer.data.splice(event.previousIndex, 1);
         }
-        this.addBlock(item.type, event.currentIndex, event.container.data);
+        this.addBlock(item, event.currentIndex, event.container.data);
         //event.container.data.splice(event.currentIndex, 0, item);
       }
     }

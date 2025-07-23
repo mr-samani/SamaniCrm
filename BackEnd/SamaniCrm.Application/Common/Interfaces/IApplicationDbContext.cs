@@ -1,15 +1,16 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using SamaniCrm.Application.DTOs;
+using SamaniCrm.Domain.Entities;
+using SamaniCrm.Domain.Entities.PageBuilderEntities;
+using SamaniCrm.Domain.Entities.ProductEntities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using SamaniCrm.Application.DTOs;
-using SamaniCrm.Domain.Entities;
-using SamaniCrm.Domain.Entities.ProductEntities;
 using MenuEntity = SamaniCrm.Domain.Entities.Menu;
-using SecuritySettingEntity = SamaniCrm.Domain.Entities.SecuritySetting;
 using ProductEntity = SamaniCrm.Domain.Entities.ProductEntities.Product;
+using SecuritySettingEntity = SamaniCrm.Domain.Entities.SecuritySetting;
 
 
 namespace SamaniCrm.Application.Common.Interfaces
@@ -27,6 +28,8 @@ namespace SamaniCrm.Application.Common.Interfaces
         public DbSet<Page> Pages { get; set; }
         public DbSet<PageTranslation> PageTranslations { get; set; }
 
+
+        #region Products
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductCategoryTranslation> ProductCategoryTranslations { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
@@ -41,9 +44,15 @@ namespace SamaniCrm.Application.Common.Interfaces
         public DbSet<ProductPrice> ProductPrices { get; set; }
         public DbSet<Currency> Currency { get; set; }
         public DbSet<Discount> Discount { get; set; }
+        #endregion
+
 
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<FileFolder> FileFolders { get; set; }
+
+
+
+        public DbSet<CustomBlock> CustomBlocks { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

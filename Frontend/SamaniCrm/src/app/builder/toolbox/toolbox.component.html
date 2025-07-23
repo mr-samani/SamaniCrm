@@ -5,7 +5,7 @@
     </div>
     <div class="items" ngxDropList [disableSort]="true" [data]="item.items" id="toolBox">
       @for (t of item.items; track $index) {
-        <div class="toolbox" ngxDraggable (dblclick)="b.addBlock(t.type)">
+        <div class="toolbox" ngxDraggable (dblclick)="b.addBlock(t)">
           {{ BlockTypeEnum[t.type] | translate }}
         </div>
       }

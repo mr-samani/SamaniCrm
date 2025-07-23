@@ -11,8 +11,10 @@ import { LanguageServiceProxy } from './api/language.service';
 import { MaintenanceServiceProxy } from './api/maintenance.service';
 import { MenuServiceProxy } from './api/menu.service';
 import { NotificationServiceProxy } from './api/notification.service';
+import { PageBuilderServiceProxy } from './api/page-builder.service';
 import { PagesServiceProxy } from './api/pages.service';
 import { ProductServiceProxy } from './api/product.service';
+import { PublicServiceProxy } from './api/public.service';
 import { RoleServiceProxy } from './api/role.service';
 import { SecuritySettingsServiceProxy } from './api/security-settings.service';
 import { UserServiceProxy } from './api/user.service';
@@ -32,8 +34,10 @@ import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
     MaintenanceServiceProxy,
     MenuServiceProxy,
     NotificationServiceProxy,
+    PageBuilderServiceProxy,
     PagesServiceProxy,
     ProductServiceProxy,
+    PublicServiceProxy,
     RoleServiceProxy,
     SecuritySettingsServiceProxy,
     UserServiceProxy,

@@ -13,6 +13,7 @@ app-builder {
 }
 .right-side {
   width: var(--rightSideWidth);
+  overflow: auto;
 }
 #main-page {
   overflow-y: auto;

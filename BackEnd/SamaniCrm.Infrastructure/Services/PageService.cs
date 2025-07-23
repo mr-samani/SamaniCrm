@@ -1,21 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Application.DTOs.PageBuilder;
 using SamaniCrm.Application.Pages.Commands;
 using SamaniCrm.Application.Pages.Queries;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Domain.Entities.PageBuilderEntities;
 using SamaniCrm.Infrastructure.Extensions;
 using SamaniCrm.Infrastructure.Identity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace SamaniCrm.Infrastructure.Services
 {
@@ -34,9 +38,11 @@ namespace SamaniCrm.Infrastructure.Services
             L = l;
         }
 
+
+
         public async Task<Guid> CreateOrEditMetaDataPage(CreateOrEditPageMetaDataCommand request, CancellationToken cancellationToken)
         {
-            Page page;
+            Page? page;
 
             if (request.Id.HasValue)
             {
@@ -138,7 +144,7 @@ namespace SamaniCrm.Infrastructure.Services
 
         public async Task<PaginatedResult<PageDto>> GetPagedList(GetFilteredPagesQuery request, CancellationToken cancellationToken)
         {
-            var currentLanguage =L.CurrentLanguage;
+            var currentLanguage = L.CurrentLanguage;
             var query = from page in _context.Pages
                         where page.Type == request.Type
                         join user in _context.Users
@@ -314,5 +320,64 @@ namespace SamaniCrm.Infrastructure.Services
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
+
+
+
+
+
+        #region Blocks
+        public async Task<Guid> CreateCustomBlock(CreateCustomBlockCommand request, CancellationToken cancellationToken)
+        {
+            // New page
+            var block = new CustomBlock
+            {
+                Name = request.Name,
+                Description = request.Description,
+                CategoryName = request.CategoryName,
+                Icon = request.Icon,
+                Data = request.Data,
+            };
+
+            _context.CustomBlocks.Add(block);
+
+            await _context.SaveChangesAsync(cancellationToken);
+            return block.Id;
+        }
+
+        public async Task<Unit> DeleteCustomBlockPage(DeleteCustomBlockCommand request, CancellationToken cancellationToken)
+        {
+            var page = await _context.CustomBlocks
+               .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
+
+            if (page is null)
+                throw new NotFoundException("Block not found");
+            if (page.CreatedBy != _currentUserService.UserId)
+            {
+                throw new AccessDeniedException("AccessDenied!\nCan not delete this block!");
+            }
+            await _context.CustomBlocks.Where(x => x.Id == request.Id).ExecuteDeleteAsync();
+
+
+            await _context.SaveChangesAsync(cancellationToken);
+            return Unit.Value;
+        }
+
+        public async Task<List<CustomBlockDto>> GetCustomBlocks(GetCustomBlockQuery request, CancellationToken cancellationToken)
+        {
+            var result = await _context.CustomBlocks
+                .Select(p => new CustomBlockDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Description = p.Description,
+                    CategoryName = p.CategoryName,
+                    Icon = p.Icon,
+                    Data = p.Data,
+                }).ToListAsync(cancellationToken);
+
+            return result;
+        }
+
+        #endregion
     }
 }

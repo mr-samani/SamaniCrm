@@ -13,8 +13,8 @@
 
 /** Interface for LanguageDTO */
 export interface ILanguageDTO {
-  culture?: string;
-  name?: string;
+  culture: string;
+  name: string;
   isRtl?: boolean;
   flag?: string;
   isDefault?: boolean;
@@ -23,8 +23,8 @@ export interface ILanguageDTO {
 
 /** Class for LanguageDTO */
 export class LanguageDTO implements ILanguageDTO {
-  culture?: string;
-  name?: string;
+  culture!: string;
+  name!: string;
   isRtl?: boolean;
   flag?: string;
   isDefault?: boolean;

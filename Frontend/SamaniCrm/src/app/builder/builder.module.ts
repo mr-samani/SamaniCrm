@@ -11,9 +11,9 @@ import { LayoutsComponent } from './layouts/layouts.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ToolboxComponent } from './toolbox/toolbox.component';
 import { FormBuilderBackendService } from './backend.service';
-import { PagesServiceProxy } from '@shared/service-proxies';
+import { PageBuilderServiceProxy, PagesServiceProxy } from '@shared/service-proxies';
 import { StyleProperties } from './properties/styles/style.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxInputBoxShadowModule, NgxInputColorModule, NgxInputGradientModule } from 'ngx-input-color';
 
 @NgModule({
@@ -26,10 +26,11 @@ import { NgxInputBoxShadowModule, NgxInputColorModule, NgxInputGradientModule } 
     BuilderRoutingModule,
     StyleProperties,
     FormsModule,
+    ReactiveFormsModule,
     NgxInputColorModule,
     NgxInputGradientModule,
     NgxInputBoxShadowModule,
   ],
-  providers: [FormBuilderService, FormBuilderBackendService, PagesServiceProxy],
+  providers: [FormBuilderService, FormBuilderBackendService, PagesServiceProxy, PageBuilderServiceProxy],
 })
 export class BuilderModule {}

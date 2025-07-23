@@ -56,6 +56,9 @@ namespace SamaniCrm.Core.Permissions
         public const string Pages_Create = "Administrator.Pages.Create";
         public const string Pages_Update = "Administrator.Pages.Update";
         public const string Pages_Delete = "Administrator.Pages.Delete";
+        public const string Pages_CustomBlockList = "Administrator.Pages.CustomBlockList";
+        public const string Pages_CreateCustomBlock = "Administrator.Pages.CreateCustomBlock";
+        public const string Pages_DeleteCustomBlock = "Administrator.Pages.DeleteCustomBlock";
 
 
         // products
