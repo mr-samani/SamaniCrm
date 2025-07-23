@@ -4,6 +4,7 @@ import { FormBuilderService } from '../form-builder.service';
 import { BlockTypeEnum } from '../blocks/block-registry';
 import { BlockStyle } from './styles/models/_style';
 import { MatDialog } from '@angular/material/dialog';
+import { CanChildHtmlTags, SimpleHtmlTags } from '../blocks/general-html-tags/GeneralTagNames';
 
 @Component({
   selector: 'properties',
@@ -15,6 +16,8 @@ import { MatDialog } from '@angular/material/dialog';
 export class PropertiesComponent extends AppComponentBase implements OnInit {
   borderCss = '';
   tab: 'General' | 'Advanced' = 'General';
+
+  htmlTags = [...SimpleHtmlTags, ...CanChildHtmlTags];
 
   constructor(
     injector: Injector,

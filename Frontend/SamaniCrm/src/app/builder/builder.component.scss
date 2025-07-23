@@ -21,9 +21,7 @@ app-builder {
   color: var(--fgColor);
   height: 100%;
 }
-#main-page {
-  overflow-y: auto;
-}
+
 .canvas {
   flex: auto;
   border: 1px solid #ccc;
@@ -52,7 +50,9 @@ app-builder {
 
 /*--------------- view mode --------------*/
 #main-page {
+  overflow-y: auto;
   background-color: #fff;
+  color: #000;
   height: 100%;
   transition: all 0.3s ease;
   &.tablet-view {

@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BlockTypeEnum, BLOCK_REGISTRY, BlockDefinition, FormTools, BlockData } from './blocks/block-registry';
-import { BlockDivComponent } from './blocks/div/div.component';
+import { BlockGeneralHtmlTagsComponent } from './blocks/general-html-tags/general-html-tags.component';
 import { IDropEvent, moveItemInArray } from 'ngx-drag-drop-kit';
 import { ViewModeEnum } from './models/view-mode.enum';
 import { NgxAlertModalService } from 'ngx-alert-modal';
 import { createTreeFormTools } from './helpers/tools';
 import { PageBuilderServiceProxy } from '@shared/service-proxies';
 import { finalize } from 'rxjs';
+import { CanChildHtmlTags, SimpleHtmlTags } from './blocks/general-html-tags/GeneralTagNames';
+import { cloneDeep } from 'lodash-es';
 
 @Injectable()
 export class FormBuilderService {
@@ -35,7 +37,33 @@ export class FormBuilderService {
   }
 
   getCustomBlocks() {
-    this.tools = createTreeFormTools(BLOCK_REGISTRY);
+    // کامپوننت های سفارشی تعریف شده
+    const advancedBlocks = BLOCK_REGISTRY;
+    // کامپوننت عمومی با تگ هایی که می توانند فرزند داشته باشند
+    const generalTags = CanChildHtmlTags.map((m) => {
+      return <BlockDefinition>{
+        category: 'Container',
+        type: BlockTypeEnum.GeneralHtmlTag,
+        component: BlockGeneralHtmlTagsComponent,
+        canChild: true,
+        tagName: m,
+        name: m,
+        icon: 'fa block-' + m,
+      };
+    });
+    // کاموننت های ساده مانند span,u,i,b,...
+    const simpleTags = SimpleHtmlTags.map((m) => {
+      return <BlockDefinition>{
+        category: 'General',
+        type: BlockTypeEnum.GeneralHtmlTag,
+        component: BlockGeneralHtmlTagsComponent,
+        canChild: false,
+        tagName: m,
+        name: m,
+        icon: 'fa block-' + m,
+      };
+    });
+    this.tools = createTreeFormTools([...advancedBlocks, ...generalTags, ...simpleTags]);
 
     this.loadingCustomBlocks = true;
     this.pageBuilderService
@@ -68,24 +96,9 @@ export class FormBuilderService {
     if (index == undefined) {
       index = parentChildren.length;
     }
-    const def = BLOCK_REGISTRY.find((b) => b.type === source.type);
-    if (def) {
-      let b = new BlockDefinition({ type: def.type, data: new BlockData({ ...def.data, ...source.data }) });
-      if (b.type == BlockTypeEnum.Row && (!b.children || b.children.length < 1)) {
-        // هر Row باید دو cell (Div) داشته باشد که هرکدام children آرایه‌ای خالی دارند
-        b.children = [
-          new BlockDefinition({ type: BlockTypeEnum.Div, component: BlockDivComponent }),
-          new BlockDefinition({ type: BlockTypeEnum.Div, component: BlockDivComponent }),
-        ];
-      }
-      parentChildren.splice(index, 0, b);
-    }
-    // is customBlock
-    else {
-      // TODO: test
-      debugger;
-      parentChildren.splice(index, 0, new BlockDefinition(def));
-    }
+    const s = cloneDeep(source);
+    s.data ??= new BlockData();
+    parentChildren.splice(index, 0, s);
 
     this.updateRowNumber(this.blocks);
   }

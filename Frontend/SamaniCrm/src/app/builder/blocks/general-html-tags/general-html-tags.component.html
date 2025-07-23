@@ -1,0 +1,42 @@
+@if (block) {
+  @if (block.canChild) {
+    <div
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.rowNumber">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        ngxDraggable />
+    </div>
+  } @else {
+    <ng-container [ngSwitch]="block.tagName">
+      <span *ngSwitchCase="'span'" ngxDraggable>{{ block.data?.text }}</span>
+      <p *ngSwitchCase="'p'" ngxDraggable>{{ block.data?.text }}</p>
+      <strong *ngSwitchCase="'strong'" ngxDraggable>{{ block.data?.text }}</strong>
+      <b *ngSwitchCase="'b'" ngxDraggable>{{ block.data?.text }}</b>
+      <i *ngSwitchCase="'i'" ngxDraggable>{{ block.data?.text }}</i>
+      <u *ngSwitchCase="'u'" ngxDraggable>{{ block.data?.text }}</u>
+      <s *ngSwitchCase="'s'" ngxDraggable>{{ block.data?.text }}</s>
+      <section *ngSwitchCase="'section'" ngxDraggable>{{ block.data?.text }}</section>
+      <article *ngSwitchCase="'article'" ngxDraggable>{{ block.data?.text }}</article>
+      <header *ngSwitchCase="'header'" ngxDraggable>{{ block.data?.text }}</header>
+      <footer *ngSwitchCase="'footer'" ngxDraggable>{{ block.data?.text }}</footer>
+      <aside *ngSwitchCase="'aside'" ngxDraggable>{{ block.data?.text }}</aside>
+      <main *ngSwitchCase="'main'" ngxDraggable>{{ block.data?.text }}</main>
+      <nav *ngSwitchCase="'nav'" ngxDraggable>{{ block.data?.text }}</nav>
+
+      <h1 *ngSwitchCase="'h1'" ngxDraggable>{{ block.data?.text }}</h1>
+      <h2 *ngSwitchCase="'h2'" ngxDraggable>{{ block.data?.text }}</h2>
+      <h3 *ngSwitchCase="'h3'" ngxDraggable>{{ block.data?.text }}</h3>
+      <h4 *ngSwitchCase="'h4'" ngxDraggable>{{ block.data?.text }}</h4>
+      <h5 *ngSwitchCase="'h5'" ngxDraggable>{{ block.data?.text }}</h5>
+      <h6 *ngSwitchCase="'h6'" ngxDraggable>{{ block.data?.text }}</h6>
+    </ng-container>
+  }
+}

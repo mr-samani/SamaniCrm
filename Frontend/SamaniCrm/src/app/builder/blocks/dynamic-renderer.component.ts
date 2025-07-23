@@ -3,7 +3,8 @@ import { CommonModule, DOCUMENT } from '@angular/common';
 import { BLOCK_REGISTRY, BlockData, BlockDefinition } from './block-registry';
 import { FormBuilderService } from '../form-builder.service';
 import { IResizableOutput, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
-
+//  ngxResizable
+//   (resizeEnd)="onResizeEnd($event)"
 @Component({
   selector: 'dynamic-renderer',
   standalone: true,
@@ -14,8 +15,6 @@ import { IResizableOutput, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
       (click)="onBlockClick(block, $event)"
       [class.fb-selected]="b.selectedBlock == block"
       [class.hidden]="block.hidden"
-      ngxResizable
-      (resizeEnd)="onResizeEnd($event)"
       [style]="block.data?.css">
       <div
         class="actions"
@@ -24,6 +23,9 @@ import { IResizableOutput, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
         <button (click)="b.deleteBlock(block, parent)">
           <i class="fa fa-trash"></i>
         </button>
+        <span>
+          {{ block.tagName }}
+        </span>
       </div>
       <ng-container #container></ng-container>
     </div>

@@ -3,6 +3,8 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { DynamicRendererComponent } from '../dynamic-renderer.component';
 import { NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 import { BlockBase } from '../block-base';
+import { BlockDefinition, BlockTypeEnum } from '../block-registry';
+import { BlockGeneralHtmlTagsComponent } from '../general-html-tags/general-html-tags.component';
 
 @Component({
   selector: 'block-row',
@@ -16,5 +18,21 @@ export class BlockRowComponent extends BlockBase implements OnInit {
     super(injector);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.block && (!this.block.children || this.block.children.length < 1)) {
+      // هر Row باید دو cell (Div) داشته باشد که هرکدام children آرایه‌ای خالی دارند
+      this.block.children = [
+        new BlockDefinition({
+          type: BlockTypeEnum.GeneralHtmlTag,
+          tagName: 'div',
+          component: BlockGeneralHtmlTagsComponent,
+        }),
+        new BlockDefinition({
+          type: BlockTypeEnum.GeneralHtmlTag,
+          tagName: 'div',
+          component: BlockGeneralHtmlTagsComponent,
+        }),
+      ];
+    }
+  }
 }

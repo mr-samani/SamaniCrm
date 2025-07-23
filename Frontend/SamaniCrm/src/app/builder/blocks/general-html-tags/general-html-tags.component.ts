@@ -1,15 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, Input, OnInit } from '@angular/core';
 import { NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 import { DynamicRendererComponent } from '../dynamic-renderer.component';
 import { FormBuilderService } from '@app/builder/form-builder.service';
 import { BlockDefinition } from '../block-registry';
-
 @Component({
-  selector: 'block-div',
+  selector: 'block-general-html-tags',
   standalone: true,
   imports: [CommonModule, NgxDragDropKitModule, DynamicRendererComponent],
-  templateUrl: './div.component.html',
+  templateUrl: './general-html-tags.component.html',
   styles: `
     :host {
       display: block;
@@ -20,7 +19,7 @@ import { BlockDefinition } from '../block-registry';
     }
   `,
 })
-export class BlockDivComponent implements OnInit {
+export class BlockGeneralHtmlTagsComponent implements OnInit {
   block?: BlockDefinition;
   constructor(
     injector: Injector,

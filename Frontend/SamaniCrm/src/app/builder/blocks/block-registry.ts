@@ -2,17 +2,18 @@ import { BlockHeroBannerComponent } from './banner/hero-banner.component';
 import { BlockProductCategoryComponent } from './product-category/product-category.component';
 import { Type } from '@angular/core';
 import { BlockRowComponent } from './row/row.component';
-import { BlockDivComponent } from './div/div.component';
+import { BlockGeneralHtmlTagsComponent } from './general-html-tags/general-html-tags.component';
 import { BlockStyle } from '../properties/styles/models/_style';
+import { GeneralTagNames } from './general-html-tags/GeneralTagNames';
 
 export enum BlockTypeEnum {
-  Div = 1,
+  GeneralHtmlTag = 0,
   ProductCategory,
   HeroBanner,
   Row,
 }
 
-export declare type BlockCategory = 'Container' | 'Banner' | 'Product' | 'Other';
+export declare type BlockCategory = 'General' | 'Container' | 'Banner' | 'Product' | 'Other';
 
 export class FormTools {
   category!: BlockCategory;
@@ -25,28 +26,32 @@ export const BLOCK_REGISTRY: BlockDefinition[] = [
     type: BlockTypeEnum.Row,
     component: BlockRowComponent,
     canChild: true,
+    icon: 'fa fa-grate',
   },
   {
-    category: 'Container',
-    type: BlockTypeEnum.Div,
-    component: BlockDivComponent,
+    category: 'General',
+    type: BlockTypeEnum.GeneralHtmlTag,
+    component: BlockGeneralHtmlTagsComponent,
     canChild: true,
   },
   {
     category: 'Product',
     type: BlockTypeEnum.ProductCategory,
     component: BlockProductCategoryComponent,
+    icon: 'fa fa-boxes-packing',
     data: { title: 'Welcome to our Store!', categories: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] } as any,
   },
   {
     category: 'Banner',
     type: BlockTypeEnum.HeroBanner,
     component: BlockHeroBannerComponent,
+    icon: 'fa fa-image-landscape',
   },
 ];
 
 export class BlockDefinition {
   id?: string;
+  tagName?: GeneralTagNames;
   name?: string;
   description?: string;
   /** forn icon (fmont awsome) */
@@ -78,6 +83,7 @@ export class BlockDefinition {
 }
 
 export class BlockData {
+  text?: string;
   style: BlockStyle = {};
   css: string = '';
   constructor(data?: BlockData | any) {

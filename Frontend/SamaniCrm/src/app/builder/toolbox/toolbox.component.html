@@ -4,12 +4,12 @@
     <div class="tools-container">
       <div class="items" ngxDropList [disableSort]="true" [data]="item.items" id="toolBox">
         @for (t of item.items; track $index) {
-          <div class="toolbox" ngxDraggable (dblclick)="b.addBlock(t)" [title]="t.description">
+          <div class="toolbox" ngxDraggable (dblclick)="b.addBlock(t)" [title]="t.description ?? ''">
             <div class="icon-container">
               <i *ngIf="t.icon" [class]="t.icon"></i>
               <span *ngIf="!t.icon" [innerHTML]="t.image"></span>
             </div>
-            {{ t.name ?? BlockTypeEnum[t.type] | translate }}
+            <span class="block-title">{{ t.name ?? BlockTypeEnum[t.type] | translate }}</span>
 
             <div class="delete-action" *ngIf="t.canDelete">
               <button (click)="deleteCustomBlock(t)" type="button" class="btn icon-btn btn-primary">
