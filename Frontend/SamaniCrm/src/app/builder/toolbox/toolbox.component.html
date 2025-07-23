@@ -1,14 +1,24 @@
-<div class="tools-container">
-  @for (item of b.tools; track $index) {
-    <div class="tool-category">
-      {{ item.category }}
+@for (item of b.tools; track $index) {
+  <details open>
+    <summary class="tool-category">{{ item.category }}</summary>
+    <div class="tools-container">
+      <div class="items" ngxDropList [disableSort]="true" [data]="item.items" id="toolBox">
+        @for (t of item.items; track $index) {
+          <div class="toolbox" ngxDraggable (dblclick)="b.addBlock(t)" [title]="t.description">
+            <div class="icon-container">
+              <i *ngIf="t.icon" [class]="t.icon"></i>
+              <span *ngIf="!t.icon" [innerHTML]="t.image"></span>
+            </div>
+            {{ t.name ?? BlockTypeEnum[t.type] | translate }}
+
+            <div class="delete-action" *ngIf="t.canDelete">
+              <button (click)="deleteCustomBlock(t)" type="button" class="btn icon-btn btn-primary">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        }
+      </div>
     </div>
-    <div class="items" ngxDropList [disableSort]="true" [data]="item.items" id="toolBox">
-      @for (t of item.items; track $index) {
-        <div class="toolbox" ngxDraggable (dblclick)="b.addBlock(t)">
-          {{ BlockTypeEnum[t.type] | translate }}
-        </div>
-      }
-    </div>
-  }
-</div>
+  </details>
+}

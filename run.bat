@@ -63,7 +63,7 @@ GOTO End
 :RunOpenApiGenDashboard
 ECHO *** Generate Services and model from swagger ***
 CD /D "%currentDirector%\Frontend\SamaniCrm"
-call npm run generate-api
+call npm run apiGen
 GOTO End
 
 ::---------------------------------------------------------

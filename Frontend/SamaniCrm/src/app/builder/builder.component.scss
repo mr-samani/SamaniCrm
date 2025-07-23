@@ -1,7 +1,10 @@
 app-builder {
   --rightSideWidth: 220px;
   --leftSideWidth: 340px;
-  --primaryColor: #008cff;
+  --primaryColor: #0861ff;
+  --bgColor: #151515;
+  --bgColor2: #1b1b1b;
+  --fgColor: #b0b0b0;
 }
 .builder-container {
   height: 98vh;
@@ -14,6 +17,9 @@ app-builder {
 .right-side {
   width: var(--rightSideWidth);
   overflow: auto;
+  background-color: var(--bgColor);
+  color: var(--fgColor);
+  height: 100%;
 }
 #main-page {
   overflow-y: auto;
@@ -40,10 +46,12 @@ app-builder {
   padding: 10px;
   overflow: auto;
   height: 100%;
+  background-color: var(--bgColor);
+  color: var(--fgColor);
 }
 
 /*--------------- view mode --------------*/
-.container-fluid {
+#main-page {
   background-color: #fff;
   height: 100%;
   transition: all 0.3s ease;
@@ -58,12 +66,23 @@ app-builder {
   }
 }
 
+details {
+  summary {
+    cursor: pointer;
+    background-color: var(--bgColor2);
+    color: var(--fgColor);
+    padding: 6px 10px;
+    margin-bottom: 6px;
+  }
+}
+
 /*--------------group buttons------------------------------*/
 .group-buttons {
   display: flex;
   gap: 2px;
-  background: linear-gradient(0deg, #1a1717, #575757);
-  color: #ffff;
+  // background: linear-gradient(0deg, #1a1717, #575757);
+  background-color: var(--bgColor);
+  color: var(--fgColor);
   button {
     background: none;
     border: none;
@@ -73,10 +92,11 @@ app-builder {
     transition: all 0.3s ease;
     &:not(:disabled):hover {
       cursor: pointer;
-      background-color: rgba(0, 140, 255, 0.644);
+      background-color: var(--primaryColor);
     }
     &.active {
-      background-color: rgba(0, 140, 255, 0.644);
+      background-color: var(--primaryColor);
+      color: #fff;
     }
   }
   &.stretch button {

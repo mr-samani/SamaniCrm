@@ -2,7 +2,6 @@ import { BlockHeroBannerComponent } from './banner/hero-banner.component';
 import { BlockProductCategoryComponent } from './product-category/product-category.component';
 import { Type } from '@angular/core';
 import { BlockRowComponent } from './row/row.component';
-import { generateUniqueId, guid } from '@shared/helper/guid';
 import { BlockDivComponent } from './div/div.component';
 import { BlockStyle } from '../properties/styles/models/_style';
 
@@ -17,22 +16,10 @@ export declare type BlockCategory = 'Container' | 'Banner' | 'Product' | 'Other'
 
 export class FormTools {
   category!: BlockCategory;
-  items: IBlockDefinition[] = [];
+  items: BlockDefinition[] = [];
 }
 
-export class IBlockDefinition {
-  id?: string = guid();
-  category?: BlockCategory;
-  hidden?: boolean;
-  rowNumber?: number;
-  type: BlockTypeEnum = BlockTypeEnum.Row;
-  component?: Type<any>;
-  data?: any;
-  children?: IBlockDefinition[] = [];
-  /** المنت هایی که می توانند فرزند داشته باشند */
-  canChild?: boolean;
-}
-export const BLOCK_REGISTRY: IBlockDefinition[] = [
+export const BLOCK_REGISTRY: BlockDefinition[] = [
   {
     category: 'Container',
     type: BlockTypeEnum.Row,
@@ -59,23 +46,30 @@ export const BLOCK_REGISTRY: IBlockDefinition[] = [
 ];
 
 export class BlockDefinition {
-  id: string = guid();
+  id?: string;
+  name?: string;
+  description?: string;
+  /** forn icon (fmont awsome) */
+  icon?: string;
+  /** svg image for toolbox icon */
+  image?: string;
+  canDelete?: boolean;
+  isCustomBlock?: boolean;
   category?: BlockCategory;
-  hidden = false;
+  hidden?: boolean;
   type: BlockTypeEnum = BlockTypeEnum.Row;
   component?: Type<any>;
-  data!: BlockData;
-  children: BlockDefinition[] = [];
+  data?: BlockData;
+  children?: BlockDefinition[] = [];
+  /** المنت هایی که می توانند فرزند داشته باشند */
   canChild?: boolean;
-  rowNumber!: number;
+  rowNumber?: number;
 
-  constructor(data?: IBlockDefinition) {
+  constructor(data?: BlockDefinition) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property)) (this as any)[property] = (data as any)[property];
       }
-
-      this.id = data.id ?? generateUniqueId();
       this.data = new BlockData(data.data);
 
       this.children = (data.children ?? []).map((child) => new BlockDefinition(child));
@@ -86,11 +80,13 @@ export class BlockDefinition {
 export class BlockData {
   style: BlockStyle = {};
   css: string = '';
-  constructor(data?: BlockData) {
+  constructor(data?: BlockData | any) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property)) (this as any)[property] = (data as any)[property];
       }
     }
+    this.style ??= {};
+    this.css ??= '';
   }
 }

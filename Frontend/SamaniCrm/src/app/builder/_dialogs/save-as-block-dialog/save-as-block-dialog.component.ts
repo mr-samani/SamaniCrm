@@ -3,7 +3,7 @@ import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
-import { BlockDefinition, IBlockDefinition } from '@app/builder/blocks/block-registry';
+import { BlockDefinition } from '@app/builder/blocks/block-registry';
 import { TranslateModule } from '@ngx-translate/core';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { CreateCustomBlockCommand, PageBuilderServiceProxy } from '@shared/service-proxies';
@@ -35,6 +35,7 @@ export class SaveAsBlockDialogComponent extends AppComponentBase implements OnIn
       name: ['', [Validators.required]],
       description: [''],
       icon: [''],
+      image: [''],
       categoryName: [''],
       data: [''],
     });
@@ -42,8 +43,6 @@ export class SaveAsBlockDialogComponent extends AppComponentBase implements OnIn
   }
 
   ngOnInit() {}
-
-
 
   save() {
     if (this.form.invalid) {
@@ -53,10 +52,8 @@ export class SaveAsBlockDialogComponent extends AppComponentBase implements OnIn
     }
     this.saving = true;
     const formValue = this.form.value;
-    debugger;
     const input = new CreateCustomBlockCommand();
     input.init(formValue);
-
     this.pageBuilderService
       .saveAsBlockDefinition(input)
       .pipe(finalize(() => (this.saving = false)))

@@ -46,10 +46,17 @@ export class PropertiesComponent extends AppComponentBase implements OnInit {
     const { SaveAsBlockDialogComponent } = await import(
       '../_dialogs/save-as-block-dialog/save-as-block-dialog.component'
     );
-    this.matDialog.open(SaveAsBlockDialogComponent, {
-      data: {
-        block: this.b.selectedBlock,
-      },
-    });
+    this.matDialog
+      .open(SaveAsBlockDialogComponent, {
+        data: {
+          block: this.b.selectedBlock,
+        },
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.b.getCustomBlocks();
+        }
+      });
   }
 }

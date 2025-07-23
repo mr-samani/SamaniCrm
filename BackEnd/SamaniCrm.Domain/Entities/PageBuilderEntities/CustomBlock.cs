@@ -17,9 +17,10 @@ public class CustomBlock : IAuditableEntity
 
     [MaxLength(500)]
     public string? Description { get; set; }
-
-    [MaxLength(500)]
+    [MaxLength(5000)]
     public string? Icon { get; set; }
+    [MaxLength(5000)]
+    public string? Image { get; set; }
 
     [MaxLength(100)]
     public string? CategoryName { get; set; }

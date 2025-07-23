@@ -22,9 +22,17 @@
 
       <mat-form-field class="col-sm-6 col-md-4">
         <mat-label>{{ 'Icon' | translate }}</mat-label>
-        <input matInput formControlName="icon" maxlength="100" />
+        <input matInput formControlName="icon" maxlength="5000" />
+        <i matSuffix [class]="form.get('icon')?.value"></i>
         <mat-error *ngIf="form.get('icon')?.hasError('required')">
           {{ 'IsRequired' | translate: { value: ('icon' | translate) } }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>{{ 'Image' | translate }}</mat-label>
+        <input matInput formControlName="image" maxlength="5000" />
+        <mat-error *ngIf="form.get('image')?.hasError('required')">
+          {{ 'IsRequired' | translate: { value: ('Image' | translate) } }}
         </mat-error>
       </mat-form-field>
 

@@ -1,6 +1,6 @@
 import { Component, Input, ViewContainerRef, ComponentRef, ViewChild, inject, Renderer2, Inject } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { BLOCK_REGISTRY, BlockDefinition } from './block-registry';
+import { BLOCK_REGISTRY, BlockData, BlockDefinition } from './block-registry';
 import { FormBuilderService } from '../form-builder.service';
 import { IResizableOutput, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 
@@ -16,7 +16,7 @@ import { IResizableOutput, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
       [class.hidden]="block.hidden"
       ngxResizable
       (resizeEnd)="onResizeEnd($event)"
-      [style]="block.data.css">
+      [style]="block.data?.css">
       <div
         class="actions"
         [class.actions-top]="actionsPosition === 'top'"
@@ -102,6 +102,9 @@ export class DynamicRendererComponent {
   }
   onResizeEnd(event: IResizableOutput) {
     if (!this.b.selectedBlock) return;
+    if (!this.b.selectedBlock.data) {
+      this.b.selectedBlock.data = new BlockData();
+    }
 
     if (!this.b.selectedBlock.data.style.position) {
       this.b.selectedBlock.data.style.position = 'relative';

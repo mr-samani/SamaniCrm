@@ -8,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.Pages.Commands;
 
-public class DeleteCustomBlockCommand : IRequest<Unit>
-{
-    public Guid Id { get; set; }
-}
+public record DeleteCustomBlockCommand(Guid Id) : IRequest<Unit>;
+
 
 public class DeleteCustomBlockCommandHandler : IRequestHandler<DeleteCustomBlockCommand, Unit>
 {

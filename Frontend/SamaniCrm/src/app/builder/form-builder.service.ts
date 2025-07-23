@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BlockTypeEnum, BLOCK_REGISTRY, BlockDefinition, FormTools, IBlockDefinition } from './blocks/block-registry';
+import { BlockTypeEnum, BLOCK_REGISTRY, BlockDefinition, FormTools, BlockData } from './blocks/block-registry';
 import { BlockDivComponent } from './blocks/div/div.component';
 import { IDropEvent, moveItemInArray } from 'ngx-drag-drop-kit';
 import { ViewModeEnum } from './models/view-mode.enum';
@@ -43,24 +43,34 @@ export class FormBuilderService {
       .pipe(finalize(() => (this.loadingCustomBlocks = false)))
       .subscribe((result) => {
         const list = result.data ?? [];
-        const customBlocks: IBlockDefinition[] = [];
+        const customBlocks: BlockDefinition[] = [];
         for (let item of list) {
-          if (item.data) customBlocks.push(JSON.parse(item.data ?? '{}'));
+          if (item.data) {
+            const b = JSON.parse(item.data ?? '{}');
+            b.isCustomBlock = true;
+            b.canDelete = item.canDelete;
+            b.name = item.name;
+            b.id = item.id;
+            b.description = item.description;
+            b.icon = item.icon;
+            b.image = item.image;
+            customBlocks.push(b);
+          }
         }
         const blocks = createTreeFormTools(customBlocks);
-        console.log('customBlocks', blocks);
+        // console.log('customBlocks', blocks);
         this.tools.push(...blocks);
       });
   }
 
-  addBlock(source: BlockDefinition | IBlockDefinition, index?: number, parentChildren?: BlockDefinition[]) {
+  addBlock(source: BlockDefinition, index?: number, parentChildren?: BlockDefinition[]) {
     if (!parentChildren) parentChildren = this.blocks;
     if (index == undefined) {
       index = parentChildren.length;
     }
     const def = BLOCK_REGISTRY.find((b) => b.type === source.type);
     if (def) {
-      let b = new BlockDefinition({ type: def.type, data: { ...def.data, ...source.data } });
+      let b = new BlockDefinition({ type: def.type, data: new BlockData({ ...def.data, ...source.data }) });
       if (b.type == BlockTypeEnum.Row && (!b.children || b.children.length < 1)) {
         // هر Row باید دو cell (Div) داشته باشد که هرکدام children آرایه‌ای خالی دارند
         b.children = [
@@ -131,9 +141,9 @@ export class FormBuilderService {
               this.blocks.splice(foundedIndex, 1);
             }
           } else {
-            const foundedIndex = parent.children.findIndex((x) => x == block);
-            if (foundedIndex > -1) {
-              parent.children.splice(foundedIndex, 1);
+            const foundedIndex = parent.children?.findIndex((x) => x == block);
+            if (foundedIndex && foundedIndex > -1) {
+              parent.children?.splice(foundedIndex, 1);
             }
           }
           this.selectedBlock = undefined;
@@ -143,6 +153,9 @@ export class FormBuilderService {
 
   updateCss() {
     if (!this.selectedBlock) return;
+    if (!this.selectedBlock.data) {
+      this.selectedBlock.data = new BlockData();
+    }
     this.selectedBlock.data.css = `
   ${this.selectedBlock.data.style.border ? 'border:' + this.selectedBlock.data.style.border + ';' : ''}
   ${this.selectedBlock.data.style.padding ? 'padding:' + this.selectedBlock.data.style.padding + ';' : ''}

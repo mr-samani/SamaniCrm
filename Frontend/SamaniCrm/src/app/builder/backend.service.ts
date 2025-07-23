@@ -33,7 +33,6 @@ export class FormBuilderBackendService extends AppComponentBase {
         this.pageInfo = response.data;
         if (this.pageInfo && this.pageInfo.data) {
           this.b.blocks = this.initBlocks(JSON.parse(this.pageInfo.data ?? '[]'));
-          console.log(this.b.blocks);
         }
       });
   }

@@ -335,6 +335,7 @@ namespace SamaniCrm.Infrastructure.Services
                 Description = request.Description,
                 CategoryName = request.CategoryName,
                 Icon = request.Icon,
+                Image = request.Image,
                 Data = request.Data,
             };
 
@@ -372,7 +373,9 @@ namespace SamaniCrm.Infrastructure.Services
                     Description = p.Description,
                     CategoryName = p.CategoryName,
                     Icon = p.Icon,
+                    Image = p.Image,
                     Data = p.Data,
+                    CanDelete = _currentUserService.UserId == p.CreatedBy,
                 }).ToListAsync(cancellationToken);
 
             return result;

@@ -17,8 +17,10 @@ export interface ICustomBlockDto {
   name: string;
   description?: string;
   icon?: string;
+  image?: string;
   categoryName?: string;
   data?: string;
+  canDelete?: boolean;
 }
 
 /** Class for CustomBlockDto */
@@ -27,8 +29,10 @@ export class CustomBlockDto implements ICustomBlockDto {
   name!: string;
   description?: string;
   icon?: string;
+  image?: string;
   categoryName?: string;
   data?: string;
+  canDelete?: boolean;
 
   constructor(data?: ICustomBlockDto) {
     if (data) {
@@ -45,8 +49,10 @@ init(data?: any) {
     this.name = data["name"];
     this.description = data["description"];
     this.icon = data["icon"];
+    this.image = data["image"];
     this.categoryName = data["categoryName"];
     this.data = data["data"];
+    this.canDelete = data["canDelete"];
   }
 }
 

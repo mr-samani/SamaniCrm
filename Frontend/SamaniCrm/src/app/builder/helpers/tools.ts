@@ -1,6 +1,6 @@
-import { FormTools, IBlockDefinition } from '../blocks/block-registry';
+import { FormTools, BlockDefinition } from '../blocks/block-registry';
 
-export function createTreeFormTools(definitios: IBlockDefinition[]): FormTools[] {
+export function createTreeFormTools(definitios: BlockDefinition[]): FormTools[] {
   let tree: FormTools[] = [];
   for (let item of definitios) {
     if (!item.category) item.category = 'Other';

@@ -1,15 +1,14 @@
-import { generateUniqueId } from '@shared/helper/guid';
 import { BlockDefinition } from '../blocks/block-registry';
 
 export function generateCSSFromBlocks(blocks: BlockDefinition[]): string {
   const cssRules: string[] = [];
 
-  function traverse(block: BlockDefinition) {
-    // اگر هنوز id نداشت، یه id یونیک بده
-    if (!block.id) {
-      block.id = generateUniqueId();
-    }
 
+  /**
+   * 
+   * @param block 
+   */
+  function traverse(block: BlockDefinition) {
     const selector = `#${block.id}`;
     const styles: string[] = [];
 

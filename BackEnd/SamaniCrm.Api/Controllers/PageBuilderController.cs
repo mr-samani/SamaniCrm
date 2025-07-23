@@ -34,9 +34,9 @@ namespace SamaniCrm.Api.Controllers
         [HttpPost("DeleteCustomBlock")]
         [Permission(AppPermissions.Pages_DeleteCustomBlock)]
         [ProducesResponseType(typeof(ApiResponse<Unit>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> DeleteCustomBlock(DeletePageCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteCustomBlock(Guid Id, CancellationToken cancellationToken)
         {
-            Unit result = await _mediator.Send(request, cancellationToken);
+            Unit result = await _mediator.Send(new DeleteCustomBlockCommand(Id), cancellationToken);
             return ApiOk(result);
         }
 

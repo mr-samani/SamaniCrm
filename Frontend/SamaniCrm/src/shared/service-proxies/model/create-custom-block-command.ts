@@ -17,8 +17,10 @@ export interface ICreateCustomBlockCommand {
   name: string;
   description?: string;
   icon?: string;
+  image?: string;
   categoryName?: string;
   data?: string;
+  canDelete?: boolean;
 }
 
 /** Class for CreateCustomBlockCommand */
@@ -27,8 +29,10 @@ export class CreateCustomBlockCommand implements ICreateCustomBlockCommand {
   name!: string;
   description?: string;
   icon?: string;
+  image?: string;
   categoryName?: string;
   data?: string;
+  canDelete?: boolean;
 
   constructor(data?: ICreateCustomBlockCommand) {
     if (data) {
@@ -45,8 +49,10 @@ init(data?: any) {
     this.name = data["name"];
     this.description = data["description"];
     this.icon = data["icon"];
+    this.image = data["image"];
     this.categoryName = data["categoryName"];
     this.data = data["data"];
+    this.canDelete = data["canDelete"];
   }
 }
 

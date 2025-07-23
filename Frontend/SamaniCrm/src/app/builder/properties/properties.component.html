@@ -1,94 +1,98 @@
-<ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link active" (click)="tab = 'General'">General</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" (click)="tab = 'Advanced'">Advanced</a>
-  </li>
-</ul>
-@if (tab == 'General') {
-  <div *ngIf="b.selectedBlock">
-    <p>ID: {{ b.selectedBlock.id }}</p>
-    <p>Type: {{ BlockTypeEnum[b.selectedBlock.type] }}</p>
-    <p>RowNumber: {{ b.selectedBlock.rowNumber }}</p>
-    <details>
-      <summary>Layout</summary>
-      <table>
-        <tr>
-          <th>Padding</th>
-          <td>
-            <style-spacing
-              [(ngModel)]="b.selectedBlock.data.style.padding"
-              (ngModelChange)="updateCss()"></style-spacing>
-          </td>
-        </tr>
-        <tr>
-          <th>Margin</th>
-          <td>
-            <style-spacing
-              [(ngModel)]="b.selectedBlock.data.style.margin"
-              (ngModelChange)="updateCss()"></style-spacing>
-          </td>
-        </tr>
-        <tr>
-          <th>Border</th>
-          <td>
-            <style-border
-              [(ngModel)]="b.selectedBlock.data.style.border"
-              (css)="borderCss = $event; updateCss()"></style-border>
-          </td>
-        </tr>
-        <tr>
-          <th>Radius</th>
-          <td>
-            <style-spacing
-              [(ngModel)]="b.selectedBlock.data.style.borderRadius"
-              (ngModelChange)="updateCss()"></style-spacing>
-          </td>
-        </tr>
-        <tr>
-          <th>Shadow</th>
-          <td>
-            <div class="btn-group" role="group">
-              <button type="button" class="btn btn-danger" (click)="clearStyle('boxShadow')">
-                <i class="fa fa-times"></i>
-              </button>
-              <button
-                type="button"
-                class="btn btn-success"
-                ngxInputBoxShadow
-                [(ngModel)]="b.selectedBlock.data.style.boxShadow"
-                (ngModelChange)="updateCss()">
-                <i class="fa fa-boxes"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </table>
-    </details>
+@if (b.selectedBlock) {
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="tab == 'General'" (click)="tab = 'General'">General</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="tab == 'Advanced'" (click)="tab = 'Advanced'">Advanced</a>
+    </li>
+  </ul>
+  @if (tab == 'General') {
+    <div>
+      <p>ID: {{ b.selectedBlock.id }}</p>
+      <p>Type: {{ BlockTypeEnum[b.selectedBlock.type] }}</p>
+      <p>RowNumber: {{ b.selectedBlock.rowNumber }}</p>
+      <details *ngIf="b.selectedBlock.data && b.selectedBlock.data.style">
+        <summary>Layout</summary>
+        <table>
+          <tr>
+            <th>Padding</th>
+            <td>
+              <style-spacing
+                [(ngModel)]="b.selectedBlock.data.style.padding"
+                (ngModelChange)="updateCss()"></style-spacing>
+            </td>
+          </tr>
+          <tr>
+            <th>Margin</th>
+            <td>
+              <style-spacing
+                [(ngModel)]="b.selectedBlock.data.style.margin"
+                (ngModelChange)="updateCss()"></style-spacing>
+            </td>
+          </tr>
+          <tr>
+            <th>Border</th>
+            <td>
+              <style-border
+                [(ngModel)]="b.selectedBlock.data.style.border"
+                (css)="borderCss = $event; updateCss()"></style-border>
+            </td>
+          </tr>
+          <tr>
+            <th>Radius</th>
+            <td>
+              <style-spacing
+                [(ngModel)]="b.selectedBlock.data.style.borderRadius"
+                (ngModelChange)="updateCss()"></style-spacing>
+            </td>
+          </tr>
+          <tr>
+            <th>Shadow</th>
+            <td>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-danger" (click)="clearStyle('boxShadow')">
+                  <i class="fa fa-times"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-success"
+                  ngxInputBoxShadow
+                  [(ngModel)]="b.selectedBlock.data.style.boxShadow"
+                  (ngModelChange)="updateCss()">
+                  <i class="fa fa-boxes"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </details>
 
-    <details>
-      <summary>Background</summary>
-      <style-background
-        [id]="'prpbg-' + b.selectedBlock.id"
-        [block]="b.selectedBlock"
-        [style]="b.selectedBlock.data.style"
-        (styleChange)="updateCss()"></style-background>
-    </details>
-    <details>
-      <summary>Dimenstions</summary>
-      <style-dimensions
-        [id]="'prpdim-' + b.selectedBlock.id"
-        [block]="b.selectedBlock"
-        [style]="b.selectedBlock.data.style"
-        (styleChange)="updateCss()"></style-dimensions>
-    </details>
+      <details *ngIf="b.selectedBlock.data && b.selectedBlock.data.style">
+        <summary>Background</summary>
+        <style-background
+          [id]="'prpbg-' + b.selectedBlock.id"
+          [block]="b.selectedBlock"
+          [style]="b.selectedBlock.data.style"
+          (styleChange)="updateCss()"></style-background>
+      </details>
+      <details *ngIf="b.selectedBlock.data && b.selectedBlock.data.style">
+        <summary>Dimenstions</summary>
+        <style-dimensions
+          [id]="'prpdim-' + b.selectedBlock.id"
+          [block]="b.selectedBlock"
+          [style]="b.selectedBlock.data.style"
+          (styleChange)="updateCss()"></style-dimensions>
+      </details>
 
-    <pre class="cssStyles">
+      <pre class="cssStyles" *ngIf="b.selectedBlock.data && b.selectedBlock.data.css">
       {{ b.selectedBlock.data.css }}
   </pre
-    >
-  </div>
-} @else if (tab == 'Advanced') {
-  <button class="btn btn-primary" (click)="saveAsBlockDefinition()">Save as block</button>
+      >
+    </div>
+  } @else if (tab == 'Advanced') {
+    <div class="p-5">
+      <button class="btn btn-primary" (click)="saveAsBlockDefinition()">Save as block</button>
+    </div>
+  }
 }
