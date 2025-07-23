@@ -27,6 +27,8 @@ export class BuilderComponent extends AppComponentBase implements OnInit, AfterV
   }
 
   ngOnInit(): void {
+    this.b.cleanServiceData();
+    this.b.getCustomBlocks();
     this.backendService.getPageInfo();
   }
   ngAfterViewInit(): void {

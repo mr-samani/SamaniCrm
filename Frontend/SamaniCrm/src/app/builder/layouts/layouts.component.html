@@ -25,7 +25,7 @@
         [class.fa-eye-slash]="item.hidden"
         (click)="item.hidden = !item.hidden"></i>
       <span (click)="b.onSelect(item, $event)">
-        {{ BlockTypeEnum[item.type] }}
+        {{ item.tagName ?? BlockTypeEnum[item.type] }}
       </span>
     </div>
     @if (item.children) {

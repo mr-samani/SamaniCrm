@@ -33,7 +33,16 @@ export class FormBuilderService {
     private alert: NgxAlertModalService,
     private pageBuilderService: PageBuilderServiceProxy,
   ) {
-    this.getCustomBlocks();
+  }
+
+  public cleanServiceData() {
+    this.blocks = [];
+    this.tools = [];
+    this.viewMode = ViewModeEnum.Desktop;
+    this.selectedBlock = undefined;
+    this.showBorder = true;
+    this.showLayouts = false;
+    this.loadingCustomBlocks = true;
   }
 
   getCustomBlocks() {

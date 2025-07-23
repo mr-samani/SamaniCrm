@@ -16,27 +16,27 @@
     </div>
   } @else {
     <ng-container [ngSwitch]="block.tagName">
-      <span *ngSwitchCase="'span'" ngxDraggable>{{ block.data?.text }}</span>
-      <p *ngSwitchCase="'p'" ngxDraggable>{{ block.data?.text }}</p>
-      <strong *ngSwitchCase="'strong'" ngxDraggable>{{ block.data?.text }}</strong>
-      <b *ngSwitchCase="'b'" ngxDraggable>{{ block.data?.text }}</b>
-      <i *ngSwitchCase="'i'" ngxDraggable>{{ block.data?.text }}</i>
-      <u *ngSwitchCase="'u'" ngxDraggable>{{ block.data?.text }}</u>
-      <s *ngSwitchCase="'s'" ngxDraggable>{{ block.data?.text }}</s>
-      <section *ngSwitchCase="'section'" ngxDraggable>{{ block.data?.text }}</section>
-      <article *ngSwitchCase="'article'" ngxDraggable>{{ block.data?.text }}</article>
-      <header *ngSwitchCase="'header'" ngxDraggable>{{ block.data?.text }}</header>
-      <footer *ngSwitchCase="'footer'" ngxDraggable>{{ block.data?.text }}</footer>
-      <aside *ngSwitchCase="'aside'" ngxDraggable>{{ block.data?.text }}</aside>
-      <main *ngSwitchCase="'main'" ngxDraggable>{{ block.data?.text }}</main>
-      <nav *ngSwitchCase="'nav'" ngxDraggable>{{ block.data?.text }}</nav>
+      <span *ngSwitchCase="'span'">{{ block.data?.text }}</span>
+      <p *ngSwitchCase="'p'">{{ block.data?.text }}</p>
+      <strong *ngSwitchCase="'strong'">{{ block.data?.text }}</strong>
+      <b *ngSwitchCase="'b'">{{ block.data?.text }}</b>
+      <i *ngSwitchCase="'i'">{{ block.data?.text }}</i>
+      <u *ngSwitchCase="'u'">{{ block.data?.text }}</u>
+      <s *ngSwitchCase="'s'">{{ block.data?.text }}</s>
+      <section *ngSwitchCase="'section'">{{ block.data?.text }}</section>
+      <article *ngSwitchCase="'article'">{{ block.data?.text }}</article>
+      <header *ngSwitchCase="'header'">{{ block.data?.text }}</header>
+      <footer *ngSwitchCase="'footer'">{{ block.data?.text }}</footer>
+      <aside *ngSwitchCase="'aside'">{{ block.data?.text }}</aside>
+      <main *ngSwitchCase="'main'">{{ block.data?.text }}</main>
+      <nav *ngSwitchCase="'nav'">{{ block.data?.text }}</nav>
 
-      <h1 *ngSwitchCase="'h1'" ngxDraggable>{{ block.data?.text }}</h1>
-      <h2 *ngSwitchCase="'h2'" ngxDraggable>{{ block.data?.text }}</h2>
-      <h3 *ngSwitchCase="'h3'" ngxDraggable>{{ block.data?.text }}</h3>
-      <h4 *ngSwitchCase="'h4'" ngxDraggable>{{ block.data?.text }}</h4>
-      <h5 *ngSwitchCase="'h5'" ngxDraggable>{{ block.data?.text }}</h5>
-      <h6 *ngSwitchCase="'h6'" ngxDraggable>{{ block.data?.text }}</h6>
+      <h1 *ngSwitchCase="'h1'">{{ block.data?.text }}</h1>
+      <h2 *ngSwitchCase="'h2'">{{ block.data?.text }}</h2>
+      <h3 *ngSwitchCase="'h3'">{{ block.data?.text }}</h3>
+      <h4 *ngSwitchCase="'h4'">{{ block.data?.text }}</h4>
+      <h5 *ngSwitchCase="'h5'">{{ block.data?.text }}</h5>
+      <h6 *ngSwitchCase="'h6'">{{ block.data?.text }}</h6>
     </ng-container>
   }
 }
