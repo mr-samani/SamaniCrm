@@ -32,8 +32,7 @@ export class FormBuilderService {
   constructor(
     private alert: NgxAlertModalService,
     private pageBuilderService: PageBuilderServiceProxy,
-  ) {
-  }
+  ) {}
 
   public cleanServiceData() {
     this.blocks = [];
@@ -173,78 +172,83 @@ export class FormBuilderService {
       });
   }
 
-  updateCss() {
-    if (!this.selectedBlock) return;
-    if (!this.selectedBlock.data) {
-      this.selectedBlock.data = new BlockData();
+  updateCss(block?: BlockDefinition) {
+    if (!block) {
+      block = this.selectedBlock;
     }
-    this.selectedBlock.data.css = `
-  ${this.selectedBlock.data.style.border ? 'border:' + this.selectedBlock.data.style.border + ';' : ''}
-  ${this.selectedBlock.data.style.padding ? 'padding:' + this.selectedBlock.data.style.padding + ';' : ''}
-  ${this.selectedBlock.data.style.margin ? 'margin:' + this.selectedBlock.data.style.margin + ';' : ''}
-  ${this.selectedBlock.data.style.borderRadius ? 'border-radius:' + this.selectedBlock.data.style.borderRadius + ';' : ''}
-  ${this.selectedBlock.data.style.boxShadow ? 'box-shadow:' + this.selectedBlock.data.style.boxShadow + ';' : ''}
-  ${this.selectedBlock.data.style.backgroundColor ? 'background-color:' + this.selectedBlock.data.style.backgroundColor + ';' : ''}
-  ${this.selectedBlock.data.style.backgroundImage ? 'background-image:' + this.selectedBlock.data.style.backgroundImage + ';' : ''}
-  ${this.selectedBlock.data.style.backgroundSize ? 'background-size:' + this.selectedBlock.data.style.backgroundSize + ';' : ''}
-  ${this.selectedBlock.data.style.backgroundRepeat ? 'background-repeat:' + this.selectedBlock.data.style.backgroundRepeat + ';' : ''}`;
+    if (!block) return;
+
+    if (!block.data) {
+      block.data = new BlockData();
+    }
+    block.data.css = `
+  ${block.data.style.border ? 'border:' + block.data.style.border + ';' : ''}
+  ${block.data.style.padding ? 'padding:' + block.data.style.padding + ';' : ''}
+  ${block.data.style.margin ? 'margin:' + block.data.style.margin + ';' : ''}
+  ${block.data.style.borderRadius ? 'border-radius:' + block.data.style.borderRadius + ';' : ''}
+  ${block.data.style.boxShadow ? 'box-shadow:' + block.data.style.boxShadow + ';' : ''}
+  ${block.data.style.backgroundColor ? 'background-color:' + block.data.style.backgroundColor + ';' : ''}
+  ${block.data.style.backgroundImage ? 'background-image:' + block.data.style.backgroundImage + ';' : ''}
+  ${block.data.style.backgroundSize ? 'background-size:' + block.data.style.backgroundSize + ';' : ''}
+  ${block.data.style.backgroundRepeat ? 'background-repeat:' + block.data.style.backgroundRepeat + ';' : ''}`;
 
     /* dimensions */
-    this.selectedBlock.data.css += `
-  ${this.selectedBlock.data.style.width ? 'width:' + this.selectedBlock.data.style.width + 'px;' : ''}
-  ${this.selectedBlock.data.style.height ? 'height:' + this.selectedBlock.data.style.height + 'px;' : ''}
-  ${this.selectedBlock.data.style.minWidth ? 'min-width:' + this.selectedBlock.data.style.minWidth + 'px;' : ''}
-  ${this.selectedBlock.data.style.minHeight ? 'min-height:' + this.selectedBlock.data.style.minHeight + 'px;' : ''}
-  ${this.selectedBlock.data.style.maxWidth ? 'max-width:' + this.selectedBlock.data.style.maxWidth + 'px;' : ''}
-  ${this.selectedBlock.data.style.maxHeight ? 'max-height:' + this.selectedBlock.data.style.maxHeight + 'px;' : ''}`;
+    block.data.css += `
+  ${block.data.style.width ? 'width:' + block.data.style.width + 'px;' : ''}
+  ${block.data.style.height ? 'height:' + block.data.style.height + 'px;' : ''}
+  ${block.data.style.minWidth ? 'min-width:' + block.data.style.minWidth + 'px;' : ''}
+  ${block.data.style.minHeight ? 'min-height:' + block.data.style.minHeight + 'px;' : ''}
+  ${block.data.style.maxWidth ? 'max-width:' + block.data.style.maxWidth + 'px;' : ''}
+  ${block.data.style.maxHeight ? 'max-height:' + block.data.style.maxHeight + 'px;' : ''}`;
 
     /* position */
-    this.selectedBlock.data.css += `
-  ${this.selectedBlock.data.style.position ? 'position:' + this.selectedBlock.data.style.position + ';' : ''}
-  ${this.selectedBlock.data.style.top ? 'top:' + this.selectedBlock.data.style.top + 'px;' : ''}
-  ${this.selectedBlock.data.style.right ? 'right:' + this.selectedBlock.data.style.right + 'px;' : ''}
-  ${this.selectedBlock.data.style.left ? 'left:' + this.selectedBlock.data.style.left + 'px;' : ''}
-  ${this.selectedBlock.data.style.bottom ? 'bottom:' + this.selectedBlock.data.style.bottom + 'px;' : ''}
-  ${this.selectedBlock.data.style.zIndex ? 'z-index:' + this.selectedBlock.data.style.zIndex + ';' : ''}
+    block.data.css += `
+  ${block.data.style.position ? 'position:' + block.data.style.position + ';' : ''}
+  ${block.data.style.top ? 'top:' + block.data.style.top + 'px;' : ''}
+  ${block.data.style.right ? 'right:' + block.data.style.right + 'px;' : ''}
+  ${block.data.style.left ? 'left:' + block.data.style.left + 'px;' : ''}
+  ${block.data.style.bottom ? 'bottom:' + block.data.style.bottom + 'px;' : ''}
+  ${block.data.style.zIndex ? 'z-index:' + block.data.style.zIndex + ';' : ''}
   `;
 
     /* flex */
-    this.selectedBlock.data.css += `
-  ${this.selectedBlock.data.style.flex ? 'flex:' + this.selectedBlock.data.style.flex + ';' : ''}
-  ${this.selectedBlock.data.style.flexGrow ? 'flex-grow:' + this.selectedBlock.data.style.flexGrow + ';' : ''}
-  ${this.selectedBlock.data.style.flexShrink ? 'flex-shrink:' + this.selectedBlock.data.style.flexShrink + ';' : ''}
-  ${this.selectedBlock.data.style.flexBasis ? 'flex-basis:' + this.selectedBlock.data.style.flexBasis + ';' : ''}
-  ${this.selectedBlock.data.style.flexDirection ? 'flex-direction:' + this.selectedBlock.data.style.flexDirection + ';' : ''}
-  ${this.selectedBlock.data.style.flexWrap ? 'flex-wrap:' + this.selectedBlock.data.style.flexWrap + ';' : ''}
-  ${this.selectedBlock.data.style.justifyContent ? 'justify-content:' + this.selectedBlock.data.style.justifyContent + ';' : ''}
-  ${this.selectedBlock.data.style.alignItems ? 'align-items:' + this.selectedBlock.data.style.alignItems + ';' : ''}
-  ${this.selectedBlock.data.style.alignContent ? 'align-content:' + this.selectedBlock.data.style.alignContent + ';' : ''}
+    block.data.css += `
+  ${block.data.style.flex ? 'flex:' + block.data.style.flex + ';' : ''}
+  ${block.data.style.flexGrow ? 'flex-grow:' + block.data.style.flexGrow + ';' : ''}
+  ${block.data.style.flexShrink ? 'flex-shrink:' + block.data.style.flexShrink + ';' : ''}
+  ${block.data.style.flexBasis ? 'flex-basis:' + block.data.style.flexBasis + ';' : ''}
+  ${block.data.style.flexDirection ? 'flex-direction:' + block.data.style.flexDirection + ';' : ''}
+  ${block.data.style.flexWrap ? 'flex-wrap:' + block.data.style.flexWrap + ';' : ''}
+  ${block.data.style.justifyContent ? 'justify-content:' + block.data.style.justifyContent + ';' : ''}
+  ${block.data.style.alignItems ? 'align-items:' + block.data.style.alignItems + ';' : ''}
+  ${block.data.style.alignContent ? 'align-content:' + block.data.style.alignContent + ';' : ''}
+  ${block.data.style.gap ? 'gap:' + block.data.style.gap + ';' : ''}
   `;
     /* overflow */
-    this.selectedBlock.data.css += `
-  ${this.selectedBlock.data.style.overflow ? 'overflow:' + this.selectedBlock.data.style.overflow + ';' : ''}
-  ${this.selectedBlock.data.style.overflowX ? 'overflow-x:' + this.selectedBlock.data.style.overflowX + ';' : ''}
-  ${this.selectedBlock.data.style.overflowY ? 'overflow-y:' + this.selectedBlock.data.style.overflowY + ';' : ''}
+    block.data.css += `
+  ${block.data.style.overflow ? 'overflow:' + block.data.style.overflow + ';' : ''}
+  ${block.data.style.overflowX ? 'overflow-x:' + block.data.style.overflowX + ';' : ''}
+  ${block.data.style.overflowY ? 'overflow-y:' + block.data.style.overflowY + ';' : ''}
   `;
 
     /* opacity */
-    this.selectedBlock.data.css += `
-  ${this.selectedBlock.data.style.opacity ? 'opacity:' + this.selectedBlock.data.style.opacity + ';' : ''}
+    block.data.css += `
+  ${block.data.style.opacity ? 'opacity:' + block.data.style.opacity + ';' : ''}
   `;
 
     /* visibility */
-    this.selectedBlock.data.css += `
-  ${this.selectedBlock.data.style.visibility ? 'visibility:' + this.selectedBlock.data.style.visibility + ';' : ''}
+    block.data.css += `
+  ${block.data.style.visibility ? 'visibility:' + block.data.style.visibility + ';' : ''}
   `;
 
     /* display */
-    this.selectedBlock.data.css += `
-  ${this.selectedBlock.data.style.display ? 'display:' + this.selectedBlock.data.style.display + ';' : ''}
+    block.data.css += `
+  ${block.data.style.display ? 'display:' + block.data.style.display + ';' : ''}
   `;
 
     /* cursor */
-    this.selectedBlock.data.css += `
-  ${this.selectedBlock.data.style.cursor ? 'cursor:' + this.selectedBlock.data.style.cursor + ';' : ''}
+    block.data.css += `
+  ${block.data.style.cursor ? 'cursor:' + block.data.style.cursor + ';' : ''}
   `;
   }
 }

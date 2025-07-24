@@ -69,6 +69,7 @@ model/get-all-notification-query.ts
 model/get-categories-for-admin-query.ts
 model/get-filtered-pages-query.ts
 model/get-product-attributes-query.ts
+model/get-product-categories-query.ts
 model/get-product-types-query.ts
 model/get-products-query.ts
 model/get-user-query.ts
@@ -125,6 +126,7 @@ model/product-attribute-dto.ts
 model/product-attribute-translation-dto.ts
 model/product-attribute-value-dto.ts
 model/product-category-dto-api-response.ts
+model/product-category-dto-list-api-response.ts
 model/product-category-dto.ts
 model/product-category-translation-dto.ts
 model/product-dto-api-response.ts

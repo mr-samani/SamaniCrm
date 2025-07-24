@@ -36,6 +36,7 @@ export class BlockStyle {
   justifyContent?: string;
   alignItems?: string;
   alignContent?: string;
+  gap?: string;
 
   // position
   position?: 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky';

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Application.ProductManager.Queries;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
 using SamaniCrm.Application.ProductManagerManager.Interfaces;
 using SamaniCrm.Application.ProductManagerManager.Queries;
@@ -188,6 +189,47 @@ public class ProductCategoryService : IProductCategoryService
         };
     }
 
+    public async Task<List<ProductCategoryDto>> GetPublicCategories(GetProductCategoriesQuery request, CancellationToken cancellationToken)
+    {
 
+        var currentLanguage = L.CurrentLanguage;
+
+        IQueryable<ProductCategory> query = _context.ProductCategories
+            .Where(w => w.IsActive == true)
+            .Where(c => c.ParentId == (request.ParentId ?? null))
+            .Include(c => c.Translations);
+
+        if (!string.IsNullOrEmpty(request.Filter))
+        {
+            query = query.Where(c =>
+           c.Translations.Any(t => t.Culture == currentLanguage && t.Title.Contains(request.Filter)));
+        }
+
+
+
+        List<ProductCategoryDto> items = await query
+       .Skip(request.Skip)
+       .Take(request.Take)
+       .Select(c => new ProductCategoryDto
+       {
+           Id = c.Id,
+           Title = c.Translations
+                       .Where(t => t.Culture == currentLanguage)
+                       .Select(t => t.Title)
+                       .FirstOrDefault() ?? "",
+           Description = c.Translations
+                       .Where(t => t.Culture == currentLanguage)
+                       .Select(t => t.Description)
+                       .FirstOrDefault() ?? "",
+           Image = c.Image,
+           OrderIndex = c.OrderIndex,
+           ParentId = c.ParentId,
+           Slug = c.Slug,
+       })
+       .ToListAsync(cancellationToken);
+
+        return items;
+
+    }
 }
 

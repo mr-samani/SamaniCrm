@@ -49,6 +49,8 @@ import { GetCategoriesForAdminQuery } from '../model/get-categories-for-admin-qu
 // @ts-ignore
 import { GetProductAttributesQuery } from '../model/get-product-attributes-query';
 // @ts-ignore
+import { GetProductCategoriesQuery } from '../model/get-product-categories-query';
+// @ts-ignore
 import { GetProductTypesQuery } from '../model/get-product-types-query';
 // @ts-ignore
 import { GetProductsQuery } from '../model/get-products-query';
@@ -64,6 +66,8 @@ import { ProductAttributeDtoApiResponse } from '../model/product-attribute-dto-a
 import { ProductAttributeDtoPaginatedResultApiResponse } from '../model/product-attribute-dto-paginated-result-api-response';
 // @ts-ignore
 import { ProductCategoryDtoApiResponse } from '../model/product-category-dto-api-response';
+// @ts-ignore
+import { ProductCategoryDtoListApiResponse } from '../model/product-category-dto-list-api-response';
 // @ts-ignore
 import { ProductDtoApiResponse } from '../model/product-dto-api-response';
 // @ts-ignore
@@ -963,6 +967,72 @@ export class ProductServiceProxy extends BaseService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param getProductCategoriesQuery 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getCategories(getProductCategoriesQuery?: GetProductCategoriesQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductCategoryDtoListApiResponse>;
+    public getCategories(getProductCategoriesQuery?: GetProductCategoriesQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductCategoryDtoListApiResponse>>;
+    public getCategories(getProductCategoriesQuery?: GetProductCategoriesQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductCategoryDtoListApiResponse>>;
+    public getCategories(getProductCategoriesQuery?: GetProductCategoriesQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/Product/GetCategories`;
+        return this.httpClient.request<ProductCategoryDtoListApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: getProductCategoriesQuery,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

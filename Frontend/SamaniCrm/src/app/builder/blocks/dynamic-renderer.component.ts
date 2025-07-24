@@ -24,7 +24,7 @@ import { IResizableOutput, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
           <i class="fa fa-trash"></i>
         </button>
         <span>
-          {{ block.tagName }}
+          {{ block.tagName ?? block.name }}
         </span>
       </div>
       <ng-container #container></ng-container>
@@ -79,6 +79,7 @@ export class DynamicRendererComponent {
         const { component } = def!;
         const cmpRef: ComponentRef<any> = this.vcr.createComponent(component!);
         cmpRef.instance.block = this.block;
+        this.b.updateCss(this.block);
       }
     } else {
       this.vcr.clear();
