@@ -1,8 +1,11 @@
-import { Component, Input } from '@angular/core';
-import { BlockAttribute, BlockAttributeDetails } from '@app/builder/blocks/block-registry';
+import { Component, Input, OnInit } from '@angular/core';
+import { BlockAttributeDetails, BlockDefinition, BlockTypeEnum } from '@app/builder/blocks/block-registry';
 import { FileManagerDto } from '@app/file-manager/models/file-manager-dto';
 import { IOptions } from '@app/file-manager/options.interface';
 import { AppConst } from '@shared/app-const';
+import { SimpleHtmlTags, CanChildHtmlTags } from '@app/builder/blocks/general-html-tags/GeneralTagNames';
+import { FormBuilderService } from '@app/builder/form-builder.service';
+import { IDataStructure } from '@app/builder/dynamic-data.service';
 
 @Component({
   standalone: false,
@@ -10,23 +13,47 @@ import { AppConst } from '@shared/app-const';
   templateUrl: './attributes.component.html',
   styleUrl: './attributes.component.scss',
 })
-export class BlockAttributesComponent {
+export class BlockAttributesComponent implements OnInit {
+  htmlTags = [...SimpleHtmlTags, ...CanChildHtmlTags];
+
   attrList: [string, BlockAttributeDetails][] = [];
-  @Input() set attributes(val: BlockAttribute | undefined) {
-    this.attrList = [];
-    if (val) {
-      this.attrList = Object.entries(val);
-    }
-  }
+  @Input() block!: BlockDefinition;
+  dynamicData: IDataStructure[] = [];
+  selectedDynamicData: any = {};
 
   imagePickerOptions: IOptions = {
     type: 'Image',
     showPreview: false,
   };
 
+  constructor(public b: FormBuilderService) {}
+
+  ngOnInit(): void {
+    this.attrList = [];
+    if (this.block.attributes) {
+      this.attrList = Object.entries(this.block.attributes);
+    }
+    this.dynamicData = this.b.ds.getTreeDynamicDataList(this.block);
+  }
+
+  public get BlockTypeEnum(): typeof BlockTypeEnum {
+    return BlockTypeEnum;
+  }
+
   onSelectFile(item: [string, BlockAttributeDetails], file: FileManagerDto) {
     if (file) {
       item[1].value = AppConst.fileServerUrl + '/' + file.id;
     }
+  }
+  onChangeDynamicKeyAttr(event: string[], item: [string, BlockAttributeDetails]) {
+    item[1].value = `{{${event.join('.')}}}`;
+    console.log(item[1].value);
+  }
+
+  onChangeDynamicKeyTxt(event: string[]) {
+    if (this.block.data) {
+      this.block.data.text = `{{${event.join('.')}}}`;
+    }
+    console.log(this.block.data?.text);
   }
 }

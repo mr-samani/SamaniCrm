@@ -1,5 +1,4 @@
-<section class="product-category">
-  <mat-spinner *ngIf="loading"></mat-spinner>
-
-  <dynamic-renderer [block]="container" *ngIf="!loading" />
-</section>
+<mat-spinner *ngIf="loading"></mat-spinner>
+@for (item of list; track $index) {
+  <dynamic-renderer [block]="itemTemplate" *ngIf="!loading" [index]="$index" />
+}

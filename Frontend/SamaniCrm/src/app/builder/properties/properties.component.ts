@@ -17,7 +17,6 @@ export class PropertiesComponent extends AppComponentBase implements OnInit {
   borderCss = '';
   tab: 'General' | 'Advanced' = 'General';
 
-  htmlTags = [...SimpleHtmlTags, ...CanChildHtmlTags];
 
   constructor(
     injector: Injector,

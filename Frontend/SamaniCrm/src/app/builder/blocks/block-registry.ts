@@ -50,6 +50,18 @@ export const BLOCK_REGISTRY: BlockDefinition[] = [
     component: BlockProductCategoryComponent,
     icon: 'fa fa-boxes-packing',
     canChild: false,
+    tagName: 'section',
+    name: 'Product Category',
+    data: {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '10px',
+        padding: '15px',
+        flexWrap: 'wrap',
+      },
+    },
   },
   {
     category: 'Banner',
@@ -81,8 +93,9 @@ export class BlockDefinition {
   canChild?: boolean;
   rowNumber?: number;
   itemTemplate?: BlockDefinition;
-
-  constructor(data?: BlockDefinition) {
+  dynamicDataCacheKey?: string;
+  parent?: BlockDefinition;
+  constructor(data?: BlockDefinition, parent?: BlockDefinition) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property)) (this as any)[property] = (data as any)[property];
@@ -91,10 +104,12 @@ export class BlockDefinition {
       if (!data.id) {
         this.id = generateSequentialGuid();
       }
+      this.parent = parent;
+
       if (data.itemTemplate) {
         this.itemTemplate = new BlockDefinition(data.itemTemplate);
       }
-      this.children = (data.children ?? []).map((child) => (child = new BlockDefinition(child)));
+      this.children = (data.children ?? []).map((child) => (child = new BlockDefinition(child, this)));
     }
   }
 }

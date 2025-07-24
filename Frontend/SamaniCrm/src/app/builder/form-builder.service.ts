@@ -10,6 +10,7 @@ import { finalize } from 'rxjs';
 import { CanChildHtmlTags, SimpleHtmlTags } from './blocks/general-html-tags/GeneralTagNames';
 import { cloneDeep } from 'lodash-es';
 import { generateSequentialGuid } from '@shared/helper/guid';
+import { DynamicDataService } from './dynamic-data.service';
 
 @Injectable()
 export class FormBuilderService {
@@ -33,6 +34,7 @@ export class FormBuilderService {
   constructor(
     private alert: NgxAlertModalService,
     private pageBuilderService: PageBuilderServiceProxy,
+    public ds: DynamicDataService,
   ) {}
 
   public cleanServiceData() {
@@ -43,6 +45,7 @@ export class FormBuilderService {
     this.showBorder = true;
     this.showLayouts = false;
     this.loadingCustomBlocks = true;
+    this.ds.reset();
   }
 
   getCustomBlocks() {
@@ -109,13 +112,12 @@ export class FormBuilderService {
     // important create new id
     s.id = generateSequentialGuid();
     s.data ??= new BlockData();
-    parentChildren.splice(index, 0, s);
+    parentChildren.splice(index, 0, new BlockDefinition(s));
 
     this.updateRowNumber(this.blocks);
   }
 
   drop(event: IDropEvent<BlockDefinition[]>) {
-    debugger;
     // اگر در همان cell جابجا شد
     if (event.previousContainer === event.container) {
       if (event.container.data) {

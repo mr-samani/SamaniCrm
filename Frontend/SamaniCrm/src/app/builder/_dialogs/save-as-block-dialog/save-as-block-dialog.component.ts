@@ -4,6 +4,7 @@ import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { BlockDefinition } from '@app/builder/blocks/block-registry';
+import { getBlocksAsString } from '@app/builder/helpers/get-blocks-as-string';
 import { TranslateModule } from '@ngx-translate/core';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { CreateCustomBlockCommand, PageBuilderServiceProxy } from '@shared/service-proxies';
@@ -39,7 +40,7 @@ export class SaveAsBlockDialogComponent extends AppComponentBase implements OnIn
       categoryName: [''],
       data: [''],
     });
-    this.form.get('data')?.patchValue(JSON.stringify(block));
+    this.form.get('data')?.patchValue(getBlocksAsString(block));
   }
 
   ngOnInit() {}

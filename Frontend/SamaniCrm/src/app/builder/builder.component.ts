@@ -57,16 +57,4 @@ export class BuilderComponent extends AppComponentBase implements OnInit, AfterV
   public get BlockTypeEnum(): typeof BlockTypeEnum {
     return BlockTypeEnum;
   }
-
-  drop(event: IDropEvent<BlockDefinition[]>) {
-    if (event.previousContainer.data && event.previousContainer.el.id === 'toolBox') {
-      let source = event.previousContainer.data[event.previousIndex];
-      this.b.addBlock(source, event.currentIndex);
-    } else {
-      let source = event.previousContainer.data!;
-      let destination = event.container.data ?? this.b.blocks;
-
-      transferArrayItem(source, destination, event.previousIndex, event.currentIndex);
-    }
-  }
 }

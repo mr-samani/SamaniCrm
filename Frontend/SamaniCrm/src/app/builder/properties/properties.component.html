@@ -13,15 +13,6 @@
       <p>Type: {{ BlockTypeEnum[b.selectedBlock.type] }}</p>
       <p>RowNumber: {{ b.selectedBlock.rowNumber }}</p>
       <ng-container *ngIf="b.selectedBlock.data">
-        <input [(ngModel)]="b.selectedBlock.data.text" type="text" class="form-control" placeholder="text" />
-
-        <select
-          class="form-select"
-          [(ngModel)]="b.selectedBlock.tagName"
-          *ngIf="b.selectedBlock.type == BlockTypeEnum.GeneralHtmlTag">
-          <option [value]="item" *ngFor="let item of htmlTags">{{ item }}</option>
-        </select>
-
         <details *ngIf="b.selectedBlock.data.style">
           <summary>Layout</summary>
           <table>
@@ -101,7 +92,7 @@
   } @else if (tab == 'Advanced') {
     <div class="p-2">
       <button class="btn btn-primary" (click)="saveAsBlockDefinition()">Save as block</button>
-      <block-attributes [attributes]="b.selectedBlock.attributes"></block-attributes>
+      <block-attributes [block]="b.selectedBlock"></block-attributes>
     </div>
   }
 }

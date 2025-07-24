@@ -7,10 +7,12 @@ import { BlockBase } from '../block-base';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <img [src]="block.attributes?.url?.value" />
+    <img [src]="imageUrl" />
   `,
 })
 export class BlockImgComponent extends BlockBase implements OnInit {
+  imageUrl = 'images/default-image.png';
+
   constructor(injector: Injector) {
     super(injector);
   }
@@ -20,5 +22,6 @@ export class BlockImgComponent extends BlockBase implements OnInit {
       this.block.attributes = {};
     }
     this.block.attributes.url ??= { type: 'image', value: 'images/default-image.png' };
+    this.imageUrl = this.b.ds.resolveValue(this.block, this.block.attributes.url.value, this.index);
   }
 }

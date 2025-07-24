@@ -4,6 +4,7 @@ import { BlockDefinition } from './block-registry';
 
 export class BlockBase {
   block!: BlockDefinition;
+  index!: number;
   b: FormBuilderService;
   el: ElementRef<HTMLElement>;
   constructor(injector: Injector) {

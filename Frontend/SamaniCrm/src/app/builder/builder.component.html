@@ -11,14 +11,15 @@
         class="container-fluid"
         ngxDropList
         id="main-page"
-        (drop)="drop($event)"
+        (drop)="b.drop($event)"
         [data]="b.blocks"
         [class.tablet-view]="b.viewMode === ViewModeEnum.Tablet"
         [class.desktop-view]="b.viewMode === ViewModeEnum.Desktop"
         [class.mobile-view]="b.viewMode === ViewModeEnum.Mobile">
         <div class="custom-placeholder" *ngxPlaceholder></div>
-
-        <dynamic-renderer [block]="item" ngxDraggable *ngFor="let item of b.blocks" />
+        @for (item of b.blocks; track $index) {
+          <dynamic-renderer [block]="item" ngxDraggable [index]="$index" />
+        }
       </div>
     </div>
 

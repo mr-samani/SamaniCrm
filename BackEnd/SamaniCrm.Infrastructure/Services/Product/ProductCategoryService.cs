@@ -191,45 +191,48 @@ public class ProductCategoryService : IProductCategoryService
 
     public async Task<List<ProductCategoryDto>> GetPublicCategories(GetProductCategoriesQuery request, CancellationToken cancellationToken)
     {
+        var currentCulture = L.CurrentLanguage;
 
-        var currentLanguage = L.CurrentLanguage;
+        var items = await _context.ProductCategories
+                 .Where(w => w.IsActive)
+                 .Where(c => c.ParentId == (request.ParentId ?? null))
+                 .Where(c => string.IsNullOrEmpty(request.Filter) ||
+                             c.Translations.Any(t => t.Culture == currentCulture && t.Title.Contains(request.Filter)))
+                 .OrderBy(c => c.OrderIndex)
+                 .Skip(request.Skip)
+                 .Take(request.Take)
+                 .Select(c => new
+                 {
+                     c.Id,
+                     c.Image,
+                     c.OrderIndex,
+                     c.ParentId,
+                     c.Slug,
+                     Translations = c.Translations
+                         .OrderByDescending(t => t.Culture == currentCulture)
+                         .Select(t => new { t.Title, t.Description, t.Culture })
+                         .ToList()
+                 })
+                 .ToListAsync(cancellationToken);
 
-        IQueryable<ProductCategory> query = _context.ProductCategories
-            .Where(w => w.IsActive == true)
-            .Where(c => c.ParentId == (request.ParentId ?? null))
-            .Include(c => c.Translations);
 
-        if (!string.IsNullOrEmpty(request.Filter))
+        var result = items.Select(c =>
         {
-            query = query.Where(c =>
-           c.Translations.Any(t => t.Culture == currentLanguage && t.Title.Contains(request.Filter)));
-        }
+            var best = c.Translations.FirstOrDefault();
+            return new ProductCategoryDto
+            {
+                Id = c.Id,
+                Title = best?.Title ?? "",
+                Description = best?.Description ?? "",
+                Image = c.Image,
+                OrderIndex = c.OrderIndex,
+                ParentId = c.ParentId,
+                Slug = c.Slug,
+            };
+        }).ToList();
 
-
-
-        List<ProductCategoryDto> items = await query
-       .Skip(request.Skip)
-       .Take(request.Take)
-       .Select(c => new ProductCategoryDto
-       {
-           Id = c.Id,
-           Title = c.Translations
-                       .Where(t => t.Culture == currentLanguage)
-                       .Select(t => t.Title)
-                       .FirstOrDefault() ?? "",
-           Description = c.Translations
-                       .Where(t => t.Culture == currentLanguage)
-                       .Select(t => t.Description)
-                       .FirstOrDefault() ?? "",
-           Image = c.Image,
-           OrderIndex = c.OrderIndex,
-           ParentId = c.ParentId,
-           Slug = c.Slug,
-       })
-       .ToListAsync(cancellationToken);
-
-        return items;
-
+        return result;
     }
+
 }
 

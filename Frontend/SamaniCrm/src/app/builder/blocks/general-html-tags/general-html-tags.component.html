@@ -1,388 +1,441 @@
 @if (block) {
-  <div
-    class="block-wrapper"
-    ngxDropList
-    [data]="block.children"
-    (drop)="b.drop($event)"
-    [id]="'blc_' + block.rowNumber">
-    <div class="custom-placeholder2" *ngxPlaceholder></div>
+  <ng-container [ngSwitch]="block.tagName">
+    <span
+      *ngSwitchCase="'span'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </span>
 
-    <ng-container [ngSwitch]="block.tagName">
-      <span
-        *ngSwitchCase="'span'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </span>
+    <p
+      *ngSwitchCase="'p'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <span class="custom-placeholder2" *ngxPlaceholder></span>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </p>
 
-      <p
-        *ngSwitchCase="'p'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <span class="custom-placeholder2" *ngxPlaceholder></span>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </p>
+    <strong
+      *ngSwitchCase="'strong'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </strong>
 
-      <strong
-        *ngSwitchCase="'strong'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </strong>
+    <b
+      *ngSwitchCase="'b'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </b>
 
-      <b
-        *ngSwitchCase="'b'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </b>
+    <i
+      *ngSwitchCase="'i'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </i>
 
-      <i
-        *ngSwitchCase="'i'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </i>
+    <u
+      *ngSwitchCase="'u'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </u>
 
-      <u
-        *ngSwitchCase="'u'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </u>
+    <s
+      *ngSwitchCase="'s'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </s>
 
-      <s
-        *ngSwitchCase="'s'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </s>
+    <section
+      *ngSwitchCase="'section'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </section>
+    <article
+      *ngSwitchCase="'article'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </article>
 
-      <section
-        *ngSwitchCase="'section'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </section>
-      <article
-        *ngSwitchCase="'article'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </article>
+    <header
+      *ngSwitchCase="'header'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </header>
 
-      <header
-        *ngSwitchCase="'header'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </header>
+    <footer
+      *ngSwitchCase="'footer'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </footer>
 
-      <footer
-        *ngSwitchCase="'footer'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </footer>
+    <aside
+      *ngSwitchCase="'aside'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </aside>
 
-      <aside
-        *ngSwitchCase="'aside'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </aside>
+    <main
+      *ngSwitchCase="'main'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </main>
 
-      <main
-        *ngSwitchCase="'main'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </main>
+    <nav
+      *ngSwitchCase="'nav'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </nav>
 
-      <nav
-        *ngSwitchCase="'nav'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </nav>
+    <h1
+      *ngSwitchCase="'h1'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </h1>
 
-      <h1
-        *ngSwitchCase="'h1'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </h1>
+    <h2
+      *ngSwitchCase="'h2'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </h2>
 
-      <h2
-        *ngSwitchCase="'h2'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </h2>
+    <h3
+      *ngSwitchCase="'h3'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </h3>
 
-      <h3
-        *ngSwitchCase="'h3'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </h3>
+    <h4
+      *ngSwitchCase="'h4'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </h4>
 
-      <h4
-        *ngSwitchCase="'h4'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </h4>
+    <h5
+      *ngSwitchCase="'h5'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </h5>
 
-      <h5
-        *ngSwitchCase="'h5'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </h5>
+    <h6
+      *ngSwitchCase="'h6'"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </h6>
 
-      <h6
-        *ngSwitchCase="'h6'"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </h6>
-
-      <div
-        *ngSwitchDefault
-        [class.hidden]="block.hidden"
-        [style]="block.data?.css"
-        class="block-wrapper"
-        ngxDropList
-        [data]="block.children"
-        (drop)="b.drop($event)"
-        [id]="'blc_' + block.rowNumber">
-        <div class="custom-placeholder2" *ngxPlaceholder></div>
-
-        {{ block.data?.text }}
-        @if (block.children && block.children.length) {
-          <dynamic-renderer [parent]="block" [block]="child" *ngFor="let child of block.children; let i = index" />
-        }
-      </div>
-    </ng-container>
-  </div>
+    <div
+      *ngSwitchDefault
+      [class.hidden]="block.hidden"
+      [style]="block.data?.css"
+      class="block-wrapper"
+      ngxDropList
+      [data]="block.children"
+      (drop)="b.drop($event)"
+      [id]="'blc_' + block.id">
+      <div class="custom-placeholder2" *ngxPlaceholder></div>
+      {{ text }}
+      <dynamic-renderer
+        [parent]="block"
+        [block]="child"
+        *ngFor="let child of block.children; let i = index"
+        [index]="i"
+        ngxDraggable />
+    </div>
+  </ng-container>
 }

@@ -1,0 +1,7 @@
+<mat-select [(ngModel)]="selectedData" (selectionChange)="onSelectionChange()" class="form-control my-2">
+  <mat-option *ngFor="let item of list" [value]="item">{{ item.key }}</mat-option>
+</mat-select>
+
+@if (selectedData && selectedData.children) {
+  <select-dynamic-data [list]="selectedData.children" (keys)="onChangeKey($event)"></select-dynamic-data>
+}

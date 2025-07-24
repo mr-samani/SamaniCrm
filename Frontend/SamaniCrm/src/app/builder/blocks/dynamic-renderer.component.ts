@@ -2,21 +2,23 @@ import { Component, Input, ViewContainerRef, ComponentRef, ViewChild, inject, Re
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { BLOCK_REGISTRY, BlockData, BlockDefinition, BlockTypeEnum } from './block-registry';
 import { FormBuilderService } from '../form-builder.service';
-import { IResizableOutput, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
+import { IResizableOutput } from 'ngx-drag-drop-kit';
+import { BlockBase } from './block-base';
 //  ngxResizable
 //   (resizeEnd)="onResizeEnd($event)"
 @Component({
   selector: 'dynamic-renderer',
   standalone: true,
-  imports: [CommonModule, NgxDragDropKitModule],
+  imports: [CommonModule],
   template: `
     <div
       class="block-item"
       (click)="onBlockClick(block, $event)"
       [class.fb-selected]="b.selectedBlock == block"
-      [class.hidden]="block.hidden"
-      [style]="block.data?.css">
+      [class.hidden]="block && block.hidden"
+      [style]="block && block.data ? block.data.css : undefined">
       <div
+        *ngIf="block"
         class="actions"
         [class.actions-top]="actionsPosition === 'top'"
         [class.actions-bottom]="actionsPosition === 'bottom'">
@@ -69,23 +71,30 @@ import { IResizableOutput, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 export class DynamicRendererComponent {
   actionsPosition: 'top' | 'bottom' = 'top';
   block!: BlockDefinition;
+
   @ViewChild('container', { read: ViewContainerRef, static: true }) vcr!: ViewContainerRef;
   renderer = inject(Renderer2);
   @Input() parent?: BlockDefinition;
+  @Input() index!: number;
+
   @Input('block') set renderBlock(value: BlockDefinition) {
-    this.block = value;
-    if (!this.block.hidden) {
-      this.vcr.clear();
-      const def = BLOCK_REGISTRY.find((b) => b.type === this.block.type);
-      if (def) {
-        const { component } = def!;
-        const cmpRef: ComponentRef<any> = this.vcr.createComponent(component!);
-        cmpRef.instance.block = this.block;
-        this.b.updateCss(this.block);
+    // wait for fill all inputs
+   // setTimeout(() => {
+      this.block = value;
+      if (!this.block.hidden) {
+        this.vcr.clear();
+        const def = BLOCK_REGISTRY.find((b) => b.type === this.block.type);
+        if (def) {
+          const { component } = def!;
+          const cmpRef: ComponentRef<BlockBase> = this.vcr.createComponent(component!);
+          cmpRef.instance.block = this.block;
+          cmpRef.instance.index = this.index;
+          this.b.updateCss(this.block);
+        }
+      } else {
+        this.vcr.clear();
       }
-    } else {
-      this.vcr.clear();
-    }
+   // });
   }
   constructor(
     public b: FormBuilderService,

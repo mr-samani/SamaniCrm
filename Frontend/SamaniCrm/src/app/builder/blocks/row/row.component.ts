@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, Injector, OnInit } from '@angular/core';
 import { DynamicRendererComponent } from '../dynamic-renderer.component';
-import { NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 import { BlockBase } from '../block-base';
 import { BlockDefinition, BlockTypeEnum } from '../block-registry';
 import { BlockGeneralHtmlTagsComponent } from '../general-html-tags/general-html-tags.component';
+import { NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 
 @Component({
   selector: 'block-row',
   standalone: true,
-  imports: [CommonModule, NgxDragDropKitModule, DynamicRendererComponent],
+  imports: [CommonModule, DynamicRendererComponent, NgxDragDropKitModule],
   templateUrl: './row.component.html',
   styleUrl: './row.component.scss',
 })

@@ -13,35 +13,19 @@ import { MaterialCommonModule } from '@shared/material/material.common.module';
   imports: [CommonModule, DynamicRendererComponent, MaterialCommonModule],
   templateUrl: './product-category.component.html',
   styleUrls: ['./product-category.component.scss'],
+  host: {
+    '[attr.style]': 'block.data.css',
+  },
   providers: [ProductServiceProxy],
 })
 export class BlockProductCategoryComponent extends BlockBase implements OnInit {
   loading = false;
   list: ProductCategoryDto[] = [];
 
-  // default value for container
-  container = new BlockDefinition({
-    type: BlockTypeEnum.GeneralHtmlTag,
-    tagName: 'section',
-    name: 'Product Category Container',
-    canChild: true,
-    data: {
-      style: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '10px',
-        padding: '15px',
-        flexWrap: 'wrap',
-      },
-    },
-  });
-
   // default value for repeatable item
-  private itemTemplate = new BlockDefinition({
+  itemTemplate = new BlockDefinition({
     category: 'Container',
     type: 0,
-    canChild: true,
     tagName: 'article',
     name: 'category card',
     data: {
@@ -57,8 +41,7 @@ export class BlockProductCategoryComponent extends BlockBase implements OnInit {
     children: [
       {
         category: 'Container',
-        type: 0,
-        canChild: true,
+        type: BlockTypeEnum.GeneralHtmlTag,
         tagName: 'div',
         name: 'image-container',
         data: {
@@ -70,7 +53,6 @@ export class BlockProductCategoryComponent extends BlockBase implements OnInit {
       {
         category: 'General',
         type: 0,
-        canChild: false,
         tagName: 'span',
         name: 'category name',
         data: {
@@ -83,6 +65,8 @@ export class BlockProductCategoryComponent extends BlockBase implements OnInit {
     ],
   });
 
+  cacheKey = '';
+
   constructor(
     injector: Injector,
     private productService: ProductServiceProxy,
@@ -91,12 +75,9 @@ export class BlockProductCategoryComponent extends BlockBase implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.block.children || !this.block.children.length) {
-      this.block.children = [this.container];
-    }
-    if (!this.block.itemTemplate) {
-      this.block.itemTemplate = this.itemTemplate;
-    }
+    this.itemTemplate = this.block && this.block.itemTemplate ? this.block.itemTemplate : this.itemTemplate;
+
+    this.cacheKey = 'productCategory_' + this.block.id;
     this.getData();
   }
 
@@ -111,14 +92,8 @@ export class BlockProductCategoryComponent extends BlockBase implements OnInit {
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((result) => {
         this.list = result.data ?? [];
-        this.container.children = [];
-        if (this.list.length == 0) {
-          this.container.children = [this.block.itemTemplate!];
-        } else {
-          for (let item of this.list) {
-            this.container.children.push(this.block.itemTemplate!);
-          }
-        }
+        this.itemTemplate.dynamicDataCacheKey = this.cacheKey;
+        this.b.ds.setCache(this.cacheKey, 'productCategory', this.list);
       });
   }
 }

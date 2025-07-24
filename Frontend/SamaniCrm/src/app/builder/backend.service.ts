@@ -7,6 +7,7 @@ import { AppConst } from '@shared/app-const';
 import { AppComponentBase } from '@app/app-component-base';
 import { BlockDefinition } from './blocks/block-registry';
 import { generateCSSFromBlocks } from './helpers/generate-css-block';
+import { getBlocksAsString } from './helpers/get-blocks-as-string';
 
 @Injectable()
 export class FormBuilderBackendService extends AppComponentBase {
@@ -43,7 +44,7 @@ export class FormBuilderBackendService extends AppComponentBase {
   }
 
   save() {
-    const data = JSON.stringify(this.b.blocks);
+    const data = getBlocksAsString(this.b.blocks);
     const css = generateCSSFromBlocks(this.b.blocks);
 
     this.saving = true;
