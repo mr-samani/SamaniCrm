@@ -7,7 +7,6 @@
 @use './grapesjs.scss';
 @use '../../node_modules/ngx-drag-drop-kit/assets/styles.css';
 
-
 @font-face {
   font-family: 'iranSans';
   src:
@@ -85,7 +84,10 @@ a {
   text-decoration: none;
   color: inherit;
 }
-
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
 .fa {
   font-size: var(--fa-size);
 }

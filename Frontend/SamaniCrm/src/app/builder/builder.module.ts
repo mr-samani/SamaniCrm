@@ -15,9 +15,18 @@ import { PageBuilderServiceProxy, PagesServiceProxy } from '@shared/service-prox
 import { StyleProperties } from './properties/styles/style.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxInputBoxShadowModule, NgxInputColorModule, NgxInputGradientModule } from 'ngx-input-color';
+import { BlockAttributesComponent } from './properties/attributes/attributes.component';
+import { FileManagerModule } from '@app/file-manager/file-manager.module';
 
 @NgModule({
-  declarations: [BuilderComponent, PropertiesComponent, LayoutsComponent, ToolbarComponent, ToolboxComponent],
+  declarations: [
+    BuilderComponent,
+    PropertiesComponent,
+    BlockAttributesComponent,
+    LayoutsComponent,
+    ToolbarComponent,
+    ToolboxComponent,
+  ],
   imports: [
     CommonModule,
     NgxDragDropKitModule,
@@ -30,6 +39,7 @@ import { NgxInputBoxShadowModule, NgxInputColorModule, NgxInputGradientModule } 
     NgxInputColorModule,
     NgxInputGradientModule,
     NgxInputBoxShadowModule,
+    FileManagerModule,
   ],
   providers: [FormBuilderService, FormBuilderBackendService, PagesServiceProxy, PageBuilderServiceProxy],
 })

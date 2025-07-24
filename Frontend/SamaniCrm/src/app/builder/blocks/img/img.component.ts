@@ -1,0 +1,24 @@
+import { Component, Injector, Input, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { BlockBase } from '../block-base';
+
+@Component({
+  selector: 'block-img',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    <img [src]="block.attributes?.url?.value" />
+  `,
+})
+export class BlockImgComponent extends BlockBase implements OnInit {
+  constructor(injector: Injector) {
+    super(injector);
+  }
+
+  ngOnInit(): void {
+    if (!this.block.attributes) {
+      this.block.attributes = {};
+    }
+    this.block.attributes.url ??= { type: 'image', value: 'images/default-image.png' };
+  }
+}

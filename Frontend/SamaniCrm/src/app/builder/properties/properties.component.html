@@ -99,8 +99,9 @@
       </ng-container>
     </div>
   } @else if (tab == 'Advanced') {
-    <div class="p-5">
+    <div class="p-2">
       <button class="btn btn-primary" (click)="saveAsBlockDefinition()">Save as block</button>
+      <block-attributes [attributes]="b.selectedBlock.attributes"></block-attributes>
     </div>
   }
 }

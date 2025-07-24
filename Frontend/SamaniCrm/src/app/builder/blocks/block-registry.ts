@@ -5,12 +5,14 @@ import { BlockRowComponent } from './row/row.component';
 import { BlockGeneralHtmlTagsComponent } from './general-html-tags/general-html-tags.component';
 import { BlockStyle } from '../properties/styles/models/_style';
 import { GeneralTagNames } from './general-html-tags/GeneralTagNames';
+import { BlockImgComponent } from './img/img.component';
 
 export enum BlockTypeEnum {
   GeneralHtmlTag = 0,
   ProductCategory,
   HeroBanner,
   Row,
+  Img,
 }
 
 export declare type BlockCategory = 'General' | 'Container' | 'Banner' | 'Product' | 'Other';
@@ -35,11 +37,17 @@ export const BLOCK_REGISTRY: BlockDefinition[] = [
     canChild: true,
   },
   {
+    category: 'General',
+    type: BlockTypeEnum.Img,
+    component: BlockImgComponent,
+    canChild: true,
+    icon: 'fa fa-image',
+  },
+  {
     category: 'Product',
     type: BlockTypeEnum.ProductCategory,
     component: BlockProductCategoryComponent,
     icon: 'fa fa-boxes-packing',
-    data: { title: 'Welcome to our Store!', categories: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] } as any,
   },
   {
     category: 'Banner',
@@ -65,6 +73,7 @@ export class BlockDefinition {
   type: BlockTypeEnum = BlockTypeEnum.Row;
   component?: Type<any>;
   data?: BlockData;
+  attributes?: BlockAttribute;
   children?: BlockDefinition[] = [];
   /** المنت هایی که می توانند فرزند داشته باشند */
   canChild?: boolean;
@@ -86,6 +95,7 @@ export class BlockData {
   text?: string;
   style: BlockStyle = {};
   css: string = '';
+
   constructor(data?: BlockData | any) {
     if (data) {
       for (let property in data) {
@@ -95,4 +105,15 @@ export class BlockData {
     this.style ??= {};
     this.css ??= '';
   }
+}
+
+export class BlockAttribute {
+  url?: BlockAttributeDetails = {
+    type: 'image',
+    value: '',
+  };
+}
+export class BlockAttributeDetails {
+  type?: 'number' | 'string' | 'image' = 'string';
+  value?: any;
 }

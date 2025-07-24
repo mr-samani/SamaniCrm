@@ -1,0 +1,15 @@
+@for (item of attrList; track $index) {
+  @switch (item[1].type) {
+    @case ('image') {
+      <file-selector (change)="onSelectFile(item, $event)" [options]="imagePickerOptions"></file-selector>
+      <img [src]="item[1].value" />
+    }
+    @case ('string') {
+      <input type="text" class="form-control" [(ngModel)]="item[1].value" name="attrVal" />
+    }
+    @case ('number') {
+      <input type="number" class="form-control" [(ngModel)]="item[1].value" name="attrVal" />
+    }
+  }
+}
+<!-- <pre>{{ attrList | json }}</pre> -->
