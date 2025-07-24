@@ -1,5 +1,13 @@
 import { moveItemInArray } from '@angular/cdk/drag-drop';
-import { AfterViewInit, Component, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  Injector,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { BlockDefinition, BlockTypeEnum, FormTools } from './blocks/block-registry';
 import { FormBuilderService } from './form-builder.service';
 import { IDropEvent, transferArrayItem } from 'ngx-drag-drop-kit';
@@ -21,6 +29,7 @@ export class BuilderComponent extends AppComponentBase implements OnInit, AfterV
     public b: FormBuilderService,
     private backendService: FormBuilderBackendService,
     injector: Injector,
+    private cd: ChangeDetectorRef,
   ) {
     super(injector);
     this.backendService.pageId = this.route.snapshot.params['pageId'];
@@ -32,8 +41,11 @@ export class BuilderComponent extends AppComponentBase implements OnInit, AfterV
     this.backendService.getPageInfo();
   }
   ngAfterViewInit(): void {
-    AppConst.mainHeaderFixedTop = false;
-    this.doc.querySelector('.builder-container')?.scrollIntoView();
+    setTimeout(() => {
+      AppConst.mainHeaderFixedTop = false;
+      this.cd.detectChanges();
+      this.doc.querySelector('.builder-container')?.scrollIntoView();
+    });
   }
   ngOnDestroy(): void {
     AppConst.mainHeaderFixedTop = this.previousMainHeaderFixedTop;

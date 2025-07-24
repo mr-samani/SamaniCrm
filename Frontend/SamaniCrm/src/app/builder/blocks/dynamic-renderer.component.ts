@@ -1,6 +1,6 @@
 import { Component, Input, ViewContainerRef, ComponentRef, ViewChild, inject, Renderer2, Inject } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { BLOCK_REGISTRY, BlockData, BlockDefinition } from './block-registry';
+import { BLOCK_REGISTRY, BlockData, BlockDefinition, BlockTypeEnum } from './block-registry';
 import { FormBuilderService } from '../form-builder.service';
 import { IResizableOutput, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 //  ngxResizable
@@ -24,10 +24,11 @@ import { IResizableOutput, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
           <i class="fa fa-trash"></i>
         </button>
         <span>
-          {{ block.tagName ?? block.name }}
+          {{ block.name ?? block.tagName ?? BlockTypeEnum[block.type] }}
         </span>
       </div>
       <ng-container #container></ng-container>
+      <ng-content></ng-content>
     </div>
   `,
   styles: `
@@ -42,6 +43,7 @@ import { IResizableOutput, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
       padding: 4px 6px;
       display: none;
       height: 28px;
+      z-index: 1000;
       button {
         background: none;
         outline: none;
@@ -89,6 +91,10 @@ export class DynamicRendererComponent {
     public b: FormBuilderService,
     @Inject(DOCUMENT) private doc: Document,
   ) {}
+
+  public get BlockTypeEnum(): typeof BlockTypeEnum {
+    return BlockTypeEnum;
+  }
 
   onBlockClick(block: BlockDefinition, event: Event) {
     this.updateActionsPosition(event.currentTarget as HTMLElement);

@@ -9,6 +9,7 @@ import { PageBuilderServiceProxy } from '@shared/service-proxies';
 import { finalize } from 'rxjs';
 import { CanChildHtmlTags, SimpleHtmlTags } from './blocks/general-html-tags/GeneralTagNames';
 import { cloneDeep } from 'lodash-es';
+import { generateSequentialGuid } from '@shared/helper/guid';
 
 @Injectable()
 export class FormBuilderService {
@@ -105,6 +106,8 @@ export class FormBuilderService {
       index = parentChildren.length;
     }
     const s = cloneDeep(source);
+    // important create new id
+    s.id = generateSequentialGuid();
     s.data ??= new BlockData();
     parentChildren.splice(index, 0, s);
 
@@ -112,6 +115,7 @@ export class FormBuilderService {
   }
 
   drop(event: IDropEvent<BlockDefinition[]>) {
+    debugger;
     // اگر در همان cell جابجا شد
     if (event.previousContainer === event.container) {
       if (event.container.data) {
@@ -157,14 +161,16 @@ export class FormBuilderService {
       .then((r) => {
         if (r.isConfirmed) {
           if (!parent) {
-            const foundedIndex = this.blocks.findIndex((x) => x == block);
+            const foundedIndex = this.blocks.findIndex((x) => x.id == block.id);
             if (foundedIndex > -1) {
               this.blocks.splice(foundedIndex, 1);
             }
           } else {
-            const foundedIndex = parent.children?.findIndex((x) => x == block);
-            if (foundedIndex && foundedIndex > -1) {
-              parent.children?.splice(foundedIndex, 1);
+            if (parent.children) {
+              const foundedIndex = parent.children.findIndex((x) => x.id == block.id);
+              if (foundedIndex > -1) {
+                parent.children?.splice(foundedIndex, 1);
+              }
             }
           }
           this.selectedBlock = undefined;

@@ -1,6 +1,5 @@
 <section class="product-category">
   <mat-spinner *ngIf="loading"></mat-spinner>
-  @for (item of list; track item.id) {
-    <dynamic-renderer [parent]="block" [block]="itemTemplate" />
-  }
+
+  <dynamic-renderer [block]="container" *ngIf="!loading" />
 </section>

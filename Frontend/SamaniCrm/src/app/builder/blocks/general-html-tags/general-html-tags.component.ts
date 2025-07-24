@@ -10,12 +10,8 @@ import { BlockDefinition } from '../block-registry';
   imports: [CommonModule, NgxDragDropKitModule, DynamicRendererComponent],
   templateUrl: './general-html-tags.component.html',
   styles: `
-    :host {
-      display: block;
-      padding: 5px;
-    }
     .block-wrapper {
-      min-height: 80px;
+      min-height: 20px;
     }
   `,
 })

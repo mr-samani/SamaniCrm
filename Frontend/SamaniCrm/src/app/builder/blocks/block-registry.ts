@@ -6,6 +6,7 @@ import { BlockGeneralHtmlTagsComponent } from './general-html-tags/general-html-
 import { BlockStyle } from '../properties/styles/models/_style';
 import { GeneralTagNames } from './general-html-tags/GeneralTagNames';
 import { BlockImgComponent } from './img/img.component';
+import { generateSequentialGuid } from '@shared/helper/guid';
 
 export enum BlockTypeEnum {
   GeneralHtmlTag = 0,
@@ -48,6 +49,7 @@ export const BLOCK_REGISTRY: BlockDefinition[] = [
     type: BlockTypeEnum.ProductCategory,
     component: BlockProductCategoryComponent,
     icon: 'fa fa-boxes-packing',
+    canChild: false,
   },
   {
     category: 'Banner',
@@ -78,6 +80,7 @@ export class BlockDefinition {
   /** المنت هایی که می توانند فرزند داشته باشند */
   canChild?: boolean;
   rowNumber?: number;
+  itemTemplate?: BlockDefinition;
 
   constructor(data?: BlockDefinition) {
     if (data) {
@@ -85,8 +88,13 @@ export class BlockDefinition {
         if (data.hasOwnProperty(property)) (this as any)[property] = (data as any)[property];
       }
       this.data = new BlockData(data.data);
-
-      this.children = (data.children ?? []).map((child) => new BlockDefinition(child));
+      if (!data.id) {
+        this.id = generateSequentialGuid();
+      }
+      if (data.itemTemplate) {
+        this.itemTemplate = new BlockDefinition(data.itemTemplate);
+      }
+      this.children = (data.children ?? []).map((child) => (child = new BlockDefinition(child)));
     }
   }
 }
@@ -94,7 +102,7 @@ export class BlockDefinition {
 export class BlockData {
   text?: string;
   style: BlockStyle = {};
-  css: string = '';
+  css?: string = '';
 
   constructor(data?: BlockData | any) {
     if (data) {

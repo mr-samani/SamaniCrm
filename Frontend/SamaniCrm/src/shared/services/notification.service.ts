@@ -23,7 +23,7 @@ export class NotificationService {
           skipNegotiation: true,
         })
         .withAutomaticReconnect()
-        .configureLogging(signalR.LogLevel.Information)
+        .configureLogging(signalR.LogLevel.Critical)
         .build();
 
       this.hubConnection
