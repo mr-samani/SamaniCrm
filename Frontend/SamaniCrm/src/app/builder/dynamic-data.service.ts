@@ -1,41 +1,29 @@
 import { Injectable } from '@angular/core';
 import { BlockDefinition } from './blocks/block-registry';
 export interface IDataStructure {
-  key: string;
+  nameSpace: string;
   type: 'string' | 'number' | 'bigint' | 'boolean' | 'symbol' | 'undefined' | 'object' | 'function';
   children: IDataStructure[];
 }
-export interface IDynamicDataCache {
-  baseName: string;
-  structure: IDataStructure[];
+export class DynamicDataCache<T = any> {
+  structure: IDataStructure[] = [];
   // object or array
-  data: any;
+  data?: T;
 }
 @Injectable()
 export class DynamicDataService {
-  private cashedDynamicData: {
-    [key: string]: IDynamicDataCache;
-  } = {};
+  private cashedDynamicData: { [key: string]: DynamicDataCache } = {};
 
   reset() {
     this.cashedDynamicData = {};
   }
 
-  setCache<T>(key: string, baseName: string, data: T) {
-    let structure: IDataStructure[] = [];
-    let s = data || {};
-    if (Array.isArray(data)) {
-      s = data[0] || {};
-    }
-    structure = this.convertToTree(s);
-
+  setCache<T>(key: string, structure: IDataStructure[], data: T) {
     this.cashedDynamicData[key] = {
-      baseName: baseName,
-      data: data,
-      structure: structure,
+      structure,
+      data,
     };
-
-    console.log(this.cashedDynamicData);
+    console.log('set cache', this.cashedDynamicData);
   }
   getCache(key?: string) {
     return key ? this.cashedDynamicData[key] : undefined;
@@ -55,27 +43,14 @@ export class DynamicDataService {
     return value;
   }
 
-  private resolveDynamicBinding(key: string, dynamicData?: any, index?: number): any {
-    if (!dynamicData || !key) return null;
-
-    const parts = key.split('.');
-
-    let current: any = dynamicData;
-    if (Array.isArray(current) && index !== undefined) {
-      current = current[index];
+  private resolveDynamicBinding(key: string, dynamicData?: DynamicDataCache, index?: number): string {
+    if (!dynamicData || !key || !dynamicData.data) return '';
+    const lastPart: string = key.split('.').pop() ?? '';
+    let data = dynamicData.data;
+    if (Array.isArray(data) && index !== undefined) {
+      data = data[index];
     }
-    for (const part of parts) {
-      if (Array.isArray(current) && index !== undefined) {
-        current = current[index];
-      }
-      if (current && typeof current === 'object' && part in current) {
-        current = current[part];
-      } else {
-        return null; // کلید پیدا نشد
-      }
-    }
-
-    return current;
+    return data[lastPart] ?? '';
   }
 
   /*------------------------------*/
@@ -84,13 +59,7 @@ export class DynamicDataService {
     if (!cacheKey) return [];
     const dynamicData = this.getCache(cacheKey);
     if (!dynamicData) return [];
-    return [
-      {
-        key: dynamicData.baseName,
-        children: dynamicData.structure,
-        type: 'object',
-      },
-    ];
+    return dynamicData.structure ?? [];
   }
   private convertToTree(obj: any): IDataStructure[] {
     if (!obj || typeof obj !== 'object') return [];
@@ -100,12 +69,12 @@ export class DynamicDataService {
     return Object.entries(obj).map(([key, value]) => {
       if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
         return {
-          key,
+          nameSpace: key,
           type: typeof value,
           children: this.convertToTree(value),
         };
       } else {
-        return { key, value, type: typeof value, children: [] };
+        return { nameSpace: key, value, type: typeof value, children: [] };
       }
     });
   }

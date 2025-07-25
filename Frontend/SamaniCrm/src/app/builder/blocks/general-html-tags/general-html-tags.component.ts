@@ -1,16 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, Injector, OnInit } from '@angular/core';
 import { DynamicRendererComponent } from '../dynamic-renderer.component';
-import { FormBuilderService } from '@app/builder/form-builder.service';
-import { BlockDefinition } from '../block-registry';
 import { NgxDragDropKitModule } from 'ngx-drag-drop-kit';
+import { BlockDefinition } from '../block-registry';
+import { FormBuilderService } from '@app/builder/form-builder.service';
 @Component({
   selector: 'block-general-html-tags',
   standalone: true,
   imports: [CommonModule, DynamicRendererComponent, NgxDragDropKitModule],
   templateUrl: './general-html-tags.component.html',
   styles: `
-    :host{
+    :host {
       display: block;
     }
     .block-wrapper {
@@ -19,15 +19,15 @@ import { NgxDragDropKitModule } from 'ngx-drag-drop-kit';
   `,
 })
 export class BlockGeneralHtmlTagsComponent implements OnInit {
-  block?: BlockDefinition;
-  index!: number;
-
   text = '';
-
+  block!: BlockDefinition;
+  loopIndex!: number;
   constructor(
     injector: Injector,
     public b: FormBuilderService,
-  ) {}
+  ) {
+    // super(injector);
+  }
 
   ngOnInit() {
     if (this.block) {
@@ -36,7 +36,7 @@ export class BlockGeneralHtmlTagsComponent implements OnInit {
       }
 
       if (this.block.data?.text) {
-        this.text = this.b.ds.resolveValue(this.block, this.block.data?.text, this.index);
+        this.text = this.b.ds.resolveValue(this.block, this.block.data?.text, this.loopIndex);
       }
     }
   }

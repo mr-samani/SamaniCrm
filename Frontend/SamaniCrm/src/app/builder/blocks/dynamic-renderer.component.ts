@@ -75,11 +75,11 @@ export class DynamicRendererComponent {
   @ViewChild('container', { read: ViewContainerRef, static: true }) vcr!: ViewContainerRef;
   renderer = inject(Renderer2);
   @Input() parent?: BlockDefinition;
-  @Input() index!: number;
+  @Input() loopIndex!: number;
 
   @Input('block') set renderBlock(value: BlockDefinition) {
     // wait for fill all inputs
-   // setTimeout(() => {
+    setTimeout(() => {
       this.block = value;
       if (!this.block.hidden) {
         this.vcr.clear();
@@ -88,13 +88,13 @@ export class DynamicRendererComponent {
           const { component } = def!;
           const cmpRef: ComponentRef<BlockBase> = this.vcr.createComponent(component!);
           cmpRef.instance.block = this.block;
-          cmpRef.instance.index = this.index;
+          cmpRef.instance.loopIndex = this.loopIndex;
           this.b.updateCss(this.block);
         }
       } else {
         this.vcr.clear();
       }
-   // });
+    });
   }
   constructor(
     public b: FormBuilderService,

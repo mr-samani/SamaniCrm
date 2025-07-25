@@ -1,7 +1,7 @@
 <div class="row gx-0">
   @if (block && block.children) {
     @for (c of block.children; track $index) {
-      {{c.children|json}}
+      {{ c.children | json }}
       <div class="col cell" ngxDropList [data]="c.children" (drop)="b.drop($event)" [id]="'blc_' + c.rowNumber">
         <div class="custom-placeholder2" *ngxPlaceholder></div>
 
@@ -9,8 +9,8 @@
           [parent]="block"
           [block]="child"
           *ngFor="let child of c.children; let i = index"
-          [index]="i"
-          ngxDraggable />
+          ngxDraggable
+          [loopIndex]="loopIndex" />
       </div>
     }
   }

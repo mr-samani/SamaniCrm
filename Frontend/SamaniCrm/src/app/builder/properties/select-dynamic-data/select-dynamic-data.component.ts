@@ -8,14 +8,30 @@ import { IDataStructure } from '@app/builder/dynamic-data.service';
 })
 export class SelectDynamicDataComponent {
   @Input() list: IDataStructure[] = [];
-  @Output() keys = new EventEmitter<string[]>();
-
+  childNameSpace = '';
   selectedData?: IDataStructure;
+  @Input() set value(value: string | undefined) {
+    value = typeof value == 'string' ? value.trim() : '';
+    if (value.startsWith('{{') && value.endsWith('}}')) {
+      const key = value.slice(2, -2);
+      const parts = key.split('.');
+      const nameSpace = parts.shift() ?? '';
+      this.childNameSpace = parts.length > 0 ? `{{${parts.join('.')}}}` : '';
+      if (nameSpace) {
+        this.selectedData = {
+          nameSpace,
+          type: 'object',
+          children: this.list.find((x) => x.nameSpace == nameSpace)?.children ?? [],
+        };
+      }
+    }
+  }
+  @Output() keys = new EventEmitter<string[]>();
 
   selectedKeys = '';
   onSelectionChange() {
-    if (this.selectedData && this.selectedData.key) {
-      this.selectedKeys = this.selectedData.key;
+    if (this.selectedData && this.selectedData.nameSpace) {
+      this.selectedKeys = this.selectedData.nameSpace;
       this.keys.emit([this.selectedKeys]);
     }
   }
@@ -23,5 +39,9 @@ export class SelectDynamicDataComponent {
   onChangeKey(event: string[]) {
     let array = [this.selectedKeys, ...event];
     this.keys.emit(array);
+  }
+
+  compareFn(a: IDataStructure, b: IDataStructure) {
+    return a && b && a.nameSpace == b.nameSpace;
   }
 }

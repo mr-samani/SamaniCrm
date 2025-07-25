@@ -22,6 +22,6 @@ export class BlockImgComponent extends BlockBase implements OnInit {
       this.block.attributes = {};
     }
     this.block.attributes.url ??= { type: 'image', value: 'images/default-image.png' };
-    this.imageUrl = this.b.ds.resolveValue(this.block, this.block.attributes.url.value, this.index);
+    this.imageUrl = this.b.ds.resolveValue(this.block, this.block.attributes.url.value, this.loopIndex);
   }
 }

@@ -18,13 +18,19 @@
   }
 
   <div *ngIf="dynamicData">
-    <select-dynamic-data [list]="dynamicData" (keys)="onChangeDynamicKeyAttr($event, item)"></select-dynamic-data>
+    <select-dynamic-data
+      [list]="dynamicData"
+      (keys)="onChangeDynamicKeyAttr($event, item)"
+      [value]="item?.[1]?.value"></select-dynamic-data>
   </div>
 }
 <!-- <pre>{{ attrList | json }}</pre> -->
 @if (block.data && block.data.text) {
   <input [(ngModel)]="block.data.text" type="text" class="form-control" placeholder="text" />
   <div *ngIf="dynamicData">
-    <select-dynamic-data [list]="dynamicData" (keys)="onChangeDynamicKeyTxt($event)"></select-dynamic-data>
+    <select-dynamic-data
+      [list]="dynamicData"
+      (keys)="onChangeDynamicKeyTxt($event)"
+      [value]="block.data.text"></select-dynamic-data>
   </div>
 }

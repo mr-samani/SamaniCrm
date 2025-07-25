@@ -6,6 +6,7 @@ import { DynamicRendererComponent } from '../dynamic-renderer.component';
 import { GetProductCategoriesQuery, ProductCategoryDto, ProductServiceProxy } from '@shared/service-proxies';
 import { finalize } from 'rxjs';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
+import { DynamicDataCache, IDataStructure } from '@app/builder/dynamic-data.service';
 
 @Component({
   selector: 'block-product-category',
@@ -93,7 +94,24 @@ export class BlockProductCategoryComponent extends BlockBase implements OnInit {
       .subscribe((result) => {
         this.list = result.data ?? [];
         this.itemTemplate.dynamicDataCacheKey = this.cacheKey;
-        this.b.ds.setCache(this.cacheKey, 'productCategory', this.list);
+        this.block.itemTemplate = this.itemTemplate;
+        let s = new ProductCategoryDto();
+
+        let dataStructure: IDataStructure[] = [
+          {
+            nameSpace: 'productCategory',
+            type: 'object',
+            children: Object.entries(s).map((m) => {
+              return {
+                nameSpace: m[0],
+                type: 'string',
+                children: [],
+              };
+            }),
+          },
+        ];
+
+        this.b.ds.setCache<ProductCategoryDto[]>(this.cacheKey, dataStructure, this.list);
       });
   }
 }

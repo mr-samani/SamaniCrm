@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BlockTypeEnum, BLOCK_REGISTRY, BlockDefinition, FormTools, BlockData } from './blocks/block-registry';
-import { BlockGeneralHtmlTagsComponent } from './blocks/general-html-tags/general-html-tags.component';
 import { IDropEvent, moveItemInArray } from 'ngx-drag-drop-kit';
 import { ViewModeEnum } from './models/view-mode.enum';
 import { NgxAlertModalService } from 'ngx-alert-modal';
@@ -11,6 +10,7 @@ import { CanChildHtmlTags, SimpleHtmlTags } from './blocks/general-html-tags/Gen
 import { cloneDeep } from 'lodash-es';
 import { generateSequentialGuid } from '@shared/helper/guid';
 import { DynamicDataService } from './dynamic-data.service';
+import { BlockGeneralHtmlTagsComponent } from './blocks/general-html-tags/general-html-tags.component';
 
 @Injectable()
 export class FormBuilderService {
