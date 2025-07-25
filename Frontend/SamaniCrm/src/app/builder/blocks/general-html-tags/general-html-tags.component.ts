@@ -15,6 +15,7 @@ import { FormBuilderService } from '@app/builder/form-builder.service';
     }
     .block-wrapper {
       min-height: 20px;
+      padding: 5px;
     }
   `,
 })

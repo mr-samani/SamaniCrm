@@ -27,7 +27,7 @@ export class BlockProductCategoryComponent extends BlockBase implements OnInit {
   itemTemplate = new BlockDefinition({
     category: 'Container',
     type: 0,
-    tagName: 'article',
+    tagName: 'div',
     name: 'category card',
     data: {
       style: {

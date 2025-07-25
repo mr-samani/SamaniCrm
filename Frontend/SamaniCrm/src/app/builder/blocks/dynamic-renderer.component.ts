@@ -1,4 +1,14 @@
-import { Component, Input, ViewContainerRef, ComponentRef, ViewChild, inject, Renderer2, Inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  ViewContainerRef,
+  ComponentRef,
+  ViewChild,
+  inject,
+  Renderer2,
+  Inject,
+  ElementRef,
+} from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { BLOCK_REGISTRY, BlockData, BlockDefinition, BlockTypeEnum } from './block-registry';
 import { FormBuilderService } from '../form-builder.service';
@@ -10,32 +20,31 @@ import { BlockBase } from './block-base';
   selector: 'dynamic-renderer',
   standalone: true,
   imports: [CommonModule],
+  host: {
+    '[class.fb-selected]': 'b.selectedBlock?.id == block?.id',
+    '[class.hidden]': 'block && block.hidden',
+    '[style]': 'block && block.data ? block.data.css : undefined',
+  },
   template: `
     <div
-      class="block-item"
-      (click)="onBlockClick(block, $event)"
-      [class.fb-selected]="b.selectedBlock == block"
-      [class.hidden]="block && block.hidden"
-      [style]="block && block.data ? block.data.css : undefined">
-      <div
-        *ngIf="block"
-        class="actions"
-        [class.actions-top]="actionsPosition === 'top'"
-        [class.actions-bottom]="actionsPosition === 'bottom'">
-        <button (click)="b.deleteBlock(block, parent)">
-          <i class="fa fa-trash"></i>
-        </button>
-        <span>
-          {{ block.name ?? block.tagName ?? BlockTypeEnum[block.type] }}
-        </span>
-      </div>
-      <ng-container #container></ng-container>
-      <ng-content></ng-content>
+      *ngIf="block"
+      class="actions"
+      [class.actions-top]="actionsPosition === 'top'"
+      [class.actions-bottom]="actionsPosition === 'bottom'">
+      <button (click)="b.deleteBlock(block, parent)">
+        <i class="fa fa-trash"></i>
+      </button>
+      <span>
+        {{ block.name ?? block.tagName ?? BlockTypeEnum[block.type] }}
+      </span>
     </div>
+    <ng-container #container></ng-container>
+    <ng-content></ng-content>
   `,
   styles: `
     :host {
-      display: block;
+      display: inline-block;
+      height: 100%;
       position: relative;
     }
     .actions {
@@ -45,7 +54,8 @@ import { BlockBase } from './block-base';
       padding: 4px 6px;
       display: none;
       height: 28px;
-      z-index: 1000;
+      z-index: 10;
+      right: 0;
       button {
         background: none;
         outline: none;
@@ -99,7 +109,12 @@ export class DynamicRendererComponent {
   constructor(
     public b: FormBuilderService,
     @Inject(DOCUMENT) private doc: Document,
-  ) {}
+    el: ElementRef,
+  ) {
+    el.nativeElement.click = (ev: Event) => {
+      this.onBlockClick(this.block, ev);
+    };
+  }
 
   public get BlockTypeEnum(): typeof BlockTypeEnum {
     return BlockTypeEnum;

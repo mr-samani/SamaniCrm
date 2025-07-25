@@ -9,6 +9,13 @@ import { BlockBase } from '../block-base';
   template: `
     <img [src]="imageUrl" />
   `,
+  styles: [
+    `
+      :host {
+        display: inline-block;
+      }
+    `,
+  ],
 })
 export class BlockImgComponent extends BlockBase implements OnInit {
   imageUrl = 'images/default-image.png';
