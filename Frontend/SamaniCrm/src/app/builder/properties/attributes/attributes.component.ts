@@ -17,7 +17,15 @@ export class BlockAttributesComponent implements OnInit {
   htmlTags = [...SimpleHtmlTags, ...CanChildHtmlTags];
 
   attrList: [string, BlockAttributeDetails][] = [];
-  @Input() block!: BlockDefinition;
+  block!: BlockDefinition;
+  @Input('block') set setBlock(val: BlockDefinition) {
+    this.block = val;
+    this.attrList = [];
+    if (this.block.attributes) {
+      this.attrList = Object.entries(this.block.attributes);
+    }
+    this.dynamicData = this.b.ds.getTreeDynamicDataList(this.block);
+  }
   dynamicData: IDataStructure[] = [];
   selectedDynamicData: any = {};
 
@@ -28,13 +36,7 @@ export class BlockAttributesComponent implements OnInit {
 
   constructor(public b: FormBuilderService) {}
 
-  ngOnInit(): void {
-    this.attrList = [];
-    if (this.block.attributes) {
-      this.attrList = Object.entries(this.block.attributes);
-    }
-    this.dynamicData = this.b.ds.getTreeDynamicDataList(this.block);
-  }
+  ngOnInit(): void {}
 
   public get BlockTypeEnum(): typeof BlockTypeEnum {
     return BlockTypeEnum;

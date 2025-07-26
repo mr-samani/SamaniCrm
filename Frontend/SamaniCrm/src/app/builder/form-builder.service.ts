@@ -11,6 +11,8 @@ import { cloneDeep } from 'lodash-es';
 import { generateSequentialGuid } from '@shared/helper/guid';
 import { DynamicDataService } from './dynamic-data.service';
 import { BlockGeneralHtmlTagsComponent } from './blocks/general-html-tags/general-html-tags.component';
+import { objectToStyle } from './properties/styles/helper/objectToStyle';
+import { findNearestDynamicDataCacheKey } from './properties/styles/helper/findNearestDynamicDataCacheKey';
 
 @Injectable()
 export class FormBuilderService {
@@ -103,21 +105,21 @@ export class FormBuilderService {
       });
   }
 
-  addBlock(source: BlockDefinition, index?: number, parentChildren?: BlockDefinition[]) {
-    if (!parentChildren) parentChildren = this.blocks;
+  addBlock(source: BlockDefinition, parent?: BlockDefinition, index?: number, blocks?: BlockDefinition[]) {
+    if (!blocks) blocks = this.blocks;
     if (index == undefined) {
-      index = parentChildren.length;
+      index = blocks.length;
     }
     const s = cloneDeep(source);
     // important create new id
     s.id = generateSequentialGuid();
     s.data ??= new BlockData();
-    parentChildren.splice(index, 0, new BlockDefinition(s));
-
+    if (parent) s.dynamicDataCacheKey = findNearestDynamicDataCacheKey(parent);
+    blocks.splice(index, 0, new BlockDefinition(s));
     this.updateRowNumber(this.blocks);
   }
 
-  drop(event: IDropEvent<BlockDefinition[]>) {
+  drop(event: IDropEvent<BlockDefinition[]>, parent?: BlockDefinition) {
     // اگر در همان cell جابجا شد
     if (event.previousContainer === event.container) {
       if (event.container.data) {
@@ -130,7 +132,7 @@ export class FormBuilderService {
         if (event.previousContainer.el.id != 'toolBox') {
           event.previousContainer.data.splice(event.previousIndex, 1);
         }
-        this.addBlock(item, event.currentIndex, event.container.data);
+        this.addBlock(item, parent, event.currentIndex, event.container.data);
         //event.container.data.splice(event.currentIndex, 0, item);
       }
     }
@@ -189,76 +191,8 @@ export class FormBuilderService {
     if (!block.data) {
       block.data = new BlockData();
     }
-    block.data.css = `
-  ${block.data.style.border ? 'border:' + block.data.style.border + ';' : ''}
-  ${block.data.style.padding ? 'padding:' + block.data.style.padding + ';' : ''}
-  ${block.data.style.margin ? 'margin:' + block.data.style.margin + ';' : ''}
-  ${block.data.style.borderRadius ? 'border-radius:' + block.data.style.borderRadius + ';' : ''}
-  ${block.data.style.boxShadow ? 'box-shadow:' + block.data.style.boxShadow + ';' : ''}
-  ${block.data.style.backgroundColor ? 'background-color:' + block.data.style.backgroundColor + ';' : ''}
-  ${block.data.style.backgroundImage ? 'background-image:' + block.data.style.backgroundImage + ';' : ''}
-  ${block.data.style.backgroundSize ? 'background-size:' + block.data.style.backgroundSize + ';' : ''}
-  ${block.data.style.backgroundRepeat ? 'background-repeat:' + block.data.style.backgroundRepeat + ';' : ''}`;
-
-    /* dimensions */
-    block.data.css += `
-  ${block.data.style.width ? 'width:' + block.data.style.width + 'px;' : ''}
-  ${block.data.style.height ? 'height:' + block.data.style.height + 'px;' : ''}
-  ${block.data.style.minWidth ? 'min-width:' + block.data.style.minWidth + 'px;' : ''}
-  ${block.data.style.minHeight ? 'min-height:' + block.data.style.minHeight + 'px;' : ''}
-  ${block.data.style.maxWidth ? 'max-width:' + block.data.style.maxWidth + 'px;' : ''}
-  ${block.data.style.maxHeight ? 'max-height:' + block.data.style.maxHeight + 'px;' : ''}`;
-
-    /* position */
-    block.data.css += `
-  ${block.data.style.position ? 'position:' + block.data.style.position + ';' : ''}
-  ${block.data.style.top ? 'top:' + block.data.style.top + 'px;' : ''}
-  ${block.data.style.right ? 'right:' + block.data.style.right + 'px;' : ''}
-  ${block.data.style.left ? 'left:' + block.data.style.left + 'px;' : ''}
-  ${block.data.style.bottom ? 'bottom:' + block.data.style.bottom + 'px;' : ''}
-  ${block.data.style.zIndex ? 'z-index:' + block.data.style.zIndex + ';' : ''}
-  `;
-
-    /* flex */
-    block.data.css += `
-  ${block.data.style.flex ? 'flex:' + block.data.style.flex + ';' : ''}
-  ${block.data.style.flexGrow ? 'flex-grow:' + block.data.style.flexGrow + ';' : ''}
-  ${block.data.style.flexShrink ? 'flex-shrink:' + block.data.style.flexShrink + ';' : ''}
-  ${block.data.style.flexBasis ? 'flex-basis:' + block.data.style.flexBasis + ';' : ''}
-  ${block.data.style.flexDirection ? 'flex-direction:' + block.data.style.flexDirection + ';' : ''}
-  ${block.data.style.flexWrap ? 'flex-wrap:' + block.data.style.flexWrap + ';' : ''}
-  ${block.data.style.justifyContent ? 'justify-content:' + block.data.style.justifyContent + ';' : ''}
-  ${block.data.style.alignItems ? 'align-items:' + block.data.style.alignItems + ';' : ''}
-  ${block.data.style.alignContent ? 'align-content:' + block.data.style.alignContent + ';' : ''}
-  ${block.data.style.gap ? 'gap:' + block.data.style.gap + ';' : ''}
-  `;
-    /* overflow */
-    block.data.css += `
-  ${block.data.style.overflow ? 'overflow:' + block.data.style.overflow + ';' : ''}
-  ${block.data.style.overflowX ? 'overflow-x:' + block.data.style.overflowX + ';' : ''}
-  ${block.data.style.overflowY ? 'overflow-y:' + block.data.style.overflowY + ';' : ''}
-  `;
-
-    /* opacity */
-    block.data.css += `
-  ${block.data.style.opacity ? 'opacity:' + block.data.style.opacity + ';' : ''}
-  `;
-
-    /* visibility */
-    block.data.css += `
-  ${block.data.style.visibility ? 'visibility:' + block.data.style.visibility + ';' : ''}
-  `;
-
-    /* display */
-    block.data.css += `
-  ${block.data.style.display ? 'display:' + block.data.style.display + ';' : ''}
-  `;
-
-    /* cursor */
-    block.data.css += `
-  ${block.data.style.cursor ? 'cursor:' + block.data.style.cursor + ';' : ''}
-  `;
-    block.data.css = block.data.css.replace(/\s/g, '');
+    block.data.css = objectToStyle(block.data.style);
+    //  block.data.css = block.data.css.replace(/\s/g, '');
   }
 }
 

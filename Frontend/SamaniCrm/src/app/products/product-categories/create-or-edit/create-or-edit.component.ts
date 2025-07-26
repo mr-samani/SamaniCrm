@@ -3,12 +3,11 @@ import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
-import {
-  ProductServiceProxy,
-  CreateOrUpdateProductCategoryCommand,
-} from '@shared/service-proxies';
+import { ProductServiceProxy, CreateOrUpdateProductCategoryCommand } from '@shared/service-proxies';
 import { finalize } from 'rxjs';
 import { ProductCategoryTranslationDto } from '@shared/service-proxies/model/product-category-translation-dto';
+import { IOptions } from '@app/file-manager/options.interface';
+import { FileManagerDto } from '@app/file-manager/models/file-manager-dto';
 
 @Component({
   selector: 'create-or-edit-category',
@@ -23,6 +22,11 @@ export class CreateOrEditProductCategoryComponent extends AppComponentBase imple
   isUpdate: boolean;
   translations?: ProductCategoryTranslationDto[];
   id: string;
+  imagePickerOptions: IOptions = {
+    type: 'Image',
+    showPreview: true,
+  };
+
   constructor(
     injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: { id: string },
@@ -130,5 +134,11 @@ export class CreateOrEditProductCategoryComponent extends AppComponentBase imple
           }
         },
       });
+  }
+
+  onSelectFile(file: FileManagerDto) {
+    if (file) {
+      this.form.get('image')?.setValue(file.id);
+    }
   }
 }

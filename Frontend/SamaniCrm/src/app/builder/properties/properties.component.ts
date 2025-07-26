@@ -2,9 +2,7 @@ import { ChangeDetectorRef, Component, Injector, OnInit, ViewEncapsulation } fro
 import { AppComponentBase } from '@app/app-component-base';
 import { FormBuilderService } from '../form-builder.service';
 import { BlockTypeEnum } from '../blocks/block-registry';
-import { BlockStyle } from './styles/models/_style';
 import { MatDialog } from '@angular/material/dialog';
-import { CanChildHtmlTags, SimpleHtmlTags } from '../blocks/general-html-tags/GeneralTagNames';
 
 @Component({
   selector: 'properties',
@@ -16,7 +14,6 @@ import { CanChildHtmlTags, SimpleHtmlTags } from '../blocks/general-html-tags/Ge
 export class PropertiesComponent extends AppComponentBase implements OnInit {
   borderCss = '';
   tab: 'General' | 'Advanced' = 'General';
-
 
   constructor(
     injector: Injector,
@@ -39,9 +36,9 @@ export class PropertiesComponent extends AppComponentBase implements OnInit {
     this.ch.detectChanges();
   }
 
-  clearStyle(styleKey: keyof BlockStyle) {
+  clearStyle(styleKey: keyof Partial<CSSStyleDeclaration>) {
     if (!this.b.selectedBlock || !this.b.selectedBlock.data || !this.b.selectedBlock.data.style) return;
-    this.b.selectedBlock.data.style[styleKey] = undefined;
+    delete this.b.selectedBlock.data.style[styleKey];
   }
 
   async saveAsBlockDefinition() {

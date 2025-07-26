@@ -1,5 +1,5 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { Component, ElementRef, Inject, Injector, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, Injector, OnInit } from '@angular/core';
 import { NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 import { BlockDefinition } from '../block-registry';
 import { FormBuilderService } from '@app/builder/form-builder.service';
@@ -18,7 +18,20 @@ import { FormBuilderService } from '@app/builder/form-builder.service';
 })
 export class BlockGeneralHtmlTagsComponent implements OnInit {
   text = '';
-  block!: BlockDefinition;
+  _block?: BlockDefinition;
+  set block(val: BlockDefinition) {
+    setTimeout(() => {
+      this._block = val;
+      if (!this._block.children) {
+        this._block.children = [];
+      }
+
+      if (this._block.data?.text) {
+        this.text = this.b.ds.resolveValue(this._block, this._block.data?.text, this.loopIndex);
+        // console.log(this._block.data?.text, this.loopIndex, this.text);
+      }
+    });
+  }
   loopIndex!: number;
   constructor(
     injector: Injector,
@@ -29,16 +42,5 @@ export class BlockGeneralHtmlTagsComponent implements OnInit {
     // super(injector);
   }
 
-  ngOnInit() {
-    if (this.block) {
-      if (!this.block.children) {
-        this.block.children = [];
-      }
-
-      if (this.block.data?.text) {
-        this.text = this.b.ds.resolveValue(this.block, this.block.data?.text, this.loopIndex);
-        console.log(this.block.data?.text, this.loopIndex, this.text);
-      }
-    }
-  }
+  ngOnInit() {}
 }

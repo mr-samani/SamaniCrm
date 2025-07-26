@@ -65,8 +65,8 @@ export class DynamicRendererComponent {
       if (def) {
         const { component } = def!;
         const cmpRef: ComponentRef<BlockBase> = this.vcr.createComponent(component!);
-        cmpRef.instance.block = this.block;
         cmpRef.instance.loopIndex = this.loopIndex;
+        cmpRef.instance.block = this.block;
         this.b.updateCss(this.block);
       }
     }
@@ -84,23 +84,5 @@ export class DynamicRendererComponent {
     const rect = el.getBoundingClientRect();
 
     this.actionsPosition = blockRect.top - 40 > rect.top ? 'top' : 'bottom';
-  }
-  onResizeEnd(event: IResizableOutput) {
-    if (!this.b.selectedBlock) return;
-    if (!this.b.selectedBlock.data) {
-      this.b.selectedBlock.data = new BlockData();
-    }
-
-    if (!this.b.selectedBlock.data.style.position) {
-      this.b.selectedBlock.data.style.position = 'relative';
-    }
-
-    this.b.selectedBlock.data.style.width = event.width;
-    this.b.selectedBlock.data.style.height = event.height;
-    // must be change in drag
-    //this.b.selectedBlock.data.style.left = event.left;
-    //this.b.selectedBlock.data.style.top = event.top;
-
-    this.b.updateCss();
-  }
+  } 
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BlockDefinition } from './blocks/block-registry';
+import { findNearestDynamicDataCacheKey } from './properties/styles/helper/findNearestDynamicDataCacheKey';
 export interface IDataStructure {
   nameSpace: string;
   type: 'string' | 'number' | 'bigint' | 'boolean' | 'symbol' | 'undefined' | 'object' | 'function';
@@ -33,7 +34,7 @@ export class DynamicDataService {
     value = typeof value == 'string' ? value.trim() : '';
     if (value.startsWith('{{') && value.endsWith('}}')) {
       const key = value.slice(2, -2);
-      const dynamicDataCacheKey = this.findNearestDynamicDataCacheKey(block);
+      const dynamicDataCacheKey = findNearestDynamicDataCacheKey(block);
       const dynamicData = this.getCache(dynamicDataCacheKey);
       if (!dynamicData) {
         return value;
@@ -55,7 +56,7 @@ export class DynamicDataService {
 
   /*------------------------------*/
   getTreeDynamicDataList(block: BlockDefinition): IDataStructure[] {
-    const cacheKey = this.findNearestDynamicDataCacheKey(block);
+    const cacheKey = findNearestDynamicDataCacheKey(block);
     if (!cacheKey) return [];
     const dynamicData = this.getCache(cacheKey);
     if (!dynamicData) return [];
@@ -77,14 +78,5 @@ export class DynamicDataService {
         return { nameSpace: key, value, type: typeof value, children: [] };
       }
     });
-  }
-
-  private findNearestDynamicDataCacheKey(block: BlockDefinition): string {
-    let current = block;
-    while (current) {
-      if (current.dynamicDataCacheKey) return current.dynamicDataCacheKey;
-      current = current.parent!;
-    }
-    return '';
   }
 }

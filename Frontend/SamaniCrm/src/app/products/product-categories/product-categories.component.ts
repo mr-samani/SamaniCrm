@@ -95,6 +95,7 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
         this.list = response.data?.items ?? [];
+        this.list.map((m) => (m.image = m.image ? AppConst.fileServerUrl + '/' + m.image : ''));
         this.totalCount = response.data?.totalCount ?? 0;
         this.breadcrumb.list = [{ name: this.l('Categories'), url: '/dashboard/products/categories' }];
         if (response.data?.breadcrumbs) {

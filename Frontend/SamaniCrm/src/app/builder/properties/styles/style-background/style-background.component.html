@@ -9,7 +9,7 @@
           name="bg"
           id="bgTypeNone"
           autocomplete="off"
-          [(ngModel)]="style.backgroundType"
+          [(ngModel)]="backgroundType"
           value="none" />
         <label class="btn" for="bgTypeNone" (click)="clearBackground()">
           <i class="fa fa-times"></i>
@@ -21,7 +21,7 @@
           name="bg"
           id="gradient"
           autocomplete="off"
-          [(ngModel)]="style.backgroundType"
+          [(ngModel)]="backgroundType"
           (change)="update()"
           value="gradient" />
         <label class="btn" for="gradient">
@@ -34,14 +34,14 @@
           name="bg"
           id="image"
           autocomplete="off"
-          [(ngModel)]="style.backgroundType"
+          [(ngModel)]="backgroundType"
           (change)="update()"
           value="image" />
         <label class="btn" for="image">
           <i class="fa fa-image"></i>
         </label>
       </div>
-      {{ style.backgroundType }}
+      {{ backgroundType }}
     </td>
   </tr>
 
@@ -59,7 +59,7 @@
       {{ style.backgroundColor }}
     </td>
   </tr>
-  <tr *ngIf="style.backgroundType == 'gradient'">
+  <tr *ngIf="backgroundType == 'gradient'">
     <th>Gradient</th>
     <td>
       <input
@@ -67,17 +67,17 @@
         [id]="'prp-bgg' + block.id"
         readonly
         ngxInputGradient
-        [(ngModel)]="style.backgroundGradient"
+        [(ngModel)]="backgroundGradient"
         (ngModelChange)="update()"
         class="color-control" />
-      {{ style.backgroundGradient }}
+      {{ backgroundGradient }}
     </td>
   </tr>
-  @if (style.backgroundType == 'image') {
+  @if (backgroundType == 'image') {
     <tr>
       <th>
-        @if (style.imageId) {
-          <div class="img-container"><img [src]="baseUrl + '/' + style.imageId" /></div>
+        @if (imageId) {
+          <div class="img-container"><img [src]="baseUrl + '/' + imageId" /></div>
         }
       </th>
       <td>

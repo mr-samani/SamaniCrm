@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { BlockStyle } from '../models/_style';
 import { AppConst } from '@shared/app-const';
 import { IOptions } from '@app/file-manager/options.interface';
 import { FileManagerDto } from '@app/file-manager/models/file-manager-dto';
@@ -12,9 +11,12 @@ declare const EyeDropper: any;
   standalone: false,
 })
 export class StyleBackgroundComponent implements OnInit {
-  @Input() style!: BlockStyle;
+  imageId?: string = '';
+  backgroundGradient = '';
+  backgroundType?: 'solidColor' | 'gradient' | 'image' | 'none';
+  @Input() style!: Partial<CSSStyleDeclaration>;
   @Input() block!: BlockDefinition;
-  @Output() styleChange = new EventEmitter<BlockStyle>();
+  @Output() styleChange = new EventEmitter<Partial<CSSStyleDeclaration>>();
   baseUrl = AppConst.fileServerUrl;
   fileSelectorOptions: IOptions = {
     type: 'Image',
@@ -26,12 +28,14 @@ export class StyleBackgroundComponent implements OnInit {
 
   clearBackground() {
     if (!this.style) return;
-    this.style.backgroundType = 'none';
     this.style.backgroundColor = undefined;
     this.style.backgroundImage = undefined;
     this.style.backgroundPosition = undefined;
     this.style.backgroundRepeat = undefined;
     this.style.backgroundSize = undefined;
+    this.backgroundType = 'none';
+    this.imageId = '';
+    this.backgroundGradient = '';
     this.emitChange();
   }
 
@@ -40,24 +44,24 @@ export class StyleBackgroundComponent implements OnInit {
   }
 
   update() {
-    switch (this.style.backgroundType) {
+    switch (this.backgroundType) {
       case 'none':
         this.clearBackground();
         this.style.backgroundColor = 'none';
         this.style.backgroundImage = 'none';
         break;
       case 'image':
-        this.style.backgroundImage = `url('${this.baseUrl + '/' + this.style.imageId}')`;
+        this.style.backgroundImage = `url('${this.baseUrl + '/' + this.imageId}')`;
         break;
       case 'gradient':
-        this.style.backgroundImage = this.style.backgroundGradient;
+        this.style.backgroundImage = this.backgroundGradient;
         break;
     }
     this.emitChange();
   }
   onSelectFile(file: FileManagerDto) {
     if (file) {
-      this.style.imageId = file.id;
+      this.imageId = file.id;
     }
     this.update();
   }

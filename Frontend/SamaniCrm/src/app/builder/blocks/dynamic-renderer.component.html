@@ -19,7 +19,7 @@
         {{ block.name ?? block.tagName ?? BlockTypeEnum[block.type] }}
       </span>
     </div>
-    <div class="children-blocks" ngxDropList [data]="block.children" (drop)="b.drop($event)">
+    <div class="children-blocks" ngxDropList [data]="block.children" (drop)="b.drop($event, parent)">
       <span class="custom-placeholder2" *ngxPlaceholder></span>
       @if (block.children) {
         <dynamic-renderer

@@ -1,3 +1,7 @@
+<p>ID: {{ b.selectedBlock?.id }}</p>
+<p>RowNumber: {{ b.selectedBlock?.rowNumber }}</p>
+<p *ngIf="b.selectedBlock">Type: {{ BlockTypeEnum[b.selectedBlock.type] }}</p>
+
 @if (b.selectedBlock) {
   <ul class="nav nav-tabs">
     <li class="nav-item">
@@ -9,9 +13,6 @@
   </ul>
   @if (tab == 'General') {
     <div>
-      <p>ID: {{ b.selectedBlock.id }}</p>
-      <p>Type: {{ BlockTypeEnum[b.selectedBlock.type] }}</p>
-      <p>RowNumber: {{ b.selectedBlock.rowNumber }}</p>
       <ng-container *ngIf="b.selectedBlock.data">
         <details *ngIf="b.selectedBlock.data.style">
           <summary>Layout</summary>

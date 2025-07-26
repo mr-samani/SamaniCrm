@@ -3,7 +3,6 @@ import { BlockProductCategoryComponent } from './product-category/product-catego
 import { Type } from '@angular/core';
 import { BlockRowComponent } from './row/row.component';
 import { BlockGeneralHtmlTagsComponent } from './general-html-tags/general-html-tags.component';
-import { BlockStyle } from '../properties/styles/models/_style';
 import { GeneralTagNames } from './general-html-tags/GeneralTagNames';
 import { BlockImgComponent } from './img/img.component';
 import { generateSequentialGuid } from '@shared/helper/guid';
@@ -55,7 +54,6 @@ export const BLOCK_REGISTRY: BlockDefinition[] = [
     data: {
       style: {
         display: 'flex',
-        alignItems: 'center',
         justifyContent: 'center',
         gap: '10px',
         padding: '15px',
@@ -113,10 +111,9 @@ export class BlockDefinition {
     }
   }
 }
-
 export class BlockData {
   text?: string;
-  style: BlockStyle = {};
+  style?: Partial<CSSStyleDeclaration>;
   css?: string = '';
 
   constructor(data?: BlockData | any) {
@@ -125,7 +122,6 @@ export class BlockData {
         if (data.hasOwnProperty(property)) (this as any)[property] = (data as any)[property];
       }
     }
-    this.style ??= {};
     this.css ??= '';
   }
 }

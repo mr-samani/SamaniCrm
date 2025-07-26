@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, ElementRef, Injector, OnInit } from '@angular/core';
 import { BlockBase } from '../block-base';
 import { BlockDefinition, BlockTypeEnum } from '../block-registry';
 import { DynamicRendererComponent } from '../dynamic-renderer.component';
@@ -31,8 +31,8 @@ export class BlockProductCategoryComponent extends BlockBase implements OnInit {
     name: 'category card',
     data: {
       style: {
-        width: 320,
-        minWidth: 320,
+        width: '320px',
+        minWidth: '320px',
         boxShadow: '0px 0px 10px 0px #00000033',
         borderRadius: '5px',
         backgroundColor: '#ffffff',
@@ -73,6 +73,7 @@ export class BlockProductCategoryComponent extends BlockBase implements OnInit {
     private productService: ProductServiceProxy,
   ) {
     super(injector);
+    this.el.nativeElement.style;
   }
 
   ngOnInit(): void {

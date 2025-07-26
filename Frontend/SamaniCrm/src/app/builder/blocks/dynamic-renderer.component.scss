@@ -2,7 +2,9 @@
   display: block;
   position: relative;
   min-height: 10px;
-  padding: 1px 0 0;
+  &:hover {
+    outline: 1px #3b97e3 solid;
+  }
 }
 .children-blocks {
   &:empty {

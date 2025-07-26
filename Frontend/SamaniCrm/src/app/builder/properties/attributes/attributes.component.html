@@ -8,6 +8,12 @@
     @case ('image') {
       <file-selector (change)="onSelectFile(item, $event)" [options]="imagePickerOptions"></file-selector>
       <img [src]="item[1].value" />
+      <!-- <div *ngIf="dynamicData">
+        <select-dynamic-data
+          [list]="dynamicData"
+          (keys)="onChangeDynamicKeyAttr($event, item)"
+          [value]="item?.[1]?.value"></select-dynamic-data>
+      </div> -->
     }
     @case ('string') {
       <input type="text" class="form-control" [(ngModel)]="item[1].value" name="attrVal" />
@@ -16,13 +22,6 @@
       <input type="number" class="form-control" [(ngModel)]="item[1].value" name="attrVal" />
     }
   }
-
-  <div *ngIf="dynamicData">
-    <select-dynamic-data
-      [list]="dynamicData"
-      (keys)="onChangeDynamicKeyAttr($event, item)"
-      [value]="item?.[1]?.value"></select-dynamic-data>
-  </div>
 }
 <!-- <pre>{{ attrList | json }}</pre> -->
 @if (block.data) {

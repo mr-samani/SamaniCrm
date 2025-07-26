@@ -15,29 +15,29 @@ export class SelectDynamicDataComponent {
     if (value.startsWith('{{') && value.endsWith('}}')) {
       const key = value.slice(2, -2);
       const parts = key.split('.');
-      const nameSpace = parts.shift() ?? '';
+      this.selectedNameSpace = parts.shift() ?? '';
       this.childNameSpace = parts.length > 0 ? `{{${parts.join('.')}}}` : '';
-      if (nameSpace) {
+      if (this.selectedNameSpace) {
         this.selectedData = {
-          nameSpace,
+          nameSpace: this.selectedNameSpace,
           type: 'object',
-          children: this.list.find((x) => x.nameSpace == nameSpace)?.children ?? [],
+          children: this.list.find((x) => x.nameSpace == this.selectedNameSpace)?.children ?? [],
         };
       }
     }
   }
   @Output() keys = new EventEmitter<string[]>();
 
-  selectedKeys = '';
+  selectedNameSpace = '';
   onSelectionChange() {
     if (this.selectedData && this.selectedData.nameSpace) {
-      this.selectedKeys = this.selectedData.nameSpace;
-      this.keys.emit([this.selectedKeys]);
+      this.selectedNameSpace = this.selectedData.nameSpace;
+      this.keys.emit([this.selectedNameSpace]);
     }
   }
 
   onChangeKey(event: string[]) {
-    let array = [this.selectedKeys, ...event];
+    let array = [this.selectedNameSpace, ...event];
     this.keys.emit(array);
   }
 
