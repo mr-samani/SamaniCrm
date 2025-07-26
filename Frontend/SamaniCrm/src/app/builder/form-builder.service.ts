@@ -258,6 +258,7 @@ export class FormBuilderService {
     block.data.css += `
   ${block.data.style.cursor ? 'cursor:' + block.data.style.cursor + ';' : ''}
   `;
+    block.data.css = block.data.css.replace(/\s/g, '');
   }
 }
 

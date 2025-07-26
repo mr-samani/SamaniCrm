@@ -1,0 +1,34 @@
+<ng-container #container>
+  <ng-content></ng-content>
+</ng-container>
+
+<ng-container
+  [ngTemplateOutlet]="nestedTreeTpl"
+  [ngTemplateOutletContext]="{ $implicit: block, parent: parent }"></ng-container>
+
+<ng-template #nestedTreeTpl let-block let-parent="parent">
+  @if (block) {
+    <div
+      class="actions"
+      [class.actions-top]="actionsPosition === 'top'"
+      [class.actions-bottom]="actionsPosition === 'bottom'">
+      <button (click)="b.deleteBlock(block, parent)">
+        <i class="fa fa-trash"></i>
+      </button>
+      <span>
+        {{ block.name ?? block.tagName ?? BlockTypeEnum[block.type] }}
+      </span>
+    </div>
+    <div class="children-blocks" ngxDropList [data]="block.children" (drop)="b.drop($event)">
+      <span class="custom-placeholder2" *ngxPlaceholder></span>
+      @if (block.children) {
+        <dynamic-renderer
+          [parent]="block"
+          [block]="child"
+          *ngFor="let child of block.children; let i = index"
+          [loopIndex]="loopIndex"
+          ngxDraggable></dynamic-renderer>
+      }
+    </div>
+  }
+</ng-template>

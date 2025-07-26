@@ -34,9 +34,9 @@ app-builder {
     border-color: rgb(0, 140, 255);
   }
   &.show-bordered {
-    .block-item,
+    dynamic-renderer,
     .cell {
-      border: 1px dashed #b1b1b1;
+      outline: 1px dashed #b1b1b1;
     }
   }
 }

@@ -1,0 +1,45 @@
+:host {
+  display: block;
+  position: relative;
+  min-height: 10px;
+  padding: 1px 0 0;
+}
+.children-blocks {
+  &:empty {
+    min-height: 10px;
+    margin-top: 5px;
+  }
+
+  &:hover {
+    background-color: #3b97e315;
+  }
+}
+.actions {
+  position: absolute;
+  background: #3b97e3;
+  color: #fff;
+  padding: 4px 6px;
+  display: none;
+  height: 28px;
+  z-index: 10;
+  right: 0;
+  button {
+    background: none;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+  }
+  &.actions-top {
+    top: -28px;
+  }
+  &.actions-bottom {
+    bottom: -28px;
+  }
+}
+:host.fb-selected > .actions {
+  display: block;
+}
+:host.hidden {
+  display: none;
+}

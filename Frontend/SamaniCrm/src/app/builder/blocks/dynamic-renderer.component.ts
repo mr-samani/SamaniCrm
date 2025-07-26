@@ -12,71 +12,21 @@ import {
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { BLOCK_REGISTRY, BlockData, BlockDefinition, BlockTypeEnum } from './block-registry';
 import { FormBuilderService } from '../form-builder.service';
-import { IResizableOutput } from 'ngx-drag-drop-kit';
+import { IResizableOutput, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 import { BlockBase } from './block-base';
 //  ngxResizable
 //   (resizeEnd)="onResizeEnd($event)"
 @Component({
   selector: 'dynamic-renderer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgxDragDropKitModule],
   host: {
     '[class.fb-selected]': 'b.selectedBlock?.id == block?.id',
     '[class.hidden]': 'block && block.hidden',
     '[style]': 'block && block.data ? block.data.css : undefined',
   },
-  template: `
-    <div
-      *ngIf="block"
-      class="actions"
-      [class.actions-top]="actionsPosition === 'top'"
-      [class.actions-bottom]="actionsPosition === 'bottom'">
-      <button (click)="b.deleteBlock(block, parent)">
-        <i class="fa fa-trash"></i>
-      </button>
-      <span>
-        {{ block.name ?? block.tagName ?? BlockTypeEnum[block.type] }}
-      </span>
-    </div>
-    <ng-container #container></ng-container>
-    <ng-content></ng-content>
-  `,
-  styles: `
-    :host {
-      display: inline-block;
-      height: 100%;
-      position: relative;
-    }
-    .actions {
-      position: absolute;
-      background: #3b97e3;
-      color: #fff;
-      padding: 4px 6px;
-      display: none;
-      height: 28px;
-      z-index: 10;
-      right: 0;
-      button {
-        background: none;
-        outline: none;
-        border: none;
-        cursor: pointer;
-        color: inherit;
-      }
-      &.actions-top {
-        top: -28px;
-      }
-      &.actions-bottom {
-        bottom: -28px;
-      }
-    }
-    .block-item.fb-selected > .actions {
-      display: block;
-    }
-    .block-item.hidden {
-      display: none;
-    }
-  `,
+  templateUrl: './dynamic-renderer.component.html',
+  styleUrls: ['./dynamic-renderer.component.scss'],
 })
 export class DynamicRendererComponent {
   actionsPosition: 'top' | 'bottom' = 'top';
@@ -91,33 +41,35 @@ export class DynamicRendererComponent {
     // wait for fill all inputs
     setTimeout(() => {
       this.block = value;
-      if (!this.block.hidden) {
-        this.vcr.clear();
-        const def = BLOCK_REGISTRY.find((b) => b.type === this.block.type);
-        if (def) {
-          const { component } = def!;
-          const cmpRef: ComponentRef<BlockBase> = this.vcr.createComponent(component!);
-          cmpRef.instance.block = this.block;
-          cmpRef.instance.loopIndex = this.loopIndex;
-          this.b.updateCss(this.block);
-        }
-      } else {
-        this.vcr.clear();
-      }
+      this.createBlock();
     });
   }
   constructor(
     public b: FormBuilderService,
     @Inject(DOCUMENT) private doc: Document,
-    el: ElementRef,
+    el: ElementRef<HTMLElement>,
   ) {
-    el.nativeElement.click = (ev: Event) => {
+    el.nativeElement.addEventListener('click', (ev: Event) => {
       this.onBlockClick(this.block, ev);
-    };
+    });
   }
 
   public get BlockTypeEnum(): typeof BlockTypeEnum {
     return BlockTypeEnum;
+  }
+
+  createBlock() {
+    this.vcr.clear();
+    if (!this.block.hidden) {
+      const def = BLOCK_REGISTRY.find((b) => b.type === this.block.type);
+      if (def) {
+        const { component } = def!;
+        const cmpRef: ComponentRef<BlockBase> = this.vcr.createComponent(component!);
+        cmpRef.instance.block = this.block;
+        cmpRef.instance.loopIndex = this.loopIndex;
+        this.b.updateCss(this.block);
+      }
+    }
   }
 
   onBlockClick(block: BlockDefinition, event: Event) {
