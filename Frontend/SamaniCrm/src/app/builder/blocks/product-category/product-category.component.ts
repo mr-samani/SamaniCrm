@@ -6,7 +6,7 @@ import { DynamicRendererComponent } from '../dynamic-renderer.component';
 import { GetProductCategoriesQuery, ProductCategoryDto, ProductServiceProxy } from '@shared/service-proxies';
 import { finalize } from 'rxjs';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
-import { DynamicDataCache, IDataStructure } from '@app/builder/dynamic-data.service';
+import { DynamicDataCache, IDataStructure } from '@app/builder/services/dynamic-data.service';
 
 @Component({
   selector: 'block-product-category',

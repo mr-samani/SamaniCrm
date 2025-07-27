@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IDataStructure } from '@app/builder/dynamic-data.service';
+import { IDataStructure } from '@app/builder/services/dynamic-data.service';
 
 @Component({
   selector: 'select-dynamic-data',

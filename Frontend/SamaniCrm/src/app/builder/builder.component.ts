@@ -1,4 +1,3 @@
-import { moveItemInArray } from '@angular/cdk/drag-drop';
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -8,13 +7,13 @@ import {
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
-import { BlockDefinition, BlockTypeEnum, FormTools } from './blocks/block-registry';
-import { FormBuilderService } from './form-builder.service';
-import { IDropEvent, transferArrayItem } from 'ngx-drag-drop-kit';
+import { BlockTypeEnum } from './blocks/block-registry';
+import { FormBuilderService } from './services/form-builder.service';
 import { AppComponentBase } from '@app/app-component-base';
 import { ViewModeEnum } from './models/view-mode.enum';
-import { FormBuilderBackendService } from './backend.service';
+import { FormBuilderBackendService } from './services/backend.service';
 import { AppConst } from '@shared/app-const';
+import { HistoryService } from './services/history.service';
 
 @Component({
   standalone: false,

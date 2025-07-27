@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BlockDefinition } from './blocks/block-registry';
-import { findNearestDynamicDataCacheKey } from './properties/styles/helper/findNearestDynamicDataCacheKey';
+import { BlockDefinition } from '../blocks/block-registry';
+import { findNearestDynamicDataCacheKey } from '../properties/styles/helper/findNearestDynamicDataCacheKey';
 export interface IDataStructure {
   nameSpace: string;
   type: 'string' | 'number' | 'bigint' | 'boolean' | 'symbol' | 'undefined' | 'object' | 'function';

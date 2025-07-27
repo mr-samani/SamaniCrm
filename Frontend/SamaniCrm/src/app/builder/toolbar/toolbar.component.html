@@ -30,6 +30,16 @@
   <button type="button">
     <i class="fa fa-gear"></i>
   </button>
+  
+  <button type="button" title="undo" (click)="undo()" [disabled]="!canUndo">
+    <i class="fa fa-undo"></i>
+  </button>
+  <button type="button" title="redo" (click)="redo()" [disabled]="!canRedo">
+    <i class="fa fa-redo"></i>
+  </button>
+  <button type="button" title="history" (click)="getHistory()">
+    <i class="fa fa-timer"></i>
+  </button>
 
   <div class="spacer"></div>
 

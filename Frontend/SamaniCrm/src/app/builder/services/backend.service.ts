@@ -5,9 +5,9 @@ import { finalize } from 'rxjs/operators';
 import { FormBuilderService } from './form-builder.service';
 import { AppConst } from '@shared/app-const';
 import { AppComponentBase } from '@app/app-component-base';
-import { BlockDefinition } from './blocks/block-registry';
-import { generateCSSFromBlocks } from './helpers/generate-css-block';
-import { getBlocksAsString } from './helpers/get-blocks-as-string';
+import { BlockDefinition } from '../blocks/block-registry';
+import { generateCSSFromBlocks } from '../helpers/generate-css-block';
+import { getBlocksAsString } from '../helpers/get-blocks-as-string';
 
 @Injectable()
 export class FormBuilderBackendService extends AppComponentBase {

@@ -4,8 +4,8 @@ import { FileManagerDto } from '@app/file-manager/models/file-manager-dto';
 import { IOptions } from '@app/file-manager/options.interface';
 import { AppConst } from '@shared/app-const';
 import { SimpleHtmlTags, CanChildHtmlTags } from '@app/builder/blocks/general-html-tags/GeneralTagNames';
-import { FormBuilderService } from '@app/builder/form-builder.service';
-import { IDataStructure } from '@app/builder/dynamic-data.service';
+import { FormBuilderService } from '@app/builder/services/form-builder.service';
+import { IDataStructure } from '@app/builder/services/dynamic-data.service';
 
 @Component({
   standalone: false,

@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { BLOCK_REGISTRY, BlockData, BlockDefinition, BlockTypeEnum } from './block-registry';
-import { FormBuilderService } from '../form-builder.service';
+import { FormBuilderService } from '../services/form-builder.service';
 import { IResizableOutput, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 import { BlockBase } from './block-base';
 //  ngxResizable
@@ -67,7 +67,7 @@ export class DynamicRendererComponent {
         const cmpRef: ComponentRef<BlockBase> = this.vcr.createComponent(component!);
         cmpRef.instance.loopIndex = this.loopIndex;
         cmpRef.instance.block = this.block;
-        this.b.updateCss(this.block);
+        this.b.updateCss(this.block, false);
       }
     }
   }
@@ -84,5 +84,5 @@ export class DynamicRendererComponent {
     const rect = el.getBoundingClientRect();
 
     this.actionsPosition = blockRect.top - 40 > rect.top ? 'top' : 'bottom';
-  } 
+  }
 }

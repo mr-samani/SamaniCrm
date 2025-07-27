@@ -95,6 +95,10 @@ details {
     color: inherit;
     padding: 6px 10px;
     transition: all 0.3s ease;
+    &:disabled {
+      cursor: not-allowed;
+      background: #2c2c2c;
+    }
     &:not(:disabled):hover {
       cursor: pointer;
       background-color: var(--primaryColor);
@@ -114,11 +118,60 @@ details {
 /*--------------end of group buttons------------------------------*/
 
 .custom-placeholder {
-  border: 2px #0059ff solid;
+  display: block;
+  border: 1px #0059ff solid;
+  position: relative;
+  width: 100%;
+  transition: all 300ms;
+  &:after {
+    content: ' ';
+    border: 5px #0059ff solid;
+    position: absolute;
+    right: 0px;
+    top: -5px;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+  }
+  &:before {
+    content: ' ';
+    border: 5px #0059ff solid;
+    position: absolute;
+    left: 0px;
+    top: -5px;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-right-color: transparent;
+  }
 }
 .custom-placeholder2 {
-  border: 2px #ff002b solid;
+  display: block;
+  border: 1px #ff002b solid;
+  position: relative;
+  width: 100%;
+  transition: all 300ms;
+  &:after {
+    content: ' ';
+    border: 5px #ff002b solid;
+    position: absolute;
+    right: 0px;
+    top: -5px;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+  }
+  &:before {
+    content: ' ';
+    border: 5px #ff002b solid;
+    position: absolute;
+    left: 0px;
+    top: -5px;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-right-color: transparent;
+  }
 }
+
 .fb-selected {
   outline: 2px solid #3b97e3 !important;
   outline-offset: -1px;

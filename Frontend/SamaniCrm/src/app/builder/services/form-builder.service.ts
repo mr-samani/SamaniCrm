@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
-import { BlockTypeEnum, BLOCK_REGISTRY, BlockDefinition, FormTools, BlockData } from './blocks/block-registry';
+import { BlockTypeEnum, BLOCK_REGISTRY, BlockDefinition, FormTools, BlockData } from '../blocks/block-registry';
 import { IDropEvent, moveItemInArray } from 'ngx-drag-drop-kit';
-import { ViewModeEnum } from './models/view-mode.enum';
+import { ViewModeEnum } from '../models/view-mode.enum';
 import { NgxAlertModalService } from 'ngx-alert-modal';
-import { createTreeFormTools } from './helpers/tools';
+import { createTreeFormTools } from '../helpers/tools';
 import { PageBuilderServiceProxy } from '@shared/service-proxies';
 import { finalize } from 'rxjs';
-import { CanChildHtmlTags, SimpleHtmlTags } from './blocks/general-html-tags/GeneralTagNames';
+import { CanChildHtmlTags, SimpleHtmlTags } from '../blocks/general-html-tags/GeneralTagNames';
 import { cloneDeep } from 'lodash-es';
 import { generateSequentialGuid } from '@shared/helper/guid';
 import { DynamicDataService } from './dynamic-data.service';
-import { BlockGeneralHtmlTagsComponent } from './blocks/general-html-tags/general-html-tags.component';
-import { objectToStyle } from './properties/styles/helper/objectToStyle';
-import { findNearestDynamicDataCacheKey } from './properties/styles/helper/findNearestDynamicDataCacheKey';
+import { BlockGeneralHtmlTagsComponent } from '../blocks/general-html-tags/general-html-tags.component';
+import { objectToStyle } from '../properties/styles/helper/objectToStyle';
+import { findNearestDynamicDataCacheKey } from '../properties/styles/helper/findNearestDynamicDataCacheKey';
+import { HistoryService } from './history.service';
 
 @Injectable()
 export class FormBuilderService {
@@ -36,6 +37,7 @@ export class FormBuilderService {
   constructor(
     private alert: NgxAlertModalService,
     private pageBuilderService: PageBuilderServiceProxy,
+    private history: HistoryService,
     public ds: DynamicDataService,
   ) {}
 
@@ -48,6 +50,7 @@ export class FormBuilderService {
     this.showLayouts = false;
     this.loadingCustomBlocks = true;
     this.ds.reset();
+    this.history.clear();
   }
 
   getCustomBlocks() {
@@ -110,13 +113,15 @@ export class FormBuilderService {
     if (index == undefined) {
       index = blocks.length;
     }
-    const s = cloneDeep(source);
+    let s = cloneDeep(source);
     // important create new id
     s.id = generateSequentialGuid();
     s.data ??= new BlockData();
     if (parent) s.dynamicDataCacheKey = findNearestDynamicDataCacheKey(parent);
-    blocks.splice(index, 0, new BlockDefinition(s));
+    s = new BlockDefinition(s);
+    blocks.splice(index, 0, s);
     this.updateRowNumber(this.blocks);
+    this.history.save('add', s, `Add block'${s.id}' to '${parent?.id}'`);
   }
 
   drop(event: IDropEvent<BlockDefinition[]>, parent?: BlockDefinition) {
@@ -164,6 +169,7 @@ export class FormBuilderService {
       })
       .then((r) => {
         if (r.isConfirmed) {
+          this.history.save('delete', block, `Delete block '${block.id}' from '${parent?.id}'`);
           if (!parent) {
             const foundedIndex = this.blocks.findIndex((x) => x.id == block.id);
             if (foundedIndex > -1) {
@@ -182,7 +188,7 @@ export class FormBuilderService {
       });
   }
 
-  updateCss(block?: BlockDefinition) {
+  updateCss(block?: BlockDefinition, setHistory = true) {
     if (!block) {
       block = this.selectedBlock;
     }
@@ -193,6 +199,7 @@ export class FormBuilderService {
     }
     block.data.css = objectToStyle(block.data.style);
     //  block.data.css = block.data.css.replace(/\s/g, '');
+    if (setHistory) this.history.save('edit', block, `Update style block '${block.id}': '${block.data.css}'`);
   }
 }
 

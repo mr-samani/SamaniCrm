@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Injector, Input, OnInit } from '@angular/core';
-import { FormBuilderService } from '../form-builder.service';
+import { FormBuilderService } from '../services/form-builder.service';
 import { BlockDefinition } from './block-registry';
 
 export class BlockBase {

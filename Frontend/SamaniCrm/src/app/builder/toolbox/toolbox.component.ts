@@ -1,7 +1,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { BlockTypeEnum, BlockDefinition } from '../blocks/block-registry';
-import { FormBuilderService } from '../form-builder.service';
+import { FormBuilderService } from '../services/form-builder.service';
 import { PageBuilderServiceProxy } from '@shared/service-proxies/api/page-builder.service';
 
 @Component({

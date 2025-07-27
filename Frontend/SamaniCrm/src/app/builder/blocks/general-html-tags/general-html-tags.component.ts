@@ -2,7 +2,7 @@ import { CommonModule, DOCUMENT } from '@angular/common';
 import { Component, ElementRef, Inject, Injector, OnInit } from '@angular/core';
 import { NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 import { BlockDefinition } from '../block-registry';
-import { FormBuilderService } from '@app/builder/form-builder.service';
+import { FormBuilderService } from '@app/builder/services/form-builder.service';
 @Component({
   selector: 'block-general-html-tags',
   standalone: true,
