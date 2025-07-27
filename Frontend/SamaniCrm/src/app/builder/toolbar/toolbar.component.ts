@@ -34,12 +34,10 @@ export class ToolbarComponent extends AppComponentBase implements OnInit {
     return this.history.canRedo();
   }
   undo() {
-    const snapShot = this.history.undo(this.b.blocks);
-    debugger;
+    this.b.blocks = this.history.undo(this.b.blocks);
   }
   redo() {
-    const snapShot = this.history.redo(this.b.blocks);
-    debugger;
+    this.b.blocks = this.history.redo(this.b.blocks);
   }
   getHistory() {
     console.log(this.history.getHistory());

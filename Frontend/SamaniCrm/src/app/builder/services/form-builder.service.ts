@@ -78,6 +78,9 @@ export class FormBuilderService {
         tagName: m,
         name: m,
         icon: 'fa block-' + m,
+        data: {
+          text: 'This is a ' + m,
+        },
       };
     });
     this.tools = createTreeFormTools([...advancedBlocks, ...generalTags, ...simpleTags]);

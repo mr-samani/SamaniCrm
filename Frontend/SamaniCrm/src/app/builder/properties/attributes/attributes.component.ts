@@ -57,5 +57,10 @@ export class BlockAttributesComponent implements OnInit {
       this.block.data.text = `{{${event.join('.')}}}`;
     }
     console.log(this.block.data?.text);
+    this.updateBlock();
+  }
+
+  updateBlock() {
+    app.event.trigger('event_' + this.block?.id, true);
   }
 }

@@ -45,21 +45,21 @@ export class HistoryService {
   /**
    * بازگردانی وضعیت قبلی
    */
-  undo(currentBlocks: BlockDefinition[]): BlockDefinition[] {
-    if (!this.canUndo()) return currentBlocks;
-
+  undo(allBlocks: BlockDefinition[]): BlockDefinition[] {
+    if (!this.canUndo()) return allBlocks;
+    const u = this._applySnapshot(allBlocks, this.currentState(), true);
     this._currentIndex.set(this._currentIndex() - 1);
-    return this._applySnapshot(currentBlocks, this.currentState());
+    return u;
   }
 
   /**
    * بازگردانی وضعیت بعدی
    */
-  redo(currentBlocks: BlockDefinition[]): BlockDefinition[] {
-    if (!this.canRedo()) return currentBlocks;
+  redo(allBlocks: BlockDefinition[]): BlockDefinition[] {
+    if (!this.canRedo()) return allBlocks;
 
     this._currentIndex.set(this._currentIndex() + 1);
-    return this._applySnapshot(currentBlocks, this.currentState());
+    return this._applySnapshot(allBlocks, this.currentState(), false);
   }
 
   clear() {
@@ -74,9 +74,15 @@ export class HistoryService {
   /**
    * اعمال وضعیت جدید روی لیست فعلی
    */
-  private _applySnapshot(current: BlockDefinition[], next: BlockDefinition | null): BlockDefinition[] {
-    debugger;
-    const updated = cloneDeep(current);
+  private _applySnapshot(
+    allBlocks: BlockDefinition[],
+    next: BlockDefinition | null,
+    isUndo: boolean,
+  ): BlockDefinition[] {
+    const blocks = cloneDeep(allBlocks);
+    const currentHistory = this._history()[this._currentIndex()];
+
+    if (!currentHistory) return blocks;
 
     const findIndexById = (
       blocks: BlockDefinition[],
@@ -111,40 +117,73 @@ export class HistoryService {
       return null;
     };
 
-    if (!next) {
-      // اگر بلاک حذف شده
-      // باید آن را پیدا کرده و حذف کنیم
-      console.warn('History snapshot is null – deletion expected. Skipping.');
-      return updated;
+    // بر اساس نوع اکشن عمل می‌کنیم
+    switch (currentHistory.action) {
+      case 'add':
+        if (next) {
+          if (isUndo) {
+            // undo add: بلاک اضافه شده را حذف می‌کنیم
+            const target = findIndexById(blocks, next.id!);
+            if (target) {
+              target.container.splice(target.index, 1);
+            }
+          } else {
+            // redo add: بلاک را دوباره اضافه می‌کنیم
+            const target = findIndexById(blocks, next.id!);
+            if (!target) {
+              if (next.parent?.id) {
+                const parent = findIndexById(blocks, next.parent.id);
+                if (parent) {
+                  parent.container.splice(parent.index + 1, 0, cloneDeep(next));
+                } else {
+                  blocks.push(cloneDeep(next));
+                }
+              } else {
+                blocks.push(cloneDeep(next));
+              }
+            }
+          }
+        }
+        break;
+
+      case 'delete':
+        if (next) {
+          if (isUndo) {
+            // undo delete: بلاک حذف شده را دوباره اضافه می‌کنیم
+            const target = findIndexById(blocks, next.id!);
+            if (!target) {
+              if (next.parent?.id) {
+                const parent = findIndexById(blocks, next.parent.id);
+                if (parent) {
+                  parent.container.splice(parent.index + 1, 0, cloneDeep(next));
+                } else {
+                  blocks.push(cloneDeep(next));
+                }
+              } else {
+                blocks.push(cloneDeep(next));
+              }
+            }
+          } else {
+            // redo delete: بلاک را دوباره حذف می‌کنیم
+            const target = findIndexById(blocks, next.id!);
+            if (target) {
+              target.container.splice(target.index, 1);
+            }
+          }
+        }
+        break;
+
+      case 'edit':
+        if (next) {
+          // undo/redo edit: بلاک را به حالت snapshot برمی‌گردانیم
+          const target = findIndexById(blocks, next.id!);
+          if (target) {
+            target.container[target.index] = cloneDeep(next);
+          }
+        }
+        break;
     }
 
-    const target = findIndexById(updated, next.id!);
-
-    if (!target) {
-      // بلاک در حال حاضر وجود ندارد ⇒ اضافه کردن
-      if (next.parent?.id) {
-        const parent = findIndexById(updated, next.parent.id);
-        if (parent) {
-          parent.container.splice(parent.index + 1, 0, cloneDeep(next));
-        } else {
-          console.warn('Parent not found for added block', next);
-        }
-      } else {
-        // parentId ندارد ⇒ سطح بالا
-        updated.push(cloneDeep(next));
-      }
-    } else {
-      if (!next) {
-        // حذف کردن
-        target.container.splice(target.index, 1);
-      } else {
-        // ویرایش یا جایگزینی کامل
-        if (!isEqual(target.container[target.index], next)) {
-          target.container[target.index] = cloneDeep(next);
-        }
-      }
-    }
-
-    return updated;
+    return blocks;
   }
 }

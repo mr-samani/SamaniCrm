@@ -8,7 +8,7 @@ import { FormBuilderService } from '@app/builder/services/form-builder.service';
   standalone: true,
   imports: [CommonModule, NgxDragDropKitModule],
   template: `
-    <div class="block-wrapper">{{ text }}</div>
+    {{ text }}
   `,
   styles: `
     :host {
@@ -18,6 +18,7 @@ import { FormBuilderService } from '@app/builder/services/form-builder.service';
 })
 export class BlockGeneralHtmlTagsComponent implements OnInit {
   text = '';
+  createdElement?: HTMLElement;
   _block?: BlockDefinition;
   set block(val: BlockDefinition) {
     setTimeout(() => {
@@ -26,21 +27,41 @@ export class BlockGeneralHtmlTagsComponent implements OnInit {
         this._block.children = [];
       }
 
-      if (this._block.data?.text) {
-        this.text = this.b.ds.resolveValue(this._block, this._block.data?.text, this.loopIndex);
-        // console.log(this._block.data?.text, this.loopIndex, this.text);
-      }
+      this.update();
     });
   }
   loopIndex!: number;
   constructor(
     injector: Injector,
     public b: FormBuilderService,
-    @Inject(DOCUMENT) private _dom: Document,
+    @Inject(DOCUMENT) private _doc: Document,
     private el: ElementRef<HTMLElement>,
   ) {
     // super(injector);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    app.event.on('event_' + this._block?.id, () => this.update());
+  }
+
+  update() {
+    if (!this._block) return;
+    if (this._block.data?.text) {
+      this.text = this.b.ds.resolveValue(this._block, this._block.data?.text, this.loopIndex);
+      // console.log(this._block.data?.text, this.loopIndex, this.text);
+    }
+
+    if (!this.createdElement) {
+      this.createdElement = this._doc.createElement(this._block.tagName || 'span');
+    }
+    if (this.createdElement && this.createdElement.tagName.toLowerCase() !== this._block.tagName?.toLowerCase()) {
+      this.createdElement = undefined;
+      this.update();
+      return;
+    }
+    this.createdElement.innerHTML = this.text;
+    this.createdElement.className = 'block-wrapper';
+    this.el.nativeElement.innerHTML = '';
+    this.el.nativeElement.append(this.createdElement);
+  }
 }
