@@ -49,18 +49,18 @@ export class BlockAttributesComponent implements OnInit {
   }
   onChangeDynamicKeyAttr(event: string[], item: [string, BlockAttributeDetails]) {
     item[1].value = `{{${event.join('.')}}}`;
-    console.log(item[1].value);
+    // console.log(item[1].value);
   }
 
   onChangeDynamicKeyTxt(event: string[]) {
     if (this.block.data) {
       this.block.data.text = `{{${event.join('.')}}}`;
     }
-    console.log(this.block.data?.text);
-    this.updateBlock();
+    // console.log(this.block.data?.text);
+    app.event.trigger('block:updateText:' + this.block?.id, this.block.data?.text);
   }
 
   updateBlock() {
-    app.event.trigger('event_' + this.block?.id, true);
+    app.event.trigger('block:update:' + this.block?.id, true);
   }
 }

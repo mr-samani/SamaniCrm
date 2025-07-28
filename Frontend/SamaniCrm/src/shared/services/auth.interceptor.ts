@@ -152,12 +152,15 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   handleServerError(err: HttpErrorResponse) {
-    const msg = err.error?.message ?? this.translateService.instant('Message.ErrorOccurred');
-    this.alertService.show({
-      title: msg,
-      showCancelButton: false,
-      showConfirmButton: true,
-      confirmButtonText: this.translateService.instant('Ok'),
+    this.translateService.get('Message.ErrorOccurred').subscribe((lmsg) => {
+      const msg =
+        err.error?.message ?? lmsg ?? 'Unfortunately, an error has occurred on the server!';
+      this.alertService.show({
+        title: msg,
+        showCancelButton: false,
+        showConfirmButton: true,
+        confirmButtonText: this.translateService.instant('Ok'),
+      });
     });
     return throwError(() => err);
   }

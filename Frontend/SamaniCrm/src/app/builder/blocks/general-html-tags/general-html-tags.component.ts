@@ -19,17 +19,7 @@ import { FormBuilderService } from '@app/builder/services/form-builder.service';
 export class BlockGeneralHtmlTagsComponent implements OnInit {
   text = '';
   createdElement?: HTMLElement;
-  _block?: BlockDefinition;
-  set block(val: BlockDefinition) {
-    setTimeout(() => {
-      this._block = val;
-      if (!this._block.children) {
-        this._block.children = [];
-      }
-
-      this.update();
-    });
-  }
+  block!: BlockDefinition;
   loopIndex!: number;
   constructor(
     injector: Injector,
@@ -41,20 +31,19 @@ export class BlockGeneralHtmlTagsComponent implements OnInit {
   }
 
   ngOnInit() {
-    app.event.on('event_' + this._block?.id, () => this.update());
+    if (!this.block.children) {
+      this.block.children = [];
+    }
+    this.update();
+    app.event.on('block:update:' + this.block.id, () => this.update());
+    app.event.on('block:updateText:' + this.block.id, () => this.update());
   }
 
   update() {
-    if (!this._block) return;
-    if (this._block.data?.text) {
-      this.text = this.b.ds.resolveValue(this._block, this._block.data?.text, this.loopIndex);
-      // console.log(this._block.data?.text, this.loopIndex, this.text);
-    }
-
     if (!this.createdElement) {
-      this.createdElement = this._doc.createElement(this._block.tagName || 'span');
+      this.createdElement = this._doc.createElement(this.block.tagName || 'span');
     }
-    if (this.createdElement && this.createdElement.tagName.toLowerCase() !== this._block.tagName?.toLowerCase()) {
+    if (this.createdElement && this.createdElement.tagName.toLowerCase() !== this.block.tagName?.toLowerCase()) {
       this.createdElement = undefined;
       this.update();
       return;
@@ -63,5 +52,15 @@ export class BlockGeneralHtmlTagsComponent implements OnInit {
     this.createdElement.className = 'block-wrapper';
     this.el.nativeElement.innerHTML = '';
     this.el.nativeElement.append(this.createdElement);
+    this.updateText();
+  }
+
+  updateText() {
+    if (!this.createdElement) return;
+    if (this.block.data?.text) {
+      this.text = this.b.ds.resolveValue(this.block, this.block.data?.text, this.loopIndex);
+      // console.log(this.block.data?.text, this.loopIndex, this.text);
+    }
+    this.createdElement.innerHTML = this.text;
   }
 }

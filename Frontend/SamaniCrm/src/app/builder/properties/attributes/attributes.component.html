@@ -25,7 +25,12 @@
 }
 <!-- <pre>{{ attrList | json }}</pre> -->
 @if (block.data) {
-  <input [(ngModel)]="block.data.text" type="text" class="form-control" placeholder="text" (change)="updateBlock()" />
+  <input
+    [(ngModel)]="block.data.text"
+    type="text"
+    class="form-control"
+    placeholder="text"
+    (ngModelChange)="updateBlock()" />
   <div *ngIf="dynamicData">
     <select-dynamic-data
       [list]="dynamicData"
