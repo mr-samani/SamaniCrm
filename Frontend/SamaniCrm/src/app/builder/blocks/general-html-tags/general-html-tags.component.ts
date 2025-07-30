@@ -1,5 +1,5 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { Component, ElementRef, Inject, Injector, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Inject, Injector, OnInit } from '@angular/core';
 import { NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 import { BlockDefinition } from '../block-registry';
 import { FormBuilderService } from '@app/builder/services/form-builder.service';
@@ -15,6 +15,7 @@ import { FormBuilderService } from '@app/builder/services/form-builder.service';
       display: block;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockGeneralHtmlTagsComponent implements OnInit {
   text = '';

@@ -17,7 +17,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxInputBoxShadowModule, NgxInputColorModule, NgxInputGradientModule } from 'ngx-input-color';
 import { BlockAttributesComponent } from './properties/attributes/attributes.component';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
-import { CdkDragPlaceholder } from '@angular/cdk/drag-drop';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { SelectDynamicDataComponent } from './properties/select-dynamic-data/select-dynamic-data.component';
 import { DynamicDataService } from './services/dynamic-data.service';
@@ -46,7 +45,6 @@ import { HistoryService } from './services/history.service';
     NgxInputGradientModule,
     NgxInputBoxShadowModule,
     FileManagerModule,
-    CdkDragPlaceholder,
     MaterialCommonModule,
   ],
   providers: [

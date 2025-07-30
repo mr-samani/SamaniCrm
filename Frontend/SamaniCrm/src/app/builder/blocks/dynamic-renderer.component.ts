@@ -10,9 +10,9 @@ import {
   ElementRef,
 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { BLOCK_REGISTRY, BlockData, BlockDefinition, BlockTypeEnum } from './block-registry';
+import { BLOCK_REGISTRY, BlockDefinition, BlockTypeEnum } from './block-registry';
 import { FormBuilderService } from '../services/form-builder.service';
-import { IResizableOutput, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
+import { NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 import { BlockBase } from './block-base';
 //  ngxResizable
 //   (resizeEnd)="onResizeEnd($event)"
@@ -21,22 +21,20 @@ import { BlockBase } from './block-base';
   standalone: true,
   imports: [CommonModule, NgxDragDropKitModule],
   host: {
-    '[class.fb-selected]': 'b.selectedBlock?.id == block?.id',
     '[class.hidden]': 'block && block.hidden',
-    '[style]': 'block && block.data ? block.data.css : undefined',
   },
   templateUrl: './dynamic-renderer.component.html',
   styleUrls: ['./dynamic-renderer.component.scss'],
 })
 export class DynamicRendererComponent {
   actionsPosition: 'top' | 'bottom' = 'top';
-  block!: BlockDefinition;
+  block?: BlockDefinition;
 
   @ViewChild('container', { read: ViewContainerRef, static: true }) vcr!: ViewContainerRef;
   renderer = inject(Renderer2);
   @Input() parent?: BlockDefinition;
   @Input() loopIndex!: number;
-
+  @Input() canDrag = true;
   @Input('block') set renderBlock(value: BlockDefinition) {
     // wait for fill all inputs
     setTimeout(() => {
@@ -47,10 +45,10 @@ export class DynamicRendererComponent {
   constructor(
     public b: FormBuilderService,
     @Inject(DOCUMENT) private doc: Document,
-    el: ElementRef<HTMLElement>,
+    private el: ElementRef<HTMLElement>,
   ) {
     el.nativeElement.addEventListener('click', (ev: Event) => {
-      this.onBlockClick(this.block, ev);
+      this.onBlockClick(this.block!, ev);
     });
   }
 
@@ -60,13 +58,13 @@ export class DynamicRendererComponent {
 
   createBlock() {
     this.vcr.clear();
-    if (!this.block.hidden) {
-      const def = BLOCK_REGISTRY.find((b) => b.type === this.block.type);
+    if (!this.block?.hidden) {
+      const def = BLOCK_REGISTRY.find((b) => b.type === this.block?.type);
       if (def) {
         const { component } = def!;
         const cmpRef: ComponentRef<BlockBase> = this.vcr.createComponent(component!);
         cmpRef.instance.loopIndex = this.loopIndex;
-        cmpRef.instance.block = this.block;
+        cmpRef.instance.block = this.block!;
         this.b.updateCss(this.block, false);
       }
     }
@@ -80,7 +78,7 @@ export class DynamicRendererComponent {
   updateActionsPosition(target: HTMLElement) {
     const el: HTMLElement | null = this.doc.querySelector('#builderCanvas');
     if (!el) return;
-    const blockRect = target.getBoundingClientRect();
+    const blockRect = this.el.nativeElement.getBoundingClientRect();
     const rect = el.getBoundingClientRect();
 
     this.actionsPosition = blockRect.top - 40 > rect.top ? 'top' : 'bottom';

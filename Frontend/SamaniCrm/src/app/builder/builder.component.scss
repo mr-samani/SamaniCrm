@@ -34,7 +34,7 @@ app-builder {
     border-color: rgb(0, 140, 255);
   }
   &.show-bordered {
-    dynamic-renderer,
+    dynamic-renderer .block-item,
     .cell {
       outline: 1px dashed #b1b1b1;
       padding: 5px;

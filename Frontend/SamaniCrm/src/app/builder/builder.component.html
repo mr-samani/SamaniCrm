@@ -18,7 +18,7 @@
         [class.mobile-view]="b.viewMode === ViewModeEnum.Mobile">
         <div class="custom-placeholder" *ngxPlaceholder></div>
         @for (item of b.blocks; track $index) {
-          <dynamic-renderer [block]="item" ngxDraggable ></dynamic-renderer>
+          <dynamic-renderer [block]="item" ></dynamic-renderer>
         }
       </div>
     </div>

@@ -65,7 +65,7 @@ export const appConfig: ApplicationConfig = {
 };
 function configurationFactory() {
   var config = new Configuration();
-  config.basePath = 'https://localhost:44342';
+  config.basePath = 'https://localhost:44343';
   return config;
 }
 export function createTranslateLoader(http: HttpClient) {

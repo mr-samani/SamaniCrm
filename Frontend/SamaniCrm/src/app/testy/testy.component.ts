@@ -1,67 +1,46 @@
 import { Directionality } from '@angular/cdk/bidi';
-import { CdkDragDrop, CdkDragMove, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { ColorSchemaService } from '@shared/services/color-schema.service';
+import { IDropEvent, NgxDragDropKitModule, transferArrayItem } from 'ngx-drag-drop-kit';
 
 @Component({
   selector: 'app-testy',
   standalone: true,
-  imports: [CommonModule, MaterialCommonModule, FormsModule, PaginationComponent],
+  imports: [CommonModule, MaterialCommonModule, FormsModule, NgxDragDropKitModule],
   templateUrl: './testy.component.html',
   styleUrl: './testy.component.scss',
 })
 export class TestyComponent implements AfterViewInit {
-  name = '';
-  dark: Boolean;
-  page = 0;
-  movies = [
-    'Episode I - The Phantom Menace',
-    'Episode II - Attack of the Clones',
-    'Episode III - Revenge of the Sith',
-    'Episode IV - A New Hope',
-    'Episode V - The Empire Strikes Back',
-    'Episode VI - Return of the Jedi',
-    'Episode VII - The Force Awakens',
-    'Episode VIII - The Last Jedi',
-    'Episode IX - The Rise of Skywalker',
-  ];
-
+  items: TreeModel[] = [];
   constructor(
     private colorSchemaService: ColorSchemaService,
     private dir: Directionality,
   ) {
-    this.dark = colorSchemaService.isDarkMode;
+    this.items = [];
+    for (let i = 1; i < 10; i++) {
+      this.items.push({
+        name: 'Item ' + i,
+        children: [],
+      });
+    }
   }
 
   ngAfterViewInit(): void {}
 
-  toggleDarkMode() {
-    this.colorSchemaService.toggleMode();
+  add() {
+    let rndPosition = Math.floor(Math.random() * this.items.length);
+    let rndName = 'added item_' + Math.round(Math.random() * 9999);
+    this.items.splice(rndPosition, 0, { name: rndName, children: [] });
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.movies, event.previousIndex, event.currentIndex);
+  drop(event: IDropEvent) {
+    transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
   }
-
-  onDragMoved(event: CdkDragMove) {
-    const previewElement: HTMLElement | null = document.querySelector('.cdk-drag.cdk-drag-preview');
-    console.log(event.pointerPosition.x);
-    // if (previewElement) {
-    //   const w = document.documentElement.offsetWidth;
-    // //  setTimeout(() => {
-    //     //let x =  event.pointerPosition.x - w;
-    //     const x =
-    //       this.dir.value === 'rtl'
-    //         ? -event.pointerPosition.x
-    //         : event.pointerPosition.x;
-    //     previewElement.style.transform = `translate3d(${x}px, ${event.pointerPosition.y}px, 0) !important`;
-    //     //   console.log('previewElement.style.transform',previewElement.style.transform);
-    //     console.log('x', x, previewElement.style.transform,previewElement);
-    //  // }, 500);
-    // }
-  }
+}
+export interface TreeModel {
+  name: string;
+  children: TreeModel[];
 }

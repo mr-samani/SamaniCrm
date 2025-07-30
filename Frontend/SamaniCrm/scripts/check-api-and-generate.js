@@ -1,7 +1,7 @@
 // import http from "http";
 // import { exec } from "child_process";
 
-// const url = "https://localhost:44342/swagger/v1/swagger.json";
+// const url = "https://localhost:44343/swagger/v1/swagger.json";
 
 // http.get(url, (res) => {
 //   if (res.statusCode === 200) {
@@ -19,7 +19,7 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 const https = require('https');
 const { exec } = require('child_process');
 
-const url = 'https://localhost:44342/swagger/v1/swagger.json';
+const url = 'https://localhost:44343/swagger/v1/swagger.json';
 
 https
   .get(url, (res) => {

@@ -1,10 +1,12 @@
-<ng-container #container>
-  <ng-content></ng-content>
-</ng-container>
-
-<ng-container
-  [ngTemplateOutlet]="nestedTreeTpl"
-  [ngTemplateOutletContext]="{ $implicit: block, parent: parent }"></ng-container>
+<div
+  class="block-item"
+  [class.fb-selected]="b.selectedBlock?.id == block?.id"
+  [style]="block?.data ? block?.data?.css : undefined">
+  <ng-container #container><ng-content></ng-content></ng-container>
+  <ng-container
+    [ngTemplateOutlet]="nestedTreeTpl"
+    [ngTemplateOutletContext]="{ $implicit: block, parent: parent }"></ng-container>
+</div>
 
 <ng-template #nestedTreeTpl let-block let-parent="parent">
   @if (block) {
@@ -15,6 +17,9 @@
       <button (click)="b.deleteBlock(block, parent)">
         <i class="fa fa-trash"></i>
       </button>
+      <span *ngIf="canDrag" class="drag-handler" ngxDraggable [dragRootElement]="'.block-item'">
+        <i class="fa fa-grip-dots"></i>
+      </span>
       <span>
         {{ block.name ?? block.tagName ?? BlockTypeEnum[block.type] }}
       </span>
@@ -26,8 +31,7 @@
           [parent]="block"
           [block]="child"
           *ngFor="let child of block.children; let i = index"
-          [loopIndex]="loopIndex"
-          ngxDraggable></dynamic-renderer>
+          [loopIndex]="loopIndex"></dynamic-renderer>
       }
     </div>
   }

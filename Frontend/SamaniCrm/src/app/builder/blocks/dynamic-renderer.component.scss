@@ -1,13 +1,17 @@
 :host {
   display: block;
+}
+.block-item {
   position: relative;
   min-height: 10px;
   &:hover {
     outline: 1px #3b97e3 solid;
   }
 }
+
 .children-blocks {
-  &:empty {
+  &:empty,
+  &:not(:first-child) {
     min-height: 10px;
     margin-top: 5px;
   }
@@ -22,9 +26,12 @@
   color: #fff;
   padding: 4px 6px;
   display: none;
-  height: 28px;
+  min-height: 40px;
   z-index: 10;
   right: 0;
+  overflow: hidden;
+  gap: 6px;
+  align-items: center;
   button {
     background: none;
     outline: none;
@@ -33,15 +40,20 @@
     color: inherit;
   }
   &.actions-top {
-    top: -28px;
+    top: -40px;
   }
   &.actions-bottom {
-    bottom: -28px;
+    bottom: -40px;
   }
 }
-:host.fb-selected > .actions {
-  display: block;
+.block-item.fb-selected > .actions {
+  display: flex;
 }
 :host.hidden {
   display: none;
+}
+.drag-handler {
+  cursor: move;
+  padding: 0 20px;
+  height: 100%;
 }

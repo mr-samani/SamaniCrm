@@ -116,7 +116,7 @@ public static class ServiceCollectionExtensions
         {
             options.AddPolicy("DefaultCors", policy =>
             {
-                policy.WithOrigins("https://localhost:44342", "http://localhost:5753", "https://localhost:5753", "https://localhost:5754")
+                policy.WithOrigins("http://localhost:5753", "https://localhost:5753", "https://localhost:5754")
                       .AllowAnyHeader()
                       .AllowAnyMethod()
                       .WithExposedHeaders("Location", "Upload-Offset", "Tus-Resumable", "Upload-Length", "Fileid");
@@ -164,7 +164,7 @@ public static class ServiceCollectionExtensions
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "SamaniCrm API", Version = "v1" });
             c.AddServer(new OpenApiServer
             {
-                Url = "https://localhost:44342",
+                Url = "https://localhost:44343",
                 Description = "localhost"
             });
             c.AddServer(new OpenApiServer
