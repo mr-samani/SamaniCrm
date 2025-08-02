@@ -123,6 +123,7 @@ export class BlockData {
       }
     }
     this.css ??= '';
+    this.style ??= {};
   }
 }
 

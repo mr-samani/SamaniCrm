@@ -11,6 +11,7 @@
       <a class="nav-link" [class.active]="tab == 'Advanced'" (click)="tab = 'Advanced'">Advanced</a>
     </li>
   </ul>
+
   @if (tab == 'General') {
     <div>
       <ng-container *ngIf="b.selectedBlock.data">
@@ -30,7 +31,8 @@
               <td>
                 <style-spacing
                   [(ngModel)]="b.selectedBlock.data.style.margin"
-                  (ngModelChange)="updateCss()"></style-spacing>
+                  (ngModelChange)="updateCss()"
+                  [canUseAuto]="true"></style-spacing>
               </td>
             </tr>
             <tr>

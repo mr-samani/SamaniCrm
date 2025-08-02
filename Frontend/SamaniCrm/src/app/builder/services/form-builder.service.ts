@@ -128,7 +128,6 @@ export class FormBuilderService {
   }
 
   drop(event: IDropEvent<BlockDefinition[]>, parent?: BlockDefinition) {
-    debugger;
     // اگر در همان cell جابجا شد
     if (event.previousContainer === event.container) {
       if (event.container.data) {

@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { FormBuilderService } from '../services/form-builder.service';
-import { BlockTypeEnum } from '../blocks/block-registry';
+import { BlockData, BlockTypeEnum } from '../blocks/block-registry';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -24,7 +24,11 @@ export class PropertiesComponent extends AppComponentBase implements OnInit {
     super(injector);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.b.selectedBlock && this.b.selectedBlock.data) {
+      this.b.selectedBlock.data = new BlockData();
+    }
+  }
 
   public get BlockTypeEnum(): typeof BlockTypeEnum {
     return BlockTypeEnum;

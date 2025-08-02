@@ -66,12 +66,4 @@ export class StyleBackgroundComponent implements OnInit {
     this.update();
   }
 
-  eyedropper() {
-    if ('EyeDropper' in window) {
-      let t = new EyeDropper().open();
-      t.then(async (result: { sRGBHex: string }) => {
-        console.log(result);
-      });
-    }
-  }
 }

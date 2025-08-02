@@ -1,4 +1,4 @@
-import { Component, forwardRef, Injector, OnInit } from '@angular/core';
+import { Component, forwardRef, Injector, Input, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 import { getCssFromSpacingStyle, parseSpacing, spacingRegex } from '../helper/parse-spacing';
@@ -24,6 +24,7 @@ export class StyleSpacingComponent extends AppComponentBase implements OnInit, C
 
   value: Spacing | null = null;
   spacingString = '';
+  @Input() canUseAuto = false;
 
   onChangeFn = (val: string) => {};
   onTouchedFn = () => {};
@@ -38,6 +39,9 @@ export class StyleSpacingComponent extends AppComponentBase implements OnInit, C
 
   writeValue(val: string | undefined): void {
     this.spacingString = val ?? '0px';
+    if (!this.canUseAuto) {
+      this.spacingString = this.spacingString.replace(/auto/g, '');
+    }
     this.value = parseSpacing(this.spacingString);
   }
 
