@@ -14,6 +14,7 @@ import { ViewModeEnum } from './models/view-mode.enum';
 import { FormBuilderBackendService } from './services/backend.service';
 import { AppConst } from '@shared/app-const';
 import { HistoryService } from './services/history.service';
+import { IResizableOutput } from 'ngx-drag-drop-kit';
 
 @Component({
   standalone: false,
@@ -24,6 +25,9 @@ import { HistoryService } from './services/history.service';
 })
 export class BuilderComponent extends AppComponentBase implements OnInit, AfterViewInit, OnDestroy {
   previousMainHeaderFixedTop: boolean = AppConst.mainHeaderFixedTop;
+  isRtl = AppConst.isRtl;
+  rightSideWidth: number;
+  propertiesWidth: number;
   constructor(
     public b: FormBuilderService,
     private backendService: FormBuilderBackendService,
@@ -32,6 +36,8 @@ export class BuilderComponent extends AppComponentBase implements OnInit, AfterV
   ) {
     super(injector);
     this.backendService.pageId = this.route.snapshot.params['pageId'];
+    this.rightSideWidth = +(localStorage.getItem('builderRightSide') || 220);
+    this.propertiesWidth = +(localStorage.getItem('builderProperties') || 340);
   }
 
   ngOnInit(): void {
@@ -55,5 +61,13 @@ export class BuilderComponent extends AppComponentBase implements OnInit, AfterV
   }
   public get BlockTypeEnum(): typeof BlockTypeEnum {
     return BlockTypeEnum;
+  }
+
+  onResizeLayout(ev: IResizableOutput, type: 'rightSide' | 'properties') {
+    if (type == 'rightSide') {
+      localStorage.setItem('builderRightSide', ev.width.toString());
+    } else {
+      localStorage.setItem('builderProperties', ev.width.toString());
+    }
   }
 }
