@@ -1,4 +1,4 @@
-import { Component, forwardRef, Injector } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef, Injector } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 import { parseBoxShadow, stringifyBoxShadow } from '../helper/parse-box-shadow';
@@ -16,7 +16,7 @@ import { parseBoxShadow, stringifyBoxShadow } from '../helper/parse-box-shadow';
     },
   ],
 })
-export class StyleShadowComponent extends AppComponentBase implements ControlValueAccessor {
+export class StyleShadowComponent extends AppComponentBase implements ControlValueAccessor, AfterViewInit {
   boxShadowString = '';
   showPanel = false;
   inset = false;
@@ -28,11 +28,22 @@ export class StyleShadowComponent extends AppComponentBase implements ControlVal
 
   isInvalid = false;
 
+  top = 0;
+  right = 0;
   onChange = (_: string) => {};
   onTouched = () => {};
 
-  constructor(injector: Injector) {
+  constructor(
+    injector: Injector,
+    private el: ElementRef<HTMLElement>,
+  ) {
     super(injector);
+  }
+
+  ngAfterViewInit(): void {
+    const rect = this.el.nativeElement.getBoundingClientRect();
+    this.top = rect.top + 40;
+    this.right = 12;
   }
 
   writeValue(val: string | undefined): void {

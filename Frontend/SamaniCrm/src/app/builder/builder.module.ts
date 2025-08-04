@@ -21,6 +21,7 @@ import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { SelectDynamicDataComponent } from './properties/select-dynamic-data/select-dynamic-data.component';
 import { DynamicDataService } from './services/dynamic-data.service';
 import { HistoryService } from './services/history.service';
+import { StyleViewPipe } from './pipes/style-view.pipe';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { HistoryService } from './services/history.service';
     NgxInputBoxShadowModule,
     FileManagerModule,
     MaterialCommonModule,
+    StyleViewPipe,
   ],
   providers: [
     FormBuilderService,

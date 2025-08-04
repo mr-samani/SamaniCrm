@@ -1,48 +1,12 @@
 .cssStyles {
-  white-space: wrap;
-}
-.btn-group {
-  border: 1px #a7a6a6 solid;
-  border-radius: 5px;
-  button {
-    padding: 4px 12px;
-    border: none;
-    outline: none;
-    background: none;
-    border-right: 1px #a7a6a6 solid;
-    i {
-      font-weight: 400;
-    }
-    &:last-child {
-      border-right: none;
-    }
-    &.active {
-      background: var(--primaryColor);
-    }
-  }
-  .btn {
-    padding: 2px 8px !important;
-    line-height: 1;
-  }
-  .btn-check:checked + .btn {
-    background: var(--primaryColor);
-  }
+  padding: 9px;
+  border: 1px #47474770 solid;
 }
 
 .m-w-50 {
   max-width: 50px;
 }
 
-.input-color {
-  border-radius: 50% !important;
-  width: 38px;
-  height: 38px;
-  padding: 0;
-  outline: 0;
-  border: 2px #727171 solid;
-  margin: 0 8px;
-  min-width: 38px;
-}
 /* input select prefix size*/
 .select-unit {
   max-width: 34px;
@@ -56,19 +20,6 @@
   i {
     font-weight: 300;
     font-size: 24px;
-  }
-}
-
-table {
-  width: 100%;
-  tr {
-    td,
-    th {
-      vertical-align: middle;
-    }
-    td:last-child {
-      text-align: end;
-    }
   }
 }
 

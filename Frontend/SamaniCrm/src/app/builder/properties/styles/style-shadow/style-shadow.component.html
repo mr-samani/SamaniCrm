@@ -14,7 +14,7 @@
   <p *ngIf="isInvalid" class="text-danger">Invalid shadow value</p>
 
   <div class="panel-back-drop" *ngIf="showPanel" (click)="showPanel = false"></div>
-  <div class="panel" *ngIf="showPanel">
+  <div class="panel" *ngIf="showPanel" [style.top.px]="top" [style.right.px]="right">
     <div class="slider-group">
       <label>Offset X</label>
       <input type="range" min="-50" max="50" [(ngModel)]="offsetX" (input)="onUiChange()" />

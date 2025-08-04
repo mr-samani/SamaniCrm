@@ -8,6 +8,7 @@ import { StyleBackgroundComponent } from './style-background/style-background.co
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { NgxInputColorModule, NgxInputGradientModule } from 'ngx-input-color';
 import { StyleDimensionsComponent } from './style-dimensions/style-dimensions.component';
+import { InputStyleComponent } from './input-style/input-style.component';
 
 const comp = [
   StyleBorderComponent,
@@ -15,6 +16,7 @@ const comp = [
   StyleShadowComponent,
   StyleBackgroundComponent,
   StyleDimensionsComponent,
+  InputStyleComponent,
 ];
 @NgModule({
   declarations: [...comp],

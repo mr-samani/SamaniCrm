@@ -89,7 +89,10 @@
             (styleChange)="updateCss()"></style-dimensions>
         </details>
 
-        <pre class="cssStyles" *ngIf="b.selectedBlock.data.css">{{ b.selectedBlock.data.css }}</pre>
+        <pre
+          class="cssStyles"
+          *ngIf="b.selectedBlock.data.css"
+          [innerHtml]="b.selectedBlock.data.css | styleView"></pre>
       </ng-container>
     </div>
   } @else if (tab == 'Advanced') {

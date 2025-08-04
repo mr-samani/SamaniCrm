@@ -2,33 +2,53 @@
 <table>
   <tr>
     <td>
-      Width
-      <input type="number" [(ngModel)]="style.width" (change)="update()" name="width" />
+      <input-style label="W" tooltip="Width" [(ngModel)]="style.width" name="width" (change)="update()"></input-style>
     </td>
     <td>
-      Height
-      <input type="number" [(ngModel)]="style.height" (change)="update()" name="height" />
+      <input-style
+        label="H"
+        tooltip="Height"
+        [(ngModel)]="style.height"
+        name="height"
+        (change)="update()"></input-style>
     </td>
   </tr>
   <tr>
     <td>
-      Min Width
-      <input type="number" [(ngModel)]="style.minWidth" (change)="update()" name="minWidth" />
+      <input-style
+        label="MinW"
+        tooltip="Min width"
+        [(ngModel)]="style.minWidth"
+        name="minWidth"
+        (change)="update()"></input-style>
     </td>
 
     <td>
-      Min Height
-      <input type="number" [(ngModel)]="style.minHeight" (change)="update()" name="minHeight" />
+      <input-style
+        label="MinH"
+        tooltip="Min height"
+        [(ngModel)]="style.minHeight"
+        name="minHeight"
+        (change)="update()"></input-style>
     </td>
   </tr>
   <tr>
     <td>
-      Max Width
-      <input type="number" [(ngModel)]="style.maxWidth" (change)="update()" name="maxWidth" />
+      <input-style
+        label="MaxW"
+        tooltip="Max width"
+        [(ngModel)]="style.maxWidth"
+        name="maxWidth"
+        (change)="update()"></input-style>
     </td>
+
     <td>
-      Max Height
-      <input type="number" [(ngModel)]="style.maxHeight" (change)="update()" name="maxHeight" />
+      <input-style
+        label="MaxH"
+        tooltip="Max height"
+        [(ngModel)]="style.maxHeight"
+        name="maxHeight"
+        (change)="update()"></input-style>
     </td>
   </tr>
 </table>
@@ -37,40 +57,45 @@
 <table>
   <tr>
     <td colspan="2">
-      Position
-      <select [(ngModel)]="style.position" (change)="update()" name="position">
-        <option value="static">Static</option>
-        <option value="relative">Relative</option>
-        <option value="absolute">Absolute</option>
-        <option value="fixed">Fixed</option>
-        <option value="sticky">Sticky</option>
-      </select>
+      <div class="input-style" title="Position">
+        <span>Position</span>
+        <select [(ngModel)]="style.position" (change)="update()" name="position">
+          <option value="static">Static</option>
+          <option value="relative">Relative</option>
+          <option value="absolute">Absolute</option>
+          <option value="fixed">Fixed</option>
+          <option value="sticky">Sticky</option>
+        </select>
+      </div>
     </td>
   </tr>
   <tr>
     <td>
-      Top
-      <input type="number" [(ngModel)]="style.top" (change)="update()" name="top" />
+      <input-style label="T" tooltip="Top" [(ngModel)]="style.top" name="top" (change)="update()"></input-style>
     </td>
     <td>
-      Left
-      <input type="number" [(ngModel)]="style.left" (change)="update()" name="left" />
+      <input-style label="L" tooltip="Left" [(ngModel)]="style.left" name="left" (change)="update()"></input-style>
     </td>
   </tr>
   <tr>
     <td>
-      Right
-      <input type="number" [(ngModel)]="style.right" (change)="update()" name="right" />
+      <input-style label="R" tooltip="Right" [(ngModel)]="style.right" name="right" (change)="update()"></input-style>
     </td>
     <td>
-      Bottom
-      <input type="number" [(ngModel)]="style.bottom" (change)="update()" name="bottom" />
+      <input-style
+        label="B"
+        tooltip="Bottom"
+        [(ngModel)]="style.bottom"
+        name="bottom"
+        (change)="update()"></input-style>
     </td>
   </tr>
   <tr>
     <td colspan="2">
-      Z-Index
-      <input type="number" [(ngModel)]="style.zIndex" (change)="update()" name="zIndex" />
+      <div class="input-style" title="Z index">
+        <span>Z-Index</span>
+        <input type="number" [(ngModel)]="style.zIndex" (change)="update()" name="zIndex" />
+      </div>
     </td>
   </tr>
 </table>

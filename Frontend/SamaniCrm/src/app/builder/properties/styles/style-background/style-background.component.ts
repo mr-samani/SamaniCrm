@@ -65,5 +65,4 @@ export class StyleBackgroundComponent implements OnInit {
     }
     this.update();
   }
-
 }

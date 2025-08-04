@@ -13,14 +13,13 @@ import { AppComponentBase } from '@app/app-component-base';
 import { ViewModeEnum } from './models/view-mode.enum';
 import { FormBuilderBackendService } from './services/backend.service';
 import { AppConst } from '@shared/app-const';
-import { HistoryService } from './services/history.service';
 import { IResizableOutput } from 'ngx-drag-drop-kit';
 
 @Component({
   standalone: false,
   selector: 'app-builder',
   templateUrl: './builder.component.html',
-  styleUrls: ['./builder.component.scss'],
+  styleUrls: ['./builder.component.scss', './style.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class BuilderComponent extends AppComponentBase implements OnInit, AfterViewInit, OnDestroy {

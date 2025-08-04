@@ -46,31 +46,31 @@
   </tr>
 
   <tr>
-    <th>Background Color</th>
+    <th>Background</th>
     <td>
-      <input
-        type="text"
-        [id]="'prp-bgc' + block.id"
-        readonly
-        ngxInputColor
-        [(ngModel)]="style.backgroundColor"
-        (ngModelChange)="update()"
-        class="color-control" />
-      {{ style.backgroundColor }}
+      <div class="input-style">
+        <button
+          type="button"
+          class="color"
+          [style.backgroundColor]="style.backgroundColor"
+          ngxInputColor
+          [(ngModel)]="style.backgroundColor"></button>
+        <input type="text" [id]="'prp-bgc' + block.id" [(ngModel)]="style.backgroundColor" (ngModelChange)="update()" />
+      </div>
     </td>
   </tr>
   <tr *ngIf="backgroundType == 'gradient'">
     <th>Gradient</th>
     <td>
-      <input
-        type="text"
-        [id]="'prp-bgg' + block.id"
-        readonly
-        ngxInputGradient
-        [(ngModel)]="backgroundGradient"
-        (ngModelChange)="update()"
-        class="color-control" />
-      {{ backgroundGradient }}
+      <div class="input-style">
+        <input
+          type="text"
+          [id]="'prp-bgg' + block.id"
+          readonly
+          ngxInputGradient
+          [(ngModel)]="backgroundGradient"
+          (ngModelChange)="update()" />
+      </div>
     </td>
   </tr>
   @if (backgroundType == 'image') {
@@ -165,4 +165,3 @@
     </tr>
   }
 </table>
-

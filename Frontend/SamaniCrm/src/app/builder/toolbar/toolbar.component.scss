@@ -5,3 +5,37 @@
     flex: auto;
   }
 }
+/*--------------group buttons------------------------------*/
+.group-buttons {
+  display: flex;
+  gap: 2px;
+  // background: linear-gradient(0deg, #1a1717, #575757);
+  background-color: var(--bgColor);
+  color: var(--fgColor);
+  button {
+    background: none;
+    border: none;
+    outline: none;
+    color: inherit;
+    padding: 6px 10px;
+    transition: all 0.3s ease;
+    &:disabled {
+      cursor: not-allowed;
+      background: #2c2c2c;
+    }
+    &:not(:disabled):hover {
+      cursor: pointer;
+      background-color: var(--primaryColor);
+    }
+    &.active {
+      background-color: var(--primaryColor);
+      color: #fff;
+    }
+  }
+  &.stretch button {
+    flex-grow: 1;
+  }
+  .spacer {
+    flex: auto;
+  }
+}

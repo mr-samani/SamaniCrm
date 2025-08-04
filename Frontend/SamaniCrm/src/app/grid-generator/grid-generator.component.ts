@@ -111,7 +111,7 @@ function generateGridLayoutV2(layouts: DashboardItem[], totalColumns = 12) {
   const containerStyle = `
     display: grid;
     grid-template-columns: repeat(${totalColumns}, 1fr);
-    grid-auto-rows: 100px;
+    grid-auto-rows: 50px;
     gap: 10px;
   `.trim();
 
