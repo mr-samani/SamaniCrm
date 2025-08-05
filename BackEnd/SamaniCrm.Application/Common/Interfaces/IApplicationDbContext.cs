@@ -54,6 +54,9 @@ namespace SamaniCrm.Application.Common.Interfaces
 
         public DbSet<CustomBlock> CustomBlocks { get; set; }
 
+        public DbSet<DataSource> DataSources { get; set; }
+        public DbSet<DataSourceField> DataSourceFields { get; set; }
+
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         int SaveChanges();

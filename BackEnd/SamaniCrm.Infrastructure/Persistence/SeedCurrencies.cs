@@ -14,38 +14,39 @@ namespace SamaniCrm.Infrastructure.Persistence
         {
             Console.WriteLine("Seeding static curerncies data...");
 
-            var IRR = new Currency()
-            {
-                CurrencyCode = "IRR",
-                Name = "Iranian Rial",
-                ExchangeRateToBase = 1,
-                IsActive = true,
-                IsDefault = true,
-                Symbol = "﷼",
-            };
-            var TMN = new Currency()
-            {
-                CurrencyCode = "TMN",
-                Name = "Iranian Toman",
-                ExchangeRateToBase = (decimal)0.10,
-                IsActive = true,
-                IsDefault = false,
-                Symbol = "تومان",
-            };
-            var USD = new Currency()
-            {
-                CurrencyCode = "USD",
-                Name = "US dolar",
-                ExchangeRateToBase = 800000,
-                IsActive = true,
-                IsDefault = false,
-                Symbol = "$",
-            };
-
-
             var existingCurrency = await dbContext.Currency.ToListAsync();
             if (!existingCurrency.Any())
             {
+                var IRR = new Currency()
+                {
+                    CurrencyCode = "IRR",
+                    Name = "Iranian Rial",
+                    ExchangeRateToBase = 1,
+                    IsActive = true,
+                    IsDefault = true,
+                    Symbol = "﷼",
+                };
+                var TMN = new Currency()
+                {
+                    CurrencyCode = "TMN",
+                    Name = "Iranian Toman",
+                    ExchangeRateToBase = (decimal)0.10,
+                    IsActive = true,
+                    IsDefault = false,
+                    Symbol = "تومان",
+                };
+                var USD = new Currency()
+                {
+                    CurrencyCode = "USD",
+                    Name = "US dolar",
+                    ExchangeRateToBase = 800000,
+                    IsActive = true,
+                    IsDefault = false,
+                    Symbol = "$",
+                };
+
+
+
                 await dbContext.Currency.AddRangeAsync(IRR, TMN, USD);
                 await dbContext.SaveChangesAsync();
             }

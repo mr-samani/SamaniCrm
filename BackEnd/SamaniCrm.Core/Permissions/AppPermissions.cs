@@ -105,6 +105,16 @@ namespace SamaniCrm.Core.Permissions
         public const string FileManager_CreateFile = "Administrator.FileManager.CreateFile";
         public const string FileManager_Delete = "Administrator.FileManager.Delete";
 
+
+        // page builder
+        public const string PageBuilder = "Administrator.PageBuilder";
+        public const string PageBuilder_Create = "Administrator.PageBuilder.Create";
+        public const string PageBuilder_Edit = "Administrator.PageBuilder.Edit";
+        public const string PageBuilder_Delete = "Administrator.PageBuilder.Delete";
+
+
+
+
     }
 
 

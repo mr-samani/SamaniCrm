@@ -63,6 +63,10 @@ namespace SamaniCrm.Infrastructure
 
         public DbSet<CustomBlock> CustomBlocks { get; set; }
 
+        public DbSet<DataSource> DataSources { get; set; }
+        public DbSet<DataSourceField> DataSourceFields { get; set; }
+
+
 
 
 
