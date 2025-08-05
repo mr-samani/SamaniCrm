@@ -1,9 +1,10 @@
-import { Component, Injector } from '@angular/core';
+import { Component, ElementRef, Injector, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { AppConst } from '@shared/app-const';
 import { UserDTO } from '@shared/service-proxies/model/user-dto';
 import { ColorSchemaService } from '@shared/services/color-schema.service';
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-header',
@@ -17,6 +18,8 @@ export class HeaderComponent extends AppComponentBase {
   languages = AppConst.languageList;
   baseUrl = AppConst.apiUrl;
   AppConst = AppConst;
+
+  @ViewChild('navbarCollapse') navbarCollapse!: ElementRef;
   constructor(
     injector: Injector,
     public colorSchemaService: ColorSchemaService,
@@ -39,5 +42,12 @@ export class HeaderComponent extends AppComponentBase {
 
   logout() {
     this.authService.logOut();
+  }
+
+  closeNavbar() {
+    const collapse = new bootstrap.Collapse(this.navbarCollapse.nativeElement, {
+      toggle: false,
+    });
+    collapse.hide();
   }
 }

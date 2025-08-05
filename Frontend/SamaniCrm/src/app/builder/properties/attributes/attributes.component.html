@@ -1,0 +1,40 @@
+<select class="form-select" [(ngModel)]="block.tagName" *ngIf="block.type == BlockTypeEnum.GeneralHtmlTag">
+  <option [value]="item" *ngFor="let item of htmlTags">{{ item }}</option>
+</select>
+
+@for (item of attrList; track $index) {
+  {{ item[1].value }}
+  @switch (item[1].type) {
+    @case ('image') {
+      <file-selector (change)="onSelectFile(item, $event)" [options]="imagePickerOptions"></file-selector>
+      <img [src]="item[1].value" />
+      <!-- <div *ngIf="dynamicData">
+        <select-dynamic-data
+          [list]="dynamicData"
+          (keys)="onChangeDynamicKeyAttr($event, item)"
+          [value]="item?.[1]?.value"></select-dynamic-data>
+      </div> -->
+    }
+    @case ('string') {
+      <input type="text" class="form-control" [(ngModel)]="item[1].value" name="attrVal" />
+    }
+    @case ('number') {
+      <input type="number" class="form-control" [(ngModel)]="item[1].value" name="attrVal" />
+    }
+  }
+}
+<!-- <pre>{{ attrList | json }}</pre> -->
+@if (block.data) {
+  <input
+    [(ngModel)]="block.data.text"
+    type="text"
+    class="form-control"
+    placeholder="text"
+    (ngModelChange)="updateBlock()" />
+  <div *ngIf="dynamicData">
+    <select-dynamic-data
+      [list]="dynamicData"
+      (keys)="onChangeDynamicKeyTxt($event)"
+      [value]="block.data.text"></select-dynamic-data>
+  </div>
+}

@@ -1,0 +1,101 @@
+<p>Size:</p>
+<table>
+  <tr>
+    <td>
+      <input-style label="W" tooltip="Width" [(ngModel)]="style.width" name="width" (change)="update()"></input-style>
+    </td>
+    <td>
+      <input-style
+        label="H"
+        tooltip="Height"
+        [(ngModel)]="style.height"
+        name="height"
+        (change)="update()"></input-style>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <input-style
+        label="MinW"
+        tooltip="Min width"
+        [(ngModel)]="style.minWidth"
+        name="minWidth"
+        (change)="update()"></input-style>
+    </td>
+
+    <td>
+      <input-style
+        label="MinH"
+        tooltip="Min height"
+        [(ngModel)]="style.minHeight"
+        name="minHeight"
+        (change)="update()"></input-style>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <input-style
+        label="MaxW"
+        tooltip="Max width"
+        [(ngModel)]="style.maxWidth"
+        name="maxWidth"
+        (change)="update()"></input-style>
+    </td>
+
+    <td>
+      <input-style
+        label="MaxH"
+        tooltip="Max height"
+        [(ngModel)]="style.maxHeight"
+        name="maxHeight"
+        (change)="update()"></input-style>
+    </td>
+  </tr>
+</table>
+
+<p>Position:</p>
+<table>
+  <tr>
+    <td colspan="2">
+      <div class="input-style" title="Position">
+        <span>Position</span>
+        <select [(ngModel)]="style.position" (change)="update()" name="position">
+          <option value="static">Static</option>
+          <option value="relative">Relative</option>
+          <option value="absolute">Absolute</option>
+          <option value="fixed">Fixed</option>
+          <option value="sticky">Sticky</option>
+        </select>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <input-style label="T" tooltip="Top" [(ngModel)]="style.top" name="top" (change)="update()"></input-style>
+    </td>
+    <td>
+      <input-style label="L" tooltip="Left" [(ngModel)]="style.left" name="left" (change)="update()"></input-style>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <input-style label="R" tooltip="Right" [(ngModel)]="style.right" name="right" (change)="update()"></input-style>
+    </td>
+    <td>
+      <input-style
+        label="B"
+        tooltip="Bottom"
+        [(ngModel)]="style.bottom"
+        name="bottom"
+        (change)="update()"></input-style>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <div class="input-style" title="Z index">
+        <span>Z-Index</span>
+        <input type="number" [(ngModel)]="style.zIndex" (change)="update()" name="zIndex" />
+      </div>
+    </td>
+  </tr>
+</table>

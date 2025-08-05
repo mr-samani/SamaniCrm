@@ -5,7 +5,7 @@
   --bs-accordion-active-bg: #cfe2ff5e;
 }
 
-html[dir='rtl'] {
+[dir='rtl'] {
   .accordion-button::after {
     margin-right: auto;
     margin-left: 0;
@@ -43,13 +43,23 @@ html[dir='rtl'] {
   }
 }
 
-body[dir='rtl'] {
+[dir='rtl'] {
   .input-group {
     :first-child {
       border-radius: 0px var(--bs-border-radius) var(--bs-border-radius) 0px !important;
     }
     :last-child {
       border-radius: var(--bs-border-radius) 0 0 var(--bs-border-radius) !important;
+    }
+  }
+}
+[dir='ltr'] {
+  .input-group {
+    :first-child {
+      border-radius: var(--bs-border-radius) 0px 0px var(--bs-border-radius) !important;
+    }
+    :last-child {
+      border-radius: 0 var(--bs-border-radius) var(--bs-border-radius) 0 !important;
     }
   }
 }

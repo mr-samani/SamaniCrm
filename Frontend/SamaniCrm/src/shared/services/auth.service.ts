@@ -1,7 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, catchError, map, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, throwError } from 'rxjs';
 import { Buffer } from 'buffer';
 import { TokenService } from './token.service';
 import { NgxAlertModalService } from 'ngx-alert-modal';
@@ -16,13 +15,14 @@ import {
 } from '@shared/service-proxies';
 import { TranslateService } from '@ngx-translate/core';
 import { AppConst } from '@shared/app-const';
+import { HttpErrorResponse } from '@angular/common/http';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<UserDTO | undefined> = new BehaviorSubject<
-    UserDTO | undefined
-  >(undefined);
+  private currentUserSubject: BehaviorSubject<UserDTO | undefined> = new BehaviorSubject<UserDTO | undefined>(
+    undefined,
+  );
   public currentUser: Observable<UserDTO | undefined>;
   accountService: AccountServiceProxy;
   userService: UserServiceProxy;
@@ -93,8 +93,8 @@ export class AuthService {
         }
         return '';
       }),
-      catchError((err: any, caught: Observable<any>) => {
-        return err;
+      catchError((err: HttpErrorResponse) => {
+        return throwError(() => err);
       }),
     );
   }

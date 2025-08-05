@@ -1,0 +1,144 @@
+.ngx-input-color-picker,
+.ngx-input-gradient-picker {
+  background-color: #1b1b1b !important;
+  border: 1px #4c4c4c solid !important;
+  .ngx-color-preview:after {
+    background-color: #1b1b1b !important;
+  }
+  .actions button,
+  .ngx-btn-eyedroper {
+    background: #1b1b1b !important;
+    border: 1px #4c4c4c solid !important;
+    svg {
+      fill: #fff;
+    }
+  }
+}
+/*----------------- nputs -----------------*/
+.input-style {
+  background-color: var(--color-bg-secondary, #383838);
+  border: 1px solid var(--color-bg-secondary, #383838);
+  border-radius: var(--radius-medium, 0.3125rem);
+  color: var(--fgColor);
+  display: flex;
+  height: 24px;
+  margin: 5px;
+  width: 100%;
+  &:focus-within {
+    border: 1px #0c8ce9 solid;
+  }
+  &:not(button.color) {
+    input,
+    select {
+      border: none;
+      outline: none;
+      background: #151515;
+      border-radius: 4px;
+      flex: auto;
+      min-width: 0;
+    }
+  }
+  &:has(button.color) input,
+  &:has(button.color) select,
+  button {
+    min-width: 0;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    background: none;
+  }
+
+  button.color {
+    border: 1px #ececec solid;
+    border-radius: 2px;
+    width: 14px;
+    height: 14px;
+    margin: 5px;
+  }
+  span {
+    padding: 4px 2px 0;
+    white-space: nowrap;
+    min-width: 20px;
+  }
+}
+/*--------------group buttons------------------------------*/
+.btn-group {
+  background-color: var(--color-bg-secondary, #383838);
+  border: 1px solid var(--color-bg-secondary, #383838);
+  border-radius: var(--radius-medium, 0.3125rem);
+  color: var(--fgColor);
+  button {
+    padding: 4px 12px;
+    border: none;
+    outline: none;
+    background: none;
+    border-radius: var(--radius-medium, 0.3125rem);
+    i {
+      font-weight: 400;
+    }
+    &:last-child {
+      border-right: none;
+    }
+    &.active {
+      background: #151515;
+      border: none;
+    }
+  }
+  .btn {
+    padding: 4px 8px !important;
+    line-height: 1;
+    min-width: 40px;
+    border-radius: 5px !important;
+  }
+  .btn-check:checked + .btn {
+    background: #151515;
+    border: none;
+  }
+}
+/*--------------table------------------------------*/
+
+table {
+  width: 100%;
+  table-layout: fixed;
+  tr {
+    td,
+    th {
+      vertical-align: middle;
+    }
+    td:last-child {
+      text-align: end;
+    }
+  }
+}
+
+/*----------- fixed panel--------------*/
+.panel-back-drop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.082);
+}
+.panel {
+  background-color: var(--bs-body-bg);
+  border: 1px solid #cccccc42;
+  border-radius: 4px;
+  padding: 12px;
+  margin-top: 8px;
+  position: fixed;
+  width: 280px;
+  right: 0;
+  z-index: 1000;
+
+  .place-top,
+  .place-bottom {
+    display: flex;
+    justify-content: center;
+  }
+  .place-left-right {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+}

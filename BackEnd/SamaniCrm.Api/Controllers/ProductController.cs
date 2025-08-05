@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SamaniCrm.Api.Attributes;
@@ -25,6 +26,23 @@ namespace SamaniCrm.Api.Controllers
         {
             _mediator = mediator;
         }
+
+
+        #region publicApis
+        [HttpPost("GetCategories")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(ApiResponse<List<ProductCategoryDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetCategories([FromBody]GetProductCategoriesQuery request, CancellationToken cancellationToken)
+        {
+            List<ProductCategoryDto> result = await _mediator.Send(request, cancellationToken);
+            return ApiOk(result);
+        }
+
+        #endregion
+
+
+
+
         #region Category
         [HttpPost("GetCategoriesForAdmin")]
         [Permission(AppPermissions.Products_Category_List)]
@@ -229,7 +247,7 @@ namespace SamaniCrm.Api.Controllers
             List<CurrencyDto> result = await _mediator.Send(new GetCurrenciesQuery(), cancellationToken);
             return ApiOk(result);
         }
- [HttpGet("GetActiveCurrencies")]
+        [HttpGet("GetActiveCurrencies")]
         [Permission(AppPermissions.Products_Currency_List)]
         [ProducesResponseType(typeof(ApiResponse<List<AutoCompleteDto<string>>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetActiveCurrencies(CancellationToken cancellationToken)
@@ -244,7 +262,7 @@ namespace SamaniCrm.Api.Controllers
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateOrEditCurrency([FromBody] CreateOrUpdateCurrencyCommand request, CancellationToken cancellationToken)
         {
-            bool result =await _mediator.Send(request, cancellationToken);
+            bool result = await _mediator.Send(request, cancellationToken);
             return ApiOk(result);
         }
 

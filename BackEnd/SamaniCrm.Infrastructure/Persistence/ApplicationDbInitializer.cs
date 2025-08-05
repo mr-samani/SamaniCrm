@@ -90,9 +90,9 @@ namespace SamaniCrm.Infrastructure.Persistence
             Console.WriteLine("Start Seeding DataBase...");
 
             await SeedPermissions.TrySeedAsync(_context);
-            await SeedStaticMenus.TrySeedAsync(_context);
-            // seeld localization must be after seed permissions,menu
+            // seeld localization must be after seed permissions
             await SeedLocalization.TrySeedAsync(_context);
+            await SeedStaticMenus.TrySeedAsync(_context);
             await SeedDefaultUsers.TrySeedAsync(_context,_logger,_userManager,_roleManager);
             await SeedSecuritySettings.TrySeedAsync(_context);
             await SeedProductCategoriesFromFile.TrySeedAsync(_context);

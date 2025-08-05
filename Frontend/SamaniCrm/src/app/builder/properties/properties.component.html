@@ -1,0 +1,104 @@
+<p>ID: {{ b.selectedBlock?.id }}</p>
+<p>RowNumber: {{ b.selectedBlock?.rowNumber }}</p>
+<p *ngIf="b.selectedBlock">Type: {{ BlockTypeEnum[b.selectedBlock.type] }}</p>
+
+@if (b.selectedBlock) {
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="tab == 'General'" (click)="tab = 'General'">General</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="tab == 'Advanced'" (click)="tab = 'Advanced'">Advanced</a>
+    </li>
+  </ul>
+
+  @if (tab == 'General') {
+    <div>
+      <ng-container *ngIf="b.selectedBlock.data">
+        <details *ngIf="b.selectedBlock.data.style">
+          <summary>Layout</summary>
+          <table>
+            <tr>
+              <th>Padding</th>
+              <td>
+                <style-spacing
+                  [(ngModel)]="b.selectedBlock.data.style.padding"
+                  (ngModelChange)="updateCss()"></style-spacing>
+              </td>
+            </tr>
+            <tr>
+              <th>Margin</th>
+              <td>
+                <style-spacing
+                  [(ngModel)]="b.selectedBlock.data.style.margin"
+                  (ngModelChange)="updateCss()"
+                  [canUseAuto]="true"></style-spacing>
+              </td>
+            </tr>
+            <tr>
+              <th>Border</th>
+              <td>
+                <style-border
+                  [(ngModel)]="b.selectedBlock.data.style.border"
+                  (css)="borderCss = $event; updateCss()"></style-border>
+              </td>
+            </tr>
+            <tr>
+              <th>Radius</th>
+              <td>
+                <style-spacing
+                  [(ngModel)]="b.selectedBlock.data.style.borderRadius"
+                  (ngModelChange)="updateCss()"></style-spacing>
+              </td>
+            </tr>
+            <tr>
+              <th>Shadow</th>
+              <td>
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-danger" (click)="clearStyle('boxShadow')">
+                    <i class="fa fa-times"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-success"
+                    ngxInputBoxShadow
+                    [(ngModel)]="b.selectedBlock.data.style.boxShadow"
+                    (ngModelChange)="updateCss()">
+                    <i class="fa fa-boxes"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </details>
+
+        <details *ngIf="b.selectedBlock.data && b.selectedBlock.data.style">
+          <summary>Background</summary>
+          <style-background
+            [id]="'prpbg-' + b.selectedBlock.id"
+            [block]="b.selectedBlock"
+            [style]="b.selectedBlock.data.style"
+            (styleChange)="updateCss()"></style-background>
+        </details>
+        <details *ngIf="b.selectedBlock.data.style">
+          <summary>Dimenstions</summary>
+          <style-dimensions
+            [id]="'prpdim-' + b.selectedBlock.id"
+            [block]="b.selectedBlock"
+            [style]="b.selectedBlock.data.style"
+            (styleChange)="updateCss()"></style-dimensions>
+        </details>
+
+        <pre
+          class="cssStyles"
+          *ngIf="b.selectedBlock.data.css"
+          [innerHtml]="b.selectedBlock.data.css | styleView"></pre>
+      </ng-container>
+    </div>
+  } @else if (tab == 'Advanced') {
+    <div class="p-2">
+      <button class="btn btn-primary" (click)="saveAsBlockDefinition()">Save as block</button>
+      <block-attributes [block]="b.selectedBlock"></block-attributes>
+    </div>
+  }
+}

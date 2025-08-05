@@ -1,0 +1,4 @@
+{
+    "ngFileGenerator.baseComponentClassName": "BaseComponent",
+    "ngFileGenerator.baseComponentPath": "@app/base-components"
+}

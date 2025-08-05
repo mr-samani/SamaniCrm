@@ -1,0 +1,9 @@
+<div class="input-style" [title]="tooltip">
+  <span>{{ label }}</span>
+  <input type="number" [(ngModel)]="value" (change)="update()" name="top" />
+  <select class="select-unit" [(ngModel)]="suffix" (change)="update()">
+    <option [value]="val" *ngFor="let val of sizeUnitList">
+      {{ val }}
+    </option>
+  </select>
+</div>

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { TestyComponent } from './testy/testy.component';
+import { GridGeneratorComponent } from './grid-generator/grid-generator.component';
 
 export const routes: Routes = [
   //{ path: '', redirectTo: 'testy', pathMatch: 'full' },
@@ -8,6 +9,7 @@ export const routes: Routes = [
   { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule) },
 
   { path: 'testy', component: TestyComponent },
+  { path: 'g', component: GridGeneratorComponent },
 
   //   {
   //     path: 'pagebuilder',

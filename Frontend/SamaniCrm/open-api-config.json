@@ -1,6 +1,6 @@
 {
   "generatorName": "typescript-angular",
-  "inputSpec": "https://localhost:44342/swagger/v1/swagger.json",
+  "inputSpec": "https://localhost:44343/swagger/v1/swagger.json",
   "output": "src/shared/service-proxies",
   "templateDir": "custom-templates",
   "additionalProperties": {

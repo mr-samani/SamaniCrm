@@ -1,0 +1,167 @@
+<table>
+  <tr>
+    <th>Background type</th>
+    <td>
+      <div class="btn-group" role="group">
+        <input
+          type="radio"
+          class="btn-check"
+          name="bg"
+          id="bgTypeNone"
+          autocomplete="off"
+          [(ngModel)]="backgroundType"
+          value="none" />
+        <label class="btn" for="bgTypeNone" (click)="clearBackground()">
+          <i class="fa fa-times"></i>
+        </label>
+
+        <input
+          type="radio"
+          class="btn-check"
+          name="bg"
+          id="gradient"
+          autocomplete="off"
+          [(ngModel)]="backgroundType"
+          (change)="update()"
+          value="gradient" />
+        <label class="btn" for="gradient">
+          <i class="fa fa-fill-drip"></i>
+        </label>
+
+        <input
+          type="radio"
+          class="btn-check"
+          name="bg"
+          id="image"
+          autocomplete="off"
+          [(ngModel)]="backgroundType"
+          (change)="update()"
+          value="image" />
+        <label class="btn" for="image">
+          <i class="fa fa-image"></i>
+        </label>
+      </div>
+      {{ backgroundType }}
+    </td>
+  </tr>
+
+  <tr>
+    <th>Background</th>
+    <td>
+      <div class="input-style">
+        <button
+          type="button"
+          class="color"
+          [style.backgroundColor]="style.backgroundColor"
+          ngxInputColor
+          [(ngModel)]="style.backgroundColor"></button>
+        <input type="text" [id]="'prp-bgc' + block.id" [(ngModel)]="style.backgroundColor" (ngModelChange)="update()" />
+      </div>
+    </td>
+  </tr>
+  <tr *ngIf="backgroundType == 'gradient'">
+    <th>Gradient</th>
+    <td>
+      <div class="input-style">
+        <input
+          type="text"
+          [id]="'prp-bgg' + block.id"
+          readonly
+          ngxInputGradient
+          [(ngModel)]="backgroundGradient"
+          (ngModelChange)="update()" />
+      </div>
+    </td>
+  </tr>
+  @if (backgroundType == 'image') {
+    <tr>
+      <th>
+        @if (imageId) {
+          <div class="img-container"><img [src]="baseUrl + '/' + imageId" /></div>
+        }
+      </th>
+      <td>
+        <file-selector (change)="onSelectFile($event)" [options]="fileSelectorOptions"></file-selector>
+      </td>
+    </tr>
+    <tr>
+      <th>Size</th>
+      <td>
+        <div class="btn-group" role="group">
+          <input
+            type="radio"
+            class="btn-check"
+            name="bgSize"
+            id="bgCover"
+            autocomplete="off"
+            [(ngModel)]="style.backgroundSize"
+            (ngModelChange)="update()"
+            value="cover" />
+          <label class="btn" for="bgCover">
+            <i class="fa fa-resize"></i>
+          </label>
+
+          <input
+            type="radio"
+            class="btn-check"
+            name="bgSize"
+            id="bgContain"
+            autocomplete="off"
+            [(ngModel)]="style.backgroundSize"
+            (ngModelChange)="update()"
+            value="contain" />
+          <label class="btn" for="bgContain">
+            <i class="fa fa-expand"></i>
+          </label>
+
+          <input
+            type="radio"
+            class="btn-check"
+            name="bgSize"
+            id="bgAuto"
+            autocomplete="off"
+            [(ngModel)]="style.backgroundSize"
+            (ngModelChange)="update()"
+            value="auto" />
+          <label class="btn" for="bgAuto">
+            <i class="fa fa-auto"></i>
+          </label>
+        </div>
+        {{ style.backgroundSize }}
+      </td>
+    </tr>
+    <tr>
+      <th>Repeat</th>
+      <td>
+        <div class="btn-group" role="group">
+          <input
+            type="radio"
+            class="btn-check"
+            name="bgRepeat"
+            id="bgRepeat"
+            autocomplete="off"
+            [(ngModel)]="style.backgroundRepeat"
+            (ngModelChange)="update()"
+            value="repeat" />
+          <label class="btn" for="bgRepeat">
+            <i class="fa fa-redo"></i>
+          </label>
+
+          <input
+            type="radio"
+            class="btn-check"
+            name="bgRepeat"
+            id="bgNoRepeat"
+            autocomplete="off"
+            [(ngModel)]="style.backgroundRepeat"
+            (ngModelChange)="update()"
+            value="no-repeat" />
+          <label class="btn" for="bgNoRepeat">
+            <i class="fa fa-repeat"></i>
+          </label>
+        </div>
+        {{ style.backgroundRepeat }}
+      </td>
+    </tr>
+  }
+</table>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Application.DTOs.PageBuilder;
 using SamaniCrm.Application.Pages.Commands;
 using SamaniCrm.Application.Pages.Queries;
 
@@ -20,5 +21,14 @@ namespace SamaniCrm.Application.Common.Interfaces
 
         Task<Unit> DeletePage(DeletePageCommand request, CancellationToken cancellationToken);
         Task<Unit> UpdatePageContent(UpdatePageContentCommand request, CancellationToken cancellationToken);
+
+
+
+
+        // Blocks
+        Task<Guid> CreateCustomBlock(CreateCustomBlockCommand request, CancellationToken cancellationToken);
+        Task<Unit> DeleteCustomBlockPage(DeleteCustomBlockCommand request, CancellationToken cancellationToken);
+        Task<List<CustomBlockDto>> GetCustomBlocks(GetCustomBlockQuery request, CancellationToken cancellationToken);
+
     }
 }

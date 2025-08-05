@@ -522,6 +522,53 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("Pages");
                 });
 
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.PageBuilderEntities.CustomBlock", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CategoryName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Data")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CustomBlocks", "Bldr");
+                });
+
             modelBuilder.Entity("SamaniCrm.Domain.Entities.PageTranslation", b =>
                 {
                     b.Property<Guid>("PageId")
@@ -614,6 +661,58 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .IsUnique();
 
                     b.ToTable("Permissions");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.Cart", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DiscountCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Carts", "product");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.CartItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CartId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("ProductUnitPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.ToTable("CartItems", "product");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.Currency", b =>
@@ -1663,6 +1762,17 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Page");
                 });
 
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.CartItem", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.Cart", "Cart")
+                        .WithMany("CartItems")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+                });
+
             modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.Product", b =>
                 {
                     b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.ProductCategory", "Category")
@@ -1941,6 +2051,11 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Page", b =>
                 {
                     b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.Cart", b =>
+                {
+                    b.Navigation("CartItems");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.Currency", b =>

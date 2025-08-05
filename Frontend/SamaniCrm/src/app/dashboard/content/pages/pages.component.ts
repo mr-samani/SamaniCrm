@@ -140,6 +140,9 @@ export class PagesComponent extends AppComponentBase implements OnInit {
   }
 
   updatePage(item: PageDtoExtended) {
+    this.router.navigate(['/dashboard/builder/' + item.id]);
+  }
+  updatePage2(item: PageDtoExtended) {
     this.router.navigate(['/dashboard/page-builder/' + item.id]);
   }
 

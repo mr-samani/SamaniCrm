@@ -1,0 +1,13 @@
+<mat-select
+  [(ngModel)]="selectedData"
+  (selectionChange)="onSelectionChange()"
+  class="form-control my-2"
+  [compareWith]="compareFn">
+  <mat-option *ngFor="let item of list" [value]="item">{{ item.nameSpace }}</mat-option>
+</mat-select>
+@if (selectedData && selectedData.children && selectedData.children.length) {
+  <select-dynamic-data
+    [list]="selectedData.children"
+    (keys)="onChangeKey($event)"
+    [value]="childNameSpace"></select-dynamic-data>
+}

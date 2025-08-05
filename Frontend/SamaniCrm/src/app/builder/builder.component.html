@@ -1,0 +1,44 @@
+<div class="builder-container" #builderContainer>
+  <toolbar></toolbar>
+  <div class="builder">
+    <div
+      class="right-side"
+      ngxResizable
+      [boundary]="builderContainer"
+      [corners]="isRtl ? ['left'] : ['right']"
+      [minWidth]="235"
+      (resizeEnd)="onResizeLayout($event, 'rightSide')"
+      [style.width.px]="rightSideWidth">
+      <toolbox *ngIf="b.showLayouts === false"></toolbox>
+      <layouts *ngIf="b.showLayouts"></layouts>
+    </div>
+
+    <div id="builderCanvas" class="canvas" [class.show-bordered]="b.showBorder">
+      <div
+        class="container-fluid"
+        ngxDropList
+        id="main-page"
+        (drop)="b.drop($event)"
+        [data]="b.blocks"
+        [class.tablet-view]="b.viewMode === ViewModeEnum.Tablet"
+        [class.desktop-view]="b.viewMode === ViewModeEnum.Desktop"
+        [class.mobile-view]="b.viewMode === ViewModeEnum.Mobile">
+        <div class="custom-placeholder" *ngxPlaceholder></div>
+        @for (item of b.blocks; track $index) {
+          <dynamic-renderer [block]="item"></dynamic-renderer>
+        }
+      </div>
+    </div>
+
+    <div
+      class="properties"
+      ngxResizable
+      [boundary]="builderContainer"
+      [corners]="isRtl ? ['right'] : ['left']"
+      [minWidth]="100"
+      (resizeEnd)="onResizeLayout($event, 'properties')"
+      [style.width.px]="propertiesWidth">
+      <properties dir="ltr"></properties>
+    </div>
+  </div>
+</div>

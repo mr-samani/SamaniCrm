@@ -1,0 +1,26 @@
+@for (item of menuList(); track $index) {
+<!-- children -->
+@if(item.children && item.children.length > 0){
+<li class="nav-item dropdown">
+  <a
+    class="nav-link dropdown-toggle"
+    href="#"
+    id="navbarScrollingDropdown"
+    role="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false">
+    {{ item.title }}
+  </a>
+  <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+    @for (child of item.children; track $index) {
+    <li>
+      <a class="dropdown-item" href="#" (click)="closeMenu()">{{ child.title ? child.title : item.url }}</a>
+    </li>
+    }
+  </ul>
+</li>
+}@else {
+<li class="nav-item">
+  <a class="nav-link" (click)="closeMenu()">{{ item.title ? item.title : item.url }}</a>
+</li>
+} }

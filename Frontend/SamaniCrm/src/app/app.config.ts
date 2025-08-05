@@ -50,8 +50,8 @@ export const appConfig: ApplicationConfig = {
     UserServiceProxy,
     {
       provide: APP_INITIALIZER,
-      useFactory: (appInitializer: AppInitializer, translate: TranslateService) => appInitializer.init(translate),
-      deps: [AppInitializer, TranslateService],
+      useFactory: (appInitializer: AppInitializer) => appInitializer.init(),
+      deps: [AppInitializer],
       multi: true,
     },
     {
@@ -65,7 +65,7 @@ export const appConfig: ApplicationConfig = {
 };
 function configurationFactory() {
   var config = new Configuration();
-  config.basePath = 'https://localhost:44342';
+  config.basePath = 'https://localhost:44343';
   return config;
 }
 export function createTranslateLoader(http: HttpClient) {

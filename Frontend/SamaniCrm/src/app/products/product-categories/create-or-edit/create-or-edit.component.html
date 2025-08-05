@@ -17,11 +17,6 @@
         <input matInput formControlName="slug" />
       </mat-form-field>
       <mat-form-field class="col-md-6">
-        <mat-label>{{ 'Image' | translate }}</mat-label>
-        <input matInput formControlName="image" />
-      </mat-form-field>
-
-      <mat-form-field class="col-md-6">
         <mat-label>{{ 'OrderIndex' | translate }}</mat-label>
         <input matInput formControlName="orderIndex" numberCheck type="number" />
       </mat-form-field>
@@ -36,7 +31,7 @@
         {{ 'IsActive' | translate }}
       </mat-checkbox>
     </p>
-
+    <file-selector (change)="onSelectFile($event)" [options]="imagePickerOptions"></file-selector>
     <tab-group>
       <tab-item
         [title]="translation.get('culture')?.value"

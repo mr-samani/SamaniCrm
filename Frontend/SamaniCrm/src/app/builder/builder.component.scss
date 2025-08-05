@@ -1,0 +1,149 @@
+app-builder {
+  --rightSideWidth: 240px;
+  --leftSideWidth: 240px;
+  --primaryColor: #0861ff;
+  --bgColor: #151515;
+  --bgColor2: #1b1b1b;
+  --fgColor: #b0b0b0;
+}
+.dashboard-content {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.builder-container {
+  height: 98vh;
+}
+.builder {
+  display: flex;
+  // 32px is height of toolbar
+  height: calc(100% - 32px);
+}
+.right-side {
+  width: var(--rightSideWidth);
+  overflow: auto;
+  background-color: var(--bgColor);
+  color: var(--fgColor);
+  height: 100%;
+}
+
+.canvas {
+  flex: auto;
+  border: 1px solid #ccc;
+  min-height: 300px;
+  background-color: #f5f5f5;
+  max-width: 100%; //calc(1100vw - var(--rightSideWidth) - var(--leftSideWidth));
+  overflow: auto;
+  &:hover {
+    border-color: rgb(0, 140, 255);
+  }
+  &.show-bordered {
+    dynamic-renderer .block-item,
+    .cell {
+      outline: 1px dashed #b1b1b1;
+      padding: 5px;
+    }
+  }
+}
+.properties {
+  width: var(--leftSideWidth);
+  border: 1px #3c3c3c47 solid;
+  direction: ltr;
+  padding: 10px;
+  overflow: auto;
+  height: 100%;
+  background-color: var(--bgColor);
+  color: var(--fgColor);
+  // fix bug ngx-dragdropkit
+  left: unset !important;
+}
+
+/*--------------- view mode --------------*/
+#main-page {
+  overflow-y: auto;
+  background-color: #fff;
+  color: #000;
+  height: 100%;
+  transition: all 0.3s ease;
+  &.tablet-view {
+    width: 770px;
+  }
+  &.desktop-view {
+    width: 100%;
+  }
+  &.mobile-view {
+    width: 320px;
+  }
+}
+
+details {
+  summary {
+    cursor: pointer;
+    background-color: var(--bgColor2);
+    color: var(--fgColor);
+    padding: 6px 10px;
+    margin-bottom: 6px;
+  }
+}
+
+
+/*--------------end of group buttons------------------------------*/
+
+.custom-placeholder {
+  display: block;
+  border: 1px #0059ff solid;
+  position: relative;
+  width: 100%;
+  transition: all 300ms;
+  &:after {
+    content: ' ';
+    border: 5px #0059ff solid;
+    position: absolute;
+    right: 0px;
+    top: -5px;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+  }
+  &:before {
+    content: ' ';
+    border: 5px #0059ff solid;
+    position: absolute;
+    left: 0px;
+    top: -5px;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-right-color: transparent;
+  }
+}
+.custom-placeholder2 {
+  display: block;
+  border: 1px #ff002b solid;
+  position: relative;
+  width: 100%;
+  transition: all 300ms;
+  &:after {
+    content: ' ';
+    border: 5px #ff002b solid;
+    position: absolute;
+    right: 0px;
+    top: -5px;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+  }
+  &:before {
+    content: ' ';
+    border: 5px #ff002b solid;
+    position: absolute;
+    left: 0px;
+    top: -5px;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-right-color: transparent;
+  }
+}
+
+.fb-selected {
+  outline: 2px solid #3b97e3 !important;
+  outline-offset: -1px;
+}

@@ -1,0 +1,145 @@
+::ng-deep {
+  .tools-container {
+    .tool-category {
+      font-weight: bold;
+    }
+    .items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      padding: 0 8px;
+    }
+    .toolbox {
+      border: 1px #3c3c3ccc solid;
+      width: 100px;
+      padding: 6px;
+      cursor: pointer;
+      height: 90px;
+      overflow: hidden;
+      position: relative;
+      .delete-action {
+        position: absolute;
+        width: 100%;
+        left: 0;
+        right: 0;
+        height: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #3c3c3ccc;
+        bottom: -100%;
+        transition: bottom 300ms;
+        overflow: hidden;
+      }
+      &:hover {
+        .delete-action {
+          bottom: 0%;
+        }
+      }
+
+      .icon-container {
+        width: 100%;
+        height: 80%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        svg,
+        img {
+          max-width: 100%;
+          max-height: 100%;
+        }
+        i.fa {
+          font-size: 34px !important;
+        }
+      }
+      .block-title {
+        width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        display: block;
+        text-align: center;
+        font-size: 12px;
+      }
+    }
+  }
+
+  i.fa {
+    &.block-div:before {
+      content: '\f2fa'; /*fa fa-rectangle*/
+    }
+
+    &.block-span:before {
+      content: '\f031'; /* آیکن چشم */
+    }
+
+    &.block-p:before {
+      content: '\f15c'; /* آیکن پاراگراف */
+    }
+
+    &.block-strong:before,
+    &.block-b:before {
+      content: '\f032'; /* آیکن Bold */
+    }
+
+    &.block-i:before {
+      content: '\f033'; /* آیکن Italic */
+    }
+
+    &.block-u:before {
+      content: '\f0cd'; /* آیکن Underline */
+    }
+
+    &.block-s:before {
+      content: '\f0cc'; /* آیکن Strikethrough */
+    }
+
+    &.block-section:before {
+      content: '\f02e'; /* آیکن فصل/section */
+    }
+
+    &.block-article:before {
+      content: '\f02f'; /* آیکن مقاله */
+    }
+
+    &.block-header:before {
+      content: '\f1dc'; /* آیکن سرصفحه */
+    }
+
+    &.block-footer:before {
+      content: '\e361'; /* آیکن  fa fa-columns-3 */
+    }
+
+    &.block-aside:before {
+      content: '\f015'; /* آیکن جعبه جانبی */
+    }
+
+    &.block-main:before {
+      content: '\e46a'; /* fa fa-block: آیکن  */
+    }
+
+    &.block-nav:before {
+      content: '\f0c9'; /* آیکن منو/ناوبری */
+    }
+
+    &.block-h1::before {
+      content: '\f313'; /*fa fa-h1*/
+    }
+    &.block-h2::before {
+      content: '\f314'; /*fa fa-h2*/
+    }
+    &.block-h3::before {
+      content: '\f315'; /*fa fa-h3*/
+    }
+    &.block-h4::before {
+      content: '\f86a'; /*fa fa-h4*/
+    }
+    &.block-h5::before {
+      content: '\e412'; /*fa fa-h5*/
+    }
+    &.block-h6::before {
+      content: '\e413'; /*fa fa-h6*/
+    }
+  }
+}

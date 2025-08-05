@@ -1,0 +1,39 @@
+.cssStyles {
+  padding: 9px;
+  border: 1px #47474770 solid;
+}
+
+.m-w-50 {
+  max-width: 50px;
+}
+
+/* input select prefix size*/
+.select-unit {
+  max-width: 34px;
+  padding: 6px;
+}
+.input-size {
+  max-width: 68px;
+  padding: 6px 2px;
+}
+.input-group-text {
+  i {
+    font-weight: 300;
+    font-size: 24px;
+  }
+}
+
+.img-container {
+  width: 120px;
+  height: 75px;
+  background-color: #a7a6a6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  overflow: hidden;
+  img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}

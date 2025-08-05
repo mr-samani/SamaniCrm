@@ -16,7 +16,7 @@ app-dashboard {
   padding: 1px;
 }
 
-.dashboard-container {
+.dashboard-container.header-fixed-top {
   margin-top: 60px;
 }
 
@@ -24,6 +24,5 @@ app-dashboard {
   background-color: var(--bs-body-bg);
   border-radius: 4px;
   margin: 10px;
-  overflow: hidden;
   padding: 15px 10px;
 }

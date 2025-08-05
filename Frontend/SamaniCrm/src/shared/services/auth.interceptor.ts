@@ -50,7 +50,7 @@ export class AuthInterceptor implements HttpInterceptor {
     if (AppConst.currentLanguage !== '') {
       return AppConst.currentLanguage;
     } else {
-      return localStorage.getItem('lang') || '';
+      return localStorage.getItem('lang') || AppConst.defaultLang;
     }
   }
 
@@ -59,13 +59,13 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
     return next.handle(this.setHeader(req)).pipe(
-      catchError((err: any) => {
+      catchError((err: HttpErrorResponse) => {
         return this.handleError(err, req, next);
       }),
     );
   }
 
-  private handleError(error: any, request: HttpRequest<any>, next: HttpHandler) {
+  private handleError(error: HttpErrorResponse, request: HttpRequest<any>, next: HttpHandler) {
     switch (error.status) {
       case 401:
         if (
@@ -106,7 +106,6 @@ export class AuthInterceptor implements HttpInterceptor {
             }),
             catchError((err: HttpErrorResponse) => {
               this.isRefreshing = false;
-              debugger;
               if (err.status == 401) {
                 this.authService.logOut();
               }
@@ -153,12 +152,15 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   handleServerError(err: HttpErrorResponse) {
-    const msg = err.error?.message ?? this.translateService.instant('Message.ErrorOccurred');
-    this.alertService.show({
-      title: msg,
-      showCancelButton: false,
-      showConfirmButton: true,
-      confirmButtonText: this.translateService.instant('Ok'),
+    this.translateService.get('Message.ErrorOccurred').subscribe((lmsg) => {
+      const msg =
+        err.error?.message ?? lmsg ?? 'Unfortunately, an error has occurred on the server!';
+      this.alertService.show({
+        title: msg,
+        showCancelButton: false,
+        showConfirmButton: true,
+        confirmButtonText: this.translateService.instant('Ok'),
+      });
     });
     return throwError(() => err);
   }

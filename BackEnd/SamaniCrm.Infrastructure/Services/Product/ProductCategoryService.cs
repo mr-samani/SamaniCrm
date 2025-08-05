@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Application.ProductManager.Queries;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
 using SamaniCrm.Application.ProductManagerManager.Interfaces;
 using SamaniCrm.Application.ProductManagerManager.Queries;
@@ -188,6 +189,50 @@ public class ProductCategoryService : IProductCategoryService
         };
     }
 
+    public async Task<List<ProductCategoryDto>> GetPublicCategories(GetProductCategoriesQuery request, CancellationToken cancellationToken)
+    {
+        var currentCulture = L.CurrentLanguage;
+
+        var items = await _context.ProductCategories
+                 .Where(w => w.IsActive)
+                 .Where(c => c.ParentId == (request.ParentId ?? null))
+                 .Where(c => string.IsNullOrEmpty(request.Filter) ||
+                             c.Translations.Any(t => t.Culture == currentCulture && t.Title.Contains(request.Filter)))
+                 .OrderBy(c => c.OrderIndex)
+                 .Skip(request.Skip)
+                 .Take(request.Take)
+                 .Select(c => new
+                 {
+                     c.Id,
+                     c.Image,
+                     c.OrderIndex,
+                     c.ParentId,
+                     c.Slug,
+                     Translations = c.Translations
+                         .OrderByDescending(t => t.Culture == currentCulture)
+                         .Select(t => new { t.Title, t.Description, t.Culture })
+                         .ToList()
+                 })
+                 .ToListAsync(cancellationToken);
+
+
+        var result = items.Select(c =>
+        {
+            var best = c.Translations.FirstOrDefault();
+            return new ProductCategoryDto
+            {
+                Id = c.Id,
+                Title = best?.Title ?? "",
+                Description = best?.Description ?? "",
+                Image = c.Image,
+                OrderIndex = c.OrderIndex,
+                ParentId = c.ParentId,
+                Slug = c.Slug,
+            };
+        }).ToList();
+
+        return result;
+    }
 
 }
 

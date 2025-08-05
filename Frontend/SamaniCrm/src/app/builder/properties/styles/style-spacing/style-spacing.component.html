@@ -1,0 +1,116 @@
+<div class="input-panel">
+  <div class="input-group">
+    <input
+      type="text"
+      class="form-control"
+      name="spacing"
+      #spacing="ngModel"
+      [(ngModel)]="spacingString"
+      (change)="stringChange()"
+      [pattern]="spacingRegex" />
+    <button class="input-group-text" (click)="togglePanel()">
+      <i class="fa fa-border-outer"></i>
+    </button>
+  </div>
+  <p *ngIf="spacing.hasError('pattern')" class="text-danger">Invalid spacing value</p>
+
+  <div class="panel-back-drop" *ngIf="showPanel" (click)="showPanel = false"></div>
+  <div class="panel" *ngIf="showPanel && value" [style.top.px]="top" [style.right.px]="right">
+    <div class="place-top">
+      <div class="mb-3">
+        <div>
+          <b>Top</b>
+        </div>
+        <div class="input-group" *ngIf="value.top">
+          <input
+            type="number"
+            class="form-control input-size"
+            [(ngModel)]="value.top.size"
+            *ngIf="value.top.unit != 'auto'"
+            (change)="onUiChange()" />
+          <select
+            class="form-control select-unit"
+            [class.fw-100px]="value.top.unit == 'auto'"
+            [(ngModel)]="value.top.unit"
+            (change)="onUiChange()">
+            <option [value]="val" *ngFor="let val of sizeUnitList">
+              {{ val }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="place-left-right">
+      <div class="mb-3">
+        <div>
+          <b>Left</b>
+        </div>
+        <div class="input-group" *ngIf="value.left">
+          <input
+            type="number"
+            class="form-control input-size"
+            [(ngModel)]="value.left.size"
+            *ngIf="value.left.unit != 'auto'"
+            (change)="onUiChange()" />
+          <select
+            class="form-control select-unit"
+            [class.fw-100px]="value.left.unit == 'auto'"
+            [(ngModel)]="value.left.unit"
+            (change)="onUiChange()">
+            <option [value]="val" *ngFor="let val of sizeUnitList">
+              {{ val }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-3">
+        <div>
+          <b>Right</b>
+        </div>
+        <div class="input-group" *ngIf="value.right">
+          <input
+            type="number"
+            class="form-control input-size"
+            [(ngModel)]="value.right.size"
+            *ngIf="value.right.unit != 'auto'"
+            (change)="onUiChange()" />
+          <select
+            class="form-control select-unit"
+            [class.fw-100px]="value.right.unit == 'auto'"
+            [(ngModel)]="value.right.unit"
+            (change)="onUiChange()">
+            <option [value]="val" *ngFor="let val of sizeUnitList">
+              {{ val }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="place-bottom">
+      <div class="mb-3">
+        <div>
+          <b>Bottom</b>
+        </div>
+        <div class="input-group" *ngIf="value.bottom">
+          <input
+            type="number"
+            class="form-control input-size"
+            [(ngModel)]="value.bottom.size"
+            *ngIf="value.bottom.unit != 'auto'"
+            (change)="onUiChange()" />
+          <select
+            class="form-control select-unit"
+            [class.fw-100px]="value.bottom.unit == 'auto'"
+            [(ngModel)]="value.bottom.unit"
+            (change)="onUiChange()">
+            <option [value]="val" *ngFor="let val of sizeUnitList">
+              {{ val }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- <pre style="direction: ltr; text-align: left">{{ value | json }}</pre> -->
+  </div>
+</div>

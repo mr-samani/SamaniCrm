@@ -5,5 +5,9 @@
     border: 1px #cbcbcb solid;
     border-radius: 5px;
     margin: 6px 0;
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
   }
 }

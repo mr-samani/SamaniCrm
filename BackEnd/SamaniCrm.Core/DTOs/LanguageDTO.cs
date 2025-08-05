@@ -9,8 +9,8 @@ namespace SamaniCrm.Core.Shared.DTOs
 
     public class LanguageDTO
     {
-        public string Culture { get; set; } = default!;
-        public string Name { get; set; } = default!;
+        public required string Culture { get; set; } 
+        public required string Name { get; set; }
         public bool IsRtl { get; set; } = false;
         public string? Flag { get; set; }
         public bool IsDefault { get; set; }
