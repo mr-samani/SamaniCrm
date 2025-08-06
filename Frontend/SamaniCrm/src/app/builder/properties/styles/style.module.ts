@@ -1,3 +1,4 @@
+import { StyleGeneralComponent } from './style-general/style-general.component';
 import { StyleShadowComponent } from './style-shadow/style-shadow.component';
 import { NgModule } from '@angular/core';
 import { StyleBorderComponent } from './style-border/style-border.component';
@@ -9,6 +10,7 @@ import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { NgxInputColorModule, NgxInputGradientModule } from 'ngx-input-color';
 import { StyleDimensionsComponent } from './style-dimensions/style-dimensions.component';
 import { InputStyleComponent } from './input-style/input-style.component';
+import { InputGroupIconComponent } from './input-group-icon/input-group-icon.component';
 
 const comp = [
   StyleBorderComponent,
@@ -16,7 +18,9 @@ const comp = [
   StyleShadowComponent,
   StyleBackgroundComponent,
   StyleDimensionsComponent,
+  StyleGeneralComponent,
   InputStyleComponent,
+  InputGroupIconComponent,
 ];
 @NgModule({
   declarations: [...comp],

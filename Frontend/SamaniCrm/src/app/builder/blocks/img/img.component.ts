@@ -13,7 +13,12 @@ import { AppConst } from '@shared/app-const';
   styles: [
     `
       :host {
-        display: inline-block;
+        display: contents;
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        display: block;
       }
     `,
   ],

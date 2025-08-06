@@ -120,6 +120,7 @@ export class FormBuilderService {
     // important create new id
     s.id = generateSequentialGuid();
     s.data ??= new BlockData();
+    s.parent = parent;
     if (parent) s.dynamicDataCacheKey = findNearestDynamicDataCacheKey(parent);
     s = new BlockDefinition(s);
     blocks.splice(index, 0, s);

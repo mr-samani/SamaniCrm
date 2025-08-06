@@ -15,61 +15,12 @@
   @if (tab == 'General') {
     <div>
       <ng-container *ngIf="b.selectedBlock.data">
-        <details *ngIf="b.selectedBlock.data.style">
+        <details *ngIf="b.selectedBlock.data.style" open>
           <summary>Layout</summary>
-          <table>
-            <tr>
-              <th>Padding</th>
-              <td>
-                <style-spacing
-                  [(ngModel)]="b.selectedBlock.data.style.padding"
-                  (ngModelChange)="updateCss()"></style-spacing>
-              </td>
-            </tr>
-            <tr>
-              <th>Margin</th>
-              <td>
-                <style-spacing
-                  [(ngModel)]="b.selectedBlock.data.style.margin"
-                  (ngModelChange)="updateCss()"
-                  [canUseAuto]="true"></style-spacing>
-              </td>
-            </tr>
-            <tr>
-              <th>Border</th>
-              <td>
-                <style-border
-                  [(ngModel)]="b.selectedBlock.data.style.border"
-                  (css)="borderCss = $event; updateCss()"></style-border>
-              </td>
-            </tr>
-            <tr>
-              <th>Radius</th>
-              <td>
-                <style-spacing
-                  [(ngModel)]="b.selectedBlock.data.style.borderRadius"
-                  (ngModelChange)="updateCss()"></style-spacing>
-              </td>
-            </tr>
-            <tr>
-              <th>Shadow</th>
-              <td>
-                <div class="btn-group" role="group">
-                  <button type="button" class="btn btn-danger" (click)="clearStyle('boxShadow')">
-                    <i class="fa fa-times"></i>
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-success"
-                    ngxInputBoxShadow
-                    [(ngModel)]="b.selectedBlock.data.style.boxShadow"
-                    (ngModelChange)="updateCss()">
-                    <i class="fa fa-boxes"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </table>
+          <style-general
+            [style]="b.selectedBlock.data.style"
+            [block]="b.selectedBlock"
+            (styleChange)="updateCss()"></style-general>
         </details>
 
         <details *ngIf="b.selectedBlock.data && b.selectedBlock.data.style">

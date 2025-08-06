@@ -1,5 +1,7 @@
 <div
   class="block-item"
+  [attr.data-name]="block?.name"
+  [attr.data-parent-id]="block?.parent?.id"
   [class.fb-selected]="b.selectedBlock?.id == block?.id"
   [style]="block?.data ? block?.data?.css : undefined">
   <ng-container #container><ng-content></ng-content></ng-container>
@@ -24,7 +26,7 @@
         {{ block.name ?? block.tagName ?? BlockTypeEnum[block.type] }}
       </span>
     </div>
-    <div class="children-blocks" ngxDropList [data]="block.children" (drop)="b.drop($event, parent)">
+    <div class="children-blocks" ngxDropList [data]="block.children" (drop)="drop($event)">
       <span class="custom-placeholder2" *ngxPlaceholder></span>
       @if (block.children) {
         <dynamic-renderer

@@ -1,3 +1,223 @@
+ 
+ 
+
+
+
+<!-- Grid Properties -->
+<div *ngIf="style.display?.includes('grid')">
+  <p>Grid Properties:</p>
+  <table>
+    <tr>
+      <td colspan="2">
+        <div class="input-style" title="Grid Template Columns">
+          <span>Grid Template Columns</span>
+          <input type="text" [(ngModel)]="style.gridTemplateColumns" (change)="update()" name="gridTemplateColumns" placeholder="1fr 1fr 1fr" />
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="input-style" title="Grid Template Rows">
+          <span>Grid Template Rows</span>
+          <input type="text" [(ngModel)]="style.gridTemplateRows" (change)="update()" name="gridTemplateRows" placeholder="auto 1fr auto" />
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="input-style" title="Grid Template Areas">
+          <span>Grid Template Areas</span>
+          <input type="text" [(ngModel)]="style.gridTemplateAreas" (change)="update()" name="gridTemplateAreas" placeholder="'header header' 'sidebar main'" />
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input-style label="Gap" tooltip="Gap" [(ngModel)]="style.gap" name="gap" (change)="update()"></input-style>
+      </td>
+      <td>
+        <input-style label="Row Gap" tooltip="Row Gap" [(ngModel)]="style.rowGap" name="rowGap" (change)="update()"></input-style>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input-style label="Column Gap" tooltip="Column Gap" [(ngModel)]="style.columnGap" name="columnGap" (change)="update()"></input-style>
+      </td>
+      <td>
+        <div class="input-style" title="Justify Items">
+          <span>Justify Items</span>
+          <select [(ngModel)]="style.justifyItems" (change)="update()" name="justifyItems">
+            <option value="start">Start</option>
+            <option value="end">End</option>
+            <option value="center">Center</option>
+            <option value="stretch">Stretch</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="input-style" title="Align Items">
+          <span>Align Items</span>
+          <select [(ngModel)]="style.alignItems" (change)="update()" name="alignItems">
+            <option value="start">Start</option>
+            <option value="end">End</option>
+            <option value="center">Center</option>
+            <option value="stretch">Stretch</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="input-style" title="Grid Column">
+          <span>Grid Column</span>
+          <input type="text" [(ngModel)]="style.gridColumn" (change)="update()" name="gridColumn" placeholder="1 / 3" />
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="input-style" title="Grid Row">
+          <span>Grid Row</span>
+          <input type="text" [(ngModel)]="style.gridRow" (change)="update()" name="gridRow" placeholder="1 / 3" />
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="input-style" title="Grid Area">
+          <span>Grid Area</span>
+          <input type="text" [(ngModel)]="style.gridArea" (change)="update()" name="gridArea" placeholder="header" />
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="input-style" title="Justify Self">
+          <span>Justify Self</span>
+          <select [(ngModel)]="style.justifySelf" (change)="update()" name="justifySelf">
+            <option value="auto">Auto</option>
+            <option value="start">Start</option>
+            <option value="end">End</option>
+            <option value="center">Center</option>
+            <option value="stretch">Stretch</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="input-style" title="Align Self">
+          <span>Align Self</span>
+          <select [(ngModel)]="style.alignSelf" (change)="update()" name="alignSelf">
+            <option value="auto">Auto</option>
+            <option value="start">Start</option>
+            <option value="end">End</option>
+            <option value="center">Center</option>
+            <option value="stretch">Stretch</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- Overflow Properties -->
+<p>Overflow:</p>
+<table>
+  <tr>
+    <td>
+      <div class="input-style" title="Overflow X">
+        <span>Overflow X</span>
+        <select [(ngModel)]="style.overflowX" (change)="update()" name="overflowX">
+          <option value="visible">Visible</option>
+          <option value="hidden">Hidden</option>
+          <option value="scroll">Scroll</option>
+          <option value="auto">Auto</option>
+        </select>
+      </div>
+    </td>
+    <td>
+      <div class="input-style" title="Overflow Y">
+        <span>Overflow Y</span>
+        <select [(ngModel)]="style.overflowY" (change)="update()" name="overflowY">
+          <option value="visible">Visible</option>
+          <option value="hidden">Hidden</option>
+          <option value="scroll">Scroll</option>
+          <option value="auto">Auto</option>
+        </select>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<!-- Box Model -->
+<p>Box Model:</p>
+<table>
+  <tr>
+    <td colspan="2">
+      <div class="input-style" title="Box Sizing">
+        <span>Box Sizing</span>
+        <select [(ngModel)]="style.boxSizing" (change)="update()" name="boxSizing">
+          <option value="content-box">Content Box</option>
+          <option value="border-box">Border Box</option>
+        </select>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div class="input-style" title="Float">
+        <span>Float</span>
+        <select [(ngModel)]="style.float" (change)="update()" name="float">
+          <option value="none">None</option>
+          <option value="left">Left</option>
+          <option value="right">Right</option>
+        </select>
+      </div>
+    </td>
+    <td>
+      <div class="input-style" title="Clear">
+        <span>Clear</span>
+        <select [(ngModel)]="style.clear" (change)="update()" name="clear">
+          <option value="none">None</option>
+          <option value="left">Left</option>
+          <option value="right">Right</option>
+          <option value="both">Both</option>
+        </select>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div class="input-style" title="Vertical Align">
+        <span>Vertical Align</span>
+        <select [(ngModel)]="style.verticalAlign" (change)="update()" name="verticalAlign">
+          <option value="baseline">Baseline</option>
+          <option value="sub">Sub</option>
+          <option value="super">Super</option>
+          <option value="top">Top</option>
+          <option value="text-top">Text Top</option>
+          <option value="middle">Middle</option>
+          <option value="bottom">Bottom</option>
+          <option value="text-bottom">Text Bottom</option>
+        </select>
+      </div>
+    </td>
+    <td>
+      <div class="input-style" title="Visibility">
+        <span>Visibility</span>
+        <select [(ngModel)]="style.visibility" (change)="update()" name="visibility">
+          <option value="visible">Visible</option>
+          <option value="hidden">Hidden</option>
+          <option value="collapse">Collapse</option>
+        </select>
+      </div>
+    </td>
+  </tr>
+</table>
+
 <p>Size:</p>
 <table>
   <tr>

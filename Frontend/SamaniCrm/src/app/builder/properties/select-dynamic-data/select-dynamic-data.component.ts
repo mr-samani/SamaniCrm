@@ -24,6 +24,8 @@ export class SelectDynamicDataComponent {
           children: this.list.find((x) => x.nameSpace == this.selectedNameSpace)?.children ?? [],
         };
       }
+    } else {
+      this.selectedData = undefined;
     }
   }
   @Output() keys = new EventEmitter<string[]>();

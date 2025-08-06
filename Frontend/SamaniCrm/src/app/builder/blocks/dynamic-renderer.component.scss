@@ -1,9 +1,10 @@
 :host {
-  display: block;
+  display: contents;
 }
 .block-item {
   position: relative;
-  min-height: 10px;
+  min-height: 20px;
+  max-height: 100%;
   &:hover {
     outline: 1px #3b97e3 solid;
   }
@@ -14,6 +15,7 @@
   &:not(:first-child) {
     min-height: 10px;
     margin-top: 5px;
+    height: 100%;
   }
 
   &:hover {

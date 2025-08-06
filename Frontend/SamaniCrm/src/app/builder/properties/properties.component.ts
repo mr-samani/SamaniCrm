@@ -12,7 +12,6 @@ import { MatDialog } from '@angular/material/dialog';
   encapsulation: ViewEncapsulation.None,
 })
 export class PropertiesComponent extends AppComponentBase implements OnInit {
-  borderCss = '';
   tab: 'General' | 'Advanced' = 'General';
 
   constructor(
@@ -40,10 +39,7 @@ export class PropertiesComponent extends AppComponentBase implements OnInit {
     this.ch.detectChanges();
   }
 
-  clearStyle(styleKey: keyof Partial<CSSStyleDeclaration>) {
-    if (!this.b.selectedBlock || !this.b.selectedBlock.data || !this.b.selectedBlock.data.style) return;
-    delete this.b.selectedBlock.data.style[styleKey];
-  }
+
 
   async saveAsBlockDefinition() {
     const { SaveAsBlockDialogComponent } = await import(

@@ -12,7 +12,7 @@ import {
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { BLOCK_REGISTRY, BlockDefinition, BlockTypeEnum } from './block-registry';
 import { FormBuilderService } from '../services/form-builder.service';
-import { NgxDragDropKitModule } from 'ngx-drag-drop-kit';
+import { IDropEvent, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 import { BlockBase } from './block-base';
 //  ngxResizable
 //   (resizeEnd)="onResizeEnd($event)"
@@ -82,5 +82,9 @@ export class DynamicRendererComponent {
     const rect = el.getBoundingClientRect();
 
     this.actionsPosition = blockRect.top - 40 > rect.top ? 'top' : 'bottom';
+  }
+
+  drop($event: IDropEvent<BlockDefinition[]>) {
+    this.b.drop($event, this.block);
   }
 }

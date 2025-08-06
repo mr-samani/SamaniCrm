@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Injector, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Injector, Input, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 import { SizeUnit, SizeUnitList } from '../models/SizeUnit';
@@ -25,6 +25,7 @@ import { SizeUnit, SizeUnitList } from '../models/SizeUnit';
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputStyleComponent extends AppComponentBase implements ControlValueAccessor {
   @Input() label? = '';

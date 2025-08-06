@@ -1,0 +1,16 @@
+<div class="btn-group" role="group">
+  @for (item of items; track $index) {
+    <input
+      type="radio"
+      class="btn-check"
+      name="bg"
+      id="alignstart"
+      autocomplete="off"
+      [(ngModel)]="value"
+      (change)="update()"
+      [value]="item.value" />
+    <label class="btn" [for]="item.value" [title]="item.value">
+      <i [ngClass]="item.icon"></i>
+    </label>
+  }
+</div>

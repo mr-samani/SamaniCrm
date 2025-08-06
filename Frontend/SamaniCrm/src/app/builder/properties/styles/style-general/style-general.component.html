@@ -1,0 +1,223 @@
+<summary>Layout</summary>
+
+<table>
+  <tr>
+    <th>Text align</th>
+    <td>
+      <input-group-icon [(ngModel)]="style.textAlign" (change)="update()" [items]="textAlignItems"></input-group-icon>
+    </td>
+  </tr>
+  <!-- display -->
+  <tr>
+    <th>Display</th>
+    <td>
+      <div class="input-style" title="Display">
+        <select [(ngModel)]="style.display" (change)="update()" name="display">
+          <option value="block">Block</option>
+          <option value="inline">Inline</option>
+          <option value="inline-block">Inline-Block</option>
+          <option value="flex">Flex</option>
+          <option value="inline-flex">Inline-Flex</option>
+          <option value="grid">Grid</option>
+          <option value="inline-grid">Inline-Grid</option>
+          <option value="none">None</option>
+          <option value="contents">Contents</option>
+          <option value="table">Table</option>
+          <option value="table-row">Table-Row</option>
+          <option value="table-cell">Table-Cell</option>
+        </select>
+      </div>
+    </td>
+  </tr>
+  @if (style.display?.includes('flex')) {
+    <tr>
+      <th>Flex Direction</th>
+      <td>
+        <input-group-icon
+          [(ngModel)]="style.flexDirection"
+          (change)="update()"
+          [items]="flexDirectionItems"></input-group-icon>
+      </td>
+    </tr>
+
+    <tr>
+      <th>Justify Content</th>
+      <td>
+        <input-group-icon
+          [(ngModel)]="style.justifyContent"
+          (change)="update()"
+          [items]="justifyContentItems"></input-group-icon>
+      </td>
+    </tr>
+    <tr>
+      <th></th>
+      <td></td>
+    </tr>
+  }
+</table>
+
+<p></p>
+
+<!-- Flex Properties -->
+<div *ngIf="style.display?.includes('flex')">
+  <table>
+    
+    <tr>
+      <td colspan="2">
+        <div class="input-style" title="Align Items">
+          <span>Align Items</span>
+          <select [(ngModel)]="style.alignItems" (change)="update()" name="alignItems">
+            <option value="stretch">Stretch</option>
+            <option value="flex-start">Flex Start</option>
+            <option value="flex-end">Flex End</option>
+            <option value="center">Center</option>
+            <option value="baseline">Baseline</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="input-style" title="Align Content">
+          <span>Align Content</span>
+          <select [(ngModel)]="style.alignContent" (change)="update()" name="alignContent">
+            <option value="stretch">Stretch</option>
+            <option value="flex-start">Flex Start</option>
+            <option value="flex-end">Flex End</option>
+            <option value="center">Center</option>
+            <option value="space-between">Space Between</option>
+            <option value="space-around">Space Around</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="input-style" title="Flex Wrap">
+          <span>Flex Wrap</span>
+          <select [(ngModel)]="style.flexWrap" (change)="update()" name="flexWrap">
+            <option value="nowrap">No Wrap</option>
+            <option value="wrap">Wrap</option>
+            <option value="wrap-reverse">Wrap Reverse</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input-style label="Gap" tooltip="Gap" [(ngModel)]="style.gap" name="gap" (change)="update()"></input-style>
+      </td>
+      <td>
+        <input-style
+          label="Row Gap"
+          tooltip="Row Gap"
+          [(ngModel)]="style.rowGap"
+          name="rowGap"
+          (change)="update()"></input-style>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input-style
+          label="Column Gap"
+          tooltip="Column Gap"
+          [(ngModel)]="style.columnGap"
+          name="columnGap"
+          (change)="update()"></input-style>
+      </td>
+      <td>
+        <input-style
+          label="Flex Grow"
+          tooltip="Flex Grow"
+          [(ngModel)]="style.flexGrow"
+          name="flexGrow"
+          (change)="update()"></input-style>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input-style
+          label="Flex Shrink"
+          tooltip="Flex Shrink"
+          [(ngModel)]="style.flexShrink"
+          name="flexShrink"
+          (change)="update()"></input-style>
+      </td>
+      <td>
+        <input-style
+          label="Flex Basis"
+          tooltip="Flex Basis"
+          [(ngModel)]="style.flexBasis"
+          name="flexBasis"
+          (change)="update()"></input-style>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="input-style" title="Align Self">
+          <span>Align Self</span>
+          <select [(ngModel)]="style.alignSelf" (change)="update()" name="alignSelf">
+            <option value="auto">Auto</option>
+            <option value="flex-start">Flex Start</option>
+            <option value="flex-end">Flex End</option>
+            <option value="center">Center</option>
+            <option value="baseline">Baseline</option>
+            <option value="stretch">Stretch</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="input-style" title="Order">
+          <span>Order</span>
+          <input type="number" [(ngModel)]="style.order" (change)="update()" name="order" />
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+<table>
+  <tr>
+    <th>Padding</th>
+    <td>
+      <style-spacing [(ngModel)]="style.padding" (ngModelChange)="update()"></style-spacing>
+    </td>
+  </tr>
+  <tr>
+    <th>Margin</th>
+    <td>
+      <style-spacing [(ngModel)]="style.margin" (ngModelChange)="update()" [canUseAuto]="true"></style-spacing>
+    </td>
+  </tr>
+  <tr>
+    <th>Border</th>
+    <td>
+      <style-border [(ngModel)]="style.border" (css)="update()"></style-border>
+    </td>
+  </tr>
+  <tr>
+    <th>Radius</th>
+    <td>
+      <style-spacing [(ngModel)]="style.borderRadius" (ngModelChange)="update()"></style-spacing>
+    </td>
+  </tr>
+  <tr>
+    <th>Shadow</th>
+    <td>
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-danger" (click)="clearStyle('boxShadow')">
+          <i class="fa fa-times"></i>
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          ngxInputBoxShadow
+          [(ngModel)]="style.boxShadow"
+          (ngModelChange)="update()">
+          <i class="fa fa-boxes"></i>
+        </button>
+      </div>
+    </td>
+  </tr>
+</table>

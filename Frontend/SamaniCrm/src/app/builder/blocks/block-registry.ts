@@ -105,7 +105,7 @@ export class BlockDefinition {
       this.parent = parent;
 
       if (data.itemTemplate) {
-        this.itemTemplate = new BlockDefinition(data.itemTemplate);
+        this.itemTemplate = new BlockDefinition(data.itemTemplate, this);
       }
       this.children = (data.children ?? []).map((child) => (child = new BlockDefinition(child, this)));
     }
