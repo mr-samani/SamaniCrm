@@ -11,6 +11,7 @@ import { NgxInputColorModule, NgxInputGradientModule } from 'ngx-input-color';
 import { StyleDimensionsComponent } from './style-dimensions/style-dimensions.component';
 import { InputStyleComponent } from './input-style/input-style.component';
 import { InputGroupIconComponent } from './input-group-icon/input-group-icon.component';
+import { SpacingControlComponent } from '@app/builder/_libs/spacing-control/spacing-control.component';
 
 const comp = [
   StyleBorderComponent,
@@ -24,7 +25,14 @@ const comp = [
 ];
 @NgModule({
   declarations: [...comp],
-  imports: [CommonModule, FormsModule, FileManagerModule, NgxInputColorModule, NgxInputGradientModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    FileManagerModule,
+    NgxInputColorModule,
+    NgxInputGradientModule,
+    SpacingControlComponent,
+  ],
   exports: [...comp],
 })
 export class StyleProperties {}

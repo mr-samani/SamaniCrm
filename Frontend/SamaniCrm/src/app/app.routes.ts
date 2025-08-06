@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { TestyComponent } from './testy/testy.component';
 import { GridGeneratorComponent } from './grid-generator/grid-generator.component';
+import { SpacingControlComponent } from './builder/_libs/spacing-control/spacing-control.component';
 
 export const routes: Routes = [
   //{ path: '', redirectTo: 'testy', pathMatch: 'full' },
@@ -10,6 +11,7 @@ export const routes: Routes = [
 
   { path: 'testy', component: TestyComponent },
   { path: 'g', component: GridGeneratorComponent },
+  { path: 's', component: SpacingControlComponent },
 
   //   {
   //     path: 'pagebuilder',

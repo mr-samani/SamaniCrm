@@ -37,7 +37,7 @@ export class StyleGeneralComponent implements OnInit {
   }
 }
 
-export const justifyContentItems: InputGroupItem[] = [
+export const JustifyContentItems: InputGroupItem[] = [
   { icon: '', value: 'flex-start' },
   { icon: '', value: 'flex-end' },
   { icon: '', value: 'center' },
