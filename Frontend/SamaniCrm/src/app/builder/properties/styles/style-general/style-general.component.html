@@ -178,20 +178,8 @@
 </div>
 
 <spacing-control [(ngModel)]="style" (change)="update()"></spacing-control>
-
-<table>
-  <tr>
-    <th>Padding</th>
-    <td>
-      <style-spacing [(ngModel)]="style.padding" (ngModelChange)="update()"></style-spacing>
-    </td>
-  </tr>
-  <tr>
-    <th>Margin</th>
-    <td>
-      <style-spacing [(ngModel)]="style.margin" (ngModelChange)="update()" [canUseAuto]="true"></style-spacing>
-    </td>
-  </tr>
+{{style.padding}}
+<!-- <table>  
   <tr>
     <th>Border</th>
     <td>
@@ -222,4 +210,4 @@
       </div>
     </td>
   </tr>
-</table>
+</table> -->

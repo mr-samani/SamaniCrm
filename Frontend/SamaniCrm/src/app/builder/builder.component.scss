@@ -51,10 +51,11 @@ app-builder {
   padding: 10px;
   overflow: auto;
   height: 100%;
-  background-color: var(--bgColor);
+  background-color: #292929; //var(--bgColor);
   color: var(--fgColor);
   // fix bug ngx-dragdropkit
   left: unset !important;
+  user-select: none;
 }
 
 /*--------------- view mode --------------*/
@@ -85,7 +86,6 @@ details {
     margin-bottom: 6px;
   }
 }
-
 
 /*--------------end of group buttons------------------------------*/
 

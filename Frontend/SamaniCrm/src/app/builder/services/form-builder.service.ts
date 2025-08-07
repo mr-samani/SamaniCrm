@@ -200,7 +200,8 @@ export class FormBuilderService {
 
     if (!block.data) {
       block.data = new BlockData();
-    }
+    } 
+    // console.log(block.data.style)
     block.data.css = objectToStyle(block.data.style);
     //  block.data.css = block.data.css.replace(/\s/g, '');
     if (setHistory) this.history.save('edit', block, `Update style block '${block.id}': '${block.data.css}'`);

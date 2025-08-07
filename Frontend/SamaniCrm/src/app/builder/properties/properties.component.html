@@ -21,6 +21,7 @@
             [style]="b.selectedBlock.data.style"
             [block]="b.selectedBlock"
             (styleChange)="updateCss()"></style-general>
+          {{ b.selectedBlock.data.style.padding }}
         </details>
 
         <details *ngIf="b.selectedBlock.data && b.selectedBlock.data.style">
