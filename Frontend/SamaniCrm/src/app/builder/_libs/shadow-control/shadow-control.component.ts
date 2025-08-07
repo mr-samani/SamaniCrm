@@ -7,7 +7,6 @@ import {
   EventEmitter,
   forwardRef,
   HostListener,
-  Injector,
   Input,
   OnInit,
   Output,
@@ -33,10 +32,6 @@ import { getOffsetPosition } from './get-offset-position';
   ],
 })
 export class ShadowControlComponent implements OnInit, AfterViewInit {
-  /**
-   * The maximum range of the box shadow.
-   * @default 25
-   */
   @Input() maxRange = 25;
 
   padRect?: DOMRect;
@@ -45,8 +40,8 @@ export class ShadowControlComponent implements OnInit, AfterViewInit {
   y = 0;
 
   isDragging = false;
-  selectedValue = '';
-  list: string[] = [];
+  selectedShadow?: BoxShadow;
+  selectedIndex = 0;
 
   @Output() change = new EventEmitter<string>();
   shadows: BoxShadow[] = [];
@@ -57,7 +52,6 @@ export class ShadowControlComponent implements OnInit, AfterViewInit {
   @ViewChild('flashlight', { static: true }) flashlight!: ElementRef<SVGSVGElement>;
 
   private radius: number = 0;
-
   center: { x: number; y: number } = { x: 0, y: 0 };
   result = '';
 
@@ -104,14 +98,22 @@ export class ShadowControlComponent implements OnInit, AfterViewInit {
 
   private updatePosition(position: { x: number; y: number }) {
     if (!this.isDragging) return;
+
     const padRec = this.padRect!;
     const flashlightRec = this.flashlightRect!;
 
+    const centerX = this.center.x;
+    const centerY = this.center.y;
+
+    const dx = position.x - centerX;
+    const dy = position.y - centerY;
+
+    // زاویه
+    const angleRad = Math.atan2(dy, dx);
     const minX = flashlightRec.width / 2;
     const maxX = padRec.width - flashlightRec.width / 2;
     const minY = flashlightRec.height / 2;
     const maxY = padRec.height - flashlightRec.height / 2;
-
     const clampedX = Math.max(minX, Math.min(position.x, maxX));
     const clampedY = Math.max(minY, Math.min(position.y, maxY));
 
@@ -119,70 +121,57 @@ export class ShadowControlComponent implements OnInit, AfterViewInit {
     this.x = clampedX - flashlightRec.width / 2;
     this.y = clampedY - flashlightRec.height / 2;
 
-    // فاصله flashlight از مرکز
-    const dx = this.x - this.center.x;
-    const dy = this.y - this.center.y;
-
-    // مقیاس تبدیل به -50 تا +50 (یا هرچقدر بخوای)
+    // ✅ ولی مقدار واقعی shadow رو از موقعیت موس (dx, dy) بگیر
     const halfRangeX = (padRec.width - flashlightRec.width) / 2;
     const halfRangeY = (padRec.height - flashlightRec.height) / 2;
 
-    let valueX = (dx / halfRangeX) * this.maxRange; // -50 تا +50
+    let valueX = (dx / halfRangeX) * this.maxRange;
     let valueY = (dy / halfRangeY) * this.maxRange;
 
-    // رُند کردن
-    valueX = Math.round(valueX);
-    valueY = Math.round(valueY);
+    valueX = Math.round(Math.min(Math.max(valueX, -this.maxRange), this.maxRange));
+    valueY = Math.round(Math.min(Math.max(valueY, -this.maxRange), this.maxRange));
 
-    // محدود کردن به -50 تا +50 یا هر مقدار دلخواه
-    valueX = Math.min(Math.max(valueX, -this.maxRange), this.maxRange);
-    valueY = Math.min(Math.max(valueY, -this.maxRange), this.maxRange);
-
-    // Calculate angle from center to mouse
-    //const angle = (Math.atan2(position.y - this.center.y, position.x - this.center.x) * 180) / Math.PI + 90;
-    const angle = (Math.atan2(this.y - this.center.y, this.x - this.center.x) * 180) / Math.PI + 90;
-    console.log(this.y - this.center.y, this.x - this.center.x, angle);
-    // Position flashlight on the edge of the container
-    const flashlightX = this.center.x + this.radius * Math.cos(angle);
-    const flashlightY = this.center.y + this.radius * Math.sin(angle);
-
-    // Update flashlight position and rotation
+    // چرخش چراغ قوه
+    const angleDeg = angleRad * (180 / Math.PI);
     if (this.flashlight.nativeElement) {
-      this.flashlight.nativeElement.style.transform = ` rotate(${angle * -1}deg)`;
+      this.flashlight.nativeElement.style.transform = `rotate(${angleDeg + 180}deg)`;
     }
 
-    // Update box-shadow to simulate light
-    const shadowX = -Math.cos(angle) * 20; // Offset shadow in opposite direction
-    const shadowY = -Math.sin(angle) * 20;
+    // آپدیت shadow
+    if (this.selectedShadow) {
+      this.selectedShadow = {
+        ...this.selectedShadow,
+        xOffset: valueX,
+        yOffset: valueY,
+      };
+      this.updateShadow(this.selectedShadow);
+    }
 
-    // if (!this.value || this.value.x !== valueX || this.value.y !== valueY) {
-    //   this.value = newValue;
-    //   this.onChangeData();
-    // }
+    this.cd.detectChanges();
   }
 
   private updateContainerDimensions() {
     this.padRect = this.pad.nativeElement.getBoundingClientRect();
     this.flashlightRect = this.flashlight.nativeElement.getBoundingClientRect();
     this.center = { x: this.padRect.width / 2, y: this.padRect.height / 2 };
-    this.x = this.center.x - this.flashlightRect!.width / 2;
-    this.y = this.center.y - this.flashlightRect!.height / 2;
-    this.radius = Math.min(this.padRect.width, this.padRect.height) / 2 - 20; // Keep flashlight inside bounds
-
+    this.radius = Math.min(this.padRect.width, this.padRect.height) / 2 - this.flashlightRect.width / 2;
+    this.x = 0; // Reset to center
+    this.y = 0;
     this.cd.detectChanges();
   }
+
   writeValue(val: string): void {
     if (!val) {
       this.shadows = [];
+      this.result = '';
       this.onChange('');
       this.change.emit('');
       return;
     }
 
-    // Parse box-shadow string
     this.shadows = parseBoxShadow(val);
     this.result = formatBoxShadowToCSS(this.shadows);
-    if (val != this.result) {
+    if (val !== this.result) {
       this.update();
     }
   }
@@ -195,20 +184,18 @@ export class ShadowControlComponent implements OnInit, AfterViewInit {
     this.onTouched = fn;
   }
 
-  // Update shadow values (e.g., from UI inputs)
-  updateShadow(index: number, updatedShadow: Partial<BoxShadow>) {
-    if (index >= this.shadows.length) return;
+  updateShadow(updatedShadow: Partial<BoxShadow>) {
+    if (this.selectedIndex >= this.shadows.length) return;
 
-    this.shadows[index] = {
-      ...this.shadows[index],
+    this.shadows[this.selectedIndex] = {
+      ...this.shadows[this.selectedIndex],
       ...updatedShadow,
-      color: validateColor(updatedShadow.color || this.shadows[index].color),
+      color: validateColor(updatedShadow.color || this.shadows[this.selectedIndex].color),
     };
-
+    this.selectedShadow!.cssValue = formatBoxShadowToCSS([this.selectedShadow!]);
     this.update();
   }
 
-  // Add a new shadow
   addShadow() {
     this.shadows.push({
       xOffset: 0,
@@ -221,7 +208,6 @@ export class ShadowControlComponent implements OnInit, AfterViewInit {
     this.update();
   }
 
-  // Remove a shadow
   removeShadow(index: number) {
     this.shadows.splice(index, 1);
     this.update();
@@ -229,7 +215,9 @@ export class ShadowControlComponent implements OnInit, AfterViewInit {
 
   private update() {
     this.result = formatBoxShadowToCSS(this.shadows);
+    this.shadows.forEach((m) => (m.cssValue = formatBoxShadowToCSS([m])));
     this.onChange(this.result);
     this.change.emit(this.result);
+    this.cd.detectChanges();
   }
 }

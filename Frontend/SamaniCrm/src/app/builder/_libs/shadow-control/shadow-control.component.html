@@ -1,7 +1,7 @@
 <div class="box-container">
   <div class="preview">
     <div class="simulator pad-container" #pad (mousedown)="onPadClick($event)" (touchstart)="onPadClick($event)">
-      <div class="card-sample" [style.boxShadow]="selectedValue"></div>
+      <div class="card-sample" [style.boxShadow]="selectedShadow?.cssValue"></div>
       <svg
         class="light-svg"
         viewBox="0 0 640 512"
@@ -30,51 +30,56 @@
       <div class="card-sample" [style.boxShadow]="result"></div>
     </div>
   </div>
-  <pre>{{ result }}</pre>
+
   <div class="list-box">
-    @for (item of list; track $index) {
-      <div class="list-item" [class.active]="item == selectedValue" (click)="selectedValue = item">
-        {{ item }}
+    @for (item of shadows; let i = $index; track i) {
+      <div class="list-item" [class.active]="item == selectedShadow" (click)="selectedShadow = item; selectedIndex = i">
+        {{ item.cssValue }}
+        <button (click)="removeShadow(i)">Remove</button>
       </div>
     }
   </div>
 </div>
 
-<div *ngFor="let shadow of shadows; let i = index" class="shadow-item">
-  {{ shadow.cssValue }}
+<div *ngIf="selectedShadow" class="shadow-item">
+  {{ selectedShadow.cssValue }}
   <label>Inset</label>
-  <input type="checkbox" [(ngModel)]="shadow.inset" (change)="updateShadow(i, { inset: shadow.inset })" />
+  <input type="checkbox" [(ngModel)]="selectedShadow.inset" (change)="updateShadow({ inset: selectedShadow.inset })" />
 
   <label>X Offset</label>
-  <input type="number" [(ngModel)]="shadow.xOffset" (change)="updateShadow(i, { xOffset: shadow.xOffset })" />
+  <input
+    type="number"
+    [(ngModel)]="selectedShadow.xOffset"
+    (change)="updateShadow({ xOffset: selectedShadow.xOffset })" />
 
   <label>Y Offset</label>
-  <input type="number" [(ngModel)]="shadow.yOffset" (change)="updateShadow(i, { yOffset: shadow.yOffset })" />
+  <input
+    type="number"
+    [(ngModel)]="selectedShadow.yOffset"
+    (change)="updateShadow({ yOffset: selectedShadow.yOffset })" />
 
   <label>Blur Radius</label>
   <input
     type="number"
-    [(ngModel)]="shadow.blurRadius"
+    [(ngModel)]="selectedShadow.blurRadius"
     min="0"
-    (change)="updateShadow(i, { blurRadius: shadow.blurRadius })" />
+    (change)="updateShadow({ blurRadius: selectedShadow.blurRadius })" />
 
   <label>Spread Radius</label>
   <input
     type="number"
-    [(ngModel)]="shadow.spreadRadius"
-    (change)="updateShadow(i, { spreadRadius: shadow.spreadRadius })" />
+    [(ngModel)]="selectedShadow.spreadRadius"
+    (change)="updateShadow({ spreadRadius: selectedShadow.spreadRadius })" />
 
   <label>Color</label>
-  <input type="text" [(ngModel)]="shadow.color" (change)="updateShadow(i, { color: shadow.color })" />
+  <input type="text" [(ngModel)]="selectedShadow.color" (change)="updateShadow({ color: selectedShadow.color })" />
 
   <label>Unit</label>
-  <select [(ngModel)]="shadow.unit" (change)="updateShadow(i, { unit: shadow.unit })">
+  <select [(ngModel)]="selectedShadow.unit" (change)="updateShadow({ unit: selectedShadow.unit })">
     <option value="px">px</option>
     <option value="rem">rem</option>
     <option value="em">em</option>
   </select>
-
-  <button (click)="removeShadow(i)">Remove</button>
 </div>
 
 <button (click)="addShadow()">Add Shadow</button>
