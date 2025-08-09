@@ -1,5 +1,6 @@
 <div
   class="block-item"
+  [attr.id]="'block_' + block?.id"
   [attr.data-name]="block?.name"
   [attr.data-parent-id]="block?.parent?.id"
   [class.fb-selected]="b.selectedBlock?.id == block?.id"

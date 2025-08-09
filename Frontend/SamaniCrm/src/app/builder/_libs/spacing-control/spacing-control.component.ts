@@ -5,11 +5,10 @@ import {
   EventEmitter,
   forwardRef,
   HostListener,
-  Injector,
+  Input,
   OnInit,
   Output,
 } from '@angular/core';
-import { AppComponentBase } from '@app/app-component-base';
 import { getPointerPosition, IPosition } from './getPointerPosition';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -39,7 +38,7 @@ export interface ISpacingModel {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SpacingControlComponent extends AppComponentBase implements OnInit, ControlValueAccessor {
+export class SpacingControlComponent implements OnInit, ControlValueAccessor {
   @Output() change = new EventEmitter<Partial<CSSStyleDeclaration> | undefined>();
   spacing: ISpacingModel = {
     margin: { top: 0, right: 0, bottom: 0, left: 0 },
@@ -55,9 +54,7 @@ export class SpacingControlComponent extends AppComponentBase implements OnInit,
   onChange = (_: Partial<CSSStyleDeclaration> | undefined) => {};
   onTouched = () => {};
 
-  constructor(injector: Injector) {
-    super(injector);
-  }
+  constructor() {}
 
   ngOnInit() {}
 

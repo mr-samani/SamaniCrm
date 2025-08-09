@@ -125,8 +125,8 @@ export class ShadowControlComponent implements OnInit, AfterViewInit {
     const halfRangeX = (padRec.width - flashlightRec.width) / 2;
     const halfRangeY = (padRec.height - flashlightRec.height) / 2;
 
-    let valueX = (dx / halfRangeX) * this.maxRange;
-    let valueY = (dy / halfRangeY) * this.maxRange;
+let valueX = (-dx / halfRangeX) * this.maxRange;
+let valueY = (-dy / halfRangeY) * this.maxRange;
 
     valueX = Math.round(Math.min(Math.max(valueX, -this.maxRange), this.maxRange));
     valueY = Math.round(Math.min(Math.max(valueY, -this.maxRange), this.maxRange));

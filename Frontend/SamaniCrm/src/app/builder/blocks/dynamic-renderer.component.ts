@@ -8,12 +8,14 @@ import {
   Renderer2,
   Inject,
   ElementRef,
+  HostListener,
 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { BLOCK_REGISTRY, BlockDefinition, BlockTypeEnum } from './block-registry';
 import { FormBuilderService } from '../services/form-builder.service';
 import { IDropEvent, NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 import { BlockBase } from './block-base';
+import { OverlayCanvasService } from '../services/overlay-canvas.service';
 //  ngxResizable
 //   (resizeEnd)="onResizeEnd($event)"
 @Component({
@@ -46,6 +48,7 @@ export class DynamicRendererComponent {
     public b: FormBuilderService,
     @Inject(DOCUMENT) private doc: Document,
     private el: ElementRef<HTMLElement>,
+    private overlayCanvasService: OverlayCanvasService,
   ) {
     el.nativeElement.addEventListener('click', (ev: Event) => {
       this.onBlockClick(this.block!, ev);
@@ -86,5 +89,17 @@ export class DynamicRendererComponent {
 
   drop($event: IDropEvent<BlockDefinition[]>) {
     this.b.drop($event, this.block);
+  }
+
+  @HostListener('mouseover')
+  onMouseOver() {
+    let target = this.doc.querySelector('#block_' + this.block?.id);
+    if (!target) return;
+    this.overlayCanvasService.highlightElement(target, { label: true, side: ['all'], type: ['margin', 'padding'] });
+  }
+
+  @HostListener('mouseout')
+  onMouseOut() {
+    this.overlayCanvasService.clear();
   }
 }
