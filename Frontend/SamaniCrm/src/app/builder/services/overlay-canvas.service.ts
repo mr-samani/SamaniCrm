@@ -1,7 +1,7 @@
 import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 
-export type BoxType = 'padding' | 'margin' | 'border' | 'content' | 'all';
-export type Side = 'top' | 'right' | 'bottom' | 'left' | 'all';
+export type BoxType = 'padding' | 'margin' | 'border' | 'content';
+export type Side = 'top' | 'right' | 'bottom' | 'left';
 
 export interface HighlightOptions {
   type?: BoxType[];
@@ -36,7 +36,7 @@ export class OverlayCanvasService {
     document.body.appendChild(this.canvas);
 
     this.ctx = this.canvas.getContext('2d')!;
-    this.createPattern();
+    // this.createPattern();
     this.resize();
 
     window.addEventListener('resize', this.resizeBound);
@@ -88,7 +88,34 @@ export class OverlayCanvasService {
     this.pattern = this.ctx.createPattern(p, 'repeat');
   }
 
-  highlightElement(target: Element, options: HighlightOptions = { type: ['padding'], side: ['all'], label: true }) {
+  private createHatchPattern(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    color = '#00f',
+    spacing = 6,
+    lineWidth = 1,
+  ) {
+    if (!this.ctx) return;
+    const pCanvas = document.createElement('canvas');
+    pCanvas.width = spacing;
+    pCanvas.height = spacing;
+    const pCtx = pCanvas.getContext('2d')!;
+
+    pCtx.strokeStyle = color;
+    pCtx.lineWidth = lineWidth;
+    pCtx.globalAlpha = 0.5;
+    pCtx.beginPath();
+    pCtx.moveTo(0, spacing);
+    pCtx.lineTo(spacing, 0);
+    pCtx.stroke();
+    this.pattern = this.ctx.createPattern(pCanvas, 'repeat');
+    this.ctx.fillStyle = this.pattern!;
+    this.ctx.fillRect(x, y, width, height);
+  }
+
+  highlightElement(target: Element, options: HighlightOptions = { type: ['padding'], label: true }) {
     this.init();
     this.currentTarget = target;
     this.currentOptions = options;
@@ -174,10 +201,10 @@ export class OverlayCanvasService {
     };
 
     const type = this.currentOptions.type || ['padding'];
-    const side = this.currentOptions.side || ['all'];
+    const side = this.currentOptions.side || [];
 
     // helper to draw hatched rect between outer and inner box
-    const drawBetween = (outer: any, inner: any, side: Side[], fillAlpha = 0.8) => {
+    const drawBetween = (outer: any, inner: any, side: Side[], fillAlpha = 0.8, color: string) => {
       const ctx = this.ctx!;
       const drawRect = (x: number, y: number, w: number, h: number) => {
         if (w <= 0 || h <= 0) return;
@@ -191,51 +218,56 @@ export class OverlayCanvasService {
         ctx.lineWidth = 1;
         // stroke with 0.5 offset for crisper 1px borders
         ctx.strokeRect(x + 0.5, y + 0.5, Math.max(0.5, w - 1), Math.max(0.5, h - 1));
+
         ctx.restore();
       };
 
-      if (side.includes('all') || side.includes('top')) {
+      if (side.includes('top')) {
         const x = outer.left;
         const y = outer.top;
         const w = outer.right - outer.left;
         const h = inner.top - outer.top;
-        drawRect(x, y, w, h);
+        //drawRect(x, y, w, h);
+        this.createHatchPattern(x, y, w, h, color);
       }
-      if (side.includes('all') || side.includes('bottom')) {
+      if (side.includes('bottom')) {
         const x = outer.left;
         const y = inner.bottom;
         const w = outer.right - outer.left;
         const h = outer.bottom - inner.bottom;
-        drawRect(x, y, w, h);
+        //drawRect(x, y, w, h);
+        this.createHatchPattern(x, y, w, h, color);
       }
-      if (side.includes('all') || side.includes('left')) {
+      if (side.includes('left')) {
         const x = outer.left;
         const y = inner.top;
         const w = inner.left - outer.left;
         const h = inner.bottom - inner.top;
-        drawRect(x, y, w, h);
+        // drawRect(x, y, w, h);
+        this.createHatchPattern(x, y, w, h, color);
       }
-      if (side.includes('all') || side.includes('right')) {
+      if (side.includes('right')) {
         const x = inner.right;
         const y = inner.top;
         const w = outer.right - inner.right;
         const h = inner.bottom - inner.top;
-        drawRect(x, y, w, h);
+        //drawRect(x, y, w, h);
+        this.createHatchPattern(x, y, w, h, color);
       }
     };
 
     // draw depending on type
     if (type.includes('padding')) {
-      drawBetween(paddingBox, contentBox, side);
+      drawBetween(paddingBox, contentBox, side, 0.5, '#fff020ff');
     }
     if (type.includes('margin')) {
-      drawBetween(marginBox, borderBox, side, 0.8);
+      drawBetween(marginBox, borderBox, side, 0.8, '#0c75ffff');
     }
     if (type.includes('border')) {
       // border is the area between borderBox and paddingBox
-      drawBetween(borderBox, paddingBox, side, 0.5);
+      drawBetween(borderBox, paddingBox, side, 0.5, '#ff4120ff');
     }
-    if (type.includes('content') || type.includes('all')) {
+    if (type.includes('content')) {
       // visual helper: draw outlines of boxes
       const ctx = this.ctx!;
       ctx.save();
@@ -247,9 +279,12 @@ export class OverlayCanvasService {
         // const hatch = this.createHatchPattern('#0385ff', 8, 1);
         // const pattern = ctx.createPattern(hatch, 'repeat');
         // ctx.fillStyle = pattern!;
-        // ctx.fillRect(b.left + 0.5, b.top + 0.5, Math.max(1, b.right - b.left - 1), Math.max(1, b.bottom - b.top - 1));
-
-        ctx.strokeRect(b.left + 0.5, b.top + 0.5, Math.max(1, b.right - b.left - 1), Math.max(1, b.bottom - b.top - 1));
+        let x = b.left + 0.5;
+        let y = b.top + 0.5;
+        let w = Math.max(1, b.right - b.left - 1);
+        let h = Math.max(1, b.bottom - b.top - 1);
+        // this.createHatchPattern(x, y, w, h);
+        ctx.strokeRect(x, y, w, h);
       });
       ctx.restore();
     }
@@ -258,22 +293,6 @@ export class OverlayCanvasService {
     if (this.currentOptions.label) {
       this.drawLabels({ pTop, pRight, pBottom, pLeft, mTop, mRight, mBottom, mLeft }, rect, side);
     }
-  }
-  private createHatchPattern(color = '#00f', spacing = 8, lineWidth = 1) {
-    const pCanvas = document.createElement('canvas');
-    pCanvas.width = spacing;
-    pCanvas.height = spacing;
-    const pCtx = pCanvas.getContext('2d')!;
-
-    pCtx.strokeStyle = color;
-    pCtx.lineWidth = lineWidth;
-
-    pCtx.beginPath();
-    pCtx.moveTo(0, spacing);
-    pCtx.lineTo(spacing, 0);
-    pCtx.stroke();
-
-    return pCanvas;
   }
 
   private drawLabels(sizes: any, rect: DOMRect, side: Side[]) {
@@ -303,19 +322,19 @@ export class OverlayCanvasService {
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
 
-    if (side.includes('all') || side.includes('top')) {
+    if (side.includes('top')) {
       const text = Math.round(sizes.pTop || sizes.mTop) + 'px';
       drawText(text, centerX, rect.top - 10);
     }
-    if (side.includes('all') || side.includes('bottom')) {
+    if (side.includes('bottom')) {
       const text = Math.round(sizes.pBottom || sizes.mBottom) + 'px';
       drawText(text, centerX, rect.bottom + 10);
     }
-    if (side.includes('all') || side.includes('left')) {
+    if (side.includes('left')) {
       const text = Math.round(sizes.pLeft || sizes.mLeft) + 'px';
       drawText(text, rect.left - 24, centerY);
     }
-    if (side.includes('all') || side.includes('right')) {
+    if (side.includes('right')) {
       const text = Math.round(sizes.pRight || sizes.mRight) + 'px';
       drawText(text, rect.right + 24, centerY);
     }

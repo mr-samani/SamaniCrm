@@ -95,7 +95,11 @@ export class DynamicRendererComponent {
   onMouseOver() {
     let target = this.doc.querySelector('#block_' + this.block?.id);
     if (!target) return;
-    this.overlayCanvasService.highlightElement(target, { label: true, side: ['all'], type: ['margin', 'padding'] });
+    this.overlayCanvasService.highlightElement(target, {
+      label: true,
+      side: ['top', 'right', 'bottom', 'left'],
+      type: ['margin', 'padding'],
+    });
   }
 
   @HostListener('mouseout')
