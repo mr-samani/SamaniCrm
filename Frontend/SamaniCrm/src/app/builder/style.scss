@@ -36,6 +36,7 @@
       border-radius: 4px;
       flex: auto;
       min-width: 0;
+      color: inherit;
     }
   }
   &:has(button.color) input,
@@ -56,9 +57,12 @@
     margin: 5px;
   }
   span {
-    padding: 4px 2px 0;
+    padding: 4px;
     white-space: nowrap;
     min-width: 20px;
+    word-break: keep-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 /*--------------group buttons------------------------------*/
@@ -73,9 +77,8 @@
     outline: none;
     background: none;
     border-radius: var(--radius-medium, 0.3125rem);
-    i {
-      font-weight: 400;
-    }
+    color: inherit;
+
     &:last-child {
       border-right: none;
     }
@@ -83,6 +86,13 @@
       background: #151515;
       border: none;
     }
+  }
+  label {
+    color: inherit;
+  }
+  i {
+    font-weight: 400;
+    color: inherit;
   }
   .btn {
     padding: 4px 8px !important;
