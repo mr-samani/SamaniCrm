@@ -10,25 +10,18 @@ import {
   Output,
 } from '@angular/core';
 import { getPointerPosition, IPosition } from './getPointerPosition';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-
-export interface IPosValue {
-  top?: number;
-  right?: number;
-  bottom?: number;
-  left?: number;
-}
-export interface ISpacingModel {
-  padding: IPosValue;
-  margin: IPosValue;
-}
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { SpacingFormatter } from './SpacingFormatter';
+import { IPosValue } from './IPosValue';
+import { ISpacingModel } from './ISpacingModel';
+import { parseSpacingValues, validateSpacing } from './validateSpacing';
 
 @Component({
   selector: 'spacing-control',
   templateUrl: './spacing-control.component.html',
   styleUrls: ['./spacing-control.component.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -49,7 +42,10 @@ export class SpacingControlComponent implements OnInit, ControlValueAccessor {
   previousXY: IPosition = { x: 0, y: 0 };
   dragItem: keyof ISpacingModel = 'margin';
   pos: keyof IPosValue = 'top';
-  previousValue = 0;
+  previousValue: number = 0;
+  customValueMOP?: keyof ISpacingModel;
+  customValueP?: keyof IPosValue;
+  customValueName?: string;
   style?: Partial<CSSStyleDeclaration>;
   onChange = (_: Partial<CSSStyleDeclaration> | undefined) => {};
   onTouched = () => {};
@@ -67,8 +63,8 @@ export class SpacingControlComponent implements OnInit, ControlValueAccessor {
 
     // Parse margin and padding from input
     this.spacing = {
-      margin: this.parseSpacingValues(val?.margin, defaultSpacing.margin),
-      padding: this.parseSpacingValues(val?.padding, defaultSpacing.padding),
+      margin: parseSpacingValues(val?.margin, defaultSpacing.margin, this.unit),
+      padding: parseSpacingValues(val?.padding, defaultSpacing.padding, this.unit),
     };
 
     this.onChange(this.style);
@@ -84,101 +80,27 @@ export class SpacingControlComponent implements OnInit, ControlValueAccessor {
   }
 
   update() {
-    if (!this.spacing && !this.style) return;
+    if (!this.spacing || !this.style) return;
 
     // Validate and format spacing values
-    const validatedMargin = this.validateSpacing(this.spacing.margin, true);
-    const validatedPadding = this.validateSpacing(this.spacing.padding, false);
+    const validatedMargin = validateSpacing(this.spacing.margin, true);
+    const validatedPadding = validateSpacing(this.spacing.padding, false);
 
     // Update style object with formatted CSS values
-    this.style!.padding = this.formatSpacingToCSS(validatedPadding);
-    this.style!.margin = this.formatSpacingToCSS(validatedMargin);
+    this.style.padding = SpacingFormatter.formatSpacingToCSS(validatedPadding);
+    this.style.margin = SpacingFormatter.formatSpacingToCSS(validatedMargin);
 
     this.onChange(this.style);
     this.change.emit(this.style);
-  }
-
-  // Parse spacing values from CSS string (e.g., "10px 20px 30px 40px")
-  private parseSpacingValues(cssValue: string | undefined, defaultValue: IPosValue): IPosValue {
-    if (!cssValue) return { ...defaultValue };
-
-    const values = cssValue.trim().split(/\s+/);
-    const unitRegex = /(px|rem|em|%)$/;
-    let unit = this.unit;
-
-    // Extract numeric values and unit
-    const parsed: IPosValue = { ...defaultValue };
-    if (values.length === 1) {
-      // Single value (e.g., "10px")
-      const val = this.parseSingleValue(values[0], unitRegex);
-      parsed.top = parsed.right = parsed.bottom = parsed.left = val;
-      unit = values[0].match(unitRegex)?.[0] || this.unit;
-    } else if (values.length === 2) {
-      // Two values (e.g., "10px 20px")
-      parsed.top = parsed.bottom = this.parseSingleValue(values[0], unitRegex);
-      parsed.right = parsed.left = this.parseSingleValue(values[1], unitRegex);
-      unit = values[0].match(unitRegex)?.[0] || this.unit;
-    } else if (values.length === 3) {
-      // Three values (e.g., "10px 20px 30px")
-      parsed.top = this.parseSingleValue(values[0], unitRegex);
-      parsed.right = parsed.left = this.parseSingleValue(values[1], unitRegex);
-      parsed.bottom = this.parseSingleValue(values[2], unitRegex);
-      unit = values[0].match(unitRegex)?.[0] || this.unit;
-    } else if (values.length === 4) {
-      // Four values (e.g., "10px 20px 30px 40px")
-      parsed.top = this.parseSingleValue(values[0], unitRegex);
-      parsed.right = this.parseSingleValue(values[1], unitRegex);
-      parsed.bottom = this.parseSingleValue(values[2], unitRegex);
-      parsed.left = this.parseSingleValue(values[3], unitRegex);
-      unit = values[0].match(unitRegex)?.[0] || this.unit;
-    }
-
-    this.unit = unit; // Update unit if detected
-    return parsed;
-  }
-
-  // Parse a single CSS value (e.g., "10px" -> 10)
-  private parseSingleValue(value: string, unitRegex: RegExp): number {
-    const num = parseFloat(value.replace(unitRegex, ''));
-    return isNaN(num) ? 0 : num;
-  }
-
-  // Validate spacing values
-  private validateSpacing(spacing: IPosValue, allowNegative: boolean): IPosValue {
-    const validated: IPosValue = {};
-    const keys: (keyof IPosValue)[] = ['top', 'right', 'bottom', 'left'];
-
-    for (const key of keys) {
-      const value = spacing[key];
-      if (value === undefined || isNaN(value)) {
-        validated[key] = 0;
-      } else if (!allowNegative && value < 0) {
-        validated[key] = 0; // No negative values for padding
-      } else {
-        validated[key] = Math.round(value * 100) / 100; // Round to 2 decimal places
-      }
-    }
-    return validated;
-  }
-
-  // Format spacing to CSS string (e.g., { top: 10, right: 20, bottom: 30, left: 40 } -> "10px 20px 30px 40px")
-  private formatSpacingToCSS(spacing: IPosValue): string {
-    const { top, right, bottom, left } = spacing;
-    if (top === right && right === bottom && bottom === left) {
-      return `${top}${this.unit}`; // Single value
-    } else if (top === bottom && right === left) {
-      return `${top}${this.unit} ${right}${this.unit}`; // Two values
-    } else if (right === left) {
-      return `${top}${this.unit} ${right}${this.unit} ${bottom}${this.unit}`; // Three values
-    }
-    return `${top}${this.unit} ${right}${this.unit} ${bottom}${this.unit} ${left}${this.unit}`; // Four values
   }
 
   onMouseDown(ev: MouseEvent | TouchEvent, mOp: keyof ISpacingModel, p: keyof IPosValue) {
     this.startDragging = true;
     this.dragItem = mOp;
     this.pos = p;
-    this.previousValue = this.spacing[this.dragItem][this.pos] ?? 0;
+
+    this.previousValue =
+      this.spacing[this.dragItem][this.pos] != 'auto' ? parseInt(this.spacing[this.dragItem][this.pos] as any) : 0;
     this.previousXY = getPointerPosition(ev);
     this.update(); // Ensure initial update
   }
@@ -202,9 +124,24 @@ export class SpacingControlComponent implements OnInit, ControlValueAccessor {
     } else {
       this.spacing[this.dragItem][this.pos] = this.previousValue + offsetX;
     }
-    if (this.dragItem === 'padding' && (this.spacing[this.dragItem][this.pos] ?? 0) < 0) {
+    if (
+      this.dragItem === 'padding' &&
+      typeof this.spacing[this.dragItem][this.pos] == 'number' &&
+      +this.spacing[this.dragItem][this.pos]! < 0
+    ) {
       this.spacing[this.dragItem][this.pos] = 0;
     }
     this.update(); // Update on drag
+  }
+
+  open(mOp: keyof ISpacingModel, p: keyof IPosValue, label: string) {
+    this.customValueMOP = mOp;
+    this.customValueP = p;
+    this.customValueName = label;
+  }
+
+  updateCustomValue(val?: number | 'auto') {
+    if (!this.customValueMOP || !this.customValueP) return;
+    this.spacing[this.customValueMOP][this.customValueP] = val;
   }
 }

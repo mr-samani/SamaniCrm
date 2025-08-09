@@ -163,11 +163,8 @@
         <stop offset="1" stop-color="white" stop-opacity="0"></stop>
       </linearGradient>
     </defs>
-    <g style="">
-      <g
-        style=""
-        (mousedown)="onMouseDown($event, 'padding', 'top')"
-        (touchstart)="onMouseDown($event, 'padding', 'top')">
+    <g>
+      <g (mousedown)="onMouseDown($event, 'padding', 'top')" (touchstart)="onMouseDown($event, 'padding', 'top')">
         <path
           cursor="s-resize"
           mode="delta"
@@ -212,11 +209,8 @@
           style="color: rgb(85, 85, 85); cursor: w-resize"></path>
       </g>
     </g>
-    <g style="">
-      <g
-        style=""
-        (mousedown)="onMouseDown($event, 'padding', 'bottom')"
-        (touchstart)="onMouseDown($event, 'padding', 'bottom')">
+    <g>
+      <g (mousedown)="onMouseDown($event, 'padding', 'bottom')" (touchstart)="onMouseDown($event, 'padding', 'bottom')">
         <path
           cursor="n-resize"
           mode="delta"
@@ -299,14 +293,68 @@
   </svg>
 
   <div class="grid-values-margin">
-    <span class="gvm-t">{{ spacing.margin.top }}</span>
-    <span class="gvm-r">{{ spacing.margin.right }}</span>
-    <span class="gvm-b">{{ spacing.margin.bottom }}</span>
-    <span class="gvm-l">{{ spacing.margin.left }}</span>
+    <button class="gvm-t" popovertarget="SpacingCustomPopover" (click)="open('margin', 'top', 'Margin Top')">
+      {{ spacing.margin.top }}
+    </button>
+    <button class="gvm-r" popovertarget="SpacingCustomPopover" (click)="open('margin', 'right', 'Margin Right')">
+      {{ spacing.margin.right }}
+    </button>
+    <button class="gvm-b" popovertarget="SpacingCustomPopover" (click)="open('margin', 'bottom', 'Margin Bottom')">
+      {{ spacing.margin.bottom }}
+    </button>
+    <button class="gvm-l" popovertarget="SpacingCustomPopover" (click)="open('margin', 'left', 'Margin Left')">
+      {{ spacing.margin.left }}
+    </button>
 
-    <span class="gvp-t">{{ spacing.padding.top }}</span>
-    <span class="gvp-r">{{ spacing.padding.right }}</span>
-    <span class="gvp-b">{{ spacing.padding.bottom }}</span>
-    <span class="gvp-l">{{ spacing.padding.left }}</span>
+    <button class="gvp-t" popovertarget="SpacingCustomPopover" (click)="open('padding', 'top', 'Padding Top')">
+      {{ spacing.padding.top }}
+    </button>
+    <button class="gvp-r" popovertarget="SpacingCustomPopover" (click)="open('padding', 'right', 'Padding Right')">
+      {{ spacing.padding.right }}
+    </button>
+    <button class="gvp-b" popovertarget="SpacingCustomPopover" (click)="open('padding', 'bottom', 'Padding Bottom')">
+      {{ spacing.padding.bottom }}
+    </button>
+    <button class="gvp-l" popovertarget="SpacingCustomPopover" (click)="open('padding', 'left', 'Padding Left')">
+      {{ spacing.padding.left }}
+    </button>
+  </div>
+</div>
+<div class="custom-panel" id="SpacingCustomPopover" popover *ngIf="customValueMOP && customValueP">
+  <div class="d-flex">
+    <input
+      type="range"
+      name="range"
+      [(ngModel)]="spacing[customValueMOP][customValueP]"
+      min="-200"
+      max="200"
+      (ratechange)="updateCustomValue()" />
+    <input
+      type="number"
+      [(ngModel)]="spacing[customValueMOP][customValueP]"
+      *ngIf="spacing[customValueMOP][customValueP] != 'auto'"
+      (change)="updateCustomValue()" />
+    <input
+      type="text"
+      readonly
+      [(ngModel)]="spacing[customValueMOP][customValueP]"
+      *ngIf="spacing[customValueMOP][customValueP] == 'auto'" />
+  </div>
+  <div class="samples" [ngClass]="customValueMOP">
+    <button class="btn auto" (click)="updateCustomValue('auto')" *ngIf="customValueMOP == 'margin'">Auto</button>
+    <button class="btn" (click)="updateCustomValue(0)">0</button>
+    <button class="btn" (click)="updateCustomValue(5)">5</button>
+    <button class="btn" (click)="updateCustomValue(10)">10</button>
+    <button class="btn" (click)="updateCustomValue(15)">15</button>
+    <button class="btn" (click)="updateCustomValue(20)">20</button>
+    <button class="btn" (click)="updateCustomValue(40)">40</button>
+    <button class="btn" (click)="updateCustomValue(80)">80</button>
+    <button class="btn" (click)="updateCustomValue(120)">120</button>
+  </div>
+  <div class="label d-flex justify-content-between align-items-center">
+    <span>{{ customValueName }}</span>
+    <button popovertargetaction="hide" popovertarget="SpacingCustomPopover" class="btn">
+      <i class="fa fa-times"></i>
+    </button>
   </div>
 </div>

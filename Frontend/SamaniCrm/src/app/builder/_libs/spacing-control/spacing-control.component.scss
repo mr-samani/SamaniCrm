@@ -34,14 +34,14 @@ svg#padding {
   color: #fff;
   z-index: 1;
   pointer-events: none;
-  span {
-    width: auto;
+  button {
+    width: 30px;
     height: auto;
     overflow: hidden;
     user-select: none;
     text-overflow: ellipsis;
     place-self: center;
-    padding: 1px 5px;
+    padding: 1px;
     border-radius: 4px;
     white-space: nowrap;
     line-height: 1;
@@ -64,6 +64,10 @@ svg#padding {
     background: rgb(6 161 255 / 30%);
     font-size: 10px;
     font-weight: 400;
+    pointer-events: fill;
+    border: none;
+    color: inherit;
+    anchor-point: auto;
   }
 
   .gvm-t {
@@ -90,5 +94,87 @@ svg#padding {
   }
   .gvp-l {
     grid-area: 2 / 3 / 6 / 3;
+  }
+}
+/*-------------------------------------------*/
+
+.custom-panel {
+  anchor-name: --my-anchor;
+  top: anchor(bottom);
+  left: calc(anchor(right) - 320px);
+  position: absolute;
+  margin: 0;
+  outline: none;
+  background: #353535;
+  color: #fff;
+  border-radius: 5px;
+  border: 1px #636363 solid;
+  box-shadow: 0px 0px 20px 8px #2020208c;
+  padding: 10px;
+  width: 320px;
+  .samples {
+    display: grid;
+    grid-template-rows: 38px 38px;
+    gap: 4px;
+    margin: 15px 0;
+    gap: 4px;
+    &.margin {
+      grid-template-columns: 1.5fr repeat(4, 1fr);
+    }
+    &.padding {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .btn {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.11) 100%);
+      box-shadow:
+        0px 0.5px 1px rgba(0, 0, 0, 0.8),
+        inset 0px 0.5px 0.5px rgba(255, 255, 255, 0.12);
+      color: inherit;
+      &:hover {
+        background: #6d6d6d;
+      }
+    }
+    .btn.auto {
+      grid-row: span 2;
+    }
+  }
+  i,
+  button {
+    color: inherit;
+  }
+  input:not([type='range']) {
+    width: 68px;
+    background: #4d4d4d;
+    border: none;
+    border-radius: 3px;
+    color: inherit;
+    padding: 4px;
+  }
+}
+input[type='range'] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 400px;
+  height: 4px;
+  border-radius: 5px;
+  background-color: #696969;
+  outline: none;
+  margin: 20px 2px 0;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 5px;
+  height: 20px;
+  border-radius: 2px;
+  background-color: #1741ff;
+  position: relative;
+}
+
+::ng-deep {
+  body[dir='rtl'] {
+    .custom-panel {
+      right: calc(anchor(left) - 320px);
+    }
   }
 }
