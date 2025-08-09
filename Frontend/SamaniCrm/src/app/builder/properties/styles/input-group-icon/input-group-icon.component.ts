@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Injector,
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 import { InputGroupItem } from './InputGroupItem';
+import { getRandomString } from '@shared/helper/random-string';
 @Component({
   selector: 'input-group-icon',
   templateUrl: './input-group-icon.component.html',
@@ -20,6 +21,8 @@ export class InputGroupIconComponent extends AppComponentBase implements Control
   @Output() change = new EventEmitter<string | undefined>();
   @Input() items: InputGroupItem[] = [];
   value?: string;
+
+  name = getRandomString(6);
 
   onChange = (_: string | undefined) => {};
   onTouched = () => {};
