@@ -22,7 +22,7 @@
   color: var(--fgColor);
   display: flex;
   height: 32px;
-  margin: 5px;
+  margin: 10px 0;
   width: auto;
   max-width: 100%;
   &:focus-within {
@@ -37,12 +37,10 @@
     min-width: 0;
     color: inherit;
   }
-  input:nth-child(1),
-  select:nth-child(1) {
+  .input-style :nth-child(-n + 1 of :not(span)) {
     border-radius: 4px 0 0 4px;
   }
-  input:nth-child(n-1),
-  select:nth-child(n-1) {
+  .input-style :nth-last-child(-n + 1) {
     border-radius: 0 4px 4px 0;
   }
 

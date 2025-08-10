@@ -18,7 +18,7 @@ import { Spacing, SpacingValue } from '../models/Spacing';
     },
   ],
 })
-export class StyleSpacingComponent extends AppComponentBase implements OnInit, ControlValueAccessor, AfterViewInit {
+export class StyleSpacingComponent extends AppComponentBase implements OnInit, ControlValueAccessor {
   sizeUnitList = SizeUnitList;
   spacingRegex = spacingRegex;
 
@@ -47,12 +47,6 @@ export class StyleSpacingComponent extends AppComponentBase implements OnInit, C
   }
 
   ngOnInit() {}
-
-  ngAfterViewInit(): void {
-    const rect = this.el.nativeElement.getBoundingClientRect();
-    this.top = rect.bottom;
-    this.left = rect.left;
-  }
 
   writeValue(val: string | undefined): void {
     this.spacingString = val ?? '0px';
@@ -99,6 +93,9 @@ export class StyleSpacingComponent extends AppComponentBase implements OnInit, C
     this.value.bottom ??= {};
     this.value.left ??= {};
     this.value.right ??= {};
+    const rect = this.el.nativeElement.getBoundingClientRect();
+    this.top = rect.bottom;
+    this.left = rect.left;
     this.showPopup = !this.showPopup;
   }
 

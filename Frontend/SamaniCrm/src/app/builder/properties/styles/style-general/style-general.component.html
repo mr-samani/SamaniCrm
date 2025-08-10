@@ -183,11 +183,4 @@
 
 <style-spacing label="Border Radius" [(ngModel)]="style.borderRadius" (ngModelChange)="update()"></style-spacing>
 
-<table>
-  <tr>
-    <th>Border</th>
-    <td>
-      <style-border [(ngModel)]="style.border" (css)="update()"></style-border>
-    </td>
-  </tr>
-</table>
+<style-border label="Border" [(ngModel)]="style.border" (css)="update()"></style-border>
