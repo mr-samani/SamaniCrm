@@ -21,32 +21,43 @@
   border-radius: var(--radius-medium, 0.3125rem);
   color: var(--fgColor);
   display: flex;
-  height: 24px;
+  height: 32px;
   margin: 5px;
-  width: 100%;
+  width: auto;
+  max-width: 100%;
   &:focus-within {
     border: 1px #0c8ce9 solid;
   }
-  &:not(button.color) {
-    input,
-    select {
-      border: none;
-      outline: none;
-      background: #151515;
-      border-radius: 4px;
-      flex: auto;
-      min-width: 0;
-      color: inherit;
-    }
+  input,
+  select {
+    border: none;
+    outline: none;
+    background: #151515;
+    flex: auto;
+    min-width: 0;
+    color: inherit;
   }
-  &:has(button.color) input,
-  &:has(button.color) select,
+  input:nth-child(1),
+  select:nth-child(1) {
+    border-radius: 4px 0 0 4px;
+  }
+  input:nth-child(n-1),
+  select:nth-child(n-1) {
+    border-radius: 0 4px 4px 0;
+  }
+
+  &.input-color input,
+  &.input-color select,
   button {
     min-width: 0;
     border: none;
     outline: none;
     background-color: transparent;
     background: none;
+    color: inherit;
+  }
+  i {
+    color: inherit;
   }
 
   button.color {
@@ -63,6 +74,7 @@
     word-break: keep-all;
     overflow: hidden;
     text-overflow: ellipsis;
+    flex-shrink: 0;
   }
 }
 /*--------------group buttons------------------------------*/
@@ -140,15 +152,4 @@ table {
   width: 280px;
   right: 0;
   z-index: 1000;
-
-  .place-top,
-  .place-bottom {
-    display: flex;
-    justify-content: center;
-  }
-  .place-left-right {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-  }
 }

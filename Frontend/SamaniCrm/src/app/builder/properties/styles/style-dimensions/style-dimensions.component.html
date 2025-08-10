@@ -1,8 +1,3 @@
- 
- 
-
-
-
 <!-- Grid Properties -->
 <div *ngIf="style.display?.includes('grid')">
   <p>Grid Properties:</p>
@@ -11,7 +6,12 @@
       <td colspan="2">
         <div class="input-style" title="Grid Template Columns">
           <span>Grid Template Columns</span>
-          <input type="text" [(ngModel)]="style.gridTemplateColumns" (change)="update()" name="gridTemplateColumns" placeholder="1fr 1fr 1fr" />
+          <input
+            type="text"
+            [(ngModel)]="style.gridTemplateColumns"
+            (change)="update()"
+            name="gridTemplateColumns"
+            placeholder="1fr 1fr 1fr" />
         </div>
       </td>
     </tr>
@@ -19,7 +19,12 @@
       <td colspan="2">
         <div class="input-style" title="Grid Template Rows">
           <span>Grid Template Rows</span>
-          <input type="text" [(ngModel)]="style.gridTemplateRows" (change)="update()" name="gridTemplateRows" placeholder="auto 1fr auto" />
+          <input
+            type="text"
+            [(ngModel)]="style.gridTemplateRows"
+            (change)="update()"
+            name="gridTemplateRows"
+            placeholder="auto 1fr auto" />
         </div>
       </td>
     </tr>
@@ -27,7 +32,12 @@
       <td colspan="2">
         <div class="input-style" title="Grid Template Areas">
           <span>Grid Template Areas</span>
-          <input type="text" [(ngModel)]="style.gridTemplateAreas" (change)="update()" name="gridTemplateAreas" placeholder="'header header' 'sidebar main'" />
+          <input
+            type="text"
+            [(ngModel)]="style.gridTemplateAreas"
+            (change)="update()"
+            name="gridTemplateAreas"
+            placeholder="'header header' 'sidebar main'" />
         </div>
       </td>
     </tr>
@@ -36,12 +46,22 @@
         <input-style label="Gap" tooltip="Gap" [(ngModel)]="style.gap" name="gap" (change)="update()"></input-style>
       </td>
       <td>
-        <input-style label="Row Gap" tooltip="Row Gap" [(ngModel)]="style.rowGap" name="rowGap" (change)="update()"></input-style>
+        <input-style
+          label="Row Gap"
+          tooltip="Row Gap"
+          [(ngModel)]="style.rowGap"
+          name="rowGap"
+          (change)="update()"></input-style>
       </td>
     </tr>
     <tr>
       <td>
-        <input-style label="Column Gap" tooltip="Column Gap" [(ngModel)]="style.columnGap" name="columnGap" (change)="update()"></input-style>
+        <input-style
+          label="Column Gap"
+          tooltip="Column Gap"
+          [(ngModel)]="style.columnGap"
+          name="columnGap"
+          (change)="update()"></input-style>
       </td>
       <td>
         <div class="input-style" title="Justify Items">
@@ -129,7 +149,7 @@
   <tr>
     <td>
       <div class="input-style" title="Overflow X">
-        <span>Overflow X</span>
+        <span>X</span>
         <select [(ngModel)]="style.overflowX" (change)="update()" name="overflowX">
           <option value="visible">Visible</option>
           <option value="hidden">Hidden</option>
@@ -140,7 +160,7 @@
     </td>
     <td>
       <div class="input-style" title="Overflow Y">
-        <span>Overflow Y</span>
+        <span>Y</span>
         <select [(ngModel)]="style.overflowY" (change)="update()" name="overflowY">
           <option value="visible">Visible</option>
           <option value="hidden">Hidden</option>
@@ -222,11 +242,16 @@
 <table>
   <tr>
     <td>
-      <input-style label="W" tooltip="Width" [(ngModel)]="style.width" name="width" (change)="update()"></input-style>
+      <input-style
+        label="Width"
+        tooltip="Width"
+        [(ngModel)]="style.width"
+        name="width"
+        (change)="update()"></input-style>
     </td>
     <td>
       <input-style
-        label="H"
+        label="Height"
         tooltip="Height"
         [(ngModel)]="style.height"
         name="height"

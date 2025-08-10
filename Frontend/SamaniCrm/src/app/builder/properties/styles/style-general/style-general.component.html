@@ -179,35 +179,15 @@
 
 <spacing-control [(ngModel)]="style" (change)="update()"></spacing-control>
 
-<!-- <table>  
+<shadow-control [(ngModel)]="style.boxShadow" (change)="update()"></shadow-control>
+
+<style-spacing label="Border Radius" [(ngModel)]="style.borderRadius" (ngModelChange)="update()"></style-spacing>
+
+<table>
   <tr>
     <th>Border</th>
     <td>
       <style-border [(ngModel)]="style.border" (css)="update()"></style-border>
     </td>
   </tr>
-  <tr>
-    <th>Radius</th>
-    <td>
-      <style-spacing [(ngModel)]="style.borderRadius" (ngModelChange)="update()"></style-spacing>
-    </td>
-  </tr>
-  <tr>
-    <th>Shadow</th>
-    <td>
-      <div class="btn-group" role="group">
-        <button type="button" class="btn btn-danger" (click)="clearStyle('boxShadow')">
-          <i class="fa fa-times"></i>
-        </button>
-        <button
-          type="button"
-          class="btn btn-success"
-          ngxInputBoxShadow
-          [(ngModel)]="style.boxShadow"
-          (ngModelChange)="update()">
-          <i class="fa fa-boxes"></i>
-        </button>
-      </div>
-    </td>
-  </tr>
-</table> -->
+</table>

@@ -1,4 +1,7 @@
-<button (click)="addShadow(list)"><i class="fa fa-plus"></i></button>
+<div class="d-flex align-items-center justify-content-between">
+  <span>Box Shadow</span>
+  <button (click)="addShadow(list)" class="btn"><i class="fa fa-plus"></i></button>
+</div>
 <div class="list-box" #list>
   @for (item of shadows; let i = $index; track i) {
     <button

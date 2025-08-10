@@ -2,8 +2,8 @@ import { AfterViewInit, Component, ElementRef, forwardRef, Injector, Input, OnIn
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 import { getCssFromSpacingStyle, parseSpacing, spacingRegex } from '../helper/parse-spacing';
-import { SizeUnitList } from '../models/SizeUnit';
-import { Spacing } from '../models/Spacing';
+import { SizeUnit, SizeUnitList } from '../models/SizeUnit';
+import { Spacing, SpacingValue } from '../models/Spacing';
 
 @Component({
   selector: 'style-spacing',
@@ -25,14 +25,19 @@ export class StyleSpacingComponent extends AppComponentBase implements OnInit, C
   value: Spacing | null = null;
   spacingString = '';
   @Input() canUseAuto = false;
+  @Input() label = '';
 
   top = 0;
-  right = 0;
-
+  left = 0;
+  allBorder = true;
+  allSpaceing: SpacingValue = {
+    size: 0,
+    unit: 'px',
+  };
   onChangeFn = (val: string) => {};
   onTouchedFn = () => {};
 
-  showPanel = false;
+  showPopup = false;
 
   constructor(
     injector: Injector,
@@ -45,8 +50,8 @@ export class StyleSpacingComponent extends AppComponentBase implements OnInit, C
 
   ngAfterViewInit(): void {
     const rect = this.el.nativeElement.getBoundingClientRect();
-    this.top = rect.top + 40;
-    this.right = 12;
+    this.top = rect.bottom;
+    this.left = rect.left;
   }
 
   writeValue(val: string | undefined): void {
@@ -94,6 +99,14 @@ export class StyleSpacingComponent extends AppComponentBase implements OnInit, C
     this.value.bottom ??= {};
     this.value.left ??= {};
     this.value.right ??= {};
-    this.showPanel = !this.showPanel;
+    this.showPopup = !this.showPopup;
+  }
+
+  onChangeAllBorder() {
+    this.value = {};
+  }
+  changeAllSpacing() {
+    this.spacingString = (this.allSpaceing.size ?? 0) + (this.allSpaceing.unit ?? 'px');
+    this.stringChange();
   }
 }
