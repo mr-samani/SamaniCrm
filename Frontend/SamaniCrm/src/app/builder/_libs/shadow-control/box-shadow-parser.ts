@@ -22,7 +22,8 @@ export function parseBoxShadow(cssValue: string): BoxShadow[] {
 
   const boxShadows: BoxShadow[] = [];
   const unitRegex = /(px|rem|em)/;
-  const colorRegex = /(#[0-9a-fA-F]{3,8}|rgba?\([^)]+\)|hsl\([^)]+\)|[a-zA-Z]+)/;
+  const colorRegex =
+    /(#(?:[a-f0-9]{3}|[a-f0-9]{6}|[a-f0-9]{4}|[a-f0-9]{8})\b|rgb\(\d{1,3},\s*\d{1,3},\s*\d{1,3}\)|rgba\(\d{1,3},\s*\d{1,3},\s*\d{1,3},\s*\d*(?:\.\d+)?\)|hsl\(\s*\d+,\s*\d*(?:\.\d+)?%,\s*\d*(?:\.\d+)?%\)|hsla\(\d+,\s*[\d.]+%,\s*[\d.]+%,\s*\d*(?:\.\d+)?\))/gi;
   const numberRegex = /-?\d*\.?\d*(?:px|rem|em)?/g;
 
   for (const shadow of shadows) {

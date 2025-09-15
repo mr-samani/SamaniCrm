@@ -2,7 +2,6 @@
   <span>{{ label }}</span>
   <input
     type="text"
-    class="form-control"
     name="spacing"
     #spacing="ngModel"
     [(ngModel)]="borderString"
@@ -73,9 +72,7 @@
       [(ngModel)]="border.color"
       (ngModelChange)="emitChange()"
       ngxInputColor
-      [simpleMode]="true"
-      [showCloseButton]="false"
-      [showConfirmButton]="false" />
+      [simpleMode]="true" />
     <select class="select-type" placeholder="Type" [(ngModel)]="border.type" (change)="emitChange()">
       <option [value]="val" *ngFor="let val of borderTypeList">
         {{ val }}
