@@ -1,46 +1,69 @@
 <div [@routerTransition] class="login-page">
   <h4 class="page-title">{{ 'LoginToAccount' | translate }}</h4>
-  <div>{{ 'LoginToAccountDescription' | translate }}</div>
 
-  <form [formGroup]="loginForm" class="d-flex flex-column gap-2 py-4">
-    <mat-form-field>
-      <mat-label>{{ 'UserName' | translate }}</mat-label>
-      <input
-        matInput
-        formControlName="userName"
-        type="userName"
-        [placeholder]="'userName' | translate"
-        autocomplete="username" />
-    </mat-form-field>
+  @if (getTwoFactorCode == false) {
+    <div>{{ 'LoginToAccountDescription' | translate }}</div>
 
-    <mat-form-field>
-      <mat-label>{{ 'Password' | translate }}</mat-label>
-      <input
-        matInput
-        formControlName="password"
-        [type]="showPassword ? 'text' : 'password'"
-        [placeholder]="'password' | translate"
-        autocomplete="current-password" />
-      <i matSuffix class="fa fa-eye" *ngIf="!showPassword" (click)="showPassword = true"></i>
-      <i matSuffix class="fa fa-eye-slash" *ngIf="showPassword" (click)="showPassword = false"></i>
-    </mat-form-field>
+    <form [formGroup]="loginForm" class="d-flex flex-column gap-2 py-4">
+      <mat-form-field>
+        <mat-label>{{ 'UserName' | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="userName"
+          type="userName"
+          [placeholder]="'userName' | translate"
+          autocomplete="username" />
+      </mat-form-field>
 
-    <p>
-      <mat-checkbox formControlName="rememberMe">{{ 'RememberMe' | translate }}</mat-checkbox>
-    </p>
+      <mat-form-field>
+        <mat-label>{{ 'Password' | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          [type]="showPassword ? 'text' : 'password'"
+          [placeholder]="'password' | translate"
+          autocomplete="current-password" />
+        <i matSuffix class="fa fa-eye" *ngIf="!showPassword" (click)="showPassword = true"></i>
+        <i matSuffix class="fa fa-eye-slash" *ngIf="showPassword" (click)="showPassword = false"></i>
+      </mat-form-field>
 
-    <captcha formControlName="captcha" #captcha *ngIf="requiredCaptcha"></captcha>
-    <!-- <p>
+      <p>
+        <mat-checkbox formControlName="rememberMe">{{ 'RememberMe' | translate }}</mat-checkbox>
+      </p>
+
+      <captcha formControlName="captcha" #captcha *ngIf="requiredCaptcha"></captcha>
+      <!-- <p>
       <a routerLink="/account/forgot-password" class="forgot-link">
         کلمه عبور خود را فراموش کرده اید؟
       </a>
     </p> -->
-    <button mat-raised-button color="primary" (click)="login()" [disabled]="loading" type="submit" class="w-100">
-      <span *ngIf="loading">loading...</span>
-      <span *ngIf="!loading">{{ 'login' | translate }}</span>
-    </button>
-    <!-- <button routerLink="/account/register" class="w-100" type="success">
+      <button mat-raised-button color="primary" (click)="login()" [disabled]="loading" type="submit" class="w-100">
+        <span *ngIf="loading">loading...</span>
+        <span *ngIf="!loading">{{ 'login' | translate }}</span>
+      </button>
+      <!-- <button routerLink="/account/register" class="w-100" type="success">
       ثبت نام
     </button> -->
-  </form>
+    </form>
+  } @else {
+    <div>{{ 'EnterTwoFactorCodeDescription' | translate }}</div>
+
+    <form class="d-flex flex-column gap-2 py-4">
+      <mat-form-field>
+        <mat-label>{{ 'Code' | translate }}</mat-label>
+        <input matInput [(ngModel)]="code" name="code" type="number" autocomplete="off" #codeEl="ngModel" />
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="loginWithTwoFactor()"
+        [disabled]="loading"
+        type="submit"
+        class="w-100">
+        <span *ngIf="loading">loading...</span>
+        <span *ngIf="!loading">{{ 'login' | translate }}</span>
+      </button>
+    </form>
+  }
 </div>

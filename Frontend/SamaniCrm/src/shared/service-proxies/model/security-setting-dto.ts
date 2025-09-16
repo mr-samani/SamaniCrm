@@ -19,6 +19,7 @@ export interface ISecuritySettingDto {
   passwordComplexity: PasswordComplexityDto;
   userSetting: UserSettingDto;
   logginAttemptCountLimit?: number;
+  logginAttemptTimeSecondsLimit?: number;
 }
 
 /** Class for SecuritySettingDto */
@@ -27,6 +28,7 @@ export class SecuritySettingDto implements ISecuritySettingDto {
   passwordComplexity!: PasswordComplexityDto;
   userSetting!: UserSettingDto;
   logginAttemptCountLimit?: number;
+  logginAttemptTimeSecondsLimit?: number;
 
   constructor(data?: ISecuritySettingDto) {
     if (data) {
@@ -43,6 +45,7 @@ init(data?: any) {
     this.passwordComplexity = data["passwordComplexity"];
     this.userSetting = data["userSetting"];
     this.logginAttemptCountLimit = data["logginAttemptCountLimit"];
+    this.logginAttemptTimeSecondsLimit = data["logginAttemptTimeSecondsLimit"];
   }
 }
 

@@ -484,4 +484,34 @@ public class IdentityService : IIdentityService
         }
         return false;
     }
+
+
+    public async Task<(bool EnableTwoFactor, string Secret, int AttemptCount, TwoFactorTypeEnum TwoFactorType)> getUserTwoFactorData(Guid userId, CancellationToken cancellationToken)
+    {
+        var found = await _applicationDbContext.UserSetting.Where(x => x.UserId == userId).FirstOrDefaultAsync(cancellationToken);
+        if (found == null)
+        {
+            return new()
+            {
+                EnableTwoFactor = false,
+                TwoFactorType = default,
+                Secret = "",
+                AttemptCount = 0,
+            };
+        }
+        var isEnable = found.EnableTwoFactor;
+        if (found.IsVerified == false || (isEnable && string.IsNullOrEmpty(found.Secret) && found.TwoFactorType == TwoFactorTypeEnum.AuthenticatorApp))
+        {
+            isEnable = false;
+        }
+        return new()
+        {
+            EnableTwoFactor = isEnable,
+            TwoFactorType = found.TwoFactorType,
+            Secret = found.Secret,
+            AttemptCount = found.AttemptCount
+        };
+    }
+
+
 }

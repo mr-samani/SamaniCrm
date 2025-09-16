@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -38,11 +39,20 @@ namespace SamaniCrm.Host.Controllers
 
         [HttpPost("login")]
         [ProducesResponseType(typeof(ApiResponse<LoginResult>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Login([FromBody] LoginCommand command)
+        public async Task<IActionResult> Login(LoginCommand command)
         {
             LoginResult result = await _mediator.Send(command);
             return ApiOk<LoginResult>(result);
         }
+
+        [HttpPost("loginTwoFactor")]
+        [ProducesResponseType(typeof(ApiResponse<LoginResult>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> LoginTwoFactor(TwoFactorLoginCommand command)
+        {
+            LoginResult result = await _mediator.Send(command);
+            return ApiOk<LoginResult>(result);
+        }
+
 
         [HttpPost("refresh")]
         [ProducesResponseType(typeof(ApiResponse<TokenResponseDto>), StatusCodes.Status200OK)]
@@ -80,7 +90,7 @@ namespace SamaniCrm.Host.Controllers
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> Verify2FaApp([FromBody] Verify2FARequest req)
         {
-            var result = await _twoFactorService.VerifyCodeAsync(req.Secret, req.Code);
+            var result = await _twoFactorService.Save2FaVerifyCodeAsync(req.Secret, req.Code);
             return ApiOk(result);
         }
     }

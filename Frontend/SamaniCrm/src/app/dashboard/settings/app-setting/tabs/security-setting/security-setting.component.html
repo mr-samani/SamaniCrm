@@ -53,6 +53,19 @@
       min="3"
       max="100" />
   </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>{{ 'LogginAttemptTimeSecondsLimit' | translate }}</mat-label>
+    <input
+      type="number"
+      matInput
+      [(ngModel)]="logginAttemptMinute"
+      name="logginAttemptTimeSecondsLimit"
+      required
+      min="1"
+      max="100" />
+    <span matSuffix>{{ 'Minutes' | translate }}</span>
+  </mat-form-field>
   <!-- ---------------------------------------------------- -->
 
   <h5>

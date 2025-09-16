@@ -16,52 +16,38 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.Auth.Commands;
 
-public class LoginCommand : IRequest<LoginResult>
+public class TwoFactorLoginCommand : IRequest<LoginResult>
 {
     public required string UserName { get; set; }
     public required string Password { get; set; }
-
-    public InputCaptchaDTO? captcha { get; set; }
+    public required string Code { get; set; }
 }
 
 
-public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult>
+public class TwoFactorLoginCommandHandler : IRequestHandler<TwoFactorLoginCommand, LoginResult>
 {
     private readonly IMediator _mediator;
     private readonly ITokenGenerator _tokenGenerator;
     private readonly IIdentityService _identityService;
-    private readonly ICaptchaStore _captcha;
+    private readonly ITwoFactorService _twoFactorService;
     private readonly ISecuritySettingService _securitySettingService;
-    public LoginCommandHandler(
+    public TwoFactorLoginCommandHandler(
             IMediator mediator,
             ITokenGenerator tokenGenerator,
             IIdentityService identityService,
-            ICaptchaStore captcha,
+            ITwoFactorService twoFactorService,
             ISecuritySettingService securitySettingService)
     {
         _mediator = mediator;
         _tokenGenerator = tokenGenerator;
         _identityService = identityService;
-        _captcha = captcha;
+        _twoFactorService = twoFactorService;
         _securitySettingService = securitySettingService;
     }
 
 
-    public async Task<LoginResult> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<LoginResult> Handle(TwoFactorLoginCommand request, CancellationToken cancellationToken)
     {
-        var securitySettings = await _securitySettingService.GetSettingsAsync(null,cancellationToken);
-        if (securitySettings.RequireCaptchaOnLogin)
-        {
-            if (request.captcha == null || string.IsNullOrEmpty(request.captcha.CaptchaKey) || string.IsNullOrEmpty(request.captcha.CaptchaText))
-            {
-                throw new InvalidCaptchaException();
-            }
-            var captchaValid = _captcha.ValidateCaptcha(request.captcha.CaptchaKey, request.captcha.CaptchaText);
-            if (captchaValid == false)
-            {
-                throw new InvalidCaptchaException();
-            }
-        }
         var result = await _identityService.SigninUserAsync(request.UserName, request.Password);
 
         if (!result)
@@ -70,22 +56,17 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult>
             throw new InvalidLoginException();
         }
         UserDTO userData = await _identityService.GetUserDetailsByUserNameAsync(request.UserName);
-        // check two factor
+        // verify two factor
+        var settings = await _securitySettingService.GetSettingsAsync(userData.Id, cancellationToken);
         var twoFactor = await _identityService.getUserTwoFactorData(userData.Id, cancellationToken);
-        if (twoFactor.EnableTwoFactor)
+
+        if (twoFactor.AttemptCount >= settings.LogginAttemptCountLimit)
         {
-            LoginResult output = new LoginResult()
-            {
-                AccessToken = "",
-                RefreshToken = "",
-                User = userData,
-                Roles = [],
-                EnableTwoFactor = twoFactor.EnableTwoFactor,
-                TwoFactorType = twoFactor.TwoFactorType
-            };
-            return output;
+            throw new LoginAttempCountException();
         }
-        else
+
+        var verify = _twoFactorService.VerifyCodeAsync(twoFactor.Secret, request.Code);
+        if (verify == true)
         {
             var accessToken = _tokenGenerator.GenerateAccessToken(userData.Id,
                                userData.UserName,
@@ -101,7 +82,14 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult>
                 User = userData,
                 Roles = userData.Roles
             };
+            await _twoFactorService.ResetAttemptCount(userData.Id);
+
             return output;
+        }
+        else
+        {
+            await _twoFactorService.SetAttemptCount(userData.Id);
+            throw new InvalidTwoFactorCodeException();
         }
 
     }

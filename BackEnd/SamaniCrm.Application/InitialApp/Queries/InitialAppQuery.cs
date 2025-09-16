@@ -22,21 +22,26 @@ public class InitialAppQueryHandler : IRequestHandler<InitialAppQuery, InitialAp
     private readonly IApplicationDbContext dbContext;
     private readonly IConfiguration _configuration;
     private readonly ILanguageService _languageService;
+    private readonly ISecuritySettingService _securitySettingService;
 
 
 
-    public InitialAppQueryHandler(IApplicationDbContext dbContext,  IConfiguration configuration, ILanguageService languageService)
+    public InitialAppQueryHandler(IApplicationDbContext dbContext, IConfiguration configuration, ILanguageService languageService, ISecuritySettingService securitySettingService)
     {
         this.dbContext = dbContext;
         _configuration = configuration;
         _languageService = languageService;
+        _securitySettingService = securitySettingService;
     }
 
     public async Task<InitialAppDTO> Handle(InitialAppQuery request, CancellationToken cancellationToken)
     {
         List<LanguageDTO> languages = await _languageService.GetAllActiveLanguages();
         string defaultLanguage = languages.Find(x => x.IsDefault)?.Culture ?? "";
-        bool.TryParse(_configuration["Captcha:Enabled"], out var requiredCaptcha);
+        var settings = await _securitySettingService.GetSettingsAsync(null,cancellationToken);
+        bool.TryParse(_configuration["Captcha:Enabled"], out var requiredCaptchaAppSetting);
+
+        var requiredCaptcha = settings.RequireCaptchaOnLogin || requiredCaptchaAppSetting;
         return new InitialAppDTO()
         {
             Languages = languages,

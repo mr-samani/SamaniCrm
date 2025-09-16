@@ -62,7 +62,17 @@ public class TwoFactorService : ITwoFactorService
     /// <summary>
     /// اعتبارسنجی کد وارد شده توسط کاربر
     /// </summary>
-    public async Task<bool> VerifyCodeAsync(string secret, string code)
+    public bool VerifyCodeAsync(string secret, string code)
+    {
+        var bytes = Base32Encoding.ToBytes(secret);
+        var totp = new Totp(bytes);
+        var checkResult = totp.VerifyTotp(code, out _, new VerificationWindow(previous: 1, future: 1));
+        // 30 ثانیه بازه زمانی
+        return checkResult;
+    }
+
+
+    public async Task<bool> Save2FaVerifyCodeAsync(string secret, string code)
     {
         var bytes = Base32Encoding.ToBytes(secret);
         var totp = new Totp(bytes);
@@ -93,11 +103,53 @@ public class TwoFactorService : ITwoFactorService
             data.EnableTwoFactor = true;
             data.TwoFactorType = TwoFactorTypeEnum.AuthenticatorApp;
             data.IsVerified = true;
+            data.Secret = secret;
 
             applicationDbContext.UserSetting.Update(data);
         }
         await applicationDbContext.SaveChangesAsync();
 
         return true;
+    }
+
+
+
+    public async Task<bool> SetAttemptCount(Guid userId)
+    {
+        var data = applicationDbContext.UserSetting.Where(x => x.UserId == userId).FirstOrDefault();
+        if (data == null)
+        {
+            data = new UserSetting()
+            {
+                UserId = userId,
+                AttemptCount = 1,
+                EnableTwoFactor = true,
+                IsVerified = true,
+                Secret = "",
+                TwoFactorType = TwoFactorTypeEnum.AuthenticatorApp,
+                LastAttemptAt = DateTime.UtcNow
+            };
+            await applicationDbContext.UserSetting.AddAsync(data);
+        }
+        else
+        {
+            data.AttemptCount = data.AttemptCount + 1;
+            data.LastAttemptAt = DateTime.UtcNow;
+            applicationDbContext.UserSetting.Update(data);
+        }
+        await applicationDbContext.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task ResetAttemptCount(Guid userId)
+    {
+        var data = applicationDbContext.UserSetting.Where(x => x.UserId == userId).FirstOrDefault();
+        if (data != null)
+        {
+            data.AttemptCount = data.AttemptCount + 1;
+            data.LastAttemptAt = DateTime.UtcNow;
+            applicationDbContext.UserSetting.Update(data);
+            await applicationDbContext.SaveChangesAsync();
+        }
     }
 }

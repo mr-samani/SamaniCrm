@@ -28,7 +28,9 @@ services
     .AddSwaggerDocumentation()
     .AddHangfire(config)
     .AddCacheService(config)
-    .AddFileManagerService(config);
+    .AddFileManagerService(config)
+    .AddHangfireJobs(config)
+    ;
 
 services.AddSignalR();
 

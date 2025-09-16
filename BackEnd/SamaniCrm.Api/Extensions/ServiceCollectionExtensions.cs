@@ -27,6 +27,7 @@ using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Localizer;
 using SamaniCrm.Infrastructure.Services;
 using SamaniCrm.Infrastructure.Services.Product;
+using SamaniCrm.Infrastructure.Jobs;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
+using Hangfire.Console;
 
 namespace SamaniCrm.Infrastructure.Extensions;
 public static class ServiceCollectionExtensions
@@ -209,6 +211,8 @@ public static class ServiceCollectionExtensions
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
                 .UseSimpleAssemblyNameTypeSerializer()
                 .UseRecommendedSerializerSettings()
+                .UseColouredConsoleLogProvider()
+                .UseConsole()
                 .UseSqlServerStorage(config.GetConnectionString("DefaultConnection"), new SqlServerStorageOptions
                 {
                     CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
@@ -246,6 +250,7 @@ public static class ServiceCollectionExtensions
 
 
         services.AddScoped<ISecuritySettingService, SecuritySettingService>();
+        services.AddScoped<ILoginJobsService, LoginJobsService>();
 
 
         //چون حافظه ایه Singleton باشه بهتره.
@@ -293,6 +298,41 @@ public static class ServiceCollectionExtensions
 
         return services;
     }
+
+
+
+
+    public static IServiceCollection AddHangfireJobs(this IServiceCollection services, IConfiguration config)
+    {
+        services.AddScoped<IStartupFilter, HangfireJobStartupFilter>();
+        return services;
+    }
+
+    public class HangfireJobStartupFilter : IStartupFilter
+    {
+        public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
+        {
+            return app =>
+            {
+                using var scope = app.ApplicationServices.CreateScope();
+                var jobManager = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+
+                jobManager.AddOrUpdate<ILoginJobsService>(
+                    recurringJobId: "ReleaseExpiredLocksJob",
+                    methodCall: job => job.ReleaseExpiredLocksAsync(null!),
+                    cronExpression: "*/30 * * * * *",
+                     options: new RecurringJobOptions()
+                     {
+                         MisfireHandling = MisfireHandlingMode.Relaxed,
+                         TimeZone = TimeZoneInfo.Utc,
+                     }
+                );
+
+                next(app);
+            };
+        }
+    }
+
 }
 
 

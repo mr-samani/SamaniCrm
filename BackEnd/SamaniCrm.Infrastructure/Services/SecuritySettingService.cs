@@ -26,22 +26,26 @@ namespace SamaniCrm.Infrastructure.Services
             _currentUser = currentUser;
         }
 
-        public async Task<SecuritySettingDto> GetSettingsAsync(CancellationToken cancellationToken)
+        public async Task<SecuritySettingDto> GetSettingsAsync(Guid? userId, CancellationToken cancellationToken)
         {
-            UserSettingDto? userSetting = await _cacheService.GetAsync<UserSettingDto>(CacheKeys.SecuritySettings);
-            if (userSetting == null)
+            UserSettingDto? userSetting = null;
+            if (userId != null)
             {
-                userSetting = await _applicationDbContext.UserSetting.Select(s => new UserSettingDto
+                userSetting = await _cacheService.GetAsync<UserSettingDto>(CacheKeys.UserSetting_ + userId.ToString());
+                if (userSetting == null)
                 {
-                    UserId = s.UserId,
-                    EnableTwoFactor = s.EnableTwoFactor,
-                    TwoFactorType = s.TwoFactorType,
-                    IsVerified = s.IsVerified,
-                    Secret = s.Secret,
-                })
-                    .Where(w => w.UserId.ToString() == _currentUser.UserId)
-                    .FirstOrDefaultAsync(cancellationToken);
-                await _cacheService.SetAsync(CacheKeys.UserSetting_ + _currentUser.UserId, userSetting, TimeSpan.FromHours(4));
+                    userSetting = await _applicationDbContext.UserSetting.Select(s => new UserSettingDto
+                    {
+                        UserId = s.UserId,
+                        EnableTwoFactor = s.EnableTwoFactor,
+                        TwoFactorType = s.TwoFactorType,
+                        IsVerified = s.IsVerified,
+                        Secret = s.Secret,
+                    })
+                        .Where(w => w.UserId == userId)
+                        .FirstOrDefaultAsync(cancellationToken);
+                    await _cacheService.SetAsync(CacheKeys.UserSetting_ + userId.ToString(), userSetting, TimeSpan.FromHours(4));
+                }
             }
             SecuritySettingDto? data = await _cacheService.GetAsync<SecuritySettingDto>(CacheKeys.SecuritySettings);
             if (data == null)
@@ -59,6 +63,7 @@ namespace SamaniCrm.Infrastructure.Services
                     },
                     RequireCaptchaOnLogin = s.RequireCaptchaOnLogin,
                     LogginAttemptCountLimit = s.LogginAttemptCountLimit,
+                    LogginAttemptTimeSecondsLimit = s.LogginAttemptTimeSecondsLimit,
                     UserSetting = default!
                 }).FirstOrDefaultAsync(cancellationToken);
                 await _cacheService.SetAsync(CacheKeys.SecuritySettings, data, TimeSpan.FromHours(4));
@@ -86,6 +91,7 @@ namespace SamaniCrm.Infrastructure.Services
                     RequireUppercase = input.PasswordComplexity.RequireUppercase,
                     RequireCaptchaOnLogin = input.RequireCaptchaOnLogin,
                     LogginAttemptCountLimit = input.LogginAttemptCountLimit,
+                    LogginAttemptTimeSecondsLimit = input.LogginAttemptTimeSecondsLimit,
                 });
             }
             else
@@ -95,12 +101,20 @@ namespace SamaniCrm.Infrastructure.Services
                 data.RequireLowercase = input.PasswordComplexity.RequireLowercase;
                 data.RequireNonAlphanumeric = input.PasswordComplexity.RequireNonAlphanumeric;
                 data.RequireUppercase = input.PasswordComplexity.RequireUppercase;
+                data.RequireCaptchaOnLogin = input.RequireCaptchaOnLogin;
+                data.LogginAttemptCountLimit = input.LogginAttemptCountLimit;
+                data.LogginAttemptTimeSecondsLimit = input.LogginAttemptTimeSecondsLimit;
                 _applicationDbContext.SecuritySettings.Update(data);
             }
             result = await _applicationDbContext.SaveChangesAsync(cancellationToken);
+
+            //clean cache
             await _cacheService.RemoveAsync(CacheKeys.SecuritySettings);
+            await _cacheService.RemoveAsync(CacheKeys.UserSetting_ + _currentUser.UserId);
+
             return result > 0;
 
         }
+
     }
 }

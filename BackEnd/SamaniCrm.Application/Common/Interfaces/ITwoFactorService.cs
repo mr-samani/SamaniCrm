@@ -4,6 +4,9 @@ namespace SamaniCrm.Application.Common.Interfaces;
 
 public interface ITwoFactorService
 {
-    public GenerateTwoFactorCodeDto GenerateSetupCode(string appName);
-    public Task<bool> VerifyCodeAsync(string secret, string code);
+    GenerateTwoFactorCodeDto GenerateSetupCode(string appName);
+    bool VerifyCodeAsync(string secret, string code);
+    Task<bool> Save2FaVerifyCodeAsync(string secret, string code);
+    Task<bool> SetAttemptCount(Guid userId);
+    Task ResetAttemptCount(Guid userId);
 }

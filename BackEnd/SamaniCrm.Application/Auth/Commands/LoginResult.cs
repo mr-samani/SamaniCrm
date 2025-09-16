@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Application.Auth.Commands
 {
@@ -14,6 +15,9 @@ namespace SamaniCrm.Application.Auth.Commands
         public string RefreshToken { get; set; } = string.Empty;
 
         public List<string> Roles { get; set; } = [];
+
+        public bool EnableTwoFactor { get; set; } = false;
+        public TwoFactorTypeEnum TwoFactorType { get; set; }
     }
 
 }

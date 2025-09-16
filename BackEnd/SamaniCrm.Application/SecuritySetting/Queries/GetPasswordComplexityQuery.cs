@@ -22,7 +22,7 @@ namespace SamaniCrm.Application.SecuritySetting.Queries
 
         public async Task<PasswordComplexityDto> Handle(GetPasswordComplexityQuery request, CancellationToken cancellationToken)
         {
-            var settings = await _securitySettingService.GetSettingsAsync(cancellationToken);
+            var settings = await _securitySettingService.GetSettingsAsync(null, cancellationToken);
            return settings.PasswordComplexity;
         }
     }

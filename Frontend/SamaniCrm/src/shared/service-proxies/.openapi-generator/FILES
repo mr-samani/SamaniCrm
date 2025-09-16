@@ -165,6 +165,7 @@ model/string-auto-complete-dto.ts
 model/string-list-api-response.ts
 model/token-response-dto-api-response.ts
 model/token-response-dto.ts
+model/two-factor-login-command.ts
 model/two-factor-type-enum.ts
 model/unit-api-response.ts
 model/update-batch-localize-key-command.ts

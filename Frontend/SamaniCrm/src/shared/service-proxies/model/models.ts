@@ -138,6 +138,7 @@ export * from './string-auto-complete-dto-list-api-response';
 export * from './string-list-api-response';
 export * from './token-response-dto';
 export * from './token-response-dto-api-response';
+export * from './two-factor-login-command';
 export * from './two-factor-type-enum';
 export * from './unit-api-response';
 export * from './update-batch-localize-key-command';

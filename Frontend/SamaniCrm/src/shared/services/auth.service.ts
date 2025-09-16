@@ -10,6 +10,7 @@ import {
   LoginCommand,
   RefreshTokenCommand,
   RevokeRefreshTokenCommand,
+  TwoFactorLoginCommand,
   UserDTO,
   UserServiceProxy,
 } from '@shared/service-proxies';
@@ -55,7 +56,17 @@ export class AuthService {
       }),
     );
   }
-
+  loginTwoFactor(input: TwoFactorLoginCommand) {
+    return this.accountService.loginTwoFactor(input).pipe(
+      map((response) => {
+        if (response.success && response.data && response.data.accessToken) {
+          this.tokenService.set(response.data);
+          this.currentUserSubject.next(response.data.user);
+        }
+        return response;
+      }),
+    );
+  }
   // register(credential: RegisterRequest): Observable<any> {
   //   return this.dataService.post<RegisterRequest, LoginDto>(Apis.register, credential).pipe(
   //     map((response) => {

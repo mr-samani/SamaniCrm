@@ -14,6 +14,7 @@ namespace SamaniCrm.Application.DTOs
         public required UserSettingDto UserSetting { get; set; }
 
         public int LogginAttemptCountLimit { get; set; }
+        public int LogginAttemptTimeSecondsLimit { get; set; }
 
     }
 }

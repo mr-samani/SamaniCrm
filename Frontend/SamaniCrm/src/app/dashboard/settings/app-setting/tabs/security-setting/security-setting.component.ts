@@ -16,7 +16,7 @@ export class SecuritySettingComponent extends AppComponentBase implements OnInit
   settings: SecuritySettingDto = new SecuritySettingDto();
   isSaving = false;
   loading = true;
-
+  logginAttemptMinute = 0;
   constructor(
     injector: Injector,
     private securitySettingService: SecuritySettingsServiceProxy,
@@ -40,6 +40,7 @@ export class SecuritySettingComponent extends AppComponentBase implements OnInit
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
         this.settings = response.data ?? new SecuritySettingDto();
+        this.logginAttemptMinute = (this.settings.logginAttemptTimeSecondsLimit ?? 0) / 60;
       });
   }
 
@@ -49,6 +50,7 @@ export class SecuritySettingComponent extends AppComponentBase implements OnInit
       return;
     }
 
+    this.settings.logginAttemptTimeSecondsLimit = this.logginAttemptMinute * 60;
     this.isSaving = true;
     this.securitySettingService
       .updateSecuritySettings(this.settings)

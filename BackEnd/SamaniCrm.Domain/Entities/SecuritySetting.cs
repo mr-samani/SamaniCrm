@@ -21,5 +21,6 @@ public class SecuritySetting
 
     public int LogginAttemptCountLimit { get; set; } = 10;
 
+    public int LogginAttemptTimeSecondsLimit { get; set; } = 5 * 60;
 }
 

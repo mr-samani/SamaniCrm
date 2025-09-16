@@ -10,7 +10,7 @@ import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { catchError, take, filter, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { TranslateService } from '@ngx-translate/core';
+import { isArray, TranslateService } from '@ngx-translate/core';
 import { TokenService } from './token.service';
 import { AppConst } from '../app-const';
 import { NgxAlertModalService } from 'ngx-alert-modal';
@@ -71,6 +71,7 @@ export class AuthInterceptor implements HttpInterceptor {
         if (
           error instanceof HttpErrorResponse &&
           !request.url.toLowerCase().includes('api/account/login') &&
+          !request.url.toLowerCase().includes('api/account/loginTwoFactor') &&
           !request.url.toLowerCase().includes('api/account/refresh')
         ) {
           return this.handle401Error(request, next);
@@ -138,7 +139,7 @@ export class AuthInterceptor implements HttpInterceptor {
     }
     let html = '<ol class="text-start">';
     for (let item of errorList) {
-      html += `<li>${item.field}: ${item.message}</li>`;
+      html += `<li>${item.field ?? ''}: ${item.message}</li>`;
     }
     html += '</ol>';
     this.alertService.show({
@@ -153,10 +154,18 @@ export class AuthInterceptor implements HttpInterceptor {
 
   handleServerError(err: HttpErrorResponse) {
     this.translateService.get('Message.ErrorOccurred').subscribe((lmsg) => {
-      const msg =
-        err.error?.message ?? lmsg ?? 'Unfortunately, an error has occurred on the server!';
+      const msg = err.error?.message ?? lmsg ?? 'Unfortunately, an error has occurred on the server!';
+      let errorList = [];
+      if (err.error && err.error.errors && Array.isArray(err.error.errors)) {
+        errorList = err.error.errors;
+      }
+      let html = '';
+      for (let item of errorList) {
+        html += `<p>${item.message}</p>`;
+      }
       this.alertService.show({
-        title: msg,
+        title: errorList.length > 0 ? '' : msg,
+        html: html,
         showCancelButton: false,
         showConfirmButton: true,
         confirmButtonText: this.translateService.instant('Ok'),
