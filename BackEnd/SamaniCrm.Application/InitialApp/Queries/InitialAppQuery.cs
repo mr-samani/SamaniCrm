@@ -38,7 +38,7 @@ public class InitialAppQueryHandler : IRequestHandler<InitialAppQuery, InitialAp
     {
         List<LanguageDTO> languages = await _languageService.GetAllActiveLanguages();
         string defaultLanguage = languages.Find(x => x.IsDefault)?.Culture ?? "";
-        var settings = await _securitySettingService.GetSettingsAsync(null,cancellationToken);
+        var settings = await _securitySettingService.GetSettingsAsync(cancellationToken);
         bool.TryParse(_configuration["Captcha:Enabled"], out var requiredCaptchaAppSetting);
 
         var requiredCaptcha = settings.RequireCaptchaOnLogin || requiredCaptchaAppSetting;

@@ -29,7 +29,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
 
-
+        #region Host security settings
         [HttpGet("GetSecuritySettings")]
         [Permission(AppPermissions.SecuritySetting_GetSetting)]
         [ProducesResponseType(typeof(ApiResponse<SecuritySettingDto>), StatusCodes.Status200OK)]
@@ -46,8 +46,29 @@ namespace SamaniCrm.Api.Controllers
         {
             return ApiOk(await _mediator.Send(input));
         }
+        #endregion
 
 
+        #region User security setting
+
+        [HttpGet("GetUserSecuritySettings")]
+        [Permission(AppPermissions.SecuritySetting_GetUserSetting)]
+        [ProducesResponseType(typeof(ApiResponse<UserSettingDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetUserSecuritySettings()
+        {
+            return ApiOk(await _mediator.Send(new GetUserSecuritySettingsQuery()));
+        }
+
+
+        [HttpPost("UpdateUserSecuritySettings")]
+        [Permission(AppPermissions.SecuritySetting_UpdateUserSetting)]
+        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> UpdateUserSecuritySettings(UpdateUserSecuritySettingCommand input)
+        {
+            return ApiOk(await _mediator.Send(input));
+        }
+
+        #endregion
     }
 
 }

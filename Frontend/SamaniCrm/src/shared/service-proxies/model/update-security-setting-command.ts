@@ -7,7 +7,6 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { UserSettingDto } from './user-setting-dto';
 import { PasswordComplexityDto } from './password-complexity-dto';
 
 
@@ -17,7 +16,6 @@ import { PasswordComplexityDto } from './password-complexity-dto';
 export interface IUpdateSecuritySettingCommand {
   requireCaptchaOnLogin?: boolean;
   passwordComplexity: PasswordComplexityDto;
-  userSetting: UserSettingDto;
   logginAttemptCountLimit?: number;
   logginAttemptTimeSecondsLimit?: number;
 }
@@ -26,7 +24,6 @@ export interface IUpdateSecuritySettingCommand {
 export class UpdateSecuritySettingCommand implements IUpdateSecuritySettingCommand {
   requireCaptchaOnLogin?: boolean;
   passwordComplexity!: PasswordComplexityDto;
-  userSetting!: UserSettingDto;
   logginAttemptCountLimit?: number;
   logginAttemptTimeSecondsLimit?: number;
 
@@ -43,7 +40,6 @@ init(data?: any) {
   if (data) {
     this.requireCaptchaOnLogin = data["requireCaptchaOnLogin"];
     this.passwordComplexity = data["passwordComplexity"];
-    this.userSetting = data["userSetting"];
     this.logginAttemptCountLimit = data["logginAttemptCountLimit"];
     this.logginAttemptTimeSecondsLimit = data["logginAttemptTimeSecondsLimit"];
   }

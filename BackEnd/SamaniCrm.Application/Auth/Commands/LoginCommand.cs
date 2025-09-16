@@ -49,7 +49,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult>
 
     public async Task<LoginResult> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var securitySettings = await _securitySettingService.GetSettingsAsync(null,cancellationToken);
+        var securitySettings = await _securitySettingService.GetSettingsAsync(cancellationToken);
         if (securitySettings.RequireCaptchaOnLogin)
         {
             if (request.captcha == null || string.IsNullOrEmpty(request.captcha.CaptchaKey) || string.IsNullOrEmpty(request.captcha.CaptchaText))

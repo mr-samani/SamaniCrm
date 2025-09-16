@@ -9,7 +9,12 @@ namespace SamaniCrm.Application.Common.Interfaces
 {
     public interface ISecuritySettingService
     {
-        Task<SecuritySettingDto> GetSettingsAsync(Guid? userId, CancellationToken cancellationToken);
+        Task<SecuritySettingDto> GetSettingsAsync(CancellationToken cancellationToken);
         Task<bool> SetSettingsAsync(SecuritySettingDto input, CancellationToken cancellationToken);
+
+
+        Task<UserSettingDto> GetUserSettingsAsync(Guid userId, CancellationToken cancellationToken);
+        Task<bool> SetUserSettingsAsync(UserSettingDto input, CancellationToken cancellationToken);
+
     }
 }

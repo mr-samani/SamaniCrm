@@ -14,18 +14,15 @@ namespace SamaniCrm.Application.SecuritySetting.Queries
     public class GetSecuritySettingsQueryHandler : IRequestHandler<GetSecuritySettingsQuery, SecuritySettingDto>
     {
         private readonly ISecuritySettingService _securitySettingService;
-        private readonly ICurrentUserService _currentUser;
 
-        public GetSecuritySettingsQueryHandler(ISecuritySettingService securitySettingService, ICurrentUserService currentUser)
+        public GetSecuritySettingsQueryHandler(ISecuritySettingService securitySettingService)
         {
             _securitySettingService = securitySettingService;
-            _currentUser = currentUser;
         }
 
         public async Task<SecuritySettingDto> Handle(GetSecuritySettingsQuery request, CancellationToken cancellationToken)
         {
-            Guid? userId = _currentUser.UserId != null ? Guid.Parse(_currentUser.UserId) : null;
-            return await _securitySettingService.GetSettingsAsync(userId, cancellationToken);
+            return await _securitySettingService.GetSettingsAsync(cancellationToken);
         }
     }
 

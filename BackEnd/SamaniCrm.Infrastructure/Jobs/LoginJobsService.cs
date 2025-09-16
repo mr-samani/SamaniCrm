@@ -39,7 +39,7 @@ public class LoginJobsService : ILoginJobsService
     public async Task ReleaseExpiredLocksAsync(PerformContext context, CancellationToken cancellationToken)
     {
         var now = DateTime.UtcNow;
-        var securitySetting = await _securitySettingService.GetSettingsAsync(null, cancellationToken);
+        var securitySetting = await _securitySettingService.GetSettingsAsync(cancellationToken);
         var limitTryCount = securitySetting.LogginAttemptCountLimit;
         List<UserSetting> lockedUsers = await _dbContext.UserSetting
            .Where(u => u.AttemptCount >= limitTryCount &&

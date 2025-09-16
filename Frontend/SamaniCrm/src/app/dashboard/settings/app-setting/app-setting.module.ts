@@ -13,10 +13,17 @@ import { GeneralSettingComponent } from './tabs/general-setting/general-setting.
 import { SecuritySettingComponent } from './tabs/security-setting/security-setting.component';
 import { SwitchModule } from '@shared/components/switch/switch.module';
 import { SecuritySettingsServiceProxy } from '@shared/service-proxies';
-import { SharedModule } from "@shared/shared.module";
+import { SharedModule } from '@shared/shared.module';
+import { UserSecuritySettingComponent } from './tabs/user-security-setting/user-security-setting.component';
 
 @NgModule({
-  declarations: [AppSettingComponent, GeneralSettingComponent, SecuritySettingComponent, TwoFaAppConfigComponent],
+  declarations: [
+    AppSettingComponent,
+    GeneralSettingComponent,
+    SecuritySettingComponent,
+    TwoFaAppConfigComponent,
+    UserSecuritySettingComponent,
+  ],
   imports: [
     CommonModule,
     AppSettingRoutingModule,
@@ -27,8 +34,8 @@ import { SharedModule } from "@shared/shared.module";
     MaterialCommonModule,
     TabGroupModule,
     SwitchModule,
-    SharedModule
-],
+    SharedModule,
+  ],
   providers: [SecuritySettingsServiceProxy],
 })
 export class AppSettingModule {}

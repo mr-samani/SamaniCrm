@@ -172,10 +172,12 @@ model/update-batch-localize-key-command.ts
 model/update-page-content-command.ts
 model/update-role-command.ts
 model/update-security-setting-command.ts
+model/update-user-security-setting-command.ts
 model/user-dto-api-response.ts
 model/user-dto-paginated-result-api-response.ts
 model/user-dto-paginated-result.ts
 model/user-dto.ts
+model/user-setting-dto-api-response.ts
 model/user-setting-dto.ts
 model/verify2-fa-request.ts
 model/weather-forecast.ts

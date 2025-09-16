@@ -33,6 +33,9 @@ namespace SamaniCrm.Core.Permissions
         public const string SecuritySetting = "Administrator.SecuritySetting";
         public const string SecuritySetting_GetSetting = "Administrator.SecuritySetting.GetSetting";
         public const string SecuritySetting_UpdateSetting = "Administrator.SecuritySetting.UpdateSetting";
+
+        public const string SecuritySetting_GetUserSetting = "Administrator.SecuritySetting.GetUserSetting";
+        public const string SecuritySetting_UpdateUserSetting = "Administrator.SecuritySetting.UpdateUserSetting";
         public const string SecuritySetting_TwoFactorApp = "Administrator.SecuritySetting.TwoFactorApp";
 
 

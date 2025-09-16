@@ -26,27 +26,8 @@ namespace SamaniCrm.Infrastructure.Services
             _currentUser = currentUser;
         }
 
-        public async Task<SecuritySettingDto> GetSettingsAsync(Guid? userId, CancellationToken cancellationToken)
+        public async Task<SecuritySettingDto> GetSettingsAsync(CancellationToken cancellationToken)
         {
-            UserSettingDto? userSetting = null;
-            if (userId != null)
-            {
-                userSetting = await _cacheService.GetAsync<UserSettingDto>(CacheKeys.UserSetting_ + userId.ToString());
-                if (userSetting == null)
-                {
-                    userSetting = await _applicationDbContext.UserSetting.Select(s => new UserSettingDto
-                    {
-                        UserId = s.UserId,
-                        EnableTwoFactor = s.EnableTwoFactor,
-                        TwoFactorType = s.TwoFactorType,
-                        IsVerified = s.IsVerified,
-                        Secret = s.Secret,
-                    })
-                        .Where(w => w.UserId == userId)
-                        .FirstOrDefaultAsync(cancellationToken);
-                    await _cacheService.SetAsync(CacheKeys.UserSetting_ + userId.ToString(), userSetting, TimeSpan.FromHours(4));
-                }
-            }
             SecuritySettingDto? data = await _cacheService.GetAsync<SecuritySettingDto>(CacheKeys.SecuritySettings);
             if (data == null)
             {
@@ -64,13 +45,9 @@ namespace SamaniCrm.Infrastructure.Services
                     RequireCaptchaOnLogin = s.RequireCaptchaOnLogin,
                     LogginAttemptCountLimit = s.LogginAttemptCountLimit,
                     LogginAttemptTimeSecondsLimit = s.LogginAttemptTimeSecondsLimit,
-                    UserSetting = default!
                 }).FirstOrDefaultAsync(cancellationToken);
                 await _cacheService.SetAsync(CacheKeys.SecuritySettings, data, TimeSpan.FromHours(4));
             }
-
-
-            data!.UserSetting = userSetting ?? new UserSettingDto();
             return data;
         }
 
@@ -110,11 +87,66 @@ namespace SamaniCrm.Infrastructure.Services
 
             //clean cache
             await _cacheService.RemoveAsync(CacheKeys.SecuritySettings);
-            await _cacheService.RemoveAsync(CacheKeys.UserSetting_ + _currentUser.UserId);
-
             return result > 0;
 
         }
+
+
+
+
+        // ___________________________________________________________________________
+        public async Task<UserSettingDto> GetUserSettingsAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            UserSettingDto? userSetting = await _cacheService.GetAsync<UserSettingDto>(CacheKeys.UserSetting_ + userId.ToString());
+            if (userSetting == null)
+            {
+                userSetting = await _applicationDbContext.UserSetting.Select(s => new UserSettingDto
+                {
+                    UserId = s.UserId,
+                    EnableTwoFactor = s.EnableTwoFactor,
+                    TwoFactorType = s.TwoFactorType,
+                    IsVerified = s.IsVerified,
+                    Secret = s.Secret,
+                })
+                    .Where(w => w.UserId == userId)
+                    .FirstOrDefaultAsync(cancellationToken);
+                await _cacheService.SetAsync(CacheKeys.UserSetting_ + userId.ToString(), userSetting, TimeSpan.FromHours(4));
+            }
+            return userSetting ?? new UserSettingDto();
+        }
+
+        public async Task<bool> SetUserSettingsAsync(UserSettingDto input, CancellationToken cancellationToken)
+        {
+            var data = await _applicationDbContext.UserSetting.Where(x => x.UserId == input.UserId)
+                                                                .FirstOrDefaultAsync();
+            int result;
+            if (data == null)
+            {
+                await _applicationDbContext.UserSetting.AddAsync(new UserSetting()
+                {
+                    UserId = input.UserId,
+                    IsVerified = input.IsVerified,
+                    AttemptCount = 0,
+                    EnableTwoFactor = input.EnableTwoFactor,
+                    TwoFactorType = input.TwoFactorType,
+                    Secret = input.Secret,
+                });
+            }
+            else
+            {
+                data.IsVerified = input.IsVerified;
+                data.EnableTwoFactor = input.EnableTwoFactor;
+                data.TwoFactorType = input.TwoFactorType;
+                data.Secret = input.Secret;
+                _applicationDbContext.UserSetting.Update(data);
+            }
+            result = await _applicationDbContext.SaveChangesAsync(cancellationToken);
+
+            //clean cache 
+            await _cacheService.RemoveAsync(CacheKeys.UserSetting_ + _currentUser.UserId);
+            return result > 0;
+        }
+
 
     }
 }

@@ -2,17 +2,18 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
-import { SecuritySettingDto, SecuritySettingsServiceProxy } from '@shared/service-proxies';
+import { UserSettingDto, SecuritySettingsServiceProxy, TwoFactorTypeEnum } from '@shared/service-proxies';
 import { finalize } from 'rxjs/operators';
+import { TwoFaAppConfigComponent } from '../../dialogs/two-fa-app-config/two-fa-app-config.component';
 
 @Component({
-  selector: 'app-security-setting',
-  templateUrl: './security-setting.component.html',
-  styleUrls: ['./security-setting.component.scss'],
+  selector: 'app-user-security-setting',
+  templateUrl: './user-security-setting.component.html',
+  styleUrls: ['./user-security-setting.component.scss'],
   standalone: false,
 })
-export class SecuritySettingComponent extends AppComponentBase implements OnInit {
-  settings: SecuritySettingDto = new SecuritySettingDto();
+export class UserSecuritySettingComponent extends AppComponentBase implements OnInit {
+  settings: UserSettingDto = new UserSettingDto();
   isSaving = false;
   loading = true;
   logginAttemptMinute = 0;
@@ -28,15 +29,17 @@ export class SecuritySettingComponent extends AppComponentBase implements OnInit
     this.getSettings();
   }
 
+  public get TwoFactorTypeEnum(): typeof TwoFactorTypeEnum {
+    return TwoFactorTypeEnum;
+  }
 
   getSettings() {
     this.loading = true;
     this.securitySettingService
-      .getSecuritySettings()
+      .getUserSecuritySettings()
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.settings = response.data ?? new SecuritySettingDto();
-        this.logginAttemptMinute = (this.settings.logginAttemptTimeSecondsLimit ?? 0) / 60;
+        this.settings = response.data ?? new UserSettingDto();
       });
   }
 
@@ -46,14 +49,28 @@ export class SecuritySettingComponent extends AppComponentBase implements OnInit
       return;
     }
 
-    this.settings.logginAttemptTimeSecondsLimit = this.logginAttemptMinute * 60;
     this.isSaving = true;
     this.securitySettingService
-      .updateSecuritySettings(this.settings)
+      .updateUserSecuritySettings(this.settings)
       .pipe(finalize(() => (this.isSaving = false)))
       .subscribe((response) => {
         this.notify.success(this.l('SaveSuccessFully'));
         this.getSettings();
+      });
+  }
+
+  set2FaAppConfig() {
+    this.matDialog
+      .open(TwoFaAppConfigComponent, {
+        data: {},
+        width: '300px',
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result == true) {
+          this.settings.isVerified = true;
+        }
       });
   }
 }

@@ -146,7 +146,7 @@ public class TwoFactorService : ITwoFactorService
         var data = applicationDbContext.UserSetting.Where(x => x.UserId == userId).FirstOrDefault();
         if (data != null)
         {
-            data.AttemptCount = data.AttemptCount + 1;
+            data.AttemptCount = 0;
             data.LastAttemptAt = DateTime.UtcNow;
             applicationDbContext.UserSetting.Update(data);
             await applicationDbContext.SaveChangesAsync();

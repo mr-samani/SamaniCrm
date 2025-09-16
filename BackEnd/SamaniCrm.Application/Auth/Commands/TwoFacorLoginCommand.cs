@@ -57,10 +57,11 @@ public class TwoFactorLoginCommandHandler : IRequestHandler<TwoFactorLoginComman
         }
         UserDTO userData = await _identityService.GetUserDetailsByUserNameAsync(request.UserName);
         // verify two factor
-        var settings = await _securitySettingService.GetSettingsAsync(userData.Id, cancellationToken);
+        var hostSettings = await _securitySettingService.GetSettingsAsync(cancellationToken);
+        var settings = await _securitySettingService.GetUserSettingsAsync(userData.Id, cancellationToken);
         var twoFactor = await _identityService.getUserTwoFactorData(userData.Id, cancellationToken);
 
-        if (twoFactor.AttemptCount >= settings.LogginAttemptCountLimit)
+        if (twoFactor.AttemptCount >= hostSettings.LogginAttemptCountLimit)
         {
             throw new LoginAttempCountException();
         }

@@ -4,40 +4,10 @@
   <h5>
     {{ 'Captcha' | translate }}
   </h5>
-
   <switch [(ngModel)]="settings.requireCaptchaOnLogin" name="requireCaptchaOnLogin">
     {{ 'RequireCaptchaOnLogin' | translate }}
   </switch>
-  <!-- ---------------------------------------------------- -->
-
-  <h5>
-    {{ 'TwoFactorAuthentication' | translate }}
-  </h5>
-  <switch [(ngModel)]="settings.userSetting.enableTwoFactor" name="enableTwoFactorAuth">
-    {{ 'Enable' | translate }}
-  </switch>
-  @if (settings.userSetting.enableTwoFactor) {
-    <mat-form-field>
-      <mat-label>{{ 'TwoFactorType' | translate }}</mat-label>
-      <mat-select [(ngModel)]="settings.userSetting.twoFactorType" name="twoFactorType">
-        <mat-option [value]="TwoFactorTypeEnum.Email">{{ 'Email' | translate }}</mat-option>
-        <mat-option [value]="TwoFactorTypeEnum.Sms">{{ 'SMS' | translate }}</mat-option>
-        <mat-option [value]="TwoFactorTypeEnum.AuthenticatorApp">{{ 'App' | translate }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    @if (settings.userSetting.isVerified) {
-      <span class="text-success">
-        {{ 'Verified2FaApp' | translate }}
-      </span>
-      <button class="btn btn-link" (click)="set2FaAppConfig()">{{ 'Change' | translate }}</button>
-    } @else {
-      <span class="text-danger">
-        {{ 'Unverified2FaApp' | translate }}
-      </span>
-      <button class="btn btn-link" (click)="set2FaAppConfig()">{{ 'Verify' | translate }}</button>
-    }
-  }
+  
   <!-- ---------------------------------------------------- -->
   <h5>
     {{ 'LogginAttemptCountLimit' | translate }}

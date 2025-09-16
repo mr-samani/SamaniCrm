@@ -11,7 +11,6 @@ namespace SamaniCrm.Application.DTOs
         public bool RequireCaptchaOnLogin { get; set; }
 
         public required PasswordComplexityDto PasswordComplexity { get; set; }
-        public required UserSettingDto UserSetting { get; set; }
 
         public int LogginAttemptCountLimit { get; set; }
         public int LogginAttemptTimeSecondsLimit { get; set; }
