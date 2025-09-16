@@ -5,7 +5,7 @@ import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
 import { CustomValidators } from '@shared/custom-validator/form-validation';
 import {
-  PasswordComplexityDTO,
+  PasswordComplexityDto,
   RoleCreateCommand,
   RoleDTO,
   RoleServiceProxy,

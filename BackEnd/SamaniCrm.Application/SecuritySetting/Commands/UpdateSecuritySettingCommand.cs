@@ -9,7 +9,7 @@ using SamaniCrm.Application.DTOs;
 
 namespace SamaniCrm.Application.SecuritySetting.Commands
 {
-    public class UpdateSecuritySettingCommand : SecuritySettingDTO, IRequest<bool>
+    public class UpdateSecuritySettingCommand : SecuritySettingDto, IRequest<bool>
     {
     }
 

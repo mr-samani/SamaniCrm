@@ -234,6 +234,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
         services.AddScoped<ITokenGenerator, TokenGenerator>();
+        services.AddScoped<ITwoFactorService, TwoFactorService>();
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IRolePermissionService, RolePermissionService>();
         services.AddSingleton(TimeProvider.System);

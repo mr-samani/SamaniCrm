@@ -25,6 +25,7 @@ namespace SamaniCrm.Application.Common.Interfaces
         public DbSet<MenuEntity> Menus { get; set; }
         public DbSet<MenuTranslation> MenuTranslations { get; set; }
         public DbSet<SecuritySettingEntity> SecuritySettings { get; set; }
+        public DbSet<UserSetting> UserSetting { get; set; }
         public DbSet<Page> Pages { get; set; }
         public DbSet<PageTranslation> PageTranslations { get; set; }
 

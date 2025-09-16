@@ -13,7 +13,7 @@ import {
 import { AppComponentBase } from '@app/app-component-base';
 import { TranslateModule } from '@ngx-translate/core';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
-import { PasswordComplexityDTO } from '@shared/service-proxies';
+import { PasswordComplexityDto } from '@shared/service-proxies';
 
 @Component({
   selector: 'app-password-input',
@@ -30,7 +30,7 @@ import { PasswordComplexityDTO } from '@shared/service-proxies';
   ],
 })
 export class PasswordInputComponent extends AppComponentBase implements OnInit {
-  @Input() policy: PasswordComplexityDTO = new PasswordComplexityDTO({
+  @Input() policy: PasswordComplexityDto = new PasswordComplexityDto({
     requiredLength: 6,
     requireDigit: true,
     requireLowercase: false,

@@ -9,27 +9,27 @@
  */
 import { Meta } from './meta';
 import { ApiError } from './api-error';
-import { PasswordComplexityDTO } from './password-complexity-dto';
+import { PasswordComplexityDto } from './password-complexity-dto';
 
 
 /* Created with custom template by mohammadreza SAMANI*/
 
-/** Interface for PasswordComplexityDTOApiResponse */
-export interface IPasswordComplexityDTOApiResponse {
+/** Interface for PasswordComplexityDtoApiResponse */
+export interface IPasswordComplexityDtoApiResponse {
   success?: boolean;
-  data?: PasswordComplexityDTO;
+  data?: PasswordComplexityDto;
   errors?: Array<ApiError>;
   meta?: Meta;
 }
 
-/** Class for PasswordComplexityDTOApiResponse */
-export class PasswordComplexityDTOApiResponse implements IPasswordComplexityDTOApiResponse {
+/** Class for PasswordComplexityDtoApiResponse */
+export class PasswordComplexityDtoApiResponse implements IPasswordComplexityDtoApiResponse {
   success?: boolean;
-  data?: PasswordComplexityDTO;
+  data?: PasswordComplexityDto;
   errors?: Array<ApiError>;
   meta?: Meta;
 
-  constructor(data?: IPasswordComplexityDTOApiResponse) {
+  constructor(data?: IPasswordComplexityDtoApiResponse) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -51,8 +51,8 @@ init(data?: any) {
   }
 }
 
-  static fromJS(data: any): PasswordComplexityDTOApiResponse {
-    const instance = new PasswordComplexityDTOApiResponse();
+  static fromJS(data: any): PasswordComplexityDtoApiResponse {
+    const instance = new PasswordComplexityDtoApiResponse();
     instance.init(data);
     return instance;
   }

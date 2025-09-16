@@ -27,6 +27,17 @@ namespace SamaniCrm.Core.Permissions
         public const string RoleManagement_Delete = "Administrator.RoleManagement.Delete";
         public const string RoleManagement_EditRolePermissions = "Administrator.RoleManagement.EditRolePermissions";
 
+
+
+        //Security setting
+        public const string SecuritySetting = "Administrator.SecuritySetting";
+        public const string SecuritySetting_GetSetting = "Administrator.SecuritySetting.GetSetting";
+        public const string SecuritySetting_UpdateSetting = "Administrator.SecuritySetting.UpdateSetting";
+        public const string SecuritySetting_TwoFactorApp = "Administrator.SecuritySetting.TwoFactorApp";
+
+
+
+
         // language management 
         public const string LanguageManagement = "Administrator.LanguageManagement";
         public const string LanguageManagement_List = "Administrator.LanguageManagement.List";

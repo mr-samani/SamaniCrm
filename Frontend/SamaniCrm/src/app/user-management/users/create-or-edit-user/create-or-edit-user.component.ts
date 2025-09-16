@@ -7,7 +7,7 @@ import { CustomValidators } from '@shared/custom-validator/form-validation';
 import {
   CreateUserCommand,
   EditUserCommand,
-  PasswordComplexityDTO,
+  PasswordComplexityDto,
   RoleDTO,
   RoleServiceProxy,
   SecuritySettingsServiceProxy,
@@ -34,7 +34,7 @@ export class CreateOrEditUserComponent extends AppComponentBase implements OnIni
   form: FormGroup;
   roles: SelectableRole[] = [];
   languageList = AppConst.languageList;
-  passwordPolicy?: PasswordComplexityDTO;
+  passwordPolicy?: PasswordComplexityDto;
   constructor(
     injector: Injector,
     private dialogRef: MatDialogRef<CreateUserCommand>,

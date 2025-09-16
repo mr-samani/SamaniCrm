@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
@@ -16,35 +17,59 @@ namespace SamaniCrm.Infrastructure.Services
     {
         private readonly IApplicationDbContext _applicationDbContext;
         private readonly ICacheService _cacheService;
+        private readonly ICurrentUserService _currentUser;
 
-        public SecuritySettingService(IApplicationDbContext applicationDbContext, ICacheService cacheService)
+        public SecuritySettingService(IApplicationDbContext applicationDbContext, ICacheService cacheService, ICurrentUserService currentUser)
         {
             _applicationDbContext = applicationDbContext;
             _cacheService = cacheService;
+            _currentUser = currentUser;
         }
 
-        public async Task<SecuritySettingDTO> GetSettingsAsync(CancellationToken cancellationToken)
+        public async Task<SecuritySettingDto> GetSettingsAsync(CancellationToken cancellationToken)
         {
-            PasswordComplexityDTO? data = await _cacheService.GetAsync<PasswordComplexityDTO>(CacheKeys.SecuritySettings);
+            UserSettingDto? userSetting = await _cacheService.GetAsync<UserSettingDto>(CacheKeys.SecuritySettings);
+            if (userSetting == null)
+            {
+                userSetting = await _applicationDbContext.UserSetting.Select(s => new UserSettingDto
+                {
+                    UserId = s.UserId,
+                    EnableTwoFactor = s.EnableTwoFactor,
+                    TwoFactorType = s.TwoFactorType,
+                    IsVerified = s.IsVerified,
+                    Secret = s.Secret,
+                })
+                    .Where(w => w.UserId.ToString() == _currentUser.UserId)
+                    .FirstOrDefaultAsync(cancellationToken);
+                await _cacheService.SetAsync(CacheKeys.UserSetting_ + _currentUser.UserId, userSetting, TimeSpan.FromHours(4));
+            }
+            SecuritySettingDto? data = await _cacheService.GetAsync<SecuritySettingDto>(CacheKeys.SecuritySettings);
             if (data == null)
             {
-                data = await _applicationDbContext.SecuritySettings.Select(s => new PasswordComplexityDTO
+                data = await _applicationDbContext.SecuritySettings.Select(s => new SecuritySettingDto
                 {
-                    RequiredLength = s.RequiredLength,
-                    RequireDigit = s.RequireDigit,
-                    RequireLowercase = s.RequireLowercase,
-                    RequireUppercase = s.RequireUppercase,
-                    RequireNonAlphanumeric = s.RequireNonAlphanumeric
+                    PasswordComplexity = new PasswordComplexityDto()
+                    {
+                        RequiredLength = s.RequiredLength,
+                        RequireDigit = s.RequireDigit,
+                        RequireLowercase = s.RequireLowercase,
+                        RequireUppercase = s.RequireUppercase,
+                        RequireNonAlphanumeric = s.RequireNonAlphanumeric,
+
+                    },
+                    RequireCaptchaOnLogin = s.RequireCaptchaOnLogin,
+                    LogginAttemptCountLimit = s.LogginAttemptCountLimit,
+                    UserSetting = default!
                 }).FirstOrDefaultAsync(cancellationToken);
                 await _cacheService.SetAsync(CacheKeys.SecuritySettings, data, TimeSpan.FromHours(4));
             }
-            return new SecuritySettingDTO
-            {
-                PasswordComplexity = data ?? default!
-            };
+
+
+            data!.UserSetting = userSetting ?? new UserSettingDto();
+            return data;
         }
 
-        public async Task<bool> SetSettingsAsync(SecuritySettingDTO input, CancellationToken cancellationToken)
+        public async Task<bool> SetSettingsAsync(SecuritySettingDto input, CancellationToken cancellationToken)
         {
             var data = await _applicationDbContext.SecuritySettings
                                 .OrderBy(s => s.Id)
@@ -58,7 +83,9 @@ namespace SamaniCrm.Infrastructure.Services
                     RequiredLength = input.PasswordComplexity.RequiredLength,
                     RequireLowercase = input.PasswordComplexity.RequireLowercase,
                     RequireNonAlphanumeric = input.PasswordComplexity.RequireUppercase,
-                    RequireUppercase = input.PasswordComplexity.RequireUppercase
+                    RequireUppercase = input.PasswordComplexity.RequireUppercase,
+                    RequireCaptchaOnLogin = input.RequireCaptchaOnLogin,
+                    LogginAttemptCountLimit = input.LogginAttemptCountLimit,
                 });
             }
             else

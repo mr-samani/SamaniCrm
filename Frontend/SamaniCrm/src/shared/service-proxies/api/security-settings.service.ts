@@ -19,9 +19,9 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { BooleanApiResponse } from '../model/boolean-api-response';
 // @ts-ignore
-import { PasswordComplexityDTOApiResponse } from '../model/password-complexity-dto-api-response';
+import { PasswordComplexityDtoApiResponse } from '../model/password-complexity-dto-api-response';
 // @ts-ignore
-import { SecuritySettingDTOApiResponse } from '../model/security-setting-dto-api-response';
+import { SecuritySettingDtoApiResponse } from '../model/security-setting-dto-api-response';
 // @ts-ignore
 import { UpdateSecuritySettingCommand } from '../model/update-security-setting-command';
 
@@ -43,9 +43,9 @@ export class SecuritySettingsServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPasswordComplexity(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<PasswordComplexityDTOApiResponse>;
-    public getPasswordComplexity(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PasswordComplexityDTOApiResponse>>;
-    public getPasswordComplexity(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PasswordComplexityDTOApiResponse>>;
+    public getPasswordComplexity(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<PasswordComplexityDtoApiResponse>;
+    public getPasswordComplexity(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PasswordComplexityDtoApiResponse>>;
+    public getPasswordComplexity(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PasswordComplexityDtoApiResponse>>;
     public getPasswordComplexity(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -79,7 +79,7 @@ export class SecuritySettingsServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/SecuritySettings/GetPasswordComplexity`;
-        return this.httpClient.request<PasswordComplexityDTOApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<PasswordComplexityDtoApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -96,9 +96,9 @@ export class SecuritySettingsServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSecuritySettings(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<SecuritySettingDTOApiResponse>;
-    public getSecuritySettings(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SecuritySettingDTOApiResponse>>;
-    public getSecuritySettings(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SecuritySettingDTOApiResponse>>;
+    public getSecuritySettings(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<SecuritySettingDtoApiResponse>;
+    public getSecuritySettings(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SecuritySettingDtoApiResponse>>;
+    public getSecuritySettings(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SecuritySettingDtoApiResponse>>;
     public getSecuritySettings(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -132,7 +132,7 @@ export class SecuritySettingsServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/SecuritySettings/GetSecuritySettings`;
-        return this.httpClient.request<SecuritySettingDTOApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<SecuritySettingDtoApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

@@ -1,3 +1,4 @@
+import { TwoFaAppConfigComponent } from './dialogs/two-fa-app-config/two-fa-app-config.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppSettingComponent } from './app-setting.component';
@@ -12,9 +13,10 @@ import { GeneralSettingComponent } from './tabs/general-setting/general-setting.
 import { SecuritySettingComponent } from './tabs/security-setting/security-setting.component';
 import { SwitchModule } from '@shared/components/switch/switch.module';
 import { SecuritySettingsServiceProxy } from '@shared/service-proxies';
+import { SharedModule } from "@shared/shared.module";
 
 @NgModule({
-  declarations: [AppSettingComponent, GeneralSettingComponent, SecuritySettingComponent],
+  declarations: [AppSettingComponent, GeneralSettingComponent, SecuritySettingComponent, TwoFaAppConfigComponent],
   imports: [
     CommonModule,
     AppSettingRoutingModule,
@@ -25,7 +27,8 @@ import { SecuritySettingsServiceProxy } from '@shared/service-proxies';
     MaterialCommonModule,
     TabGroupModule,
     SwitchModule,
-  ],
+    SharedModule
+],
   providers: [SecuritySettingsServiceProxy],
 })
 export class AppSettingModule {}

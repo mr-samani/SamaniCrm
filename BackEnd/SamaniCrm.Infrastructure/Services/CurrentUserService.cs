@@ -20,10 +20,14 @@ namespace SamaniCrm.Infrastructure.Services
         }
         private string? _overrideLang;
         public string? UserId =>
-
         _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier)
                 ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue("sub")
                 ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue(JwtRegisteredClaimNames.Sub);
+
+        public string? UserName =>
+        _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name)
+            ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue(JwtRegisteredClaimNames.UniqueName)
+            ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue("unique_name");
 
         // public string lang => _httpContextAccessor.HttpContext?.User?.FindFirstValue("lang") ?? "fa-IR";
 

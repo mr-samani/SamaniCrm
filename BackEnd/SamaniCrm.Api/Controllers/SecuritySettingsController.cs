@@ -1,10 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SamaniCrm.Api.Attributes;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.SecuritySetting.Commands;
 using SamaniCrm.Application.SecuritySetting.Queries;
+using SamaniCrm.Core.Permissions;
 using SamaniCrm.Host.Models;
 
 namespace SamaniCrm.Api.Controllers
@@ -20,7 +22,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetPasswordComplexity")]
-        [ProducesResponseType(typeof(ApiResponse<PasswordComplexityDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<PasswordComplexityDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPasswordComplexity()
         {
             return ApiOk(await _mediator.Send(new GetPasswordComplexityQuery()));
@@ -29,7 +31,8 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpGet("GetSecuritySettings")]
-        [ProducesResponseType(typeof(ApiResponse<SecuritySettingDTO>), StatusCodes.Status200OK)]
+        [Permission(AppPermissions.SecuritySetting_GetSetting)]
+        [ProducesResponseType(typeof(ApiResponse<SecuritySettingDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetSecuritySettings()
         {
             return ApiOk(await _mediator.Send(new GetSecuritySettingsQuery()));
@@ -37,6 +40,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpPost("UpdateSecuritySettings")]
+        [Permission(AppPermissions.SecuritySetting_UpdateSetting)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateSecuritySettings(UpdateSecuritySettingCommand input)
         {

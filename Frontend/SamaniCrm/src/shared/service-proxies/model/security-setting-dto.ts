@@ -7,21 +7,28 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { PasswordComplexityDTO } from './password-complexity-dto';
+import { UserSettingDto } from './user-setting-dto';
+import { PasswordComplexityDto } from './password-complexity-dto';
 
 
 /* Created with custom template by mohammadreza SAMANI*/
 
-/** Interface for SecuritySettingDTO */
-export interface ISecuritySettingDTO {
-  passwordComplexity: PasswordComplexityDTO;
+/** Interface for SecuritySettingDto */
+export interface ISecuritySettingDto {
+  requireCaptchaOnLogin?: boolean;
+  passwordComplexity: PasswordComplexityDto;
+  userSetting: UserSettingDto;
+  logginAttemptCountLimit?: number;
 }
 
-/** Class for SecuritySettingDTO */
-export class SecuritySettingDTO implements ISecuritySettingDTO {
-  passwordComplexity!: PasswordComplexityDTO;
+/** Class for SecuritySettingDto */
+export class SecuritySettingDto implements ISecuritySettingDto {
+  requireCaptchaOnLogin?: boolean;
+  passwordComplexity!: PasswordComplexityDto;
+  userSetting!: UserSettingDto;
+  logginAttemptCountLimit?: number;
 
-  constructor(data?: ISecuritySettingDTO) {
+  constructor(data?: ISecuritySettingDto) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -32,12 +39,15 @@ export class SecuritySettingDTO implements ISecuritySettingDTO {
 
 init(data?: any) {
   if (data) {
+    this.requireCaptchaOnLogin = data["requireCaptchaOnLogin"];
     this.passwordComplexity = data["passwordComplexity"];
+    this.userSetting = data["userSetting"];
+    this.logginAttemptCountLimit = data["logginAttemptCountLimit"];
   }
 }
 
-  static fromJS(data: any): SecuritySettingDTO {
-    const instance = new SecuritySettingDTO();
+  static fromJS(data: any): SecuritySettingDto {
+    const instance = new SecuritySettingDto();
     instance.init(data);
     return instance;
   }

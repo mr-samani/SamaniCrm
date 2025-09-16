@@ -17,6 +17,10 @@ namespace SamaniCrm.Core.Shared.Consts
 
         [Description("Security settings: password complexity,...")]
         public const string SecuritySettings = "SecuritySettings";
+     
+        [Description("User settings: Secret code , two factor,...")] 
+        public static string UserSetting_ = "UserSetting_";
+
 
         public static string GetLocalizationCacheKey(string culture) => $"localization:{culture}";
 

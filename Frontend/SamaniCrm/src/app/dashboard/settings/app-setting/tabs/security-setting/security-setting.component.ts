@@ -1,8 +1,10 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
-import { SecuritySettingDTO, SecuritySettingsServiceProxy } from '@shared/service-proxies';
+import { SecuritySettingDto, SecuritySettingsServiceProxy, TwoFactorTypeEnum } from '@shared/service-proxies';
 import { finalize } from 'rxjs/operators';
+import { TwoFaAppConfigComponent } from '../../dialogs/two-fa-app-config/two-fa-app-config.component';
 
 @Component({
   selector: 'app-security-setting',
@@ -11,13 +13,14 @@ import { finalize } from 'rxjs/operators';
   standalone: false,
 })
 export class SecuritySettingComponent extends AppComponentBase implements OnInit {
-  settings?: SecuritySettingDTO ;
+  settings: SecuritySettingDto = new SecuritySettingDto();
   isSaving = false;
   loading = true;
 
   constructor(
     injector: Injector,
     private securitySettingService: SecuritySettingsServiceProxy,
+    private matDialog: MatDialog,
   ) {
     super(injector);
   }
@@ -26,17 +29,8 @@ export class SecuritySettingComponent extends AppComponentBase implements OnInit
     this.getSettings();
   }
 
-  onChangeTwoFactor() {
-    // if (this.settings?.twoFactorAuthentication.enable == false) {
-    //   this.settings!.twoFactorAuthentication.viaEmail = false;
-    //   this.settings!.twoFactorAuthentication.viaSMS = false;
-    // } else if (
-    //   this.settings?.twoFactorAuthentication.enable &&
-    //   !this.settings!.twoFactorAuthentication.viaEmail &&
-    //   !this.settings!.twoFactorAuthentication.viaSMS
-    // ) {
-    //   this.settings!.twoFactorAuthentication.viaEmail = true;
-    // }
+  public get TwoFactorTypeEnum(): typeof TwoFactorTypeEnum {
+    return TwoFactorTypeEnum;
   }
 
   getSettings() {
@@ -45,12 +39,7 @@ export class SecuritySettingComponent extends AppComponentBase implements OnInit
       .getSecuritySettings()
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.settings = response.data ;
-        // if (this.settings && this.settings.twoFactorAuthentication) {
-        //   if (this.settings.twoFactorAuthentication.viaEmail || this.settings.twoFactorAuthentication.viaSMS) {
-        //     this.settings.twoFactorAuthentication.enable = true;
-        //   }
-        // }
+        this.settings = response.data ?? new SecuritySettingDto();
       });
   }
 
@@ -61,11 +50,27 @@ export class SecuritySettingComponent extends AppComponentBase implements OnInit
     }
 
     this.isSaving = true;
-    this.securitySettingService.updateSecuritySettings(this.settings) 
+    this.securitySettingService
+      .updateSecuritySettings(this.settings)
       .pipe(finalize(() => (this.isSaving = false)))
       .subscribe((response) => {
         this.notify.success(this.l('SaveSuccessFully'));
         this.getSettings();
+      });
+  }
+
+  set2FaAppConfig() {
+    this.matDialog
+      .open(TwoFaAppConfigComponent, {
+        data: {},
+        width: '300px',
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result == true) {
+          this.settings.userSetting.isVerified = true;
+        }
       });
   }
 }
