@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SamaniCrm.Core.Shared.Enums;
 
 namespace SamaniCrm.Domain.Entities.ProductEntities
 {
@@ -40,18 +41,6 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
 
 
 
-    public enum ProductAttributeDataTypeEnum
-    {
-        [Description("String")]
-        String = 0,
-        [Description("Int")]
-        Int,
-        [Description("Decimal")]
-        Decimal,
-        [Description("Bool")]
-        Bool,
-        [Description("Color")]
-        Color
-    }
+ 
 
 }

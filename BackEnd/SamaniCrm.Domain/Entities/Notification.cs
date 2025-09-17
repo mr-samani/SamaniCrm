@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SamaniCrm.Core.Shared.Enums;
 
 namespace SamaniCrm.Domain.Entities;
 
@@ -47,19 +48,4 @@ public class Notification : IAuditableEntity, ISoftDelete
 }
 
 
-public enum NotificationPeriorityEnum
-{
-    Normal = 0,
-    Info,
-    Hight,
-    Alert,
-    Cretical,
-    Error
-}
 
-public enum NotificationTypeEnum
-{
-    Other = 0,
-    Message,
-    DownloadZip,
-}

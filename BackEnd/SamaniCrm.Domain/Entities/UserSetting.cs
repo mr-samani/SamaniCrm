@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using SamaniCrm.Core.Shared.Enums;
 
 namespace SamaniCrm.Domain.Entities;
 
@@ -23,9 +24,3 @@ public class UserSetting
 }
 
 
-public enum TwoFactorTypeEnum
-{
-    AuthenticatorApp,
-    Sms,
-    Email
-}

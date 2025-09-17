@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Interfaces;
 
 namespace SamaniCrm.Domain.Entities
@@ -52,19 +53,6 @@ namespace SamaniCrm.Domain.Entities
     }
 
 
-    public enum MenuTargetEnum
-    {
-        [Description("_self")]
-        Self,
 
-        [Description("_blank")]
-        Blank,
-
-        [Description("_parent")]
-        Parent,
-
-        [Description("_top")]
-        Top
-    }
 
 }

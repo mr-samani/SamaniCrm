@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Infrastructure.Persistence
@@ -84,15 +85,15 @@ namespace SamaniCrm.Infrastructure.Persistence
                 .Where(l => allPermissions.Contains(l.Key))
                 .Select(l => new { l.Key, l.Culture })
                 .ToHashSet();
-            foreach (var permissionKey in allPermissions)
+            foreach (var permissionLocalizeKey in allPermissions)
             {
                 foreach (var culture in allLanguages)
                 {
-                    if (!existingPermissionLocalizations.Contains(new { Key = permissionKey, Culture = culture }))
+                    if (!existingPermissionLocalizations.Contains(new { Key = permissionLocalizeKey, Culture = culture }))
                     {
                         newLocalizations.Add(new Localization
                         {
-                            Key = permissionKey,
+                            Key = permissionLocalizeKey,
                             Culture = culture,
                             Value = string.Empty, // بعداً توسط کاربر تکمیل می شود
                             Category= LocalizationCategoryEnum.Permission,

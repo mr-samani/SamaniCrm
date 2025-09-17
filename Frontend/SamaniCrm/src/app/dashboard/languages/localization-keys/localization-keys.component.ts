@@ -107,38 +107,55 @@ export class LocalizationKeysComponent extends AppComponentBase implements OnIni
       });
   }
 
-  remove(key: string, index: number) {
-    this.confirmMessage(`${this.l('Delete')}:${key}`, this.l('ThisKeyWasDeletedFromAllLanguages')).then((result) => {
-      if (result.isConfirmed) {
-        this.showMainLoading();
-        const input = new DeleteLocalizeKeyCommand();
-        input.key = key;
-        this.languageService
-          .deleteKey(input)
-          .pipe(finalize(() => this.hideMainLoading()))
-          .subscribe((response) => {
-            if (response.success) {
-              this.notify.success(this.l('DeletedSuccessfully'));
-              this.allLocalizations.splice(index, 1);
-              this.search();
-            }
-          });
-      }
-    });
+  remove(item: LocalizationKeyDTO) {
+    this.confirmMessage(`${this.l('Delete')}:${item.key}`, this.l('ThisKeyWasDeletedFromAllLanguages')).then(
+      (result) => {
+        if (result.isConfirmed) {
+          this.showMainLoading();
+          const input = new DeleteLocalizeKeyCommand();
+          input.key = item.key;
+          this.languageService
+            .deleteKey(input)
+            .pipe(finalize(() => this.hideMainLoading()))
+            .subscribe((response) => {
+              if (response.success) {
+                this.notify.success(this.l('DeletedSuccessfully'));
+                let index = this.allLocalizations.findIndex((x) => x.id == item.id);
+                this.allLocalizations.splice(index, 1);
+                this.search();
+              }
+            });
+        }
+      },
+    );
   }
 
   exportData() {
     this.busy = true;
     const data: { [key: string]: string } = {};
-    for (let item of this.allLocalizations) {
+    let expData = this.allLocalizations;
+    if (this.importCategory) {
+      expData = expData.filter((x) => x.category === this.importCategory);
+    }
+    for (let item of expData) {
       data[item.key] = item.value ?? '';
     }
     this.downloadService
-      .generateDownloadJson(data, 'localization_' + this.culture + '.json')
+      .generateDownloadJson(
+        data,
+        'localization_' +
+          this.culture +
+          (this.importCategory ? '_' + LocalizationCategoryEnum[this.importCategory] : '') +
+          '.json',
+      )
       .then((_) => (this.busy = false));
   }
 
   importData() {
+    if (this.importCategory == undefined) {
+      this.notify.error(this.l('PleaseSelectACategory'));
+      return;
+    }
     this.jsonFileReaderService.selectAndReadJson().then((data: { [key: string]: string }) => {
       console.table(data);
       try {

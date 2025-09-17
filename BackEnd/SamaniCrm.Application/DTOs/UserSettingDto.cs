@@ -1,4 +1,5 @@
 ﻿
+using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
 using System.ComponentModel;
 

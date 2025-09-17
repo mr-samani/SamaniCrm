@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Core.Shared.Consts;
+using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Entities;
 
@@ -40,8 +41,16 @@ namespace SamaniCrm.Application.Localize.Queries
                        Category = s.Category,
                        Id = s.Id,
                        Value = s.Value ?? ""
-                   }).Where(x => x.Culture == request.culture && x.Category == LocalizationCategoryEnum.Frontend)
-                    .ToDictionaryAsync(x => x.Key, v => v.Value);
+                   }).Where(x =>
+                   x.Culture == request.culture &&
+                   (x.Category == LocalizationCategoryEnum.Frontend ||
+                   x.Category == LocalizationCategoryEnum.Enum ||
+                   x.Category == LocalizationCategoryEnum.Role ||
+                   x.Category == LocalizationCategoryEnum.Permission)
+                   )
+                    .GroupBy(x => x.Key) // گروه‌بندی بر اساس کلید
+                    .Select(g => g.First()) // فقط اولین رکورد هر کلید
+                   .ToDictionaryAsync(x => x.Key, v => v.Value ?? "");
                 await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromDays(30));
             }
             return result;

@@ -2,6 +2,7 @@
 using QRCoder;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
 using System;
 using System.Collections.Generic;

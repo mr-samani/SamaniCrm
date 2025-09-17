@@ -3,6 +3,7 @@ using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Queries.User;
 using SamaniCrm.Application.Role.Commands;
 using SamaniCrm.Application.User.Commands;
+using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
 using System;
 using System.Collections.Generic;

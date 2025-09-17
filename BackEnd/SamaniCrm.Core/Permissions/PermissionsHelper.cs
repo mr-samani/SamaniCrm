@@ -15,7 +15,7 @@ namespace SamaniCrm.Core.Shared.Permissions
                              .Where(f => f.FieldType == typeof(string))
                              .Select(f => new FlatPermission()
                              {
-                                 LocalizeKey = f.Name,
+                                 LocalizeKey = "Permission_" + f.Name,
                                  Value = f.GetRawConstantValue()?.ToString()!,
                              })
                              .Where(p => !string.IsNullOrEmpty(p.Value))

@@ -33,6 +33,10 @@ namespace SamaniCrm.Infrastructure.Persistence
                 await dbContext.Permissions.AddRangeAsync(newPermissions);
                 await dbContext.SaveChangesAsync();
             }
+
+
+
+
         }
     }
 }

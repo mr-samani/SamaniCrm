@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Application.Pages.Queries

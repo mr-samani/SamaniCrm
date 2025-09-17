@@ -62,7 +62,7 @@
         <tr>
           <td>{{ (page - 1) * perPage + ($index + 1) }}</td>
           <td>
-            <button type="button" mat-icon-button (click)="remove(item.key, $index)">
+            <button type="button" mat-icon-button (click)="remove(item)">
               <i class="fa fa-trash"></i>
             </button>
           </td>
@@ -93,6 +93,7 @@
       {{ 'ImportFromJson' | translate }}
     </button>
     <mat-select class="form-control" [(ngModel)]="importCategory">
+      <mat-option [value]="undefined">{{ 'All' | translate }}</mat-option>
       <mat-option [value]="+c" *ngFor="let c of LocalizationCategoryEnum | enumToArray">
         {{ 'LocalizationCategoryEnum_' + c | translate }}
       </mat-option>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SamaniCrm.Core.Shared.Enums;
 
 namespace SamaniCrm.Domain.Entities.ProductEntities
 {
@@ -34,10 +35,4 @@ namespace SamaniCrm.Domain.Entities.ProductEntities
     }
 
 
-
-    public enum DiscountTypeEnum
-    {
-        StaticPriceValue,
-        PercetageValue,
-    }
 }

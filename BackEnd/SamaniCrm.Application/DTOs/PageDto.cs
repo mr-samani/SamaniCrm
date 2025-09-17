@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Application.DTOs
