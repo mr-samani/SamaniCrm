@@ -6,17 +6,10 @@
  * Usage:
  *   node extract-translations.js [sourceDir] [outputJson]
  *
- * Defaults:
- *   sourceDir = "src"
- *   outputJson = "translations/extracted-translations.json"
- *
- * Scans files for translation keys used with:
- *  - 'key' | translate
- *  - this.l('key')
- *  - translate.instant('key'), this.translate.instant('key')
- *  - translateService.get('key'), translate.get('key')
- *
- * Writes a JSON object: { "key1": "", "key2": "", ... }
+ * رفتار جدید:
+ *   - اگر فایل خروجی قبلاً وجود داشته باشه، محتوای اون (ترجمه‌های دستی) رو می‌خونه
+ *   - فقط کلیدهای جدید اضافه می‌شن
+ *   - کلیدهای قبلی و مقادیر ترجمه‌شده‌شون حفظ می‌شن
  */
 
 const fs = require('fs').promises;
@@ -59,7 +52,7 @@ async function walk(dir, fileList = []) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
       // skip node_modules and dist/build folders by default
-      if (entry.name === 'node_modules' || entry.name === 'dist' || entry.name === 'build') continue;
+      if (['node_modules', 'dist', 'build'].includes(entry.name)) continue;
       await walk(full, fileList);
     } else if (entry.isFile()) {
       if (EXTENSIONS.has(path.extname(entry.name).toLowerCase())) {
@@ -81,12 +74,9 @@ async function extractKeysFromFile(filePath, keySet) {
       while ((m = re.exec(content)) !== null) {
         // capture group 2 is the key in our patterns
         const key = m[2] && m[2].trim();
-        if (key && key.length > 0) {
-          keySet.add(key);
-        }
+        if (key) keySet.add(key);
       }
     }
-
     // additional heuristic: look for l('key') without this. (optional)
     // (uncomment next block if you want to include plain l('...') calls)
     /*
@@ -98,7 +88,6 @@ async function extractKeysFromFile(filePath, keySet) {
       if (key) keySet.add(key);
     }
     */
-
   } catch (err) {
     console.warn(`Error reading file ${filePath}: ${err.message}`);
   }
@@ -110,27 +99,38 @@ async function main() {
   console.log(`Files scanned: ${files.length}`);
 
   const keys = new Set();
-
   for (const f of files) {
     await extractKeysFromFile(f, keys);
   }
 
   const sortedKeys = Array.from(keys).sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
-  const outObj = {};
-  for (const k of sortedKeys) {
-    outObj[k] = "";
+
+  // اگر فایل خروجی قبلا وجود داره بخونش
+  let existing = {};
+  try {
+    const data = await fs.readFile(OUT, 'utf8');
+    existing = JSON.parse(data);
+  } catch {
+    existing = {};
   }
 
-  // ensure output directory exists
+  // merge: کلیدهای قبلی حفظ، جدیدها اضافه
+  for (const k of sortedKeys) {
+    if (!(k in existing)) {
+      existing[k] = '';
+    }
+  }
+
   const outDir = path.dirname(OUT);
   await fs.mkdir(outDir, { recursive: true });
 
-  await fs.writeFile(OUT, JSON.stringify(outObj, null, 2), 'utf8');
-  console.log(`Keys extracted: ${sortedKeys.length}`);
+  await fs.writeFile(OUT, JSON.stringify(existing, null, 2), 'utf8');
+  console.log(`Keys found: ${sortedKeys.length}`);
+  console.log(`Total keys in output: ${Object.keys(existing).length}`);
   console.log(`Output file: ${OUT}`);
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('Error:', err);
   process.exit(1);
 });
