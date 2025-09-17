@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamaniCrm.Domain.Interfaces;
+using SamaniCrm.Core.Shared.Enums;
 
 namespace SamaniCrm.Domain.Entities
 {
@@ -42,21 +43,5 @@ namespace SamaniCrm.Domain.Entities
 
 
 
-    public enum LocalizationCategoryEnum
-    {
-        [Description("Role")]
-        Role = 0,
-        [Description("Permission")]
-        Permission,
-        [Description("Backend")]
-        Backend,
-        [Description("Frontend")]
-        Frontend,
-        [Description("Enum")]
-        Enum,
-        [Description("App")]
-        App,
-        [Description("Other")]
-        Other
-    }
+ 
 }

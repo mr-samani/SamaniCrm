@@ -1,6 +1,6 @@
 ﻿namespace SamaniCrm.Application.DTOs
 {
-    public class PasswordComplexityDTO
+    public class PasswordComplexityDto
     {
         public int RequiredLength { get; set; }
         public bool RequireDigit { get; set; }
@@ -8,5 +8,7 @@
         public bool RequireUppercase { get; set; }
         public bool RequireNonAlphanumeric { get; set; }
     }
+
+
 
 }

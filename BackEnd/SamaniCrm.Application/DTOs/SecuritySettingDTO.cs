@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.DTOs
 {
-    public class SecuritySettingDTO
+    public class SecuritySettingDto
     {
-        public required PasswordComplexityDTO PasswordComplexity { get; set; }
+        public bool RequireCaptchaOnLogin { get; set; }
+
+        public required PasswordComplexityDto PasswordComplexity { get; set; }
+
+        public int LogginAttemptCountLimit { get; set; }
+        public int LogginAttemptTimeSecondsLimit { get; set; }
+
     }
 }

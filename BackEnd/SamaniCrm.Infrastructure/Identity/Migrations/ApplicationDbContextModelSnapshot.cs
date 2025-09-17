@@ -299,7 +299,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("Culture");
 
-                    b.HasIndex("Key", "Culture")
+                    b.HasIndex("Key", "Culture", "Category")
                         .IsUnique();
 
                     b.ToTable("Localizations");
@@ -1476,6 +1476,15 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("LogginAttemptCountLimit")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LogginAttemptTimeSecondsLimit")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("RequireCaptchaOnLogin")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("RequireDigit")
                         .HasColumnType("bit");
 
@@ -1494,6 +1503,42 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SecuritySettings");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.UserSetting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AttemptCount")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("EnableTwoFactor")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastAttemptAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Secret")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TwoFactorType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserSetting");
                 });
 
             modelBuilder.Entity("SamaniCrm.Infrastructure.Identity.ApplicationRole", b =>
@@ -2031,6 +2076,15 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Permission");
                 });
 
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.UserSetting", b =>
+                {
+                    b.HasOne("SamaniCrm.Infrastructure.Identity.ApplicationUser", null)
+                        .WithOne("UserSetting")
+                        .HasForeignKey("SamaniCrm.Domain.Entities.UserSetting", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SamaniCrm.Domain.Entities.FileFolder", b =>
                 {
                     b.Navigation("Children");
@@ -2104,6 +2158,12 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
             modelBuilder.Entity("SamaniCrm.Infrastructure.Identity.ApplicationRole", b =>
                 {
                     b.Navigation("RolePermissions");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Infrastructure.Identity.ApplicationUser", b =>
+                {
+                    b.Navigation("UserSetting")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

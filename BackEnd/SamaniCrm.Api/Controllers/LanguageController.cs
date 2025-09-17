@@ -9,6 +9,7 @@ using SamaniCrm.Application.Localize.Queries;
 using SamaniCrm.Core.Permissions;
 using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Host.Models;
+using System.Threading.Tasks;
 
 namespace SamaniCrm.Api.Controllers
 {
@@ -35,7 +36,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
 
-      
+
 
 
         [HttpPost("CreateOrUpdate")]
@@ -75,7 +76,7 @@ namespace SamaniCrm.Api.Controllers
         [ProducesResponseType(typeof(ApiResponse<List<LocalizationKeyDTO>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllLanguageKeys(string culture)
         {
-           var result = await _mediator.Send(new GetAllLanguageKeys(culture));
+            var result = await _mediator.Send(new GetAllLanguageKeys(culture));
             return ApiOk<List<LocalizationKeyDTO>>(result);
         }
 
@@ -120,5 +121,13 @@ namespace SamaniCrm.Api.Controllers
 
         #endregion
 
+
+        [AllowAnonymous]
+        [HttpGet("i18n/{culture}")]
+        public async Task<Dictionary<string, string>> i18n(string culture)
+        {
+            var result = await _mediator.Send(new GetFrontEndLocalizationsCommand(culture));
+            return result;
+        }
     }
 }

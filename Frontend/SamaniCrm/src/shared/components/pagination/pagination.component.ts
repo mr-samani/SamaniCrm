@@ -84,20 +84,37 @@ export class PaginationComponent implements AfterViewInit {
       this.page = 1;
       this.pageChange.emit(this.page);
     }
-    this.pages = [];
-    let allPages = Array.from(Array(this.paginationCount), (_, i) => i + 1);
-    let part1 = allPages.slice(this.page > 3 ? this.page - 3 : 0, this.page + 3);
 
-    let part2: number[] = [];
-    if (this.page < allPages.length - 3) {
-      part2 = allPages.slice(allPages.length - 3);
+    const pages: any[] = [];
+    const delta = 2; // چند صفحه قبل و بعد از page نشان داده شود
+
+    const left = Math.max(2, this.page - delta);
+    const right = Math.min(this.paginationCount - 1, this.page + delta);
+
+    // همیشه صفحه اول
+    pages.push(1);
+
+    // ... اگر فاصله زیاد بود
+    if (left > 2) {
+      pages.push('...');
     }
 
-    if (part2.length > 0) {
-      this.pages = [...new Set([...part1, '...', ...part2])];
-    } else {
-      this.pages = part1;
+    // صفحات میانی
+    for (let i = left; i <= right; i++) {
+      pages.push(i);
     }
+
+    // ... اگر فاصله زیاد بود
+    if (right < this.paginationCount - 1) {
+      pages.push('...');
+    }
+
+    // همیشه صفحه آخر
+    if (this.paginationCount > 1) {
+      pages.push(this.paginationCount);
+    }
+
+    this.pages = pages;
 
     this.firstItem = (this.page - 1) * this.perPage + 1;
     this.lastItem = Math.min(this.firstItem + this.perPage - 1, this.totalPages);

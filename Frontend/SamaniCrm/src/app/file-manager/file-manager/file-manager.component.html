@@ -1,16 +1,16 @@
 <div class="explorer">
   <div class="explorer-header">
     @if (openedFolder) {
-      <button (click)="createFolder()">
+      <button (click)="createFolder()" *ngIf="AppPermissions.FileManager_CreateFolder | permission">
         <i class="fa fa-folder"></i>
         {{ 'NewFolder' | translate }}
       </button>
       <input type="file" #file placeholder="Choose file" (change)="uploadFile(file)" style="display: none" />
-      <button (click)="file.click()">
+      <button (click)="file?.click()" *ngIf="AppPermissions.FileManager_CreateFile | permission">
         <i class="fa fa-upload"></i>
         {{ 'Upload' | translate }}
       </button>
-      <button (click)="uploadImage()">
+      <button (click)="uploadImage()" *ngIf="AppPermissions.FileManager_CreateFile | permission">
         <i class="fa fa-upload"></i>
         {{ 'UploadImage' | translate }}
       </button>

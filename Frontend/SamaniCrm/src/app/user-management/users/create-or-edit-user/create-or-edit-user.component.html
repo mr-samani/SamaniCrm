@@ -87,7 +87,7 @@
     </tab-item>
 
     <!-- -------------------------------- -->
-    <tab-item [title]="'Roles' | translate">
+    <tab-item [title]="'Roles' | translate" *ngIf="AppPermissions.UserManagement_AssignRole | permission">
       <p *ngFor="let role of roles">
         <mat-checkbox color="primary" [(ngModel)]="role.selected">
           {{ role.displayName }}

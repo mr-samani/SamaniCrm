@@ -7,29 +7,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { SecuritySettingDTO } from './security-setting-dto';
+import { SecuritySettingDto } from './security-setting-dto';
 import { Meta } from './meta';
 import { ApiError } from './api-error';
 
 
 /* Created with custom template by mohammadreza SAMANI*/
 
-/** Interface for SecuritySettingDTOApiResponse */
-export interface ISecuritySettingDTOApiResponse {
+/** Interface for SecuritySettingDtoApiResponse */
+export interface ISecuritySettingDtoApiResponse {
   success?: boolean;
-  data?: SecuritySettingDTO;
+  data?: SecuritySettingDto;
   errors?: Array<ApiError>;
   meta?: Meta;
 }
 
-/** Class for SecuritySettingDTOApiResponse */
-export class SecuritySettingDTOApiResponse implements ISecuritySettingDTOApiResponse {
+/** Class for SecuritySettingDtoApiResponse */
+export class SecuritySettingDtoApiResponse implements ISecuritySettingDtoApiResponse {
   success?: boolean;
-  data?: SecuritySettingDTO;
+  data?: SecuritySettingDto;
   errors?: Array<ApiError>;
   meta?: Meta;
 
-  constructor(data?: ISecuritySettingDTOApiResponse) {
+  constructor(data?: ISecuritySettingDtoApiResponse) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -51,8 +51,8 @@ init(data?: any) {
   }
 }
 
-  static fromJS(data: any): SecuritySettingDTOApiResponse {
-    const instance = new SecuritySettingDTOApiResponse();
+  static fromJS(data: any): SecuritySettingDtoApiResponse {
+    const instance = new SecuritySettingDtoApiResponse();
     instance.init(data);
     return instance;
   }

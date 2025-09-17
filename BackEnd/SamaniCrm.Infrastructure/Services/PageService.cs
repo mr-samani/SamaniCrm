@@ -8,6 +8,7 @@ using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.DTOs.PageBuilder;
 using SamaniCrm.Application.Pages.Commands;
 using SamaniCrm.Application.Pages.Queries;
+using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Entities.PageBuilderEntities;

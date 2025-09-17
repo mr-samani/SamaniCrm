@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
@@ -10,8 +11,10 @@ using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Queries.User;
 using SamaniCrm.Application.Role.Commands;
 using SamaniCrm.Application.User.Commands;
+using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.Identity;
+using StackExchange.Redis;
 using System.Linq.Dynamic.Core;
 using System.Security.Claims;
 using System.Threading;
@@ -133,7 +136,7 @@ public class IdentityService : IIdentityService
                          join r in _applicationDbContext.Roles on ur.RoleId equals r.Id
                          select new { ur.UserId, RoleName = r.Name };
 
-        IQueryable<ApplicationUser> query = _userManager.Users.AsQueryable();
+        IQueryable<ApplicationUser> query = _applicationDbContext.Users.AsQueryable();
         if (!string.IsNullOrEmpty(request.Filter))
         {
             query = query.Where(x =>
@@ -484,4 +487,34 @@ public class IdentityService : IIdentityService
         }
         return false;
     }
+
+
+    public async Task<(bool EnableTwoFactor, string Secret, int AttemptCount, TwoFactorTypeEnum TwoFactorType)> getUserTwoFactorData(Guid userId, CancellationToken cancellationToken)
+    {
+        var found = await _applicationDbContext.UserSetting.Where(x => x.UserId == userId).FirstOrDefaultAsync(cancellationToken);
+        if (found == null)
+        {
+            return new()
+            {
+                EnableTwoFactor = false,
+                TwoFactorType = default,
+                Secret = "",
+                AttemptCount = 0,
+            };
+        }
+        var isEnable = found.EnableTwoFactor;
+        if (found.IsVerified == false || (isEnable && string.IsNullOrEmpty(found.Secret) && found.TwoFactorType == TwoFactorTypeEnum.AuthenticatorApp))
+        {
+            isEnable = false;
+        }
+        return new()
+        {
+            EnableTwoFactor = isEnable,
+            TwoFactorType = found.TwoFactorType,
+            Secret = found.Secret,
+            AttemptCount = found.AttemptCount
+        };
+    }
+
+   
 }

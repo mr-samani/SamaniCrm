@@ -7,6 +7,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using SamaniCrm.Domain.Interfaces;
+using SamaniCrm.Core.Shared.Enums;
 
 namespace SamaniCrm.Domain.Entities;
 
@@ -43,21 +44,3 @@ public class Page : IAuditableEntity, ISoftDelete
 }
 
 
-public enum PageStatusEnum
-{
-    Draft = 0,
-    Published,
-    Archived
-}
-
-
-public enum PageTypeEnum
-{
-    OtherPages = 0,
-    HomePage,
-    AboutUs,
-    ContactUs,
-    Blog,
-    Article,
-    News
-}

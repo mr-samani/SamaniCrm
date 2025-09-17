@@ -126,7 +126,7 @@ namespace SamaniCrm.Infrastructure.Cache
                     wrapperObj.GetType().GetGenericTypeDefinition() == typeof(CacheItemWrapper<>))
                 {
                     dynamic dynamicWrapper = wrapperObj;
-                    lastModified = (DateTime)dynamicWrapper.CreatedAt;
+                    lastModified = dynamicWrapper.CreatedTime;
                     ttl = dynamicWrapper.GetTimeToLive();
                 }
 

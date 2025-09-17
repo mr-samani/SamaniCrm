@@ -92,7 +92,7 @@ namespace SamaniCrm.Infrastructure.Localizer
                 .Where(x => x.Culture == culture)
                 .ToDictionaryAsync(x => x.Key, x => x.Value);
 
-            await _cacheService.SetAsync(cacheKey, items, TimeSpan.FromHours(12)); 
+            await _cacheService.SetAsync(cacheKey, items, TimeSpan.FromHours(12));
 
             return items;
         }
@@ -112,8 +112,11 @@ namespace SamaniCrm.Infrastructure.Localizer
 
             foreach (var group in data)
             {
-                var dict = group.ToDictionary(x => x.Key, x => x.Value);
-                cache.SetCulture(group.Key, dict);
+                var dict = group
+                    .GroupBy(x => x.Key) // گروه‌بندی بر اساس کلید
+                    .Select(g => g.First()) // فقط اولین رکورد هر کلید
+                    .ToDictionary(x => x.Key, x => x.Value);
+                cache.SetCulture(group.Key, dict!);
             }
         }
 

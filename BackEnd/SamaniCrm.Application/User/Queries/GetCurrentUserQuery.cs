@@ -17,11 +17,16 @@ namespace SamaniCrm.Application.User.Queries
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IIdentityService _identityService;
+        private readonly IUserPermissionService _userPermissionService;
 
-        public GetCurrentUserQueryHandler(ICurrentUserService currentUserService, IIdentityService identityService)
+        public GetCurrentUserQueryHandler(
+            ICurrentUserService currentUserService,
+            IIdentityService identityService,
+            IUserPermissionService userPermissionService)
         {
             _currentUserService = currentUserService;
             _identityService = identityService;
+            _userPermissionService = userPermissionService;
         }
 
         public async Task<UserDTO> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
@@ -37,7 +42,8 @@ namespace SamaniCrm.Application.User.Queries
             {
                 throw new NotFoundException("User not found.");
             }
-
+            var permissions = await _userPermissionService.GetUserPermissionsAsync(currentUserId, cancellationToken);
+            result.Permissions = permissions;
             return result;
         }
     }

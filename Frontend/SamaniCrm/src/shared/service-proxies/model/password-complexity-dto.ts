@@ -11,8 +11,8 @@
 
 /* Created with custom template by mohammadreza SAMANI*/
 
-/** Interface for PasswordComplexityDTO */
-export interface IPasswordComplexityDTO {
+/** Interface for PasswordComplexityDto */
+export interface IPasswordComplexityDto {
   requiredLength?: number;
   requireDigit?: boolean;
   requireLowercase?: boolean;
@@ -20,15 +20,15 @@ export interface IPasswordComplexityDTO {
   requireNonAlphanumeric?: boolean;
 }
 
-/** Class for PasswordComplexityDTO */
-export class PasswordComplexityDTO implements IPasswordComplexityDTO {
+/** Class for PasswordComplexityDto */
+export class PasswordComplexityDto implements IPasswordComplexityDto {
   requiredLength?: number;
   requireDigit?: boolean;
   requireLowercase?: boolean;
   requireUppercase?: boolean;
   requireNonAlphanumeric?: boolean;
 
-  constructor(data?: IPasswordComplexityDTO) {
+  constructor(data?: IPasswordComplexityDto) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -47,8 +47,8 @@ init(data?: any) {
   }
 }
 
-  static fromJS(data: any): PasswordComplexityDTO {
-    const instance = new PasswordComplexityDTO();
+  static fromJS(data: any): PasswordComplexityDto {
+    const instance = new PasswordComplexityDto();
     instance.init(data);
     return instance;
   }

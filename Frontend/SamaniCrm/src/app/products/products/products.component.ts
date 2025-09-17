@@ -28,7 +28,7 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
   totalCount = 0;
   publicSiteUrl = AppConst.publicSiteUrl;
   fields: FieldsType[] = [
-    // { column: 'id', title: this.l('id'), width: 100 },
+    // { column: 'id', title: this.l('Id'), width: 100 },
     { column: 'title', title: this.l('Title') },
     { column: 'categoryTitle', title: this.l('Category') },
     { column: 'productTypeTitle', title: this.l('ProductType') },

@@ -23,12 +23,6 @@ namespace SamaniCrm.Infrastructure.Cache
         public string BasePath { get; set; } = "CacheFiles";
     }
 
-    public enum CacheProvider
-    {
-        Memory,
-        Redis,
-        File,
-        Hybrid
-    }
+ 
 
 }

@@ -34,7 +34,10 @@
   <button mat-stroked-button color="primary" (click)="selectIcon()" *ngIf="selectedFileInfo.isFolder">
     {{ 'ChangeIcon' | translate }}
   </button>
-  <button (click)="deleteFileOrFolder()" mat-icon-button *ngIf="selectedFileInfo.id">
+  <button
+    (click)="deleteFileOrFolder()"
+    mat-icon-button
+    *ngIf="selectedFileInfo.id && (AppPermissions.FileManager_Delete | permission)">
     <i class="fa fa-trash"></i>
   </button>
   <table>

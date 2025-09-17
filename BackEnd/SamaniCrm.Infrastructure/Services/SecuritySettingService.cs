@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
@@ -16,35 +17,41 @@ namespace SamaniCrm.Infrastructure.Services
     {
         private readonly IApplicationDbContext _applicationDbContext;
         private readonly ICacheService _cacheService;
+        private readonly ICurrentUserService _currentUser;
 
-        public SecuritySettingService(IApplicationDbContext applicationDbContext, ICacheService cacheService)
+        public SecuritySettingService(IApplicationDbContext applicationDbContext, ICacheService cacheService, ICurrentUserService currentUser)
         {
             _applicationDbContext = applicationDbContext;
             _cacheService = cacheService;
+            _currentUser = currentUser;
         }
 
-        public async Task<SecuritySettingDTO> GetSettingsAsync(CancellationToken cancellationToken)
+        public async Task<SecuritySettingDto> GetSettingsAsync(CancellationToken cancellationToken)
         {
-            PasswordComplexityDTO? data = await _cacheService.GetAsync<PasswordComplexityDTO>(CacheKeys.SecuritySettings);
+            SecuritySettingDto? data = await _cacheService.GetAsync<SecuritySettingDto>(CacheKeys.SecuritySettings);
             if (data == null)
             {
-                data = await _applicationDbContext.SecuritySettings.Select(s => new PasswordComplexityDTO
+                data = await _applicationDbContext.SecuritySettings.Select(s => new SecuritySettingDto
                 {
-                    RequiredLength = s.RequiredLength,
-                    RequireDigit = s.RequireDigit,
-                    RequireLowercase = s.RequireLowercase,
-                    RequireUppercase = s.RequireUppercase,
-                    RequireNonAlphanumeric = s.RequireNonAlphanumeric
+                    PasswordComplexity = new PasswordComplexityDto()
+                    {
+                        RequiredLength = s.RequiredLength,
+                        RequireDigit = s.RequireDigit,
+                        RequireLowercase = s.RequireLowercase,
+                        RequireUppercase = s.RequireUppercase,
+                        RequireNonAlphanumeric = s.RequireNonAlphanumeric,
+
+                    },
+                    RequireCaptchaOnLogin = s.RequireCaptchaOnLogin,
+                    LogginAttemptCountLimit = s.LogginAttemptCountLimit,
+                    LogginAttemptTimeSecondsLimit = s.LogginAttemptTimeSecondsLimit,
                 }).FirstOrDefaultAsync(cancellationToken);
                 await _cacheService.SetAsync(CacheKeys.SecuritySettings, data, TimeSpan.FromHours(4));
             }
-            return new SecuritySettingDTO
-            {
-                PasswordComplexity = data ?? default!
-            };
+            return data;
         }
 
-        public async Task<bool> SetSettingsAsync(SecuritySettingDTO input, CancellationToken cancellationToken)
+        public async Task<bool> SetSettingsAsync(SecuritySettingDto input, CancellationToken cancellationToken)
         {
             var data = await _applicationDbContext.SecuritySettings
                                 .OrderBy(s => s.Id)
@@ -58,7 +65,10 @@ namespace SamaniCrm.Infrastructure.Services
                     RequiredLength = input.PasswordComplexity.RequiredLength,
                     RequireLowercase = input.PasswordComplexity.RequireLowercase,
                     RequireNonAlphanumeric = input.PasswordComplexity.RequireUppercase,
-                    RequireUppercase = input.PasswordComplexity.RequireUppercase
+                    RequireUppercase = input.PasswordComplexity.RequireUppercase,
+                    RequireCaptchaOnLogin = input.RequireCaptchaOnLogin,
+                    LogginAttemptCountLimit = input.LogginAttemptCountLimit,
+                    LogginAttemptTimeSecondsLimit = input.LogginAttemptTimeSecondsLimit,
                 });
             }
             else
@@ -68,12 +78,75 @@ namespace SamaniCrm.Infrastructure.Services
                 data.RequireLowercase = input.PasswordComplexity.RequireLowercase;
                 data.RequireNonAlphanumeric = input.PasswordComplexity.RequireNonAlphanumeric;
                 data.RequireUppercase = input.PasswordComplexity.RequireUppercase;
+                data.RequireCaptchaOnLogin = input.RequireCaptchaOnLogin;
+                data.LogginAttemptCountLimit = input.LogginAttemptCountLimit;
+                data.LogginAttemptTimeSecondsLimit = input.LogginAttemptTimeSecondsLimit;
                 _applicationDbContext.SecuritySettings.Update(data);
             }
             result = await _applicationDbContext.SaveChangesAsync(cancellationToken);
+
+            //clean cache
             await _cacheService.RemoveAsync(CacheKeys.SecuritySettings);
             return result > 0;
 
         }
+
+
+
+
+        // ___________________________________________________________________________
+        public async Task<UserSettingDto> GetUserSettingsAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            UserSettingDto? userSetting = await _cacheService.GetAsync<UserSettingDto>(CacheKeys.UserSetting_ + userId.ToString());
+            if (userSetting == null)
+            {
+                userSetting = await _applicationDbContext.UserSetting.Select(s => new UserSettingDto
+                {
+                    UserId = s.UserId,
+                    EnableTwoFactor = s.EnableTwoFactor,
+                    TwoFactorType = s.TwoFactorType,
+                    IsVerified = s.IsVerified,
+                    Secret = s.Secret,
+                })
+                    .Where(w => w.UserId == userId)
+                    .FirstOrDefaultAsync(cancellationToken);
+                await _cacheService.SetAsync(CacheKeys.UserSetting_ + userId.ToString(), userSetting, TimeSpan.FromHours(4));
+            }
+            return userSetting ?? new UserSettingDto();
+        }
+
+        public async Task<bool> SetUserSettingsAsync(UserSettingDto input, CancellationToken cancellationToken)
+        {
+            var data = await _applicationDbContext.UserSetting.Where(x => x.UserId == input.UserId)
+                                                                .FirstOrDefaultAsync();
+            int result;
+            if (data == null)
+            {
+                await _applicationDbContext.UserSetting.AddAsync(new UserSetting()
+                {
+                    UserId = input.UserId,
+                    IsVerified = input.IsVerified,
+                    AttemptCount = 0,
+                    EnableTwoFactor = input.EnableTwoFactor,
+                    TwoFactorType = input.TwoFactorType,
+                    Secret = input.Secret,
+                });
+            }
+            else
+            {
+                data.IsVerified = input.IsVerified;
+                data.EnableTwoFactor = input.EnableTwoFactor;
+                data.TwoFactorType = input.TwoFactorType;
+                data.Secret = input.Secret;
+                _applicationDbContext.UserSetting.Update(data);
+            }
+            result = await _applicationDbContext.SaveChangesAsync(cancellationToken);
+
+            //clean cache 
+            await _cacheService.RemoveAsync(CacheKeys.UserSetting_ + _currentUser.UserId);
+            return result > 0;
+        }
+
+
     }
 }

@@ -1,29 +1,41 @@
 <mat-progress-bar *ngIf="loading" class="my-5" [mode]="'indeterminate'"></mat-progress-bar>
 
 <form #frm="ngForm" *ngIf="settings && !loading">
-  <!-- <switch [(ngModel)]="settings.requireCaptchaOnLogin" name="requireCaptchaOnLogin">
-    {{ 'RequireCaptchaOnLogin' | translate }}
-  </switch> -->
-  <!-- ---------------------------------------------------- -->
-
-  <!-- <h5>
-    {{ 'TwoFactorAuthentication' | translate }}
+  <h5>
+    {{ 'Captcha' | translate }}
   </h5>
-  <switch
-    [(ngModel)]="settings.twoFactorAuthentication.enable"
-    name="enableTwoFactorAuth"
-    (ngModelChange)="onChangeTwoFactor()">
-    {{ 'Enable' | translate }}
+  <switch [(ngModel)]="settings.requireCaptchaOnLogin" name="requireCaptchaOnLogin">
+    {{ 'RequireCaptchaOnLogin' | translate }}
   </switch>
-  <div class="mx-3" *ngIf="settings.twoFactorAuthentication.enable">
-    <switch [(ngModel)]="settings.twoFactorAuthentication.viaEmail" name="viaEmail">
-      {{ 'TwoFactorAuthenticationViaEmail' | translate }}
-    </switch>
-    <switch [(ngModel)]="settings.twoFactorAuthentication.viaSMS" name="viaSMS">
-      {{ 'TwoFactorAuthenticationViaSMS' | translate }}
-    </switch>
-  </div> -->
+  
+  <!-- ---------------------------------------------------- -->
+  <h5>
+    {{ 'LogginAttemptCountLimit' | translate }}
+  </h5>
+  <mat-form-field>
+    <mat-label>{{ 'LimitCount' | translate }}</mat-label>
+    <input
+      type="number"
+      matInput
+      [(ngModel)]="settings.logginAttemptCountLimit"
+      name="logginAttemptCountLimit"
+      required
+      min="3"
+      max="100" />
+  </mat-form-field>
 
+  <mat-form-field>
+    <mat-label>{{ 'LogginAttemptTimeSecondsLimit' | translate }}</mat-label>
+    <input
+      type="number"
+      matInput
+      [(ngModel)]="logginAttemptMinute"
+      name="logginAttemptTimeSecondsLimit"
+      required
+      min="1"
+      max="100" />
+    <span matSuffix>{{ 'Minutes' | translate }}</span>
+  </mat-form-field>
   <!-- ---------------------------------------------------- -->
 
   <h5>

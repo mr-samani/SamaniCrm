@@ -1,3 +1,4 @@
+using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities.ProductEntities;
 using System;
 using System.Collections.Generic;

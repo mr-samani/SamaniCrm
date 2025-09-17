@@ -9,9 +9,9 @@ using SamaniCrm.Application.DTOs;
 
 namespace SamaniCrm.Application.SecuritySetting.Queries
 {
-    public class GetPasswordComplexityQuery() : IRequest<PasswordComplexityDTO>;
+    public class GetPasswordComplexityQuery() : IRequest<PasswordComplexityDto>;
 
-    public class GetPasswordComplexityQueryHandler : IRequestHandler<GetPasswordComplexityQuery, PasswordComplexityDTO>
+    public class GetPasswordComplexityQueryHandler : IRequestHandler<GetPasswordComplexityQuery, PasswordComplexityDto>
     {
         private readonly ISecuritySettingService _securitySettingService;
 
@@ -20,7 +20,7 @@ namespace SamaniCrm.Application.SecuritySetting.Queries
             _securitySettingService = securitySettingService;
         }
 
-        public async Task<PasswordComplexityDTO> Handle(GetPasswordComplexityQuery request, CancellationToken cancellationToken)
+        public async Task<PasswordComplexityDto> Handle(GetPasswordComplexityQuery request, CancellationToken cancellationToken)
         {
             var settings = await _securitySettingService.GetSettingsAsync(cancellationToken);
            return settings.PasswordComplexity;

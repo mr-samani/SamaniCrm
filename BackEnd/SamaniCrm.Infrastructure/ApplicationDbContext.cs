@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Entities.PageBuilderEntities;
@@ -33,6 +34,7 @@ namespace SamaniCrm.Infrastructure
         public DbSet<Menu> Menus { get; set; }
         public DbSet<MenuTranslation> MenuTranslations { get; set; }
         public DbSet<SecuritySetting> SecuritySettings { get; set; }
+        public DbSet<UserSetting> UserSetting { get; set; }
 
         public DbSet<Page> Pages { get; set; }
         public DbSet<PageTranslation> PageTranslations { get; set; }
@@ -96,7 +98,7 @@ namespace SamaniCrm.Infrastructure
 
             builder.Entity<SecuritySetting>(b =>
             {
-                b.HasKey(k=>k.Id);
+                b.HasKey(k => k.Id);
             });
 
             builder.Entity<ApplicationUser>(b =>
@@ -143,7 +145,7 @@ namespace SamaniCrm.Infrastructure
                     .WithMany(x => x.Localizations)
                     .HasForeignKey(x => x.Culture)
                     .OnDelete(DeleteBehavior.Cascade);
-                l.HasIndex(x => new { x.Key, x.Culture }).IsUnique();
+                l.HasIndex(x => new { x.Key, x.Culture, x.Category }).IsUnique();
 
 
                 var converter = new ValueConverter<LocalizationCategoryEnum, string>(

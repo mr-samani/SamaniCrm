@@ -26,7 +26,7 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
   totalCount = 0;
 
   fields: FieldsType[] = [
-    // { column: 'id', title: this.l('id'), width: 100 },
+    // { column: 'id', title: this.l('Id'), width: 100 },
     { column: 'name', title: this.l('Name') },
     { column: 'description', title: this.l('Description') },
     { column: 'creationTime', title: this.l('CreationTime'), type: 'dateTime' },

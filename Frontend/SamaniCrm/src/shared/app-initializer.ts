@@ -5,6 +5,7 @@ import { AppConst } from './app-const';
 import { ColorSchemaService } from './services/color-schema.service';
 import { LanguageService } from './services/language.service';
 import { InitialAppDTOApiResponse } from './service-proxies/model/initial-app-dto-api-response';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 @Injectable({
   providedIn: 'root',
@@ -47,6 +48,8 @@ export class AppInitializer {
                   AppConst.languageList = resp.data.languages ?? [];
                   AppConst.defaultLang = resp.data.defaultLang ?? 'fa-IR';
                   AppConst.requireCaptcha = resp.data.requireCaptcha === true;
+                  const loader = new TranslateHttpLoader(this.httpClient, AppConst.apiUrl + '/api/language/i18n/', '');
+                  this.languageService.translate.currentLoader = loader;
                   resolve(true);
                 } else {
                   reject();

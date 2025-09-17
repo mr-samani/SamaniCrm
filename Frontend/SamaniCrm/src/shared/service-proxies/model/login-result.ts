@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { TwoFactorTypeEnum } from './two-factor-type-enum';
 import { UserDTO } from './user-dto';
 
 
@@ -18,6 +19,9 @@ export interface ILoginResult {
   accessToken?: string;
   refreshToken?: string;
   roles?: Array<string>;
+  permissions?: Array<string>;
+  enableTwoFactor?: boolean;
+  twoFactorType?: TwoFactorTypeEnum;
 }
 
 /** Class for LoginResult */
@@ -26,6 +30,9 @@ export class LoginResult implements ILoginResult {
   accessToken?: string;
   refreshToken?: string;
   roles?: Array<string>;
+  permissions?: Array<string>;
+  enableTwoFactor?: boolean;
+  twoFactorType?: TwoFactorTypeEnum;
 
   constructor(data?: ILoginResult) {
     if (data) {
@@ -46,6 +53,13 @@ init(data?: any) {
       for (let item of data["roles"])
         (this.roles as any).push(item);
     }
+    if (Array.isArray(data["permissions"])) {
+      this.permissions = [] as any;
+      for (let item of data["permissions"])
+        (this.permissions as any).push(item);
+    }
+    this.enableTwoFactor = data["enableTwoFactor"];
+    this.twoFactorType = data["twoFactorType"];
   }
 }
 

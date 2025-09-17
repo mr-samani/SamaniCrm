@@ -1,15 +1,16 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.DTOs;
+using SamaniCrm.Core.Shared.Interfaces;
+using SamaniCrm.Core.Shared.Permissions;
+using SamaniCrm.Domain.Constants;
+using SamaniCrm.Infrastructure.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using SamaniCrm.Application.Common.Interfaces;
-using SamaniCrm.Application.DTOs;
-using SamaniCrm.Core.Shared.Permissions;
-using SamaniCrm.Domain.Constants;
-using SamaniCrm.Infrastructure.Identity;
 
 namespace SamaniCrm.Infrastructure.Services
 {
@@ -18,12 +19,18 @@ namespace SamaniCrm.Infrastructure.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly ApplicationDbContext _dbContext;
+        private readonly ILocalizer L;
 
-        public RolePermissionService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, ApplicationDbContext dbContext)
+        public RolePermissionService(
+            UserManager<ApplicationUser> userManager,
+            RoleManager<ApplicationRole> roleManager,
+            ApplicationDbContext dbContext,
+            ILocalizer l)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _dbContext = dbContext;
+            L = l;
         }
 
         public async Task<List<string>> GetPermissionsForUserAsync(Guid userId)
@@ -104,7 +111,7 @@ namespace SamaniCrm.Infrastructure.Services
                 existingNode = new RolePermissionsDTO
                 {
                     Name = currentFullName,
-                    DisplayName = displayName,
+                    DisplayName = displayName != null ? L[displayName] : "",
                     Selected = selectedPermissionNames.Contains(fullName),
                     Children = []
                 };

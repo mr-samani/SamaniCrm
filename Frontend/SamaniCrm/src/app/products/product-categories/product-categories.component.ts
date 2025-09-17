@@ -31,7 +31,7 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
 
   fields: FieldsType[] = [
     { column: 'image', title: this.l('Image'), width: 100, type: 'profilePicture' },
-    // { column: 'id', title: this.l('id'), width: 100 },
+    // { column: 'id', title: this.l('Id'), width: 100 },
     { column: 'title', title: this.l('Title') },
     { column: 'description', title: this.l('Description') },
     { column: 'isActive', title: this.l('IsActive'), type: 'yesNo' },

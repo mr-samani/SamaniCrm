@@ -29,7 +29,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
 
   fields: FieldsType[] = [
     { column: 'profilePicture', title: this.l('Image'), width: 100, type: 'profilePicture' },
-    // { column: 'id', title: this.l('id'), width: 100 },
+    // { column: 'id', title: this.l('Id'), width: 100 },
     { column: 'fullName', title: this.l('Name') },
     { column: 'userName', title: this.l('UserName') },
     { column: 'email', title: this.l('Email') },

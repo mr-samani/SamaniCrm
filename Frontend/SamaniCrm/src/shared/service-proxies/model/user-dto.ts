@@ -25,6 +25,7 @@ export interface IUserDTO {
   phoneNumber: string;
   creationTime: string;
   roles: Array<string>;
+  permissions?: Array<string>;
 }
 
 /** Class for UserDTO */
@@ -41,6 +42,7 @@ export class UserDTO implements IUserDTO {
   phoneNumber!: string;
   creationTime!: string;
   roles!: Array<string>;
+  permissions?: Array<string>;
 
   constructor(data?: IUserDTO) {
     if (data) {
@@ -68,6 +70,11 @@ init(data?: any) {
       this.roles = [] as any;
       for (let item of data["roles"])
         (this.roles as any).push(item);
+    }
+    if (Array.isArray(data["permissions"])) {
+      this.permissions = [] as any;
+      for (let item of data["permissions"])
+        (this.permissions as any).push(item);
     }
   }
 }

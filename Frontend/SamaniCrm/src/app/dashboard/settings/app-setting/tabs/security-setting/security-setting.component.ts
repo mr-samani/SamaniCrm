@@ -1,7 +1,8 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
-import { SecuritySettingDTO, SecuritySettingsServiceProxy } from '@shared/service-proxies';
+import { SecuritySettingDto, SecuritySettingsServiceProxy } from '@shared/service-proxies';
 import { finalize } from 'rxjs/operators';
 
 @Component({
@@ -11,13 +12,14 @@ import { finalize } from 'rxjs/operators';
   standalone: false,
 })
 export class SecuritySettingComponent extends AppComponentBase implements OnInit {
-  settings?: SecuritySettingDTO ;
+  settings: SecuritySettingDto = new SecuritySettingDto();
   isSaving = false;
   loading = true;
-
+  logginAttemptMinute = 0;
   constructor(
     injector: Injector,
     private securitySettingService: SecuritySettingsServiceProxy,
+    private matDialog: MatDialog,
   ) {
     super(injector);
   }
@@ -26,18 +28,6 @@ export class SecuritySettingComponent extends AppComponentBase implements OnInit
     this.getSettings();
   }
 
-  onChangeTwoFactor() {
-    // if (this.settings?.twoFactorAuthentication.enable == false) {
-    //   this.settings!.twoFactorAuthentication.viaEmail = false;
-    //   this.settings!.twoFactorAuthentication.viaSMS = false;
-    // } else if (
-    //   this.settings?.twoFactorAuthentication.enable &&
-    //   !this.settings!.twoFactorAuthentication.viaEmail &&
-    //   !this.settings!.twoFactorAuthentication.viaSMS
-    // ) {
-    //   this.settings!.twoFactorAuthentication.viaEmail = true;
-    // }
-  }
 
   getSettings() {
     this.loading = true;
@@ -45,12 +35,8 @@ export class SecuritySettingComponent extends AppComponentBase implements OnInit
       .getSecuritySettings()
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.settings = response.data ;
-        // if (this.settings && this.settings.twoFactorAuthentication) {
-        //   if (this.settings.twoFactorAuthentication.viaEmail || this.settings.twoFactorAuthentication.viaSMS) {
-        //     this.settings.twoFactorAuthentication.enable = true;
-        //   }
-        // }
+        this.settings = response.data ?? new SecuritySettingDto();
+        this.logginAttemptMinute = (this.settings.logginAttemptTimeSecondsLimit ?? 0) / 60;
       });
   }
 
@@ -60,8 +46,10 @@ export class SecuritySettingComponent extends AppComponentBase implements OnInit
       return;
     }
 
+    this.settings.logginAttemptTimeSecondsLimit = this.logginAttemptMinute * 60;
     this.isSaving = true;
-    this.securitySettingService.updateSecuritySettings(this.settings) 
+    this.securitySettingService
+      .updateSecuritySettings(this.settings)
       .pipe(finalize(() => (this.isSaving = false)))
       .subscribe((response) => {
         this.notify.success(this.l('SaveSuccessFully'));

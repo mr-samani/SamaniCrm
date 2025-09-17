@@ -35,10 +35,11 @@ namespace SamaniCrm.Application.Queries.User
                 Lang = result.Lang,
                 Email = result.Email,
                 FullName = result.FullName,
-                Address= result.Address,
+                Address = result.Address,
                 PhoneNumber = result.PhoneNumber,
-                CreationTime= result.CreationTime,
+                CreationTime = result.CreationTime,
                 Roles = result.Roles,
+                Permissions = []
             };
         }
     }

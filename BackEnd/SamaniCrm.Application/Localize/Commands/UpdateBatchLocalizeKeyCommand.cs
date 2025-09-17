@@ -13,7 +13,7 @@ namespace SamaniCrm.Application.Localize.Commands
 {
     public record UpdateBatchLocalizeKeyCommand(List<LocalizationKeyDTO> data, string culture) : IRequest<bool>;
 
-    
+
 
     public class UpdateBatchLocalizeKeyCommandHandler : IRequestHandler<UpdateBatchLocalizeKeyCommand, bool>
     {
@@ -30,7 +30,9 @@ namespace SamaniCrm.Application.Localize.Commands
             List<Localization> updateKeys = new();
             foreach (var item in request.data)
             {
-                var found = await _dbContext.Localizations.Where(w => w.Culture == request.culture && w.Key == item.Key).FirstAsync();
+                var found = await _dbContext.Localizations
+                    .Where(w => w.Culture == request.culture && w.Key == item.Key && w.Category == item.Category)
+                    .FirstOrDefaultAsync();
                 if (found == null)
                 {
                     addKeys.Add(new Localization()

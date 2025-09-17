@@ -7,6 +7,9 @@ import { FileSizePipe } from './pipes/file-size.pipe';
 import { EnumToArrayPipe, EnumToArrayStringValuePipe } from './pipes/enum-to-array.pipe';
 import { NumberCheckDirective } from './directives/number-check.directive';
 import { FilteFormrDirective } from './directives/filter-form.directive';
+import { PermissionPipe } from './permissions/permission.pipe';
+import { PermissionAnyPipe } from './permissions/permission-any.pipe';
+import { PermissionAllPipe } from './permissions/permission-all.pipe';
 
 const pipes = [
   SanitizerPipe,
@@ -16,7 +19,10 @@ const pipes = [
   EnumToArrayPipe,
   EnumToArrayStringValuePipe,
   NumberCheckDirective,
-  FilteFormrDirective
+  FilteFormrDirective,
+  PermissionPipe,
+  PermissionAnyPipe,
+  PermissionAllPipe,
 ];
 @NgModule({
   declarations: [...pipes],

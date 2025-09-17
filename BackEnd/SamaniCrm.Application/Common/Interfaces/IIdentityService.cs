@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SamaniCrm.Application.Common.DTOs;
+﻿using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Queries.User;
 using SamaniCrm.Application.Role.Commands;
 using SamaniCrm.Application.User.Commands;
+using SamaniCrm.Core.Shared.Enums;
+using SamaniCrm.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.Common.Interfaces
 {
@@ -45,5 +47,7 @@ namespace SamaniCrm.Application.Common.Interfaces
         Task<bool> UpdateRolePermissionsAsync(EditRolePermissionsCommand request, CancellationToken cancellationToken);
 
         Task<bool> updateUserLanguage(string culture, Guid userId, CancellationToken cancellationToken);
+        Task<(bool EnableTwoFactor, string Secret, int AttemptCount, TwoFactorTypeEnum TwoFactorType)> getUserTwoFactorData(Guid userId, CancellationToken cancellationToken);
+ 
     }
 }

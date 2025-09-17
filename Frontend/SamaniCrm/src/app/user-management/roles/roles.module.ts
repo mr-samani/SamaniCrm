@@ -12,6 +12,7 @@ import { TreeViewComponent } from '@shared/components/tree-view/tree-view.compon
 import { TableViewModule } from '@shared/components/table-view/table-view.module';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { RoleServiceProxy } from '@shared/service-proxies';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [RoleListComponent, RolePermissionsListComponent, CreateOrEditRoleComponent],
@@ -25,6 +26,7 @@ import { RoleServiceProxy } from '@shared/service-proxies';
     MaterialCommonModule,
     TreeViewComponent,
     ReactiveFormsModule,
+    SharedModule,
   ],
   providers: [RoleServiceProxy],
 })

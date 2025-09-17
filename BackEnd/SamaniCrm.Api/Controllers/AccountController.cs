@@ -1,16 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using SamaniCrm.Api.Attributes;
+using SamaniCrm.Api.Controllers;
+using SamaniCrm.Application.Auth.Commands;
+using SamaniCrm.Application.Common.DTOs;
+using SamaniCrm.Application.Common.Exceptions;
+using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.DTOs;
+using SamaniCrm.Core.Permissions;
+using SamaniCrm.Host.Models;
 using SamaniCrm.Infrastructure.Identity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using SamaniCrm.Host.Models;
-using MediatR;
-using SamaniCrm.Application.Auth.Commands;
-using SamaniCrm.Application.Common.Exceptions;
-using SamaniCrm.Application.Common.DTOs;
-using SamaniCrm.Api.Controllers;
+using System.Threading.Tasks;
 
 namespace SamaniCrm.Host.Controllers
 {
@@ -20,22 +26,33 @@ namespace SamaniCrm.Host.Controllers
 
         private readonly IConfiguration _configuration;
         private readonly IMediator _mediator;
+        private readonly ITwoFactorService _twoFactorService;
 
         public AccountController(
-            IConfiguration configuration, IMediator mediator)
+            IConfiguration configuration, IMediator mediator, ITwoFactorService twoFactorService)
         {
             _configuration = configuration;
             _mediator = mediator;
+            _twoFactorService = twoFactorService;
         }
 
 
         [HttpPost("login")]
         [ProducesResponseType(typeof(ApiResponse<LoginResult>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Login([FromBody] LoginCommand command)
+        public async Task<IActionResult> Login(LoginCommand command)
         {
             LoginResult result = await _mediator.Send(command);
             return ApiOk<LoginResult>(result);
         }
+
+        [HttpPost("loginTwoFactor")]
+        [ProducesResponseType(typeof(ApiResponse<LoginResult>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> LoginTwoFactor(TwoFactorLoginCommand command)
+        {
+            LoginResult result = await _mediator.Send(command);
+            return ApiOk<LoginResult>(result);
+        }
+
 
         [HttpPost("refresh")]
         [ProducesResponseType(typeof(ApiResponse<TokenResponseDto>), StatusCodes.Status200OK)]
@@ -56,5 +73,36 @@ namespace SamaniCrm.Host.Controllers
             return ApiOk<string>("");
         }
 
+
+
+
+        [HttpPost("generate2FaRequest")]
+        [Permission(AppPermissions.SecuritySetting_TwoFactorApp)]
+        [ProducesResponseType(typeof(ApiResponse<GenerateTwoFactorCodeDto>), StatusCodes.Status200OK)]
+        public IActionResult generate2FaRequestGenerate()
+        {
+            var result = _twoFactorService.GenerateSetupCode("SamaniCrm");
+            return ApiOk(result);
+        }
+
+        [HttpPost("Verify2FaApp")]
+        [Permission(AppPermissions.SecuritySetting_TwoFactorApp)]
+        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Verify2FaApp([FromBody] Verify2FARequest req)
+        {
+            var result = await _twoFactorService.Save2FaVerifyCodeAsync(req.Secret, req.Code);
+            return ApiOk(result);
+        }
     }
+
+
+
+
+
+    public class Verify2FARequest
+    {
+        public string Secret { get; set; } = "";
+        public string Code { get; set; } = "";
+    }
+
 }

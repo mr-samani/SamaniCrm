@@ -28,7 +28,7 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
   list: NotificationDto[] = [];
   totalCount = 0;
   fields: FieldsType[] = [
-    // { column: 'id', title: this.l('id'), width: 100 },
+    // { column: 'id', title: this.l('Id'), width: 100 },
     { column: 'title', title: this.l('Title') },
     { column: 'type', title: this.l('Type'), type: 'localize', localizeKey: 'NotificationTypeEnum_' },
     { column: 'periority', title: this.l('Periority'), type: 'localize', localizeKey: 'NotificationPeriorityEnum_' },

@@ -42,7 +42,7 @@
             {{ 'Dashboard' | translate }}
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="AppPermissions.Notification_List | permission">
           <a
             class="nav-link"
             [routerLink]="['/dashboard/notifications']"
@@ -58,19 +58,19 @@
             {{ 'Settings' | translate }}
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="AppPermissions.FileManager_List | permission">
           <a class="nav-link" (click)="openFileManager(); closeNavbar()">
             <i class="fa fa-folder-image"></i>
             {{ 'Media' | translate }}
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="AppPermissions.Pages | permission">
           <a class="nav-link" [routerLink]="['/dashboard/content']" routerLinkActive="active" (click)="closeNavbar()">
             <i class="fa fa-file-contract"></i>
             {{ 'Content' | translate }}
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="AppPermissions.Products | permission">
           <a class="nav-link" [routerLink]="['/dashboard/products']" routerLinkActive="active" (click)="closeNavbar()">
             <i class="fa fa-file-contract"></i>
             {{ 'Products' | translate }}
@@ -99,7 +99,7 @@
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
         </li> -->
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="AppPermissions.Pages_Builder | permission">
           <a class="nav-link" routerLink="/dashboard/builder" routerLinkActive="active" (click)="closeNavbar()">
             <i class="fa fa-page"></i>
             {{ 'PageBuilder' | translate }}
@@ -108,7 +108,7 @@
       </ul>
       <div class="flex-fill"></div>
 
-      <last-notifications></last-notifications>
+      <last-notifications *ngIf="AppPermissions.Notification_List | permission"></last-notifications>
       <!-- darkmode -->
       <label class="switch">
         <input

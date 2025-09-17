@@ -5,7 +5,11 @@
       <span>{{ 'Filter' | translate }}</span>
     </button>
   </div>
-  <button mat-raised-button color="primary" (click)="openCreatePageDialog()">
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="openCreatePageDialog()"
+    *ngIf="AppPermissions.Pages_Create | permission">
     <i class="fa fa-circle-plus mx-1"></i>
     <span>{{ 'CreateNewPage' | translate }}</span>
   </button>
@@ -35,22 +39,24 @@
 <pagination [total]="totalCount" [(page)]="page" [(perPage)]="perPage" (change)="onPageChange($event)"></pagination>
 
 <ng-template #operations let-item>
-  <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
-    <i class="fa fa-ellipsis-v"></i>
-  </button>
-  <mat-menu #menu="matMenu">
-    <a mat-menu-item (click)="updatePage(item)">
-      <i class="fa fa-edit mx-1"></i>
-      <span>{{ 'EditContent' | translate }}</span>
-    </a>
+  @if ([AppPermissions.Pages_Builder, AppPermissions.Pages_Delete] | permissionAny) {
+    <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
+      <i class="fa fa-ellipsis-v"></i>
+    </button>
+    <mat-menu #menu="matMenu">
+      <a mat-menu-item (click)="updatePage(item)" *ngIf="AppPermissions.Pages_Builder | permission">
+        <i class="fa fa-edit mx-1"></i>
+        <span>{{ 'EditContent' | translate }}</span>
+      </a>
 
-    <a mat-menu-item (click)="updatePage2(item)">
-      <i class="fa fa-edit mx-1"></i>
-      <span>{{ 'EditContentGreapsJs' | translate }}</span>
-    </a>
-    <a mat-menu-item (click)="remove(item)">
-      <i class="fa fa-trash mx-1"></i>
-      <span>{{ 'Remove' | translate }}</span>
-    </a>
-  </mat-menu>
+      <a mat-menu-item (click)="updatePage2(item)" *ngIf="AppPermissions.Pages_Builder | permission">
+        <i class="fa fa-edit mx-1"></i>
+        <span>{{ 'EditContentGreapsJs' | translate }}</span>
+      </a>
+      <a mat-menu-item (click)="remove(item)" *ngIf="AppPermissions.Pages_Delete | permission">
+        <i class="fa fa-trash mx-1"></i>
+        <span>{{ 'Remove' | translate }}</span>
+      </a>
+    </mat-menu>
+  }
 </ng-template>

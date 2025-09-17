@@ -1,10 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SamaniCrm.Api.Attributes;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.SecuritySetting.Commands;
 using SamaniCrm.Application.SecuritySetting.Queries;
+using SamaniCrm.Core.Permissions;
 using SamaniCrm.Host.Models;
 
 namespace SamaniCrm.Api.Controllers
@@ -20,16 +22,17 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetPasswordComplexity")]
-        [ProducesResponseType(typeof(ApiResponse<PasswordComplexityDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse<PasswordComplexityDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPasswordComplexity()
         {
             return ApiOk(await _mediator.Send(new GetPasswordComplexityQuery()));
         }
 
 
-
+        #region Host security settings
         [HttpGet("GetSecuritySettings")]
-        [ProducesResponseType(typeof(ApiResponse<SecuritySettingDTO>), StatusCodes.Status200OK)]
+        [Permission(AppPermissions.SecuritySetting_GetSetting)]
+        [ProducesResponseType(typeof(ApiResponse<SecuritySettingDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetSecuritySettings()
         {
             return ApiOk(await _mediator.Send(new GetSecuritySettingsQuery()));
@@ -37,13 +40,35 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpPost("UpdateSecuritySettings")]
+        [Permission(AppPermissions.SecuritySetting_UpdateSetting)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateSecuritySettings(UpdateSecuritySettingCommand input)
         {
             return ApiOk(await _mediator.Send(input));
         }
+        #endregion
 
 
+        #region User security setting
+
+        [HttpGet("GetUserSecuritySettings")]
+        [Permission(AppPermissions.SecuritySetting_GetUserSetting)]
+        [ProducesResponseType(typeof(ApiResponse<UserSettingDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetUserSecuritySettings()
+        {
+            return ApiOk(await _mediator.Send(new GetUserSecuritySettingsQuery()));
+        }
+
+
+        [HttpPost("UpdateUserSecuritySettings")]
+        [Permission(AppPermissions.SecuritySetting_UpdateUserSetting)]
+        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> UpdateUserSecuritySettings(UpdateUserSecuritySettingCommand input)
+        {
+            return ApiOk(await _mediator.Send(input));
+        }
+
+        #endregion
     }
 
 }
