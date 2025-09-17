@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SamaniCrm.Core.Shared.Interfaces;
 
 namespace SamaniCrm.Application.Queries.Role
 {
@@ -17,10 +18,12 @@ namespace SamaniCrm.Application.Queries.Role
     public class GetRoleQueryHandler : IRequestHandler<GetRoleQuery, IList<RoleDTO>>
     {
         private readonly IIdentityService _identityService;
+        private readonly ILocalizer L;
 
-        public GetRoleQueryHandler(IIdentityService identityService)
+        public GetRoleQueryHandler(IIdentityService identityService, ILocalizer localizer)
         {
             _identityService = identityService;
+            L = localizer;
         }
         public async Task<IList<RoleDTO>> Handle(GetRoleQuery request, CancellationToken cancellationToken)
         {
@@ -29,7 +32,7 @@ namespace SamaniCrm.Application.Queries.Role
             {
                 Id = role.id,
                 RoleName = role.roleName,
-                DisplayName = "Role:" + role.roleName,
+                DisplayName = L["Role:" + role.roleName],
             }).ToList();
         }
     }
