@@ -1,5 +1,9 @@
 <div class="d-flex justify-content-end my-2">
-  <button mat-stroked-button color="primary" (click)="clearAll()">
+  <button
+    mat-stroked-button
+    color="primary"
+    (click)="clearAll()"
+    *ngIf="AppPermissions.CacheEntries_ClearAll | permission">
     <i class="fa fa-trash mx-1"></i>
     <span>{{ 'ClearAll' | translate }}</span>
     <span>({{ totalSize | fileSize }})</span>
@@ -13,7 +17,7 @@
     <i class="fa fa-ellipsis-v"></i>
   </button>
   <mat-menu #menu="matMenu">
-    <a mat-menu-item (click)="remove(item)">
+    <a mat-menu-item (click)="remove(item)" *ngIf="AppPermissions.CacheEntries_Delete | permission">
       <i class="fa fa-trash mx-1"></i>
       <span>{{ 'Remove' | translate }}</span>
     </a>

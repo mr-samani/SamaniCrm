@@ -27,6 +27,9 @@ export class AuthService {
   public currentUser: Observable<UserDTO | undefined>;
   accountService: AccountServiceProxy;
   userService: UserServiceProxy;
+
+  userRoles: string[] = [];
+  userPermissions: string[] = [];
   constructor(
     private router: Router,
     private tokenService: TokenService,
@@ -49,6 +52,8 @@ export class AuthService {
     return this.accountService.login(input).pipe(
       map((response) => {
         if (response.success && response.data && response.data.accessToken) {
+          this.userRoles = response.data.roles ?? [];
+          this.userPermissions = response.data.permissions ?? [];
           this.tokenService.set(response.data);
           this.currentUserSubject.next(response.data.user);
         }
@@ -60,6 +65,8 @@ export class AuthService {
     return this.accountService.loginTwoFactor(input).pipe(
       map((response) => {
         if (response.success && response.data && response.data.accessToken) {
+          this.userRoles = response.data.roles ?? [];
+          this.userPermissions = response.data.permissions ?? [];
           this.tokenService.set(response.data);
           this.currentUserSubject.next(response.data.user);
         }
@@ -130,6 +137,8 @@ export class AuthService {
       return this.userService.getCurrentUser().subscribe({
         next: (response) => {
           if (response.success && response.data) {
+            this.userRoles = response.data.roles ?? [];
+            this.userPermissions = response.data.permissions ?? [];
             this.currentUserSubject.next(response.data);
             if (
               AppConst.currentLanguage !== response.data.lang &&
@@ -148,6 +157,13 @@ export class AuthService {
         },
       });
     });
+  }
+
+  isGranted(permission: string): boolean {
+    if (!this.currentUserValue || !this.userPermissions) {
+      return false;
+    }
+    return this.userPermissions.includes(permission);
   }
 }
 

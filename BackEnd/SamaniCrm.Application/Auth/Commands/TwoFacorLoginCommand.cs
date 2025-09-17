@@ -31,18 +31,21 @@ public class TwoFactorLoginCommandHandler : IRequestHandler<TwoFactorLoginComman
     private readonly IIdentityService _identityService;
     private readonly ITwoFactorService _twoFactorService;
     private readonly ISecuritySettingService _securitySettingService;
+    private readonly IUserPermissionService _userPermissionService;
     public TwoFactorLoginCommandHandler(
             IMediator mediator,
             ITokenGenerator tokenGenerator,
             IIdentityService identityService,
             ITwoFactorService twoFactorService,
-            ISecuritySettingService securitySettingService)
+            ISecuritySettingService securitySettingService,
+            IUserPermissionService userPermissionService)
     {
         _mediator = mediator;
         _tokenGenerator = tokenGenerator;
         _identityService = identityService;
         _twoFactorService = twoFactorService;
         _securitySettingService = securitySettingService;
+        _userPermissionService = userPermissionService;
     }
 
 
@@ -74,6 +77,7 @@ public class TwoFactorLoginCommandHandler : IRequestHandler<TwoFactorLoginComman
                                userData.Lang,
                                userData.Roles);
             var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.Id, accessToken);
+            var permissions = await _userPermissionService.GetUserPermissionsAsync(userData.Id, cancellationToken);
 
             BackgroundJob.Enqueue(() => SendLoginNotification(request.UserName));
             LoginResult output = new LoginResult()
@@ -81,7 +85,8 @@ public class TwoFactorLoginCommandHandler : IRequestHandler<TwoFactorLoginComman
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
                 User = userData,
-                Roles = userData.Roles
+                Roles = userData.Roles,
+                Permissions = permissions
             };
             await _twoFactorService.ResetAttemptCount(userData.Id);
 

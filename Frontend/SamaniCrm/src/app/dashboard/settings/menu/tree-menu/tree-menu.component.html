@@ -1,5 +1,10 @@
 <div class="d-flex gap-1 flex-wrap">
-  <button mat-stroked-button color="primary" (click)="openCreateOrEditDialog()" [disabled]="loading">
+  <button
+    mat-stroked-button
+    color="primary"
+    (click)="openCreateOrEditDialog()"
+    [disabled]="loading"
+    *ngIf="AppPermissions.MenuManagement_Create | permission">
     <i class="fa fa-plus mx-2"></i>
     {{ 'CreateNewMenu' | translate }}
   </button>
@@ -43,21 +48,22 @@
         }
       }
       <span>{{ node.title }}</span>
-      <span>({{node.url}})</span>
+      <span>({{ node.url }})</span>
       <div class="actions" (click)="stopPagination($event)">
         <span class="item-notes">({{ node.children.length }})</span>
         <button mat-icon-button (click)="openCreateOrEditDialog(node)">
           <i class="fa fa-edit"></i>
         </button>
 
-        <button mat-icon-button (click)="delete(node)">
+        <button mat-icon-button (click)="delete(node)" *ngIf="AppPermissions.MenuManagement_Delete | permission">
           <i class="fa fa-trash"></i>
         </button>
         <mat-slide-toggle
           [(ngModel)]="node.active"
           [disabled]="node.loading"
           color="primary"
-          (toggleChange)="changeActive(node)"></mat-slide-toggle>
+          (toggleChange)="changeActive(node)"
+          *ngIf="AppPermissions.MenuManagement_Edit | permission"></mat-slide-toggle>
       </div>
     </div>
 
@@ -70,7 +76,12 @@
       [cdkDropListConnectedTo]="dropTargetIds"
       (cdkDropListDropped)="drop($event)"
       [cdkDropListSortingDisabled]="true">
-      <div *ngFor="let child of node.children" cdkDrag [cdkDragData]="child.id" (cdkDragMoved)="dragMoved($event)">
+      <div
+        *ngFor="let child of node.children"
+        cdkDrag
+        [cdkDragData]="child.id"
+        (cdkDragMoved)="dragMoved($event)"
+        [cdkDragDisabled]="!(AppPermissions.MenuManagement_ReOrder | permission)">
         <ng-container *ngTemplateOutlet="tmplNode; context: { node: child }"></ng-container>
       </div>
     </div>

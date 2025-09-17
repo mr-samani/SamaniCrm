@@ -31,19 +31,22 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult>
     private readonly ITokenGenerator _tokenGenerator;
     private readonly IIdentityService _identityService;
     private readonly ICaptchaStore _captcha;
+    private readonly IUserPermissionService _userPermissionService;
     private readonly ISecuritySettingService _securitySettingService;
     public LoginCommandHandler(
             IMediator mediator,
             ITokenGenerator tokenGenerator,
             IIdentityService identityService,
             ICaptchaStore captcha,
-            ISecuritySettingService securitySettingService)
+            ISecuritySettingService securitySettingService,
+            IUserPermissionService userPermissionService)
     {
         _mediator = mediator;
         _tokenGenerator = tokenGenerator;
         _identityService = identityService;
         _captcha = captcha;
         _securitySettingService = securitySettingService;
+        _userPermissionService = userPermissionService;
     }
 
 
@@ -92,14 +95,15 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult>
                                userData.Lang,
                                userData.Roles);
             var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.Id, accessToken);
-
+            var permissions = await _userPermissionService.GetUserPermissionsAsync(userData.Id, cancellationToken);
             BackgroundJob.Enqueue(() => SendLoginNotification(request.UserName));
             LoginResult output = new LoginResult()
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
                 User = userData,
-                Roles = userData.Roles
+                Roles = userData.Roles,
+                Permissions = permissions
             };
             return output;
         }

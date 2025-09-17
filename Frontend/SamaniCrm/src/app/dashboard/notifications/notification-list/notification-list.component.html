@@ -66,7 +66,7 @@
       <i class="fa fa-eye mx-1"></i>
       <span>{{ 'View' | translate }}</span>
     </a>
-    <a mat-menu-item (click)="remove(item)">
+    <a mat-menu-item (click)="remove(item)" *ngIf="AppPermissions.Notification_Delete | permission">
       <i class="fa fa-trash mx-1"></i>
       <span>{{ 'Remove' | translate }}</span>
     </a>

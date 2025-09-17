@@ -48,6 +48,6 @@ namespace SamaniCrm.Application.Common.Interfaces
 
         Task<bool> updateUserLanguage(string culture, Guid userId, CancellationToken cancellationToken);
         Task<(bool EnableTwoFactor, string Secret, int AttemptCount, TwoFactorTypeEnum TwoFactorType)> getUserTwoFactorData(Guid userId, CancellationToken cancellationToken);
-
+ 
     }
 }

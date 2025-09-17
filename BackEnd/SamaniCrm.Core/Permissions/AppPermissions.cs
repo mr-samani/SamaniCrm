@@ -15,6 +15,7 @@ namespace SamaniCrm.Core.Permissions
         public const string UserManagement = "Administrator.UserManagement";
         public const string UserManagement_List = "Administrator.UserManagement.List";
         public const string UserManagement_Create = "Administrator.UserManagement.Create";
+        public const string UserManagement_ChangeAvatar = "Administrator.UserManagement.ChangeAvatar";
         public const string UserManagement_Edit = "Administrator.UserManagement.Edit";
         public const string UserManagement_Delete = "Administrator.UserManagement.Delete";
         public const string UserManagement_AssignRole = "Administrator.UserManagement.AssignRole";
@@ -58,7 +59,7 @@ namespace SamaniCrm.Core.Permissions
 
 
         // Maintenance 
-        public const string Meintenance = "Administrator.Maintenance";
+        public const string Maintenance = "Administrator.Maintenance";
         public const string CacheEntries_List = "Administrator.Maintenance.Cache.List";
         public const string CacheEntries_Delete = "Administrator.Maintenance.Cache.Delete";
         public const string CacheEntries_ClearAll = "Administrator.Maintenance.Cache.ClearAll";
@@ -70,6 +71,15 @@ namespace SamaniCrm.Core.Permissions
         public const string Pages_Create = "Administrator.Pages.Create";
         public const string Pages_Update = "Administrator.Pages.Update";
         public const string Pages_Delete = "Administrator.Pages.Delete";
+        public const string Pages_Home_Edit = "Administrator.Pages.HomeEdit";
+        public const string Pages_AboutUs_Edit = "Administrator.Pages.AboutUsEdit";
+        public const string Pages_ContactUs_Edit = "Administrator.Pages.ContactUsEdit";
+        public const string Pages_OtherPage_Edit = "Administrator.Pages.OtherPageEdit";
+        public const string Pages_Articles_Edit = "Administrator.Pages.ArticlesEdit";
+        public const string Pages_News_Edit = "Administrator.Pages.NewsEdit";
+        public const string Pages_Blogs_Edit = "Administrator.Pages.BlogsEdit"; 
+
+        public const string Pages_Builder = "Administrator.Pages.PageBuilder";
         public const string Pages_CustomBlockList = "Administrator.Pages.CustomBlockList";
         public const string Pages_CreateCustomBlock = "Administrator.Pages.CreateCustomBlock";
         public const string Pages_DeleteCustomBlock = "Administrator.Pages.DeleteCustomBlock";
@@ -78,6 +88,8 @@ namespace SamaniCrm.Core.Permissions
         // products
         public const string Products = "Administrator.Products";
         public const string Products_Category_List = "Administrator.Products.Category.List";
+        public const string Products_Category_Export = "Administrator.Products.Category.Export";
+        public const string Products_Category_Import = "Administrator.Products.Category.Import";
         public const string Products_Category_Create = "Administrator.Products.Category.Create";
         public const string Products_Category_Edit = "Administrator.Products.Category.Edit";
         public const string Products_Category_Delete = "Administrator.Products.Category.Delete";

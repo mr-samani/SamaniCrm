@@ -1,6 +1,10 @@
 <div class="d-flex">
   <div class="menu-list">
-    <a class="menu-item" [routerLink]="['/dashboard/products/categories']" routerLinkActive="active">
+    <a
+      *ngIf="AppPermissions.Products_Category_List | permission"
+      class="menu-item"
+      [routerLink]="['/dashboard/products/categories']"
+      routerLinkActive="active">
       <div class="icon">
         <i class="fad fa-diagram-project"></i>
       </div>
@@ -9,7 +13,11 @@
         <div class="description">{{ 'ProductCategoriesDescription' | translate }}</div>
       </div>
     </a>
-    <a class="menu-item" [routerLink]="['/dashboard/products/types']" routerLinkActive="active">
+    <a
+      *ngIf="AppPermissions.Products_Type_List | permission"
+      class="menu-item"
+      [routerLink]="['/dashboard/products/types']"
+      routerLinkActive="active">
       <div class="icon">
         <i class="fad fa-box-open-full"></i>
       </div>
@@ -20,7 +28,11 @@
       </div>
     </a>
 
-    <a class="menu-item" [routerLink]="['/dashboard/products/product-list']" routerLinkActive="active">
+    <a
+      *ngIf="AppPermissions.Products_List | permission"
+      class="menu-item"
+      [routerLink]="['/dashboard/products/product-list']"
+      routerLinkActive="active">
       <div class="icon">
         <i class="fad fa-boxes-packing"></i>
       </div>
@@ -31,7 +43,11 @@
       </div>
     </a>
 
-    <a class="menu-item" [routerLink]="['/dashboard/products/currencies']" routerLinkActive="active">
+    <a
+      *ngIf="AppPermissions.Products_Currency_List | permission"
+      class="menu-item"
+      [routerLink]="['/dashboard/products/currencies']"
+      routerLinkActive="active">
       <div class="icon">
         <i class="fad fa-money-bills"></i>
       </div>

@@ -92,7 +92,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetAllProductCategoryTranslations")]
-        [Permission(AppPermissions.Products_Category_List)]
+        [Permission(AppPermissions.Products_Category_Export)]
         [ProducesResponseType(typeof(ApiResponse<List<ExportAllLocalizationValueDto>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllProductCategoryTranslations(CancellationToken cancellationToken)
         {
@@ -100,7 +100,7 @@ namespace SamaniCrm.Api.Controllers
             return ApiOk(result);
         }
         [HttpPost("ImportProductCategoryLocalization")]
-        [Permission(AppPermissions.Products_Category_List)]
+        [Permission(AppPermissions.Products_Category_Import)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> ImportProductCategoryLocalization([FromBody] List<ExportAllLocalizationValueDto> data, CancellationToken cancellationToken)
         {

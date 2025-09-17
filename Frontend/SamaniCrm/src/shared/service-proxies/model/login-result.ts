@@ -19,6 +19,7 @@ export interface ILoginResult {
   accessToken?: string;
   refreshToken?: string;
   roles?: Array<string>;
+  permissions?: Array<string>;
   enableTwoFactor?: boolean;
   twoFactorType?: TwoFactorTypeEnum;
 }
@@ -29,6 +30,7 @@ export class LoginResult implements ILoginResult {
   accessToken?: string;
   refreshToken?: string;
   roles?: Array<string>;
+  permissions?: Array<string>;
   enableTwoFactor?: boolean;
   twoFactorType?: TwoFactorTypeEnum;
 
@@ -50,6 +52,11 @@ init(data?: any) {
       this.roles = [] as any;
       for (let item of data["roles"])
         (this.roles as any).push(item);
+    }
+    if (Array.isArray(data["permissions"])) {
+      this.permissions = [] as any;
+      for (let item of data["permissions"])
+        (this.permissions as any).push(item);
     }
     this.enableTwoFactor = data["enableTwoFactor"];
     this.twoFactorType = data["twoFactorType"];

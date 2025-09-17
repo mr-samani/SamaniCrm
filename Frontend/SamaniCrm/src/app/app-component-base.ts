@@ -10,6 +10,7 @@ import { NgxAlertModalService } from 'ngx-alert-modal';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { DashboardService } from './dashboard/dashboard/dashboard.service';
 import { DOCUMENT } from '@angular/common';
+import { AppPermissions } from '@shared/permissions/app-permissions';
 export abstract class AppComponentBase {
   fb: FormBuilder;
   authService: AuthService;
@@ -24,7 +25,7 @@ export abstract class AppComponentBase {
   breadcrumb: BreadcrumbService;
 
   dashboardService: DashboardService;
-
+  AppPermissions = AppPermissions;
   doc: Document;
   constructor(injector: Injector) {
     this.mainSpinnerService = injector.get(MainSpinnerService);

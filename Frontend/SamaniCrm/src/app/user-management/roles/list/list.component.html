@@ -1,6 +1,10 @@
 <div class="tools d-flex justify-content-between align-items-center flex-wrap gap-2">
   <div class="d-flex gap-2"></div>
-  <button mat-raised-button color="primary" (click)="openCreateOrEditDialog()">
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="openCreateOrEditDialog()"
+    *ngIf="AppPermissions.RoleManagement_Create | permission">
     <i class="fa fa-circle-plus mx-1"></i>
     <span>{{ 'CreateNewRole' | translate }}</span>
   </button>
@@ -9,17 +13,26 @@
 <table-view [list]="list" [fields]="fields" [operations]="operations" [loading]="loading"></table-view>
 
 <ng-template #operations let-item>
-  <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
-    <i class="fa fa-ellipsis-v"></i>
-  </button>
-  <mat-menu #menu="matMenu">
-    <a mat-menu-item routerLink="/dashboard/roles/permissions/{{ item.id }}">
-      <i class="fa fa-check-list mx-1"></i>
-      <span>{{ 'Permissions' | translate }}</span>
-    </a>
-    <a mat-menu-item (click)="remove(item)">
-      <i class="fa fa-trash mx-1"></i>
-      <span>{{ 'Remove' | translate }}</span>
-    </a>
-  </mat-menu>
+  @if ([AppPermissions.RoleManagement_EditRolePermissions, AppPermissions.RoleManagement_Delete] | permissionAny) {
+    <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
+      <i class="fa fa-ellipsis-v"></i>
+    </button>
+    <mat-menu #menu="matMenu">
+      <a
+        mat-menu-item
+        routerLink="/dashboard/roles/permissions/{{ item.id }}"
+        *ngIf="AppPermissions.RoleManagement_EditRolePermissions | permission">
+        <i class="fa fa-check-list mx-1"></i>
+        <span>{{ 'Permissions' | translate }}</span>
+      </a>
+      <a mat-menu-item (click)="openCreateOrEditDialog(item)" *ngIf="AppPermissions.RoleManagement_Edit | permission">
+        <i class="fa fa-edit mx-1"></i>
+        <span>{{ 'Edit' | translate }}</span>
+      </a>
+      <a mat-menu-item (click)="remove(item)" *ngIf="AppPermissions.RoleManagement_Delete | permission">
+        <i class="fa fa-trash mx-1"></i>
+        <span>{{ 'Remove' | translate }}</span>
+      </a>
+    </mat-menu>
+  }
 </ng-template>
