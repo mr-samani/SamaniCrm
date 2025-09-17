@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Persistence\SeedExternalProviders.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Duende.IdentityServer" Version="7.2.0" />
     <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.2.0" />
     <PackageReference Include="Hangfire.Console" Version="1.4.3" />
@@ -35,6 +39,10 @@
 
   <ItemGroup>
     <Folder Include="seed-data\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Persistence\SeedExternalProviders.cs" />
   </ItemGroup>
 
 </Project>

@@ -64,10 +64,7 @@ namespace SamaniCrm.Infrastructure
         public DbSet<FileFolder> FileFolders { get; set; }
 
         public DbSet<CustomBlock> CustomBlocks { get; set; }
-
-
-
-
+        public DbSet<ExternalProvider> ExternalProviders { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, ICurrentUserService currentUserService) : base(options)
         {

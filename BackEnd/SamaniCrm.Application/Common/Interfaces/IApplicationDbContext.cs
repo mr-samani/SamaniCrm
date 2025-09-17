@@ -54,6 +54,7 @@ namespace SamaniCrm.Application.Common.Interfaces
 
 
         public DbSet<CustomBlock> CustomBlocks { get; set; }
+        public DbSet<ExternalProvider> ExternalProviders { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

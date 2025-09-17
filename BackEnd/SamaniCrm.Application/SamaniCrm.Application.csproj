@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Auth\Queries\**" />
-    <EmbeddedResource Remove="Auth\Queries\**" />
-    <None Remove="Auth\Queries\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SamaniCrm.Core\SamaniCrm.Core.Shared.csproj" />
     <ProjectReference Include="..\SamaniCrm.Domain\SamaniCrm.Domain.csproj" />
   </ItemGroup>

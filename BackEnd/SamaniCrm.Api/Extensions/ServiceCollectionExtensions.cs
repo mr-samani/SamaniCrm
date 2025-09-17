@@ -1,7 +1,10 @@
 ﻿using FluentValidation;
 using Hangfire;
+using Hangfire.Console;
 using Hangfire.SqlServer;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -24,21 +27,22 @@ using SamaniCrm.Infrastructure.Captcha;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.FileManager;
 using SamaniCrm.Infrastructure.Identity;
+using SamaniCrm.Infrastructure.Jobs;
 using SamaniCrm.Infrastructure.Localizer;
 using SamaniCrm.Infrastructure.Services;
 using SamaniCrm.Infrastructure.Services.Product;
-using SamaniCrm.Infrastructure.Jobs;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
-using Hangfire.Console;
 
 namespace SamaniCrm.Infrastructure.Extensions;
 public static class ServiceCollectionExtensions
@@ -307,7 +311,70 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IStartupFilter, HangfireJobStartupFilter>();
         return services;
     }
+    public static IServiceCollection LoadExternalProviders(this IServiceCollection services, IConfiguration config)
+    {
+        // load external provider configs (sync for bootstrap; or async with factory)
+        using (var sp = services.BuildServiceProvider())
+        {
+            var db = sp.GetRequiredService<ApplicationDbContext>();
+            var vault = sp.GetRequiredService<ISecretStore>(); // wrapper for KeyVault / DPAPI
+            var providers = db.ExternalProviderConfigs.Where(p => p.IsEnabled).ToList();
 
+            foreach (var p in providers)
+            {
+                if (p.ProviderType == "Google")
+                {
+                    services.AddAuthentication().AddGoogle(p.Scheme, options => {
+                        options.ClientId = vault.GetSecret(p.ClientIdKey);
+                        options.ClientSecret = vault.GetSecret(p.ClientSecretKey);
+                        options.CallbackPath = p.CallbackPath ?? $"/signin-{p.Scheme}";
+                        options.SignInScheme = IdentityConstants.ExternalScheme;
+                        // map claims if needed
+                    });
+                }
+                else if (p.ProviderType == "OAuth2")
+                {
+                   services.AddAuthentication().AddOAuth(p.Scheme, options => {
+                        options.ClientId = vault.GetSecret(p.ClientIdKey);
+                        options.ClientSecret = vault.GetSecret(p.ClientSecretKey);
+                        options.AuthorizationEndpoint = p.AuthorizationEndpoint;
+                        options.TokenEndpoint = p.TokenEndpoint;
+                        options.UserInformationEndpoint = p.UserInfoEndpoint;
+                        options.CallbackPath = p.CallbackPath ?? $"/signin-{p.Scheme}";
+                        options.SignInScheme = IdentityConstants.ExternalScheme;
+
+                        options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+                        options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+
+                        options.Events = new OAuthEvents
+                        {
+                            OnCreatingTicket = async ctx => {
+                                var request = new HttpRequestMessage(HttpMethod.Get, options.UserInformationEndpoint);
+                                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", ctx.AccessToken);
+                                var resp = await ctx.Backchannel.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ctx.HttpContext.RequestAborted);
+                                resp.EnsureSuccessStatusCode();
+                                var user = JsonDocument.Parse(await resp.Content.ReadAsStringAsync());
+                                ctx.RunClaimActions(user.RootElement);
+                            }
+                        };
+                    });
+                }
+                else if (p.ProviderType == "OpenIdConnect")
+                {
+                    services.AddAuthentication().AddOpenIdConnect(p.Scheme, options => {
+                        options.Authority = p.MetadataJson; // or metadata URL
+                        options.ClientId = vault.GetSecret(p.ClientIdKey);
+                        options.ClientSecret = vault.GetSecret(p.ClientSecretKey);
+                        options.CallbackPath = p.CallbackPath ?? $"/signin-{p.Scheme}";
+                        options.SignInScheme = IdentityConstants.ExternalScheme;
+                        options.ResponseType = "code";
+                        // ...map scopes/claims
+                    });
+                }
+            }
+        }
+        return services;
+    }
     public class HangfireJobStartupFilter : IStartupFilter
     {
         public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
