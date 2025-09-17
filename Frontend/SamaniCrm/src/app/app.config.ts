@@ -8,15 +8,14 @@ import {
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { NgxAlertModalModule } from 'ngx-alert-modal';
 import { AppConst } from '@shared/app-const';
 import { AppInitializer } from '@shared/app-initializer';
 import { AuthInterceptor } from '@shared/services/auth.interceptor';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AccountServiceProxy } from '@shared/service-proxies/api/account.service';
 import { Configuration } from '@shared/service-proxies/configuration';
 import { GlobalErrorHandler } from '@shared/handlers/global-error-handler';
@@ -37,13 +36,7 @@ export const appConfig: ApplicationConfig = {
       //   registrationStrategy: 'registerWhenStable:30000',
       // }),
       NgxAlertModalModule,
-      TranslateModule.forRoot({
-        loader: {
-          provide: TranslateLoader,
-          useFactory: createTranslateLoader,
-          deps: [HttpClient],
-        },
-      }),
+      TranslateModule.forRoot(),
       MatSnackBarModule,
     ),
     AccountServiceProxy,
@@ -68,9 +61,7 @@ function configurationFactory() {
   config.basePath = 'https://localhost:44343';
   return config;
 }
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './i18n/', '.json');
-}
+
 
 export function getRemoteServiceBaseUrl(): string {
   return AppConst.apiUrl;

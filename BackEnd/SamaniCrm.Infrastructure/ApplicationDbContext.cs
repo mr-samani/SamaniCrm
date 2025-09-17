@@ -97,7 +97,7 @@ namespace SamaniCrm.Infrastructure
 
             builder.Entity<SecuritySetting>(b =>
             {
-                b.HasKey(k=>k.Id);
+                b.HasKey(k => k.Id);
             });
 
             builder.Entity<ApplicationUser>(b =>
@@ -144,7 +144,7 @@ namespace SamaniCrm.Infrastructure
                     .WithMany(x => x.Localizations)
                     .HasForeignKey(x => x.Culture)
                     .OnDelete(DeleteBehavior.Cascade);
-                l.HasIndex(x => new { x.Key, x.Culture }).IsUnique();
+                l.HasIndex(x => new { x.Key, x.Culture, x.Category }).IsUnique();
 
 
                 var converter = new ValueConverter<LocalizationCategoryEnum, string>(

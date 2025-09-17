@@ -9,6 +9,11 @@ namespace SamaniCrm.Core.Shared.Consts
 {
     public abstract class CacheKeys
     {
+
+        [Description("front end localization keys by culture")]
+        public static string FrontEndLocalize_ = "FrontEndLocalize_";
+
+
         [Description("list of languages")]
         public const string LanguageList = "LanguageList";
 

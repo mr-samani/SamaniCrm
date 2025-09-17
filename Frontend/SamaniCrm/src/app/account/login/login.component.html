@@ -11,7 +11,7 @@
           matInput
           formControlName="userName"
           type="userName"
-          [placeholder]="'userName' | translate"
+          [placeholder]="'UserName' | translate"
           autocomplete="username" />
       </mat-form-field>
 
@@ -21,7 +21,7 @@
           matInput
           formControlName="password"
           [type]="showPassword ? 'text' : 'password'"
-          [placeholder]="'password' | translate"
+          [placeholder]="'Password' | translate"
           autocomplete="current-password" />
         <i matSuffix class="fa fa-eye" *ngIf="!showPassword" (click)="showPassword = true"></i>
         <i matSuffix class="fa fa-eye-slash" *ngIf="showPassword" (click)="showPassword = false"></i>

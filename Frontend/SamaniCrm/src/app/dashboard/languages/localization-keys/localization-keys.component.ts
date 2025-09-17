@@ -33,6 +33,9 @@ export class LocalizationKeysComponent extends AppComponentBase implements OnIni
   perPage = 10;
 
   busy = false;
+
+  importCategory = LocalizationCategoryEnum.Other;
+  filterCategory?: LocalizationCategoryEnum;
   constructor(
     injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: { culture: string },
@@ -69,7 +72,8 @@ export class LocalizationKeysComponent extends AppComponentBase implements OnIni
     if (!ev) this.page = 1;
     const filtered = this.allLocalizations.filter((x) => {
       return (
-        x.key.toLowerCase().includes(this.filter.toLowerCase()) ||
+        ((this.filterCategory ? x.category === this.filterCategory : true) &&
+          x.key.toLowerCase().includes(this.filter.toLowerCase())) ||
         x.value?.toLowerCase().includes(this.filter.toLowerCase())
       );
     });
@@ -132,9 +136,19 @@ export class LocalizationKeysComponent extends AppComponentBase implements OnIni
       console.table(data);
       try {
         for (let item of Object.entries(data)) {
-          const found = this.allLocalizations.find((x) => x.key == item[0]);
+          const found = this.allLocalizations.find((x) => x.key == item[0] && x.category == this.importCategory);
           if (found && item[1]) {
             found.value = item[1];
+          }
+          if (!found) {
+            this.allLocalizations.push(
+              new LocalizationKeyDTO({
+                category: this.importCategory,
+                culture: this.culture,
+                key: item[0],
+                value: item[1],
+              }),
+            );
           }
         }
         this.filter = '';

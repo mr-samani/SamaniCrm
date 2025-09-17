@@ -8,6 +8,13 @@
 <mat-dialog-content style="min-width: 80vw">
   <form class="input-group" (submit)="search()">
     <input type="text" class="form-control" [(ngModel)]="filter" name="filter" />
+    <mat-select class="form-control" [(ngModel)]="filterCategory">
+      <mat-option [value]="undefined">{{ 'All' | translate }}</mat-option>
+      <mat-option [value]="+c" *ngFor="let c of LocalizationCategoryEnum | enumToArray">
+        {{ 'LocalizationCategoryEnum_' + c | translate }}
+      </mat-option>
+    </mat-select>
+
     <button class="btn primary input-group-text">
       <i class="fa fa-search"></i>
     </button>
@@ -70,6 +77,11 @@
     <button mat-stroked-button (click)="importData()" [disabled]="busy">
       {{ 'ImportFromJson' | translate }}
     </button>
+    <mat-select class="form-control" [(ngModel)]="importCategory">
+      <mat-option [value]="+c" *ngFor="let c of LocalizationCategoryEnum | enumToArray">
+        {{ 'LocalizationCategoryEnum_' + c | translate }}
+      </mat-option>
+    </mat-select>
   </div>
   <div class="d-flex gap-2">
     <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
