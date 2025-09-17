@@ -20,12 +20,12 @@ export class CurrenciesComponent extends AppComponentBase implements OnInit {
   list: CurrencyDto[] = [];
   totalCount = 0;
   fields: FieldsType[] = [
-    // { column: 'id', title: this.l('id'), width: 100 },
+    // { column: 'id', title: this.l('Id'), width: 100 },
     { column: 'currencyCode', title: this.l('Code') },
     { column: 'name', title: this.l('Name') },
     { column: 'symbol', title: this.l('Symbol') },
     { column: 'exchangeRateToBase', title: this.l('ExchangeRateToBase'), type: 'number' },
-    { column: 'isDefault', title: this.l('isDefault'), type: 'yesNo' },
+    { column: 'isDefault', title: this.l('IsDefault'), type: 'yesNo' },
     { column: 'isActive', title: this.l('IsActive'), type: 'yesNo' },
     // { column: 'creationTime', title: this.l('CreationTime'), type: 'dateTime' },
   ];

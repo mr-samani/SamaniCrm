@@ -28,7 +28,7 @@ export class ToolboxComponent extends AppComponentBase implements OnInit {
   deleteCustomBlock(t: BlockDefinition) {
     if (!t.canDelete || !t.id) return;
 
-    this.confirmMessage(this.l('AreYouSureForDelete?'), t.name ?? '').then((r) => {
+    this.confirmMessage(this.l('AreYouSureForDelete'), t.name ?? '').then((r) => {
       if (r.isConfirmed) {
         this.pageBuilderService.deleteCustomBlock(t.id).subscribe((result) => {
           this.notify.success(this.l('DeleteSuccessfully'));

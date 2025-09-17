@@ -31,7 +31,7 @@ export class ProductAttributesComponent extends AppComponentBase implements OnIn
   totalCount = 0;
 
   fields: FieldsType[] = [
-    // { column: 'id', title: this.l('id'), width: 100 },
+    // { column: 'id', title: this.l('Id'), width: 100 },
     { column: 'name', title: this.l('Name') },
     { column: 'dataType', title: this.l('DataType') },
     { column: 'isRequired', title: this.l('IsRequired'), type: 'yesNo' },
