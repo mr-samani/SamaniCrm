@@ -65,7 +65,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("MarkAllAsRead")]
-        [Permission(AppPermissions.Notification_List)]
+        [Permission(AppPermissions.Notification_MarkAllAsRead)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> MarkAllAsRead( )
         {
