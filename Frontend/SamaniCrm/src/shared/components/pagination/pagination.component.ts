@@ -1,20 +1,17 @@
 import { CommonModule } from '@angular/common';
 import {
-  AfterContentInit,
   AfterViewInit,
   Component,
   EventEmitter,
   Inject,
   Input,
-  OnInit,
   Output,
-  output,
 } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { InjectionToken } from '@angular/core';
 import { IPaginationLabel, PaginationLabel } from './labels';
-import { Observable } from 'rxjs/internal/Observable';
 import { FormsModule } from '@angular/forms';
+import { PaginationLocalize } from '@shared/localize/pagination';
 
 export const PAGINATION_LABELS = new InjectionToken<IPaginationLabel>('localize pagination label', {
   providedIn: 'root',
@@ -42,6 +39,13 @@ export interface PageEvent {
   styleUrls: ['./pagination.component.scss'],
   standalone: true,
   imports: [CommonModule, TranslateModule, FormsModule],
+  providers: [
+    {
+      provide: PAGINATION_LABELS,
+      useFactory: (localize: PaginationLocalize) => localize.labels,
+      deps: [PaginationLocalize],
+    },
+  ],
 })
 export class PaginationComponent implements AfterViewInit {
   totalPages = 0;
