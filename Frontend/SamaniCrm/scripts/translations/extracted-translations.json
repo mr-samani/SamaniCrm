@@ -294,5 +294,8 @@
   "ViewProduct": "نمایش محصول",
   "ViewSubCategories": "نمایش زیرمجموعه‌ها",
   "Yes": "بله",
-  "YouHaveNewMessage": "شما پیام جدید دارید"
+  "YouHaveNewMessage": "شما پیام جدید دارید",
+  "All": "همه",
+  "LocalizationTexts": "متن‌های محلی‌سازی",
+  "Permissions": "مجوزها"
 }

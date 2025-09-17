@@ -5,15 +5,30 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </h2>
-<mat-dialog-content style="min-width: 80vw">
-  <form class="input-group" (submit)="search()">
-    <input type="text" class="form-control" [(ngModel)]="filter" name="filter" />
-    <mat-select class="form-control" [(ngModel)]="filterCategory">
+<mat-dialog-content style="min-width: 80vw; min-height: 80vh">
+  <form class="input-group mb-2" (submit)="search()">
+    <mat-select
+      class="form-control"
+      [(ngModel)]="filterCategory"
+      [placeholder]="'Category' | translate"
+      name="filterCategory">
       <mat-option [value]="undefined">{{ 'All' | translate }}</mat-option>
       <mat-option [value]="+c" *ngFor="let c of LocalizationCategoryEnum | enumToArray">
         {{ 'LocalizationCategoryEnum_' + c | translate }}
       </mat-option>
     </mat-select>
+    <input
+      type="text"
+      class="form-control"
+      [(ngModel)]="filterKey"
+      name="filterKey"
+      [placeholder]="'Key' | translate" />
+    <input
+      type="text"
+      class="form-control"
+      [(ngModel)]="filterValue"
+      name="filterValue"
+      [placeholder]="'Value' | translate" />
 
     <button class="btn primary input-group-text">
       <i class="fa fa-search"></i>

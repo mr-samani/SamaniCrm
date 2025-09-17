@@ -28,7 +28,8 @@ export class LocalizationKeysComponent extends AppComponentBase implements OnIni
   allLocalizations: LocalizationKeyDTO[] = [];
   filteredList: LocalizationKeyDTO[] = [];
   totalCount = 0;
-  filter: string = '';
+  filterKey: string = '';
+  filterValue: string = '';
   page = 1;
   perPage = 10;
 
@@ -71,11 +72,17 @@ export class LocalizationKeysComponent extends AppComponentBase implements OnIni
   search(ev?: PageEvent, data = this.allLocalizations) {
     if (!ev) this.page = 1;
     const filtered = this.allLocalizations.filter((x) => {
-      return (
-        ((this.filterCategory ? x.category === this.filterCategory : true) &&
-          x.key.toLowerCase().includes(this.filter.toLowerCase())) ||
-        x.value?.toLowerCase().includes(this.filter.toLowerCase())
-      );
+      let c = [];
+      if (this.filterCategory != undefined) {
+        c.push(x.category === this.filterCategory);
+      }
+      if (this.filterKey != '') {
+        c.push(x.key.toLowerCase().includes(this.filterKey.toLowerCase()));
+      }
+      if (this.filterValue != '') {
+        c.push(x.value?.toLowerCase().includes(this.filterValue.toLowerCase()));
+      }
+      return c.every(Boolean);
     });
 
     const from = (this.page - 1) * this.perPage;
@@ -151,7 +158,9 @@ export class LocalizationKeysComponent extends AppComponentBase implements OnIni
             );
           }
         }
-        this.filter = '';
+        this.filterKey = '';
+        this.filterValue = '';
+        this.filterCategory = undefined;
         this.search();
       } catch (e) {
         this.notify.error(this.l('JsonFileIsInvalid'));

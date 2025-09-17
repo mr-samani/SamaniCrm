@@ -210,6 +210,7 @@
   "Pagination.Showing": "نمایش",
   "Pagination.To": "تا",
   "Parent": "والد",
+  "password": "رمز عبور",
   "Password": "رمز عبور",
   "PasswordComplexity": "پیچیدگی رمز عبور",
   "PasswordComplexityRequireDigit": "نیاز به عدد در رمز عبور",
@@ -293,5 +294,8 @@
   "ViewProduct": "نمایش محصول",
   "ViewSubCategories": "نمایش زیرمجموعه‌ها",
   "Yes": "بله",
-  "YouHaveNewMessage": "شما پیام جدید دارید"
+  "YouHaveNewMessage": "شما پیام جدید دارید",
+  "All": "همه",
+  "LocalizationTexts": "متن‌های محلی‌سازی",
+  "Permissions": "مجوزها"
 }
