@@ -9,5 +9,5 @@ public enum ExternalProviderTypeEnum
     Facebook,
     GitHub,
     Twitter,
-    LinkdIn
+    LinkedIn
 }

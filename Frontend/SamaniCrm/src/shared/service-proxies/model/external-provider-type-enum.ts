@@ -25,6 +25,6 @@ export enum ExternalProviderTypeEnum {
 
     Twitter = 6,
 
-    LinkdIn = 7
+    LinkedIn = 7
 }
 

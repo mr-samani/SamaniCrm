@@ -75,6 +75,8 @@ export class ExternalProvidersComponent extends AppComponentBase implements OnIn
               item.isActive = !item.isActive;
             },
           });
+      } else {
+        item.isActive = !item.isActive;
       }
     });
   }

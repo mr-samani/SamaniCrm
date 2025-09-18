@@ -71,6 +71,12 @@ public class ExternalLoginService : IExternalLoginService
                 output.Name = githubResult.user.Name ?? githubResult.user.Login;
                 output.UserName = githubResult.user.Login;
                 break;
+            case ExternalProviderTypeEnum.LinkedIn:
+                var linkdinResult = await Linkdin.GetLinkdinUserAsync(_httpClient, access_token, cancellationToken);
+                output.Email = linkdinResult.email;
+                output.Name = linkdinResult.user.Name ?? linkdinResult.user.Login;
+                output.UserName = linkdinResult.user.Login;
+                break;
 
         }
 

@@ -98,8 +98,8 @@ public static class SeedExternalProviders
                 AuthorizationEndpoint = "https://www.linkedin.com/oauth/v2/authorization",
                 TokenEndpoint = "https://www.linkedin.com/oauth/v2/accessToken",
                 UserInfoEndpoint = "https://api.linkedin.com/v2/me",
-                Scopes = "r_liteprofile r_emailaddress",
-                ProviderType = ExternalProviderTypeEnum.LinkdIn
+                Scopes = "email profile",// "r_liteprofile r_emailaddress",
+                ProviderType = ExternalProviderTypeEnum.LinkedIn
             },
             new ExternalProvider
             {

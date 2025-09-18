@@ -22,6 +22,7 @@ export class ExternalLoginCalbackComponent extends AppComponentBase implements O
   }
 
   ngOnInit() {
+    debugger
     this.authService
       .externalLoginCallback(new ExternalLoginCallbackCommand({ code: this.code, provider: this.provider }))
       .subscribe({

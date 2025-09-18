@@ -138,6 +138,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
         case ExternalProviderTypeEnum.Microsoft:
         case ExternalProviderTypeEnum.Google:
         case ExternalProviderTypeEnum.GitHub:
+        case ExternalProviderTypeEnum.LinkedIn:
           url =
             provider.authorizationEndpoint +
             `?client_id=${provider.clientId}&redirect_uri=${AppConst.baseUrl + '/account/external/' + provider.name}&response_type=code&scope=${provider.scopes}`;

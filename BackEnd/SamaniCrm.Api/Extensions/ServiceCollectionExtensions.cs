@@ -365,7 +365,8 @@ public static class ServiceCollectionExtensions
                             options.ClientSecret = secretStore.GetSecret("GitHub:ClientSecret");
                         });
                         break;
-                    case ExternalProviderTypeEnum.LinkdIn:
+                    //https://learn.microsoft.com/en-us/linkedin/shared/authentication/client-credentials-flow?tabs=HTTPS1
+                    case ExternalProviderTypeEnum.LinkedIn:
                         services.AddAuthentication().AddLinkedIn(options =>
                          {
                              options.ClientId = secretStore.GetSecret("LinkedIn:ClientId");
