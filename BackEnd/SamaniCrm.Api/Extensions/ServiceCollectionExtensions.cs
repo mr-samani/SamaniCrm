@@ -20,6 +20,7 @@ using SamaniCrm.Application.InitialApp.Queries;
 using SamaniCrm.Application.ProductManagerManager.Interfaces;
 using SamaniCrm.Application.Queries.Role;
 using SamaniCrm.Application.User.Queries;
+using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.BackgroundServices;
@@ -29,8 +30,10 @@ using SamaniCrm.Infrastructure.FileManager;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Jobs;
 using SamaniCrm.Infrastructure.Localizer;
+using SamaniCrm.Infrastructure.Notifications;
 using SamaniCrm.Infrastructure.Services;
 using SamaniCrm.Infrastructure.Services.Product;
+using SamaniCrm.Infrastructure.Storage;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
@@ -250,6 +253,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ILanguageService, LanguageService>();
         services.AddSingleton<LocalizationMemoryCache>();
         services.AddScoped<ILocalizer, CachedStringLocalizer>();
+        services.AddSingleton<ISecretStore, ConfigurationSecretStore>();
 
 
 
@@ -317,60 +321,105 @@ public static class ServiceCollectionExtensions
         using (var sp = services.BuildServiceProvider())
         {
             var db = sp.GetRequiredService<ApplicationDbContext>();
-            var vault = sp.GetRequiredService<ISecretStore>(); // wrapper for KeyVault / DPAPI
-            var providers = db.ExternalProviderConfigs.Where(p => p.IsEnabled).ToList();
+            var secretStore = sp.GetRequiredService<ISecretStore>(); // wrapper for KeyVault / DPAPI
+            var providers = db.ExternalProviders.Where(p => p.IsActive).ToList();
 
-            foreach (var p in providers)
+            foreach (var provider in providers)
             {
-                if (p.ProviderType == "Google")
+                switch (provider.ProviderType)
                 {
-                    services.AddAuthentication().AddGoogle(p.Scheme, options => {
-                        options.ClientId = vault.GetSecret(p.ClientIdKey);
-                        options.ClientSecret = vault.GetSecret(p.ClientSecretKey);
-                        options.CallbackPath = p.CallbackPath ?? $"/signin-{p.Scheme}";
-                        options.SignInScheme = IdentityConstants.ExternalScheme;
-                        // map claims if needed
-                    });
-                }
-                else if (p.ProviderType == "OAuth2")
-                {
-                   services.AddAuthentication().AddOAuth(p.Scheme, options => {
-                        options.ClientId = vault.GetSecret(p.ClientIdKey);
-                        options.ClientSecret = vault.GetSecret(p.ClientSecretKey);
-                        options.AuthorizationEndpoint = p.AuthorizationEndpoint;
-                        options.TokenEndpoint = p.TokenEndpoint;
-                        options.UserInformationEndpoint = p.UserInfoEndpoint;
-                        options.CallbackPath = p.CallbackPath ?? $"/signin-{p.Scheme}";
-                        options.SignInScheme = IdentityConstants.ExternalScheme;
-
-                        options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-                        options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
-
-                        options.Events = new OAuthEvents
+                    case ExternalProviderTypeEnum.Google:
+                        services.AddAuthentication().AddGoogle(options =>
                         {
-                            OnCreatingTicket = async ctx => {
-                                var request = new HttpRequestMessage(HttpMethod.Get, options.UserInformationEndpoint);
-                                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", ctx.AccessToken);
-                                var resp = await ctx.Backchannel.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ctx.HttpContext.RequestAborted);
-                                resp.EnsureSuccessStatusCode();
-                                var user = JsonDocument.Parse(await resp.Content.ReadAsStringAsync());
-                                ctx.RunClaimActions(user.RootElement);
-                            }
-                        };
-                    });
+                            options.ClientId = secretStore.GetSecret("Google:ClientId");
+                            options.ClientSecret = secretStore.GetSecret("Google:ClientSecret");
+                            options.CallbackPath = provider.CallbackPath ?? $"/signin-{provider.Scheme}";
+                            options.SignInScheme = IdentityConstants.ExternalScheme;
+                            // map claims if needed
+                        });
+                        break;
+                    // https://learn.microsoft.com/en-us/aspnet/core/security/authentication/social/microsoft-logins?view=aspnetcore-10.0
+                    case ExternalProviderTypeEnum.Microsoft:
+                        services.AddAuthentication().AddMicrosoftAccount(options =>
+                        {
+                            options.ClientId = secretStore.GetSecret("Microsoft:ClientId");
+                            options.ClientSecret = secretStore.GetSecret("Microsoft:ClientSecret");
+                        });
+                        break;
+
+                    case ExternalProviderTypeEnum.Facebook:
+                        services.AddAuthentication().AddFacebook(options =>
+                        {
+                            options.ClientId = secretStore.GetSecret("Facebook:ClientId");
+                            options.ClientSecret = secretStore.GetSecret("Facebook:ClientSecret");
+                        });
+                        break;
+
+                    case ExternalProviderTypeEnum.GitHub:
+                        services.AddAuthentication().AddGitHub(options =>
+                        {
+                            options.ClientId = secretStore.GetSecret("GitHub:ClientId");
+                            options.ClientSecret = secretStore.GetSecret("GitHub:ClientSecret");
+                        });
+                        break;
+                    case ExternalProviderTypeEnum.LinkdIn:
+                        services.AddAuthentication().AddLinkedIn(options =>
+                         {
+                             options.ClientId = secretStore.GetSecret("LinkedIn:ClientId");
+                             options.ClientSecret = secretStore.GetSecret("LinkedIn:ClientSecret");
+                         });
+                        break;
+                    case ExternalProviderTypeEnum.Twitter:
+                        services.AddAuthentication().AddTwitter(options =>
+                         {
+                             options.ConsumerKey = secretStore.GetSecret("Twitter:ClientId");
+                             options.ConsumerSecret = secretStore.GetSecret("Twitter:ClientSecret");
+                         });
+                        break;
+                    case ExternalProviderTypeEnum.OAuth2:
+                        services.AddAuthentication().AddOAuth(provider.Scheme, options =>
+                        {
+                            options.ClientId = secretStore.GetSecret("OAuth2.ClientId") ?? "myOath";
+                            options.ClientSecret = secretStore.GetSecret("OAuth2.ClientSecret") ?? "myOath";
+                            options.AuthorizationEndpoint = provider.AuthorizationEndpoint;
+                            options.TokenEndpoint = provider.TokenEndpoint;
+                            options.UserInformationEndpoint = provider.UserInfoEndpoint;
+                            options.CallbackPath = provider.CallbackPath ?? $"/signin-{provider.Scheme}";
+                            options.SignInScheme = IdentityConstants.ExternalScheme;
+
+                            options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+                            options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+
+                            options.Events = new OAuthEvents
+                            {
+                                OnCreatingTicket = async ctx =>
+                                {
+                                    var request = new HttpRequestMessage(HttpMethod.Get, options.UserInformationEndpoint);
+                                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", ctx.AccessToken);
+                                    var resp = await ctx.Backchannel.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ctx.HttpContext.RequestAborted);
+                                    resp.EnsureSuccessStatusCode();
+                                    var user = JsonDocument.Parse(await resp.Content.ReadAsStringAsync());
+                                    ctx.RunClaimActions(user.RootElement);
+                                }
+                            };
+                        });
+                        break;
+                    case ExternalProviderTypeEnum.OpenIdConnect:
+                        services.AddAuthentication().AddOpenIdConnect(provider.Scheme, options =>
+                        {
+                            options.Authority = provider.MetadataJson; // or metadata URL
+                            options.ClientId = secretStore.GetSecret("OpenIdConnect.ClientId");
+                            options.ClientSecret = secretStore.GetSecret("OpenIdConnect.ClientSecret");
+                            options.CallbackPath = provider.CallbackPath ?? $"/signin-{provider.Scheme}";
+                            options.SignInScheme = IdentityConstants.ExternalScheme;
+                            options.ResponseType = "code";
+                            // ...map scopes/claims
+                        });
+                        break;
+                        // ... برای LinkedIn, Twitter, ...
                 }
-                else if (p.ProviderType == "OpenIdConnect")
-                {
-                    services.AddAuthentication().AddOpenIdConnect(p.Scheme, options => {
-                        options.Authority = p.MetadataJson; // or metadata URL
-                        options.ClientId = vault.GetSecret(p.ClientIdKey);
-                        options.ClientSecret = vault.GetSecret(p.ClientSecretKey);
-                        options.CallbackPath = p.CallbackPath ?? $"/signin-{p.Scheme}";
-                        options.SignInScheme = IdentityConstants.ExternalScheme;
-                        options.ResponseType = "code";
-                        // ...map scopes/claims
-                    });
-                }
+
+
             }
         }
         return services;

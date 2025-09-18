@@ -1,3 +1,4 @@
+import { ExternalProvidersComponent } from './tabs/external-providers/external-providers.component';
 import { TwoFaAppConfigComponent } from './dialogs/two-fa-app-config/two-fa-app-config.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -23,6 +24,7 @@ import { UserSecuritySettingComponent } from './tabs/user-security-setting/user-
     SecuritySettingComponent,
     TwoFaAppConfigComponent,
     UserSecuritySettingComponent,
+    ExternalProvidersComponent,
   ],
   imports: [
     CommonModule,

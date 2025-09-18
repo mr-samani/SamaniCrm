@@ -1,9 +1,15 @@
 ﻿using Azure.Core;
+using Duende.IdentityServer.Endpoints.Results;
+using Duende.IdentityServer.Models;
+using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Configuration;
+using SamaniCrm.Application.Auth.Commands;
+using SamaniCrm.Application.Auth.Queries;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
@@ -11,13 +17,25 @@ using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Queries.User;
 using SamaniCrm.Application.Role.Commands;
 using SamaniCrm.Application.User.Commands;
+using SamaniCrm.Core;
 using SamaniCrm.Core.Shared.Enums;
+using SamaniCrm.Core.Shared.Interfaces;
+using SamaniCrm.Domain.Constants;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.Identity;
+using SamaniCrm.Infrastructure.Notifications;
 using StackExchange.Redis;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Diagnostics;
 using System.Linq.Dynamic.Core;
+using System.Net;
+using System.Net.Http.Json;
+using System.Net.NetworkInformation;
 using System.Security.Claims;
+using System.Text.Json.Serialization;
 using System.Threading;
+using UnauthorizedAccessException = SamaniCrm.Application.Common.Exceptions.UnauthorizedAccessException;
 
 
 namespace SamaniCrm.Infrastructure.Services;
@@ -28,15 +46,40 @@ public class IdentityService : IIdentityService
     private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly ApplicationDbContext _applicationDbContext;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ITokenGenerator _tokenGenerator;
+    private readonly IUserPermissionService _userPermissionService;
+    private readonly ISecuritySettingService _securitySettingService;
+    private readonly ITwoFactorService _twoFactorService;
+    private readonly HttpClient _httpClient;
+    private readonly ISecretStore _secretStore;
+    private readonly IConfiguration _config;
 
-
-    public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<ApplicationRole> roleManager, ApplicationDbContext applicationDbContext, IHttpContextAccessor httpContextAccessor)
+    public IdentityService(
+        UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager,
+        RoleManager<ApplicationRole> roleManager,
+        ApplicationDbContext applicationDbContext,
+        IHttpContextAccessor httpContextAccessor,
+        ITokenGenerator tokenGenerator,
+        IUserPermissionService userPermissionService,
+        ISecuritySettingService securitySettingService,
+        ITwoFactorService twoFactorService,
+        HttpClient httpClient,
+        ISecretStore secretStore,
+        IConfiguration config)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
         _applicationDbContext = applicationDbContext;
         _httpContextAccessor = httpContextAccessor;
+        _tokenGenerator = tokenGenerator;
+        _userPermissionService = userPermissionService;
+        _securitySettingService = securitySettingService;
+        _twoFactorService = twoFactorService;
+        _httpClient = httpClient;
+        _secretStore = secretStore;
+        _config = config;
     }
 
     public async Task<bool> AssignUserToRole(string userName, IList<string> roles)
@@ -298,7 +341,7 @@ public class IdentityService : IIdentityService
         return await _userManager.FindByNameAsync(userName) == null;
     }
 
-    public async Task<bool> SigninUserAsync(string userName, string password)
+    private async Task<bool> SigninUserAsync(string userName, string password)
     {
         var result = await _signInManager.PasswordSignInAsync(userName, password, true, false);
         return result.Succeeded;
@@ -516,5 +559,241 @@ public class IdentityService : IIdentityService
         };
     }
 
-   
+    public async Task<LoginResult> SignInAsync(LoginCommand request, CancellationToken cancellationToken)
+    {
+
+
+        var result = await SigninUserAsync(request.UserName, request.Password);
+
+        if (!result)
+        {
+            BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification(request.UserName));
+            throw new InvalidLoginException();
+        }
+        UserDTO userData = await GetUserDetailsByUserNameAsync(request.UserName);
+        // check two factor
+        var twoFactor = await getUserTwoFactorData(userData.Id, cancellationToken);
+        if (twoFactor.EnableTwoFactor)
+        {
+            LoginResult output = new LoginResult()
+            {
+                AccessToken = "",
+                RefreshToken = "",
+                User = userData,
+                Roles = [],
+                EnableTwoFactor = twoFactor.EnableTwoFactor,
+                TwoFactorType = twoFactor.TwoFactorType
+            };
+            return output;
+        }
+        else
+        {
+            var accessToken = _tokenGenerator.GenerateAccessToken(userData.Id,
+                               userData.UserName,
+                               userData.Lang,
+                               userData.Roles);
+            var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.Id, accessToken);
+            var permissions = await _userPermissionService.GetUserPermissionsAsync(userData.Id, cancellationToken);
+            BackgroundJob.Enqueue(() => LoginNotification.SendLoginNotification(request.UserName));
+            LoginResult output = new LoginResult()
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+                User = userData,
+                Roles = userData.Roles,
+                Permissions = permissions
+            };
+            return output;
+        }
+    }
+
+    public async Task<LoginResult> TwofactorSignInAsync(TwoFactorLoginCommand request, CancellationToken cancellationToken)
+    {
+        var result = await SigninUserAsync(request.UserName, request.Password);
+
+        if (!result)
+        {
+            BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification(request.UserName));
+            throw new InvalidLoginException();
+        }
+        UserDTO userData = await GetUserDetailsByUserNameAsync(request.UserName);
+        // verify two factor
+        var hostSettings = await _securitySettingService.GetSettingsAsync(cancellationToken);
+        var settings = await _securitySettingService.GetUserSettingsAsync(userData.Id, cancellationToken);
+        var twoFactor = await getUserTwoFactorData(userData.Id, cancellationToken);
+
+        if (twoFactor.AttemptCount >= hostSettings.LogginAttemptCountLimit)
+        {
+            throw new LoginAttempCountException();
+        }
+
+        var verify = _twoFactorService.VerifyCodeAsync(twoFactor.Secret, request.Code);
+        if (verify == true)
+        {
+            var accessToken = _tokenGenerator.GenerateAccessToken(userData.Id,
+                               userData.UserName,
+                               userData.Lang,
+                               userData.Roles);
+            var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.Id, accessToken);
+            var permissions = await _userPermissionService.GetUserPermissionsAsync(userData.Id, cancellationToken);
+
+            BackgroundJob.Enqueue(() => LoginNotification.SendLoginNotification(request.UserName));
+            LoginResult output = new LoginResult()
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+                User = userData,
+                Roles = userData.Roles,
+                Permissions = permissions
+            };
+            await _twoFactorService.ResetAttemptCount(userData.Id);
+
+            return output;
+        }
+        else
+        {
+            await _twoFactorService.SetAttemptCount(userData.Id);
+            throw new InvalidTwoFactorCodeException();
+        }
+    }
+
+
+
+
+    public async Task<LoginResult> ExternalSignInAsync(ExternalLoginCallbackCommand request, CancellationToken cancellationToken)
+    {
+        //var info = await _signInManager.GetExternalLoginInfoAsync();
+        //if (info == null) throw new UnauthorizedAccessException("External login info not found");
+
+        //var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
+
+        var provider = await _applicationDbContext.ExternalProviders
+            .Where(x => x.Name == request.provider)
+            .Select(s => new
+            {
+                s.Name,
+                s.TokenEndpoint,
+                s.ProviderType,
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+        if (provider == null)
+        {
+            throw new UnauthorizedAccessException("External login provider not found");
+        }
+
+        var clientId = _secretStore.GetSecret(request.provider + ":ClientId");
+        var secret = _secretStore.GetSecret(request.provider + ":ClientSecret");
+        var redirectUrl = _config["ExternalLogin:RedirectUri"]! + provider.Name;
+        var response = await _httpClient.PostAsync(provider.TokenEndpoint,
+                new FormUrlEncodedContent(new Dictionary<string, string>
+                {
+                    { "client_id",clientId },
+                    { "client_secret", secret },
+                    { "code", request.code },
+                    { "redirect_uri",  redirectUrl},
+                    { "grant_type", "authorization_code" }
+                }), cancellationToken);
+        var tokenResult = await response.Content.ReadFromJsonAsync<TokenResponse>(cancellationToken: cancellationToken);
+
+
+        if (response.StatusCode != HttpStatusCode.OK)
+        {
+            throw new ExternalLoginException(tokenResult.error_description);
+        }
+
+
+
+
+        string access_token = tokenResult!.AccessToken;
+        string idToken = tokenResult.IdToken;
+
+        // 3. استخراج ایمیل کاربر از id_token (JWT)
+        var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+        var jwt = handler.ReadJwtToken(idToken);
+        var email = jwt.Claims.FirstOrDefault(c => c.Type == "email")?.Value
+                    ?? jwt.Claims.FirstOrDefault(c => c.Type == "preferred_username")?.Value;
+        var name = jwt.Claims.FirstOrDefault(c => c.Type == "name")?.Value ?? email;
+
+        if (email == null)
+            throw new ValidationException("Email not found in external login");
+
+
+        ApplicationUser? user = await _userManager.FindByEmailAsync(email ?? "");
+        if (user == null)
+        {
+
+            user = new ApplicationUser
+            {
+                UserName = email,
+                FullName = name,
+                Email = email,
+                Lang = AppConsts.DefaultLanguage,
+                EmailConfirmed = true
+            };
+            var createResult = await _userManager.CreateAsync(user);
+            if (!createResult.Succeeded)
+            {
+                BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification("provider: " + request.provider));
+                throw new ValidationException(createResult.Errors.Select(e => e.Description).FirstOrDefault());
+            }
+        }
+        await _signInManager.SignInAsync(user, false);
+
+        var roles = await _userManager.GetRolesAsync(user);
+        var accessToken = _tokenGenerator.GenerateAccessToken(user.Id,
+                         user.UserName!,
+                         user.Lang,
+                         roles);
+        var refreshToken = await _tokenGenerator.GenerateRefreshToken(user.Id, accessToken);
+        var permissions = await _userPermissionService.GetUserPermissionsAsync(user.Id, cancellationToken);
+        BackgroundJob.Enqueue(() => LoginNotification.SendLoginNotification(user.UserName!));
+        LoginResult output = new LoginResult()
+        {
+            AccessToken = accessToken,
+            RefreshToken = refreshToken,
+            User = new UserDTO
+            {
+                Id = user.Id,
+                UserName = user.UserName ?? "",
+                FirstName = user.FirstName ?? "",
+                LastName = user.LastName ?? "",
+                FullName = user.FullName ?? "",
+                Lang = user.Lang,
+                Email = user.Email ?? "",
+                ProfilePicture = user.ProfilePicture ?? "",
+                Address = user.Address ?? "",
+                PhoneNumber = user.PhoneNumber ?? "",
+                CreationTime = user.CreationTime.ToUniversalTime(),
+                Roles = roles.ToList()
+            },
+            Roles = roles.ToList(),
+            Permissions = permissions
+        };
+        return output;
+
+
+    }
+
+
+
+
+    public class TokenResponse
+    {
+        [JsonPropertyName("access_token")]
+        public string AccessToken { get; set; } = default!;
+
+        [JsonPropertyName("id_token")]
+        public string IdToken { get; set; } = default!;
+
+        [JsonPropertyName("refresh_token")]
+        public string RefreshToken { get; set; } = default!;
+
+        [JsonPropertyName("expires_in")]
+        public int ExpiresIn { get; set; }
+
+        public string? Error { get; set; }
+        public string? error_description { get; set; }
+    }
+
+
 }

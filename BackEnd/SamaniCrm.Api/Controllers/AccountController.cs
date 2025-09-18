@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using SamaniCrm.Api.Attributes;
 using SamaniCrm.Api.Controllers;
 using SamaniCrm.Application.Auth.Commands;
+using SamaniCrm.Application.Auth.Queries;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
@@ -13,6 +15,7 @@ using SamaniCrm.Application.DTOs;
 using SamaniCrm.Core.Permissions;
 using SamaniCrm.Host.Models;
 using SamaniCrm.Infrastructure.Identity;
+using SamaniCrm.Infrastructure.Identity.Migrations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -93,6 +96,39 @@ namespace SamaniCrm.Host.Controllers
             var result = await _twoFactorService.Save2FaVerifyCodeAsync(req.Secret, req.Code);
             return ApiOk(result);
         }
+
+
+        [HttpGet("GetExternalProviders")]
+        [ProducesResponseType(typeof(ApiResponse<List<ExternalProviderDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetExternalProviders()
+        {
+            List<ExternalProviderDto> result = await _mediator.Send(new GetExternalProvidersQuery(true));
+            return ApiOk(result);
+        }
+
+
+
+        //[HttpGet("external-login")]
+        //public async Task<IActionResult> ExternalLogin([FromQuery] string provider, [FromQuery] string returnUrl = "/")
+        //{
+        //    var redirectUrl = await _mediator.Send(new ExternalLoginCommand(provider, returnUrl));
+        //    return Challenge(new AuthenticationProperties { RedirectUri = redirectUrl }, provider);
+        //}
+
+        [HttpPost("ExternalLoginCallback")]
+        [ProducesResponseType(typeof(ApiResponse<LoginResult>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> ExternalLoginCallback(ExternalLoginCallbackCommand request)
+        {
+            LoginResult result = await _mediator.Send(request);
+
+            return ApiOk<LoginResult>(result);
+        }
+
+
+
+
+
+
     }
 
 

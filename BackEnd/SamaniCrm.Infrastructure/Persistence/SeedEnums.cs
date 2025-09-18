@@ -31,7 +31,8 @@ namespace SamaniCrm.Infrastructure.Persistence
                 typeof(DiscountTypeEnum),
                 typeof(PriceTypeEnum),
                 typeof(TwoFactorTypeEnum),
-                typeof(CacheProvider)
+                typeof(CacheProvider),
+                typeof(ExternalProviderTypeEnum)
 
             };
             var seedLocalizations = new List<Localization>();

@@ -1,5 +1,4 @@
-﻿namespace SamaniCrm.Core.Shared.Enums
-;
+﻿namespace SamaniCrm.Core.Shared.Enums;
 
 public enum DiscountTypeEnum
 {

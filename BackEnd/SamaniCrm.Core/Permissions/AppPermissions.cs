@@ -32,6 +32,10 @@ namespace SamaniCrm.Core.Permissions
 
         //Security setting
         public const string SecuritySetting = "Administrator.SecuritySetting";
+        public const string SecuritySetting_ExternalProviders = "Administrator.ExternalProviders";
+        public const string SecuritySetting_ExternalProvidersList = "Administrator.ExternalProviders.List";
+        public const string SecuritySetting_ExternalProvidersUpdate = "Administrator.ExternalProviders.Update";
+
         public const string SecuritySetting_GetSetting = "Administrator.SecuritySetting.GetSetting";
         public const string SecuritySetting_UpdateSetting = "Administrator.SecuritySetting.UpdateSetting";
 

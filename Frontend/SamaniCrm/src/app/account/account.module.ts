@@ -1,3 +1,4 @@
+import { ExternalLoginCalbackComponent } from './external-login-calback/external-login-calback.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -13,7 +14,7 @@ import { SharedModule } from '@shared/shared.module';
 import { AccountServiceProxy } from '@shared/service-proxies';
 
 @NgModule({
-  declarations: [AccountComponent, LoginComponent, RegisterComponent],
+  declarations: [AccountComponent, LoginComponent, RegisterComponent, ExternalLoginCalbackComponent],
   imports: [
     CommonModule,
     AccountRoutingModule,

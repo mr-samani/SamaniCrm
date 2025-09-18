@@ -1,4 +1,5 @@
-﻿using SamaniCrm.Application.Common.DTOs;
+﻿using SamaniCrm.Application.Auth.Commands;
+using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Queries.User;
 using SamaniCrm.Application.Role.Commands;
@@ -17,7 +18,6 @@ namespace SamaniCrm.Application.Common.Interfaces
     {
         // User section
         Task<(bool isSucceed, Guid userId)> CreateUserAsync(CreateUserCommand input);
-        Task<bool> SigninUserAsync(string userName, string password);
         Task<string> GetUserIdAsync(string userName);
         Task<UserDTO> GetUserDetailsAsync(Guid userId);
         Task<UserDTO> GetUserDetailsByUserNameAsync(string userName);
@@ -48,6 +48,11 @@ namespace SamaniCrm.Application.Common.Interfaces
 
         Task<bool> updateUserLanguage(string culture, Guid userId, CancellationToken cancellationToken);
         Task<(bool EnableTwoFactor, string Secret, int AttemptCount, TwoFactorTypeEnum TwoFactorType)> getUserTwoFactorData(Guid userId, CancellationToken cancellationToken);
- 
+        Task<LoginResult> SignInAsync(LoginCommand request, CancellationToken cancellationToken);
+        Task<LoginResult> TwofactorSignInAsync(TwoFactorLoginCommand request, CancellationToken cancellationToken);
+        Task<LoginResult> ExternalSignInAsync(ExternalLoginCallbackCommand request, CancellationToken cancellationToken);
+
+
+
     }
 }

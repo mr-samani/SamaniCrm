@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SamaniCrm.Api.Attributes;
+using SamaniCrm.Application.Auth.Queries;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.SecuritySetting.Commands;
@@ -48,6 +49,23 @@ namespace SamaniCrm.Api.Controllers
         }
         #endregion
 
+        [HttpGet("GetAllExternalProviders")]
+        [Permission(AppPermissions.SecuritySetting_ExternalProvidersList)]
+        [ProducesResponseType(typeof(ApiResponse<List<ExternalProviderDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllExternalProviders()
+        {
+            List<ExternalProviderDto> result = await _mediator.Send(new GetExternalProvidersQuery(false));
+            return ApiOk(result);
+        }
+
+        [HttpPost("ChangeIsActiveExternalProvider")]
+        [Permission(AppPermissions.SecuritySetting_ExternalProvidersUpdate)]
+        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> ChangeIsActiveExternalProvider(Guid id,bool isActive)
+        {
+            bool result = await _mediator.Send(new ChangeIsActiveExternalProviderCommand(id,isActive));
+            return ApiOk(result);
+        }
 
         #region User security setting
 

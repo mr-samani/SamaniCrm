@@ -37,6 +37,7 @@
         کلمه عبور خود را فراموش کرده اید؟
       </a>
     </p> -->
+
       <button mat-raised-button color="primary" (click)="login()" [disabled]="loading" type="submit" class="w-100">
         <span *ngIf="loading">loading...</span>
         <span *ngIf="!loading">{{ 'login' | translate }}</span>
@@ -44,6 +45,21 @@
       <!-- <button routerLink="/account/register" class="w-100" type="success">
       ثبت نام
     </button> -->
+      @if (loadingExternalProviders) {
+        <div class="d-flex align-items-center">
+          <mat-spinner color="primary" diameter="25"></mat-spinner>
+        </div>
+      } @else {
+        <div *ngIf="externalProviderList.length > 0">
+          <h5>{{ 'ExternalProviders' | translate }}</h5>
+          <button
+            *ngFor="let provider of externalProviderList"
+            class="w-100 btn btn-primary btn-{{ provider.name }}"
+            (click)="loginExternalProvider(provider)">
+            {{ provider.name }}
+          </button>
+        </div>
+      }
     </form>
   } @else {
     <div>{{ 'EnterTwoFactorCodeDescription' | translate }}</div>

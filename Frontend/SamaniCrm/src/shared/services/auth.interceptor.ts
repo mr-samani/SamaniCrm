@@ -71,6 +71,7 @@ export class AuthInterceptor implements HttpInterceptor {
         if (
           error instanceof HttpErrorResponse &&
           !request.url.toLowerCase().includes('api/account/login') &&
+          !request.url.toLowerCase().includes('api/account/external') &&
           !request.url.toLowerCase().includes('api/account/loginTwoFactor') &&
           !request.url.toLowerCase().includes('api/account/refresh')
         ) {

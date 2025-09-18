@@ -4,6 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AccountComponent } from './account.component';
 import { accountResolver } from './account.resolver';
+import { ExternalLoginCalbackComponent } from './external-login-calback/external-login-calback.component';
 
 const routes: Routes = [
   {
@@ -14,6 +15,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
+      { path: 'external/:provider', component: ExternalLoginCalbackComponent },
     ],
   },
 ];

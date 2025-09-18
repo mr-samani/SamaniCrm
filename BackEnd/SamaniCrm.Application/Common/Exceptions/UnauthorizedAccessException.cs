@@ -9,6 +9,7 @@ namespace SamaniCrm.Application.Common.Exceptions
     public class UnauthorizedAccessException: BaseAppException
     {
         public UnauthorizedAccessException() : base("Invalid Token!", System.Net.HttpStatusCode.Unauthorized) { }
+        public UnauthorizedAccessException(string v) : base(v, System.Net.HttpStatusCode.Unauthorized) { }
 
     }
 }

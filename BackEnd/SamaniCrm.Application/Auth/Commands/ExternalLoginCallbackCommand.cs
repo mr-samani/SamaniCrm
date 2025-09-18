@@ -1,57 +1,41 @@
-﻿using MediatR;
+﻿using Hangfire;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
+using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.DTOs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.Auth.Commands;
 
-public record ExternalLoginCallbackCommand() : IRequest<AuthResultDto>;
+public record ExternalLoginCallbackCommand(string code,string provider) : IRequest<LoginResult>;
 
-public class ExternalLoginCallbackHandler : IRequestHandler<ExternalLoginCallbackCommand, AuthResultDto>
+public class ExternalLoginCallbackHandler : IRequestHandler<ExternalLoginCallbackCommand, LoginResult>
 {
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IJwtTokenGenerator _jwt;
+    private readonly IIdentityService _identityService;
+    private readonly ITokenGenerator _tokenGenerator;
+    private readonly IUserPermissionService _userPermissionService;
 
-    public ExternalLoginCallbackHandler(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IJwtTokenGenerator jwt)
+    public ExternalLoginCallbackHandler(IIdentityService identityService,
+        ITokenGenerator tokenGenerator,
+        IUserPermissionService userPermissionService)
     {
-        _signInManager = signInManager;
-        _userManager = userManager;
-        _jwt = jwt;
+        _identityService = identityService;
+        _tokenGenerator = tokenGenerator;
+        _userPermissionService = userPermissionService;
     }
 
-    public async Task<AuthResultDto> Handle(ExternalLoginCallbackCommand cmd, CancellationToken ct)
+
+
+    public async Task<LoginResult> Handle(ExternalLoginCallbackCommand cmd, CancellationToken cancellationToken)
     {
-        var info = await _signInManager.GetExternalLoginInfoAsync();
-        if (info == null) throw new UnauthorizedAccessException("External login info not found");
-
-        var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
-        ApplicationUser user;
-
-        if (result.Succeeded)
-        {
-            user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
-        }
-        else
-        {
-            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            user = await _userManager.FindByEmailAsync(email);
-            if (user == null)
-            {
-                user = new ApplicationUser { UserName = email ?? Guid.NewGuid().ToString(), Email = email };
-                var create = await _userManager.CreateAsync(user);
-                if (!create.Succeeded) throw new ValidationException(create.Errors.Select(e => e.Description));
-            }
-            await _userManager.AddLoginAsync(user, info);
-        }
-
-        var token = _jwt.Generate(user);
-        return new AuthResultDto(user.Id, token);
+        var output = await _identityService.ExternalSignInAsync(cmd, cancellationToken);
+        return output;
     }
 }
-public record AuthResultDto(Guid UserId, string AccessToken);

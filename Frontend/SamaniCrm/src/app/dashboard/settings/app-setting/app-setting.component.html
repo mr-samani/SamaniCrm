@@ -9,6 +9,12 @@
     *ngIf="[AppPermissions.SecuritySetting_GetSetting, AppPermissions.SecuritySetting_UpdateSetting] | permissionAll">
     <app-security-setting></app-security-setting>
   </tab-item>
+  <tab-item
+    [title]="'ExternalProviders' | translate"
+    *ngIf="[AppPermissions.SecuritySetting_ExternalProvidersList] | permissionAll">
+    <app-external-providers></app-external-providers>
+  </tab-item>
+
   <!-- user security setting -->
   <tab-item
     [title]="'UserSecuritySettings' | translate"

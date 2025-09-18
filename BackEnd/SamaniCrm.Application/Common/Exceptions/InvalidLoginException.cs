@@ -33,3 +33,9 @@ public class InvalidTwoFactorCodeException : BaseAppException
     public InvalidTwoFactorCodeException() : base("Invalid two factor code!") { }
 
 }
+public class ExternalLoginException : BaseAppException
+{
+    public ExternalLoginException(string v) : base("Login in external providers is faild! \n" + v) { }
+
+    public HttpStatusCode StatusCode => HttpStatusCode.Unauthorized; // 401
+}
