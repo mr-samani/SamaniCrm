@@ -136,13 +136,15 @@ export class LoginComponent extends AppComponentBase implements OnInit {
       let url = '';
       switch (provider.providerType) {
         case ExternalProviderTypeEnum.Microsoft:
+        case ExternalProviderTypeEnum.Google:
+        case ExternalProviderTypeEnum.GitHub:
           url =
             provider.authorizationEndpoint +
             `?client_id=${provider.clientId}&redirect_uri=${AppConst.baseUrl + '/account/external/' + provider.name}&response_type=code&scope=${provider.scopes}`;
           break;
         default:
           this.alert.show({
-            title: this.l('Message.ExternalLoginNotSupported'),
+            title: this.l('Message.ExternalLoginNotAccessable'),
           });
           throw new Error('External login not supported');
       }

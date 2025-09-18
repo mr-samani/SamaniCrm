@@ -50,11 +50,12 @@
           <mat-spinner color="primary" diameter="25"></mat-spinner>
         </div>
       } @else {
-        <div *ngIf="externalProviderList.length > 0">
-          <h5>{{ 'ExternalProviders' | translate }}</h5>
+        <div *ngIf="externalProviderList.length > 0" class="mt-2">
+          <p>{{ 'ExternalProviders' | translate }}:</p>
           <button
+            type="button"
             *ngFor="let provider of externalProviderList"
-            class="w-100 btn btn-primary btn-{{ provider.name }}"
+            class="w-100 mb-1 btn btn-primary btn-{{ provider.name }}"
             (click)="loginExternalProvider(provider)">
             {{ provider.name }}
           </button>

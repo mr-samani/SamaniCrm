@@ -22,6 +22,7 @@ using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Constants;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.ExternalLogin;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Notifications;
 using StackExchange.Redis;
@@ -33,6 +34,7 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Net.NetworkInformation;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using UnauthorizedAccessException = SamaniCrm.Application.Common.Exceptions.UnauthorizedAccessException;
@@ -53,6 +55,7 @@ public class IdentityService : IIdentityService
     private readonly HttpClient _httpClient;
     private readonly ISecretStore _secretStore;
     private readonly IConfiguration _config;
+    private readonly IExternalLoginService _externalLoginService;
 
     public IdentityService(
         UserManager<ApplicationUser> userManager,
@@ -66,7 +69,8 @@ public class IdentityService : IIdentityService
         ITwoFactorService twoFactorService,
         HttpClient httpClient,
         ISecretStore secretStore,
-        IConfiguration config)
+        IConfiguration config,
+        IExternalLoginService externalLoginService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -80,6 +84,7 @@ public class IdentityService : IIdentityService
         _httpClient = httpClient;
         _secretStore = secretStore;
         _config = config;
+        _externalLoginService = externalLoginService;
     }
 
     public async Task<bool> AssignUserToRole(string userName, IList<string> roles)
@@ -684,49 +689,19 @@ public class IdentityService : IIdentityService
         var clientId = _secretStore.GetSecret(request.provider + ":ClientId");
         var secret = _secretStore.GetSecret(request.provider + ":ClientSecret");
         var redirectUrl = _config["ExternalLogin:RedirectUri"]! + provider.Name;
-        var response = await _httpClient.PostAsync(provider.TokenEndpoint,
-                new FormUrlEncodedContent(new Dictionary<string, string>
-                {
-                    { "client_id",clientId },
-                    { "client_secret", secret },
-                    { "code", request.code },
-                    { "redirect_uri",  redirectUrl},
-                    { "grant_type", "authorization_code" }
-                }), cancellationToken);
-        var tokenResult = await response.Content.ReadFromJsonAsync<TokenResponse>(cancellationToken: cancellationToken);
-
-
-        if (response.StatusCode != HttpStatusCode.OK)
-        {
-            throw new ExternalLoginException(tokenResult.error_description);
-        }
+        var externalLoginResult = await _externalLoginService.ExchangeCodeAsync(provider.ProviderType, request.code, provider.TokenEndpoint, clientId, secret, redirectUrl, cancellationToken);
 
 
 
-
-        string access_token = tokenResult!.AccessToken;
-        string idToken = tokenResult.IdToken;
-
-        // 3. استخراج ایمیل کاربر از id_token (JWT)
-        var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-        var jwt = handler.ReadJwtToken(idToken);
-        var email = jwt.Claims.FirstOrDefault(c => c.Type == "email")?.Value
-                    ?? jwt.Claims.FirstOrDefault(c => c.Type == "preferred_username")?.Value;
-        var name = jwt.Claims.FirstOrDefault(c => c.Type == "name")?.Value ?? email;
-
-        if (email == null)
-            throw new ValidationException("Email not found in external login");
-
-
-        ApplicationUser? user = await _userManager.FindByEmailAsync(email ?? "");
+        ApplicationUser? user = await _userManager.FindByEmailAsync(externalLoginResult.Email ?? "");
         if (user == null)
         {
 
             user = new ApplicationUser
             {
-                UserName = email,
-                FullName = name,
-                Email = email,
+                UserName = externalLoginResult.UserName ?? externalLoginResult.Email,
+                FullName = externalLoginResult.Name,
+                Email = externalLoginResult.Email,
                 Lang = AppConsts.DefaultLanguage,
                 EmailConfirmed = true
             };
@@ -775,25 +750,6 @@ public class IdentityService : IIdentityService
     }
 
 
-
-
-    public class TokenResponse
-    {
-        [JsonPropertyName("access_token")]
-        public string AccessToken { get; set; } = default!;
-
-        [JsonPropertyName("id_token")]
-        public string IdToken { get; set; } = default!;
-
-        [JsonPropertyName("refresh_token")]
-        public string RefreshToken { get; set; } = default!;
-
-        [JsonPropertyName("expires_in")]
-        public int ExpiresIn { get; set; }
-
-        public string? Error { get; set; }
-        public string? error_description { get; set; }
-    }
 
 
 }

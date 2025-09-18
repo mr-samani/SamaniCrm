@@ -26,6 +26,7 @@ using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.BackgroundServices;
 using SamaniCrm.Infrastructure.Captcha;
 using SamaniCrm.Infrastructure.Email;
+using SamaniCrm.Infrastructure.ExternalLogin;
 using SamaniCrm.Infrastructure.FileManager;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Jobs;
@@ -246,6 +247,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
         services.AddScoped<ITokenGenerator, TokenGenerator>();
         services.AddScoped<ITwoFactorService, TwoFactorService>();
+        services.AddScoped<IExternalLoginService, ExternalLoginService>();
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IRolePermissionService, RolePermissionService>();
         services.AddSingleton(TimeProvider.System);
@@ -328,6 +330,7 @@ public static class ServiceCollectionExtensions
             {
                 switch (provider.ProviderType)
                 {
+                    //https://learn.microsoft.com/en-us/aspnet/core/security/authentication/social/google-logins?view=aspnetcore-9.0
                     case ExternalProviderTypeEnum.Google:
                         services.AddAuthentication().AddGoogle(options =>
                         {

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Infrastructure.Localizer;
 public class CachedStringLocalizer : ILocalizer
-{ 
+{
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly LocalizationMemoryCache _cache;
 
@@ -29,19 +29,19 @@ public class CachedStringLocalizer : ILocalizer
     {
         //return _httpContextAccessor.HttpContext?.Items["lang"]?.ToString()
         //       ?? CultureInfo.CurrentUICulture.Name ?? AppConsts.DefaultLanguage;
-        return  CultureInfo.CurrentUICulture.Name ?? AppConsts.DefaultLanguage;
+        return CultureInfo.CurrentUICulture.Name ?? AppConsts.DefaultLanguage;
     }
 
 
 
     public string this[string name]
     {
-       
+
         get
         {
             var culture = GetCulture();
             var value = _cache.Get(culture, name);
-            return  value ?? name;
+            return string.IsNullOrEmpty(value) ? name : value;
         }
     }
 
@@ -49,8 +49,8 @@ public class CachedStringLocalizer : ILocalizer
     {
         get
         {
-            var baseString = this[name]; 
-            return  string.Format(baseString, arguments);
+            var baseString = this[name];
+            return string.Format(baseString, arguments);
         }
     }
 
