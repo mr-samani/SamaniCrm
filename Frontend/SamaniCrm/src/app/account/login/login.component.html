@@ -66,11 +66,13 @@
     <div>{{ 'EnterTwoFactorCodeDescription' | translate }}</div>
 
     <form class="d-flex flex-column gap-2 py-4">
-      <mat-form-field>
+      <!-- <mat-form-field>
         <mat-label>{{ 'Code' | translate }}</mat-label>
         <input matInput [(ngModel)]="code" name="code" type="number" autocomplete="off" #codeEl="ngModel" />
-      </mat-form-field>
+      </mat-form-field> -->
 
+      <otp-input [length]="6" [(ngModel)]="code" name="code"></otp-input>
+      <!-- {{ code }} -->
       <button
         mat-raised-button
         color="primary"

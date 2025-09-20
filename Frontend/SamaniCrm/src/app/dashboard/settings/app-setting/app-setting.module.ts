@@ -16,6 +16,7 @@ import { SwitchModule } from '@shared/components/switch/switch.module';
 import { SecuritySettingsServiceProxy } from '@shared/service-proxies';
 import { SharedModule } from '@shared/shared.module';
 import { UserSecuritySettingComponent } from './tabs/user-security-setting/user-security-setting.component';
+import { OtpInputComponent } from '@shared/components/otp-input/otp-input.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { UserSecuritySettingComponent } from './tabs/user-security-setting/user-
     TabGroupModule,
     SwitchModule,
     SharedModule,
+    OtpInputComponent
   ],
   providers: [SecuritySettingsServiceProxy],
 })

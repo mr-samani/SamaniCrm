@@ -12,6 +12,7 @@ import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { CaptchaModule } from '@shared/captcha/captcha.module';
 import { SharedModule } from '@shared/shared.module';
 import { AccountServiceProxy } from '@shared/service-proxies';
+import { OtpInputComponent } from '@shared/components/otp-input/otp-input.component';
 
 @NgModule({
   declarations: [AccountComponent, LoginComponent, RegisterComponent, ExternalLoginCalbackComponent],
@@ -24,6 +25,7 @@ import { AccountServiceProxy } from '@shared/service-proxies';
     SharedModule,
     CaptchaModule,
     MaterialCommonModule,
+    OtpInputComponent
   ],
   providers: [AccountServiceProxy],
 })
