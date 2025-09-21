@@ -111,7 +111,7 @@ namespace SamaniCrm.Infrastructure.Services
                 existingNode = new RolePermissionsDTO
                 {
                     Name = currentFullName,
-                    DisplayName = displayName != null ? L[displayName] : "",
+                    DisplayName = displayName != null ? L[displayName] : currentFullName,
                     Selected = selectedPermissionNames.Contains(fullName),
                     Children = []
                 };

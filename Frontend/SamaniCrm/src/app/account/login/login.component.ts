@@ -6,6 +6,7 @@ import { AppComponentBase } from '@app/app-component-base';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
 import { AppConst } from '@shared/app-const';
 import { CaptchaComponent } from '@shared/captcha/captcha.component';
+import { AccountServiceProxy, ExternalProviderDto, ExternalProviderTypeEnum } from '@shared/service-proxies';
 import { InputCaptchaDTO } from '@shared/service-proxies/model/input-captcha-dto';
 import { LoginCommand } from '@shared/service-proxies/model/login-command';
 import { TwoFactorLoginCommand } from '@shared/service-proxies/model/two-factor-login-command';
@@ -29,9 +30,13 @@ export class LoginComponent extends AppComponentBase implements OnInit {
 
   getTwoFactorCode = false;
   code = '';
+
+  loadingExternalProviders = false;
+  externalProviderList: ExternalProviderDto[] = [];
   constructor(
     injector: Injector,
     private matDialog: MatDialog,
+    private accountService: AccountServiceProxy,
   ) {
     super(injector);
     this.loginForm = this.fb.group({
@@ -45,6 +50,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
 
   ngOnInit(): void {
     this.matDialog.closeAll();
+    this.getExternalProviders();
   }
 
   login() {
@@ -112,5 +118,43 @@ export class LoginComponent extends AppComponentBase implements OnInit {
           if (this.captcha && AppConst.requireCaptcha) this.captcha.reloadCaptcha();
         },
       });
+  }
+
+  getExternalProviders() {
+    this.loadingExternalProviders = true;
+    this.accountService
+      .getExternalProviders()
+      .pipe(finalize(() => (this.loadingExternalProviders = false)))
+      .subscribe((response) => {
+        this.externalProviderList = response.data ?? [];
+      });
+  }
+
+  loginExternalProvider(provider: ExternalProviderDto) {
+    this.loadingExternalProviders = true;
+    try {
+      let url = '';
+      switch (provider.providerType) {
+        case ExternalProviderTypeEnum.Microsoft:
+        case ExternalProviderTypeEnum.Google:
+        case ExternalProviderTypeEnum.GitHub:
+        case ExternalProviderTypeEnum.LinkedIn:
+          url =
+            provider.authorizationEndpoint +
+            `?client_id=${provider.clientId}&redirect_uri=${AppConst.baseUrl + '/account/external/' + provider.name}&response_type=code&scope=${provider.scopes}`;
+          break;
+        default:
+          this.alert.show({
+            title: this.l('Message.ExternalLoginNotAccessable'),
+          });
+          throw new Error('External login not supported');
+      }
+      window.location.href = url;
+      console.log(url);
+      //window.open(url, '_blank', 'noopener,noreferrer',);
+    } catch (error) {
+      console.error('Error occurred while handling external login:', error);
+      this.loadingExternalProviders = false;
+    }
   }
 }

@@ -1,3 +1,4 @@
+import { ExternalLoginCalbackComponent } from './external-login-calback/external-login-calback.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -11,9 +12,10 @@ import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { CaptchaModule } from '@shared/captcha/captcha.module';
 import { SharedModule } from '@shared/shared.module';
 import { AccountServiceProxy } from '@shared/service-proxies';
+import { OtpInputComponent } from '@shared/components/otp-input/otp-input.component';
 
 @NgModule({
-  declarations: [AccountComponent, LoginComponent, RegisterComponent],
+  declarations: [AccountComponent, LoginComponent, RegisterComponent, ExternalLoginCalbackComponent],
   imports: [
     CommonModule,
     AccountRoutingModule,
@@ -23,6 +25,7 @@ import { AccountServiceProxy } from '@shared/service-proxies';
     SharedModule,
     CaptchaModule,
     MaterialCommonModule,
+    OtpInputComponent
   ],
   providers: [AccountServiceProxy],
 })

@@ -7,6 +7,7 @@ import { NgxAlertModalService } from 'ngx-alert-modal';
 import { LanguageService } from './language.service';
 import {
   AccountServiceProxy,
+  ExternalLoginCallbackCommand,
   LoginCommand,
   RefreshTokenCommand,
   RevokeRefreshTokenCommand,
@@ -74,6 +75,21 @@ export class AuthService {
       }),
     );
   }
+
+  externalLoginCallback(input: ExternalLoginCallbackCommand) {
+    return this.accountService.externalLoginCallback(input).pipe(
+      map((response) => {
+        if (response.success && response.data && response.data.accessToken) {
+          this.userRoles = response.data.roles ?? [];
+          this.userPermissions = response.data.permissions ?? [];
+          this.tokenService.set(response.data);
+          this.currentUserSubject.next(response.data.user);
+        }
+        return response;
+      }),
+    );
+  }
+
   // register(credential: RegisterRequest): Observable<any> {
   //   return this.dataService.post<RegisterRequest, LoginDto>(Apis.register, credential).pipe(
   //     map((response) => {

@@ -12,11 +12,11 @@ using SamaniCrm.Host.Models;
 
 namespace SamaniCrm.Api.Controllers;
 
- 
-    public class FileManagerController : ApiBaseController
-    {
 
-        private readonly IMediator _mediator;
+public class FileManagerController : ApiBaseController
+{
+
+    private readonly IMediator _mediator;
 
     public FileManagerController(IMediator mediator)
     {

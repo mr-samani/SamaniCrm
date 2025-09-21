@@ -20,12 +20,13 @@ public class TwoFactorService : ITwoFactorService
 {
     private readonly ICurrentUserService currentUser;
     private readonly IApplicationDbContext applicationDbContext;
-    private readonly IIdentityService identityService;
-    public TwoFactorService(ICurrentUserService currentUser, IApplicationDbContext applicationDbContext, IIdentityService identityService)
+    public TwoFactorService(
+        ICurrentUserService currentUser,
+        IApplicationDbContext applicationDbContext
+       )
     {
         this.currentUser = currentUser;
         this.applicationDbContext = applicationDbContext;
-        this.identityService = identityService;
     }
 
 

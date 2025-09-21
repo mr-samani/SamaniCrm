@@ -9,5 +9,8 @@ namespace SamaniCrm.Core;
 public static class AppConsts
 {
     public const string DefaultLanguage = "fa-IR";
+
+    // used in github external login , ....
+    public static string AppName = "SamaniCrm";
 }
 

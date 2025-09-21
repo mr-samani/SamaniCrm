@@ -68,6 +68,8 @@ app-builder {
   color: #000;
   height: 100%;
   transition: all 0.3s ease;
+  margin: 0 auto;
+  box-shadow: 0 0 10px 0 #545454;
   &.tablet-view {
     width: 770px;
   }

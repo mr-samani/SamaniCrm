@@ -1,3 +1,4 @@
+import { ExternalProvidersComponent } from './tabs/external-providers/external-providers.component';
 import { TwoFaAppConfigComponent } from './dialogs/two-fa-app-config/two-fa-app-config.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -15,6 +16,7 @@ import { SwitchModule } from '@shared/components/switch/switch.module';
 import { SecuritySettingsServiceProxy } from '@shared/service-proxies';
 import { SharedModule } from '@shared/shared.module';
 import { UserSecuritySettingComponent } from './tabs/user-security-setting/user-security-setting.component';
+import { OtpInputComponent } from '@shared/components/otp-input/otp-input.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { UserSecuritySettingComponent } from './tabs/user-security-setting/user-
     SecuritySettingComponent,
     TwoFaAppConfigComponent,
     UserSecuritySettingComponent,
+    ExternalProvidersComponent,
   ],
   imports: [
     CommonModule,
@@ -35,6 +38,7 @@ import { UserSecuritySettingComponent } from './tabs/user-security-setting/user-
     TabGroupModule,
     SwitchModule,
     SharedModule,
+    OtpInputComponent
   ],
   providers: [SecuritySettingsServiceProxy],
 })

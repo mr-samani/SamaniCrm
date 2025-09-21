@@ -30,7 +30,7 @@ services
     .AddCacheService(config)
     .AddFileManagerService(config)
     .AddHangfireJobs(config)
-    ;
+    .LoadExternalProviders(config);
 
 services.AddSignalR();
 

@@ -27,26 +27,17 @@ public class LoginCommand : IRequest<LoginResult>
 
 public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult>
 {
-    private readonly IMediator _mediator;
-    private readonly ITokenGenerator _tokenGenerator;
     private readonly IIdentityService _identityService;
-    private readonly ICaptchaStore _captcha;
-    private readonly IUserPermissionService _userPermissionService;
     private readonly ISecuritySettingService _securitySettingService;
+    private readonly ICaptchaStore _captcha;
     public LoginCommandHandler(
-            IMediator mediator,
-            ITokenGenerator tokenGenerator,
             IIdentityService identityService,
             ICaptchaStore captcha,
-            ISecuritySettingService securitySettingService,
-            IUserPermissionService userPermissionService)
+            ISecuritySettingService securitySettingService)
     {
-        _mediator = mediator;
-        _tokenGenerator = tokenGenerator;
         _identityService = identityService;
         _captcha = captcha;
         _securitySettingService = securitySettingService;
-        _userPermissionService = userPermissionService;
     }
 
 
@@ -65,61 +56,12 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult>
                 throw new InvalidCaptchaException();
             }
         }
-        var result = await _identityService.SigninUserAsync(request.UserName, request.Password);
+        var output = await _identityService.SignInAsync(request, cancellationToken);
+        return output;
 
-        if (!result)
-        {
-            BackgroundJob.Enqueue(() => SendLoginFailureNotification(request.UserName));
-            throw new InvalidLoginException();
-        }
-        UserDTO userData = await _identityService.GetUserDetailsByUserNameAsync(request.UserName);
-        // check two factor
-        var twoFactor = await _identityService.getUserTwoFactorData(userData.Id, cancellationToken);
-        if (twoFactor.EnableTwoFactor)
-        {
-            LoginResult output = new LoginResult()
-            {
-                AccessToken = "",
-                RefreshToken = "",
-                User = userData,
-                Roles = [],
-                EnableTwoFactor = twoFactor.EnableTwoFactor,
-                TwoFactorType = twoFactor.TwoFactorType
-            };
-            return output;
-        }
-        else
-        {
-            var accessToken = _tokenGenerator.GenerateAccessToken(userData.Id,
-                               userData.UserName,
-                               userData.Lang,
-                               userData.Roles);
-            var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.Id, accessToken);
-            var permissions = await _userPermissionService.GetUserPermissionsAsync(userData.Id, cancellationToken);
-            BackgroundJob.Enqueue(() => SendLoginNotification(request.UserName));
-            LoginResult output = new LoginResult()
-            {
-                AccessToken = accessToken,
-                RefreshToken = refreshToken,
-                User = userData,
-                Roles = userData.Roles,
-                Permissions = permissions
-            };
-            return output;
-        }
 
     }
 
 
-    public void SendLoginNotification(string username)
-    {
-        // کد ارسال نوتیفیکیشن یا لاگ
-        Console.WriteLine($"User {username} logged in successfully!");
-    }
 
-    public void SendLoginFailureNotification(string username)
-    {
-        // کد ارسال نوتیفیکیشن یا لاگ
-        Console.WriteLine($"User {username} failed to log in.");
-    }
 }
