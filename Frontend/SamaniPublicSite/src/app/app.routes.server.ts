@@ -2,19 +2,19 @@ import { RenderMode, ServerRoute } from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
   {
-    path: 'home',
+    path: ':culture/home',
     renderMode: RenderMode.Client,
   },
   {
-    path: 'page-preview-old/:culture/:id',
+    path: ':culture/page-preview-old/:culture/:id',
     renderMode: RenderMode.Client,
   },
   {
-    path: 'page/preview/:culture/:pageId',
+    path: ':culture/page/preview/:culture/:pageId',
     renderMode: RenderMode.Prerender,
   },
   {
-    path: 'page/:culture/:slug',
+    path: ':culture/page/:culture/:slug',
     renderMode: RenderMode.Prerender,
   },
   {
