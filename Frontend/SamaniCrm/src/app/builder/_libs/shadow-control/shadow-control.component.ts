@@ -159,7 +159,6 @@ export class ShadowControlComponent implements OnInit, AfterViewInit {
   }
 
   writeValue(val: string): void {
-    debugger
     if (!val) {
       this.shadows = [];
       this.result = '';
