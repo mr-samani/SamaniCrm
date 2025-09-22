@@ -13,7 +13,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250501051653_localize")]
-    partial class localize
+    partial class Localize
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

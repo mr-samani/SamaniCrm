@@ -13,7 +13,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250504164923_unique-localization-key-and-culture")]
-    partial class uniquelocalizationkeyandculture
+    partial class Uniquelocalizationkeyandculture
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

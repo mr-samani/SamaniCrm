@@ -15,7 +15,7 @@ public interface IFileManagerService
 
     Task<List<FileNodeDto>> GetFolderDetails(Guid Id, CancellationToken cancellationToken);
 
-    Task<List<string>> GetFileManagerIcons(CancellationToken cancellationToken);
+    List<string> GetFileManagerIcons(CancellationToken cancellationToken);
     Task<bool> DeleteFileOrFolder(Guid Id, CancellationToken cancellationToken);
 
     Task<bool> SetFolderIcon(Guid Id, string Icon, CancellationToken cancellationToken);

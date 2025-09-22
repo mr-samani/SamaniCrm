@@ -16,8 +16,8 @@ public record GetAllProductCategoryTranslationQuery() : IRequest<List<ExportAllL
 public class ExportAllLocalizationValueDto
 {
     public Guid Id { get; set; }
-    public string Title { get; set; }
-    public string Description { get; set; }
+    public required string Title { get; set; }
+    public string? Description { get; set; }
 
 }
 

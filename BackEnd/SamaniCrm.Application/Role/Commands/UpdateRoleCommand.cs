@@ -11,7 +11,7 @@ namespace SamaniCrm.Application.Role.Commands
     public class UpdateRoleCommand : IRequest<int>
     {
         public Guid Id { get; set; }
-        public string RoleName { get; set; }
+        public required string RoleName { get; set; }
     }
 
     public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, int>

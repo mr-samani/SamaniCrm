@@ -204,7 +204,7 @@ namespace SamaniCrm.Infrastructure.FileManager
             return result > 0;
         }
 
-        public async Task<List<string>> GetFileManagerIcons(CancellationToken cancellationToken)
+        public List<string> GetFileManagerIcons(CancellationToken cancellationToken)
         {
             var wwwrootPath = Path.Combine(_env.WebRootPath);
             var path = Path.Combine(wwwrootPath, "Images", "folder-icons");

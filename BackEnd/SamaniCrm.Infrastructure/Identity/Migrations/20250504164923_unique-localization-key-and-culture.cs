@@ -5,7 +5,7 @@
 namespace SamaniCrm.Infrastructure.Identity.Migrations
 {
     /// <inheritdoc />
-    public partial class uniquelocalizationkeyandculture : Migration
+    public partial class Uniquelocalizationkeyandculture : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

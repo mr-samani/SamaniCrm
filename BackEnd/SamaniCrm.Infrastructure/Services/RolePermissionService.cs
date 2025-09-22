@@ -32,35 +32,7 @@ namespace SamaniCrm.Infrastructure.Services
             _dbContext = dbContext;
             L = l;
         }
-
-        public async Task<List<string>> GetPermissionsForUserAsync(Guid userId)
-        {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-            var roles = await _userManager.GetRolesAsync(user);
-
-            var permissions = new List<string>();
-            throw new NotImplementedException();
-            //foreach (var role in roles)
-            //{
-            //    var appRole = await _roleManager.FindByNameAsync(role);
-            //    if (appRole != null)
-            //    {
-            //        // فرض: permissionها در جدول خاصی ذخیره شده و به نقش‌ها map شدن
-            //        permissions.AddRange(await GetRolePermissionsAsyc(appRole.Id));
-            //    }
-            //}
-
-            //return permissions.Distinct().ToList();
-        }
-
-
-
-        public async Task<bool> PermissionAsync(Guid userId, string permissionName)
-        {
-            throw new NotImplementedException();
-            //var permissions = await GetPermissionsForUserAsync(userId);
-            //return permissions.Contains(permissionName);
-        }
+   
 
         public async Task<List<RolePermissionsDTO>> GetRolePermissionsAsyc(Guid roleId)
         {

@@ -11,7 +11,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
         public Guid ProductTypeId { get; set; }
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
-        public string Content { get; set; }
+        public string? Content { get; set; }
 
         public string? CategoryTitle { get; set; }
         public string? ProductTypeTitle { get; set; }   

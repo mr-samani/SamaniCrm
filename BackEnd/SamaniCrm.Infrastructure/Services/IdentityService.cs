@@ -188,11 +188,11 @@ public class IdentityService : IIdentityService
         if (!string.IsNullOrEmpty(request.Filter))
         {
             query = query.Where(x =>
-            x.UserName.Contains(request.Filter) ||
-            x.FirstName.Contains(request.Filter) ||
+            x.UserName!.Contains(request.Filter) ||
+            x.FirstName!.Contains(request.Filter) ||
             x.LastName.Contains(request.Filter) ||
-            x.Email.Contains(request.Filter) ||
-            x.PhoneNumber.Contains(request.Filter)
+            x.Email!.Contains(request.Filter) ||
+            x.PhoneNumber!.Contains(request.Filter)
             );
         }
 
@@ -244,7 +244,7 @@ public class IdentityService : IIdentityService
             x.Name
         }).ToListAsync();
 
-        return roles.Select(role => (role.Id, role.Name)).ToList();
+        return roles.Select(role => (role.Id, role.Name!)).ToList();
     }
 
     public async Task<UserDTO> GetUserDetailsAsync(Guid userId)
@@ -316,7 +316,7 @@ public class IdentityService : IIdentityService
             throw new NotFoundException("User not found");
             //throw new Exception("User not found");
         }
-        return await _userManager.GetUserNameAsync(user);
+        return await _userManager.GetUserNameAsync(user) ?? "";
     }
 
     public async Task<List<string>> GetUserRolesAsync(Guid userId)
@@ -391,7 +391,7 @@ public class IdentityService : IIdentityService
     public async Task<(Guid id, string roleName)> GetRoleByIdAsync(Guid id)
     {
         var role = await _roleManager.FindByIdAsync(id.ToString());
-        return (role.Id, role.Name);
+        return (role!.Id, role.Name ?? "");
     }
 
     public async Task<bool> UpdateRole(Guid id, string roleName)
@@ -399,9 +399,12 @@ public class IdentityService : IIdentityService
         if (roleName != null)
         {
             var role = await _roleManager.FindByIdAsync(id.ToString());
-            role.Name = roleName;
-            var result = await _roleManager.UpdateAsync(role);
-            return result.Succeeded;
+            if (role != null)
+            {
+                role.Name = roleName;
+                var result = await _roleManager.UpdateAsync(role);
+                return result.Succeeded;
+            }
         }
         return false;
     }
@@ -409,6 +412,10 @@ public class IdentityService : IIdentityService
     public async Task<bool> UpdateUsersRole(string userName, IList<string> usersRole)
     {
         var user = await _userManager.FindByNameAsync(userName);
+        if(user == null)
+        {
+            return false;
+        }
         var existingRoles = await _userManager.GetRolesAsync(user);
         var result = await _userManager.RemoveFromRolesAsync(user, existingRoles);
         result = await _userManager.AddToRolesAsync(user, usersRole);

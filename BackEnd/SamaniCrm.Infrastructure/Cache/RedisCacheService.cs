@@ -39,10 +39,10 @@ namespace SamaniCrm.Infrastructure.Cache
             await _database.KeyDeleteAsync(key);
         }
 
-        public async Task<IEnumerable<string>> GetKeysAsync(string? pattern = null)
+        public Task<IEnumerable<string>> GetKeysAsync(string? pattern)
         {
             var server = _connection.GetServer(_connection.GetEndPoints().First());
-            return server.Keys(pattern: pattern ?? "*").Select(k => k.ToString());
+            return (Task<IEnumerable<string>>)server.Keys(pattern: pattern ?? "*").Select(k => k.ToString());
         }
 
         public async Task ClearAsync()
@@ -72,9 +72,7 @@ namespace SamaniCrm.Infrastructure.Cache
                 LastModified = null // Redis به صورت پیش فرض تاریخ ندارد
             };
         }
-
-
-
+ 
     }
 
 }

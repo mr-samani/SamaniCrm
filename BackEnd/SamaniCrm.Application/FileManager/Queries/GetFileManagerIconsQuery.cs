@@ -23,8 +23,8 @@ public class GetFileManagerIconsQueryHanlder : IRequestHandler<GetFileManagerIco
         _fileManagerService = fileManagerService;
     }
 
-    public async Task<List<string>> Handle(GetFileManagerIconsQuery request, CancellationToken cancellationToken)
+    public Task<List<string>> Handle(GetFileManagerIconsQuery request, CancellationToken cancellationToken)
     {
-        return await _fileManagerService.GetFileManagerIcons(cancellationToken);
+        return Task.FromResult(_fileManagerService.GetFileManagerIcons(cancellationToken));
     }
 }

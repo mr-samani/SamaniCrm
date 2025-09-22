@@ -10,8 +10,8 @@ namespace SamaniCrm.Application.User.Commands
 {
     public class UpdateUserRolesCommand : IRequest<int>
     {
-        public string userName { get; set; }
-        public IList<string> Roles { get; set; }
+        public required string userName { get; set; }
+        public IList<string> Roles { get; set; } = [];
     }
 
     public class UpdateUserRolesCommandHandler : IRequestHandler<UpdateUserRolesCommand, int>
