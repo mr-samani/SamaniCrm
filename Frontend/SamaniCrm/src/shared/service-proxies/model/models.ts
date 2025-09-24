@@ -93,7 +93,6 @@ export * from './page-status-enum';
 export * from './page-type-enum';
 export * from './paged-product-categories-dto';
 export * from './paged-product-categories-dto-api-response';
-export * from './paged-product-category-dto';
 export * from './password-complexity-dto';
 export * from './password-complexity-dto-api-response';
 export * from './price-type-enum';

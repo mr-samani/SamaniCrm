@@ -14,13 +14,13 @@
 /** Interface for UpdateRoleCommand */
 export interface IUpdateRoleCommand {
   id?: string;
-  roleName?: string;
+  roleName: string;
 }
 
 /** Class for UpdateRoleCommand */
 export class UpdateRoleCommand implements IUpdateRoleCommand {
   id?: string;
-  roleName?: string;
+  roleName!: string;
 
   constructor(data?: IUpdateRoleCommand) {
     if (data) {

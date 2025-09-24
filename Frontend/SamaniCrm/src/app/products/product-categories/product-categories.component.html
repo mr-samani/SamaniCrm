@@ -1,10 +1,4 @@
-<div class="tools d-flex justify-content-between align-items-center flex-wrap gap-2">
-  <div class="d-flex gap-2">
-    <button mat-raised-button color="primary" (click)="showFilter = !showFilter">
-      <i class="fa fa-filter mx-1"></i>
-      <span>{{ 'Filter' | translate }}</span>
-    </button>
-  </div>
+<div class="tools d-flex justify-content-end align-items-center flex-wrap gap-2">
   <div class="d-flex gap-2">
     <button
       mat-raised-button
@@ -33,61 +27,53 @@
   </div>
 </div>
 
-<form [formGroup]="form" *filterForm="showFilter" class="filter-form">
-  <div class="row">
-    <mat-form-field class="col-sm-6 col-md-4">
-      <mat-label>{{ 'Filter' | translate }}</mat-label>
-      <input matInput type="text" maxlength="500" formControlName="filter" />
-    </mat-form-field>
-  </div>
-  <div class="d-flex align-items-center justify-content-end gap-2">
-    <button mat-stroked-button color="primary" (click)="resetFilter()" type="reset">
-      <i class="fa fa-times mx-1"></i>
-      <span>{{ 'Reset' | translate }}</span>
-    </button>
-    <button mat-stroked-button color="primary" (click)="reload()" type="submit">
-      <i class="fa fa-refresh mx-1"></i>
-      <span>{{ 'Reload' | translate }}</span>
-    </button>
-  </div>
-</form>
+<div class="d-flex align-items-center justify-content-center py-5" *ngIf="loading">
+  <mat-spinner diameter="30" color="primary"></mat-spinner>
+</div>
+<div class="tree">
+  <ng-container *ngTemplateOutlet="categoryTemplate; context: { $implicit: list }"></ng-container>
+</div>
 
-<table-view
-  [list]="list"
-  [fields]="fields"
-  [operations]="operations"
-  [loading]="loading"
-  (sortChange)="getList($event)"></table-view>
+<ng-template #categoryTemplate let-list>
+  <ul>
+    <li
+      *ngFor="let item of list; let i = index"
+      class="node"
+      [class.close-child]="!item.isOpen"
+      [class.last]="i == list.length - 1">
+      <div class="inner">
+        <span
+          class="tree-icon"
+          [class.isOpen]="item.isOpen"
+          [class.no-child]="!item.hasChildren && (!item.children || item.children.length == 0)"
+          (click)="openCloseFolder(item)"></span>
 
-<pagination [total]="totalCount" [(page)]="page" [(perPage)]="perPage" (change)="onPageChange($event)"></pagination>
+        <span
+          [class.icon-folder]="!item.isOpen && item.hasChildren"
+          [class.icon-folder-open]="item.isOpen && item.hasChildren"
+          [class.icon-file]="!item.hasChildren"></span>
 
-<ng-template #operations let-item>
-  <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
-    <i class="fa fa-ellipsis-v"></i>
-  </button>
-  <mat-menu #menu="matMenu">
-    <a
-      *ngIf="AppPermissions.Products_List | permission"
-      mat-menu-item
-      [routerLink]="['/dashboard/products/product-list']"
-      [queryParams]="{
-        categoryId: item.id,
-        categoryTitle: item.title,
-      }">
-      <i class="fa fa-product mx-1"></i>
-      <span>{{ 'Products' | translate }}</span>
-    </a>
-    <a *ngIf="item.hasChild" mat-menu-item (click)="viewSubCategories(item)">
-      <i class="fa fa-list mx-1"></i>
-      <span>{{ 'ViewSubCategories' | translate }}</span>
-    </a>
-    <a mat-menu-item (click)="openCreateOrEditDialog(item)" *ngIf="AppPermissions.Products_Category_Edit | permission">
-      <i class="fa fa-edit mx-1"></i>
-      <span>{{ 'Edit' | translate }}</span>
-    </a>
-    <a mat-menu-item (click)="remove(item)" *ngIf="AppPermissions.Products_Category_Delete | permission">
-      <i class="fa fa-trash mx-1"></i>
-      <span>{{ 'Remove' | translate }}</span>
-    </a>
-  </mat-menu>
+        <div class="checkbox-container" (click)="onChange(item)">
+          <span
+            class="checkbox"
+            [class.checked]="item.isActive"
+            [class.indeterminate]="item.hasUnSelectedChildren"
+            [class.squre]="item.isActive && item.hasUnSelectedChildren"></span>
+          <img *ngIf="item.image" [src]="baseUrl + '/' + item.image" class="img-circle" />
+          <img *ngIf="!item.image" src="/images/default-image.png" class="img-circle img-cover" />
+          <button type="button" (click)="remove(item)" class="btn btn-icon">
+            <i class="fa fa-trash"></i>
+          </button>
+          <button type="button" (click)="openCreateOrEditDialog(item)" class="btn btn-icon">
+            <i class="fa fa-edit"></i>
+          </button>
+          <span [title]="item.description">{{ item.title }}</span>
+        </div>
+      </div>
+
+      @if (item.children) {
+        <ng-container *ngTemplateOutlet="categoryTemplate; context: { $implicit: item.children }"></ng-container>
+      }
+    </li>
+  </ul>
 </ng-template>

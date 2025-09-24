@@ -53,6 +53,27 @@ namespace SamaniCrm.Api.Controllers
             return ApiOk(result);
         }
 
+
+        [HttpPost("GetTreeProductCategoriesForAdmin")]
+        [Permission(AppPermissions.Products_Category_List)]
+        [ProducesResponseType(typeof(ApiResponse<List<ProductCategoryDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetTreeProductCategoriesForAdmin([FromBody] GetTreeProductCategoryForAdminQuery request, CancellationToken cancellationToken)
+        {
+            List<ProductCategoryDto> result = await _mediator.Send(request, cancellationToken);
+            return ApiOk(result);
+        }
+        [HttpGet("GetTreeProductCategories")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(ApiResponse<List<ProductCategoryDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetTreeProductCategories([FromBody] GetTreeProductCategoryQuery request, CancellationToken cancellationToken)
+        {
+            List<ProductCategoryDto> result = await _mediator.Send(request, cancellationToken);
+            return ApiOk(result);
+        }
+
+
+
+
         [HttpGet("GetProductCategoryForEdit")]
         [Permission(AppPermissions.Products_Category_Edit)]
         [ProducesResponseType(typeof(ApiResponse<ProductCategoryDto>), StatusCodes.Status200OK)]

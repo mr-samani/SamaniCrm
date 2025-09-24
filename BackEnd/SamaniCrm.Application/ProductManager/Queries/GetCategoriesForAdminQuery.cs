@@ -16,7 +16,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
         public string? Filter { get; set; }
     }
 
-    public class PagedProductCategoriesDto : PaginatedResult<PagedProductCategoryDto>
+    public class PagedProductCategoriesDto : PaginatedResult<ProductCategoryDto>
     {
         public List<BreadcrumbResult> Breadcrumbs { get; set; } = default!;
     }

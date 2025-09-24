@@ -120,7 +120,6 @@ model/page-status-enum.ts
 model/page-type-enum.ts
 model/paged-product-categories-dto-api-response.ts
 model/paged-product-categories-dto.ts
-model/paged-product-category-dto.ts
 model/password-complexity-dto-api-response.ts
 model/password-complexity-dto.ts
 model/price-type-enum.ts

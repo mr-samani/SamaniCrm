@@ -20,7 +20,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
         public int OrderIndex { get; set; }
 
         public bool IsActive { get; set; } = true;
-        public DateTime? CreatedTime { get; set; }
+        public DateTime? CreationTime { get; set; }
 
 
         public Guid? ParentId { get; set; }
@@ -29,6 +29,12 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
         public List<ProductCategoryDto> Children { get; set; } = [];
 
         public List<ProductCategoryTranslationDto>? Translations { get; set; }
+
+
+
+
+        public bool? hasChild { get; set; }
+        public int? ChildCount { get; set; }
     }
 
     public class ProductCategoryTranslationDto

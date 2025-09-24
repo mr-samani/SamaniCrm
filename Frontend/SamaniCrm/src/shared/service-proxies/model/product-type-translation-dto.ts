@@ -15,7 +15,7 @@
 export interface IProductTypeTranslationDto {
   productTypeId?: string;
   culture: string;
-  name?: string;
+  name: string;
   description?: string;
 }
 
@@ -23,7 +23,7 @@ export interface IProductTypeTranslationDto {
 export class ProductTypeTranslationDto implements IProductTypeTranslationDto {
   productTypeId?: string;
   culture!: string;
-  name?: string;
+  name!: string;
   description?: string;
 
   constructor(data?: IProductTypeTranslationDto) {

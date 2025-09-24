@@ -32,7 +32,6 @@ export class TreeViewComponent implements OnInit {
   }
 
   onChange(item: TreeViewModel) {
-    item.isModified = true;
     // کلیک اول
     // خودش فقط انتخاب بشه
     if (!item.selected) {
@@ -75,7 +74,7 @@ export class TreeViewComponent implements OnInit {
 
   toggleAllChild(item: TreeViewModel, selected: boolean) {
     item.selected = selected;
-    item.isModified = true;
+
     item.hasUnSelectedChildren = false;
     if (item.children) {
       this.checkOrUncheckAll(item.children, item.selected);
@@ -84,7 +83,7 @@ export class TreeViewComponent implements OnInit {
   checkOrUncheckAll(item: TreeViewModel[], isChecked: boolean) {
     for (let i of item) {
       i.selected = isChecked;
-      i.isModified = true;
+
       i.hasUnSelectedChildren = false;
       this.changeChild.emit(i);
       if (i.children) {
@@ -97,11 +96,10 @@ export class TreeViewComponent implements OnInit {
     //  console.log(ev, 'parent', parent);
     if (parent.children?.every((x) => x.selected)) {
       parent.selected = true;
-      parent.isModified = true;
+
       parent.hasUnSelectedChildren = false;
     } else if (parent.children?.some((x) => x.selected || x.hasUnSelectedChildren)) {
       parent.hasUnSelectedChildren = true;
-      parent.isModified = true;
     }
     this.changeChild.emit(this.parent);
   }

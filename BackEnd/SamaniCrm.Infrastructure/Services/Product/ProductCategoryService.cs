@@ -36,41 +36,6 @@ public class ProductCategoryService : IProductCategoryService
     }
 
 
-
-    public async Task<List<ProductCategoryDto>> GetCategoryTree(CancellationToken cancellationToken)
-    {
-        var currentLanguage = L.CurrentLanguage;
-        var allCategories = await _context.ProductCategories.Include(m => m.Translations)
-                        .Include(m => m.Children)
-                            .ThenInclude(c => c.Translations)
-                        .OrderBy(m => m.OrderIndex)
-                        .ToListAsync();
-        var roots = allCategories.Where(m => m.ParentId == null).ToList();
-        var result = roots.Select(m => MapToDtoRecursive(m, currentLanguage)).ToList();
-        return result ?? [];
-    }
-
-
-
-    private static ProductCategoryDto MapToDtoRecursive(ProductCategory item, string language)
-    {
-        return new ProductCategoryDto
-        {
-            Id = item.Id,
-            Image = item.Image,
-            OrderIndex = item.OrderIndex,
-            ParentId = item.ParentId,
-            Slug = item.Slug,
-            IsActive = item.IsActive,
-            Title = item.Translations?.FirstOrDefault(t => t.Culture == language)?.Title ?? "",
-            Description = item.Translations?.FirstOrDefault(t => t.Culture == language)?.Description ?? "",
-            Children = item.Children?
-                .OrderBy(c => c.OrderIndex)
-                .Select(c => MapToDtoRecursive(c, language))
-                .ToList() ?? []
-        };
-    }
-
     public async Task<PagedProductCategoriesDto> GetPagedCategories(GetCategoriesForAdminQuery request, CancellationToken cancellationToken)
     {
 
@@ -98,7 +63,7 @@ public class ProductCategoryService : IProductCategoryService
         var items = await query
        .Skip(request.PageSize * (request.PageNumber - 1))
        .Take(request.PageSize)
-       .Select(c => new PagedProductCategoryDto
+       .Select(c => new ProductCategoryDto
        {
            Id = c.Id,
            Title = c.Translations
@@ -233,6 +198,70 @@ public class ProductCategoryService : IProductCategoryService
 
         return result;
     }
+
+    public async Task<List<ProductCategoryDto>> GetTreeProductCategories(bool onlyIsActive, CancellationToken cancellationToken)
+    {
+        var currentCulture = L.CurrentLanguage;
+
+        var query = _context.ProductCategories
+            .AsNoTracking()
+            .Select(c => new
+            {
+                c.Id,
+                c.ParentId,
+                c.Image,
+                c.OrderIndex,
+                c.Slug,
+                c.IsActive,
+                PreferredTranslation = c.Translations
+                    .Where(t => t.Culture == currentCulture && t.Title != null)
+                    .Select(t => new { t.Title, t.Description })
+                    .FirstOrDefault(),
+
+                FallbackTranslation = c.Translations
+                    .Where(t => t.Title != null)
+                    .Select(t => new { t.Title, t.Description })
+                    .FirstOrDefault()
+            });
+
+        if (onlyIsActive)
+        {
+            query = query.Where(c => c.IsActive);
+        }
+
+        var items = await query
+            .OrderBy(c => c.OrderIndex)
+            .ToListAsync(cancellationToken);
+
+        // تبدیل به DTO
+        var dtoList = items.Select(c => new ProductCategoryDto
+        {
+            Id = c.Id,
+            ParentId = c.ParentId,
+            Image = c.Image,
+            OrderIndex = c.OrderIndex,
+            Slug = c.Slug,
+            Title = c.PreferredTranslation?.Title ?? c.FallbackTranslation?.Title ?? "",
+            Description = c.PreferredTranslation?.Description ?? c.FallbackTranslation?.Description ?? ""
+        }).ToList();
+
+        // ساخت درخت
+        var lookup = dtoList.ToLookup(c => c.ParentId);
+        foreach (var dto in dtoList)
+        {
+            dto.Children = lookup[dto.Id].OrderBy(x => x.OrderIndex).ToList();
+        }
+
+        var tree = lookup[null].OrderBy(x => x.OrderIndex).ToList();
+        return tree;
+    }
+
+
+
+
+
+
+
 
 }
 
