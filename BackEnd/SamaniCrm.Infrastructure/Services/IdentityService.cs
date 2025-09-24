@@ -412,7 +412,7 @@ public class IdentityService : IIdentityService
     public async Task<bool> UpdateUsersRole(string userName, IList<string> usersRole)
     {
         var user = await _userManager.FindByNameAsync(userName);
-        if(user == null)
+        if (user == null)
         {
             return false;
         }
@@ -756,7 +756,39 @@ public class IdentityService : IIdentityService
 
     }
 
+    public async Task<List<Guid>> GetAllActiveUsersIds(CancellationToken cancellationToken)
+    {
+        List<Guid> list = await _applicationDbContext.Users
+             .Where(x => x.IsDeleted == false)
+             .Select(u => u.Id)
+             .ToListAsync();
+        return list;
+    }
+
+    public async Task<List<AutoCompleteDto<Guid>>> GetAutoCompleteUsers(string filter, CancellationToken cancellationToken)
+    {
+
+        var query = _applicationDbContext.Users.AsQueryable();
 
 
+        if (!string.IsNullOrEmpty(filter))
+        {
+            query = query.Where(c =>
+                c.UserName.Contains(filter) ||
+                c.FirstName.Contains(filter) ||
+                c.LastName.Contains(filter)
+            );
+        }
+
+        var items = await query.Select(s => new AutoCompleteDto<Guid>
+        {
+            Id = s.Id,
+            Title = s.FirstName + " " + s.LastName + " (" + s.UserName + ")",
+        })
+            .Skip(0)
+            .Take(50)
+            .ToListAsync(cancellationToken);
+        return items;
+    }
 
 }

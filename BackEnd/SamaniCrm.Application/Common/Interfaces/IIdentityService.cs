@@ -52,7 +52,8 @@ namespace SamaniCrm.Application.Common.Interfaces
         Task<LoginResult> TwofactorSignInAsync(TwoFactorLoginCommand request, CancellationToken cancellationToken);
         Task<LoginResult> ExternalSignInAsync(ExternalLoginCallbackCommand request, CancellationToken cancellationToken);
 
-
+        Task<List<Guid>> GetAllActiveUsersIds(CancellationToken cancellationToken);
+        Task<List<AutoCompleteDto<Guid>>> GetAutoCompleteUsers(string filter, CancellationToken cancellationToken);
 
     }
 }

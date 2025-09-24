@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 
 @Component({
@@ -6,6 +6,7 @@ import { BreadcrumbService } from '@shared/services/breadcrumb.service';
   templateUrl: './braed-crumb.component.html',
   styleUrl: './braed-crumb.component.scss',
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BraedCrumbComponent {
   constructor(public breadcrumb: BreadcrumbService) {}

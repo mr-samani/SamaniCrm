@@ -28,6 +28,7 @@ model/active-or-deactive-language-command.ts
 model/api-error.ts
 model/boolean-api-response.ts
 model/breadcrumb-result.ts
+model/broad-cast-notifications-command.ts
 model/cache-entry-dto-list-api-response.ts
 model/cache-entry-dto.ts
 model/captcha-dto.ts
@@ -86,6 +87,7 @@ model/initial-app-dto-api-response.ts
 model/initial-app-dto.ts
 model/input-captcha-dto.ts
 model/int32-api-response.ts
+model/int64-api-response.ts
 model/language-dto-list-api-response.ts
 model/language-dto.ts
 model/localization-category-enum.ts

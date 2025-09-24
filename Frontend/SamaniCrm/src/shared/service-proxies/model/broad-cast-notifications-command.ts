@@ -12,22 +12,20 @@ import { NotificationPeriorityEnum } from './notification-periority-enum';
 
 /* Created with custom template by mohammadreza SAMANI*/
 
-/** Interface for SendNotificationCommand */
-export interface ISendNotificationCommand {
-  userId: string;
+/** Interface for BroadCastNotificationsCommand */
+export interface IBroadCastNotificationsCommand {
   title: string;
   content: string;
   periority?: NotificationPeriorityEnum;
 }
 
-/** Class for SendNotificationCommand */
-export class SendNotificationCommand implements ISendNotificationCommand {
-  userId!: string;
+/** Class for BroadCastNotificationsCommand */
+export class BroadCastNotificationsCommand implements IBroadCastNotificationsCommand {
   title!: string;
   content!: string;
   periority?: NotificationPeriorityEnum;
 
-  constructor(data?: ISendNotificationCommand) {
+  constructor(data?: IBroadCastNotificationsCommand) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -38,15 +36,14 @@ export class SendNotificationCommand implements ISendNotificationCommand {
 
 init(data?: any) {
   if (data) {
-    this.userId = data["userId"];
     this.title = data["title"];
     this.content = data["content"];
     this.periority = data["periority"];
   }
 }
 
-  static fromJS(data: any): SendNotificationCommand {
-    const instance = new SendNotificationCommand();
+  static fromJS(data: any): BroadCastNotificationsCommand {
+    const instance = new BroadCastNotificationsCommand();
     instance.init(data);
     return instance;
   }

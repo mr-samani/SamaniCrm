@@ -24,14 +24,26 @@ namespace SamaniCrm.Api.Controllers
 
 
 
-        [HttpPost("signal")]
+        [HttpPost("SendMessageToUser")]
+        [Permission(AppPermissions.Notification_SendMessageToUser)]
         [ProducesResponseType(typeof(ApiResponse<Unit>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> signal(SendNotificationCommand request)
+        public async Task<IActionResult> SendMessageToUser(SendNotificationCommand request)
         {
             Unit result = await _mediator.Send(request);
             return ApiOk(result);
 
         }
+
+        [HttpPost("BroadCastMessageToAllUsers")]
+        [Permission(AppPermissions.Notification_BroadCastMessageToAll)]
+        [ProducesResponseType(typeof(ApiResponse<long>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> BroadCastMessageToAllUsers(BroadCastNotificationsCommand request)
+        {
+            long result = await _mediator.Send(request);
+            return ApiOk(result);
+
+        }
+
 
 
         [HttpPost("GetAllNotifications")]
@@ -67,7 +79,7 @@ namespace SamaniCrm.Api.Controllers
         [HttpPost("MarkAllAsRead")]
         [Permission(AppPermissions.Notification_MarkAllAsRead)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> MarkAllAsRead( )
+        public async Task<IActionResult> MarkAllAsRead()
         {
             bool result = await _mediator.Send(new MarkAllAsReadCommand());
             return ApiOk(result);

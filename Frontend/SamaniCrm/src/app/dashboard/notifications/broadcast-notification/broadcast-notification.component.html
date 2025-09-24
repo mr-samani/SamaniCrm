@@ -1,0 +1,43 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title">{{ 'Notification' | translate }}</span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="row">
+    <mat-form-field class="col-md-6">
+      <mat-label>{{ 'Periority' | translate }}</mat-label>
+      <mat-select formControlName="periority">
+        <mat-option *ngFor="let item of NotificationPeriorityEnum | enumToArray" [value]="item">
+          {{ 'NotificationPeriorityEnum_' + item | translate }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('periority')?.hasError('required')">
+        {{ 'IsRequired' | translate: { value: ('Periority' | translate) } }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="col-md-12">
+      <mat-label>{{ 'Title' | translate }}</mat-label>
+      <input matInput formControlName="title" />
+      <mat-error *ngIf="form.get('title')?.hasError('required')">
+        {{ 'IsRequired' | translate: { value: ('Title' | translate) } }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="col-md-12">
+      <mat-label>{{ 'Content' | translate }}</mat-label>
+      <textarea matInput formControlName="content" rows="4"></textarea>
+      <mat-error *ngIf="form.get('content')?.hasError('required')">
+        {{ 'IsRequired' | translate: { value: ('Content' | translate) } }}
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close color="cancel">{{ 'Close' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="saving">
+    <mat-spinner *ngIf="saving" color="primary" diameter="25"></mat-spinner>
+    <span>{{ 'Save' | translate }}</span>
+  </button>
+</mat-dialog-actions>

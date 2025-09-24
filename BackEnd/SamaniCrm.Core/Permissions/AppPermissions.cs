@@ -127,6 +127,8 @@ namespace SamaniCrm.Core.Permissions
         public const string Notification_List = "Administrator.Notification.List";
         public const string Notification_Delete = "Administrator.Notification.Delete";
         public const string Notification_MarkAllAsRead = "Administrator.Notification.MarkAllAsRead";
+        public const string Notification_SendMessageToUser = "Administrator.Notification.SendMessageToUser";
+        public const string Notification_BroadCastMessageToAll = "Administrator.Notification.BroadCastMessageToAll";
 
 
         // file manager

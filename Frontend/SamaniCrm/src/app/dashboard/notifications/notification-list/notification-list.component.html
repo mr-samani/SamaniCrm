@@ -5,6 +5,24 @@
       <span>{{ 'Filter' | translate }}</span>
     </button>
   </div>
+  <div class="d-flex gap-2">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="sendMessageToUser()"
+      *ngIf="AppPermissions.Notification_SendMessageToUser | permission">
+      <i class="fa fa-bell mx-1"></i>
+      <span>{{ 'SendMessage' | translate }}</span>
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="broadCastMessage()"
+      *ngIf="AppPermissions.Notification_BroadCastMessageToAll | permission">
+      <i class="fa fa-broadcast mx-1"></i>
+      <span>{{ 'BroadcastMessage' | translate }}</span>
+    </button>
+  </div>
 </div>
 
 <form [formGroup]="form" *filterForm="showFilter" class="filter-form">
@@ -51,7 +69,52 @@
   [loading]="loading"
   (sortChange)="getList($event)">
   <ng-template tableCell="read" let-item>
-    <span [class.read]="item.read">{{ item.read ? 'Read' : 'Unread' }}</span>
+    <span
+      class="fad yellow"
+      [class.fa-envelope]="!item.read"
+      [class.fa-envelope-open]="item.read"
+      [title]="(item.read ? 'MsgRead' : 'MsgUnread') | translate"></span>
+  </ng-template>
+
+  <ng-template tableCell="periority" let-item>
+    <span [title]="'NotificationPeriorityEnum_' + item.periority | translate">
+      @switch (item.periority) {
+        @case (NotificationPeriorityEnum.Error) {
+          <i class="fad icon-periority fa-triangle-exclamation text-danger"></i>
+        }
+        @case (NotificationPeriorityEnum.Cretical) {
+          <i class="fad icon-periority fa-bomb text-danger"></i>
+        }
+        @case (NotificationPeriorityEnum.Alert) {
+          <i class="fad icon-periority fa-octagon-exclamation text-warning"></i>
+        }
+        @case (NotificationPeriorityEnum.Info) {
+          <i class="fad icon-periority fa-lightbulb-exclamation yellow"></i>
+        }
+        @case (NotificationPeriorityEnum.Hight) {
+          <i class="fad icon-periority fa-arrow-up-from-line text-danger"></i>
+        }
+        @default {
+          <i class="fad icon-periority fa-circle-info text-info"></i>
+        }
+      }
+    </span>
+  </ng-template>
+
+  <ng-template tableCell="type" let-item>
+    <span [title]="'NotificationTypeEnum_' + item.type">
+      @switch (item.type) {
+        @case (NotificationTypeEnum.Message) {
+          <i class="fad icon-type fa-message-lines"></i>
+        }
+        @case (NotificationTypeEnum.DownloadZip) {
+          <i class="fad icon-type fa-file-zipper"></i>
+        }
+        @default {
+          <i class="fad icon-type fa-file"></i>
+        }
+      }
+    </span>
   </ng-template>
 </table-view>
 

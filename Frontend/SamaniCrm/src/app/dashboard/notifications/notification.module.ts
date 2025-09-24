@@ -9,10 +9,13 @@ import { TableViewModule } from '@shared/components/table-view/table-view.module
 import { TranslateModule } from '@ngx-translate/core';
 import { NotificationServiceProxy } from '@shared/service-proxies';
 import { FilterComponent } from '@shared/components/filter/filter.component';
-import { SharedModule } from '@shared/shared.module'; 
+import { SharedModule } from '@shared/shared.module';
+import { SendNotificationDialogComponent } from './send-notification/send-notification.component';
+import { AutoCompleteUserComponent } from '@app/user-management/auto-complete-user/auto-complete-user.component';
+import { BroadcastNotificationComponent } from './broadcast-notification/broadcast-notification.component';
 
 @NgModule({
-  declarations: [NotificationListComponent],
+  declarations: [NotificationListComponent, SendNotificationDialogComponent, BroadcastNotificationComponent],
   imports: [
     CommonModule,
     NotificationRoutingModule,
@@ -23,6 +26,7 @@ import { SharedModule } from '@shared/shared.module';
     TranslateModule,
     FilterComponent,
     SharedModule,
+    AutoCompleteUserComponent,
   ],
   providers: [NotificationServiceProxy],
 })

@@ -5,6 +5,7 @@ import { AppComponentBase } from '@app/app-component-base';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
 import {
+  BroadCastNotificationsCommand,
   DeleteNotificationCommand,
   GetAllNotificationQuery,
   NotificationDto,
@@ -15,6 +16,8 @@ import {
 import { Subscription } from 'rxjs/internal/Subscription';
 import { finalize } from 'rxjs/operators';
 import { NotificationInfoComponent } from '../notification-info/notification-info.component';
+import { SendNotificationDialogComponent } from '../send-notification/send-notification.component';
+import { BroadcastNotificationComponent } from '../broadcast-notification/broadcast-notification.component';
 
 @Component({
   selector: 'app-notification-list',
@@ -30,17 +33,16 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
   fields: FieldsType[] = [
     // { column: 'id', title: this.l('Id'), width: 100 },
     { column: 'title', title: this.l('Title') },
-    { column: 'type', title: this.l('Type'), type: 'localize', localizeKey: 'NotificationTypeEnum_' },
-    { column: 'periority', title: this.l('Periority'), type: 'localize', localizeKey: 'NotificationPeriorityEnum_' },
-    { column: 'read', title: this.l('Read'), type: 'template' },
-    { column: 'creationTime', title: this.l('CreationTime'), type: 'dateTime' },
+    { column: 'type', title: this.l('Type'), type: 'template', width: 100 },
+    { column: 'periority', title: this.l('Periority'), type: 'template', width: 100 },
+    { column: 'read', title: this.l('Read'), type: 'template', width: 100 },
+    { column: 'creationTime', title: this.l('CreationTime'), type: 'dateTime', width: 150 },
   ];
   form: FormGroup;
   page = 1;
   perPage = 10;
   listSubscription$?: Subscription;
   showFilter = false;
-
   constructor(
     injector: Injector,
     private notificationService: NotificationServiceProxy,
@@ -143,6 +145,32 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
       .afterClosed()
       .subscribe((r) => {
         item.read = true;
+      });
+  }
+
+  broadCastMessage() {
+       this.matDialog
+      .open(BroadcastNotificationComponent, {
+        data: {},
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.reload();
+        }
+      });
+  }
+
+  sendMessageToUser() {
+    this.matDialog
+      .open(SendNotificationDialogComponent, {
+        data: {},
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.reload();
+        }
       });
   }
 }
