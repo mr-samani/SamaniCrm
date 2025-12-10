@@ -51,7 +51,12 @@ export class LastNotificationsComponent extends AppComponentBase implements OnIn
   }
 
   markAllAsRead() {
-    this.notificationServiceProxy.markAllAsRead().subscribe();
+    this.notificationServiceProxy.markAllAsRead().subscribe((result) => {
+      if (result.success == true) {
+        this.notificationList.map((m) => (m.read = true));
+        this.count = 0;
+      }
+    });
   }
 
   async openNotify(item: NotificationDto) {
