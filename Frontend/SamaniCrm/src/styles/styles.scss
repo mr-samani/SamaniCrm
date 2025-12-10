@@ -141,3 +141,10 @@ html[data-bs-theme='dark'] {
     background-color: var(--bs-dark) !important;
   }
 }
+
+fieldset {
+  legend {
+    float: none;
+    width: auto;
+  }
+}

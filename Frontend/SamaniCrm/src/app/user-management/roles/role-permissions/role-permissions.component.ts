@@ -16,6 +16,7 @@ export class RolePermissionsListComponent extends AppComponentBase implements On
   loading = true;
   isSaving = false;
   list: TreeViewModel[] = [];
+  selectedBasePermission: TreeViewModel[] = [];
   roleName!: string;
   constructor(
     injector: Injector,

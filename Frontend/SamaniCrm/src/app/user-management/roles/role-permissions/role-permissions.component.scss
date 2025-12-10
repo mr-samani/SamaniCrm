@@ -1,0 +1,24 @@
+.nav-tabs.flex-column .nav-link {
+  padding: 0.675rem 0;
+  margin-bottom: 0.25rem;
+}
+.nav-pills .nav-link:not(.active):hover {
+  background-color: #686b6e14;
+}
+
+.nav-link:not(.active):hover,
+.nav-link:not(.active):focus,
+.nav-link:not(.active):active {
+  border-color: #686b6e14;
+  color: #161616;
+  cursor: pointer !important;
+}
+
+.nav-item {
+  border-radius: 8px;
+}
+
+.sticky-top {
+  position: sticky;
+  top: 75px;
+}
