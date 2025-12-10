@@ -51,11 +51,22 @@ public class ExternalLoginService : IExternalLoginService
         response.EnsureSuccessStatusCode();
 
         string access_token = result.AccessToken;
+        string refresh_token = result.RefreshToken;
         string idToken = result.IdToken;
 
         var output = new ExternalLoginResult();
         switch (provider)
         {
+            case ExternalProviderTypeEnum.Google:
+                var handler1 = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+                var jwt1 = handler1.ReadJwtToken(idToken ?? access_token);
+                output.Email = jwt1.Claims.FirstOrDefault(c => c.Type == "email")?.Value
+                            ?? jwt1.Claims.FirstOrDefault(c => c.Type == "preferred_username")?.Value;
+                output.Name = jwt1.Claims.FirstOrDefault(c => c.Type == "name")?.Value ?? output.Email;
+                output.Image = jwt1.Claims.FirstOrDefault(c => c.Type == "picture")?.Value ?? "";
+                output.UserName = output.Email;
+                break;
+
             case ExternalProviderTypeEnum.Microsoft:
                 var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
                 var jwt = handler.ReadJwtToken(idToken ?? access_token);
