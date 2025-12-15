@@ -160,6 +160,7 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
     event.chipInput!.clear();
   }
   save() {
+    debugger;
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.notify.warning(this.l('CompleteFormField'));

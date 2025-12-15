@@ -1,7 +1,8 @@
 .tab-group-container {
+  --oc-tab-bg: #fff;
   --oc-tab-border: #d7e1ea;
   --oc-tab-hover-bg: rgba(215, 225, 234, 0.7);
-  padding: 20px;
+  // padding: 20px;
   background-color: inherit; //var(--bs-body-bg);
   position: relative;
 
@@ -15,16 +16,7 @@
     vertical-align: bottom;
     white-space: nowrap;
     line-height: 1;
-    &:before {
-      border-bottom: 2px solid var(--oc-tab-border);
-      bottom: 0;
-      content: ' ';
-      height: 2px;
-      position: absolute;
-      z-index: 9;
-      left: -14px;
-      right: -14px;
-    }
+    padding: 0 25px;
 
     .tab-item {
       background: transparent;
@@ -34,13 +26,13 @@
       overflow: visible;
       padding-bottom: 3px;
       position: relative;
-      top: -1px;
+      top: 3px;
       z-index: 11;
 
       .title {
         box-sizing: border-box;
         display: inline-block;
-        padding: 4px 25px 0;
+        padding: 4px 12px 0;
         position: relative;
         z-index: 10;
         display: flex;
@@ -65,7 +57,7 @@
 
         &:before,
         &:after {
-          background: transparent;
+          background: var(--oc-tab-bg);
           border-top: 2px solid var(--oc-tab-border);
           bottom: -2px;
           content: '';
@@ -83,18 +75,17 @@
         z-index: 12;
 
         &:before {
-          background-color: var(--bs-body-bg);
-          bottom: -1px;
+          background-color: var(--oc-tab-bg);
+          bottom: -3px;
           content: ' ';
-          height: 2.4px;
-          left: 2px;
+          height: 7.4px;
+          left: -8px;
           position: absolute;
-          right: 2px;
-        }
-        span.tab-name {
-          padding: 0px 10px;
+          right: -7px;
+          z-index: 20;
         }
         .title {
+          background: var(--oc-tab-bg);
           border-top-color: #d6d6d6;
           z-index: 12;
 
@@ -106,7 +97,7 @@
             display: block;
             border-left: 2px solid var(--oc-tab-border);
             border-radius: 8px 0 0 0;
-            left: 0;
+            left: -12px;
             transform: skewX(-10deg);
           }
 
@@ -114,7 +105,7 @@
             display: block;
             border-radius: 0 8px 0 0;
             border-right: 2px solid var(--oc-tab-border);
-            right: 0;
+            right: -12px;
             transform: skewX(10deg);
           }
         }
@@ -126,5 +117,13 @@
         transition: all 300ms;
       }
     }
+  }
+}
+
+body.color-scheme-dark {
+  .tab-group-container {
+    --oc-tab-bg: rgb(37, 37, 37);
+    --oc-tab-border: #414141;
+    --oc-tab-hover-bg: #294e6fb3;
   }
 }

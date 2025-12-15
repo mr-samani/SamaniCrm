@@ -15,26 +15,6 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01" #navbarCollapse>
-      <div class="user-block navbar-brand" [mat-menu-trigger-for]="userMenu">
-        <img *ngIf="user?.profilePicture" [src]="user?.profilePicture" [alt]="user?.userName" />
-        <img *ngIf="!user?.profilePicture" src="/images/profile-picture.jpg" [alt]="user?.userName" />
-        <span>{{ user?.userName }}</span>
-      </div>
-      <mat-menu #userMenu="matMenu">
-        <button mat-menu-item (click)="closeNavbar()">
-          <i class="fa fa-user mx-1"></i>
-          {{ 'Profile' | translate }}
-        </button>
-        <button mat-menu-item>
-          <i class="fa fa-lock mx-1"></i>
-          {{ 'ChangePassword' | translate }}
-        </button>
-        <button mat-menu-item (click)="logout(); closeNavbar()">
-          <i class="fa fa-power-off mx-1"></i>
-          {{ 'Logout' | translate }}
-        </button>
-      </mat-menu>
-
       <ul class="navbar-nav mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/dashboard']" routerLinkActive="active" (click)="closeNavbar()">
@@ -144,6 +124,26 @@
         </button>
       </mat-menu>
       <!-- //language -->
+
+      <div class="user-block navbar-brand" [mat-menu-trigger-for]="userMenu">
+        <img *ngIf="user?.profilePicture" [src]="user?.profilePicture" [alt]="user?.userName" />
+        <img *ngIf="!user?.profilePicture" src="/images/profile-picture.jpg" [alt]="user?.userName" />
+        <span>{{ user?.userName }}</span>
+      </div>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="closeNavbar()" routerLink="/dashboard/user-profile">
+          <i class="fa fa-user mx-1"></i>
+          {{ 'UserProfile' | translate }}
+        </button>
+        <button mat-menu-item (click)="closeNavbar()" routerLink="/dashboard/user-profile" [fragment]="'password'">
+          <i class="fa fa-lock mx-1"></i>
+          {{ 'ChangePassword' | translate }}
+        </button>
+        <button mat-menu-item (click)="logout(); closeNavbar()">
+          <i class="fa fa-power-off mx-1"></i>
+          {{ 'Logout' | translate }}
+        </button>
+      </mat-menu>
     </div>
   </div>
 </nav>

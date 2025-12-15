@@ -1,4 +1,13 @@
-import { AfterContentInit, Component, ContentChildren, EventEmitter, Input, Output, QueryList } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  ContentChildren,
+  EventEmitter,
+  Input,
+  Output,
+  QueryList,
+  ViewEncapsulation,
+} from '@angular/core';
 import { TabItemComponent } from './tab-item/tab-item.component';
 import { CommonModule } from '@angular/common';
 
@@ -7,6 +16,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './tab-group.component.html',
   styleUrls: ['./tab-group.component.scss'],
   standalone: false,
+  encapsulation: ViewEncapsulation.None,
 })
 export class TabGroupComponent implements AfterContentInit {
   @Input() showPlusButton = false;

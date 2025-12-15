@@ -46,8 +46,12 @@ body {
   margin: 0;
   background: #eef0f8;
   --border-color: #e1e1e1;
+  --subheader-bg: #f34100;
+  --subheader-fg: #fff;
+
   &.color-scheme-dark {
     --border-color: #383838;
+    --subheader-bg: #3f51b5;
     background-color: #252222;
     color: #eee;
 

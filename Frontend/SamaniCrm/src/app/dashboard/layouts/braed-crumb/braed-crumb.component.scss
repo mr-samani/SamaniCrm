@@ -1,6 +1,7 @@
 .bread-crumb {
-  background: var(--bs-body-bg);
-  border-bottom: 1px var(--border-color) solid;
+  background: var(--subheader-bg);
+  color: var(--subheader-fg);
+  // border-bottom: 1px var(--border-color) solid;
   padding: 8px 15px;
   display: flex;
   align-items: center;

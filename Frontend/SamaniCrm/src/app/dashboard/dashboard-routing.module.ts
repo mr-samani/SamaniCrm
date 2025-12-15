@@ -11,6 +11,11 @@ const routes: Routes = [
       data: dashboardResolver,
     },
     children: [
+      {
+        path: 'user-profile',
+        loadComponent: () => import('./user-profile/user-profile.component').then((c) => c.UserProfileComponent),
+      },
+
       { path: 'setting', loadChildren: () => import('./settings/settings.module').then((m) => m.SettingsModule) },
       // {
       //   path: 'media',
