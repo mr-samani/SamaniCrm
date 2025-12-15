@@ -86,7 +86,7 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
       });
   }
 
-  remove(item: TreeProductCategory) {
+  remove(item: TreeProductCategory, parent?: TreeProductCategory) {
     this.confirmMessage(`${this.l('Delete')}:${item?.title}`, this.l('AreYouSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
@@ -94,9 +94,20 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
           .deleteProductCategory(new DeleteProductCategoryCommand({ id: item.id }))
           .pipe(finalize(() => this.hideMainLoading()))
           .subscribe((response) => {
+            debugger
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));
-              this.getList();
+              if (!parent) {
+                let index = this.list.findIndex((x) => x.id == item.id);
+                this.list.splice(index, 1);
+              } else {
+                if (parent.children) {
+                  let index = parent.children.findIndex((x) => x.id == item.id);
+                  parent.children.splice(index, 1);
+                } else {
+                  this.getList();
+                }
+              }
             }
           });
       }

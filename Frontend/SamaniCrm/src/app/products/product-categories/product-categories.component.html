@@ -30,50 +30,52 @@
 <div class="d-flex align-items-center justify-content-center py-5" *ngIf="loading">
   <mat-spinner diameter="30" color="primary"></mat-spinner>
 </div>
-<div class="tree">
-  <ng-container *ngTemplateOutlet="categoryTemplate; context: { $implicit: list }"></ng-container>
-</div>
 
-<ng-template #categoryTemplate let-list>
-  <ul>
-    <li
-      *ngFor="let item of list; let i = index"
-      class="node"
-      [class.close-child]="!item.isOpen"
-      [class.last]="i == list.length - 1">
-      <div class="inner">
-        <span
-          class="tree-icon"
-          [class.isOpen]="item.isOpen"
-          [class.no-child]="!item.hasChildren && (!item.children || item.children.length == 0)"
-          (click)="openCloseFolder(item)"></span>
+<ng-container *ngTemplateOutlet="categoryTemplate; context: { $implicit: list }"></ng-container>
 
-        <span
-          [class.icon-folder]="!item.isOpen && item.hasChildren"
-          [class.icon-folder-open]="item.isOpen && item.hasChildren"
-          [class.icon-file]="!item.hasChildren"></span>
-
-        <div class="checkbox-container" (click)="onChange(item)">
+<ng-template #categoryTemplate let-list let-parent="parent">
+  <div class="tree">
+    <ul>
+      <li
+        *ngFor="let item of list; let i = index"
+        class="node"
+        [class.close-child]="!item.isOpen"
+        [class.last]="i == list.length - 1">
+        <div class="inner">
           <span
-            class="checkbox"
-            [class.checked]="item.isActive"
-            [class.indeterminate]="item.hasUnSelectedChildren"
-            [class.squre]="item.isActive && item.hasUnSelectedChildren"></span>
-          <img *ngIf="item.image" [src]="baseUrl + '/' + item.image" class="img-circle" />
-          <img *ngIf="!item.image" src="/images/default-image.png" class="img-circle img-cover" />
-          <button type="button" (click)="remove(item)" class="btn btn-icon">
-            <i class="fa fa-trash"></i>
-          </button>
-          <button type="button" (click)="openCreateOrEditDialog(item)" class="btn btn-icon">
-            <i class="fa fa-edit"></i>
-          </button>
-          <span [title]="item.description">{{ item.title }}</span>
-        </div>
-      </div>
+            class="tree-icon"
+            [class.isOpen]="item.isOpen"
+            [class.no-child]="!item.hasChildren && (!item.children || item.children.length == 0)"
+            (click)="openCloseFolder(item)"></span>
 
-      @if (item.children) {
-        <ng-container *ngTemplateOutlet="categoryTemplate; context: { $implicit: item.children }"></ng-container>
-      }
-    </li>
-  </ul>
+          <span
+            [class.icon-folder]="!item.isOpen && item.hasChildren"
+            [class.icon-folder-open]="item.isOpen && item.hasChildren"
+            [class.icon-file]="!item.hasChildren"></span>
+
+          <div class="checkbox-container" (click)="onChange(item)">
+            <span
+              class="checkbox"
+              [class.checked]="item.isActive"
+              [class.indeterminate]="item.hasUnSelectedChildren"
+              [class.squre]="item.isActive && item.hasUnSelectedChildren"></span>
+            <img *ngIf="item.image" [src]="baseUrl + '/' + item.image" class="img-circle" />
+            <img *ngIf="!item.image" src="/images/default-image.png" class="img-circle img-cover" />
+            <button type="button" (click)="remove(item, parent)" class="btn btn-icon">
+              <i class="fa fa-trash"></i>
+            </button>
+            <button type="button" (click)="openCreateOrEditDialog(item)" class="btn btn-icon">
+              <i class="fa fa-edit"></i>
+            </button>
+            <span [title]="item.description">{{ item.title }}</span>
+          </div>
+        </div>
+
+        @if (item.children) {
+          <ng-container
+            *ngTemplateOutlet="categoryTemplate; context: { $implicit: item.children, parent: item }"></ng-container>
+        }
+      </li>
+    </ul>
+  </div>
 </ng-template>
