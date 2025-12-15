@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using SamaniCrm.Application.FileManager.Commands;
+using SamaniCrm.Core;
 using System.Net;
 using System.Text;
 using tusdotnet;
@@ -9,7 +10,6 @@ namespace SamaniCrm.Api.TUS
 {
     public static class TusRouteMap
     {
-        public static string[] AllowedTypes { get; set; } = ["jpg", "png", "jpeg", "tiff"];
 
         public static WebApplication InitializeTUS(this WebApplication app, IConfiguration configuration)
         {
@@ -42,7 +42,7 @@ namespace SamaniCrm.Api.TUS
                             ctx.FailRequest("parentId is required");
                         if (!meta.ContainsKey("filename") || !meta.ContainsKey("filetype"))
                             ctx.FailRequest("filename and filetype are required");
-                        if (!AllowedTypes.Contains(meta["filetype"].GetString(UTF8Encoding.UTF8)))
+                        if (!AppConsts.AllowedTusUploadTypes.Contains(meta["filetype"].GetString(UTF8Encoding.UTF8)))
                         {
                             ctx.FailRequest("unsupported file type");
                         }
