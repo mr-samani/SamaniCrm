@@ -7,7 +7,7 @@ public class DashboardItemDto
 {
     public Guid? Id { get; set; }
     public Guid DashboardId { get; set; }
-    public JsonObject Position { get; set; } = new JsonObject() { };
+    public string Position { get; set; } = "";
     [MaxLength(100)]
     public string? ComponentName { get; set; }
     [MaxLength(2000)]
