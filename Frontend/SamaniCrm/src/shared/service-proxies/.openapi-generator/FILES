@@ -6,6 +6,7 @@ api/account.service.ts
 api/api.ts
 api/captcha.service.ts
 api/common.service.ts
+api/dasboard.service.ts
 api/file-manager.service.ts
 api/file-serve.service.ts
 api/language.service.ts
@@ -40,6 +41,8 @@ model/create-or-edit-localize-key-command.ts
 model/create-or-edit-menu-command.ts
 model/create-or-edit-page-meta-data-command.ts
 model/create-or-update-currency-command.ts
+model/create-or-update-dashboard-command.ts
+model/create-or-update-dashboard-item-command.ts
 model/create-or-update-product-attribute-command.ts
 model/create-or-update-product-category-command.ts
 model/create-or-update-product-command.ts
@@ -49,7 +52,13 @@ model/currency-dto-list-api-response.ts
 model/currency-dto.ts
 model/custom-block-dto-list-api-response.ts
 model/custom-block-dto.ts
+model/dashboard-dto-list-api-response.ts
+model/dashboard-dto.ts
+model/dashboard-item-dto-list-api-response.ts
+model/dashboard-item-dto.ts
 model/delete-currency-command.ts
+model/delete-dashboard-command.ts
+model/delete-dashboard-item-command.ts
 model/delete-file-or-folder-command.ts
 model/delete-language-command.ts
 model/delete-localize-key-command.ts

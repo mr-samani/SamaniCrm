@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { AccountServiceProxy } from './api/account.service';
 import { CaptchaServiceProxy } from './api/captcha.service';
 import { CommonServiceProxy } from './api/common.service';
+import { DasboardServiceProxy } from './api/dasboard.service';
 import { FileManagerServiceProxy } from './api/file-manager.service';
 import { FileServeServiceProxy } from './api/file-serve.service';
 import { LanguageServiceProxy } from './api/language.service';
@@ -28,6 +29,7 @@ import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
     AccountServiceProxy,
     CaptchaServiceProxy,
     CommonServiceProxy,
+    DasboardServiceProxy,
     FileManagerServiceProxy,
     FileServeServiceProxy,
     LanguageServiceProxy,
