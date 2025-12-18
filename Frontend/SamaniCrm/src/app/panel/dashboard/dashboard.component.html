@@ -1,6 +1,20 @@
 <sub-header [title]="'Dashboard' | translate">
+  <button class="btn btn-primary" (click)="openDahboardDialog()">
+    {{ 'CreateDashboard' | translate }}
+  </button>
   <switch [(ngModel)]="editMode">Edit</switch>
 </sub-header>
 <div class="panel-content">
-    
+  <mat-progress-bar *ngIf="loading || loadingItems" class="my-5" [mode]="'indeterminate'"></mat-progress-bar>
+  <tab-group (selectedIndexChange)="onChangeDashboard($event)" [selectedIndex]="selectedIndex">
+    @for (dashboard of dashboards; track dashboard.id) {
+      <tab-item [title]="'General' | translate" *ngIf="AppPermissions.Administrator | permission">
+        <grid-layout [options]="options">
+          @for (item of dashboardItems; track item.id) {
+            <grid-item></grid-item>
+          }
+        </grid-layout>
+      </tab-item>
+    }
+  </tab-group>
 </div>

@@ -20,8 +20,15 @@ import { CommonModule } from '@angular/common';
 })
 export class TabGroupComponent implements AfterContentInit {
   @Input() showPlusButton = false;
+
   @Output() onAddTab = new EventEmitter();
-  @Output() selectedIndex = new EventEmitter<number>();
+
+  @Input('selectedIndex') set setIndex(val: number) {
+    if (this.tabs && this.tabs.get(val) != undefined) {
+      this.selectTab(this.tabs.get(val)!, val);
+    }
+  }
+  @Output() selectedIndexChange = new EventEmitter<number>();
   @ContentChildren(TabItemComponent) tabs?: QueryList<TabItemComponent>;
   rndId = Math.round(Math.random() * 5000);
   constructor() {}
@@ -45,7 +52,7 @@ export class TabGroupComponent implements AfterContentInit {
     this.tabs?.toArray().forEach((tab) => (tab.active = false));
     // activate the tab the user has clicked on.
     tab.active = true;
-    this.selectedIndex.emit(index);
+    this.selectedIndexChange.emit(index);
   }
 
   onClickPlus() {
