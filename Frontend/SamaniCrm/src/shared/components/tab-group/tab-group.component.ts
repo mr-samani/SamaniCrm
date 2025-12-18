@@ -1,15 +1,18 @@
 import {
   AfterContentInit,
+  AfterViewInit,
   Component,
   ContentChildren,
   EventEmitter,
   Input,
+  OnDestroy,
   Output,
   QueryList,
   ViewEncapsulation,
 } from '@angular/core';
 import { TabItemComponent } from './tab-item/tab-item.component';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'tab-group',
@@ -18,7 +21,7 @@ import { CommonModule } from '@angular/common';
   standalone: false,
   encapsulation: ViewEncapsulation.None,
 })
-export class TabGroupComponent implements AfterContentInit {
+export class TabGroupComponent implements OnDestroy, AfterViewInit {
   @Input() showPlusButton = false;
 
   @Output() onAddTab = new EventEmitter();
@@ -29,20 +32,20 @@ export class TabGroupComponent implements AfterContentInit {
     }
   }
   @Output() selectedIndexChange = new EventEmitter<number>();
-  @ContentChildren(TabItemComponent) tabs?: QueryList<TabItemComponent>;
+  @ContentChildren(TabItemComponent) tabs = new QueryList<TabItemComponent>();
   rndId = Math.round(Math.random() * 5000);
+  private index = -1;
   constructor() {}
 
-  ngAfterContentInit() {
+  ngAfterViewInit(): void {
     setTimeout(() => {
-      // get all active tabs
       let activeTabs = this.tabs?.filter((tab) => tab.active);
-      // if there is no active tab set, activate the first
-      if (activeTabs?.length === 0 && this.tabs) {
+      if (this.index < 0 && activeTabs?.length === 0 && this.tabs) {
         this.selectTab(this.tabs.first, 0);
       }
-    }, 10);
+    }, 100);
   }
+  ngOnDestroy(): void {}
 
   selectTab(tab: TabItemComponent, index: number) {
     if (!tab) {

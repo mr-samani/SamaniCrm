@@ -94,7 +94,6 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
           .deleteProductCategory(new DeleteProductCategoryCommand({ id: item.id }))
           .pipe(finalize(() => this.hideMainLoading()))
           .subscribe((response) => {
-            debugger
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));
               if (!parent) {

@@ -1,1 +1,26 @@
-/* custom styles dashboard */
+.widget-panel {
+  position: fixed;
+  bottom: 15px;
+  left: 15px;
+  border-radius: 10px;
+  background: #2e2e2e3b;
+  padding: 10px;
+}
+.widget-actions {
+  position: absolute;
+  left: 10px;
+  top: -100%;
+  background: #3f51b5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0 10px 10px;
+  padding: 0 10px;
+  transition: top 300ms;
+}
+
+grid-item:hover {
+  .widget-actions {
+    top: 0;
+  }
+}

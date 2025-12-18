@@ -40,6 +40,7 @@ namespace SamaniCrm.Application.DashboardManager
                     ComponentName = request.ComponentName,
                     DashboardId = request.DashboardId,
                     Data = request.Data,
+                    Position= request.Position
                 };
 
                 var r = await _dbContext.DashboardItems.AddAsync(newItem, cancellationToken);
@@ -50,6 +51,7 @@ namespace SamaniCrm.Application.DashboardManager
                 found.ComponentName = request.ComponentName;
                 found.DashboardId = request.DashboardId;
                 found.Data = request.Data;
+                found.Position= request.Position;
             }
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
 

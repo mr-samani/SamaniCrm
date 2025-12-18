@@ -28,12 +28,11 @@ namespace SamaniCrm.Application.DashboardManager
             }
             var userId = Guid.Parse(_currentUser.UserId);
 
-            var entity = await _dbContext.DashboardItems.Where(
+            await _dbContext.DashboardItems.Where(
                 x => x.Dashboard.UserId == userId &&
-                x.Id == request.Id).FirstAsync();
-            if (entity == null)
-                throw new NotFoundException("Dashboard not found.");
-            var result = await _dbContext.Dashboards.ExecuteDeleteAsync(cancellationToken);
+                x.Id == request.Id).ExecuteDeleteAsync();
+
+            var result = await _dbContext.SaveChangesAsync(cancellationToken);
             return result > 0;
         }
     }

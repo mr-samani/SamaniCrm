@@ -7,14 +7,41 @@
 <div class="panel-content">
   <mat-progress-bar *ngIf="loading || loadingItems" class="my-5" [mode]="'indeterminate'"></mat-progress-bar>
   <tab-group (selectedIndexChange)="onChangeDashboard($event)" [selectedIndex]="selectedIndex">
-    @for (dashboard of dashboards; track dashboard.id) {
-      <tab-item [title]="'General' | translate" *ngIf="AppPermissions.Administrator | permission">
-        <grid-layout [options]="options">
+    @for (dashboard of dashboards; track dashboard.id; let i = $index) {
+      <tab-item [title]="dashboard.title" [active]="i == 0">
+        <grid-layout [options]="options" (layoutChange)="onChangeLayout($event)">
           @for (item of dashboardItems; track item.id) {
-            <grid-item></grid-item>
+            <grid-item [id]="item.id" [config]="item.config">
+              @if (editMode) {
+                <div class="widget-actions">
+                  <button class="btn btn-icon" (click)="deleteWidget(item)">
+                    <i class="fa fa-trash"></i>
+                  </button>
+
+                  <button class="btn btn-icon" (click)="editWidget(item, c)">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                </div>
+              }
+              <ng-container
+                [ngComponentOutlet]="item.component"
+                [ngComponentOutletInputs]="{ item }"
+                #c="ngComponentOutlet"></ng-container>
+            </grid-item>
           }
         </grid-layout>
       </tab-item>
     }
   </tab-group>
 </div>
+
+@if (editMode) {
+  <div class="widget-panel">
+    <button mat-icon-button color="accent" (click)="openWidgetDialog()">
+      <i class="fa fa-plus"></i>
+    </button>
+    <button mat-icon-button color="accent" (click)="deleteDashboard()">
+      <i class="fa fa-trash"></i>
+    </button>
+  </div>
+}

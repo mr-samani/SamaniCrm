@@ -155,6 +155,7 @@ export * from './two-factor-login-command';
 export * from './two-factor-type-enum';
 export * from './unit-api-response';
 export * from './update-batch-localize-key-command';
+export * from './update-dashboard-items-command';
 export * from './update-page-content-command';
 export * from './update-role-command';
 export * from './update-security-setting-command';

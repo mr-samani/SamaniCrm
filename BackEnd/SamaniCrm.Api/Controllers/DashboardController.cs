@@ -65,6 +65,17 @@ namespace SamaniCrm.Host.Controllers
             var result = await _mediator.Send(input);
             return ApiOk(result);
         }
+        
+        [HttpPost("UpdateDashboardItems")]
+        [Permission(AppPermissions.Dashboard_Item_Edit)]
+        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> UpdateDashboardItems(UpdateDashboardItemsCommand input)
+        {
+            var result = await _mediator.Send(input);
+            return ApiOk(result);
+        }
+
+
 
         [HttpPost("DeleteDashboardItem")]
         [Permission(AppPermissions.Dashboard_Item_Delete)]
