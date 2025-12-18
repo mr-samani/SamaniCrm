@@ -128,12 +128,12 @@ export class DashboardComponent extends AppComponentBase implements OnInit {
         w: item.w,
         h: item.h,
       });
-      if (!equals(find, previous)) {
-        if (find.data && typeof find.data == 'object') {
-          find.data = JSON.stringify(find.data);
-        }
-        changedList.push(find);
+      //if (!equals(find, previous)) {
+      if (find.data && typeof find.data == 'object') {
+        find.data = JSON.stringify(find.data);
       }
+      changedList.push(find);
+      // }
     }
 
     if (changedList.length == 0) return;
