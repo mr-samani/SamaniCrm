@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Domain.Entities.Dashboard;
 using SamaniCrm.Domain.Entities.PageBuilderEntities;
 using SamaniCrm.Domain.Entities.ProductEntities;
 using System;
@@ -55,6 +56,11 @@ namespace SamaniCrm.Application.Common.Interfaces
 
         public DbSet<CustomBlock> CustomBlocks { get; set; }
         public DbSet<ExternalProvider> ExternalProviders { get; set; }
+
+        #region Dashboard
+        public DbSet<Dashboard> Dashboards { get; set; }
+        public DbSet<DashboardItem> DashboardItems { get; set; }
+        #endregion
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
