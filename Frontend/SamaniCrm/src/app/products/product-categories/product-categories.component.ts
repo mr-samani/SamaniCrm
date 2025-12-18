@@ -42,7 +42,7 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
     private jsonFileReaderService: JsonFileReaderService,
   ) {
     super(injector);
-    this.breadcrumb.list = [{ name: this.l('ProductCategories'), url: '/dashboard/products/categories' }];
+    this.breadcrumb.list = [{ name: this.l('ProductCategories'), url: '/panel/products/categories' }];
   }
 
   ngOnInit(): void {

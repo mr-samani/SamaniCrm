@@ -20,7 +20,7 @@ export class GridGeneratorComponent extends AppComponentBase implements OnInit {
       borderWidth: 1,
     },
   };
-  layouts: DashboardItem[] = [
+  layouts: PanelItem[] = [
     { id: '1', config: new GridItemConfig(3, 0, 2, 3) },
     { id: '2', config: new GridItemConfig(5, 3, 2, 4) },
     { id: '3', config: new GridItemConfig(0, 6, 2, 2) },
@@ -59,7 +59,7 @@ export class GridGeneratorComponent extends AppComponentBase implements OnInit {
   }
 }
 
-export interface DashboardItem {
+export interface PanelItem {
   config: GridItemConfig;
   id?: string;
 }
@@ -75,7 +75,7 @@ export class GridItemConfig {
     this.h = h;
   }
 }
-function generateGridLayout(layout: DashboardItem[], totalColumns = 12): { html: string; style: string } {
+function generateGridLayout(layout: PanelItem[], totalColumns = 12): { html: string; style: string } {
   // Determine max rows
   const maxRow = layout.reduce((max, item) => Math.max(max, item.config.y + item.config.h), 0);
   const containerStyle = `
@@ -107,7 +107,7 @@ function generateGridLayout(layout: DashboardItem[], totalColumns = 12): { html:
   };
 }
 
-function generateGridLayoutV2(layouts: DashboardItem[], totalColumns = 12) {
+function generateGridLayoutV2(layouts: PanelItem[], totalColumns = 12) {
   const containerStyle = `
     display: grid;
     grid-template-columns: repeat(${totalColumns}, 1fr);

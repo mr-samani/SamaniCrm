@@ -51,7 +51,7 @@
     <a
       *ngIf="AppPermissions.Products_List | permission"
       mat-menu-item
-      [routerLink]="['/dashboard/products/product-list']"
+      [routerLink]="['/panel/products/product-list']"
       [queryParams]="{
         typeId: item.id,
         typeTitle: item.name,
@@ -59,7 +59,7 @@
       <i class="fa fa-product mx-1"></i>
       <span>{{ 'Products' | translate }}</span>
     </a>
-    <a mat-menu-item [routerLink]="['/dashboard/products/attributes/' + item.id]" [queryParams]="{ name: item.name }">
+    <a mat-menu-item [routerLink]="['/panel/products/attributes/' + item.id]" [queryParams]="{ name: item.name }">
       <i class="fa fa-list mx-1"></i>
       <span>{{ 'ViewAttributes' | translate }}</span>
     </a>

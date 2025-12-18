@@ -20,7 +20,7 @@
     <mat-menu #menu="matMenu">
       <a
         mat-menu-item
-        routerLink="/dashboard/roles/permissions/{{ item.id }}"
+        routerLink="/panel/roles/permissions/{{ item.id }}"
         *ngIf="AppPermissions.RoleManagement_EditRolePermissions | permission">
         <i class="fa fa-check-list mx-1"></i>
         <span>{{ 'Permissions' | translate }}</span>

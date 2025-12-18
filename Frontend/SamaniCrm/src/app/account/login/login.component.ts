@@ -72,7 +72,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
             if (this.returnUrl) {
               window.location.href = this.returnUrl;
             } else {
-              this.router.navigate(['/dashboard']);
+              this.router.navigate(['/panel']);
             }
           } else if (result.success && result.data?.enableTwoFactor) {
             this.getTwoFactorCode = true;
@@ -107,7 +107,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
             if (this.returnUrl) {
               window.location.href = this.returnUrl;
             } else {
-              this.router.navigate(['/dashboard']);
+              this.router.navigate(['/panel']);
             }
           }
         },

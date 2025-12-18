@@ -8,7 +8,7 @@ import { NotifyService } from '@shared/services/notify.service';
 import { LanguageService } from '@shared/services/language.service';
 import { NgxAlertModalService } from 'ngx-alert-modal';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
-import { DashboardService } from './dashboard/dashboard/dashboard.service';
+import { PanelService } from './panel/panel.service';
 import { DOCUMENT } from '@angular/common';
 import { AppPermissions } from '@shared/permissions/app-permissions';
 export abstract class AppComponentBase {
@@ -24,7 +24,7 @@ export abstract class AppComponentBase {
   alert: NgxAlertModalService;
   breadcrumb: BreadcrumbService;
 
-  dashboardService: DashboardService;
+  panelService: PanelService;
   AppPermissions = AppPermissions;
   doc: Document;
   constructor(injector: Injector) {
@@ -39,7 +39,7 @@ export abstract class AppComponentBase {
     this.language = injector.get(LanguageService);
     this.alert = injector.get(NgxAlertModalService);
     this.breadcrumb = injector.get(BreadcrumbService);
-    this.dashboardService = injector.get(DashboardService);
+    this.panelService = injector.get(PanelService);
     this.doc = injector.get(DOCUMENT) as Document;
   }
 

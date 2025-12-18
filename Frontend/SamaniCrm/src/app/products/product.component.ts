@@ -13,7 +13,7 @@ import { AppComponentBase } from '@app/app-component-base';
 export class ProductComponent extends AppComponentBase implements OnInit {
   constructor(injector: Injector) {
     super(injector);
-    this.breadcrumb.list = [{ name: this.l('Products'), url: '/dashboard/products' }];
+    this.breadcrumb.list = [{ name: this.l('Products'), url: '/panel/products' }];
 
   }
 

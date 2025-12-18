@@ -38,7 +38,7 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
     private productService: ProductServiceProxy,
   ) {
     super(injector);
-    this.breadcrumb.list = [{ name: this.l('Products'), url: '/dashboard/products/product-list' }];
+    this.breadcrumb.list = [{ name: this.l('Products'), url: '/panel/products/product-list' }];
 
     this.form = this.fb.group({
       category: ['', [Validators.required]],
@@ -185,7 +185,7 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
         next: (response) => {
           if (response.success) {
             this.notify.success(this.l('SaveSuccessFully'));
-            this.router.navigate(['/dashboard/products/product-list']);
+            this.router.navigate(['/panel/products/product-list']);
           }
         },
       });
