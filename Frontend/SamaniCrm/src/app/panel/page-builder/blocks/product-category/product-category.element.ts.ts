@@ -1,3 +1,4 @@
+import { provideZoneChangeDetection } from "@angular/core";
 import { provideHttpClient } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AddComponentTypeOptions, BlockProperties } from 'grapesjs';
@@ -8,7 +9,7 @@ import { createCustomElement } from '@angular/elements';
 
 export async function defineProductCategoryElement() {
   const { injector } = await bootstrapApplication(ProductCategoryBlockComponent, {
-    providers: [provideHttpClient()],
+    providers: [provideZoneChangeDetection(),provideHttpClient()],
   });
 
   const el = createCustomElement(ProductCategoryBlockComponent, { injector });

@@ -105,30 +105,30 @@ img {
 /*notify */
 .notify-success {
   background-color: #00bb73;
-  --mdc-snackbar-container-color: #00bb73;
+  --mat-snackbar-container-color: #00bb73;
   color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
+  --mat-snackbar-supporting-text-color: #fff;
 }
 
 .notify-warning {
   background-color: #ff7b00;
-  --mdc-snackbar-container-color: #ff7b00;
+  --mat-snackbar-container-color: #ff7b00;
   color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
+  --mat-snackbar-supporting-text-color: #fff;
 }
 
 .notify-error {
   background-color: #ff0055;
-  --mdc-snackbar-container-color: #ff0055;
+  --mat-snackbar-container-color: #ff0055;
   color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
+  --mat-snackbar-supporting-text-color: #fff;
 }
 
 .notify-info {
   background-color: #0084ff;
-  --mdc-snackbar-container-color: #0084ff;
+  --mat-snackbar-container-color: #0084ff;
   color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
+  --mat-snackbar-supporting-text-color: #fff;
 }
 
 /* end of notify */
