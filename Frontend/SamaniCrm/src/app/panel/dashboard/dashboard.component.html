@@ -9,9 +9,9 @@
   <tab-group (selectedIndexChange)="onChangeDashboard($event)" [selectedIndex]="selectedIndex">
     @for (dashboard of dashboards; track dashboard.id; let i = $index) {
       <tab-item [title]="dashboard.title" [active]="i == 0">
-        <grid-layout [options]="options" (layoutChange)="onChangeLayout($event)">
+        <ngx-grid-layout [editMode]="editMode" [options]="options" (layoutChange)="onChangeLayout($event)">
           @for (item of dashboardItems; track item.id) {
-            <grid-item [id]="item.id" [config]="item.config">
+            <ngx-grid-item [id]="item.id" [config]="item.config">
               @if (editMode) {
                 <div class="widget-actions">
                   <button class="btn btn-icon" (click)="deleteWidget(item)">
@@ -27,9 +27,9 @@
                 [ngComponentOutlet]="item.component"
                 [ngComponentOutletInputs]="{ item }"
                 #c="ngComponentOutlet"></ng-container>
-            </grid-item>
+            </ngx-grid-item>
           }
-        </grid-layout>
+        </ngx-grid-layout>
       </tab-item>
     }
   </tab-group>

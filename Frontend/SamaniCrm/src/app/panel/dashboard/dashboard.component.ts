@@ -6,7 +6,6 @@ import { AppComponentBase } from '@app/app-component-base';
 import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 
 import { SharedModule } from '@shared/shared.module';
-import { GridLayoutModule, IGridLayoutOptions } from 'ngx-drag-drop-kit';
 import { finalize } from 'rxjs';
 import { CreateDashboardComponent } from './create-dashboard/create-dashboard.component';
 import { AddDashboardWidgetComponent } from './add-widget/add-widget.component';
@@ -18,14 +17,14 @@ import { DeleteDashboardItemCommand } from '@shared/service-proxies/model/delete
 import { DeleteDashboardCommand } from '@shared/service-proxies/model/delete-dashboard-command';
 import { MatButtonModule } from '@angular/material/button';
 import { cloneDeep } from 'lodash-es';
-import { equals } from '@ngx-translate/core';
+import { IGridLayoutOptions, NgxGridLayoutModule } from 'ngx-drag-drop-kit';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   standalone: true,
-  imports: [CommonModule, SharedModule, GridLayoutModule, TabGroupModule, MatProgressBarModule, MatButtonModule],
+  imports: [CommonModule, SharedModule, NgxGridLayoutModule, TabGroupModule, MatProgressBarModule, MatButtonModule],
   providers: [DasboardServiceProxy],
 })
 export class DashboardComponent extends AppComponentBase implements OnInit {
