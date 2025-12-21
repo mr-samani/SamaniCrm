@@ -43,7 +43,7 @@ namespace SamaniCrm.Infrastructure.Persistence
             };
 
 
-            var existingCurrency = await dbContext.Currency.ToListAsync();
+            var existingCurrency = await dbContext.Currency.IgnoreQueryFilters().ToListAsync();
             if (!existingCurrency.Any())
             {
                 await dbContext.Currency.AddRangeAsync(IRR, TMN, USD);
