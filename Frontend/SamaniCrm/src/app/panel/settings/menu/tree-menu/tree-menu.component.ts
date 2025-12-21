@@ -1,5 +1,5 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, Inject, Injector, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+
+import { Component, Inject, Injector, Input, OnDestroy, OnInit, ViewEncapsulation, DOCUMENT } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { CdkDragDrop, CdkDragMove } from '@angular/cdk/drag-drop';
 import { Subject, debounceTime, finalize } from 'rxjs';

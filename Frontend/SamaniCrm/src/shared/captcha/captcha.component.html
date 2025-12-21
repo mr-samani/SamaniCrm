@@ -7,31 +7,39 @@
       [(ngModel)]="captchaCode"
       (change)="onChange()"
       [placeholder]="'CaptchaCode' | translate" />
-    <div matSuffix class="d-flex align-items-end">
-      <img [src]="image" alt="captcha" *ngIf="!loading" />
-      <mat-spinner [diameter]="25" *ngIf="loading"></mat-spinner>
-      <button mat-icon-button (click)="reloadCaptcha()" [disabled]="loading" type="button">
-        <i class="fa fa-refresh"></i>
-      </button>
-    </div>
-  </mat-form-field>
-} @else {
-  <div class="row">
-    <div class="col-sm-6">
-      <label>{{ 'CaptchaCode' | translate }}</label>
-      <input
-        type="text"
-        [(ngModel)]="captchaCode"
-        (change)="onChange()"
-        [placeholder]="'CaptchaCode' | translate"
-        class="form-control" />
-    </div>
-    <div class="col-sm-6 d-flex align-items-end">
-      <img [src]="image" alt="captcha" *ngIf="!loading" />
-      <mat-spinner [diameter]="25" *ngIf="loading"></mat-spinner>
-      <button mat-icon-button (click)="reloadCaptcha()" [disabled]="loading" type="button">
-        <i class="fa fa-refresh"></i>
-      </button>
-    </div>
-  </div>
-}
+      <div matSuffix class="d-flex align-items-end">
+        @if (!loading) {
+          <img [src]="image" alt="captcha" />
+        }
+        @if (loading) {
+          <mat-spinner [diameter]="25"></mat-spinner>
+        }
+        <button mat-icon-button (click)="reloadCaptcha()" [disabled]="loading" type="button">
+          <i class="fa fa-refresh"></i>
+        </button>
+      </div>
+    </mat-form-field>
+  } @else {
+    <div class="row">
+      <div class="col-sm-6">
+        <label>{{ 'CaptchaCode' | translate }}</label>
+        <input
+          type="text"
+          [(ngModel)]="captchaCode"
+          (change)="onChange()"
+          [placeholder]="'CaptchaCode' | translate"
+          class="form-control" />
+        </div>
+        <div class="col-sm-6 d-flex align-items-end">
+          @if (!loading) {
+            <img [src]="image" alt="captcha" />
+          }
+          @if (loading) {
+            <mat-spinner [diameter]="25"></mat-spinner>
+          }
+          <button mat-icon-button (click)="reloadCaptcha()" [disabled]="loading" type="button">
+            <i class="fa fa-refresh"></i>
+          </button>
+        </div>
+      </div>
+    }

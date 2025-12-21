@@ -8,7 +8,7 @@
   <ng-container #container><ng-content></ng-content></ng-container>
   <ng-container
     [ngTemplateOutlet]="nestedTreeTpl"
-    [ngTemplateOutletContext]="{ $implicit: block, parent: parent }"></ng-container>
+  [ngTemplateOutletContext]="{ $implicit: block, parent: parent }"></ng-container>
 </div>
 
 <ng-template #nestedTreeTpl let-block let-parent="parent">
@@ -20,9 +20,11 @@
       <button (click)="b.deleteBlock(block, parent)">
         <i class="fa fa-trash"></i>
       </button>
-      <span *ngIf="canDrag" class="drag-handler" ngxDraggable [dragRootElement]="'.block-item'">
-        <i class="fa fa-grip-dots"></i>
-      </span>
+      @if (canDrag) {
+        <span class="drag-handler" ngxDraggable [dragRootElement]="'.block-item'">
+          <i class="fa fa-grip-dots"></i>
+        </span>
+      }
       <span>
         {{ block.name ?? block.tagName ?? BlockTypeEnum[block.type] }}
       </span>
@@ -30,11 +32,12 @@
     <div class="children-blocks" ngxDropList [data]="block.children" (drop)="drop($event)">
       <span class="custom-placeholder2" *ngxPlaceholder></span>
       @if (block.children) {
-        <dynamic-renderer
-          [parent]="block"
-          [block]="child"
-          *ngFor="let child of block.children; let i = index"
+        @for (child of block.children; track child; let i = $index) {
+          <dynamic-renderer
+            [parent]="block"
+            [block]="child"
           [loopIndex]="loopIndex"></dynamic-renderer>
+        }
       }
     </div>
   }

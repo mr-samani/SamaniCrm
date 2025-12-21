@@ -1,13 +1,14 @@
-  <div class="otp-container">
-      <input
-        *ngFor="let ctrl of boxes; let i = index"
-        #otpInput
-        type="text"
-        maxlength="1"
-        class="otp-box"
-        [attr.inputmode]="'numeric'"
-        (input)="onInput($event, i)"
-        (keydown)="onKeyDown($event, i)"
-        (paste)="onPaste($event, i)"
+<div class="otp-container">
+  @for (ctrl of boxes; track ctrl; let i = $index) {
+    <input
+      #otpInput
+      type="text"
+      maxlength="1"
+      class="otp-box"
+      [attr.inputmode]="'numeric'"
+      (input)="onInput($event, i)"
+      (keydown)="onKeyDown($event, i)"
+      (paste)="onPaste($event, i)"
       />
-    </div>
+  }
+</div>

@@ -1,31 +1,6 @@
-<mat-form-field class="w-100" *ngIf="theme == 'material'">
-  <mat-label>{{ 'ProductType' | translate }}</mat-label>
-  <input
-    type="text"
-    matInput
-    [formControl]="myControl"
-    [matAutocomplete]="autoGroup"
-    #trigger="matAutocompleteTrigger"
-    (click)="openPanel(trigger)"
-    (change)="onChangeTextBox()" />
-  <mat-autocomplete #autoGroup="matAutocomplete" [displayWith]="displayFn.bind(this)" (optionSelected)="onChange()">
-    <mat-option disabled *ngIf="isEmpty">
-      {{ 'NotACase' | translate }}
-    </mat-option>
-    <ng-container *ngFor="let item of filteredOptions | async">
-      <mat-option [value]="item">
-        <span>{{ item.title }}</span>
-      </mat-option>
-    </ng-container>
-  </mat-autocomplete>
-  <mat-spinner diameter="20" color="primary" *ngIf="loading" matSuffix></mat-spinner>
-  <button mat-icon-button matSuffix *ngIf="myControl.value && !loading" (click)="reset()">
-    <i class="fa fa-times"></i>
-  </button>
-</mat-form-field>
-
-<mat-form-field class="w-100" *ngIf="theme == 'bootstrap'">
-  <div class="d-flex">
+@if (theme == 'material') {
+  <mat-form-field class="w-100">
+    <mat-label>{{ 'ProductType' | translate }}</mat-label>
     <input
       type="text"
       matInput
@@ -34,19 +9,60 @@
       #trigger="matAutocompleteTrigger"
       (click)="openPanel(trigger)"
       (change)="onChangeTextBox()" />
-    <mat-autocomplete #autoGroup="matAutocomplete" [displayWith]="displayFn.bind(this)" (optionSelected)="onChange()">
-      <mat-option disabled *ngIf="isEmpty">
-        {{ 'NotACase' | translate }}
-      </mat-option>
-      <ng-container *ngFor="let item of filteredOptions | async">
-        <mat-option [value]="item">
-          <span>{{ item.title }}</span>
-        </mat-option>
-      </ng-container>
-    </mat-autocomplete>
-    <mat-spinner diameter="20" color="primary" *ngIf="loading" matSuffix></mat-spinner>
-    <button mat-icon-button matSuffix *ngIf="myControl.value && !loading" (click)="reset()">
-      <i class="fa fa-times"></i>
-    </button>
-  </div>
-</mat-form-field>
+      <mat-autocomplete #autoGroup="matAutocomplete" [displayWith]="displayFn.bind(this)" (optionSelected)="onChange()">
+        @if (isEmpty) {
+          <mat-option disabled>
+            {{ 'NotACase' | translate }}
+          </mat-option>
+        }
+        @for (item of filteredOptions | async; track item) {
+          <mat-option [value]="item">
+            <span>{{ item.title }}</span>
+          </mat-option>
+        }
+      </mat-autocomplete>
+      @if (loading) {
+        <mat-spinner diameter="20" color="primary" matSuffix></mat-spinner>
+      }
+      @if (myControl.value && !loading) {
+        <button mat-icon-button matSuffix (click)="reset()">
+          <i class="fa fa-times"></i>
+        </button>
+      }
+    </mat-form-field>
+  }
+
+  @if (theme == 'bootstrap') {
+    <mat-form-field class="w-100">
+      <div class="d-flex">
+        <input
+          type="text"
+          matInput
+          [formControl]="myControl"
+          [matAutocomplete]="autoGroup"
+          #trigger="matAutocompleteTrigger"
+          (click)="openPanel(trigger)"
+          (change)="onChangeTextBox()" />
+          <mat-autocomplete #autoGroup="matAutocomplete" [displayWith]="displayFn.bind(this)" (optionSelected)="onChange()">
+            @if (isEmpty) {
+              <mat-option disabled>
+                {{ 'NotACase' | translate }}
+              </mat-option>
+            }
+            @for (item of filteredOptions | async; track item) {
+              <mat-option [value]="item">
+                <span>{{ item.title }}</span>
+              </mat-option>
+            }
+          </mat-autocomplete>
+          @if (loading) {
+            <mat-spinner diameter="20" color="primary" matSuffix></mat-spinner>
+          }
+          @if (myControl.value && !loading) {
+            <button mat-icon-button matSuffix (click)="reset()">
+              <i class="fa fa-times"></i>
+            </button>
+          }
+        </div>
+      </mat-form-field>
+    }

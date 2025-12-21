@@ -5,14 +5,16 @@
       <span>{{ 'Filter' | translate }}</span>
     </button>
   </div>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="openCreateOrEditDialog()"
-    *ngIf="AppPermissions.Products_Type_Create | permission">
-    <i class="fa fa-circle-plus mx-1"></i>
-    <span>{{ 'CreateNewType' | translate }}</span>
-  </button>
+  @if (AppPermissions.Products_Type_Create | permission) {
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="openCreateOrEditDialog()"
+      >
+      <i class="fa fa-circle-plus mx-1"></i>
+      <span>{{ 'CreateNewType' | translate }}</span>
+    </button>
+  }
 </div>
 
 <form [formGroup]="form" *filterForm="showFilter" class="filter-form">
@@ -39,7 +41,7 @@
   [fields]="fields"
   [operations]="operations"
   [loading]="loading"
-  (sortChange)="getList($event)"></table-view>
+(sortChange)="getList($event)"></table-view>
 
 <pagination [total]="totalCount" [(page)]="page" [(perPage)]="perPage" (change)="onPageChange($event)"></pagination>
 
@@ -48,28 +50,33 @@
     <i class="fa fa-ellipsis-v"></i>
   </button>
   <mat-menu #menu="matMenu">
-    <a
-      *ngIf="AppPermissions.Products_List | permission"
-      mat-menu-item
-      [routerLink]="['/panel/products/product-list']"
+    @if (AppPermissions.Products_List | permission) {
+      <a
+        mat-menu-item
+        [routerLink]="['/panel/products/product-list']"
       [queryParams]="{
         typeId: item.id,
         typeTitle: item.name,
       }">
-      <i class="fa fa-product mx-1"></i>
-      <span>{{ 'Products' | translate }}</span>
-    </a>
+        <i class="fa fa-product mx-1"></i>
+        <span>{{ 'Products' | translate }}</span>
+      </a>
+    }
     <a mat-menu-item [routerLink]="['/panel/products/attributes/' + item.id]" [queryParams]="{ name: item.name }">
       <i class="fa fa-list mx-1"></i>
       <span>{{ 'ViewAttributes' | translate }}</span>
     </a>
-    <a mat-menu-item (click)="openCreateOrEditDialog(item)" *ngIf="AppPermissions.Products_Type_Edit | permission">
-      <i class="fa fa-edit mx-1"></i>
-      <span>{{ 'Edit' | translate }}</span>
-    </a>
-    <a mat-menu-item (click)="remove(item)" *ngIf="AppPermissions.Products_Type_Delete | permission">
-      <i class="fa fa-trash mx-1"></i>
-      <span>{{ 'Remove' | translate }}</span>
-    </a>
+    @if (AppPermissions.Products_Type_Edit | permission) {
+      <a mat-menu-item (click)="openCreateOrEditDialog(item)">
+        <i class="fa fa-edit mx-1"></i>
+        <span>{{ 'Edit' | translate }}</span>
+      </a>
+    }
+    @if (AppPermissions.Products_Type_Delete | permission) {
+      <a mat-menu-item (click)="remove(item)">
+        <i class="fa fa-trash mx-1"></i>
+        <span>{{ 'Remove' | translate }}</span>
+      </a>
+    }
   </mat-menu>
 </ng-template>

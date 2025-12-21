@@ -17,9 +17,11 @@
             </mat-option>
           }
         </mat-select>
-        <mat-error *ngIf="form.get('componentName')?.hasError('required')">
-          {{ 'IsRequired' | translate: { value: ('Widget' | translate) } }}
-        </mat-error>
+        @if (form.get('componentName')?.hasError('required')) {
+          <mat-error>
+            {{ 'IsRequired' | translate: { value: ('Widget' | translate) } }}
+          </mat-error>
+        }
       </mat-form-field>
     </div>
   </form>
@@ -27,7 +29,9 @@
 <mat-dialog-actions>
   <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
   <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="saving">
-    <mat-spinner *ngIf="saving" color="primary" diameter="25"></mat-spinner>
+    @if (saving) {
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    }
     <span>{{ 'Save' | translate }}</span>
   </button>
 </mat-dialog-actions>

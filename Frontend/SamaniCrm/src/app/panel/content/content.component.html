@@ -2,102 +2,109 @@
 <div class="panel-content">
   <div class="d-flex">
     <div class="menu-list">
-      <a
-        *ngIf="AppPermissions.Pages_Home_Edit | permission"
-        class="menu-item"
-        [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.HomePage]]"
-        routerLinkActive="active">
-        <div class="icon">
-          <i class="fad fa-memo-circle-info"></i>
-        </div>
-        <div class="content">
-          <div class="title">{{ 'HomePage' | translate }}</div>
-          <div class="description">{{ 'HomePageDescription' | translate }}</div>
-        </div>
-      </a>
+      @if (AppPermissions.Pages_Home_Edit | permission) {
+        <a
+          class="menu-item"
+          [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.HomePage]]"
+          routerLinkActive="active">
+          <div class="icon">
+            <i class="fad fa-memo-circle-info"></i>
+          </div>
+          <div class="content">
+            <div class="title">{{ 'HomePage' | translate }}</div>
+            <div class="description">{{ 'HomePageDescription' | translate }}</div>
+          </div>
+        </a>
+      }
 
-      <a
-        *ngIf="AppPermissions.Pages_AboutUs_Edit | permission"
-        class="menu-item"
-        [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.AboutUs]]"
-        routerLinkActive="active">
-        <div class="icon">
-          <i class="fad fa-memo-circle-info"></i>
-        </div>
-        <div class="content">
-          <div class="title">{{ 'AboutUs' | translate }}</div>
-          <div class="description">{{ 'AboutUsDescription' | translate }}</div>
-        </div>
-      </a>
+      @if (AppPermissions.Pages_AboutUs_Edit | permission) {
+        <a
+          class="menu-item"
+          [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.AboutUs]]"
+          routerLinkActive="active">
+          <div class="icon">
+            <i class="fad fa-memo-circle-info"></i>
+          </div>
+          <div class="content">
+            <div class="title">{{ 'AboutUs' | translate }}</div>
+            <div class="description">{{ 'AboutUsDescription' | translate }}</div>
+          </div>
+        </a>
+      }
 
-      <a
-        *ngIf="AppPermissions.Pages_ContactUs_Edit | permission"
-        class="menu-item"
-        [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.ContactUs]]"
-        routerLinkActive="active">
-        <div class="icon">
-          <i class="fad fa-memo-circle-info"></i>
-        </div>
-        <div class="content">
-          <div class="title">{{ 'ContactUs' | translate }}</div>
-          <div class="description">{{ 'ContactUsDescription' | translate }}</div>
-        </div>
-      </a>
-      <a
-        *ngIf="AppPermissions.Pages_OtherPage_Edit | permission"
-        class="menu-item"
-        [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.OtherPages]]"
-        routerLinkActive="active">
-        <div class="icon">
-          <i class="fad fa-file-invoice"></i>
-        </div>
-        <div class="content">
-          <div class="title">{{ 'Pages' | translate }}</div>
-          <div class="description">{{ 'PagesDescription' | translate }}</div>
-        </div>
-      </a>
+      @if (AppPermissions.Pages_ContactUs_Edit | permission) {
+        <a
+          class="menu-item"
+          [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.ContactUs]]"
+          routerLinkActive="active">
+          <div class="icon">
+            <i class="fad fa-memo-circle-info"></i>
+          </div>
+          <div class="content">
+            <div class="title">{{ 'ContactUs' | translate }}</div>
+            <div class="description">{{ 'ContactUsDescription' | translate }}</div>
+          </div>
+        </a>
+      }
+      @if (AppPermissions.Pages_OtherPage_Edit | permission) {
+        <a
+          class="menu-item"
+          [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.OtherPages]]"
+          routerLinkActive="active">
+          <div class="icon">
+            <i class="fad fa-file-invoice"></i>
+          </div>
+          <div class="content">
+            <div class="title">{{ 'Pages' | translate }}</div>
+            <div class="description">{{ 'PagesDescription' | translate }}</div>
+          </div>
+        </a>
+      }
 
-      <a
-        *ngIf="AppPermissions.Pages_Articles_Edit | permission"
-        class="menu-item"
-        [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.Article]]"
-        routerLinkActive="active">
-        <div class="icon">
-          <i class="fad fa-file-signature"></i>
-        </div>
-        <div class="content">
-          <div class="title">{{ 'Articles' | translate }}</div>
-          <div class="description">{{ 'ArticleDescription' | translate }}</div>
-        </div>
-      </a>
+      @if (AppPermissions.Pages_Articles_Edit | permission) {
+        <a
+          class="menu-item"
+          [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.Article]]"
+          routerLinkActive="active">
+          <div class="icon">
+            <i class="fad fa-file-signature"></i>
+          </div>
+          <div class="content">
+            <div class="title">{{ 'Articles' | translate }}</div>
+            <div class="description">{{ 'ArticleDescription' | translate }}</div>
+          </div>
+        </a>
+      }
 
-      <a
-        *ngIf="AppPermissions.Pages_Blogs_Edit | permission"
-        class="menu-item"
-        [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.Blog]]"
-        routerLinkActive="active">
-        <div class="icon">
-          <i class="fad fa-blog"></i>
-        </div>
-        <div class="content">
-          <div class="title">{{ 'Blogs' | translate }}</div>
-          <div class="description">{{ 'BlogsDescription' | translate }}</div>
-        </div>
-      </a>
+      @if (AppPermissions.Pages_Blogs_Edit | permission) {
+        <a
+          class="menu-item"
+          [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.Blog]]"
+          routerLinkActive="active">
+          <div class="icon">
+            <i class="fad fa-blog"></i>
+          </div>
+          <div class="content">
+            <div class="title">{{ 'Blogs' | translate }}</div>
+            <div class="description">{{ 'BlogsDescription' | translate }}</div>
+          </div>
+        </a>
+      }
 
-      <a
-        *ngIf="AppPermissions.Pages_News_Edit | permission"
-        class="menu-item"
-        [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.News]]"
-        routerLinkActive="active">
-        <div class="icon">
-          <i class="fad fa-newspaper"></i>
-        </div>
-        <div class="content">
-          <div class="title">{{ 'News' | translate }}</div>
-          <div class="description">{{ 'NewsDescription' | translate }}</div>
-        </div>
-      </a>
+      @if (AppPermissions.Pages_News_Edit | permission) {
+        <a
+          class="menu-item"
+          [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.News]]"
+          routerLinkActive="active">
+          <div class="icon">
+            <i class="fad fa-newspaper"></i>
+          </div>
+          <div class="content">
+            <div class="title">{{ 'News' | translate }}</div>
+            <div class="description">{{ 'NewsDescription' | translate }}</div>
+          </div>
+        </a>
+      }
     </div>
     <div class="flex-fill">
       <router-outlet></router-outlet>

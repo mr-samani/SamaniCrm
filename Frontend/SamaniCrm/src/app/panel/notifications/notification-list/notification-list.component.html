@@ -8,22 +8,26 @@
       </button>
     </div>
     <div class="d-flex gap-2">
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="sendMessageToUser()"
-        *ngIf="AppPermissions.Notification_SendMessageToUser | permission">
-        <i class="fa fa-bell mx-1"></i>
-        <span>{{ 'SendMessage' | translate }}</span>
-      </button>
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="broadCastMessage()"
-        *ngIf="AppPermissions.Notification_BroadCastMessageToAll | permission">
-        <i class="fa fa-broadcast mx-1"></i>
-        <span>{{ 'BroadcastMessage' | translate }}</span>
-      </button>
+      @if (AppPermissions.Notification_SendMessageToUser | permission) {
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="sendMessageToUser()"
+          >
+          <i class="fa fa-bell mx-1"></i>
+          <span>{{ 'SendMessage' | translate }}</span>
+        </button>
+      }
+      @if (AppPermissions.Notification_BroadCastMessageToAll | permission) {
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="broadCastMessage()"
+          >
+          <i class="fa fa-broadcast mx-1"></i>
+          <span>{{ 'BroadcastMessage' | translate }}</span>
+        </button>
+      }
     </div>
   </div>
 
@@ -37,18 +41,22 @@
       <mat-form-field class="col-sm-6 col-md-4">
         <mat-label>{{ 'Type' | translate }}</mat-label>
         <mat-select formControlName="type" multiple>
-          <mat-option *ngFor="let item of NotificationTypeEnum | enumToArray" [value]="+item">
-            {{ 'NotificationTypeEnum_' + item | translate }}
-          </mat-option>
+          @for (item of NotificationTypeEnum | enumToArray; track item) {
+            <mat-option [value]="+item">
+              {{ 'NotificationTypeEnum_' + item | translate }}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
 
       <mat-form-field class="col-sm-6 col-md-4">
         <mat-label>{{ 'Periority' | translate }}</mat-label>
         <mat-select formControlName="periority" multiple>
-          <mat-option *ngFor="let item of NotificationPeriorityEnum | enumToArray" [value]="+item">
-            {{ 'NotificationPeriorityEnum_' + item | translate }}
-          </mat-option>
+          @for (item of NotificationPeriorityEnum | enumToArray; track item) {
+            <mat-option [value]="+item">
+              {{ 'NotificationPeriorityEnum_' + item | translate }}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
     </div>
@@ -75,7 +83,7 @@
         class="fad yellow"
         [class.fa-envelope]="!item.read"
         [class.fa-envelope-open]="item.read"
-        [title]="(item.read ? 'MsgRead' : 'MsgUnread') | translate"></span>
+      [title]="(item.read ? 'MsgRead' : 'MsgUnread') | translate"></span>
     </ng-template>
 
     <ng-template tableCell="periority" let-item>
@@ -131,10 +139,12 @@
         <i class="fa fa-eye mx-1"></i>
         <span>{{ 'View' | translate }}</span>
       </a>
-      <a mat-menu-item (click)="remove(item)" *ngIf="AppPermissions.Notification_Delete | permission">
-        <i class="fa fa-trash mx-1"></i>
-        <span>{{ 'Remove' | translate }}</span>
-      </a>
+      @if (AppPermissions.Notification_Delete | permission) {
+        <a mat-menu-item (click)="remove(item)">
+          <i class="fa fa-trash mx-1"></i>
+          <span>{{ 'Remove' | translate }}</span>
+        </a>
+      }
     </mat-menu>
   </ng-template>
 </div>

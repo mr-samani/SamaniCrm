@@ -1,6 +1,8 @@
 <p>ID: {{ b.selectedBlock?.id }}</p>
 <p>RowNumber: {{ b.selectedBlock?.rowNumber }}</p>
-<p *ngIf="b.selectedBlock">Type: {{ BlockTypeEnum[b.selectedBlock.type] }}</p>
+@if (b.selectedBlock) {
+  <p>Type: {{ BlockTypeEnum[b.selectedBlock.type] }}</p>
+}
 
 @if (b.selectedBlock) {
   <ul class="nav nav-tabs">
@@ -14,37 +16,42 @@
 
   @if (tab == 'General') {
     <div>
-      <ng-container *ngIf="b.selectedBlock.data">
-        <details *ngIf="b.selectedBlock.data.style" open>
-          <summary>Layout</summary>
-          <style-general
-            [style]="b.selectedBlock.data.style"
-            [block]="b.selectedBlock"
+      @if (b.selectedBlock.data) {
+        @if (b.selectedBlock.data.style) {
+          <details open>
+            <summary>Layout</summary>
+            <style-general
+              [style]="b.selectedBlock.data.style"
+              [block]="b.selectedBlock"
             (styleChange)="updateCss()"></style-general>
-        </details>
-
-        <details *ngIf="b.selectedBlock.data && b.selectedBlock.data.style">
-          <summary>Background</summary>
-          <style-background
-            [id]="'prpbg-' + b.selectedBlock.id"
-            [block]="b.selectedBlock"
-            [style]="b.selectedBlock.data.style"
+          </details>
+        }
+        @if (b.selectedBlock.data && b.selectedBlock.data.style) {
+          <details>
+            <summary>Background</summary>
+            <style-background
+              [id]="'prpbg-' + b.selectedBlock.id"
+              [block]="b.selectedBlock"
+              [style]="b.selectedBlock.data.style"
             (styleChange)="updateCss()"></style-background>
-        </details>
-        <details *ngIf="b.selectedBlock.data.style">
-          <summary>Dimenstions</summary>
-          <style-dimensions
-            [id]="'prpdim-' + b.selectedBlock.id"
-            [block]="b.selectedBlock"
-            [style]="b.selectedBlock.data.style"
+          </details>
+        }
+        @if (b.selectedBlock.data.style) {
+          <details>
+            <summary>Dimenstions</summary>
+            <style-dimensions
+              [id]="'prpdim-' + b.selectedBlock.id"
+              [block]="b.selectedBlock"
+              [style]="b.selectedBlock.data.style"
             (styleChange)="updateCss()"></style-dimensions>
-        </details>
-
-        <pre
-          class="cssStyles"
-          *ngIf="b.selectedBlock.data.css"
+          </details>
+        }
+        @if (b.selectedBlock.data.css) {
+          <pre
+            class="cssStyles"
           [innerHtml]="b.selectedBlock.data.css | styleView"></pre>
-      </ng-container>
+        }
+      }
     </div>
   } @else if (tab == 'Advanced') {
     <div class="p-2">

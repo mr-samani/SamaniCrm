@@ -13,53 +13,66 @@
           type="userName"
           [placeholder]="'UserName' | translate"
           autocomplete="username" />
-      </mat-form-field>
+        </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>{{ 'Password' | translate }}</mat-label>
-        <input
-          matInput
-          formControlName="password"
-          [type]="showPassword ? 'text' : 'password'"
-          [placeholder]="'Password' | translate"
-          autocomplete="current-password" />
-        <i matSuffix class="fa fa-eye" *ngIf="!showPassword" (click)="showPassword = true"></i>
-        <i matSuffix class="fa fa-eye-slash" *ngIf="showPassword" (click)="showPassword = false"></i>
-      </mat-form-field>
+        <mat-form-field>
+          <mat-label>{{ 'Password' | translate }}</mat-label>
+          <input
+            matInput
+            formControlName="password"
+            [type]="showPassword ? 'text' : 'password'"
+            [placeholder]="'Password' | translate"
+            autocomplete="current-password" />
+            @if (!showPassword) {
+              <i matSuffix class="fa fa-eye" (click)="showPassword = true"></i>
+            }
+            @if (showPassword) {
+              <i matSuffix class="fa fa-eye-slash" (click)="showPassword = false"></i>
+            }
+          </mat-form-field>
 
-      <p>
-        <mat-checkbox formControlName="rememberMe">{{ 'RememberMe' | translate }}</mat-checkbox>
-      </p>
+          <p>
+            <mat-checkbox formControlName="rememberMe">{{ 'RememberMe' | translate }}</mat-checkbox>
+          </p>
 
-      <captcha formControlName="captcha" #captcha *ngIf="requiredCaptcha"></captcha>
-      <!-- <p>
-      <a routerLink="/account/forgot-password" class="forgot-link">
-        کلمه عبور خود را فراموش کرده اید؟
-      </a>
-    </p> -->
+          @if (requiredCaptcha) {
+            <captcha formControlName="captcha" #captcha></captcha>
+          }
+          <!-- <p>
+          <a routerLink="/account/forgot-password" class="forgot-link">
+            کلمه عبور خود را فراموش کرده اید؟
+          </a>
+        </p> -->
 
-      <button mat-raised-button color="primary" (click)="login()" [disabled]="loading" type="submit" class="w-100">
-        <span *ngIf="loading">loading...</span>
-        <span *ngIf="!loading">{{ 'login' | translate }}</span>
-      </button>
-      <!-- <button routerLink="/account/register" class="w-100" type="success">
-      ثبت نام
-    </button> -->
+        <button mat-raised-button color="primary" (click)="login()" [disabled]="loading" type="submit" class="w-100">
+          @if (loading) {
+            <span>loading...</span>
+          }
+          @if (!loading) {
+            <span>{{ 'login' | translate }}</span>
+          }
+        </button>
+        <!-- <button routerLink="/account/register" class="w-100" type="success">
+        ثبت نام
+      </button> -->
       @if (loadingExternalProviders) {
         <div class="d-flex align-items-center">
           <mat-spinner color="primary" diameter="25"></mat-spinner>
         </div>
       } @else {
-        <div *ngIf="externalProviderList.length > 0" class="mt-2">
-          <p>{{ 'ExternalProviders' | translate }}:</p>
-          <button
-            type="button"
-            *ngFor="let provider of externalProviderList"
-            class="w-100 mb-1 btn btn-primary btn-{{ provider.name }}"
-            (click)="loginExternalProvider(provider)">
-            {{ provider.name }}
-          </button>
-        </div>
+        @if (externalProviderList.length > 0) {
+          <div class="mt-2">
+            <p>{{ 'ExternalProviders' | translate }}:</p>
+            @for (provider of externalProviderList; track provider) {
+              <button
+                type="button"
+                class="w-100 mb-1 btn btn-primary btn-{{ provider.name }}"
+                (click)="loginExternalProvider(provider)">
+                {{ provider.name }}
+              </button>
+            }
+          </div>
+        }
       }
     </form>
   } @else {
@@ -67,22 +80,26 @@
 
     <form class="d-flex flex-column gap-2 py-4">
       <!-- <mat-form-field>
-        <mat-label>{{ 'Code' | translate }}</mat-label>
-        <input matInput [(ngModel)]="code" name="code" type="number" autocomplete="off" #codeEl="ngModel" />
-      </mat-form-field> -->
+      <mat-label>{{ 'Code' | translate }}</mat-label>
+      <input matInput [(ngModel)]="code" name="code" type="number" autocomplete="off" #codeEl="ngModel" />
+    </mat-form-field> -->
 
-      <otp-input [length]="6" [(ngModel)]="code" name="code"></otp-input>
-      <!-- {{ code }} -->
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="loginWithTwoFactor()"
-        [disabled]="loading"
-        type="submit"
-        class="w-100">
-        <span *ngIf="loading">loading...</span>
-        <span *ngIf="!loading">{{ 'login' | translate }}</span>
-      </button>
-    </form>
-  }
+    <otp-input [length]="6" [(ngModel)]="code" name="code"></otp-input>
+    <!-- {{ code }} -->
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="loginWithTwoFactor()"
+      [disabled]="loading"
+      type="submit"
+      class="w-100">
+      @if (loading) {
+        <span>loading...</span>
+      }
+      @if (!loading) {
+        <span>{{ 'login' | translate }}</span>
+      }
+    </button>
+  </form>
+}
 </div>

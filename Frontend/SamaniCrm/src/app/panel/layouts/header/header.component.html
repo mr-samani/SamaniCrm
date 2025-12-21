@@ -22,80 +22,92 @@
             {{ 'Panel' | translate }}
           </a>
         </li>
-        <li class="nav-item" *ngIf="AppPermissions.Notification_List | permission">
-          <a
-            class="nav-link"
-            [routerLink]="['/panel/notifications']"
-            routerLinkActive="active"
-            (click)="closeNavbar()">
-            <i class="fa fa-gear"></i>
-            {{ 'Notifications' | translate }}
-          </a>
-        </li>
+        @if (AppPermissions.Notification_List | permission) {
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [routerLink]="['/panel/notifications']"
+              routerLinkActive="active"
+              (click)="closeNavbar()">
+              <i class="fa fa-gear"></i>
+              {{ 'Notifications' | translate }}
+            </a>
+          </li>
+        }
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/panel/setting']" routerLinkActive="active" (click)="closeNavbar()">
             <i class="fa fa-gear"></i>
             {{ 'Settings' | translate }}
           </a>
         </li>
-        <li class="nav-item" *ngIf="AppPermissions.FileManager_List | permission">
-          <a class="nav-link" (click)="openFileManager(); closeNavbar()">
-            <i class="fa fa-folder-image"></i>
-            {{ 'Media' | translate }}
-          </a>
-        </li>
-        <li class="nav-item" *ngIf="AppPermissions.Pages | permission">
-          <a class="nav-link" [routerLink]="['/panel/content']" routerLinkActive="active" (click)="closeNavbar()">
-            <i class="fa fa-file-contract"></i>
-            {{ 'Content' | translate }}
-          </a>
-        </li>
-        <li class="nav-item" *ngIf="AppPermissions.Products | permission">
-          <a class="nav-link" [routerLink]="['/panel/products']" routerLinkActive="active" (click)="closeNavbar()">
-            <i class="fa fa-file-contract"></i>
-            {{ 'Products' | translate }}
-          </a>
-        </li>
+        @if (AppPermissions.FileManager_List | permission) {
+          <li class="nav-item">
+            <a class="nav-link" (click)="openFileManager(); closeNavbar()">
+              <i class="fa fa-folder-image"></i>
+              {{ 'Media' | translate }}
+            </a>
+          </li>
+        }
+        @if (AppPermissions.Pages | permission) {
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/panel/content']" routerLinkActive="active" (click)="closeNavbar()">
+              <i class="fa fa-file-contract"></i>
+              {{ 'Content' | translate }}
+            </a>
+          </li>
+        }
+        @if (AppPermissions.Products | permission) {
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/panel/products']" routerLinkActive="active" (click)="closeNavbar()">
+              <i class="fa fa-file-contract"></i>
+              {{ 'Products' | translate }}
+            </a>
+          </li>
+        }
         <!-- <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            id="productDropdown"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false">
-            <i class="fa fa-tag"></i>
-            {{ 'Products' | translate }}
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="productDropdown">
-            <li>
-              <a class="dropdown-item" [routerLink]="['/panel/product/categories']" routerLinkActive="active">
-                {{ 'Categories' | translate }}
-              </a>
-            </li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li>
-              <hr class="dropdown-divider" />
-            </li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li> -->
-        <li class="nav-item" *ngIf="AppPermissions.Pages_Builder | permission">
+        <a
+          class="nav-link dropdown-toggle"
+          id="productDropdown"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false">
+          <i class="fa fa-tag"></i>
+          {{ 'Products' | translate }}
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="productDropdown">
+          <li>
+            <a class="dropdown-item" [routerLink]="['/panel/product/categories']" routerLinkActive="active">
+              {{ 'Categories' | translate }}
+            </a>
+          </li>
+          <li><a class="dropdown-item" href="#">Another action</a></li>
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+          <li><a class="dropdown-item" href="#">Something else here</a></li>
+        </ul>
+      </li> -->
+      @if (AppPermissions.Pages_Builder | permission) {
+        <li class="nav-item">
           <a class="nav-link" routerLink="/panel/builder" routerLinkActive="active" (click)="closeNavbar()">
             <i class="fa fa-page"></i>
             {{ 'PageBuilder' | translate }}
           </a>
         </li>
-      </ul>
-      <div class="flex-fill"></div>
+      }
+    </ul>
+    <div class="flex-fill"></div>
 
-      <last-notifications *ngIf="AppPermissions.Notification_List | permission"></last-notifications>
-      <!-- darkmode -->
-      <label class="switch">
-        <input
-          class="switch__input"
-          type="checkbox"
-          [ngModel]="AppConst.isDarkMode"
-          (change)="colorSchemaService.toggleMode()" />
+    @if (AppPermissions.Notification_List | permission) {
+      <last-notifications></last-notifications>
+    }
+    <!-- darkmode -->
+    <label class="switch">
+      <input
+        class="switch__input"
+        type="checkbox"
+        [ngModel]="AppConst.isDarkMode"
+        (change)="colorSchemaService.toggleMode()" />
         <span class="switch__background">
           <span class="switch__toggle">
             <span class="switch__moon"></span>
@@ -111,23 +123,28 @@
         <img [src]="baseUrl + '/images/flags/' + currentLang + '.png'" />
       </button>
       <mat-menu #langMnu="matMenu">
-        <button
-          mat-menu-item
-          *ngFor="let lang of languages"
-          (click)="changeLanguage(lang.culture!)"
-          class="language-menu">
-          <div class="d-flex align-items-center g-5">
-            <!-- <i class="flag" [ngClass]="lang.code"></i> -->
-            <img [src]="baseUrl + '/images/flags/' + lang.flag + '.png'" />
-            <span>{{ lang.name }}</span>
-          </div>
-        </button>
+        @for (lang of languages; track lang) {
+          <button
+            mat-menu-item
+            (click)="changeLanguage(lang.culture!)"
+            class="language-menu">
+            <div class="d-flex align-items-center g-5">
+              <!-- <i class="flag" [ngClass]="lang.code"></i> -->
+              <img [src]="baseUrl + '/images/flags/' + lang.flag + '.png'" />
+              <span>{{ lang.name }}</span>
+            </div>
+          </button>
+        }
       </mat-menu>
       <!-- //language -->
 
       <div class="user-block navbar-brand" [mat-menu-trigger-for]="userMenu">
-        <img *ngIf="user?.profilePicture" [src]="user?.profilePicture" [alt]="user?.userName" />
-        <img *ngIf="!user?.profilePicture" src="/images/profile-picture.jpg" [alt]="user?.userName" />
+        @if (user?.profilePicture) {
+          <img [src]="user?.profilePicture" [alt]="user?.userName" />
+        }
+        @if (!user?.profilePicture) {
+          <img src="/images/profile-picture.jpg" [alt]="user?.userName" />
+        }
         <span>{{ user?.userName }}</span>
       </div>
       <mat-menu #userMenu="matMenu">

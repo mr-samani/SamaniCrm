@@ -1,6 +1,10 @@
 <h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
-  <span cdkDragHandle class="title" *ngIf="!isUpdate">{{ 'CreateNewRole' | translate }}</span>
-  <span cdkDragHandle class="title" *ngIf="isUpdate">{{ 'EditRole' | translate }}</span>
+  @if (!isUpdate) {
+    <span cdkDragHandle class="title">{{ 'CreateNewRole' | translate }}</span>
+  }
+  @if (isUpdate) {
+    <span cdkDragHandle class="title">{{ 'EditRole' | translate }}</span>
+  }
 
   <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
     <span aria-hidden="true">&times;</span>
@@ -12,28 +16,34 @@
       <mat-form-field class="col-md-6">
         <mat-label>{{ 'RoleName' | translate }}</mat-label>
         <input matInput formControlName="roleName" />
-        <mat-error *ngIf="form.get('roleName')?.hasError('required')">
-          {{ 'IsRequired' | translate: { value: ('RoleName' | translate) } }}
-        </mat-error>
-        <mat-error *ngIf="form.get('roleName')?.hasError('pattern')">
-          {{ 'IsInvalid' | translate: { value: ('RoleName' | translate) } }}
-        </mat-error>
+        @if (form.get('roleName')?.hasError('required')) {
+          <mat-error>
+            {{ 'IsRequired' | translate: { value: ('RoleName' | translate) } }}
+          </mat-error>
+        }
+        @if (form.get('roleName')?.hasError('pattern')) {
+          <mat-error>
+            {{ 'IsInvalid' | translate: { value: ('RoleName' | translate) } }}
+          </mat-error>
+        }
       </mat-form-field>
 
       <!-- <mat-form-field class="col-md-6">
-            <mat-label>{{ 'DisplayName' | translate }}</mat-label>
-            <input matInput formControlName="displayName" type="text" />
-            <mat-error *ngIf="form.get('displayName')?.hasError('required')">
-              {{ 'IsRequired' | translate: { value: ('DisplayName' | translate) } }}
-            </mat-error>
-          </mat-form-field> -->
-    </div>
-  </form>
+      <mat-label>{{ 'DisplayName' | translate }}</mat-label>
+      <input matInput formControlName="displayName" type="text" />
+      <mat-error *ngIf="form.get('displayName')?.hasError('required')">
+        {{ 'IsRequired' | translate: { value: ('DisplayName' | translate) } }}
+      </mat-error>
+    </mat-form-field> -->
+  </div>
+</form>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
   <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="saving">
-    <mat-spinner *ngIf="saving" color="primary" diameter="25"></mat-spinner>
+    @if (saving) {
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    }
     <span>{{ 'Save' | translate }}</span>
   </button>
 </mat-dialog-actions>

@@ -1,4 +1,4 @@
-import { inject, Injector } from '@angular/core';
+import { inject, Injector, DOCUMENT } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -9,7 +9,7 @@ import { LanguageService } from '@shared/services/language.service';
 import { NgxAlertModalService } from 'ngx-alert-modal';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { PanelService } from './panel/panel.service';
-import { DOCUMENT } from '@angular/common';
+
 import { AppPermissions } from '@shared/permissions/app-permissions';
 export abstract class AppComponentBase {
   fb: FormBuilder;

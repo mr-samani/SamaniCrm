@@ -1,7 +1,9 @@
 <button mat-icon-button (click)="getList()">
   <i class="fa fa-reload"></i>
 </button>
-<mat-progress-bar *ngIf="loading" class="my-5" [mode]="'indeterminate'"></mat-progress-bar>
+@if (loading) {
+  <mat-progress-bar class="my-5" [mode]="'indeterminate'"></mat-progress-bar>
+}
 <h6>{{ roleName }}</h6>
 
 <fieldset class="border rounded-4 p-3">
@@ -30,9 +32,11 @@
   </div>
 </fieldset>
 
-<div class="d-flex align-items-end justify-content-end" *ngIf="!loading">
-  <button mat-raised-button color="primary" (click)="save()" [disabled]="isSaving">
-    {{ 'Save' | translate }}
-  </button>
-</div>
+@if (!loading) {
+  <div class="d-flex align-items-end justify-content-end">
+    <button mat-raised-button color="primary" (click)="save()" [disabled]="isSaving">
+      {{ 'Save' | translate }}
+    </button>
+  </div>
+}
 <!-- <pre style="text-align: left;direction: ltr;">{{list|json}}</pre> -->

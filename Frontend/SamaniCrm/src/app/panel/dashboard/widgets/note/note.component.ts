@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Injector, Input, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { WidgetNoteData } from './WidgetNoteData';
@@ -12,7 +12,7 @@ import { EditNoteWidgetComponent } from './edit-note/edit-note-widget.component'
   templateUrl: './note.component.html',
   styleUrls: ['./note.component.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
 })
 export class NoteComponent extends AppComponentBase implements OnInit, IWidgetBase {
   item!: Widget;

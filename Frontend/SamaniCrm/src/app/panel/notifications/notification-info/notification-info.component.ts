@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -13,7 +13,7 @@ import { finalize } from 'rxjs';
   styleUrls: ['./notification-info.component.scss'],
   standalone: true,
   providers: [NotificationServiceProxy],
-  imports: [CommonModule, MaterialCommonModule, TranslateModule],
+  imports: [MaterialCommonModule, TranslateModule],
 })
 export class NotificationInfoComponent extends AppComponentBase implements OnInit {
   loading = true;

@@ -11,7 +11,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { TabItemComponent } from './tab-item/tab-item.component';
-import { CommonModule } from '@angular/common';
+
 import { Subscription } from 'rxjs';
 
 @Component({

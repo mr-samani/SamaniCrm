@@ -6,19 +6,25 @@
   </button>
 </h2>
 <mat-dialog-content>
-  <div class="d-flex align-items-center py-3" *ngIf="loading">
-    <mat-spinner diameter="25" color="primary"></mat-spinner>
-  </div>
-  <div class="list-icon">
-    <div class="icon" *ngFor="let item of list" [class.selected]="item == selected" (click)="selected = item">
-      <img [src]="baseUrl + item" />
+  @if (loading) {
+    <div class="d-flex align-items-center py-3">
+      <mat-spinner diameter="25" color="primary"></mat-spinner>
     </div>
+  }
+  <div class="list-icon">
+    @for (item of list; track item) {
+      <div class="icon" [class.selected]="item == selected" (click)="selected = item">
+        <img [src]="baseUrl + item" />
+      </div>
+    }
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
   <button mat-raised-button color="primary" (click)="changeIcon()" cdkFocusInitial [disabled]="loading || saving">
-    <mat-spinner *ngIf="saving" color="primary" diameter="25"></mat-spinner>
+    @if (saving) {
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    }
     <span>{{ 'Save' | translate }}</span>
   </button>
 </mat-dialog-actions>

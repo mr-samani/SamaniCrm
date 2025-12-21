@@ -1,12 +1,12 @@
 import { Component, Injector, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { BlockBase } from '../block-base';
 import { AppConst } from '@shared/app-const';
 
 @Component({
   selector: 'block-img',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <img [src]="imageUrl" />
   `,

@@ -1,25 +1,33 @@
 <div class="d-flex justify-content-end my-2">
-  <button
-    mat-stroked-button
-    color="primary"
-    (click)="clearAll()"
-    *ngIf="AppPermissions.CacheEntries_ClearAll | permission">
-    <i class="fa fa-trash mx-1"></i>
-    <span>{{ 'ClearAll' | translate }}</span>
-    <span>({{ totalSize | fileSize }})</span>
-  </button>
+  @if (AppPermissions.CacheEntries_ClearAll | permission) {
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="clearAll()"
+      >
+      <i class="fa fa-trash mx-1"></i>
+      <span>{{ 'ClearAll' | translate }}</span>
+      <span>({{ totalSize | fileSize }})</span>
+    </button>
+  }
 </div>
 <table-view [list]="cacheKeys" [fields]="fields" [operations]="operations" [loading]="loading"></table-view>
 
 <ng-template #operations let-item>
-  <mat-spinner [diameter]="20" *ngIf="item.loading"></mat-spinner>
-  <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger" *ngIf="!item.loading">
-    <i class="fa fa-ellipsis-v"></i>
-  </button>
+  @if (item.loading) {
+    <mat-spinner [diameter]="20"></mat-spinner>
+  }
+  @if (!item.loading) {
+    <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
+      <i class="fa fa-ellipsis-v"></i>
+    </button>
+  }
   <mat-menu #menu="matMenu">
-    <a mat-menu-item (click)="remove(item)" *ngIf="AppPermissions.CacheEntries_Delete | permission">
-      <i class="fa fa-trash mx-1"></i>
-      <span>{{ 'Remove' | translate }}</span>
-    </a>
+    @if (AppPermissions.CacheEntries_Delete | permission) {
+      <a mat-menu-item (click)="remove(item)">
+        <i class="fa fa-trash mx-1"></i>
+        <span>{{ 'Remove' | translate }}</span>
+      </a>
+    }
   </mat-menu>
 </ng-template>

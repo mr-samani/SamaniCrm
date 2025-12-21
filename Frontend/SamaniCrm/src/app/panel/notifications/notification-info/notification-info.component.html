@@ -6,24 +6,26 @@
   </button>
 </h2>
 <mat-dialog-content>
-  <div class="py-5 my-5 text-center" *ngIf="loading">
-    <mat-spinner color="primary" diameter="25"></mat-spinner>
-  </div>
-  <div class="notification-info" *ngIf="!loading && notifyInfo">
-    <h3>{{ notifyInfo.title }}</h3>
-
-    <div class="row">
-      <div class="col-sm-6">{{ 'NotificationPeriorityEnum_' + notifyInfo.periority | translate }}</div>
-      <div class="col-sm-6">
-        <span>{{ 'Sender' | translate }}:</span>
-        <b>{{ notifyInfo.senderName }}</b>
-      </div>
+  @if (loading) {
+    <div class="py-5 my-5 text-center">
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
     </div>
-
-    <pre class="text-justify">
-      {{ notifyInfo.content }}
-    </pre>
-  </div>
+  }
+  @if (!loading && notifyInfo) {
+    <div class="notification-info">
+      <h3>{{ notifyInfo.title }}</h3>
+      <div class="row">
+        <div class="col-sm-6">{{ 'NotificationPeriorityEnum_' + notifyInfo.periority | translate }}</div>
+        <div class="col-sm-6">
+          <span>{{ 'Sender' | translate }}:</span>
+          <b>{{ notifyInfo.senderName }}</b>
+        </div>
+      </div>
+      <pre class="text-justify">
+        {{ notifyInfo.content }}
+      </pre>
+    </div>
+  }
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close color="cancel">{{ 'Close' | translate }}</button>

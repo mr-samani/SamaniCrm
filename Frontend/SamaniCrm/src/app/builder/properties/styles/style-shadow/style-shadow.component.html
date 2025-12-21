@@ -7,42 +7,43 @@
       #inputShadow="ngModel"
       [(ngModel)]="boxShadowString"
       (change)="stringChange()" />
-    <button class="input-group-text" (click)="togglePanel()">
-      <i class="fa fa-border-outer"></i>
-    </button>
+      <button class="input-group-text" (click)="togglePanel()">
+        <i class="fa fa-border-outer"></i>
+      </button>
+    </div>
+    @if (isInvalid) {
+      <p class="text-danger">Invalid shadow value</p>
+    }
+
+    @if (showPanel) {
+      <div class="panel-back-drop" (click)="showPanel = false"></div>
+    }
+    @if (showPanel) {
+      <div class="panel" [style.top.px]="top" [style.right.px]="right">
+        <div class="slider-group">
+          <label>Offset X</label>
+          <input type="range" min="-50" max="50" [(ngModel)]="offsetX" (input)="onUiChange()" />
+        </div>
+        <div class="slider-group">
+          <label>Offset Y</label>
+          <input type="range" min="-50" max="50" [(ngModel)]="offsetY" (input)="onUiChange()" />
+        </div>
+        <div class="slider-group">
+          <label>Blur Radius</label>
+          <input type="range" min="0" max="100" [(ngModel)]="blurRadius" (input)="onUiChange()" />
+        </div>
+        <div class="slider-group">
+          <label>Spread</label>
+          <input type="range" min="-50" max="50" [(ngModel)]="spreadRadius" (input)="onUiChange()" />
+        </div>
+        <div class="slider-group">
+          <label>Color</label>
+          <input type="color" [(ngModel)]="color" (input)="onUiChange()" />
+        </div>
+        <label>
+          <input type="checkbox" [(ngModel)]="inset" (change)="onUiChange()" />
+          Inset
+        </label>
+      </div>
+    }
   </div>
-  <p *ngIf="isInvalid" class="text-danger">Invalid shadow value</p>
-
-  <div class="panel-back-drop" *ngIf="showPanel" (click)="showPanel = false"></div>
-  <div class="panel" *ngIf="showPanel" [style.top.px]="top" [style.right.px]="right">
-    <div class="slider-group">
-      <label>Offset X</label>
-      <input type="range" min="-50" max="50" [(ngModel)]="offsetX" (input)="onUiChange()" />
-    </div>
-
-    <div class="slider-group">
-      <label>Offset Y</label>
-      <input type="range" min="-50" max="50" [(ngModel)]="offsetY" (input)="onUiChange()" />
-    </div>
-
-    <div class="slider-group">
-      <label>Blur Radius</label>
-      <input type="range" min="0" max="100" [(ngModel)]="blurRadius" (input)="onUiChange()" />
-    </div>
-
-    <div class="slider-group">
-      <label>Spread</label>
-      <input type="range" min="-50" max="50" [(ngModel)]="spreadRadius" (input)="onUiChange()" />
-    </div>
-
-    <div class="slider-group">
-      <label>Color</label>
-      <input type="color" [(ngModel)]="color" (input)="onUiChange()" />
-    </div>
-
-    <label>
-      <input type="checkbox" [(ngModel)]="inset" (change)="onUiChange()" />
-      Inset
-    </label>
-  </div>
-</div>

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   AfterViewInit,
   Component,
@@ -38,7 +38,7 @@ export interface PageEvent {
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss'],
   standalone: true,
-  imports: [CommonModule, TranslateModule, FormsModule],
+  imports: [TranslateModule, FormsModule],
   providers: [
     {
       provide: PAGINATION_LABELS,

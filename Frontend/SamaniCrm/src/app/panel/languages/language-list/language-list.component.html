@@ -1,12 +1,14 @@
 <sub-header [title]="'Content' | translate">
-  <button
-    mat-stroked-button
-    color="primary"
-    (click)="openLanguageDialog()"
-    *ngIf="AppPermissions.LanguageManagement_Create | permission">
-    <i class="fa fa-circle-plus mx-1"></i>
-    <span>{{ 'CreateNewLanguage' | translate }}</span>
-  </button>
+  @if (AppPermissions.LanguageManagement_Create | permission) {
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="openLanguageDialog()"
+      >
+      <i class="fa fa-circle-plus mx-1"></i>
+      <span>{{ 'CreateNewLanguage' | translate }}</span>
+    </button>
+  }
 </sub-header>
 <div class="panel-content">
   <table-view [list]="list" [fields]="fields" [operations]="operations" [loading]="loading"></table-view>
@@ -14,25 +16,39 @@
 
 <ng-template #operations let-item>
   @if ([AppPermissions.LanguageManagement_Edit, AppPermissions.LanguageManagement_Delete] | permissionAny) {
-    <mat-spinner [diameter]="20" *ngIf="item.loading"></mat-spinner>
-    <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger" *ngIf="!item.loading">
-      <i class="fa fa-ellipsis-v"></i>
-    </button>
+    @if (item.loading) {
+      <mat-spinner [diameter]="20"></mat-spinner>
+    }
+    @if (!item.loading) {
+      <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
+        <i class="fa fa-ellipsis-v"></i>
+      </button>
+    }
     <mat-menu #menu="matMenu">
-      <a mat-menu-item (click)="toggleActivate(item)" *ngIf="AppPermissions.LanguageManagement_Edit | permission">
-        <i class="fa fa-circle-check mx-1"></i>
-        <span *ngIf="!item.isActive">{{ 'Activate' | translate }}</span>
-        <span *ngIf="item.isActive">{{ 'DeActivate' | translate }}</span>
-      </a>
+      @if (AppPermissions.LanguageManagement_Edit | permission) {
+        <a mat-menu-item (click)="toggleActivate(item)">
+          <i class="fa fa-circle-check mx-1"></i>
+          @if (!item.isActive) {
+            <span>{{ 'Activate' | translate }}</span>
+          }
+          @if (item.isActive) {
+            <span>{{ 'DeActivate' | translate }}</span>
+          }
+        </a>
+      }
 
-      <a mat-menu-item (click)="openDetails(item)" *ngIf="AppPermissions.LanguageManagement_Edit | permission">
-        <i class="fa fa-list mx-1"></i>
-        <span>{{ 'LocalizationTexts' | translate }}</span>
-      </a>
-      <a mat-menu-item (click)="remove(item)" *ngIf="AppPermissions.LanguageManagement_Delete | permission">
-        <i class="fa fa-trash mx-1"></i>
-        <span>{{ 'Remove' | translate }}</span>
-      </a>
+      @if (AppPermissions.LanguageManagement_Edit | permission) {
+        <a mat-menu-item (click)="openDetails(item)">
+          <i class="fa fa-list mx-1"></i>
+          <span>{{ 'LocalizationTexts' | translate }}</span>
+        </a>
+      }
+      @if (AppPermissions.LanguageManagement_Delete | permission) {
+        <a mat-menu-item (click)="remove(item)">
+          <i class="fa fa-trash mx-1"></i>
+          <span>{{ 'Remove' | translate }}</span>
+        </a>
+      }
     </mat-menu>
   }
 </ng-template>

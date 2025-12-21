@@ -6,10 +6,12 @@
       @for (item of images; track $index) {
         <div class="image-item" (click)="setAsDefault(item)">
           <img [src]="fileServerUrl + '/' + item.fileId" />
-          <span class="default" *ngIf="item.isMain">
-            <i class="fa fa-circle-check"></i>
-            {{ 'Default' | translate }}
-          </span>
+          @if (item.isMain) {
+            <span class="default">
+              <i class="fa fa-circle-check"></i>
+              {{ 'Default' | translate }}
+            </span>
+          }
           <span class="delete" (click)="removeFile($event, item)">
             <i class="fa fa-times"></i>
           </span>

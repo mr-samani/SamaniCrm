@@ -1,17 +1,23 @@
 <div class="d-flex gap-1 flex-wrap">
-  <button
-    mat-stroked-button
-    color="primary"
-    (click)="openCreateOrEditDialog()"
-    [disabled]="loading"
-    *ngIf="AppPermissions.MenuManagement_Create | permission">
-    <i class="fa fa-plus mx-2"></i>
-    {{ 'CreateNewMenu' | translate }}
-  </button>
+  @if (AppPermissions.MenuManagement_Create | permission) {
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="openCreateOrEditDialog()"
+      [disabled]="loading"
+      >
+      <i class="fa fa-plus mx-2"></i>
+      {{ 'CreateNewMenu' | translate }}
+    </button>
+  }
 
   <button mat-stroked-button (click)="toggleAll(nodes); this.isExpandAll = !this.isExpandAll">
-    <span *ngIf="isExpandAll">{{ 'CollapseAll' | translate }}</span>
-    <span *ngIf="!isExpandAll">{{ 'ExpandAll' | translate }}</span>
+    @if (isExpandAll) {
+      <span>{{ 'CollapseAll' | translate }}</span>
+    }
+    @if (!isExpandAll) {
+      <span>{{ 'ExpandAll' | translate }}</span>
+    }
   </button>
 
   <button mat-stroked-button (click)="reload()" [disabled]="loading">
@@ -19,9 +25,11 @@
   </button>
 </div>
 
-<div class="d-flex align-items-center justify-content-center" *ngIf="nodes.length == 0 && !loading">
-  {{ 'NotAnyCase' | translate }}
-</div>
+@if (nodes.length == 0 && !loading) {
+  <div class="d-flex align-items-center justify-content-center">
+    {{ 'NotAnyCase' | translate }}
+  </div>
+}
 
 <div
   cdkDropList
@@ -30,15 +38,19 @@
   [cdkDropListConnectedTo]="dropTargetIds"
   (cdkDropListDropped)="drop($event)"
   [cdkDropListSortingDisabled]="true">
-  <div *ngFor="let node of nodes" cdkDrag [cdkDragData]="node.id" (cdkDragMoved)="dragMoved($event)">
-    <ng-container *ngTemplateOutlet="tmplNode; context: { node: node }"></ng-container>
-  </div>
+  @for (node of nodes; track node) {
+    <div cdkDrag [cdkDragData]="node.id" (cdkDragMoved)="dragMoved($event)">
+      <ng-container *ngTemplateOutlet="tmplNode; context: { node: node }"></ng-container>
+    </div>
+  }
 </div>
 
 <ng-template #tmplNode let-node="node">
   <div class="node-item" [attr.data-id]="node.id" [attr.id]="'node-' + node.id">
     <div class="node-title" (click)="node.isExpanded = !node.isExpanded">
-      <mat-spinner color="primary" diameter="20" *ngIf="node.loading"></mat-spinner>
+      @if (node.loading) {
+        <mat-spinner color="primary" diameter="20"></mat-spinner>
+      }
       <i [class]="node.icon"></i>
       @if (node.children && node.children.length > 0) {
         @if (node.isExpanded) {
@@ -55,35 +67,41 @@
           <i class="fa fa-edit"></i>
         </button>
 
-        <button mat-icon-button (click)="delete(node)" *ngIf="AppPermissions.MenuManagement_Delete | permission">
-          <i class="fa fa-trash"></i>
-        </button>
-        <mat-slide-toggle
-          [(ngModel)]="node.active"
-          [disabled]="node.loading"
-          color="primary"
-          (toggleChange)="changeActive(node)"
-          *ngIf="AppPermissions.MenuManagement_Edit | permission"></mat-slide-toggle>
+        @if (AppPermissions.MenuManagement_Delete | permission) {
+          <button mat-icon-button (click)="delete(node)">
+            <i class="fa fa-trash"></i>
+          </button>
+        }
+        @if (AppPermissions.MenuManagement_Edit | permission) {
+          <mat-slide-toggle
+            [(ngModel)]="node.active"
+            [disabled]="node.loading"
+            color="primary"
+            (toggleChange)="changeActive(node)"
+          ></mat-slide-toggle>
+        }
       </div>
     </div>
 
-    <div
-      *ngIf="node.isExpanded && node.children.length"
-      class="node-children"
-      cdkDropList
-      [cdkDropListData]="node.children"
-      [id]="node.id"
-      [cdkDropListConnectedTo]="dropTargetIds"
-      (cdkDropListDropped)="drop($event)"
-      [cdkDropListSortingDisabled]="true">
+    @if (node.isExpanded && node.children.length) {
       <div
-        *ngFor="let child of node.children"
-        cdkDrag
-        [cdkDragData]="child.id"
-        (cdkDragMoved)="dragMoved($event)"
-        [cdkDragDisabled]="!(AppPermissions.MenuManagement_ReOrder | permission)">
-        <ng-container *ngTemplateOutlet="tmplNode; context: { node: child }"></ng-container>
+        class="node-children"
+        cdkDropList
+        [cdkDropListData]="node.children"
+        [id]="node.id"
+        [cdkDropListConnectedTo]="dropTargetIds"
+        (cdkDropListDropped)="drop($event)"
+        [cdkDropListSortingDisabled]="true">
+        @for (child of node.children; track child) {
+          <div
+            cdkDrag
+            [cdkDragData]="child.id"
+            (cdkDragMoved)="dragMoved($event)"
+            [cdkDragDisabled]="!(AppPermissions.MenuManagement_ReOrder | permission)">
+            <ng-container *ngTemplateOutlet="tmplNode; context: { node: child }"></ng-container>
+          </div>
+        }
       </div>
-    </div>
+    }
   </div>
 </ng-template>

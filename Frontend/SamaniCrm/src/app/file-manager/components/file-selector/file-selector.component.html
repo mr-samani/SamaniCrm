@@ -2,11 +2,13 @@
   {{ 'SelectFile' | translate }}
 </button>
 
-<div class="file-preview" *ngIf="fileInfo && _options.showPreview">
-  <div class="image-container">
-    <img [src]="fileServerUrl + '/' + fileInfo.id" [alt]="fileInfo.extension" />
+@if (fileInfo && _options.showPreview) {
+  <div class="file-preview">
+    <div class="image-container">
+      <img [src]="fileServerUrl + '/' + fileInfo.id" [alt]="fileInfo.extension" />
+    </div>
+    <div class="name">
+      {{ fileInfo.name }}
+    </div>
   </div>
-  <div class="name">
-    {{ fileInfo.name }}
-  </div>
-</div>
+}

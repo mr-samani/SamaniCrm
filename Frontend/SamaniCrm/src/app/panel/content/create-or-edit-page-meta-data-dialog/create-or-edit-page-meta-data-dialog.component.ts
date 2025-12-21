@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -21,7 +21,7 @@ import { finalize } from 'rxjs';
   selector: 'app-create-or-edit-page-meta-data-dialog',
   templateUrl: './create-or-edit-page-meta-data-dialog.component.html',
   styleUrls: ['./create-or-edit-page-meta-data-dialog.component.scss'],
-  imports: [CommonModule, TabGroupModule, ReactiveFormsModule, TranslateModule, SharedModule, MaterialCommonModule],
+  imports: [TabGroupModule, ReactiveFormsModule, TranslateModule, SharedModule, MaterialCommonModule],
 })
 export class CreateOrEditPageMetaDataDialogComponent extends AppComponentBase implements OnInit {
   form: FormGroup;

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -16,7 +16,7 @@ import { IWidgetDefinition, Widget, WidgetHelper } from '../widgets/widgets';
   templateUrl: './add-widget.component.html',
   styleUrls: ['./add-widget.component.scss'],
   standalone: true,
-  imports: [CommonModule, SharedModule, MaterialCommonModule, ReactiveFormsModule],
+  imports: [SharedModule, MaterialCommonModule, ReactiveFormsModule],
   providers: [DasboardServiceProxy],
 })
 export class AddDashboardWidgetComponent extends AppComponentBase implements OnInit {

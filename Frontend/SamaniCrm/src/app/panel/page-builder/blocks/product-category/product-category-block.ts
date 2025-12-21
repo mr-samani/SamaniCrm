@@ -1,5 +1,5 @@
 // src/app/blocks/product-category/product-category.component.ts
-import { CommonModule } from '@angular/common';
+
 import { Component, Input } from '@angular/core';
 
 @Component({
@@ -9,11 +9,13 @@ import { Component, Input } from '@angular/core';
     <div>
       <h3>{{ title }}</h3>
       <ul>
-        <li *ngFor="let category of categories">{{ category }}</li>
+        @for (category of categories; track category) {
+          <li>{{ category }}</li>
+        }
       </ul>
     </div>
-  `,
-  imports: [CommonModule],
+    `,
+  imports: [],
 })
 export class ProductCategoryBlockComponent {
   @Input() title: string = 'Product Categories';

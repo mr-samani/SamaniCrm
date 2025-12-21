@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, ElementRef, Injector, OnInit } from '@angular/core';
 import { BlockBase } from '../block-base';
 import { BlockDefinition, BlockTypeEnum } from '../block-registry';
@@ -11,7 +11,7 @@ import { DynamicDataCache, IDataStructure } from '@app/builder/services/dynamic-
 @Component({
   selector: 'block-product-category',
   standalone: true,
-  imports: [CommonModule, DynamicRendererComponent, MaterialCommonModule],
+  imports: [DynamicRendererComponent, MaterialCommonModule],
   templateUrl: './product-category.component.html',
   styleUrls: ['./product-category.component.scss'],
   host: {

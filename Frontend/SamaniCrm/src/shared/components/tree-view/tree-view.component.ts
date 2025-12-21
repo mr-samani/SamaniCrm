@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TreeViewModel } from './tree-view.model';
 
@@ -7,7 +7,7 @@ import { TreeViewModel } from './tree-view.model';
   templateUrl: './tree-view.component.html',
   styleUrls: ['./tree-view.component.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
 })
 export class TreeViewComponent implements OnInit {
   list: TreeViewModel[] = [];

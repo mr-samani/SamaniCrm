@@ -1,62 +1,63 @@
 <div class="d-flex">
   <div class="menu-list">
-    <a
-      *ngIf="AppPermissions.Products_Category_List | permission"
-      class="menu-item"
-      [routerLink]="['/panel/products/categories']"
-      routerLinkActive="active">
-      <div class="icon">
-        <i class="fad fa-diagram-project"></i>
-      </div>
-      <div class="content">
-        <div class="title">{{ 'ProductCategories' | translate }}</div>
-        <div class="description">{{ 'ProductCategoriesDescription' | translate }}</div>
-      </div>
-    </a>
-    <a
-      *ngIf="AppPermissions.Products_Type_List | permission"
-      class="menu-item"
-      [routerLink]="['/panel/products/types']"
-      routerLinkActive="active">
-      <div class="icon">
-        <i class="fad fa-box-open-full"></i>
-      </div>
+    @if (AppPermissions.Products_Category_List | permission) {
+      <a
+        class="menu-item"
+        [routerLink]="['/panel/products/categories']"
+        routerLinkActive="active">
+        <div class="icon">
+          <i class="fad fa-diagram-project"></i>
+        </div>
+        <div class="content">
+          <div class="title">{{ 'ProductCategories' | translate }}</div>
+          <div class="description">{{ 'ProductCategoriesDescription' | translate }}</div>
+        </div>
+      </a>
+    }
+    @if (AppPermissions.Products_Type_List | permission) {
+      <a
+        class="menu-item"
+        [routerLink]="['/panel/products/types']"
+        routerLinkActive="active">
+        <div class="icon">
+          <i class="fad fa-box-open-full"></i>
+        </div>
+        <div class="content">
+          <div class="title">{{ 'ProductTypes' | translate }}</div>
+          <div class="description">{{ 'ProductTypesDescription' | translate }}</div>
+        </div>
+      </a>
+    }
 
-      <div class="content">
-        <div class="title">{{ 'ProductTypes' | translate }}</div>
-        <div class="description">{{ 'ProductTypesDescription' | translate }}</div>
-      </div>
-    </a>
+    @if (AppPermissions.Products_List | permission) {
+      <a
+        class="menu-item"
+        [routerLink]="['/panel/products/product-list']"
+        routerLinkActive="active">
+        <div class="icon">
+          <i class="fad fa-boxes-packing"></i>
+        </div>
+        <div class="content">
+          <div class="title">{{ 'Products' | translate }}</div>
+          <div class="description">{{ 'ProductsDescription' | translate }}</div>
+        </div>
+      </a>
+    }
 
-    <a
-      *ngIf="AppPermissions.Products_List | permission"
-      class="menu-item"
-      [routerLink]="['/panel/products/product-list']"
-      routerLinkActive="active">
-      <div class="icon">
-        <i class="fad fa-boxes-packing"></i>
-      </div>
-
-      <div class="content">
-        <div class="title">{{ 'Products' | translate }}</div>
-        <div class="description">{{ 'ProductsDescription' | translate }}</div>
-      </div>
-    </a>
-
-    <a
-      *ngIf="AppPermissions.Products_Currency_List | permission"
-      class="menu-item"
-      [routerLink]="['/panel/products/currencies']"
-      routerLinkActive="active">
-      <div class="icon">
-        <i class="fad fa-money-bills"></i>
-      </div>
-
-      <div class="content">
-        <div class="title">{{ 'Currencies' | translate }}</div>
-        <div class="description">{{ 'CurrenciesDescription' | translate }}</div>
-      </div>
-    </a>
+    @if (AppPermissions.Products_Currency_List | permission) {
+      <a
+        class="menu-item"
+        [routerLink]="['/panel/products/currencies']"
+        routerLinkActive="active">
+        <div class="icon">
+          <i class="fad fa-money-bills"></i>
+        </div>
+        <div class="content">
+          <div class="title">{{ 'Currencies' | translate }}</div>
+          <div class="description">{{ 'CurrenciesDescription' | translate }}</div>
+        </div>
+      </a>
+    }
   </div>
   <div class="flex-fill">
     <router-outlet></router-outlet>

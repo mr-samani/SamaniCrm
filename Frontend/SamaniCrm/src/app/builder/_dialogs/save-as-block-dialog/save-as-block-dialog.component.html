@@ -1,55 +1,71 @@
 <h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
-  <span cdkDragHandle class="title" *ngIf="!isUpdate">{{ 'SaveAsNewBlock' | translate }}</span>
-  <span cdkDragHandle class="title" *ngIf="isUpdate">{{ 'EditBlock' | translate }}</span>
+  @if (!isUpdate) {
+    <span cdkDragHandle class="title">{{ 'SaveAsNewBlock' | translate }}</span>
+  }
+  @if (isUpdate) {
+    <span cdkDragHandle class="title">{{ 'EditBlock' | translate }}</span>
+  }
 
   <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
     <span aria-hidden="true">&times;</span>
   </button>
 </h2>
 <mat-dialog-content>
-  <div class="d-flex align-items-center justify-content-center py-5" *ngIf="loading">
-    <mat-spinner color="primary" diameter="25"></mat-spinner>
-  </div>
+  @if (loading) {
+    <div class="d-flex align-items-center justify-content-center py-5">
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    </div>
+  }
   <form [formGroup]="form">
     <div class="row">
       <mat-form-field class="col-sm-6 col-md-4">
         <mat-label>{{ 'Title' | translate }}</mat-label>
         <input matInput formControlName="name" maxlength="100" />
-        <mat-error *ngIf="form.get('name')?.hasError('required')">
-          {{ 'IsRequired' | translate: { value: ('Title' | translate) } }}
-        </mat-error>
+        @if (form.get('name')?.hasError('required')) {
+          <mat-error>
+            {{ 'IsRequired' | translate: { value: ('Title' | translate) } }}
+          </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="col-sm-6 col-md-4">
         <mat-label>{{ 'Icon' | translate }}</mat-label>
         <input matInput formControlName="icon" maxlength="5000" />
         <i matSuffix [class]="form.get('icon')?.value"></i>
-        <mat-error *ngIf="form.get('icon')?.hasError('required')">
-          {{ 'IsRequired' | translate: { value: (Icon' | translate) } }}
-        </mat-error>
+        @if (form.get('icon')?.hasError('required')) {
+          <mat-error>
+            {{ 'IsRequired' | translate: { value: (Icon' | translate) } }}
+          </mat-error>
+        }
       </mat-form-field>
       <mat-form-field class="col-sm-6 col-md-4">
         <mat-label>{{ 'Image' | translate }}</mat-label>
         <input matInput formControlName="image" maxlength="5000" />
-        <mat-error *ngIf="form.get('image')?.hasError('required')">
-          {{ 'IsRequired' | translate: { value: ('Image' | translate) } }}
-        </mat-error>
+        @if (form.get('image')?.hasError('required')) {
+          <mat-error>
+            {{ 'IsRequired' | translate: { value: ('Image' | translate) } }}
+          </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="col-sm-6 col-md-4">
         <mat-label>{{ 'Category' | translate }}</mat-label>
         <input matInput formControlName="categoryName" maxlength="100" />
-        <mat-error *ngIf="form.get('categoryName')?.hasError('required')">
-          {{ 'IsRequired' | translate: { value: ('categoryName' | translate) } }}
-        </mat-error>
+        @if (form.get('categoryName')?.hasError('required')) {
+          <mat-error>
+            {{ 'IsRequired' | translate: { value: ('categoryName' | translate) } }}
+          </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="col-sm-12">
         <mat-label>{{ 'Description' | translate }}</mat-label>
         <textarea matInput formControlName="description" maxlength="500" rows="2"></textarea>
-        <mat-error *ngIf="form.get('description')?.hasError('required')">
-          {{ 'IsRequired' | translate: { value: ('Description' | translate) } }}
-        </mat-error>
+        @if (form.get('description')?.hasError('required')) {
+          <mat-error>
+            {{ 'IsRequired' | translate: { value: ('Description' | translate) } }}
+          </mat-error>
+        }
       </mat-form-field>
     </div>
   </form>
@@ -61,7 +77,9 @@
 <mat-dialog-actions>
   <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
   <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
-    <mat-spinner *ngIf="saving" color="primary" diameter="25"></mat-spinner>
+    @if (saving) {
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    }
     <span>{{ 'Save' | translate }}</span>
   </button>
 </mat-dialog-actions>

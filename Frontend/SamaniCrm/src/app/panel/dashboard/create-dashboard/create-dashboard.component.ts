@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -17,7 +17,7 @@ import { finalize } from 'rxjs';
   templateUrl: './create-dashboard.component.html',
   styleUrls: ['./create-dashboard.component.scss'],
   standalone: true,
-  imports: [CommonModule, SharedModule, MaterialCommonModule, ReactiveFormsModule],
+  imports: [SharedModule, MaterialCommonModule, ReactiveFormsModule],
   providers:[
     DasboardServiceProxy
   ]

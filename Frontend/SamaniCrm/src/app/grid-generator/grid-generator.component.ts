@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Injector, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AppComponentBase } from '@app/app-component-base';
@@ -9,7 +9,7 @@ import { IGridLayoutOptions, NgxDragDropKitModule, NgxGridLayoutModule } from 'n
   templateUrl: './grid-generator.component.html',
   styleUrls: ['./grid-generator.component.scss'],
   standalone: true,
-  imports: [CommonModule, NgxDragDropKitModule, NgxGridLayoutModule],
+  imports: [NgxDragDropKitModule, NgxGridLayoutModule],
 })
 export class GridGeneratorComponent extends AppComponentBase implements OnInit {
   options: IGridLayoutOptions = {
