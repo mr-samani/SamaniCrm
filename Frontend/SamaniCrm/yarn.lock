@@ -209,10 +209,10 @@
   optionalDependencies:
     lmdb "3.4.3"
 
-"@angular/cdk@^20.2.14", "@angular/cdk@20.2.14":
-  version "20.2.14"
-  resolved "https://registry.npmjs.org/@angular/cdk/-/cdk-20.2.14.tgz"
-  integrity sha512-7bZxc01URbiPiIBWThQ69XwOxVduqEKN4PhpbF2AAyfMc/W8Hcr4VoIJOwL0O1Nkq5beS8pCAqoOeIgFyXd/kg==
+"@angular/cdk@^21.0.5", "@angular/cdk@21.0.5":
+  version "21.0.5"
+  resolved "https://registry.npmjs.org/@angular/cdk/-/cdk-21.0.5.tgz"
+  integrity sha512-yO/IRYEZ5wJkpwg3GT3b6RST4pqNFTAhuyPdEdLcE81cs283K3aKOsCYh2xUR3bR4WxBh2kBPSJ31AFZyJXbSA==
   dependencies:
     parse5 "^8.0.0"
     tslib "^2.3.0"
@@ -242,7 +242,7 @@
     yargs "18.0.0"
     zod "4.1.13"
 
-"@angular/common@^20.0.0 || ^21.0.0", "@angular/common@^21.0.6", "@angular/common@>=15", "@angular/common@>=16", "@angular/common@>=16.0.0", "@angular/common@>=17.3.0", "@angular/common@>=18.0.0", "@angular/common@>=19", "@angular/common@21.0.6":
+"@angular/common@^21.0.0 || ^22.0.0", "@angular/common@^21.0.6", "@angular/common@>=15", "@angular/common@>=16", "@angular/common@>=16.0.0", "@angular/common@>=17.3.0", "@angular/common@>=18.0.0", "@angular/common@>=19", "@angular/common@21.0.6":
   version "21.0.6"
   resolved "https://registry.npmjs.org/@angular/common/-/common-21.0.6.tgz"
   integrity sha512-Yd8PF0dR37FAzqEcBHAyVCiSGMJOezSJe6rV/4BC6AVLfaZ7oZLl8CNVxKsod2UHd6rKxt1hzx05QdVcVvYNeA==
@@ -270,7 +270,7 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/core@^20.0.0 || ^21.0.0", "@angular/core@^21.0.0", "@angular/core@^21.0.6", "@angular/core@>=15", "@angular/core@>=16", "@angular/core@>=16.0.0", "@angular/core@>=17.3.0", "@angular/core@>=18.0.0", "@angular/core@>=19", "@angular/core@21.0.6":
+"@angular/core@^21.0.0", "@angular/core@^21.0.0 || ^22.0.0", "@angular/core@^21.0.6", "@angular/core@>=15", "@angular/core@>=16", "@angular/core@>=16.0.0", "@angular/core@>=17.3.0", "@angular/core@>=18.0.0", "@angular/core@>=19", "@angular/core@21.0.6":
   version "21.0.6"
   resolved "https://registry.npmjs.org/@angular/core/-/core-21.0.6.tgz"
   integrity sha512-SvWbOkkrsqprYJSBmzQEWkWjfZB/jkRYyFp2ClMJBPqOLxP1a+i3Om2rolcNQjZPz87bs9FszwgRlXUy7sw5cQ==
@@ -284,7 +284,7 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/forms@^20.0.0 || ^21.0.0", "@angular/forms@^21.0.6", "@angular/forms@>=16.0.0":
+"@angular/forms@^21.0.0 || ^22.0.0", "@angular/forms@^21.0.6", "@angular/forms@>=16.0.0":
   version "21.0.6"
   resolved "https://registry.npmjs.org/@angular/forms/-/forms-21.0.6.tgz"
   integrity sha512-aAkAAKuUrP8U7R4aH/HbmG/CXP90GlML77ECBI5b4qCSb+bvaTEYsaf85mCyTpr9jvGkia2LTe42hPcOuyzdsQ==
@@ -292,17 +292,17 @@
     "@standard-schema/spec" "^1.0.0"
     tslib "^2.3.0"
 
-"@angular/material-luxon-adapter@^20.2.14":
-  version "20.2.14"
-  resolved "https://registry.npmjs.org/@angular/material-luxon-adapter/-/material-luxon-adapter-20.2.14.tgz"
-  integrity sha512-TY7KOeO4ag960JPvcT0WVjj2rd2QpRHRmB2IsuWBTfYCpNog0HAHS04Ug6k2OIYi+mYXyCQPIdUIjt7nOzqrmg==
+"@angular/material-luxon-adapter@^21.0.5":
+  version "21.0.5"
+  resolved "https://registry.npmjs.org/@angular/material-luxon-adapter/-/material-luxon-adapter-21.0.5.tgz"
+  integrity sha512-+f0BHPzr5c5icrRVtEXTNj/j7Vyg5UKXbS1B2cjwZPvTLDu6tMO3WaODXv6R0gdgRbD+kM+yNsfU1LMAhhNRxA==
   dependencies:
     tslib "^2.3.0"
 
-"@angular/material@^20.2.14", "@angular/material@20.2.14":
-  version "20.2.14"
-  resolved "https://registry.npmjs.org/@angular/material/-/material-20.2.14.tgz"
-  integrity sha512-IbAgV6XLsvmHiJzxycVhcNC1PA4M30qi+ERCOir6cT333Bxm8vDV32gsOjfL52uzG5YRARroPC+8s1XqR2oxeA==
+"@angular/material@^21.0.5", "@angular/material@21.0.5":
+  version "21.0.5"
+  resolved "https://registry.npmjs.org/@angular/material/-/material-21.0.5.tgz"
+  integrity sha512-LcDotwwTl2GFtFK1BqcKjj0eRAkOjTSj1C6ux0rOlpU2hJaECxue/ZqEyB/KMHngFAqMJpecxF4zGy/ISCp2xA==
   dependencies:
     tslib "^2.3.0"
 
@@ -313,7 +313,7 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/platform-browser@^20.0.0 || ^21.0.0", "@angular/platform-browser@^21.0.0", "@angular/platform-browser@^21.0.6", "@angular/platform-browser@21.0.6":
+"@angular/platform-browser@^21.0.0", "@angular/platform-browser@^21.0.0 || ^22.0.0", "@angular/platform-browser@^21.0.6", "@angular/platform-browser@21.0.6":
   version "21.0.6"
   resolved "https://registry.npmjs.org/@angular/platform-browser/-/platform-browser-21.0.6.tgz"
   integrity sha512-tPk8rlUEBPXIUPRYq6Xu7QhJgKtnVr0dOHHuhyi70biKTupr5VikpZC5X9dy2Q3H3zYbK6MHC6384YMuwfU2kg==
@@ -3409,10 +3409,10 @@ lru-cache@^7.14.1:
   resolved "https://registry.npmjs.org/lru-cache/-/lru-cache-7.18.3.tgz"
   integrity sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==
 
-luxon@^3.0.0, luxon@^3.6.1:
-  version "3.6.1"
-  resolved "https://registry.npmjs.org/luxon/-/luxon-3.6.1.tgz"
-  integrity sha512-tJLxrKJhO2ukZ5z0gyjY1zPh3Rh88Ej9P7jNrZiHMUXHae1yvI2imgOZtL1TO8TW6biMMKfTtAOoEJANgtWBMQ==
+luxon@^3.7.2:
+  version "3.7.2"
+  resolved "https://registry.npmjs.org/luxon/-/luxon-3.7.2.tgz"
+  integrity sha512-vtEhXh/gNjI9Yg1u4jX/0YVPMvxzHuGgCm6tC5kZyb08yjGWGnqAjGJvcXbqQR2P3MyMEFnRbpcdFS6PBcLqew==
 
 magic-string@0.30.19:
   version "0.30.19"
