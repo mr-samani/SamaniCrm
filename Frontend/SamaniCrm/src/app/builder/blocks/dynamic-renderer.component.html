@@ -30,7 +30,7 @@
       </span>
     </div>
     <div class="children-blocks" ngxDropList [data]="block.children" (drop)="drop($event)">
-      <span class="custom-placeholder2" *ngxPlaceholder></span>
+      <!-- <span class="custom-placeholder2" *ngxPlaceholder></span> -->
       @if (block.children) {
         @for (child of block.children; track child; let i = $index) {
           <dynamic-renderer

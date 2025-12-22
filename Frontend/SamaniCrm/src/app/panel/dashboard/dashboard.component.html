@@ -4,16 +4,17 @@
   </button>
   <switch [(ngModel)]="editMode">Edit</switch>
 </sub-header>
-<div class="panel-content">
-  @if (loading || loadingItems) {
-    <mat-progress-bar class="my-5" [mode]="'indeterminate'"></mat-progress-bar>
-  }
-  <tab-group (selectedIndexChange)="onChangeDashboard($event)" [selectedIndex]="selectedIndex">
-    @for (dashboard of dashboards; track dashboard.id; let i = $index) {
-      <tab-item [title]="dashboard.title" [active]="i == 0">
-        <ngx-grid-layout [editMode]="editMode" [options]="options" (layoutChange)="onChangeLayout($event)">
-          @for (item of dashboardItems; track item.id) {
-            <ngx-grid-item [id]="item.id" [config]="item.config">
+
+@if (loading || loadingItems) {
+  <mat-progress-bar class="my-5" [mode]="'indeterminate'"></mat-progress-bar>
+}
+<tab-group (selectedIndexChange)="onChangeDashboard($event)" [selectedIndex]="selectedIndex" [color]="'none'">
+  @for (dashboard of dashboards; track dashboard.id; let i = $index) {
+    <tab-item [title]="dashboard.title" [active]="i == 0">
+      <ngx-grid-layout [editMode]="editMode" [options]="options" (layoutChange)="onChangeLayout($event)">
+        @for (item of dashboardItems; track item.id) {
+          <ngx-grid-item [id]="item.id" [config]="item.config">
+            <div class="widget-container">
               @if (editMode) {
                 <div class="widget-actions">
                   <button class="btn btn-icon" (click)="deleteWidget(item)">
@@ -28,14 +29,14 @@
               <ng-container
                 [ngComponentOutlet]="item.component"
                 [ngComponentOutletInputs]="{ item }"
-              #c="ngComponentOutlet"></ng-container>
-            </ngx-grid-item>
-          }
-        </ngx-grid-layout>
-      </tab-item>
-    }
-  </tab-group>
-</div>
+                #c="ngComponentOutlet"></ng-container>
+            </div>
+          </ngx-grid-item>
+        }
+      </ngx-grid-layout>
+    </tab-item>
+  }
+</tab-group>
 
 @if (editMode) {
   <div class="widget-panel">

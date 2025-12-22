@@ -3,16 +3,18 @@ import {
   AfterViewInit,
   Component,
   ContentChildren,
+  DOCUMENT,
+  ElementRef,
   EventEmitter,
+  inject,
   Input,
   OnDestroy,
   Output,
   QueryList,
+  viewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { TabItemComponent } from './tab-item/tab-item.component';
-
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'tab-group',
@@ -23,7 +25,7 @@ import { Subscription } from 'rxjs';
 })
 export class TabGroupComponent implements OnDestroy, AfterViewInit {
   @Input() showPlusButton = false;
-
+  @Input() color = '#fff';
   @Output() onAddTab = new EventEmitter();
 
   @Input('selectedIndex') set setIndex(val: number) {
@@ -33,8 +35,11 @@ export class TabGroupComponent implements OnDestroy, AfterViewInit {
   }
   @Output() selectedIndexChange = new EventEmitter<number>();
   @ContentChildren(TabItemComponent) tabs = new QueryList<TabItemComponent>();
+  tabGroupContainer = viewChild<ElementRef<HTMLElement>>('tabGroupContainer');
   rndId = Math.round(Math.random() * 5000);
   private index = -1;
+
+  protected doc = inject(DOCUMENT);
   constructor() {}
 
   ngAfterViewInit(): void {
@@ -44,6 +49,8 @@ export class TabGroupComponent implements OnDestroy, AfterViewInit {
         this.selectTab(this.tabs.first, 0);
       }
     }, 100);
+
+    this.tabGroupContainer()?.nativeElement.style.setProperty('--oc-tab-bg', this.color);
   }
   ngOnDestroy(): void {}
 

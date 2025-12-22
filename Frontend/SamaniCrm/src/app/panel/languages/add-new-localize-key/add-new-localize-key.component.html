@@ -1,7 +1,5 @@
 <h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
-  @if () {
-    <span cdkDragHandle class="title">{{ 'AddNewLocalizeKey' | translate }}</span>
-  }
+  <span cdkDragHandle class="title">{{ 'AddNewLocalizeKey' | translate }}</span>
 
   <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
     <span aria-hidden="true">&times;</span>
@@ -33,10 +31,7 @@
       </div>
       <tab-group>
         @for (translation of localizationsArray.controls; track translation; let i = $index) {
-          <tab-item
-            [title]="translation.get('culture')?.value"
-            formArrayName="localizations"
-            >
+          <tab-item [title]="translation.get('culture')?.value" formArrayName="localizations">
             <div [formGroupName]="i" class="row">
               <mat-form-field class="col-sm-12">
                 <mat-label>{{ 'Value' | translate }}</mat-label>

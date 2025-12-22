@@ -20,8 +20,8 @@ export class DragPreviewRtlDirective {
     this.isRtl = htmlIsRtl || bodyIsRtl;
   }
 
-  @HostListener('cdkDragStarted', ['$event'])
-  onMouseDown(event: CdkDragStart) {
+  @HostListener('cdkDragStarted')
+  onMouseDown() {
     this.checkPageDirection();
     if (this.isRtl) {
       let drgPrview = document.querySelector('.cdk-drag.cdk-drag-preview');

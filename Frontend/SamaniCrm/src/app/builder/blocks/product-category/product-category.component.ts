@@ -15,7 +15,7 @@ import { DynamicDataCache, IDataStructure } from '@app/builder/services/dynamic-
   templateUrl: './product-category.component.html',
   styleUrls: ['./product-category.component.scss'],
   host: {
-    '[attr.style]': 'block.data.css',
+    '[attr.style]': 'block.data?.css',
   },
   providers: [ProductServiceProxy],
 })

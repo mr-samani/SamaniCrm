@@ -10,7 +10,6 @@
       (drop)="drop($event)"
       [data]="items"
       id="base">
-      <div class="custom-placeholder2" *ngxPlaceholder></div>
       @for (item of items; track item) {
         <div class="example-box" [id]="item.name">
           <div>
@@ -25,7 +24,7 @@
               {{ item.name }}
             </div>
             <div class="children" ngxDropList (drop)="drop($event)" [data]="item.children" [id]="'child_' + item.name">
-              <div class="custom-placeholder" *ngxPlaceholder></div>
+             
               @if (item.children) {
                 <ng-container
                   [ngTemplateOutlet]="tree"

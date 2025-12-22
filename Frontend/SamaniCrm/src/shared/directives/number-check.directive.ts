@@ -99,12 +99,12 @@ export class NumberCheckDirective implements OnInit, ControlValueAccessor {
     this.checkMinMax();
   }
 
-  @HostListener('paste', ['$event']) blockPaste(event: KeyboardEvent): void {
+  @HostListener('paste') blockPaste(): void {
     // console.log('paste', (event.currentTarget as any)?.value);
     this.checkNumbers();
     this.checkMinMax();
   }
-  @HostListener('change', ['$event']) inputChange(event: KeyboardEvent): void {
+  @HostListener('change') inputChange(): void {
     // console.log('inputChange', (event.currentTarget as any)?.value);
     this.checkNumbers();
   }
