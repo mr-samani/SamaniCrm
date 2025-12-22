@@ -1,4 +1,5 @@
 // @use '@angular/material' as mat;
+@use './colors.scss';
 @use './bootstrap-overide.scss';
 @use './panel.scss';
 @use './theme.scss';
@@ -34,6 +35,7 @@
   /* for table view responsive */
   --available-content-height: calc(100vh - 220px);
 }
+
 html {
   overflow-y: scroll;
 }
@@ -44,17 +46,10 @@ body {
 
 body {
   margin: 0;
-  background: #eef0f8;
-  --border-color: #e1e1e1;
-  --subheader-bg: #f34100;
-  --subheader-fg: #fff;
+  background: var(--body-bg) !important;
+  color: var(--text-primary);
 
   &.color-scheme-dark {
-    --border-color: #383838;
-    --subheader-bg: #3f51b5;
-    background-color: #252222;
-    color: #eee;
-
     .ngx-alert-container {
       &.has-backdrop {
         background: #a9a9a954 !important;
@@ -93,6 +88,10 @@ img {
   max-width: 100%;
   max-height: 100%;
 }
+pre {
+  font: inherit;
+  white-space: pre-wrap;
+}
 .fa {
   font-size: var(--fa-size);
 }
@@ -102,6 +101,19 @@ img {
 .text-end {
   text-align: end !important;
 }
+
+.card {
+  /* inner glow 👇 */
+  box-shadow:
+    inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.075),
+    /* shadow ring 👇 */ 0 0 0 1px hsla(0, 0%, 0%, 0.05),
+    /* multiple soft shadows 👇 */ 0 0.3px 0.4px hsla(0, 0%, 0%, 0.02),
+    0 0.9px 1.5px hsla(0, 0%, 0%, 0.045),
+    0 3.5px 6px hsla(0, 0%, 0%, 0.09);
+  border-color: var(--border-soft);
+  background-color: var(--card-bg);
+}
+
 /*notify */
 .notify-success {
   background-color: #00bb73;

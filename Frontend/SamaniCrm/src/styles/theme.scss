@@ -99,3 +99,21 @@ mat-form-field.mat-mdc-form-field {
     font-size: 18px;
   }
 }
+
+
+/* notify */
+.snackbar-info .mdc-snackbar__surface {
+  background-color: #00adff !important;
+}
+
+.snackbar-warning .mdc-snackbar__surface {
+  background-color: #ffa13d !important;
+}
+
+.snackbar-danger .mdc-snackbar__surface {
+  background-color: #ff003b !important;
+}
+
+.snackbar-success .mdc-snackbar__surface {
+  background-color: #00d181 !important;
+}

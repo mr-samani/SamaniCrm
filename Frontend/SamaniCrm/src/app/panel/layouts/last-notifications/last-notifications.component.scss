@@ -50,7 +50,7 @@
 
 .have-new-message {
   border: 1px var(--border-color) solid;
-  background-color: var(--bs-body-bg);
+  background-color: var(--body-bg);
   position: absolute;
   top: 39px;
   min-width: 180px;
@@ -63,7 +63,7 @@
     content: ' ';
     border-top: 1px var(--border-color) solid;
     border-left: 1px var(--border-color) solid;
-    background-color: var(--bs-body-bg);
+    background-color: var(--body-bg);
     position: absolute;
     top: -10px;
     width: 20px;

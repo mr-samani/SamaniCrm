@@ -8,13 +8,13 @@
 @if (loading || loadingItems) {
   <mat-progress-bar class="my-5" [mode]="'indeterminate'"></mat-progress-bar>
 }
-<tab-group (selectedIndexChange)="onChangeDashboard($event)" [selectedIndex]="selectedIndex" [color]="'none'">
+<tab-group (selectedIndexChange)="onChangeDashboard($event)" [selectedIndex]="selectedIndex" [color]="'var(--body-bg)'">
   @for (dashboard of dashboards; track dashboard.id; let i = $index) {
     <tab-item [title]="dashboard.title" [active]="i == 0">
       <ngx-grid-layout [editMode]="editMode" [options]="options" (layoutChange)="onChangeLayout($event)">
         @for (item of dashboardItems; track item.id) {
           <ngx-grid-item [id]="item.id" [config]="item.config">
-            <div class="widget-container">
+            <div class="widget-container card">
               @if (editMode) {
                 <div class="widget-actions">
                   <button class="btn btn-icon" (click)="deleteWidget(item)">
