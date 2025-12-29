@@ -66,10 +66,10 @@
                   }
                   @case ('yesNo') {
                     @if (item[f.column]) {
-                      <span class="label label-success">{{'Yes'|translate}}</span>
+                      <span class="tag tag-success">{{'Yes'|translate}}</span>
                     }
                     @if (!item[f.column]) {
-                      <span class="label label-success">{{'No'|translate}}</span>
+                      <span class="tag tag-danger">{{'No'|translate}}</span>
                     }
                   }
                   @case ('localize') {

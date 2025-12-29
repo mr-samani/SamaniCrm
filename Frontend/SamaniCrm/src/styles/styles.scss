@@ -114,6 +114,18 @@ pre {
   background-color: var(--card-bg);
 }
 
+.blur-card {
+  -webkit-backdrop-filter: blur(40px) saturate(1);
+  backdrop-filter: blur(40px) saturate(1);
+  background-color: #0000000d;
+  border: 1px solid hsla(0, 0%, 100%, 0.05);
+  position: relative;
+  /* corner-shape: squircle; */
+  border-radius: 7em;
+  padding: 6em 5em;
+  z-index: 10000;
+}
+
 /*notify */
 .notify-success {
   background-color: #00bb73;

@@ -121,7 +121,7 @@
 
 body.color-scheme-dark {
   .tab-group-container {
-    --oc-tab-bg: rgb(37, 37, 37);
+    --oc-tab-bg: rgb(37, 37, 37) !important;
     --oc-tab-border: #414141;
     --oc-tab-hover-bg: #294e6fb3;
   }
