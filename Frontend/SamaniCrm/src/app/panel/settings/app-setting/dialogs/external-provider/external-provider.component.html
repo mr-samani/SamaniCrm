@@ -1,0 +1,202 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title">
+    {{ isEditMode ? 'ویرایش احراز هویت خارجی' : 'افزودن احراز هویت خارجی OpenID Connect' }}
+  </span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="provider-form">
+    <!-- Basic Information -->
+    <h3>اطلاعات پایه</h3>
+    <div class="row">
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>نام (Name)</mat-label>
+        <input matInput formControlName="name" placeholder="مثال: MyCompanyOIDC" />
+        <mat-hint>نام یکتا برای شناسایی provider</mat-hint>
+        @if (form.get('name')?.hasError('required')) {
+          <mat-error>نام الزامی است</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>نام نمایشی (Display Name)</mat-label>
+        <input matInput formControlName="displayName" placeholder="مثال: ورود با حساب شرکتی" />
+        <mat-hint>نامی که به کاربر نمایش داده می‌شود</mat-hint>
+        @if (form.get('displayName')?.hasError('required')) {
+          <mat-error>نام نمایشی الزامی است</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>Scheme (اختیاری)</mat-label>
+        <input matInput formControlName="scheme" placeholder="اگر خالی باشد از Name استفاده می‌شود" />
+        <mat-hint>Scheme یکتا برای authentication handler</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>نوع Provider</mat-label>
+        <mat-select formControlName="providerType">
+          @for (type of providerTypes; track type) {
+            <mat-option [value]="type.value">
+              {{ type.label }}
+            </mat-option>
+          }
+        </mat-select>
+        <mat-hint>نوع پروتکل احراز هویت</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <!-- Client Credentials -->
+    <h3>اطلاعات Client</h3>
+    <div class="row">
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>Client ID</mat-label>
+        <input matInput formControlName="clientId" placeholder="client_id از provider" />
+        <mat-hint>Client ID دریافتی از OAuth provider</mat-hint>
+        @if (form.get('clientId')?.hasError('required')) {
+          <mat-error>Client ID الزامی است</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>Client Secret</mat-label>
+        <input
+          matInput
+          [type]="showClientSecret ? 'text' : 'password'"
+          formControlName="clientSecret"
+          placeholder="client_secret از provider" />
+        <button mat-icon-button matSuffix type="button" (click)="toggleClientSecretVisibility()">
+          <i class="fa" [class.fa-eye]="!showClientSecret"></i>
+          <i class="fa" [class.fa-eye-slash]="showClientSecret"></i>
+        </button>
+        <mat-hint>
+          {{ isEditMode ? 'برای نگه‌داشتن مقدار قبلی خالی بگذارید' : 'Client Secret دریافتی از provider' }}
+        </mat-hint>
+        @if (form.get('clientSecret')?.hasError('required')) {
+          <mat-error>Client Secret الزامی است</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Endpoints -->
+    <h3>نقاط پایانی (Endpoints)</h3>
+    <div class="row">
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>Authorization Endpoint</mat-label>
+        <input matInput formControlName="authorizationEndpoint" placeholder="https://provider.com/oauth/authorize" />
+        <mat-hint>آدرس صفحه login در provider</mat-hint>
+        @if (form.get('authorizationEndpoint')?.hasError('required')) {
+          <mat-error>الزامی است</mat-error>
+        }
+        @if (form.get('authorizationEndpoint')?.hasError('pattern')) {
+          <mat-error>URL معتبر وارد کنید</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>Token Endpoint</mat-label>
+        <input matInput formControlName="tokenEndpoint" placeholder="https://provider.com/oauth/token" />
+        <mat-hint>آدرس دریافت توکن</mat-hint>
+        @if (form.get('tokenEndpoint')?.hasError('required')) {
+          <mat-error>الزامی است</mat-error>
+        }
+        @if (form.get('tokenEndpoint')?.hasError('pattern')) {
+          <mat-error>URL معتبر وارد کنید</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>UserInfo Endpoint</mat-label>
+        <input matInput formControlName="userInfoEndpoint" placeholder="https://provider.com/oauth/userinfo" />
+        <mat-hint>آدرس دریافت اطلاعات کاربر</mat-hint>
+        @if (form.get('userInfoEndpoint')?.hasError('required')) {
+          <mat-error>الزامی است</mat-error>
+        }
+        @if (form.get('userInfoEndpoint')?.hasError('pattern')) {
+          <mat-error>URL معتبر وارد کنید</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>Logout Endpoint (اختیاری)</mat-label>
+        <input matInput formControlName="logoutEndpoint" placeholder="https://provider.com/oauth/logout" />
+        <mat-hint>آدرس logout در provider</mat-hint>
+        @if (form.get('logoutEndpoint')?.hasError('pattern')) {
+          <mat-error>URL معتبر وارد کنید</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>Callback Path (اختیاری)</mat-label>
+        <input matInput formControlName="callbackPath" placeholder="/signin-oidc" />
+        <mat-hint>اگر خالی باشد به صورت خودکار تولید می‌شود</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <!-- OAuth/OIDC Settings -->
+    <h3>تنظیمات OAuth/OIDC</h3>
+    <div class="row">
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>Scopes</mat-label>
+        <input matInput formControlName="scopes" placeholder="openid profile email" />
+        <mat-hint>Scopes مورد نیاز (با space یا comma جدا شوند)</mat-hint>
+        @if (form.get('scopes')?.hasError('required')) {
+          <mat-error>Scopes الزامی است</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>Response Type</mat-label>
+        <mat-select formControlName="responseType">
+          @for (type of responseTypes; track type) {
+            <mat-option [value]="type.value">
+              {{ type.label }}
+            </mat-option>
+          }
+        </mat-select>
+        <mat-hint>نوع Flow مورد استفاده</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>Response Mode</mat-label>
+        <mat-select formControlName="responseMode">
+          @for (mode of responseModes; track mode) {
+            <mat-option [value]="mode.value">
+              {{ mode.label }}
+            </mat-option>
+          }
+        </mat-select>
+        <mat-hint>نحوه بازگشت پاسخ</mat-hint>
+      </mat-form-field>
+    </div>
+    <p class="checkbox-field">
+      <mat-checkbox formControlName="usePkce">استفاده از PKCE (Proof Key for Code Exchange)</mat-checkbox>
+      <span class="hint-text">برای امنیت بیشتر توصیه می‌شود</span>
+    </p>
+    <!-- Advanced Settings -->
+    <h3>تنظیمات پیشرفته (اختیاری)</h3>
+    <div class="row">
+      <mat-form-field class="col-sm-12">
+        <mat-label>Metadata JSON</mat-label>
+        <textarea
+          matInput
+          formControlName="metadataJson"
+          rows="4"
+          placeholder='{"claim_mapping": {"email": "mail"}}'></textarea>
+        <mat-hint>تنظیمات JSON برای mapping یا سایر موارد</mat-hint>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" cdkFocusInitial [disabled]="loading || saving">
+    @if (saving) {
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    }
+    <span>{{ 'Save' | translate }}</span>
+  </button>
+</mat-dialog-actions>

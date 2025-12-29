@@ -13,7 +13,7 @@ import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 import { GeneralSettingComponent } from './tabs/general-setting/general-setting.component';
 import { SecuritySettingComponent } from './tabs/security-setting/security-setting.component';
 import { SwitchModule } from '@shared/components/switch/switch.module';
-import { SecuritySettingsServiceProxy } from '@shared/service-proxies';
+import { ExternalProvidersServiceProxy, SecuritySettingsServiceProxy } from '@shared/service-proxies';
 import { SharedModule } from '@shared/shared.module';
 import { UserSecuritySettingComponent } from './tabs/user-security-setting/user-security-setting.component';
 import { OtpInputComponent } from '@shared/components/otp-input/otp-input.component';
@@ -38,8 +38,8 @@ import { OtpInputComponent } from '@shared/components/otp-input/otp-input.compon
     TabGroupModule,
     SwitchModule,
     SharedModule,
-    OtpInputComponent
+    OtpInputComponent,
   ],
-  providers: [SecuritySettingsServiceProxy],
+  providers: [SecuritySettingsServiceProxy, ExternalProvidersServiceProxy],
 })
 export class AppSettingModule {}

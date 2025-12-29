@@ -14,4 +14,9 @@ public class ExternalProviderDto
     public required string Scopes { get; set; }
 
     public bool IsActive { get; set; } = false;
+
+
+    public string ResponseType { get; set; } = "";
+    public string ResponseMode { get; set; } = "";
+    public bool UsePkce { get; set; }
 }

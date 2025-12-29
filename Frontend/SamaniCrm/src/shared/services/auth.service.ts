@@ -22,6 +22,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   providedIn: 'root',
 })
 export class AuthService {
+ 
   private currentUserSubject: BehaviorSubject<UserDTO | undefined> = new BehaviorSubject<UserDTO | undefined>(
     undefined,
   );
@@ -62,6 +63,8 @@ export class AuthService {
       }),
     );
   }
+
+
   loginTwoFactor(input: TwoFactorLoginCommand) {
     return this.accountService.loginTwoFactor(input).pipe(
       map((response) => {

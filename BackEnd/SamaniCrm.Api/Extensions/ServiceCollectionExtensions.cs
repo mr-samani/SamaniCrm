@@ -31,6 +31,7 @@ using SamaniCrm.Infrastructure.FileManager;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Jobs;
 using SamaniCrm.Infrastructure.Localizer;
+using SamaniCrm.Infrastructure.MappingProfile;
 using SamaniCrm.Infrastructure.Notifications;
 using SamaniCrm.Infrastructure.Services;
 using SamaniCrm.Infrastructure.Services.Product;
@@ -85,9 +86,10 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddAutoMapper(this IServiceCollection services)
     {
-        services.AddAutoMapper(cfg => { }
-            //typeof(ProfileTypeFromAssembly1), 
-            //typeof(ProfileTypeFromAssembly2) 
+        services.AddAutoMapper(cfg => { },
+        typeof(ExternalProviderProfile)
+          //typeof(ProfileTypeFromAssembly1), 
+          //typeof(ProfileTypeFromAssembly2) 
           );
         return services;
     }

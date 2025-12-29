@@ -88,7 +88,7 @@ namespace SamaniCrm.Api.Controllers
                
 
                 // Redirect to frontend with tokens
-                var redirectUrl = $"{_configuration["FrontendUrl"]}/auth/callback?token={loginResult.AccessToken}&refreshToken={loginResult.RefreshToken}";
+                var redirectUrl = $"{_configuration["FrontendUrl"]}/account/callback?token={loginResult.AccessToken}&refreshToken={loginResult.RefreshToken}";
                 return Redirect(redirectUrl);
             }
             catch (Exception ex)

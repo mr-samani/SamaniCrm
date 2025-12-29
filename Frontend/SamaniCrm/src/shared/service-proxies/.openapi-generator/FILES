@@ -37,7 +37,7 @@ model/cache-entry-dto.ts
 model/captcha-dto.ts
 model/change-active-menu-command.ts
 model/create-custom-block-command.ts
-model/create-external-provider-dto.ts
+model/create-external-provider-command.ts
 model/create-folder-command.ts
 model/create-or-edit-language-command.ts
 model/create-or-edit-localize-key-command.ts
@@ -46,6 +46,8 @@ model/create-or-edit-page-meta-data-command.ts
 model/create-or-update-currency-command.ts
 model/create-or-update-dashboard-command.ts
 model/create-or-update-dashboard-item-command.ts
+model/create-or-update-external-provider-dto-api-response.ts
+model/create-or-update-external-provider-dto.ts
 model/create-or-update-product-attribute-command.ts
 model/create-or-update-product-category-command.ts
 model/create-or-update-product-command.ts
@@ -77,7 +79,6 @@ model/edit-user-command.ts
 model/export-all-localization-value-dto-list-api-response.ts
 model/export-all-localization-value-dto.ts
 model/external-login-callback-command.ts
-model/external-provider-dto-api-response.ts
 model/external-provider-dto-list-api-response.ts
 model/external-provider-dto.ts
 model/external-provider-type-enum.ts
@@ -188,7 +189,7 @@ model/two-factor-type-enum.ts
 model/unit-api-response.ts
 model/update-batch-localize-key-command.ts
 model/update-dashboard-items-command.ts
-model/update-external-provider-dto.ts
+model/update-external-provider-command.ts
 model/update-page-content-command.ts
 model/update-role-command.ts
 model/update-security-setting-command.ts

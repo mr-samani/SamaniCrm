@@ -1,9 +1,10 @@
 ﻿using SamaniCrm.Core.Shared.Enums;
 
-namespace SamaniCrm.Application.Common.DTOs;
+namespace SamaniCrm.Core.Shared.DTOs;
 
-public class CreateExternalProviderDto
+public class CreateOrUpdateExternalProviderDto
 {
+    public Guid? Id { get; set; }
     public string Name { get; set; }
     public string DisplayName { get; set; }
     public string Scheme { get; set; }
@@ -17,7 +18,7 @@ public class CreateExternalProviderDto
     public string LogoutEndpoint { get; set; }
     public string MetadataJson { get; set; }
     public string Scopes { get; set; }
-    public string ResponseType { get; set; } = "code";
-    public string ResponseMode { get; set; } = "query";
-    public bool UsePkce { get; set; } = true;
+    public string ResponseType { get; set; }
+    public string ResponseMode { get; set; }
+    public bool UsePkce { get; set; }
 }

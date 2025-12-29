@@ -2,9 +2,11 @@ import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
-import { AccountServiceProxy, ExternalProviderDto, SecuritySettingsServiceProxy } from '@shared/service-proxies';
 import { finalize, Subscription } from 'rxjs';
 import { CreateOrEditExternalProviderComponent } from '../../dialogs/external-provider/external-provider.component';
+import { ExternalProviderDto } from '@shared/service-proxies/model/external-provider-dto';
+import { SecuritySettingsServiceProxy } from '@shared/service-proxies/api/security-settings.service';
+import { ExternalProvidersServiceProxy } from '@shared/service-proxies/api/external-providers.service';
 
 @Component({
   selector: 'app-external-providers',
@@ -32,7 +34,7 @@ export class ExternalProvidersComponent extends AppComponentBase implements OnIn
 
   constructor(
     injector: Injector,
-    private securitySettingsService: SecuritySettingsServiceProxy,
+    private externalProviderService: ExternalProvidersServiceProxy,
     private matDialog: MatDialog,
   ) {
     super(injector);
@@ -54,7 +56,7 @@ export class ExternalProvidersComponent extends AppComponentBase implements OnIn
     }
     this.loading = true;
 
-    this.listSubscription$ = this.securitySettingsService
+    this.listSubscription$ = this.externalProviderService
       .getAllExternalProviders()
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
@@ -67,7 +69,7 @@ export class ExternalProvidersComponent extends AppComponentBase implements OnIn
     this.confirmMessage(`${item?.name}`, this.l('AreYouSureForChange')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
-        this.securitySettingsService
+        this.externalProviderService
           .changeIsActiveExternalProvider(item.id, item.isActive)
           .pipe(finalize(() => this.hideMainLoading()))
           .subscribe({
@@ -90,7 +92,7 @@ export class ExternalProvidersComponent extends AppComponentBase implements OnIn
         data: {
           provider: item,
         },
-        width: '768px',
+        width: '1024px',
       })
       .afterClosed()
       .subscribe((result) => {
@@ -99,5 +101,22 @@ export class ExternalProvidersComponent extends AppComponentBase implements OnIn
           this.getList();
         }
       });
+  }
+
+  deleteItem(item: ExternalProviderDto) {
+    this.confirmMessage(this.l('AreYouSureForDelete'), item.displayName).then((r) => {
+      if (r.isConfirmed) {
+        this.showMainLoading();
+        this.externalProviderService
+          ._delete(item.id)
+          .pipe(finalize(() => this.hideMainLoading()))
+          .subscribe((response) => {
+            if (response.success) {
+              this.notify.success(this.l('DeletedSuccessfully'));
+              this.getList();
+            }
+          });
+      }
+    });
   }
 }

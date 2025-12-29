@@ -42,6 +42,9 @@ public class GetExternalProvidersHandler : IRequestHandler<GetExternalProvidersQ
                AuthorizationEndpoint = p.AuthorizationEndpoint,
                ClientId = _secretStore.GetSecret(p.Name + ":ClientId"),
                Scopes = p.Scopes,
+               ResponseType = p.ResponseType,
+               ResponseMode = p.ResponseMode,
+               UsePkce = p.UsePkce,
                IsActive = p.IsActive
            })
            .ToListAsync(cancellationToken);

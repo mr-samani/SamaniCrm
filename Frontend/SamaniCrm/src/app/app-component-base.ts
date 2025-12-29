@@ -56,7 +56,7 @@ export abstract class AppComponentBase {
     this.mainSpinnerService.showLoading = false;
   }
 
-  confirmMessage(title: string, text: string): Promise<import('ngx-alert-modal').AlertResult<any>> {
+  confirmMessage(title: string, text?: string): Promise<import('ngx-alert-modal').AlertResult<any>> {
     return this.alert.show({
       title: title,
       text: text,

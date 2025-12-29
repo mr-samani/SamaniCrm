@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Core.Shared.Enums;
 using System;
 using System.Collections.Generic;
@@ -11,25 +13,9 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.SecuritySetting.Commands;
 
-public class UpdateExternalProviderCommand : IRequest<bool>
+public class UpdateExternalProviderCommand : CreateOrUpdateExternalProviderDto, IRequest<bool>
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public string DisplayName { get; set; }
-    public string Scheme { get; set; }
-    public ExternalProviderTypeEnum ProviderType { get; set; }
-    public string ClientId { get; set; }
-    public string ClientSecret { get; set; }
-    public string AuthorizationEndpoint { get; set; }
-    public string TokenEndpoint { get; set; }
-    public string UserInfoEndpoint { get; set; }
-    public string CallbackPath { get; set; }
-    public string LogoutEndpoint { get; set; }
-    public string MetadataJson { get; set; }
-    public string Scopes { get; set; }
-    public string ResponseType { get; set; }
-    public string ResponseMode { get; set; }
-    public bool UsePkce { get; set; }
+
 }
 
 public class UpdateExternalProviderCommandHandler : IRequestHandler<UpdateExternalProviderCommand, bool>
@@ -56,7 +42,7 @@ public class UpdateExternalProviderCommandHandler : IRequestHandler<UpdateExtern
 
         if (duplicateExists)
         {
-           throw new UserFriendlyException("Provider with this name or scheme already exists");
+            throw new UserFriendlyException("Provider with this name or scheme already exists");
         }
 
         provider.Name = request.Name;
