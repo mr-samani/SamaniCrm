@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.Auth.Commands;
 
-public record ExternalLoginCallbackCommand(string code,string provider) : IRequest<LoginResult>;
+public record ExternalLoginCallbackCommand(string code,string provider,string? codeVerifier) : IRequest<LoginResult>;
 
 public class ExternalLoginCallbackHandler : IRequestHandler<ExternalLoginCallbackCommand, LoginResult>
 {

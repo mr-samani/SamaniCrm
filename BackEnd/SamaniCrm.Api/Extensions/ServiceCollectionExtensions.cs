@@ -420,18 +420,18 @@ public static class ServiceCollectionExtensions
                             };
                         });
                         break;
-                    case ExternalProviderTypeEnum.OpenIdConnect:
-                        services.AddAuthentication().AddOpenIdConnect(provider.Scheme!, options =>
-                        {
-                            options.Authority = provider.MetadataJson; // or metadata URL
-                            options.ClientId = secretStore.GetSecret("OpenIdConnect.ClientId");
-                            options.ClientSecret = secretStore.GetSecret("OpenIdConnect.ClientSecret");
-                            options.CallbackPath = provider.CallbackPath ?? $"/signin-{provider.Scheme}";
-                            options.SignInScheme = IdentityConstants.ExternalScheme;
-                            options.ResponseType = "code";
-                            // ...map scopes/claims
-                        });
-                        break;
+                    //case ExternalProviderTypeEnum.OpenIdConnect:
+                    //    services.AddAuthentication().AddOpenIdConnect(provider.Scheme!, options =>
+                    //    {
+                    //        options.Authority = provider.MetadataJson; // or metadata URL
+                    //        options.ClientId = provider.ClientId ?? secretStore.GetSecret("OpenIdConnect.ClientId");
+                    //        options.ClientSecret = secretStore.GetSecret("OpenIdConnect.ClientSecret");
+                    //        options.CallbackPath = provider.CallbackPath != "" ? provider.CallbackPath : $"/signin-{provider.Scheme}";
+                    //        options.SignInScheme = IdentityConstants.ExternalScheme;
+                    //        options.ResponseType = "code";
+                    //        // ...map scopes/claims
+                    //    });
+                    //    break;
                         // ... برای LinkedIn, Twitter, ...
                 }
 

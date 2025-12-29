@@ -1,4 +1,5 @@
 ﻿using Duende.IdentityServer.Endpoints.Results;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Exceptions;
@@ -23,14 +24,24 @@ public class ExternalLoginService : IExternalLoginService
         _logger = logger;
     }
 
-    public async Task<ExternalLoginResult> ExchangeCodeAsync(ExternalProviderTypeEnum provider, string code, string tokenEndpoint, string clientId, string clientSecret, string redirectUri, CancellationToken cancellationToken)
+    public async Task<ExternalLoginResult> ExchangeCodeAsync(
+        ExternalProviderTypeEnum provider,
+        string code,
+        string tokenEndpoint,
+        string clientId,
+        string clientSecret,
+        string codeVerifier,
+        string redirectUri,
+        CancellationToken cancellationToken)
     {
+
         var request = new HttpRequestMessage(HttpMethod.Post, tokenEndpoint)
         {
             Content = new FormUrlEncodedContent(new Dictionary<string, string>
             {
                 ["client_id"] = clientId,
                 ["client_secret"] = clientSecret,
+                ["code_verifier"] = codeVerifier,
                 ["code"] = code,
                 ["redirect_uri"] = redirectUri,
                 ["grant_type"] = "authorization_code"
@@ -95,7 +106,7 @@ public class ExternalLoginService : IExternalLoginService
             case ExternalProviderTypeEnum.OpenIdConnect:
                 var claims = ValidateIdToken(idToken, null);
                 if (claims == null) return null;
-                output.UserName = claims.ContainsKey("sub") ? claims["sub"].ToString() : null;
+                output.UserName = claims.ContainsKey("preferred_username") ? claims["preferred_username"].ToString() : null;
                 output.Email = claims.ContainsKey("email") ? claims["email"].ToString() : null;
                 output.Name = claims.ContainsKey("name") ? claims["name"].ToString() : null;
                 output.GivenName = claims.ContainsKey("given_name") ? claims["given_name"].ToString() : null;

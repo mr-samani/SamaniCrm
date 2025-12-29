@@ -40,7 +40,7 @@ public class GetExternalProvidersHandler : IRequestHandler<GetExternalProvidersQ
                DisplayName = p.DisplayName,
                ProviderType = p.ProviderType,
                AuthorizationEndpoint = p.AuthorizationEndpoint,
-               ClientId = _secretStore.GetSecret(p.Name + ":ClientId"),
+               ClientId = p.ClientId != null ? p.ClientId : _secretStore.GetSecret(p.Name + ":ClientId"),
                Scopes = p.Scopes,
                ResponseType = p.ResponseType,
                ResponseMode = p.ResponseMode,

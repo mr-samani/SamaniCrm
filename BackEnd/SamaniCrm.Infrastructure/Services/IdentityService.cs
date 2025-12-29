@@ -678,14 +678,21 @@ public class IdentityService : IIdentityService
         //if (info == null) throw new UnauthorizedAccessException("External login info not found");
 
         //var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
+        var backendUrl = _config["BackendUrl"] ?? "";
+        if (backendUrl.EndsWith("/") == false)
+        {
+            backendUrl += "/";
+        }
 
         var provider = await _applicationDbContext.ExternalProviders
-            .Where(x => x.Name == request.provider)
+            .Where(x => x.Name.ToLower() == request.provider.ToLower() && x.IsActive)
             .Select(s => new
             {
                 s.Name,
                 s.TokenEndpoint,
                 s.ProviderType,
+                s.ClientId,
+                s.ClientSecret,
             })
             .FirstOrDefaultAsync(cancellationToken);
         if (provider == null)
@@ -693,12 +700,24 @@ public class IdentityService : IIdentityService
             throw new UnauthorizedAccessException("External login provider not found");
         }
 
-        var clientId = _secretStore.GetSecret(request.provider + ":ClientId");
-        var secret = _secretStore.GetSecret(request.provider + ":ClientSecret");
+        var clientId = provider.ClientId ?? _secretStore.GetSecret(request.provider + ":ClientId");
+        var secret = provider.ClientSecret ?? _secretStore.GetSecret(request.provider + ":ClientSecret");
         var redirectUrl = _config["ExternalLogin:RedirectUri"]! + provider.Name;
-        var externalLoginResult = await _externalLoginService.ExchangeCodeAsync(provider.ProviderType, request.code, provider.TokenEndpoint, clientId, secret, redirectUrl, cancellationToken);
+        if (provider.ProviderType == ExternalProviderTypeEnum.OpenIdConnect)
+        {
+            redirectUrl = $"{backendUrl}api/externalauth/callback/{provider.Name}";
+        }
 
 
+        var externalLoginResult = await _externalLoginService.ExchangeCodeAsync(
+            provider.ProviderType,
+            request.code,
+            provider.TokenEndpoint,
+            clientId,
+            secret,
+            request.codeVerifier,
+            redirectUrl,
+            cancellationToken);
 
         ApplicationUser? user = await FindOrCreateExternalUser(externalLoginResult.Email, externalLoginResult.UserName, externalLoginResult.Name, provider.Name);
 

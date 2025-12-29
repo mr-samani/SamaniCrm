@@ -67,7 +67,8 @@
           matInput
           [type]="showClientSecret ? 'text' : 'password'"
           formControlName="clientSecret"
-          placeholder="client_secret از provider" />
+          placeholder="client_secret از provider"
+          autocomplete="off" />
         <button mat-icon-button matSuffix type="button" (click)="toggleClientSecretVisibility()">
           <i class="fa" [class.fa-eye]="!showClientSecret"></i>
           <i class="fa" [class.fa-eye-slash]="showClientSecret"></i>
@@ -84,9 +85,13 @@
     <!-- Endpoints -->
     <h3>نقاط پایانی (Endpoints)</h3>
     <div class="row">
-      <mat-form-field class="col-sm-6 col-md-4">
+      <mat-form-field class="col-sm-12">
         <mat-label>Authorization Endpoint</mat-label>
-        <input matInput formControlName="authorizationEndpoint" placeholder="https://provider.com/oauth/authorize" />
+        <input
+          matInput
+          dir="ltr"
+          formControlName="authorizationEndpoint"
+          placeholder="https://provider.com/oauth/authorize" />
         <mat-hint>آدرس صفحه login در provider</mat-hint>
         @if (form.get('authorizationEndpoint')?.hasError('required')) {
           <mat-error>الزامی است</mat-error>
@@ -96,9 +101,9 @@
         }
       </mat-form-field>
 
-      <mat-form-field class="col-sm-6 col-md-4">
+      <mat-form-field class="col-sm-12">
         <mat-label>Token Endpoint</mat-label>
-        <input matInput formControlName="tokenEndpoint" placeholder="https://provider.com/oauth/token" />
+        <input matInput dir="ltr" formControlName="tokenEndpoint" placeholder="https://provider.com/oauth/token" />
         <mat-hint>آدرس دریافت توکن</mat-hint>
         @if (form.get('tokenEndpoint')?.hasError('required')) {
           <mat-error>الزامی است</mat-error>
@@ -108,9 +113,13 @@
         }
       </mat-form-field>
 
-      <mat-form-field class="col-sm-6 col-md-4">
+      <mat-form-field class="col-sm-12">
         <mat-label>UserInfo Endpoint</mat-label>
-        <input matInput formControlName="userInfoEndpoint" placeholder="https://provider.com/oauth/userinfo" />
+        <input
+          matInput
+          dir="ltr"
+          formControlName="userInfoEndpoint"
+          placeholder="https://provider.com/oauth/userinfo" />
         <mat-hint>آدرس دریافت اطلاعات کاربر</mat-hint>
         @if (form.get('userInfoEndpoint')?.hasError('required')) {
           <mat-error>الزامی است</mat-error>
@@ -120,18 +129,18 @@
         }
       </mat-form-field>
 
-      <mat-form-field class="col-sm-6 col-md-4">
+      <mat-form-field class="col-sm-12">
         <mat-label>Logout Endpoint (اختیاری)</mat-label>
-        <input matInput formControlName="logoutEndpoint" placeholder="https://provider.com/oauth/logout" />
+        <input matInput dir="ltr" formControlName="logoutEndpoint" placeholder="https://provider.com/oauth/logout" />
         <mat-hint>آدرس logout در provider</mat-hint>
         @if (form.get('logoutEndpoint')?.hasError('pattern')) {
           <mat-error>URL معتبر وارد کنید</mat-error>
         }
       </mat-form-field>
 
-      <mat-form-field class="col-sm-6 col-md-4">
+      <mat-form-field class="col-sm-12">
         <mat-label>Callback Path (اختیاری)</mat-label>
-        <input matInput formControlName="callbackPath" placeholder="/signin-oidc" />
+        <input matInput dir="ltr" formControlName="callbackPath" placeholder="/signin-oidc" />
         <mat-hint>اگر خالی باشد به صورت خودکار تولید می‌شود</mat-hint>
       </mat-form-field>
     </div>

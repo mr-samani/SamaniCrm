@@ -95,7 +95,7 @@ export class CreateOrEditExternalProviderComponent extends AppComponentBase impl
     this.loading = true;
     this.service
       .getById(id)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(finalize(() => (this.loading = false)))
       .subscribe({
         next: (result) => {
           if (result.data) {
@@ -106,6 +106,7 @@ export class CreateOrEditExternalProviderComponent extends AppComponentBase impl
               scheme: provider.scheme,
               providerType: provider.providerType,
               clientId: provider.clientId,
+              clientSecret:provider.clientSecret,
               authorizationEndpoint: provider.authorizationEndpoint,
               tokenEndpoint: provider.tokenEndpoint,
               userInfoEndpoint: provider.userInfoEndpoint,

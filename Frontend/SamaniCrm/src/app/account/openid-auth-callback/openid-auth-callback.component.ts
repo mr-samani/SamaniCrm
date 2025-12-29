@@ -27,14 +27,14 @@ export class OpenidAuthCallbackComponent extends AppComponentBase implements OnI
       if (token && refreshToken) {
         // Save tokens
         tokenService.set({
-          accessToken:token,
-          refreshToken:refreshToken
+          accessToken: token,
+          refreshToken: refreshToken,
         });
 
         // Navigate to dashboard or home
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/panel/dashboard']);
       } else {
-        this.router.navigate(['/login'], {
+        this.router.navigate(['/account/login'], {
           queryParams: { error: 'توکن دریافت نشد' },
         });
       }
