@@ -3788,10 +3788,10 @@ netmask@^2.0.2:
   resolved "https://registry.yarnpkg.com/netmask/-/netmask-2.0.2.tgz#8b01a07644065d536383835823bc52004ebac5e7"
   integrity sha512-dBpDMdxv9Irdq66304OLfEmQ9tbNRFnFTuZiLo+bD+r332bBmMJ8GBLXklIXXgxd3+v9+KUnZaUR5PJMa75Gsg==
 
-ngx-alert-modal@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/ngx-alert-modal/-/ngx-alert-modal-1.0.1.tgz#e78627580f17aabb3a85c9bd8c02eab93a93b458"
-  integrity sha512-Nd6j4GHtzfV93AiTYGps3uSVP+coaMSKDG+j3alnZcHi5qWzpJ/JA4s8smF2O+z++bICsbxxnAFkJ9a0aVP3nw==
+ngx-alert-modal@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-alert-modal/-/ngx-alert-modal-2.0.0.tgz#fff4ac3fd82cf20a427fea8d7602bbcd98f9e617"
+  integrity sha512-/rTPiFD8yVALdXWR06EBP/ASOLIWm+58LhoG1ra8CwOAFHE9OanapBcBfGdJcU3s6lIPMcWxXqU1po2u0NhZ5g==
   dependencies:
     tslib "^2.3.0"
 

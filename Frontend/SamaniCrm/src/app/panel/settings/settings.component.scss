@@ -1,0 +1,30 @@
+.menu-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+
+  .menu-item {
+    border: 1px #e8e8e82b solid;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    cursor: pointer;
+    width: 250px;
+    box-shadow: 0px 0px 10px #0000004d;
+    .icon {
+      i {
+        font-size: 40px;
+        margin: 0 10px;
+        font-weight: 100;
+      }
+    }
+    .menu-block {
+      .title {
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+    }
+  }
+}

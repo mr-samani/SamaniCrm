@@ -12,5 +12,16 @@ public static class AppConsts
 
     // used in github external login , ....
     public static string AppName = "SamaniCrm";
+
+
+    public static string[] AllowedTusUploadTypes { get; set; } = [
+        // images
+        "jpg", "png", "jpeg", "gif", "hiec", "tiff",
+        // documents
+        "pdf","doc", "docx" ,
+        // audio
+        "mp3","ogg",
+        // video
+        "mp4","3gp","avi" ];
 }
 

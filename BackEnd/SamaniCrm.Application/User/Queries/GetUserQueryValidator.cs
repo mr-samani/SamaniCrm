@@ -24,7 +24,7 @@ namespace SamaniCrm.Application.User.Queries
 
             RuleFor(x => x.SortDirection)
                 .Empty()
-                .Must(dir => dir.ToLower() == "asc" || dir.ToLower() == "desc" || dir == "")
+                .Must(dir => dir?.ToLower() == "asc" || dir?.ToLower() == "desc" || dir == "")
                 .WithMessage("SortDirection must be 'asc' or 'desc'.");
 
             RuleFor(x => x.SortBy)

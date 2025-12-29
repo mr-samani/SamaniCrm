@@ -9,12 +9,16 @@
       [minWidth]="235"
       (resizeEnd)="onResizeLayout($event, 'rightSide')"
       [style.width.px]="rightSideWidth">
-      <toolbox *ngIf="b.showLayouts === false"></toolbox>
-      <layouts *ngIf="b.showLayouts"></layouts>
+      @if (b.showLayouts === false) {
+        <toolbox></toolbox>
+      }
+      @if (b.showLayouts) {
+        <layouts></layouts>
+      }
     </div>
 
     <div id="builderCanvas" class="canvas" [class.show-bordered]="b.showBorder">
-      <div 
+      <div
         ngxDropList
         id="main-page"
         (drop)="b.drop($event)"
@@ -22,7 +26,7 @@
         [class.tablet-view]="b.viewMode === ViewModeEnum.Tablet"
         [class.desktop-view]="b.viewMode === ViewModeEnum.Desktop"
         [class.mobile-view]="b.viewMode === ViewModeEnum.Mobile">
-        <div class="custom-placeholder" *ngxPlaceholder></div>
+        <!-- <div class="custom-placeholder" *ngxPlaceholder></div> -->
         @for (item of b.blocks; track $index) {
           <dynamic-renderer [block]="item"></dynamic-renderer>
         }

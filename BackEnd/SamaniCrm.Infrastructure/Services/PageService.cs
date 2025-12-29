@@ -161,10 +161,10 @@ namespace SamaniCrm.Infrastructure.Services
                         };
 
             if (!string.IsNullOrWhiteSpace(request.Title))
-                query = query.Where(p => p.Translations.Any(t => t.Title.Contains(request.Title)));
+                query = query.Where(p => p.Translations.Any(t => t.Title!.Contains(request.Title)));
 
             if (!string.IsNullOrWhiteSpace(request.Introduction))
-                query = query.Where(p => p.Translations.Any(t => t.Introduction.Contains(request.Introduction)));
+                query = query.Where(p => p.Translations.Any(t => t.Introduction!.Contains(request.Introduction)));
 
             if (!string.IsNullOrWhiteSpace(request.AuthorName))
                 query = query.Where(p => p.Author.FullName != null && p.Author.FullName.Contains(request.AuthorName));
@@ -193,9 +193,10 @@ namespace SamaniCrm.Infrastructure.Services
                     Status = p.Page.Status,
                     Author = p.Author.FullName,
                     Created = p.Page.CreationTime,
-                    Title = p.Translations.FirstOrDefault().Title,
-                    Introduction = p.Translations.FirstOrDefault().Introduction,
-                    Description = p.Translations.FirstOrDefault().Description
+                    Culture = p.Translations.FirstOrDefault()!.Culture,
+                    Title = p.Translations.FirstOrDefault()!.Title ?? "",
+                    Introduction = p.Translations.FirstOrDefault()!.Introduction,
+                    Description = p.Translations.FirstOrDefault()!.Description
                 }).ToListAsync(cancellationToken);
 
             return new PaginatedResult<PageDto>
@@ -222,7 +223,7 @@ namespace SamaniCrm.Infrastructure.Services
                            Translations = s.Translations.Select(t => new PageMetaDataDto
                            {
                                Id = t.Id,
-                               Title = t.Title,
+                               Title = t.Title??"",
                                Culture = t.Culture,
                                Introduction = t.Introduction,
                                Description = t.Description,

@@ -1,0 +1,150 @@
+<sub-header [title]="'Notifications' | translate"></sub-header>
+<div class="panel-content">
+  <div class="tools d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div class="d-flex gap-2">
+      <button mat-raised-button color="primary" (click)="showFilter = !showFilter">
+        <i class="fa fa-filter mx-1"></i>
+        <span>{{ 'Filter' | translate }}</span>
+      </button>
+    </div>
+    <div class="d-flex gap-2">
+      @if (AppPermissions.Notification_SendMessageToUser | permission) {
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="sendMessageToUser()"
+          >
+          <i class="fa fa-bell mx-1"></i>
+          <span>{{ 'SendMessage' | translate }}</span>
+        </button>
+      }
+      @if (AppPermissions.Notification_BroadCastMessageToAll | permission) {
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="broadCastMessage()"
+          >
+          <i class="fa fa-broadcast mx-1"></i>
+          <span>{{ 'BroadcastMessage' | translate }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <form [formGroup]="form" *filterForm="showFilter" class="filter-form">
+    <div class="row">
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>{{ 'Filter' | translate }}</mat-label>
+        <input matInput type="text" maxlength="500" formControlName="filter" />
+      </mat-form-field>
+
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>{{ 'Type' | translate }}</mat-label>
+        <mat-select formControlName="type" multiple>
+          @for (item of NotificationTypeEnum | enumToArray; track item) {
+            <mat-option [value]="+item">
+              {{ 'NotificationTypeEnum_' + item | translate }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>{{ 'Periority' | translate }}</mat-label>
+        <mat-select formControlName="periority" multiple>
+          @for (item of NotificationPeriorityEnum | enumToArray; track item) {
+            <mat-option [value]="+item">
+              {{ 'NotificationPeriorityEnum_' + item | translate }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="d-flex align-items-center justify-content-end gap-2">
+      <button mat-stroked-button color="primary" (click)="resetFilter()" type="reset">
+        <i class="fa fa-times mx-1"></i>
+        <span>{{ 'Reset' | translate }}</span>
+      </button>
+      <button mat-stroked-button color="primary" (click)="reload()" type="submit">
+        <i class="fa fa-refresh mx-1"></i>
+        <span>{{ 'Reload' | translate }}</span>
+      </button>
+    </div>
+  </form>
+
+  <table-view
+    [list]="list"
+    [fields]="fields"
+    [operations]="operations"
+    [loading]="loading"
+    (sortChange)="getList($event)">
+    <ng-template tableCell="read" let-item>
+      <span
+        class="fad yellow"
+        [class.fa-envelope]="!item.read"
+        [class.fa-envelope-open]="item.read"
+      [title]="(item.read ? 'MsgRead' : 'MsgUnread') | translate"></span>
+    </ng-template>
+
+    <ng-template tableCell="periority" let-item>
+      <span [title]="'NotificationPeriorityEnum_' + item.periority | translate">
+        @switch (item.periority) {
+          @case (NotificationPeriorityEnum.Error) {
+            <i class="fad icon-periority fa-triangle-exclamation text-danger"></i>
+          }
+          @case (NotificationPeriorityEnum.Cretical) {
+            <i class="fad icon-periority fa-bomb text-danger"></i>
+          }
+          @case (NotificationPeriorityEnum.Alert) {
+            <i class="fad icon-periority fa-octagon-exclamation text-warning"></i>
+          }
+          @case (NotificationPeriorityEnum.Info) {
+            <i class="fad icon-periority fa-lightbulb-exclamation yellow"></i>
+          }
+          @case (NotificationPeriorityEnum.Hight) {
+            <i class="fad icon-periority fa-arrow-up-from-line text-danger"></i>
+          }
+          @default {
+            <i class="fad icon-periority fa-circle-info text-info"></i>
+          }
+        }
+      </span>
+    </ng-template>
+
+    <ng-template tableCell="type" let-item>
+      <span [title]="'NotificationTypeEnum_' + item.type">
+        @switch (item.type) {
+          @case (NotificationTypeEnum.Message) {
+            <i class="fad icon-type fa-message-lines"></i>
+          }
+          @case (NotificationTypeEnum.DownloadZip) {
+            <i class="fad icon-type fa-file-zipper"></i>
+          }
+          @default {
+            <i class="fad icon-type fa-file"></i>
+          }
+        }
+      </span>
+    </ng-template>
+  </table-view>
+
+  <pagination [total]="totalCount" [(page)]="page" [(perPage)]="perPage" (change)="onPageChange($event)"></pagination>
+
+  <ng-template #operations let-item>
+    <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
+      <i class="fa fa-ellipsis-v"></i>
+    </button>
+    <mat-menu #menu="matMenu">
+      <a mat-menu-item (click)="view(item)">
+        <i class="fa fa-eye mx-1"></i>
+        <span>{{ 'View' | translate }}</span>
+      </a>
+      @if (AppPermissions.Notification_Delete | permission) {
+        <a mat-menu-item (click)="remove(item)">
+          <i class="fa fa-trash mx-1"></i>
+          <span>{{ 'Remove' | translate }}</span>
+        </a>
+      }
+    </mat-menu>
+  </ng-template>
+</div>

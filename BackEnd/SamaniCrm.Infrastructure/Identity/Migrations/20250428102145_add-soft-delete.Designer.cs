@@ -13,7 +13,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250428102145_add-soft-delete")]
-    partial class addsoftdelete
+    partial class Addsoftdelete
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

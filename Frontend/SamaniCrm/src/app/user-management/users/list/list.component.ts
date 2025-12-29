@@ -54,8 +54,8 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
   ) {
     super(injector);
     this.breadcrumb.list = [
-      { name: this.l('Settings'), url: '/dashboard/setting' },
-      { name: this.l('Users'), url: '/dashboard/users' },
+      { name: this.l('Settings'), url: '/panel/setting' },
+      { name: this.l('Users'), url: '/panel/users' },
     ];
     this.form = this.fb.group({
       filter: [''],
@@ -108,7 +108,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
 
   onPageChange(ev?: PageEvent) {
     this.getList();
-    this.router.navigate(['/dashboard/users'], {
+    this.router.navigate(['/panel/users'], {
       queryParams: {
         page: this.page,
       },

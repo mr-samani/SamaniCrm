@@ -1,11 +1,11 @@
 import { Component, Injector, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { BlockBase } from '../block-base';
 
 @Component({
   selector: 'block-hero-banner',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="hero-banner" >Banner</div>
   `,

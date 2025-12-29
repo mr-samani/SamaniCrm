@@ -1,20 +1,22 @@
 // @use '@angular/material' as mat;
+@use './colors.scss';
 @use './bootstrap-overide.scss';
-@use './dashboard.scss';
+@use './panel.scss';
 @use './theme.scss';
 @use './list.scss';
 @use './custom-dialog.scss';
 @use './grapesjs.scss';
+@use './tree.scss';
 @use '../../node_modules/ngx-drag-drop-kit/assets/styles.css';
 
 @font-face {
   font-family: 'iranSans';
   src:
-    url('../../public/fonts/farsiNum/eot/IRANSansXFaNum-Regular.eot') format('embedded-opentype'),
-    url('../../public/fonts/farsiNum/otf/IRANSansXFaNum-Regular.otf') format('truetype'),
-    url('../../public/fonts/farsiNum/ttf/IRANSansXFaNum-Regular.ttf') format('truetype'),
-    url('../../public/fonts/farsiNum/woff/IRANSansXFaNum-Regular.woff') format('woff'),
-    url('../../public/fonts/farsiNum/woff2/IRANSansXFaNum-Regular.woff2') format('woff2');
+    url('../../public/fonts/farsiNum/eot/IRANSansXFaNum-UltraLight.eot') format('embedded-opentype'),
+    url('../../public/fonts/farsiNum/otf/IRANSansXFaNum-UltraLight.otf') format('truetype'),
+    url('../../public/fonts/farsiNum/ttf/IRANSansXFaNum-UltraLight.ttf') format('truetype'),
+    url('../../public/fonts/farsiNum/woff/IRANSansXFaNum-UltraLight.woff') format('woff'),
+    url('../../public/fonts/farsiNum/woff2/IRANSansXFaNum-UltraLight.woff2') format('woff2');
 }
 
 @font-face {
@@ -33,6 +35,7 @@
   /* for table view responsive */
   --available-content-height: calc(100vh - 220px);
 }
+
 html {
   overflow-y: scroll;
 }
@@ -43,13 +46,10 @@ body {
 
 body {
   margin: 0;
-  background: #eef0f8;
-  --border-color: #e1e1e1;
-  &.color-scheme-dark {
-    --border-color: #383838;
-    background-color: #252222;
-    color: #eee;
+  background: var(--body-bg) !important;
+  color: var(--text-primary);
 
+  &.color-scheme-dark {
     .ngx-alert-container {
       &.has-backdrop {
         background: #a9a9a954 !important;
@@ -88,6 +88,10 @@ img {
   max-width: 100%;
   max-height: 100%;
 }
+pre {
+  font: inherit;
+  white-space: pre-wrap;
+}
 .fa {
   font-size: var(--fa-size);
 }
@@ -97,33 +101,58 @@ img {
 .text-end {
   text-align: end !important;
 }
+
+.card {
+  /* inner glow 👇 */
+  box-shadow:
+    inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.075),
+    /* shadow ring 👇 */ 0 0 0 1px hsla(0, 0%, 0%, 0.05),
+    /* multiple soft shadows 👇 */ 0 0.3px 0.4px hsla(0, 0%, 0%, 0.02),
+    0 0.9px 1.5px hsla(0, 0%, 0%, 0.045),
+    0 3.5px 6px hsla(0, 0%, 0%, 0.09);
+  border-color: var(--border-soft);
+  background-color: var(--card-bg);
+}
+
+.blur-card {
+  -webkit-backdrop-filter: blur(40px) saturate(1);
+  backdrop-filter: blur(40px) saturate(1);
+  background-color: #0000000d;
+  border: 1px solid hsla(0, 0%, 100%, 0.05);
+  position: relative;
+  /* corner-shape: squircle; */
+  border-radius: 7em;
+  padding: 6em 5em;
+  z-index: 10000;
+}
+
 /*notify */
 .notify-success {
   background-color: #00bb73;
-  --mdc-snackbar-container-color: #00bb73;
+  --mat-snackbar-container-color: #00bb73;
   color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
+  --mat-snackbar-supporting-text-color: #fff;
 }
 
 .notify-warning {
   background-color: #ff7b00;
-  --mdc-snackbar-container-color: #ff7b00;
+  --mat-snackbar-container-color: #ff7b00;
   color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
+  --mat-snackbar-supporting-text-color: #fff;
 }
 
 .notify-error {
   background-color: #ff0055;
-  --mdc-snackbar-container-color: #ff0055;
+  --mat-snackbar-container-color: #ff0055;
   color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
+  --mat-snackbar-supporting-text-color: #fff;
 }
 
 .notify-info {
   background-color: #0084ff;
-  --mdc-snackbar-container-color: #0084ff;
+  --mat-snackbar-container-color: #0084ff;
   color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
+  --mat-snackbar-supporting-text-color: #fff;
 }
 
 /* end of notify */
@@ -138,5 +167,12 @@ html[data-bs-theme='light'] {
 html[data-bs-theme='dark'] {
   .ngx-alert-container .ngx-alert-inner {
     background-color: var(--bs-dark) !important;
+  }
+}
+
+fieldset {
+  legend {
+    float: none;
+    width: auto;
   }
 }

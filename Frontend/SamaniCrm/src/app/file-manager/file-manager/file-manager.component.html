@@ -1,19 +1,25 @@
 <div class="explorer">
   <div class="explorer-header">
     @if (openedFolder) {
-      <button (click)="createFolder()" *ngIf="AppPermissions.FileManager_CreateFolder | permission">
-        <i class="fa fa-folder"></i>
-        {{ 'NewFolder' | translate }}
-      </button>
+      @if (AppPermissions.FileManager_CreateFolder | permission) {
+        <button (click)="createFolder()">
+          <i class="fa fa-folder"></i>
+          {{ 'NewFolder' | translate }}
+        </button>
+      }
       <input type="file" #file placeholder="Choose file" (change)="uploadFile(file)" style="display: none" />
-      <button (click)="file?.click()" *ngIf="AppPermissions.FileManager_CreateFile | permission">
-        <i class="fa fa-upload"></i>
-        {{ 'Upload' | translate }}
-      </button>
-      <button (click)="uploadImage()" *ngIf="AppPermissions.FileManager_CreateFile | permission">
-        <i class="fa fa-upload"></i>
-        {{ 'UploadImage' | translate }}
-      </button>
+      @if (AppPermissions.FileManager_CreateFile | permission) {
+        <button (click)="file?.click()">
+          <i class="fa fa-upload"></i>
+          {{ 'Upload' | translate }}
+        </button>
+      }
+      @if (AppPermissions.FileManager_CreateFile | permission) {
+        <button (click)="uploadImage()">
+          <i class="fa fa-upload"></i>
+          {{ 'UploadImage' | translate }}
+        </button>
+      }
     }
 
     <button [disabled]="true">
@@ -41,24 +47,30 @@
     </div>
     <div class="d-flex align-items-center justify-content-between">
       <span class="upload">{{ progress }}%</span>
-      <span class="upload" *ngIf="message">
-        {{ message }}
-      </span>
+      @if (message) {
+        <span class="upload">
+          {{ message }}
+        </span>
+      }
     </div>
   </div>
   <div class="file-folders">
     <div class="folder-tree">
-      <p class="text-center my-5 py-5" *ngIf="folders.length === 0 && loadingFolders === false">
-        {{ 'Message.notFoundResult' | translate }}
-      </p>
-      <mat-spinner color="primary" *ngIf="loadingFolders" diameter="25"></mat-spinner>
+      @if (folders.length === 0 && loadingFolders === false) {
+        <p class="text-center my-5 py-5">
+          {{ 'Message.notFoundResult' | translate }}
+        </p>
+      }
+      @if (loadingFolders) {
+        <mat-spinner color="primary" diameter="25"></mat-spinner>
+      }
       <tree-folder [folders]="folders" (openFolder)="openedFolder = $event"></tree-folder>
     </div>
     <div class="folder-view">
       <address-bar
         [folderId]="openedFolder?.id"
         [folders]="folders"
-        (selectionChange)="openedFolder = $event"></address-bar>
+      (selectionChange)="openedFolder = $event"></address-bar>
 
       <file-list #fileList (onSelectFile)="onSelectFile($event)" [(openFolder)]="openedFolder"></file-list>
     </div>

@@ -3,19 +3,21 @@ import { AppComponentBase } from '@app/app-component-base';
 import { finalize, Subscription } from 'rxjs';
 import { ProductServiceProxy } from '@shared/service-proxies/api/product.service';
 import { MatDialog } from '@angular/material/dialog';
-import { FormGroup } from '@angular/forms';
-import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
 import {
   DeleteProductCategoryCommand,
   ExportAllLocalizationValueDto,
   GetCategoriesForAdminQuery,
-  PagedProductCategoryDto,
+  ProductCategoryDto,
 } from '@shared/service-proxies';
-import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { CreateOrEditProductCategoryComponent } from './create-or-edit/create-or-edit.component';
 import { DownloadService } from '@shared/services/download.service';
 import { AppConst } from '@shared/app-const';
 import { JsonFileReaderService } from '@shared/services/json-file-reader.service';
+export class TreeProductCategory extends ProductCategoryDto {
+  override children?: TreeProductCategory[] = [];
+  isOpen?: boolean;
+  hasUnSelectedChildren?: boolean;
+}
 
 @Component({
   selector: 'app-product-categories',
@@ -26,29 +28,12 @@ import { JsonFileReaderService } from '@shared/services/json-file-reader.service
 export class ProductCategoriesComponent extends AppComponentBase implements OnInit {
   loading = true;
 
-  list: PagedProductCategoryDto[] = [];
-  totalCount = 0;
+  list: TreeProductCategory[] = [];
 
-  fields: FieldsType[] = [
-    { column: 'image', title: this.l('Image'), width: 100, type: 'profilePicture' },
-    // { column: 'id', title: this.l('Id'), width: 100 },
-    { column: 'title', title: this.l('Title') },
-    { column: 'description', title: this.l('Description') },
-    { column: 'isActive', title: this.l('IsActive'), type: 'yesNo' },
-    { column: 'hasChild', title: this.l('HasChild'), type: 'yesNo' },
-    { column: 'orderIndex', title: this.l('OrderIndex') },
-    { column: 'slug', title: this.l('Slug') },
-    { column: 'childCount', title: this.l('ChildCount') },
-    { column: 'creationTime', title: this.l('CreationTime'), type: 'dateTime' },
-  ];
-
-  form: FormGroup;
-  page = 1;
-  perPage = 10;
   listSubscription$?: Subscription;
   showFilter = false;
 
-  parentId = '';
+  baseUrl = AppConst.fileServerUrl;
   constructor(
     injector: Injector,
     private productService: ProductServiceProxy,
@@ -57,20 +42,12 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
     private jsonFileReaderService: JsonFileReaderService,
   ) {
     super(injector);
-    this.breadcrumb.list = [{ name: this.l('ProductCategories'), url: '/dashboard/products/categories' }];
-    this.form = this.fb.group({
-      filter: [''],
-    });
-
-    this.route.queryParams.subscribe((p) => {
-      this.parentId = p['parentId'] ?? '';
-      this.page = p['page'] ?? 1;
-      this.perPage = p['perPage'] ?? 10;
-      this.getList();
-    });
+    this.breadcrumb.list = [{ name: this.l('ProductCategories'), url: '/panel/products/categories' }];
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getList();
+  }
 
   ngOnDestroy(): void {
     if (this.listSubscription$) {
@@ -78,68 +55,22 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
     }
   }
 
-  getList(ev?: SortEvent) {
+  getList() {
     if (this.listSubscription$) {
       this.listSubscription$.unsubscribe();
     }
     this.loading = true;
+    this.list = [];
     const input = new GetCategoriesForAdminQuery();
-    input.parentId = this.parentId == '' ? undefined : this.parentId;
-    input.filter = this.form.get('filter')?.value;
-    input.pageNumber = this.page;
-    input.pageSize = this.perPage;
-    input.sortBy = ev ? ev.field : '';
-    input.sortDirection = ev ? ev.direction : '';
     this.listSubscription$ = this.productService
-      .getCategoriesForAdmin(input)
+      .getTreeProductCategoriesForAdmin(input)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((response) => {
-        this.list = response.data?.items ?? [];
-        this.list.map((m) => (m.image = m.image ? AppConst.fileServerUrl + '/' + m.image : ''));
-        this.totalCount = response.data?.totalCount ?? 0;
-        this.breadcrumb.list = [{ name: this.l('Categories'), url: '/dashboard/products/categories' }];
-        if (response.data?.breadcrumbs) {
-          for (let b of response.data.breadcrumbs.reverse()) {
-            if (b.id == this.parentId) {
-              this.breadcrumb.list.push({ name: b.title! });
-            } else {
-              this.breadcrumb.list.push({
-                name: b.title!,
-                url: '/dashboard/products/categories',
-                queryParams: {
-                  parentId: b.id!,
-                  page: 1 + '',
-                },
-              });
-            }
-          }
-        }
+        this.list = response.data ?? [];
       });
   }
 
-  reload(setFirstPage = true) {
-    if (setFirstPage) {
-      this.page = 1;
-    }
-    this.onPageChange();
-  }
-  resetFilter() {
-    this.showFilter = false;
-    this.form.patchValue({ filter: '' });
-    this.reload();
-  }
-
-  onPageChange(ev?: PageEvent) {
-    this.getList();
-    this.router.navigate(['/dashboard/products/categories'], {
-      queryParams: {
-        page: this.page,
-        parentId: this.parentId,
-      },
-    });
-  }
-
-  openCreateOrEditDialog(item?: PagedProductCategoryDto) {
+  openCreateOrEditDialog(item?: TreeProductCategory) {
     this.matDialog
       .open(CreateOrEditProductCategoryComponent, {
         data: {
@@ -150,12 +81,12 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
       .afterClosed()
       .subscribe((result) => {
         if (result) {
-          this.reload();
+          this.getList();
         }
       });
   }
 
-  remove(item: PagedProductCategoryDto) {
+  remove(item: TreeProductCategory, parent?: TreeProductCategory) {
     this.confirmMessage(`${this.l('Delete')}:${item?.title}`, this.l('AreYouSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
@@ -165,20 +96,20 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));
-              this.reload();
+              if (!parent) {
+                let index = this.list.findIndex((x) => x.id == item.id);
+                this.list.splice(index, 1);
+              } else {
+                if (parent.children) {
+                  let index = parent.children.findIndex((x) => x.id == item.id);
+                  parent.children.splice(index, 1);
+                } else {
+                  this.getList();
+                }
+              }
             }
           });
       }
-    });
-  }
-
-  viewSubCategories(item: PagedProductCategoryDto) {
-    this.parentId = item.id!;
-    this.router.navigate(['/dashboard/products/categories'], {
-      queryParams: {
-        page: 1,
-        parentId: this.parentId,
-      },
     });
   }
 
@@ -203,12 +134,105 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
           .pipe(finalize(() => this.hideMainLoading()))
           .subscribe((result) => {
             if (result) {
-              this.reload();
+              this.getList();
             }
           });
       } catch (e) {
         this.notify.error(this.l('JsonFileIsInvalid'));
       }
     });
+  }
+
+  /*-------------------------------------------------------------------*/
+
+  onChange(item: TreeProductCategory) {
+    // کلیک اول
+    // خودش فقط انتخاب بشه
+    if (!item.isActive) {
+      item.isActive = true;
+      //this.changeChild.emit(item);
+      if (!item.isOpen) {
+        this.openCloseFolder(item);
+      }
+      return;
+    }
+    // کلیک دوم
+    // خودش و بچه هاش انتخاب بشن
+    if (
+      item.isActive == true &&
+      item.children &&
+      item.children.length > 0 &&
+      item.children.every((x) => x.isActive) == false
+    ) {
+      this.toggleAllChild(item, true);
+      return;
+    }
+    // کلیک سوم
+    // خودش و بچه هاش از انتخاب خارج بشن
+    if (
+      item.isActive === true &&
+      item.children &&
+      item.children.length > 0 &&
+      item.children.every((x) => x.isActive) == true
+    ) {
+      this.toggleAllChild(item, false);
+      return;
+    }
+
+    if (item.isActive == true && (!item.children || item.children.length === 0)) {
+      item.isActive = false;
+      // this.changeChild.emit(item);
+      return;
+    }
+  }
+
+  toggleAllChild(item: TreeProductCategory, isActive: boolean) {
+    item.isActive = isActive;
+
+    item.hasUnSelectedChildren = false;
+    if (item.children) {
+      this.checkOrUncheckAll(item.children, item.isActive);
+    }
+  }
+  checkOrUncheckAll(item: TreeProductCategory[], isChecked: boolean) {
+    for (let i of item) {
+      i.isActive = isChecked;
+
+      i.hasUnSelectedChildren = false;
+      // this.changeChild.emit(i);
+      if (i.children) {
+        this.checkOrUncheckAll(i.children, isChecked);
+      }
+    }
+  }
+
+  checkChild(ev: TreeProductCategory, parent: TreeProductCategory) {
+    //  console.log(ev, 'parent', parent);
+    if (parent.children?.every((x) => x.isActive)) {
+      parent.isActive = true;
+
+      parent.hasUnSelectedChildren = false;
+    } else if (parent.children?.some((x) => x.isActive || x.hasUnSelectedChildren)) {
+      parent.hasUnSelectedChildren = true;
+    }
+    // this.changeChild.emit(this.parent);
+  }
+
+  openCloseFolder(item: TreeProductCategory) {
+    item.isOpen = !item.isOpen;
+    if (item.isOpen && item.children && item.children.length === 0) {
+      // this.getData(item);
+    }
+  }
+
+  //--------------------------------------------
+
+  openOrCloseAll(tree: TreeProductCategory[], open: boolean) {
+    for (let item of tree) {
+      item.isOpen = open;
+      if (item.children) {
+        this.openOrCloseAll(item.children, open);
+      }
+    }
   }
 }

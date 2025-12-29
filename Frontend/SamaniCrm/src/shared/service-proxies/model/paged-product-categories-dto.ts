@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { PagedProductCategoryDto } from './paged-product-category-dto';
+import { ProductCategoryDto } from './product-category-dto';
 import { BreadcrumbResult } from './breadcrumb-result';
 
 
@@ -15,7 +15,7 @@ import { BreadcrumbResult } from './breadcrumb-result';
 
 /** Interface for PagedProductCategoriesDto */
 export interface IPagedProductCategoriesDto {
-  items?: Array<PagedProductCategoryDto>;
+  items?: Array<ProductCategoryDto>;
   totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
@@ -24,7 +24,7 @@ export interface IPagedProductCategoriesDto {
 
 /** Class for PagedProductCategoriesDto */
 export class PagedProductCategoriesDto implements IPagedProductCategoriesDto {
-  items?: Array<PagedProductCategoryDto>;
+  items?: Array<ProductCategoryDto>;
   totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
@@ -44,7 +44,7 @@ init(data?: any) {
     if (Array.isArray(data["items"])) {
       this.items = [] as any;
       for (let item of data["items"])
-        (this.items as any).push(PagedProductCategoryDto.fromJS(item));
+        (this.items as any).push(ProductCategoryDto.fromJS(item));
     }
     this.totalCount = data["totalCount"];
     this.pageNumber = data["pageNumber"];

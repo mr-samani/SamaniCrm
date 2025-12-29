@@ -12,10 +12,10 @@ namespace SamaniCrm.Application.ProductManagerManager.Interfaces
 {
     public interface IProductCategoryService
     {
-        Task<List<ProductCategoryDto>> GetCategoryTree(CancellationToken cancellationToken);
         Task<PagedProductCategoriesDto> GetPagedCategories(GetCategoriesForAdminQuery request, CancellationToken cancellationToken);
 
         Task<List<ProductCategoryDto>> GetPublicCategories(GetProductCategoriesQuery request, CancellationToken cancellationToken);
+        Task<List<ProductCategoryDto>> GetTreeProductCategories(bool onlyIsActive, CancellationToken cancellationToken);
 
     }
 }

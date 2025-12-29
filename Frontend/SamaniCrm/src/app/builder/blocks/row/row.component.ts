@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Injector, OnInit } from '@angular/core';
 import { DynamicRendererComponent } from '../dynamic-renderer.component';
 import { BlockBase } from '../block-base';
@@ -9,7 +9,7 @@ import { BlockGeneralHtmlTagsComponent } from '../general-html-tags/general-html
 @Component({
   selector: 'block-row',
   standalone: true,
-  imports: [CommonModule, DynamicRendererComponent, NgxDragDropKitModule],
+  imports: [DynamicRendererComponent, NgxDragDropKitModule],
   templateUrl: './row.component.html',
   styleUrl: './row.component.scss',
 })

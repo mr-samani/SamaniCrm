@@ -6,9 +6,9 @@ import { CComponent } from './c/c.component';
 
 export const routes: Routes = [
   //{ path: '', redirectTo: 'testy', pathMatch: 'full' },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'panel', pathMatch: 'full' },
   { path: 'account', loadChildren: () => import('./account/account.module').then((m) => m.AccountModule) },
-  { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule) },
+  { path: 'panel', loadChildren: () => import('./panel/panel.module').then((m) => m.PanelModule) },
 
   { path: 'testy', component: TestyComponent },
   { path: 'g', component: GridGeneratorComponent },

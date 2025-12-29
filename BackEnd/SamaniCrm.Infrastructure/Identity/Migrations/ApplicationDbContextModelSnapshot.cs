@@ -125,6 +125,84 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Dashboard.Dashboard", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Dashboards", "panel");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Dashboard.DashboardItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ComponentName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("DashboardId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Data")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DashboardId");
+
+                    b.ToTable("DashboardItems", "panel");
+                });
+
             modelBuilder.Entity("SamaniCrm.Domain.Entities.ExternalProvider", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1829,6 +1907,17 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Dashboard.DashboardItem", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.Dashboard.Dashboard", "Dashboard")
+                        .WithMany("DashboardItems")
+                        .HasForeignKey("DashboardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dashboard");
+                });
+
             modelBuilder.Entity("SamaniCrm.Domain.Entities.FileFolder", b =>
                 {
                     b.HasOne("SamaniCrm.Domain.Entities.FileFolder", "Parent")
@@ -2180,6 +2269,11 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasForeignKey("SamaniCrm.Domain.Entities.UserSetting", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Dashboard.Dashboard", b =>
+                {
+                    b.Navigation("DashboardItems");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.FileFolder", b =>

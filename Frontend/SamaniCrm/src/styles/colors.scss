@@ -1,0 +1,70 @@
+/* Light mode variables */
+body {
+  /* Base */
+  --body-bg: #eef0f8;
+  --surface-bg: #ffffff;
+  --card-bg: #ffffff;
+
+  /* Text */
+  --text-primary: #1f2937; /* slate-800 */
+  --text-secondary: #6b7280; /* slate-500 */
+  --text-muted: #9ca3af;
+
+  /* Brand / Accent */
+  --primary: #f34100; /* accent warm */
+  --primary-hover: #d93800;
+  --primary-soft: #fff1ec;
+
+  /* Borders */
+  --border-color: #e1e5f2;
+  --border-soft: #f0f2f8;
+
+  /* Shadow (خیلی مهم) */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.12);
+
+  /* UI */
+  --subheader-bg: #f34100;
+  --subheader-fg: #ffffff;
+  --hover-bg: #f5f7ff;
+  --focus-ring: rgba(243, 65, 0, 0.35);
+
+  /* Button */
+  --btn-hover-inset-color: #fff;
+}
+/* Dark mode variables */
+body.color-scheme-dark {
+  /* Base */
+  --body-bg: #1f1f23;
+  --surface-bg: #25252b;
+  --card-bg: #2b2b31;
+
+  /* Text */
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+
+  /* Brand */
+  --primary: #3f51b5; /* گرم‌تر برای dark */
+  --primary-hover: #5062c7;
+  --primary-soft: rgba(255, 120, 73, 0.12);
+
+  /* Borders */
+  --border-color: #38383f;
+  --border-soft: #2f2f36;
+
+  /* Shadow (برعکس لایت، نرم‌تر) */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 14px 40px rgba(0, 0, 0, 0.6);
+
+  /* UI */
+  --subheader-bg: #3f51b5;
+  --subheader-fg: #ffffff;
+  --hover-bg: #33333a;
+  --focus-ring: #3f51b54b;
+
+  /* Button */
+  --btn-hover-inset-color: #38383f;
+}

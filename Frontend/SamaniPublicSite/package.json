@@ -29,7 +29,7 @@
     "express": "^5.1.0",
     "lodash-es": "^4.17.21",
     "luxon": "^3.6.1",
-    "ngx-alert-modal": "^1.0.1",
+    "ngx-alert-modal": "^2.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

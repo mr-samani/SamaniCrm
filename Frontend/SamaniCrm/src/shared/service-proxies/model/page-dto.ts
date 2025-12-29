@@ -27,7 +27,7 @@ export interface IPageDto {
   isActive?: boolean;
   isSystem?: boolean;
   coverImage?: string;
-  culture?: string;
+  culture: string;
   metaDescription?: string;
   metaKeywords?: string;
   data?: string;
@@ -50,7 +50,7 @@ export class PageDto implements IPageDto {
   isActive?: boolean;
   isSystem?: boolean;
   coverImage?: string;
-  culture?: string;
+  culture!: string;
   metaDescription?: string;
   metaKeywords?: string;
   data?: string;

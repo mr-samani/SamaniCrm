@@ -1,16 +1,17 @@
-﻿using SamaniCrm.Application.DTOs;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SamaniCrm.Application.User.Commands;
-using SamaniCrm.Application.Queries.User;
-using SamaniCrm.Host.Models;
-using SamaniCrm.Application.Common.DTOs;
-using SamaniCrm.Application.User.Queries;
 using SamaniCrm.Api.Attributes;
-using SamaniCrm.Core.Permissions;
+using SamaniCrm.Application.Common.DTOs;
+using SamaniCrm.Application.DTOs;
+using SamaniCrm.Application.ProductManager.Queries;
+using SamaniCrm.Application.Queries.User;
 using SamaniCrm.Application.Role.Commands;
+using SamaniCrm.Application.User.Commands;
+using SamaniCrm.Application.User.Queries;
+using SamaniCrm.Core.Permissions;
+using SamaniCrm.Host.Models;
 
 
 namespace SamaniCrm.Api.Controllers
@@ -117,5 +118,18 @@ namespace SamaniCrm.Api.Controllers
             var result = await _mediator.Send(new ChangeUserLanguageCommand(culture));
             return ApiOk(result);
         }
+
+
+        [HttpGet("GetAutoCompleteUser")]
+        [Permission(AppPermissions.UserManagement_List)]
+        [ProducesResponseType(typeof(ApiResponse<List<AutoCompleteDto<Guid>>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAutoCompleteUser(string? filter, CancellationToken cancellationToken)
+        {
+            List<AutoCompleteDto<Guid>> result = await _mediator.Send(new GetAutoCompleteUserQuery(filter), cancellationToken);
+            return ApiOk(result);
+        }
+
+
+
     }
 }

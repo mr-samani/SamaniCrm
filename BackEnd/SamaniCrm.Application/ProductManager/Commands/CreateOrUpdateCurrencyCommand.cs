@@ -30,8 +30,12 @@ namespace SamaniCrm.Application.ProductManager.Commands
 
         public async Task<bool> Handle(CreateOrUpdateCurrencyCommand request, CancellationToken cancellationToken)
         {
-            var found = await _dbContext.Currency.FindAsync(new object[] { request.Id }, cancellationToken);
+            Currency? found = null;
 
+            if (request.Id != null)
+            {
+                found = await _dbContext.Currency.FindAsync(new object[] { request.Id }, cancellationToken);
+            }
             if (found == null)
             {
                 var newItem = new Currency

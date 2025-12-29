@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, forwardRef, Injector, Input, OnInit } from '@angular/core';
 import {
   AbstractControl,
@@ -20,7 +20,7 @@ import { PasswordComplexityDto } from '@shared/service-proxies';
   templateUrl: './password-input.component.html',
   styleUrls: ['./password-input.component.scss'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialCommonModule, TranslateModule],
+  imports: [ReactiveFormsModule, MaterialCommonModule, TranslateModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

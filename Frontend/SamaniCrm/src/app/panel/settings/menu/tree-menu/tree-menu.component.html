@@ -1,0 +1,107 @@
+<div class="d-flex gap-1 flex-wrap">
+  @if (AppPermissions.MenuManagement_Create | permission) {
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="openCreateOrEditDialog()"
+      [disabled]="loading"
+      >
+      <i class="fa fa-plus mx-2"></i>
+      {{ 'CreateNewMenu' | translate }}
+    </button>
+  }
+
+  <button mat-stroked-button (click)="toggleAll(nodes); this.isExpandAll = !this.isExpandAll">
+    @if (isExpandAll) {
+      <span>{{ 'CollapseAll' | translate }}</span>
+    }
+    @if (!isExpandAll) {
+      <span>{{ 'ExpandAll' | translate }}</span>
+    }
+  </button>
+
+  <button mat-stroked-button (click)="reload()" [disabled]="loading">
+    <i class="fa fa-refresh"></i>
+  </button>
+</div>
+
+@if (nodes.length == 0 && !loading) {
+  <div class="d-flex align-items-center justify-content-center">
+    {{ 'NotAnyCase' | translate }}
+  </div>
+}
+
+<div
+  cdkDropList
+  [cdkDropListData]="nodes"
+  [id]="'main'"
+  [cdkDropListConnectedTo]="dropTargetIds"
+  (cdkDropListDropped)="drop($event)"
+  [cdkDropListSortingDisabled]="true">
+  @for (node of nodes; track node) {
+    <div cdkDrag [cdkDragData]="node.id" (cdkDragMoved)="dragMoved($event)">
+      <ng-container *ngTemplateOutlet="tmplNode; context: { node: node }"></ng-container>
+    </div>
+  }
+</div>
+
+<ng-template #tmplNode let-node="node">
+  <div class="node-item" [attr.data-id]="node.id" [attr.id]="'node-' + node.id">
+    <div class="node-title" (click)="node.isExpanded = !node.isExpanded">
+      @if (node.loading) {
+        <mat-spinner color="primary" diameter="20"></mat-spinner>
+      }
+      <i [class]="node.icon"></i>
+      @if (node.children && node.children.length > 0) {
+        @if (node.isExpanded) {
+          <i class="fa fa-circle-minus mx-2"></i>
+        } @else {
+          <i class="fa fa-circle-plus mx-2"></i>
+        }
+      }
+      <span>{{ node.title }}</span>
+      <span>({{ node.url }})</span>
+      <div class="actions" (click)="stopPagination($event)">
+        <span class="item-notes">({{ node.children.length }})</span>
+        <button mat-icon-button (click)="openCreateOrEditDialog(node)">
+          <i class="fa fa-edit"></i>
+        </button>
+
+        @if (AppPermissions.MenuManagement_Delete | permission) {
+          <button mat-icon-button (click)="delete(node)">
+            <i class="fa fa-trash"></i>
+          </button>
+        }
+        @if (AppPermissions.MenuManagement_Edit | permission) {
+          <mat-slide-toggle
+            [(ngModel)]="node.active"
+            [disabled]="node.loading"
+            color="primary"
+            (toggleChange)="changeActive(node)"
+          ></mat-slide-toggle>
+        }
+      </div>
+    </div>
+
+    @if (node.isExpanded && node.children.length) {
+      <div
+        class="node-children"
+        cdkDropList
+        [cdkDropListData]="node.children"
+        [id]="node.id"
+        [cdkDropListConnectedTo]="dropTargetIds"
+        (cdkDropListDropped)="drop($event)"
+        [cdkDropListSortingDisabled]="true">
+        @for (child of node.children; track child) {
+          <div
+            cdkDrag
+            [cdkDragData]="child.id"
+            (cdkDragMoved)="dragMoved($event)"
+            [cdkDragDisabled]="!(AppPermissions.MenuManagement_ReOrder | permission)">
+            <ng-container *ngTemplateOutlet="tmplNode; context: { node: child }"></ng-container>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</ng-template>

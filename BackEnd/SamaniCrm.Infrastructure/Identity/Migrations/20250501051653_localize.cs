@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SamaniCrm.Infrastructure.Identity.Migrations
 {
     /// <inheritdoc />
-    public partial class localize : Migration
+    public partial class Localize : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

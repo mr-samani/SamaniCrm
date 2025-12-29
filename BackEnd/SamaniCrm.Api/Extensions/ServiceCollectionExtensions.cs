@@ -324,7 +324,7 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddHangfireJobs(this IServiceCollection services, IConfiguration config)
     {
-        services.AddScoped<IStartupFilter, HangfireJobStartupFilter>();
+        services.AddSingleton<IStartupFilter, HangfireJobStartupFilter>();
         return services;
     }
     public static IServiceCollection LoadExternalProviders(this IServiceCollection services, IConfiguration config)
@@ -391,7 +391,7 @@ public static class ServiceCollectionExtensions
                          });
                         break;
                     case ExternalProviderTypeEnum.OAuth2:
-                        services.AddAuthentication().AddOAuth(provider.Scheme, options =>
+                        services.AddAuthentication().AddOAuth(provider.Scheme!, options =>
                         {
                             options.ClientId = secretStore.GetSecret("OAuth2.ClientId") ?? "myOath";
                             options.ClientSecret = secretStore.GetSecret("OAuth2.ClientSecret") ?? "myOath";
@@ -419,7 +419,7 @@ public static class ServiceCollectionExtensions
                         });
                         break;
                     case ExternalProviderTypeEnum.OpenIdConnect:
-                        services.AddAuthentication().AddOpenIdConnect(provider.Scheme, options =>
+                        services.AddAuthentication().AddOpenIdConnect(provider.Scheme!, options =>
                         {
                             options.Authority = provider.MetadataJson; // or metadata URL
                             options.ClientId = secretStore.GetSecret("OpenIdConnect.ClientId");

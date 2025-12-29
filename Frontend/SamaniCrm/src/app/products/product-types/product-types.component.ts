@@ -44,7 +44,7 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
     private matDialog: MatDialog,
   ) {
     super(injector);
-    this.breadcrumb.list = [{ name: this.l('ProductTypes'), url: '/dashboard/products/types' }];
+    this.breadcrumb.list = [{ name: this.l('ProductTypes'), url: '/panel/products/types' }];
     this.form = this.fb.group({
       filter: [''],
     });
@@ -98,7 +98,7 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
 
   onPageChange(ev?: PageEvent) {
     this.getList();
-    this.router.navigate(['/dashboard/products/types'], {
+    this.router.navigate(['/panel/products/types'], {
       queryParams: {
         page: this.page,
       },

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Domain.Entities.ProductEntities;
 
 namespace SamaniCrm.Infrastructure.Persistence;
@@ -65,7 +66,10 @@ public static class SeedProductCategoriesFromFile
         }
 
         // جلوگیری از درج دوباره:
-        var existingSlugs = dbContext.ProductCategories.Select(c => c.Slug).ToHashSet();
+        var existingSlugs = dbContext.ProductCategories
+            .Select(c => c.Slug)
+            .IgnoreQueryFilters()
+            .ToHashSet();
         var newCategories = categories.Values
             .Where(c => !existingSlugs.Contains(c.Slug))
             .ToList();

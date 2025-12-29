@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Injector, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
@@ -9,7 +9,7 @@ import { ShadowControlComponent } from '@app/builder/_libs/shadow-control/shadow
   templateUrl: './c.component.html',
   styleUrls: ['./c.component.scss'],
   standalone: true,
-  imports: [CommonModule, ShadowControlComponent, FormsModule],
+  imports: [ShadowControlComponent, FormsModule],
 })
 export class CComponent extends AppComponentBase implements OnInit {
   shadow =

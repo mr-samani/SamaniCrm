@@ -4,10 +4,15 @@ export * from './captcha.service';
 import { CaptchaServiceProxy } from './captcha.service';
 export * from './common.service';
 import { CommonServiceProxy } from './common.service';
+<<<<<<< HEAD
 export * from './external-auth.service';
 import { ExternalAuthServiceProxy } from './external-auth.service';
 export * from './external-providers.service';
 import { ExternalProvidersServiceProxy } from './external-providers.service';
+=======
+export * from './dasboard.service';
+import { DasboardServiceProxy } from './dasboard.service';
+>>>>>>> feature/dashboard
 export * from './file-manager.service';
 import { FileManagerServiceProxy } from './file-manager.service';
 export * from './file-serve.service';
@@ -36,4 +41,8 @@ export * from './user.service';
 import { UserServiceProxy } from './user.service';
 export * from './weather-forecast.service';
 import { WeatherForecastServiceProxy } from './weather-forecast.service';
+<<<<<<< HEAD
 export const APIS = [AccountServiceProxy, CaptchaServiceProxy, CommonServiceProxy, ExternalAuthServiceProxy, ExternalProvidersServiceProxy, FileManagerServiceProxy, FileServeServiceProxy, LanguageServiceProxy, MaintenanceServiceProxy, MenuServiceProxy, NotificationServiceProxy, PageBuilderServiceProxy, PagesServiceProxy, ProductServiceProxy, PublicServiceProxy, RoleServiceProxy, SecuritySettingsServiceProxy, UserServiceProxy, WeatherForecastServiceProxy];
+=======
+export const APIS = [AccountServiceProxy, CaptchaServiceProxy, CommonServiceProxy, DasboardServiceProxy, FileManagerServiceProxy, FileServeServiceProxy, LanguageServiceProxy, MaintenanceServiceProxy, MenuServiceProxy, NotificationServiceProxy, PageBuilderServiceProxy, PagesServiceProxy, ProductServiceProxy, PublicServiceProxy, RoleServiceProxy, SecuritySettingsServiceProxy, UserServiceProxy, WeatherForecastServiceProxy];
+>>>>>>> feature/dashboard

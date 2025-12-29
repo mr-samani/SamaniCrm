@@ -1,0 +1,26 @@
+.bread-crumb {
+  // border-bottom: 1px var(--border-color) solid;
+  background: var(--subheader-bg);
+  color: var(--subheader-fg);
+  padding: 10px 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+
+  .tag {
+    transition: all 500ms;
+
+    &:not(:first-child):before {
+      content: '/';
+      margin: 0 2px;
+      color: #fff !important;
+    }
+  }
+  a.tag:hover {
+    color: rgb(115, 0, 255);
+    i{
+      margin: 0 3px;
+    }
+  }
+}

@@ -25,7 +25,7 @@ namespace SamaniCrm.Application.DTOs
         public bool IsActive { get; set; }
         public bool IsSystem { get; set; }
         public string? CoverImage { get; set; }
-        public string Culture { get; set; }   
+        public required string Culture { get; set; }   
         [MaxLength(2000)]
         public string? MetaDescription { get; set; }
         [MaxLength(2000)]

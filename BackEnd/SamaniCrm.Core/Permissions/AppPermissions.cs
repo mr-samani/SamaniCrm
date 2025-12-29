@@ -11,6 +11,7 @@ namespace SamaniCrm.Core.Permissions
 
         public const string Administrator = "Administrator";
 
+
         // user management 
         public const string UserManagement = "Administrator.UserManagement";
         public const string UserManagement_List = "Administrator.UserManagement.List";
@@ -83,7 +84,7 @@ namespace SamaniCrm.Core.Permissions
         public const string Pages_OtherPage_Edit = "Administrator.Pages.OtherPageEdit";
         public const string Pages_Articles_Edit = "Administrator.Pages.ArticlesEdit";
         public const string Pages_News_Edit = "Administrator.Pages.NewsEdit";
-        public const string Pages_Blogs_Edit = "Administrator.Pages.BlogsEdit"; 
+        public const string Pages_Blogs_Edit = "Administrator.Pages.BlogsEdit";
 
         public const string Pages_Builder = "Administrator.Pages.PageBuilder";
         public const string Pages_CustomBlockList = "Administrator.Pages.CustomBlockList";
@@ -129,6 +130,8 @@ namespace SamaniCrm.Core.Permissions
         public const string Notification_List = "Administrator.Notification.List";
         public const string Notification_Delete = "Administrator.Notification.Delete";
         public const string Notification_MarkAllAsRead = "Administrator.Notification.MarkAllAsRead";
+        public const string Notification_SendMessageToUser = "Administrator.Notification.SendMessageToUser";
+        public const string Notification_BroadCastMessageToAll = "Administrator.Notification.BroadCastMessageToAll";
 
 
         // file manager
@@ -137,6 +140,22 @@ namespace SamaniCrm.Core.Permissions
         public const string FileManager_CreateFolder = "Administrator.FileManager.CreateFolder";
         public const string FileManager_CreateFile = "Administrator.FileManager.CreateFile";
         public const string FileManager_Delete = "Administrator.FileManager.Delete";
+
+
+
+
+
+        // Dashboard 
+        public const string Dashboard = "Panel.Dashboard";
+        public const string Dashboard_List = "Panel.Dashboard.Cache.List";
+        public const string Dashboard_Create = "Panel.Dashboard.Create";
+        public const string Dashboard_Edit = "Panel.Dashboard.Edit";
+        public const string Dashboard_Delete = "Panel.Dashboard.Delete";
+
+        public const string Dashboard_Item_Create = "Panel.Dashboard.Item.Create";
+        public const string Dashboard_Item_Edit = "Panel.Dashboard.Item.Edit";
+        public const string Dashboard_Item_Delete = "Panel.Dashboard.Item.Delete";
+
 
     }
 

@@ -51,7 +51,7 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
     private matDialog: MatDialog,
   ) {
     super(injector);
-    this.breadcrumb.list = [{ name: this.l('Products'), url: '/dashboard/products/product-list' }];
+    this.breadcrumb.list = [{ name: this.l('Products'), url: '/panel/products/product-list' }];
     this.form = this.fb.group({
       filter: [''],
       productCategory: [],
@@ -122,7 +122,7 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
 
   onPageChange(ev?: PageEvent) {
     this.getList();
-    this.router.navigate(['/dashboard/products/product-list'], {
+    this.router.navigate(['/panel/products/product-list'], {
       queryParams: {
         page: this.page,
       },
@@ -131,9 +131,9 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
 
   openCreateOrEditDialog(item?: ProductDto) {
     if (item) {
-      this.router.navigate(['/dashboard/products/update-product/' + item.id]);
+      this.router.navigate(['/panel/products/update-product/' + item.id]);
     } else {
-      this.router.navigate(['/dashboard/products/new-product']);
+      this.router.navigate(['/panel/products/new-product']);
     }
   }
 

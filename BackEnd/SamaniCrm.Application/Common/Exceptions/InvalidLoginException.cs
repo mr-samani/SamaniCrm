@@ -9,17 +9,15 @@ namespace SamaniCrm.Application.Common.Exceptions;
 
 public class InvalidLoginException : BaseAppException
 {
-    public InvalidLoginException() : base("Invalid UserName or Password!") { }
+    public InvalidLoginException() : base("Invalid UserName or Password!", HttpStatusCode.Unauthorized) { }
 
-    public HttpStatusCode StatusCode => HttpStatusCode.Unauthorized; // 401
 }
 
 
 public class LoginAttempCountException : BaseAppException
 {
-    public LoginAttempCountException() : base("Your account is locked! try after 5 minutes") { }
+    public LoginAttempCountException() : base("Your account is locked! try after 5 minutes", HttpStatusCode.Unauthorized) { }
 
-    public HttpStatusCode StatusCode => HttpStatusCode.Unauthorized; // 401
 }
 
 public class InvalidCaptchaException : BaseAppException
@@ -35,7 +33,6 @@ public class InvalidTwoFactorCodeException : BaseAppException
 }
 public class ExternalLoginException : BaseAppException
 {
-    public ExternalLoginException(string v) : base("Login in external providers is faild! \n" + v) { }
+    public ExternalLoginException(string v) : base("Login in external providers is faild! \n" + v,HttpStatusCode.Unauthorized) { }
 
-    public HttpStatusCode StatusCode => HttpStatusCode.Unauthorized; // 401
 }

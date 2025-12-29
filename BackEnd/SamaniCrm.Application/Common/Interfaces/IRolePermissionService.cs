@@ -10,8 +10,5 @@ namespace SamaniCrm.Application.Common.Interfaces
     public interface IRolePermissionService
     {
         Task<List<RolePermissionsDTO>> GetRolePermissionsAsyc(Guid RoleId);
-
-        Task<List<string>> GetPermissionsForUserAsync(Guid userId);
-        Task<bool> PermissionAsync(Guid userId, string permissionName);
     }
 }

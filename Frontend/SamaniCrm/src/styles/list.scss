@@ -22,7 +22,9 @@
   margin: -10px 10px -10px -10px;
   width: 240px;
   min-height: 75vh;
-
+  position: sticky;
+  top: 68px;
+  align-self: flex-start;
   .menu-item {
     border: 1px #c3c3c3 solid;
     margin: 5px;

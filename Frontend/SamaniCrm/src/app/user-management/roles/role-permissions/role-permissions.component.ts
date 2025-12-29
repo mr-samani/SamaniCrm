@@ -16,6 +16,7 @@ export class RolePermissionsListComponent extends AppComponentBase implements On
   loading = true;
   isSaving = false;
   list: TreeViewModel[] = [];
+  selectedBasePermission: TreeViewModel[] = [];
   roleName!: string;
   constructor(
     injector: Injector,
@@ -24,8 +25,8 @@ export class RolePermissionsListComponent extends AppComponentBase implements On
     super(injector);
     this.roleId = this.route.snapshot.params['roleId'];
     this.breadcrumb.list = [
-      { name: this.l('Settings'), url: '/dashboard/setting' },
-      { name: this.l('Roles'), url: '/dashboard/roles' },
+      { name: this.l('Settings'), url: '/panel/setting' },
+      { name: this.l('Roles'), url: '/panel/roles' },
     ];
   }
 

@@ -1,0 +1,119 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title">{{ culture }}</span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content style="min-width: 80vw; min-height: 80vh">
+  <form class="input-group mb-2" (submit)="search()">
+    <mat-select
+      class="form-control"
+      [(ngModel)]="filterCategory"
+      [placeholder]="'Category' | translate"
+      name="filterCategory">
+      <mat-option [value]="undefined">{{ 'All' | translate }}</mat-option>
+      @for (c of LocalizationCategoryEnum | enumToArray; track c) {
+        <mat-option [value]="+c">
+          {{ 'LocalizationCategoryEnum_' + c | translate }}
+        </mat-option>
+      }
+    </mat-select>
+    <input
+      type="text"
+      class="form-control"
+      [(ngModel)]="filterKey"
+      name="filterKey"
+      [placeholder]="'Key' | translate" />
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="filterValue"
+        name="filterValue"
+        [placeholder]="'Value' | translate" />
+
+        <button class="btn primary input-group-text">
+          <i class="fa fa-search"></i>
+        </button>
+        <button
+          class="btn primary input-group-text"
+          type="button"
+          (click)="openNewLocalizeDialog()"
+          [title]="'AddNeyKeyToAllLanguages' | translate">
+          <i class="fa fa-plus mx-1"></i>
+          <span>{{ 'AddNewLocalizeKey' | translate }}</span>
+        </button>
+      </form>
+
+      @if (loading) {
+        <div class="d-flex align-items-center justify-content-center py-5">
+          <mat-spinner color="primary" diameter="25"></mat-spinner>
+        </div>
+      }
+
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>{{ 'Delete' | translate }}</th>
+            <th>{{ 'Category' | translate }}</th>
+            <th>{{ 'Key' | translate }}</th>
+            <th>{{ 'Value' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of filteredList; track $index) {
+            <tr>
+              <td>{{ (page - 1) * perPage + ($index + 1) }}</td>
+              <td>
+                <button type="button" mat-icon-button (click)="remove(item)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+              <td>
+                <mat-select class="form-control" [(ngModel)]="item.category">
+                  @for (c of LocalizationCategoryEnum | enumToArray; track c) {
+                    <mat-option [value]="+c">
+                      {{ 'LocalizationCategoryEnum_' + c | translate }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </td>
+              <td vAlign="middle">{{ item.key }}</td>
+              <td class="w-100">
+                <input type="text" class="form-control" [(ngModel)]="item.value" />
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <pagination [total]="totalCount" [(page)]="page" [(perPage)]="perPage" (change)="search($event)"></pagination>
+    </mat-dialog-content>
+    <mat-dialog-actions class="d-flex flex-wrap justify-content-between">
+      <div class="d-flex gap-2">
+        <button mat-stroked-button (click)="exportData()" [disabled]="busy">
+          {{ 'ExportAsJson' | translate }}
+        </button>
+        <button mat-stroked-button (click)="importData()" [disabled]="busy">
+          {{ 'ImportFromJson' | translate }}
+        </button>
+        <mat-select class="form-control" [(ngModel)]="importCategory">
+          <mat-option [value]="undefined">{{ 'All' | translate }}</mat-option>
+          @for (c of LocalizationCategoryEnum | enumToArray; track c) {
+            <mat-option [value]="+c">
+              {{ 'LocalizationCategoryEnum_' + c | translate }}
+            </mat-option>
+          }
+        </mat-select>
+      </div>
+      <div class="d-flex gap-2">
+        <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
+        <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
+          @if (saving) {
+            <mat-spinner color="primary" diameter="25"></mat-spinner>
+          }
+          <span>{{ 'Save' | translate }}</span>
+        </button>
+      </div>
+    </mat-dialog-actions>

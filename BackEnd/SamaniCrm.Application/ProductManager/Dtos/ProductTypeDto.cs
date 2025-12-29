@@ -18,7 +18,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
     {
         public Guid? ProductTypeId { get; set; }
         public required string Culture { get; set; }
-        public string Name { get; set; }
+        public required string Name { get; set; }
         public string? Description { get; set; }
     }
 

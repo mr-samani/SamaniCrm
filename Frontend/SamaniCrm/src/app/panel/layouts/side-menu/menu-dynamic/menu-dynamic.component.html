@@ -1,0 +1,43 @@
+<ul class="accordion accordion--animated">
+  @for (item of menuItems; track item) {
+    @if (checkPermission(item)) {
+      <li class="accordion__item">
+        @if (item.url) {
+          <a [routerLink]="[item.url]" [routerLinkActive]="'active'" (click)="stopPagination($event)">
+            <label class="accordion__label">
+              @if (item.icon) {
+                <i class="{{ item.icon }}"></i>
+              }
+              <span>{{ item.name }}</span>
+            </label>
+          </a>
+        }
+        @if (!item.url) {
+          <a (click)="toggle(item, $event)">
+            <label class="accordion__label" for="{{ item.id }}">
+              @if (item.icon) {
+                <i class="{{ item.icon }}"></i>
+              }
+              <span>{{ item.name }}</span>
+            </label>
+            @if (item.children) {
+              <span class="has-child">
+                @if (!item.isOpen) {
+                  <i class="fa fa-chevron-left"></i>
+                }
+                @if (item.isOpen) {
+                  <i class="fa fa-chevron-down"></i>
+                }
+              </span>
+            }
+            @if (item.children) {
+              <ul class="accordion__sub" [class.open]="item.isOpen">
+                <menu-dynamic [menu]="item.children"></menu-dynamic>
+              </ul>
+            }
+          </a>
+        }
+      </li>
+    }
+  }
+</ul>

@@ -6,55 +6,65 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngIf="loading">
-      <td colspan="2" align="center">
-        {{ 'Loading' | translate }}
-      </td>
-    </tr>
-    <tr *ngIf="!loading && attributeList.length === 0">
-      <td colspan="2" align="center">
-        {{ 'NoAttribute' | translate }}
-      </td>
-    </tr>
-    <tr *ngFor="let item of attributeList">
-      <td [vAlign]="'middle'" align="end">{{ item.name }}:</td>
-      <td [vAlign]="'middle'">
-        @switch (item.dataType) {
-          @case (ProductAttributeDataTypeEnum.Int) {
-            <input
-              type="number"
-              class="form-control"
-              [(ngModel)]="item.value"
-              numberCheck
-              [allowNegative]="false"
-              [isDecimal]="false"
-              (blur)="changed()" />
-          }
-          @case (ProductAttributeDataTypeEnum.Decimal) {
-            <input
-              type="number"
-              class="form-control"
-              [(ngModel)]="item.value"
-              numberCheck
-              [allowNegative]="false"
-              [isDecimal]="true"
-              [maxDecimalDigit]="5"
-              (blur)="changed()" />
-          }
-          @case (ProductAttributeDataTypeEnum.Bool) {
-            <mat-checkbox [(ngModel)]="item.value" (change)="changed()">
-              <span *ngIf="item.value">{{ 'Yes' | translate }}</span>
-              <span *ngIf="!item.value">{{ 'No' | translate }}</span>
-            </mat-checkbox>
-          }
-          @case (ProductAttributeDataTypeEnum.Color) {
-            <input type="color" class="form-control input-color" [(ngModel)]="item.value" (blur)="changed()" />
-          }
-          @default {
-            <input type="text" class="form-control" [(ngModel)]="item.value" (blur)="changed()" />
-          }
+    @if (loading) {
+      <tr>
+        <td colspan="2" align="center">
+          {{ 'Loading' | translate }}
+        </td>
+      </tr>
+    }
+    @if (!loading && attributeList.length === 0) {
+      <tr>
+        <td colspan="2" align="center">
+          {{ 'NoAttribute' | translate }}
+        </td>
+      </tr>
+    }
+    @for (item of attributeList; track item) {
+      <tr>
+        <td [vAlign]="'middle'" align="end">{{ item.name }}:</td>
+        <td [vAlign]="'middle'">
+          @switch (item.dataType) {
+            @case (ProductAttributeDataTypeEnum.Int) {
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="item.value"
+                numberCheck
+                [allowNegative]="false"
+                [isDecimal]="false"
+                (blur)="changed()" />
+              }
+              @case (ProductAttributeDataTypeEnum.Decimal) {
+                <input
+                  type="number"
+                  class="form-control"
+                  [(ngModel)]="item.value"
+                  numberCheck
+                  [allowNegative]="false"
+                  [isDecimal]="true"
+                  [maxDecimalDigit]="5"
+                  (blur)="changed()" />
+                }
+                @case (ProductAttributeDataTypeEnum.Bool) {
+                  <mat-checkbox [(ngModel)]="item.value" (change)="changed()">
+                    @if (item.value) {
+                      <span>{{ 'Yes' | translate }}</span>
+                    }
+                    @if (!item.value) {
+                      <span>{{ 'No' | translate }}</span>
+                    }
+                  </mat-checkbox>
+                }
+                @case (ProductAttributeDataTypeEnum.Color) {
+                  <input type="color" class="form-control input-color" [(ngModel)]="item.value" (blur)="changed()" />
+                }
+                @default {
+                  <input type="text" class="form-control" [(ngModel)]="item.value" (blur)="changed()" />
+                }
+              }
+            </td>
+          </tr>
         }
-      </td>
-    </tr>
-  </tbody>
-</table>
+      </tbody>
+    </table>

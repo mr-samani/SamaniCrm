@@ -1,16 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using MimeDetective.Storage;
-using Newtonsoft.Json.Linq;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
-using SamaniCrm.Domain.Entities.ProductEntities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SamaniCrm.Infrastructure.Persistence;
 

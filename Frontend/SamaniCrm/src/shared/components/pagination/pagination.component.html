@@ -27,8 +27,12 @@
         <!-- Pagination Elements -->
         @for (item of pages; track $index) {
           <li class="page-item page-num" [class.active]="item === page">
-            <a class="page-link" (click)="onPageChange(item)" *ngIf="item !== page && item != '...'">{{ item }}</a>
-            <span class="page-link" *ngIf="item === page || item == '...'">{{ item }}</span>
+            @if (item !== page && item != '...') {
+              <a class="page-link" (click)="onPageChange(item)">{{ item }}</a>
+            }
+            @if (item === page || item == '...') {
+              <span class="page-link">{{ item }}</span>
+            }
           </li>
         }
 
@@ -48,9 +52,11 @@
       <div class="form-group d-flex align-items-center">
         <span class="text-nowrap">{{ labels.perPage }}:</span>
         <select [(ngModel)]="perPage" class="form-control" name="perPage" (change)="onPerPageChange()">
-          <option [value]="item" *ngFor="let item of perPageList">
-            {{ item }}
-          </option>
+          @for (item of perPageList; track item) {
+            <option [value]="item">
+              {{ item }}
+            </option>
+          }
         </select>
       </div>
     </div>

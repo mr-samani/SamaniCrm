@@ -14,14 +14,14 @@
 /** Interface for ExportAllLocalizationValueDto */
 export interface IExportAllLocalizationValueDto {
   id?: string;
-  title?: string;
+  title: string;
   description?: string;
 }
 
 /** Class for ExportAllLocalizationValueDto */
 export class ExportAllLocalizationValueDto implements IExportAllLocalizationValueDto {
   id?: string;
-  title?: string;
+  title!: string;
   description?: string;
 
   constructor(data?: IExportAllLocalizationValueDto) {

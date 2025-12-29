@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SamaniCrm.Infrastructure.Identity.Migrations
 {
     /// <inheritdoc />
-    public partial class addsoftdelete : Migration
+    public partial class Addsoftdelete : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

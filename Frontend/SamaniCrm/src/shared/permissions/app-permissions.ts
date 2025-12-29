@@ -106,6 +106,8 @@ export abstract class AppPermissions {
   public static Notification_List = 'Administrator.Notification.List';
   public static Notification_MarkAllAsRead = 'Administrator.Notification.MarkAllAsRead';
   public static Notification_Delete = 'Administrator.Notification.Delete';
+  public static Notification_SendMessageToUser = 'Administrator.Notification.SendMessageToUser';
+  public static Notification_BroadCastMessageToAll = 'Administrator.Notification.BroadCastMessageToAll';
 
   // file manager
   public static FileManager_List = 'Administrator.FileManager.List';

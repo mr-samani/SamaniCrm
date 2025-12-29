@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -18,7 +18,7 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'filter',
   standalone: true,
-  imports: [CommonModule, TranslateModule, MatButtonModule, ReactiveFormsModule, MatDialogModule],
+  imports: [TranslateModule, MatButtonModule, ReactiveFormsModule, MatDialogModule],
   templateUrl: './filter.component.html',
   styleUrl: './filter.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
