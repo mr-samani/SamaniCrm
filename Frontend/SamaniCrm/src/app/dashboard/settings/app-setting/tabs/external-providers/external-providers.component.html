@@ -1,10 +1,19 @@
-<table-view
-  [list]="list"
-  [fields]="fields"
-  [operations]="operations"
-  [loading]="loading"
-  (sortChange)="getList($event)"></table-view>
+<div class="d-flex gap-1 flex-wrap">
+  @if (AppPermissions.MenuManagement_Create | permission) {
+    <button mat-stroked-button color="primary" (click)="openCreateOrEditDialog()" [disabled]="loading">
+      <i class="fa fa-plus mx-2"></i>
+      {{ 'CreateNew' | translate }}
+    </button>
+  }
 
-<ng-template #operations let-item>
-  <switch [(ngModel)]="item.isActive" (ngModelChange)="changeIsActive(item)"></switch>
-</ng-template>
+  <table-view
+    [list]="list"
+    [fields]="fields"
+    [operations]="operations"
+    [loading]="loading"
+    (sortChange)="getList($event)"></table-view>
+
+  <ng-template #operations let-item>
+    <switch [(ngModel)]="item.isActive" (ngModelChange)="changeIsActive(item)"></switch>
+  </ng-template>
+</div>

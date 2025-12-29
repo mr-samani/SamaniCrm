@@ -16,16 +16,17 @@ export interface IUserDTO {
   id: string;
   userName: string;
   firstName: string;
-  lastName: string;
-  fullName: string;
-  email: string;
-  profilePicture: string;
-  lang: string;
+  lastName?: string;
+  fullName?: string;
+  email?: string;
+  profilePicture?: string;
+  lang?: string;
   address?: string;
-  phoneNumber: string;
-  creationTime: string;
-  roles: Array<string>;
+  phoneNumber?: string;
+  creationTime?: string;
+  roles?: Array<string>;
   permissions?: Array<string>;
+  givenName?: string;
 }
 
 /** Class for UserDTO */
@@ -33,16 +34,17 @@ export class UserDTO implements IUserDTO {
   id!: string;
   userName!: string;
   firstName!: string;
-  lastName!: string;
-  fullName!: string;
-  email!: string;
-  profilePicture!: string;
-  lang!: string;
+  lastName?: string;
+  fullName?: string;
+  email?: string;
+  profilePicture?: string;
+  lang?: string;
   address?: string;
-  phoneNumber!: string;
-  creationTime!: string;
-  roles!: Array<string>;
+  phoneNumber?: string;
+  creationTime?: string;
+  roles?: Array<string>;
   permissions?: Array<string>;
+  givenName?: string;
 
   constructor(data?: IUserDTO) {
     if (data) {
@@ -76,6 +78,7 @@ init(data?: any) {
       for (let item of data["permissions"])
         (this.permissions as any).push(item);
     }
+    this.givenName = data["givenName"];
   }
 }
 

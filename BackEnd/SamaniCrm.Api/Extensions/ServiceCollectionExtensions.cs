@@ -83,6 +83,16 @@ public static class ServiceCollectionExtensions
     }
 
 
+    public static IServiceCollection AddAutoMapper(this IServiceCollection services)
+    {
+        services.AddAutoMapper(cfg => { }
+            //typeof(ProfileTypeFromAssembly1), 
+            //typeof(ProfileTypeFromAssembly2) 
+          );
+        return services;
+    }
+
+
     /// <summary>
     /// فعال سازی ولیدیشن های ورودی به برنامه با استفاده از FluentValidation
     /// </summary>

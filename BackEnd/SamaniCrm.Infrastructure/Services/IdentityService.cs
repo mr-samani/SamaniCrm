@@ -693,25 +693,8 @@ public class IdentityService : IIdentityService
 
 
 
-        ApplicationUser? user = await _userManager.FindByEmailAsync(externalLoginResult.Email ?? "");
-        if (user == null)
-        {
+        ApplicationUser? user = await FindOrCreateExternalUser(externalLoginResult.Email, externalLoginResult.UserName, externalLoginResult.Name, provider.Name);
 
-            user = new ApplicationUser
-            {
-                UserName = externalLoginResult.UserName ?? externalLoginResult.Email,
-                FullName = externalLoginResult.Name,
-                Email = externalLoginResult.Email,
-                Lang = AppConsts.DefaultLanguage,
-                EmailConfirmed = true
-            };
-            var createResult = await _userManager.CreateAsync(user);
-            if (!createResult.Succeeded)
-            {
-                BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification("provider: " + request.provider));
-                throw new ValidationException(createResult.Errors.Select(e => e.Description).FirstOrDefault());
-            }
-        }
         await _signInManager.SignInAsync(user, false);
 
         var roles = await _userManager.GetRolesAsync(user);
@@ -749,7 +732,27 @@ public class IdentityService : IIdentityService
 
     }
 
+    public async Task<ApplicationUser> FindOrCreateExternalUser(string email, string userName, string name, string providerName)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+        {
 
-
-
+            user = new ApplicationUser
+            {
+                UserName = userName ?? email,
+                FullName = name,
+                Email = email,
+                Lang = AppConsts.DefaultLanguage,
+                EmailConfirmed = true
+            };
+            var createResult = await _userManager.CreateAsync(user);
+            if (!createResult.Succeeded)
+            {
+                BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification("provider: " + providerName));
+                throw new ValidationException(createResult.Errors.Select(e => e.Description).FirstOrDefault());
+            }
+        }
+        return user;
+    }
 }

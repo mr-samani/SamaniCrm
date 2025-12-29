@@ -133,8 +133,37 @@ export class LoginComponent extends AppComponentBase implements OnInit {
   loginExternalProvider(provider: ExternalProviderDto) {
     this.loadingExternalProviders = true;
     try {
+    const baseUrl = AppConst.apiUrl;
+    const callbackUrl = `${baseUrl}/api/externalauth/callback/${provider.name.toLowerCase()}`;
+   
       let url = '';
       switch (provider.providerType) {
+        case ExternalProviderTypeEnum.OpenIdConnect:
+          // Build OpenID Connect URL
+          const params = new URLSearchParams({
+            client_id: provider.clientId,
+            redirect_uri: callbackUrl,
+            response_type: provider.responseType || 'code',
+            response_mode: provider.responseMode || 'query',
+            scope: provider.scopes,
+            state: this.generateState(), // Generate random state for security
+            nonce: this.generateNonce(), // Generate nonce for OIDC
+          });
+
+          // Add PKCE if enabled
+          if (provider.usePkce) {
+            const codeVerifier = this.generateCodeVerifier();
+            const codeChallenge = await this.generateCodeChallenge(codeVerifier);
+
+            // Store code_verifier in session/local storage for later use
+            sessionStorage.setItem('pkce_code_verifier', codeVerifier);
+
+            params.append('code_challenge', codeChallenge);
+            params.append('code_challenge_method', 'S256');
+          }
+
+          url = `${provider.authorizationEndpoint}?${params.toString()}`;
+          break;
         case ExternalProviderTypeEnum.Microsoft:
         case ExternalProviderTypeEnum.Google:
         case ExternalProviderTypeEnum.GitHub:
@@ -157,4 +186,41 @@ export class LoginComponent extends AppComponentBase implements OnInit {
       this.loadingExternalProviders = false;
     }
   }
+
+
+  // Helper methods for PKCE and security
+private generateState(): string {
+const array = new Uint8Array(32);
+crypto.getRandomValues(array);
+return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
+private generateNonce(): string {
+const array = new Uint8Array(32);
+crypto.getRandomValues(array);
+return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
+private generateCodeVerifier(): string {
+const array = new Uint8Array(32);
+crypto.getRandomValues(array);
+return this.base64URLEncode(array);
+}
+
+private async generateCodeChallenge(verifier: string): Promise<string> {
+const encoder = new TextEncoder();
+const data = encoder.encode(verifier);
+const hash = await crypto.subtle.digest('SHA-256', data);
+return this.base64URLEncode(new Uint8Array(hash));
+}
+
+private base64URLEncode(buffer: Uint8Array): string {
+const base64 = btoa(String.fromCharCode(...buffer));
+return base64
+.replace(/+/g, '-')
+.replace(///g, '_')
+.replace(/=/g, '');
+}
+
+
 }

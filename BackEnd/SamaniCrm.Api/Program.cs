@@ -22,6 +22,7 @@ services
 services
     .AddCorsPolicy()
     .AddControllersWithDefaults()
+    .AddAutoMapper()
     .AddCustomMediatR()
     .AddFluentValidation()
     .AddInfrastructure(config)
@@ -30,7 +31,8 @@ services
     .AddCacheService(config)
     .AddFileManagerService(config)
     .AddHangfireJobs(config)
-    .LoadExternalProviders(config);
+    .LoadExternalProviders(config)
+    ;
 
 services.AddSignalR();
 

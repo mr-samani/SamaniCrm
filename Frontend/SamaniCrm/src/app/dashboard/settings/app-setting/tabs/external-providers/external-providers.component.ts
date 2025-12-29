@@ -1,8 +1,10 @@
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
 import { AccountServiceProxy, ExternalProviderDto, SecuritySettingsServiceProxy } from '@shared/service-proxies';
 import { finalize, Subscription } from 'rxjs';
+import { CreateOrEditExternalProviderComponent } from '../../dialogs/external-provider/external-provider.component';
 
 @Component({
   selector: 'app-external-providers',
@@ -31,6 +33,7 @@ export class ExternalProvidersComponent extends AppComponentBase implements OnIn
   constructor(
     injector: Injector,
     private securitySettingsService: SecuritySettingsServiceProxy,
+    private matDialog: MatDialog,
   ) {
     super(injector);
 
@@ -79,5 +82,22 @@ export class ExternalProvidersComponent extends AppComponentBase implements OnIn
         item.isActive = !item.isActive;
       }
     });
+  }
+
+  openCreateOrEditDialog(item?: ExternalProviderDto) {
+    this.matDialog
+      .open(CreateOrEditExternalProviderComponent, {
+        data: {
+          provider: item,
+        },
+        width: '768px',
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          // Reload list
+          this.getList();
+        }
+      });
   }
 }

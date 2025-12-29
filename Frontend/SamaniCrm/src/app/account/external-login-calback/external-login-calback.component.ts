@@ -22,6 +22,35 @@ export class ExternalLoginCalbackComponent extends AppComponentBase implements O
   }
 
   ngOnInit() {
+     this.route.queryParams.subscribe(params => {
+      const token = params['token'];
+      const refreshToken = params['refreshToken'];
+      const error = params['error'];
+
+      if (error) {
+        console.error('External auth error:', error);
+        this.router.navigate(['/login'], { 
+          queryParams: { error: 'احراز هویت خارجی ناموفق بود' } 
+        });
+        return;
+      }
+
+      if (token && refreshToken) {
+        // Save tokens
+        this.authService.setTokens(token, refreshToken);
+        
+        // Navigate to dashboard or home
+        this.router.navigate(['/dashboard']);
+      } else {
+        this.router.navigate(['/login'], { 
+          queryParams: { error: 'توکن دریافت نشد' } 
+        });
+      }
+    });
+
+
+
+    
     this.authService
       .externalLoginCallback(new ExternalLoginCallbackCommand({ code: this.code, provider: this.provider }))
       .subscribe({
