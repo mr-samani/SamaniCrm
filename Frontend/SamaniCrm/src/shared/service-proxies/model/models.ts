@@ -157,11 +157,8 @@ export * from './two-factor-login-command';
 export * from './two-factor-type-enum';
 export * from './unit-api-response';
 export * from './update-batch-localize-key-command';
-<<<<<<< HEAD
-export * from './update-external-provider-dto';
-=======
 export * from './update-dashboard-items-command';
->>>>>>> feature/dashboard
+export * from './update-external-provider-dto';
 export * from './update-page-content-command';
 export * from './update-role-command';
 export * from './update-security-setting-command';

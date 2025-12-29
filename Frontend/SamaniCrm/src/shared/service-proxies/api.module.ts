@@ -5,12 +5,9 @@ import { HttpClient } from '@angular/common/http';
 import { AccountServiceProxy } from './api/account.service';
 import { CaptchaServiceProxy } from './api/captcha.service';
 import { CommonServiceProxy } from './api/common.service';
-<<<<<<< HEAD
+import { DasboardServiceProxy } from './api/dasboard.service';
 import { ExternalAuthServiceProxy } from './api/external-auth.service';
 import { ExternalProvidersServiceProxy } from './api/external-providers.service';
-=======
-import { DasboardServiceProxy } from './api/dasboard.service';
->>>>>>> feature/dashboard
 import { FileManagerServiceProxy } from './api/file-manager.service';
 import { FileServeServiceProxy } from './api/file-serve.service';
 import { LanguageServiceProxy } from './api/language.service';
@@ -34,12 +31,9 @@ import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
     AccountServiceProxy,
     CaptchaServiceProxy,
     CommonServiceProxy,
-<<<<<<< HEAD
+    DasboardServiceProxy,
     ExternalAuthServiceProxy,
     ExternalProvidersServiceProxy,
-=======
-    DasboardServiceProxy,
->>>>>>> feature/dashboard
     FileManagerServiceProxy,
     FileServeServiceProxy,
     LanguageServiceProxy,

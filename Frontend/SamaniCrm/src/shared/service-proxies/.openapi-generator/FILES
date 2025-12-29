@@ -6,12 +6,9 @@ api/account.service.ts
 api/api.ts
 api/captcha.service.ts
 api/common.service.ts
-<<<<<<< HEAD
+api/dasboard.service.ts
 api/external-auth.service.ts
 api/external-providers.service.ts
-=======
-api/dasboard.service.ts
->>>>>>> feature/dashboard
 api/file-manager.service.ts
 api/file-serve.service.ts
 api/language.service.ts
@@ -190,11 +187,8 @@ model/two-factor-login-command.ts
 model/two-factor-type-enum.ts
 model/unit-api-response.ts
 model/update-batch-localize-key-command.ts
-<<<<<<< HEAD
-model/update-external-provider-dto.ts
-=======
 model/update-dashboard-items-command.ts
->>>>>>> feature/dashboard
+model/update-external-provider-dto.ts
 model/update-page-content-command.ts
 model/update-role-command.ts
 model/update-security-setting-command.ts
