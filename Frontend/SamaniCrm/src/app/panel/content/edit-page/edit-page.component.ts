@@ -11,7 +11,8 @@ import {
   NGX_PAGE_BUILDER_HTML_EDITOR,
   NgxPageBuilder,
   providePageBuilder,
-  STORAGE_SERVICE,
+  NGX_PAGE_BUILDER_STORAGE_SERVICE,
+  IPagebuilderOutput,
 } from 'ngx-page-builder';
 import { style } from '@angular/animations';
 import { PageStorageService } from '../page-builder/page-storage.service';
@@ -25,10 +26,10 @@ import { SharedPageDataService } from '../page-builder/shared-page-data.service'
   styleUrls: ['./edit-page.component.scss'],
   imports: [NgxPageBuilder],
   providers: [
+    PagesServiceProxy,
     { provide: NGX_PAGE_BUILDER_FILE_PICKER, useClass: FilePickerService },
     { provide: NGX_PAGE_BUILDER_HTML_EDITOR, useClass: HtmlEditorService },
-    PagesServiceProxy,
-    { provide: STORAGE_SERVICE, useClass: PageStorageService },
+    { provide: NGX_PAGE_BUILDER_STORAGE_SERVICE, useClass: PageStorageService },
   ],
 })
 export class EditPageComponent extends AppComponentBase implements OnInit, AfterViewInit, OnDestroy {
@@ -72,8 +73,8 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
         this.sharedPageDataService.pageInfo = response.data;
         this.styles = this.sharedPageDataService.pageInfo?.styles ?? '';
         if (this.sharedPageDataService.pageInfo && this.sharedPageDataService.pageInfo.data) {
-          const d: IPageBuilderDto = JSON.parse(this.sharedPageDataService.pageInfo.data ?? '[]');
-          this.data = d.pages;
+          const d: IPage[] = JSON.parse(this.sharedPageDataService.pageInfo.data ?? '[]');
+          this.data = d ?? [];
         }
       });
   }

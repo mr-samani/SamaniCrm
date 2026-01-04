@@ -1,9 +1,7 @@
-import { inject, Injectable } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Injectable } from '@angular/core';
 import { PagesServiceProxy } from '@shared/service-proxies/api/pages.service';
-import { PageDto } from '@shared/service-proxies/model/page-dto';
 import { UpdatePageContentCommand } from '@shared/service-proxies/model/update-page-content-command';
-import { IStorageService, PageBuilderDto, PageBuilderService, preparePageDataForSave } from 'ngx-page-builder';
+import { IPagebuilderOutput, IStorageService, PageBuilderService, preparePageDataForSave } from 'ngx-page-builder';
 import { SharedPageDataService } from './shared-page-data.service';
 
 @Injectable({
@@ -16,11 +14,11 @@ export class PageStorageService implements IStorageService {
     private pagesServiceProxy: PagesServiceProxy,
   ) {}
 
-  async loadData(): Promise<PageBuilderDto> {
-    return new PageBuilderDto();
+  async loadData(): Promise<IPagebuilderOutput> {
+    throw Error('Not implemented');
   }
 
-  async saveData(): Promise<PageBuilderDto> {
+  async saveData(): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
       try {
         if (!this.sharedPageDataService.pageInfo) {
@@ -28,14 +26,13 @@ export class PageStorageService implements IStorageService {
           return;
         }
 
-        const sanitized = await preparePageDataForSave(this.pageBuilder.pageInfo);
+        const sanitized = await preparePageDataForSave(this.pageBuilder);
         const input = new UpdatePageContentCommand();
-        input.data = JSON.stringify(sanitized);
+        input.data = JSON.stringify(sanitized.data);
         input.pageId = this.sharedPageDataService.pageInfo.id;
         input.culture = this.sharedPageDataService.pageInfo.culture;
-        this.pagesServiceProxy.updatePageContent(input).subscribe((result) => {
-          resolve(new PageBuilderDto(sanitized));
-        });
+        input.styles = sanitized.style;
+        this.pagesServiceProxy.updatePageContent(input).subscribe((r) => resolve(r.success == true));
       } catch (error) {
         console.error('Error on save page:', error);
         reject(error);
