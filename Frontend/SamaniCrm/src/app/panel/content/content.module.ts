@@ -1,3 +1,4 @@
+import { EditPageComponent } from './edit-page/edit-page.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -14,9 +15,9 @@ import { PagesServiceProxy } from '@shared/service-proxies';
 import { SharedModule } from '@shared/shared.module';
 import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 import { CreateOrEditPageMetaDataDialogComponent } from './create-or-edit-page-meta-data-dialog/create-or-edit-page-meta-data-dialog.component';
-
+import { providePageBuilder, NgxPageBuilder } from 'ngx-page-builder';
 @NgModule({
-  declarations: [ContentComponent, PagesComponent],
+  declarations: [ContentComponent, PagesComponent, EditPageComponent],
   imports: [
     CommonModule,
     ContentRoutingModule,
@@ -30,7 +31,11 @@ import { CreateOrEditPageMetaDataDialogComponent } from './create-or-edit-page-m
     SharedModule,
     TabGroupModule,
     CreateOrEditPageMetaDataDialogComponent,
+    NgxPageBuilder,
   ],
-  providers: [PagesServiceProxy],
+  providers: [
+    PagesServiceProxy,
+    // providePageBuilder({})
+  ],
 })
 export class ContentModule {}

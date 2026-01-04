@@ -139,13 +139,15 @@ export class PagesComponent extends AppComponentBase implements OnInit {
       });
   }
 
-  updatePage(item: PageDtoExtended) {
+  updatePageOld(item: PageDtoExtended) {
     this.router.navigate(['/panel/builder/' + item.id]);
   }
   updatePage2(item: PageDtoExtended) {
     this.router.navigate(['/panel/page-builder/' + item.id]);
   }
-
+  updatePage(item: PageDtoExtended) {
+    this.router.navigate(['/panel/content/edit/' + item.id]);
+  }
   remove(item: PageDtoExtended) {
     this.confirmMessage(`${this.l('Delete')}:${item?.title}`, this.l('AreYouSureForDelete')).then((result) => {
       if (result.isConfirmed) {

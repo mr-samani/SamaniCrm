@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ContentComponent } from './content.component';
 import { PagesComponent } from './pages/pages.component';
 import { PageTypeEnum } from '@shared/service-proxies';
+import { EditPageComponent } from './edit-page/edit-page.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,7 @@ const routes: Routes = [
       { path: 'pages/:type', component: PagesComponent },
     ],
   },
+  { path: 'edit/:id', component: EditPageComponent },
 ];
 
 @NgModule({

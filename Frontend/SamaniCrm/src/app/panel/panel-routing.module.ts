@@ -50,11 +50,6 @@ const routes: Routes = [
       },
       { path: 'menu', loadChildren: () => import('./settings/menu/menu.module').then((m) => m.MenuModule) },
 
-      {
-        path: 'page-builder',
-        loadChildren: () => import('./page-builder/page-builder.module').then((m) => m.PageBuilderModule),
-      },
-
       { path: 'content', loadChildren: () => import('./content/content.module').then((m) => m.ContentModule) },
       // products
       {
@@ -66,7 +61,10 @@ const routes: Routes = [
         path: 'notifications',
         loadChildren: () => import('./notifications/notification.module').then((m) => m.NotificationModule),
       },
-
+      {
+        path: 'page-builder',
+        loadChildren: () => import('./page-builder/page-builder.module').then((m) => m.PageBuilderModule),
+      },
       { path: 'builder', loadChildren: () => import('../builder/builder.module').then((m) => m.BuilderModule) },
     ],
   },

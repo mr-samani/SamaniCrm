@@ -8,11 +8,7 @@
       </button>
     </div>
     @if (AppPermissions.Pages_Create | permission) {
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="openCreatePageDialog()"
-        >
+      <button mat-raised-button color="primary" (click)="openCreatePageDialog()">
         <i class="fa fa-circle-plus mx-1"></i>
         <span>{{ 'CreateNewPage' | translate }}</span>
       </button>
@@ -54,7 +50,12 @@
             <span>{{ 'EditContent' | translate }}</span>
           </a>
         }
-
+        @if (AppPermissions.Pages_Builder | permission) {
+          <a mat-menu-item (click)="updatePageOld(item)">
+            <i class="fa fa-edit mx-1"></i>
+            <span>{{ 'EditContentOld' | translate }}</span>
+          </a>
+        }
         @if (AppPermissions.Pages_Builder | permission) {
           <a mat-menu-item (click)="updatePage2(item)">
             <i class="fa fa-edit mx-1"></i>

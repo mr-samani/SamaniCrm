@@ -3,7 +3,9 @@ import {
   ApplicationConfig,
   ErrorHandler,
   importProvidersFrom,
+  provideAppInitializer,
   provideZoneChangeDetection,
+  provideZonelessChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
@@ -20,14 +22,14 @@ import { AccountServiceProxy } from '@shared/service-proxies/api/account.service
 import { Configuration } from '@shared/service-proxies/configuration';
 import { GlobalErrorHandler } from '@shared/handlers/global-error-handler';
 import { UserServiceProxy } from '@shared/service-proxies';
+import { providePageBuilder } from 'ngx-page-builder';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    // provideZonelessChangeDetection(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
-
-    provideAnimationsAsync(),
     importProvidersFrom(
       // ServiceWorkerModule.register('ngsw-worker.js', {
       //   enabled: !isDevMode(),
@@ -54,6 +56,7 @@ export const appConfig: ApplicationConfig = {
     },
     { provide: Configuration, useFactory: configurationFactory },
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
+    providePageBuilder({}),
   ],
 };
 function configurationFactory() {
@@ -61,7 +64,6 @@ function configurationFactory() {
   config.basePath = 'https://localhost:44343';
   return config;
 }
-
 
 export function getRemoteServiceBaseUrl(): string {
   return AppConst.apiUrl;
