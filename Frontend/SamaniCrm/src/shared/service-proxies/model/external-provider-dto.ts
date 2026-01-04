@@ -22,6 +22,9 @@ export interface IExternalProviderDto {
   clientId: string;
   scopes: string;
   isActive?: boolean;
+  responseType?: string;
+  responseMode?: string;
+  usePkce?: boolean;
 }
 
 /** Class for ExternalProviderDto */
@@ -34,6 +37,9 @@ export class ExternalProviderDto implements IExternalProviderDto {
   clientId!: string;
   scopes!: string;
   isActive?: boolean;
+  responseType?: string;
+  responseMode?: string;
+  usePkce?: boolean;
 
   constructor(data?: IExternalProviderDto) {
     if (data) {
@@ -54,6 +60,9 @@ init(data?: any) {
     this.clientId = data["clientId"];
     this.scopes = data["scopes"];
     this.isActive = data["isActive"];
+    this.responseType = data["responseType"];
+    this.responseMode = data["responseMode"];
+    this.usePkce = data["usePkce"];
   }
 }
 

@@ -1,4 +1,4 @@
-import { inject, Injector } from '@angular/core';
+import { inject, Injector, DOCUMENT } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -8,8 +8,8 @@ import { NotifyService } from '@shared/services/notify.service';
 import { LanguageService } from '@shared/services/language.service';
 import { NgxAlertModalService } from 'ngx-alert-modal';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
-import { DashboardService } from './dashboard/dashboard/dashboard.service';
-import { DOCUMENT } from '@angular/common';
+import { PanelService } from './panel/panel.service';
+
 import { AppPermissions } from '@shared/permissions/app-permissions';
 export abstract class AppComponentBase {
   fb: FormBuilder;
@@ -24,7 +24,7 @@ export abstract class AppComponentBase {
   alert: NgxAlertModalService;
   breadcrumb: BreadcrumbService;
 
-  dashboardService: DashboardService;
+  panelService: PanelService;
   AppPermissions = AppPermissions;
   doc: Document;
   constructor(injector: Injector) {
@@ -39,7 +39,7 @@ export abstract class AppComponentBase {
     this.language = injector.get(LanguageService);
     this.alert = injector.get(NgxAlertModalService);
     this.breadcrumb = injector.get(BreadcrumbService);
-    this.dashboardService = injector.get(DashboardService);
+    this.panelService = injector.get(PanelService);
     this.doc = injector.get(DOCUMENT) as Document;
   }
 
@@ -56,7 +56,7 @@ export abstract class AppComponentBase {
     this.mainSpinnerService.showLoading = false;
   }
 
-  confirmMessage(title: string, text: string): Promise<import('ngx-alert-modal').AlertResult<any>> {
+  confirmMessage(title: string, text?: string): Promise<import('ngx-alert-modal').AlertResult<any>> {
     return this.alert.show({
       title: title,
       text: text,

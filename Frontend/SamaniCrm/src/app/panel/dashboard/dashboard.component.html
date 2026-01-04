@@ -1,0 +1,50 @@
+<sub-header [title]="'Dashboard' | translate">
+  <button class="btn btn-primary" (click)="openDahboardDialog()">
+    {{ 'CreateDashboard' | translate }}
+  </button>
+  <switch [(ngModel)]="editMode">Edit</switch>
+</sub-header>
+
+@if (loading || loadingItems) {
+  <mat-progress-bar class="my-5" [mode]="'indeterminate'"></mat-progress-bar>
+}
+<tab-group (selectedIndexChange)="onChangeDashboard($event)" [selectedIndex]="selectedIndex" [color]="'var(--body-bg)'">
+  @for (dashboard of dashboards; track dashboard.id; let i = $index) {
+    <tab-item [title]="dashboard.title" [active]="i == 0">
+      <ngx-grid-layout [editMode]="editMode" [options]="options" (layoutChange)="onChangeLayout($event)">
+        @for (item of dashboardItems; track item.id) {
+          <ngx-grid-item [id]="item.id" [config]="item.config">
+            <div class="widget-container card">
+              @if (editMode) {
+                <div class="widget-actions">
+                  <button class="btn btn-icon" (click)="deleteWidget(item)">
+                    <i class="fa fa-trash"></i>
+                  </button>
+
+                  <button class="btn btn-icon" (click)="editWidget(item, c)">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                </div>
+              }
+              <ng-container
+                [ngComponentOutlet]="item.component"
+                [ngComponentOutletInputs]="{ item }"
+                #c="ngComponentOutlet"></ng-container>
+            </div>
+          </ngx-grid-item>
+        }
+      </ngx-grid-layout>
+    </tab-item>
+  }
+</tab-group>
+
+@if (editMode) {
+  <div class="widget-panel">
+    <button mat-icon-button color="accent" (click)="openWidgetDialog()">
+      <i class="fa fa-plus"></i>
+    </button>
+    <button mat-icon-button color="accent" (click)="deleteDashboard()">
+      <i class="fa fa-trash"></i>
+    </button>
+  </div>
+}

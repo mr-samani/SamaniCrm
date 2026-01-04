@@ -1,0 +1,8 @@
+<div class="panel-container" [class.header-fixed-top]="AppConst.mainHeaderFixedTop">
+  <app-header></app-header>
+  <!-- <app-side-menu></app-side-menu> -->
+  @if (panelService.breadcrumb.enable()) {
+    <braed-crumb></braed-crumb>
+  }
+  <router-outlet></router-outlet>
+</div>

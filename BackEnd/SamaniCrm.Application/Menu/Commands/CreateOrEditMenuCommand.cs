@@ -28,13 +28,13 @@ namespace SamaniCrm.Application.Menu.Commands
 
         public async Task<Guid> Handle(CreateOrEditMenuCommand request, CancellationToken cancellationToken)
         {
-            MenuEntity menu;
+            MenuEntity? menu = null;
 
-            if (request.Id.HasValue)
+            if (request.Id != null)
             {
                 menu = await _dbContext.Menus
                      .Include(p => p.Translations)
-                     .FirstOrDefaultAsync(p => p.Id == request.Id.Value, cancellationToken);
+                     .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
                 if (menu == null)
                     throw new NotFoundException("Menu not found.");
             }
@@ -56,7 +56,7 @@ namespace SamaniCrm.Application.Menu.Commands
             // Update translations
             foreach (var item in request.Translations ?? [])
             {
-                var existingTranslation = menu.Translations
+                var existingTranslation = menu.Translations?
                     .FirstOrDefault(t => t.Culture == item.Culture);
 
                 if (existingTranslation != null)
@@ -67,7 +67,7 @@ namespace SamaniCrm.Application.Menu.Commands
                 else
                 {
                     // Add new translation
-                    menu.Translations.Add(new MenuTranslation
+                    menu.Translations?.Add(new MenuTranslation
                     {
                         Culture = item.Culture,
                         Title = item.Title,

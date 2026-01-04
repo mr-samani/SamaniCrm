@@ -8,8 +8,8 @@ namespace SamaniCrm.Application.DTOs
 {
     public class AuthResponseDTO
     {
-        public string UserId { get; set; }
-        public string Name { get; set; }
-        public string Token { get; set; }
+        public required string UserId { get; set; }
+        public required string Name { get; set; }
+        public required string Token { get; set; }
     }
 }

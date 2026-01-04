@@ -31,6 +31,7 @@ using SamaniCrm.Infrastructure.FileManager;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Jobs;
 using SamaniCrm.Infrastructure.Localizer;
+using SamaniCrm.Infrastructure.MappingProfile;
 using SamaniCrm.Infrastructure.Notifications;
 using SamaniCrm.Infrastructure.Services;
 using SamaniCrm.Infrastructure.Services.Product;
@@ -79,6 +80,17 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        return services;
+    }
+
+
+    public static IServiceCollection AddAutoMapper(this IServiceCollection services)
+    {
+        services.AddAutoMapper(cfg => { },
+        typeof(ExternalProviderProfile)
+          //typeof(ProfileTypeFromAssembly1), 
+          //typeof(ProfileTypeFromAssembly2) 
+          );
         return services;
     }
 
@@ -314,7 +326,7 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddHangfireJobs(this IServiceCollection services, IConfiguration config)
     {
-        services.AddScoped<IStartupFilter, HangfireJobStartupFilter>();
+        services.AddSingleton<IStartupFilter, HangfireJobStartupFilter>();
         return services;
     }
     public static IServiceCollection LoadExternalProviders(this IServiceCollection services, IConfiguration config)
@@ -381,7 +393,7 @@ public static class ServiceCollectionExtensions
                          });
                         break;
                     case ExternalProviderTypeEnum.OAuth2:
-                        services.AddAuthentication().AddOAuth(provider.Scheme, options =>
+                        services.AddAuthentication().AddOAuth(provider.Scheme!, options =>
                         {
                             options.ClientId = secretStore.GetSecret("OAuth2.ClientId") ?? "myOath";
                             options.ClientSecret = secretStore.GetSecret("OAuth2.ClientSecret") ?? "myOath";
@@ -408,18 +420,18 @@ public static class ServiceCollectionExtensions
                             };
                         });
                         break;
-                    case ExternalProviderTypeEnum.OpenIdConnect:
-                        services.AddAuthentication().AddOpenIdConnect(provider.Scheme, options =>
-                        {
-                            options.Authority = provider.MetadataJson; // or metadata URL
-                            options.ClientId = secretStore.GetSecret("OpenIdConnect.ClientId");
-                            options.ClientSecret = secretStore.GetSecret("OpenIdConnect.ClientSecret");
-                            options.CallbackPath = provider.CallbackPath ?? $"/signin-{provider.Scheme}";
-                            options.SignInScheme = IdentityConstants.ExternalScheme;
-                            options.ResponseType = "code";
-                            // ...map scopes/claims
-                        });
-                        break;
+                    //case ExternalProviderTypeEnum.OpenIdConnect:
+                    //    services.AddAuthentication().AddOpenIdConnect(provider.Scheme!, options =>
+                    //    {
+                    //        options.Authority = provider.MetadataJson; // or metadata URL
+                    //        options.ClientId = provider.ClientId ?? secretStore.GetSecret("OpenIdConnect.ClientId");
+                    //        options.ClientSecret = secretStore.GetSecret("OpenIdConnect.ClientSecret");
+                    //        options.CallbackPath = provider.CallbackPath != "" ? provider.CallbackPath : $"/signin-{provider.Scheme}";
+                    //        options.SignInScheme = IdentityConstants.ExternalScheme;
+                    //        options.ResponseType = "code";
+                    //        // ...map scopes/claims
+                    //    });
+                    //    break;
                         // ... برای LinkedIn, Twitter, ...
                 }
 

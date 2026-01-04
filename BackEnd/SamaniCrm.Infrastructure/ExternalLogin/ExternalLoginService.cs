@@ -1,10 +1,15 @@
 ﻿using Duende.IdentityServer.Endpoints.Results;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Core.Shared.Enums;
+using SamaniCrm.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
 
 namespace SamaniCrm.Infrastructure.ExternalLogin;
@@ -19,14 +24,24 @@ public class ExternalLoginService : IExternalLoginService
         _logger = logger;
     }
 
-    public async Task<ExternalLoginResult> ExchangeCodeAsync(ExternalProviderTypeEnum provider, string code, string tokenEndpoint, string clientId, string clientSecret, string redirectUri, CancellationToken cancellationToken)
+    public async Task<ExternalLoginResult> ExchangeCodeAsync(
+        ExternalProviderTypeEnum provider,
+        string code,
+        string tokenEndpoint,
+        string clientId,
+        string clientSecret,
+        string codeVerifier,
+        string redirectUri,
+        CancellationToken cancellationToken)
     {
+
         var request = new HttpRequestMessage(HttpMethod.Post, tokenEndpoint)
         {
             Content = new FormUrlEncodedContent(new Dictionary<string, string>
             {
                 ["client_id"] = clientId,
                 ["client_secret"] = clientSecret,
+                ["code_verifier"] = codeVerifier,
                 ["code"] = code,
                 ["redirect_uri"] = redirectUri,
                 ["grant_type"] = "authorization_code"
@@ -51,11 +66,22 @@ public class ExternalLoginService : IExternalLoginService
         response.EnsureSuccessStatusCode();
 
         string access_token = result.AccessToken;
+        string refresh_token = result.RefreshToken;
         string idToken = result.IdToken;
 
         var output = new ExternalLoginResult();
         switch (provider)
         {
+            case ExternalProviderTypeEnum.Google:
+                var handler1 = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+                var jwt1 = handler1.ReadJwtToken(idToken ?? access_token);
+                output.Email = jwt1.Claims.FirstOrDefault(c => c.Type == "email")?.Value
+                            ?? jwt1.Claims.FirstOrDefault(c => c.Type == "preferred_username")?.Value;
+                output.Name = jwt1.Claims.FirstOrDefault(c => c.Type == "name")?.Value ?? output.Email;
+                output.Image = jwt1.Claims.FirstOrDefault(c => c.Type == "picture")?.Value ?? "";
+                output.UserName = output.Email;
+                break;
+
             case ExternalProviderTypeEnum.Microsoft:
                 var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
                 var jwt = handler.ReadJwtToken(idToken ?? access_token);
@@ -77,7 +103,16 @@ public class ExternalLoginService : IExternalLoginService
                 output.Name = linkdinResult.user.Name ?? linkdinResult.user.Login;
                 output.UserName = linkdinResult.user.Login;
                 break;
-
+            case ExternalProviderTypeEnum.OpenIdConnect:
+                var claims = ValidateIdToken(idToken, null);
+                if (claims == null) return null;
+                output.UserName = claims.ContainsKey("preferred_username") ? claims["preferred_username"].ToString() : null;
+                output.Email = claims.ContainsKey("email") ? claims["email"].ToString() : null;
+                output.Name = claims.ContainsKey("name") ? claims["name"].ToString() : null;
+                output.GivenName = claims.ContainsKey("given_name") ? claims["given_name"].ToString() : null;
+                output.LastName = claims.ContainsKey("family_name") ? claims["family_name"].ToString() : null;
+                output.Image = claims.ContainsKey("picture") ? claims["picture"].ToString() : null;
+                break;
         }
 
 
@@ -124,8 +159,39 @@ public class ExternalLoginService : IExternalLoginService
         return fallback;
     }
 
+    // Validate ID Token (basic validation - in production use proper JWT library)
+    private Dictionary<string, object> ValidateIdToken(string idToken, ExternalProvider provider)
+    {
+        try
+        {
+            // Decode JWT (without signature verification for now)
+            var parts = idToken.Split('.');
+            if (parts.Length != 3) return null;
 
+            var payload = parts[1];
+            var json = Encoding.UTF8.GetString(Base64UrlDecode(payload));
+            var claims = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
 
+            // TODO: In production, verify signature using provider's public keys (JWKS)
+            // TODO: Verify iss, aud, exp, nonce claims
+
+            return claims;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+    private byte[] Base64UrlDecode(string input)
+    {
+        var output = input.Replace('-', '+').Replace('_', '/');
+        switch (output.Length % 4)
+        {
+            case 2: output += "=="; break;
+            case 3: output += "="; break;
+        }
+        return Convert.FromBase64String(output);
+    }
 
     private void getGitHubUserData()
     {

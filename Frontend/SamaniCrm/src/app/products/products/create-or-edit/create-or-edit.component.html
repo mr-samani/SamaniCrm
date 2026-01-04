@@ -1,120 +1,135 @@
 <h2>
-  <span cdkDragHandle class="title" *ngIf="!isUpdate">{{ 'CreateProduct' | translate }}</span>
-  <span cdkDragHandle class="title" *ngIf="isUpdate">{{ 'EditProduct' | translate }}</span>
+  @if (!isUpdate) {
+    <span cdkDragHandle class="title">{{ 'CreateProduct' | translate }}</span>
+  }
+  @if (isUpdate) {
+    <span cdkDragHandle class="title">{{ 'EditProduct' | translate }}</span>
+  }
 </h2>
 
-<div class="d-flex align-items-center justify-content-center py-5" *ngIf="loading">
-  <mat-spinner color="primary" diameter="25"></mat-spinner>
-</div>
-<form [formGroup]="form" *ngIf="!loading">
-  <div class="row">
-    <div class="col-sm-8">
-      <div class="card">
-        <div class="card-body">
-          <div class="row">
-            <auto-complete-product-category
-              class="col-sm-6 col-md-3"
+@if (loading) {
+  <div class="d-flex align-items-center justify-content-center py-5">
+    <mat-spinner color="primary" diameter="25"></mat-spinner>
+  </div>
+}
+@if (!loading) {
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="col-sm-8">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <auto-complete-product-category
+                class="col-sm-6 col-md-3"
               formControlName="category"></auto-complete-product-category>
-
-            <auto-complete-product-type
-              class="col-sm-6 col-md-3"
+              <auto-complete-product-type
+                class="col-sm-6 col-md-3"
               formControlName="productType"></auto-complete-product-type>
-            <div class="col-sm-6 col-md-3">
-              <mat-form-field>
-                <mat-label>{{ 'Slug' | translate }}</mat-label>
-                <input matInput formControlName="slug" />
-                <mat-error *ngIf="form.get('slug')?.hasError('required')">
-                  {{ 'IsRequired' | translate: { value: ('Slug' | translate) } }}
-                </mat-error>
-              </mat-form-field>
+              <div class="col-sm-6 col-md-3">
+                <mat-form-field>
+                  <mat-label>{{ 'Slug' | translate }}</mat-label>
+                  <input matInput formControlName="slug" />
+                  @if (form.get('slug')?.hasError('required')) {
+                    <mat-error>
+                      {{ 'IsRequired' | translate: { value: ('Slug' | translate) } }}
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6 col-md-3">
+                <mat-form-field class="col-sm-6 col-md-3">
+                  <mat-label>{{ 'Sku' | translate }}</mat-label>
+                  <input matInput formControlName="sku" numberCheck type="number" />
+                  @if (form.get('sku')?.hasError('required')) {
+                    <mat-error>
+                      {{ 'IsRequired' | translate: { value: ('Sku' | translate) } }}
+                    </mat-error>
+                  }
+                  @if (form.get('sku')?.hasError('minlenght')) {
+                    <mat-error>
+                      {{ 'MinLenghtError' | translate: { value: 3 } }}
+                    </mat-error>
+                  }
+                  @if (form.get('sku')?.hasError('maxlenght')) {
+                    <mat-error>
+                      {{ 'MaxLenghtError' | translate: { value: 100 } }}
+                    </mat-error>
+                  }
+                </mat-form-field>
+              </div>
             </div>
-            <div class="col-sm-6 col-md-3">
-              <mat-form-field class="col-sm-6 col-md-3">
-                <mat-label>{{ 'Sku' | translate }}</mat-label>
-                <input matInput formControlName="sku" numberCheck type="number" />
-                <mat-error *ngIf="form.get('sku')?.hasError('required')">
-                  {{ 'IsRequired' | translate: { value: ('Sku' | translate) } }}
-                </mat-error>
-                <mat-error *ngIf="form.get('sku')?.hasError('minlenght')">
-                  {{ 'MinLenghtError' | translate: { value: 3 } }}
-                </mat-error>
-                <mat-error *ngIf="form.get('sku')?.hasError('maxlenght')">
-                  {{ 'MaxLenghtError' | translate: { value: 100 } }}
-                </mat-error>
+            <p>
+              <mat-checkbox formControlName="isActive" color="primary">
+                {{ 'IsActive' | translate }}
+              </mat-checkbox>
+            </p>
+            <add-or-update-product-attributes
+              [productTypeId]="form.get('productType')?.value?.id"
+              [attributeValues]="attributeValues"
+            (onChange)="attributeValues = $event"></add-or-update-product-attributes>
+            <product-prices [(prices)]="prices"></product-prices>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4 d-flex flex-column gap-3">
+        <product-images [(images)]="images"></product-images>
+        <product-files [(files)]="files"></product-files>
+        <div class="card">
+          <div class="card-header">{{ 'Tags' | translate }}</div>
+          <div class="card-body">
+            <mat-form-field>
+              <mat-label>{{ 'Tags' | translate }}</mat-label>
+              <mat-chip-grid #chipGrid aria-label="Enter tag">
+                @for (tag of tagList; track tag) {
+                  <mat-chip-row (removed)="removeTag(tag)">
+                    {{ tag }}
+                    <button matChipRemove [attr.aria-label]="'remove ' + tag">
+                      <i class="fa fa-times"></i>
+                    </button>
+                  </mat-chip-row>
+                }
+              </mat-chip-grid>
+              <input
+                [placeholder]="'NewTagThreeDot' | translate"
+                [matChipInputFor]="chipGrid"
+                (matChipInputTokenEnd)="addTag($event)" />
               </mat-form-field>
             </div>
           </div>
-          <p>
-            <mat-checkbox formControlName="isActive" color="primary">
-              {{ 'IsActive' | translate }}
-            </mat-checkbox>
-          </p>
-
-          <add-or-update-product-attributes
-            [productTypeId]="form.get('productType')?.value?.id"
-            [attributeValues]="attributeValues"
-            (onChange)="attributeValues = $event"></add-or-update-product-attributes>
-
-          <product-prices [(prices)]="prices"></product-prices>
         </div>
       </div>
-    </div>
-    <div class="col-sm-4 d-flex flex-column gap-3">
-      <product-images [(images)]="images"></product-images>
-      <product-files [(files)]="files"></product-files>
- 
-      <div class="card">
-        <div class="card-header">{{ 'Tags' | translate }}</div>
-        <div class="card-body">
-          <mat-form-field>
-            <mat-label>{{ 'Tags' | translate }}</mat-label>
-            <mat-chip-grid #chipGrid aria-label="Enter tag">
-              @for (tag of tagList; track tag) {
-                <mat-chip-row (removed)="removeTag(tag)">
-                  {{ tag }}
-                  <button matChipRemove [attr.aria-label]="'remove ' + tag">
-                    <i class="fa fa-times"></i>
-                  </button>
-                </mat-chip-row>
-              }
-            </mat-chip-grid>
-            <input
-              [placeholder]="'NewTagThreeDot' | translate"
-              [matChipInputFor]="chipGrid"
-              (matChipInputTokenEnd)="addTag($event)" />
-          </mat-form-field>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <tab-group>
-    <tab-item
-      [title]="translation.get('culture')?.value"
-      formArrayName="translations"
-      *ngFor="let translation of translationsArray.controls; let i = index">
-      <div [formGroupName]="i" class="row">
-        <mat-form-field class="col-sm-12">
-          <mat-label>{{ 'Title' | translate }}</mat-label>
-          <input matInput formControlName="title" />
-        </mat-form-field>
-        <mat-form-field class="col-sm-12">
-          <mat-label>{{ 'Description' | translate }}</mat-label>
-          <textarea matInput formControlName="description" rows="3"></textarea>
-        </mat-form-field>
-        <!-- <mat-form-field class="col-sm-12">
-          <mat-label>{{ 'Content' | translate }}</mat-label>
-          <textarea matInput formControlName="content" rows="10"></textarea>
-        </mat-form-field> -->
-        <html-editor formControlName="content"></html-editor>
-      </div>
-    </tab-item>
-  </tab-group>
-</form>
+      <tab-group>
+        @for (translation of translationsArray.controls; track translation; let i = $index) {
+          <tab-item
+            [title]="translation.get('culture')?.value"
+            formArrayName="translations"
+            >
+            <div [formGroupName]="i" class="row">
+              <mat-form-field class="col-sm-12">
+                <mat-label>{{ 'Title' | translate }}</mat-label>
+                <input matInput formControlName="title" />
+              </mat-form-field>
+              <mat-form-field class="col-sm-12">
+                <mat-label>{{ 'Description' | translate }}</mat-label>
+                <textarea matInput formControlName="description" rows="3"></textarea>
+              </mat-form-field>
+              <!-- <mat-form-field class="col-sm-12">
+              <mat-label>{{ 'Content' | translate }}</mat-label>
+              <textarea matInput formControlName="content" rows="10"></textarea>
+            </mat-form-field> -->
+            <html-editor formControlName="content"></html-editor>
+          </div>
+        </tab-item>
+      }
+    </tab-group>
+  </form>
+}
 
 <div class="actions fixed-bottom">
   <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
-    <mat-spinner *ngIf="saving" color="primary" diameter="25"></mat-spinner>
+    @if (saving) {
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    }
     <span>{{ 'Save' | translate }}</span>
   </button>
 </div>

@@ -188,11 +188,11 @@ public class IdentityService : IIdentityService
         if (!string.IsNullOrEmpty(request.Filter))
         {
             query = query.Where(x =>
-            x.UserName.Contains(request.Filter) ||
-            x.FirstName.Contains(request.Filter) ||
+            x.UserName!.Contains(request.Filter) ||
+            x.FirstName!.Contains(request.Filter) ||
             x.LastName.Contains(request.Filter) ||
-            x.Email.Contains(request.Filter) ||
-            x.PhoneNumber.Contains(request.Filter)
+            x.Email!.Contains(request.Filter) ||
+            x.PhoneNumber!.Contains(request.Filter)
             );
         }
 
@@ -244,7 +244,7 @@ public class IdentityService : IIdentityService
             x.Name
         }).ToListAsync();
 
-        return roles.Select(role => (role.Id, role.Name)).ToList();
+        return roles.Select(role => (role.Id, role.Name!)).ToList();
     }
 
     public async Task<UserDTO> GetUserDetailsAsync(Guid userId)
@@ -316,7 +316,7 @@ public class IdentityService : IIdentityService
             throw new NotFoundException("User not found");
             //throw new Exception("User not found");
         }
-        return await _userManager.GetUserNameAsync(user);
+        return await _userManager.GetUserNameAsync(user) ?? "";
     }
 
     public async Task<List<string>> GetUserRolesAsync(Guid userId)
@@ -391,7 +391,7 @@ public class IdentityService : IIdentityService
     public async Task<(Guid id, string roleName)> GetRoleByIdAsync(Guid id)
     {
         var role = await _roleManager.FindByIdAsync(id.ToString());
-        return (role.Id, role.Name);
+        return (role!.Id, role.Name ?? "");
     }
 
     public async Task<bool> UpdateRole(Guid id, string roleName)
@@ -399,9 +399,12 @@ public class IdentityService : IIdentityService
         if (roleName != null)
         {
             var role = await _roleManager.FindByIdAsync(id.ToString());
-            role.Name = roleName;
-            var result = await _roleManager.UpdateAsync(role);
-            return result.Succeeded;
+            if (role != null)
+            {
+                role.Name = roleName;
+                var result = await _roleManager.UpdateAsync(role);
+                return result.Succeeded;
+            }
         }
         return false;
     }
@@ -409,6 +412,10 @@ public class IdentityService : IIdentityService
     public async Task<bool> UpdateUsersRole(string userName, IList<string> usersRole)
     {
         var user = await _userManager.FindByNameAsync(userName);
+        if (user == null)
+        {
+            return false;
+        }
         var existingRoles = await _userManager.GetRolesAsync(user);
         var result = await _userManager.RemoveFromRolesAsync(user, existingRoles);
         result = await _userManager.AddToRolesAsync(user, usersRole);
@@ -671,14 +678,21 @@ public class IdentityService : IIdentityService
         //if (info == null) throw new UnauthorizedAccessException("External login info not found");
 
         //var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
+        var backendUrl = _config["BackendUrl"] ?? "";
+        if (backendUrl.EndsWith("/") == false)
+        {
+            backendUrl += "/";
+        }
 
         var provider = await _applicationDbContext.ExternalProviders
-            .Where(x => x.Name == request.provider)
+            .Where(x => x.Name.ToLower() == request.provider.ToLower() && x.IsActive)
             .Select(s => new
             {
                 s.Name,
                 s.TokenEndpoint,
                 s.ProviderType,
+                s.ClientId,
+                s.ClientSecret,
             })
             .FirstOrDefaultAsync(cancellationToken);
         if (provider == null)
@@ -686,32 +700,27 @@ public class IdentityService : IIdentityService
             throw new UnauthorizedAccessException("External login provider not found");
         }
 
-        var clientId = _secretStore.GetSecret(request.provider + ":ClientId");
-        var secret = _secretStore.GetSecret(request.provider + ":ClientSecret");
+        var clientId = provider.ClientId ?? _secretStore.GetSecret(request.provider + ":ClientId");
+        var secret = provider.ClientSecret ?? _secretStore.GetSecret(request.provider + ":ClientSecret");
         var redirectUrl = _config["ExternalLogin:RedirectUri"]! + provider.Name;
-        var externalLoginResult = await _externalLoginService.ExchangeCodeAsync(provider.ProviderType, request.code, provider.TokenEndpoint, clientId, secret, redirectUrl, cancellationToken);
-
-
-
-        ApplicationUser? user = await _userManager.FindByEmailAsync(externalLoginResult.Email ?? "");
-        if (user == null)
+        if (provider.ProviderType == ExternalProviderTypeEnum.OpenIdConnect)
         {
-
-            user = new ApplicationUser
-            {
-                UserName = externalLoginResult.UserName ?? externalLoginResult.Email,
-                FullName = externalLoginResult.Name,
-                Email = externalLoginResult.Email,
-                Lang = AppConsts.DefaultLanguage,
-                EmailConfirmed = true
-            };
-            var createResult = await _userManager.CreateAsync(user);
-            if (!createResult.Succeeded)
-            {
-                BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification("provider: " + request.provider));
-                throw new ValidationException(createResult.Errors.Select(e => e.Description).FirstOrDefault());
-            }
+            redirectUrl = $"{backendUrl}api/externalauth/callback/{provider.Name}";
         }
+
+
+        var externalLoginResult = await _externalLoginService.ExchangeCodeAsync(
+            provider.ProviderType,
+            request.code,
+            provider.TokenEndpoint,
+            clientId,
+            secret,
+            request.codeVerifier,
+            redirectUrl,
+            cancellationToken);
+
+        ApplicationUser? user = await FindOrCreateExternalUser(externalLoginResult.Email, externalLoginResult.UserName, externalLoginResult.Name, provider.Name);
+
         await _signInManager.SignInAsync(user, false);
 
         var roles = await _userManager.GetRolesAsync(user);
@@ -749,7 +758,62 @@ public class IdentityService : IIdentityService
 
     }
 
+    public async Task<List<Guid>> GetAllActiveUsersIds(CancellationToken cancellationToken)
+    {
+        List<Guid> list = await _applicationDbContext.Users
+             .Where(x => x.IsDeleted == false)
+             .Select(u => u.Id)
+             .ToListAsync();
+        return list;
+    }
+
+    public async Task<List<AutoCompleteDto<Guid>>> GetAutoCompleteUsers(string filter, CancellationToken cancellationToken)
+    {
+
+        var query = _applicationDbContext.Users.AsQueryable();
 
 
+        if (!string.IsNullOrEmpty(filter))
+        {
+            query = query.Where(c =>
+                c.UserName.Contains(filter) ||
+                c.FirstName.Contains(filter) ||
+                c.LastName.Contains(filter)
+            );
+        }
 
+        var items = await query.Select(s => new AutoCompleteDto<Guid>
+        {
+            Id = s.Id,
+            Title = s.FirstName + " " + s.LastName + " (" + s.UserName + ")",
+        })
+            .Skip(0)
+            .Take(50)
+            .ToListAsync(cancellationToken);
+        return items;
+    }
+
+    public async Task<ApplicationUser> FindOrCreateExternalUser(string email, string userName, string name, string providerName)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+        {
+
+            user = new ApplicationUser
+            {
+                UserName = userName ?? email,
+                FullName = name,
+                Email = email,
+                Lang = AppConsts.DefaultLanguage,
+                EmailConfirmed = true
+            };
+            var createResult = await _userManager.CreateAsync(user);
+            if (!createResult.Succeeded)
+            {
+                BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification("provider: " + providerName));
+                throw new ValidationException(createResult.Errors.Select(e => e.Description).FirstOrDefault());
+            }
+        }
+        return user;
+    }
 }

@@ -1,16 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using MimeDetective.Storage;
-using Newtonsoft.Json.Linq;
+﻿using Duende.IdentityServer.Models;
+using Microsoft.EntityFrameworkCore;
+using MimeDetective.Diagnostics;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
-using SamaniCrm.Domain.Entities.ProductEntities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using static Duende.IdentityModel.OidcConstants;
 
 namespace SamaniCrm.Infrastructure.Persistence;
 
@@ -23,11 +16,11 @@ public static class SeedExternalProviders
         var providers = GetProviders();
 
 
-        var existingKeys = await dbContext.ExternalProviders.Select(x=>x.Name).ToListAsync();
+        var existingKeys = await dbContext.ExternalProviders.Select(x => x.Name).ToListAsync();
 
         // فقط مواردی که وجود ندارند را اضافه می‌کنیم
         var toAdd = providers
-            .Where(x =>!existingKeys.Contains(x.Name))
+            .Where(x => !existingKeys.Contains(x.Name))
             .ToList();
 
         if (toAdd.Any())
@@ -111,7 +104,25 @@ public static class SeedExternalProviders
                 UserInfoEndpoint = "https://api.twitter.com/2/users/me",
                 Scopes = "tweet.read users.read offline.access",
                 ProviderType = ExternalProviderTypeEnum.Twitter
+            },
+            new ExternalProvider
+            {
+                Id = Guid.NewGuid(),
+                Name = "SamaniAuth",
+                DisplayName = "KeyClock",
+                AuthorizationEndpoint = "https://localhost:8443/realms/master/protocol/openid-connect/auth",
+                TokenEndpoint = "https://localhost:8443/realms/master/protocol/openid-connect/token",
+                UserInfoEndpoint = "https://localhost:8443/realms/master/protocol/openid-connect/userinfo",
+                Scopes = "openid profile email",
+                ProviderType = ExternalProviderTypeEnum.OpenIdConnect,
+                IsActive = false,
+                ClientId = "SamaniAuth",
+                ClientSecret = "Zf90JkD87avWLigGEQe3Tk6TmqkQJInu",
+                ResponseMode = "query",
+                ResponseType = "code",
+                UsePkce = true
             }
+
         };
     }
 

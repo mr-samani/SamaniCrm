@@ -1,41 +1,53 @@
 <h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
-  <span cdkDragHandle class="title" *ngIf="!isUpdate">{{ 'CreateProductType' | translate }}</span>
-  <span cdkDragHandle class="title" *ngIf="isUpdate">{{ 'EditProductType' | translate }}</span>
+  @if (!isUpdate) {
+    <span cdkDragHandle class="title">{{ 'CreateProductType' | translate }}</span>
+  }
+  @if (isUpdate) {
+    <span cdkDragHandle class="title">{{ 'EditProductType' | translate }}</span>
+  }
 
   <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
     <span aria-hidden="true">&times;</span>
   </button>
 </h2>
 <mat-dialog-content>
-  <div class="d-flex align-items-center justify-content-center py-5" *ngIf="loading">
-    <mat-spinner color="primary" diameter="25"></mat-spinner>
-  </div>
-  <form [formGroup]="form" *ngIf="!loading">
-    <tab-group>
-      <tab-item
-        [title]="translation.get('culture')?.value"
-        formArrayName="translations"
-        *ngFor="let translation of translationsArray.controls; let i = index">
-        <div [formGroupName]="i" class="row">
-          <mat-form-field class="col-sm-12">
-            <mat-label>{{ 'Name' | translate }}</mat-label>
-            <input matInput formControlName="name" />
-          </mat-form-field>
-          <mat-form-field class="col-sm-12">
-            <mat-label>{{ 'Description' | translate }}</mat-label>
-            <textarea matInput formControlName="description" rows="3"></textarea>
-          </mat-form-field>
-        </div>
-      </tab-item>
-    </tab-group>
-  </form>
+  @if (loading) {
+    <div class="d-flex align-items-center justify-content-center py-5">
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    </div>
+  }
+  @if (!loading) {
+    <form [formGroup]="form">
+      <tab-group>
+        @for (translation of translationsArray.controls; track translation; let i = $index) {
+          <tab-item
+            [title]="translation.get('culture')?.value"
+            formArrayName="translations"
+            >
+            <div [formGroupName]="i" class="row">
+              <mat-form-field class="col-sm-12">
+                <mat-label>{{ 'Name' | translate }}</mat-label>
+                <input matInput formControlName="name" />
+              </mat-form-field>
+              <mat-form-field class="col-sm-12">
+                <mat-label>{{ 'Description' | translate }}</mat-label>
+                <textarea matInput formControlName="description" rows="3"></textarea>
+              </mat-form-field>
+            </div>
+          </tab-item>
+        }
+      </tab-group>
+    </form>
+  }
 
   <!-- <pre dir="ltr" style="text-align: left;">{{form.value|json}}</pre> -->
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
   <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
-    <mat-spinner *ngIf="saving" color="primary" diameter="25"></mat-spinner>
+    @if (saving) {
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    }
     <span>{{ 'Save' | translate }}</span>
   </button>
 </mat-dialog-actions>

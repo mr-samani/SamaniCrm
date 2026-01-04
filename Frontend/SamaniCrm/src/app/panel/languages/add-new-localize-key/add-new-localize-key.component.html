@@ -1,0 +1,57 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title">{{ 'AddNewLocalizeKey' | translate }}</span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+  @if (loading) {
+    <div class="d-flex align-items-center justify-content-center py-5">
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    </div>
+  }
+  @if (!loading) {
+    <form [formGroup]="form">
+      <div class="row">
+        <mat-form-field class="col-md-6">
+          <mat-label>{{ 'Key' | translate }}</mat-label>
+          <input matInput formControlName="key" />
+        </mat-form-field>
+        <mat-form-field class="col-md-6">
+          <mat-label>{{ 'Category' | translate }}</mat-label>
+          <mat-select formControlName="category">
+            @for (item of LocalizationCategoryEnum | enumToArray; track item) {
+              <mat-option [value]="+item">
+                {{ 'LocalizationCategoryEnum_' + item | translate }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <tab-group>
+        @for (translation of localizationsArray.controls; track translation; let i = $index) {
+          <tab-item [title]="translation.get('culture')?.value" formArrayName="localizations">
+            <div [formGroupName]="i" class="row">
+              <mat-form-field class="col-sm-12">
+                <mat-label>{{ 'Value' | translate }}</mat-label>
+                <input matInput formControlName="value" />
+              </mat-form-field>
+            </div>
+          </tab-item>
+        }
+      </tab-group>
+    </form>
+  }
+
+  <!-- <pre dir="ltr" style="text-align: left;">{{form.value|json}}</pre> -->
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
+    @if (saving) {
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    }
+    <span>{{ 'Save' | translate }}</span>
+  </button>
+</mat-dialog-actions>

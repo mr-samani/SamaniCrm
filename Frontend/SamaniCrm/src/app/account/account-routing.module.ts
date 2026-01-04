@@ -5,6 +5,7 @@ import { RegisterComponent } from './register/register.component';
 import { AccountComponent } from './account.component';
 import { accountResolver } from './account.resolver';
 import { ExternalLoginCalbackComponent } from './external-login-calback/external-login-calback.component';
+import { OpenidAuthCallbackComponent } from './openid-auth-callback/openid-auth-callback.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,7 @@ const routes: Routes = [
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
       { path: 'external/:provider', component: ExternalLoginCalbackComponent },
+      { path: 'callback', component: OpenidAuthCallbackComponent },
     ],
   },
 ];

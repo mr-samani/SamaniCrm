@@ -23,7 +23,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
         }
         public async Task<Guid> Handle(CreateOrUpdateProductTypeCommand request, CancellationToken cancellationToken)
         {
-            ProductType entity;
+            ProductType? entity;
             if (request.Id.HasValue)
             {
                 entity = await _dbContext.ProductTypes
@@ -41,7 +41,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             // Handle translations
             if (request != null)
             {
-                var toRemove = entity.Translations.Where(t => !(request.Translations.Any(rt => rt.Culture == t.Culture))).ToList();
+                var toRemove = entity.Translations.Where(t => !(request.Translations!.Any(rt => rt.Culture == t.Culture))).ToList();
                 foreach (var t in toRemove)
                     entity.Translations.Remove(t);
                 foreach (var item in request.Translations ?? [])

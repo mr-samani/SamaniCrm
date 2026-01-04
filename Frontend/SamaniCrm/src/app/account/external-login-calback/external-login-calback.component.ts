@@ -31,9 +31,9 @@ export class ExternalLoginCalbackComponent extends AppComponentBase implements O
             if (this.returnUrl) {
               window.location.href = this.returnUrl;
             } else {
-              this.router.navigate(['/dashboard']);
+              this.router.navigate(['/panel']);
             }
-          }else{
+          } else {
             throw new Error('Login failed');
           }
         },

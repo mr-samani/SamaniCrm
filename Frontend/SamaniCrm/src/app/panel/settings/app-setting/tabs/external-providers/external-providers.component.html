@@ -1,0 +1,30 @@
+<div class="d-flex gap-1 flex-wrap">
+  @if (AppPermissions.SecuritySetting_ExternalProvidersCreate | permission) {
+    <button mat-stroked-button color="primary" (click)="openCreateOrEditDialog()">
+      <i class="fa fa-plus mx-2"></i>
+      {{ 'CreateNew' | translate }}
+    </button>
+  }
+</div>
+<table-view
+  [list]="list"
+  [fields]="fields"
+  [operations]="operations"
+  [loading]="loading"
+  (sortChange)="getList($event)"></table-view>
+
+<ng-template #operations let-item>
+  <div class="d-flex align-items-center gap-1">
+    @if (AppPermissions.SecuritySetting_ExternalProvidersUpdate | permission) {
+      <button mat-icon-button (click)="openCreateOrEditDialog(item)">
+        <i class="fa fa-edit"></i>
+      </button>
+    }
+    @if (AppPermissions.SecuritySetting_ExternalProvidersDelete | permission) {
+      <button mat-icon-button (click)="deleteItem(item)">
+        <i class="fa fa-trash"></i>
+      </button>
+    }
+    <switch [(ngModel)]="item.isActive" (ngModelChange)="changeIsActive(item)"></switch>
+  </div>
+</ng-template>

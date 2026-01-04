@@ -36,7 +36,7 @@
         <input-group-icon
           [(ngModel)]="style.flexDirection"
           (change)="update()"
-          [items]="flexDirectionItems"></input-group-icon>
+        [items]="flexDirectionItems"></input-group-icon>
       </td>
     </tr>
 
@@ -46,7 +46,7 @@
         <input-group-icon
           [(ngModel)]="style.justifyContent"
           (change)="update()"
-          [items]="justifyContentItems"></input-group-icon>
+        [items]="justifyContentItems"></input-group-icon>
       </td>
     </tr>
     <tr>
@@ -59,123 +59,125 @@
 <p></p>
 
 <!-- Flex Properties -->
-<div *ngIf="style.display?.includes('flex')">
-  <table>
-    <tr>
-      <td colspan="2">
-        <div class="input-style" title="Align Items">
-          <span>Align Items</span>
-          <select [(ngModel)]="style.alignItems" (change)="update()" name="alignItems">
-            <option value="stretch">Stretch</option>
-            <option value="flex-start">Flex Start</option>
-            <option value="flex-end">Flex End</option>
-            <option value="center">Center</option>
-            <option value="baseline">Baseline</option>
-          </select>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <div class="input-style" title="Align Content">
-          <span>Align Content</span>
-          <select [(ngModel)]="style.alignContent" (change)="update()" name="alignContent">
-            <option value="stretch">Stretch</option>
-            <option value="flex-start">Flex Start</option>
-            <option value="flex-end">Flex End</option>
-            <option value="center">Center</option>
-            <option value="space-between">Space Between</option>
-            <option value="space-around">Space Around</option>
-          </select>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <div class="input-style" title="Flex Wrap">
-          <span>Flex Wrap</span>
-          <select [(ngModel)]="style.flexWrap" (change)="update()" name="flexWrap">
-            <option value="nowrap">No Wrap</option>
-            <option value="wrap">Wrap</option>
-            <option value="wrap-reverse">Wrap Reverse</option>
-          </select>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <input-style label="Gap" tooltip="Gap" [(ngModel)]="style.gap" name="gap" (change)="update()"></input-style>
-      </td>
-      <td>
-        <input-style
-          label="Row Gap"
-          tooltip="Row Gap"
-          [(ngModel)]="style.rowGap"
-          name="rowGap"
+@if (style.display?.includes('flex')) {
+  <div>
+    <table>
+      <tr>
+        <td colspan="2">
+          <div class="input-style" title="Align Items">
+            <span>Align Items</span>
+            <select [(ngModel)]="style.alignItems" (change)="update()" name="alignItems">
+              <option value="stretch">Stretch</option>
+              <option value="flex-start">Flex Start</option>
+              <option value="flex-end">Flex End</option>
+              <option value="center">Center</option>
+              <option value="baseline">Baseline</option>
+            </select>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <div class="input-style" title="Align Content">
+            <span>Align Content</span>
+            <select [(ngModel)]="style.alignContent" (change)="update()" name="alignContent">
+              <option value="stretch">Stretch</option>
+              <option value="flex-start">Flex Start</option>
+              <option value="flex-end">Flex End</option>
+              <option value="center">Center</option>
+              <option value="space-between">Space Between</option>
+              <option value="space-around">Space Around</option>
+            </select>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <div class="input-style" title="Flex Wrap">
+            <span>Flex Wrap</span>
+            <select [(ngModel)]="style.flexWrap" (change)="update()" name="flexWrap">
+              <option value="nowrap">No Wrap</option>
+              <option value="wrap">Wrap</option>
+              <option value="wrap-reverse">Wrap Reverse</option>
+            </select>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input-style label="Gap" tooltip="Gap" [(ngModel)]="style.gap" name="gap" (change)="update()"></input-style>
+        </td>
+        <td>
+          <input-style
+            label="Row Gap"
+            tooltip="Row Gap"
+            [(ngModel)]="style.rowGap"
+            name="rowGap"
           (change)="update()"></input-style>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <input-style
-          label="Column Gap"
-          tooltip="Column Gap"
-          [(ngModel)]="style.columnGap"
-          name="columnGap"
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input-style
+            label="Column Gap"
+            tooltip="Column Gap"
+            [(ngModel)]="style.columnGap"
+            name="columnGap"
           (change)="update()"></input-style>
-      </td>
-      <td>
-        <input-style
-          label="Flex Grow"
-          tooltip="Flex Grow"
-          [(ngModel)]="style.flexGrow"
-          name="flexGrow"
+        </td>
+        <td>
+          <input-style
+            label="Flex Grow"
+            tooltip="Flex Grow"
+            [(ngModel)]="style.flexGrow"
+            name="flexGrow"
           (change)="update()"></input-style>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <input-style
-          label="Flex Shrink"
-          tooltip="Flex Shrink"
-          [(ngModel)]="style.flexShrink"
-          name="flexShrink"
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input-style
+            label="Flex Shrink"
+            tooltip="Flex Shrink"
+            [(ngModel)]="style.flexShrink"
+            name="flexShrink"
           (change)="update()"></input-style>
-      </td>
-      <td>
-        <input-style
-          label="Flex Basis"
-          tooltip="Flex Basis"
-          [(ngModel)]="style.flexBasis"
-          name="flexBasis"
+        </td>
+        <td>
+          <input-style
+            label="Flex Basis"
+            tooltip="Flex Basis"
+            [(ngModel)]="style.flexBasis"
+            name="flexBasis"
           (change)="update()"></input-style>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <div class="input-style" title="Align Self">
-          <span>Align Self</span>
-          <select [(ngModel)]="style.alignSelf" (change)="update()" name="alignSelf">
-            <option value="auto">Auto</option>
-            <option value="flex-start">Flex Start</option>
-            <option value="flex-end">Flex End</option>
-            <option value="center">Center</option>
-            <option value="baseline">Baseline</option>
-            <option value="stretch">Stretch</option>
-          </select>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <div class="input-style" title="Order">
-          <span>Order</span>
-          <input type="number" [(ngModel)]="style.order" (change)="update()" name="order" />
-        </div>
-      </td>
-    </tr>
-  </table>
-</div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <div class="input-style" title="Align Self">
+            <span>Align Self</span>
+            <select [(ngModel)]="style.alignSelf" (change)="update()" name="alignSelf">
+              <option value="auto">Auto</option>
+              <option value="flex-start">Flex Start</option>
+              <option value="flex-end">Flex End</option>
+              <option value="center">Center</option>
+              <option value="baseline">Baseline</option>
+              <option value="stretch">Stretch</option>
+            </select>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <div class="input-style" title="Order">
+            <span>Order</span>
+            <input type="number" [(ngModel)]="style.order" (change)="update()" name="order" />
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+}
 
 <spacing-control [(ngModel)]="style" (change)="update()"></spacing-control>
 

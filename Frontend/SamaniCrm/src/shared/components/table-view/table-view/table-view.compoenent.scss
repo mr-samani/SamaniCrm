@@ -116,8 +116,8 @@
 }
 
 .operations {
-  min-width: 100px !important;
-  max-width: 100px !important;
+  width: 100px !important;
+  max-width: 200px !important;
 }
 
 @media (max-width: 768px) {
@@ -182,5 +182,17 @@
   transition: opacity 500ms;
   &.active {
     opacity: 1;
+  }
+}
+
+.tag {
+  color: #fff;
+  padding: 0 10px;
+  border-radius: 5px;
+  &.tag-success {
+    background: #008e44;
+  }
+  &.tag-danger {
+    background: #bb001b;
   }
 }

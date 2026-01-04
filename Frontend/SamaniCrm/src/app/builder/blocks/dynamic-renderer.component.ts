@@ -9,8 +9,9 @@ import {
   Inject,
   ElementRef,
   HostListener,
+  DOCUMENT
 } from '@angular/core';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { BLOCK_REGISTRY, BlockDefinition, BlockTypeEnum } from './block-registry';
 import { FormBuilderService } from '../services/form-builder.service';
 import { IDropEvent, NgxDragDropKitModule } from 'ngx-drag-drop-kit';

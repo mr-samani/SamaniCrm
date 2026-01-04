@@ -1,0 +1,48 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  @if (!isUpdate) {
+    <span cdkDragHandle class="title">{{ 'CreateLanguage' | translate }}</span>
+  }
+  @if (isUpdate) {
+    <span cdkDragHandle class="title">{{ 'EditLanguage' | translate }}</span>
+  }
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <div class="row">
+      <mat-form-field class="col-sm-6">
+        <mat-label>{{ 'Title' | translate }}</mat-label>
+        <input matInput type="text" formControlName="title" maxlength="100" />
+        @if (form.get('title')?.hasError('required')) {
+          <mat-error>
+            {{ 'IsRequired' | translate: { value: ('Title' | translate) } }}
+          </mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field class="col-sm-6">
+        <mat-label>{{ 'Order' | translate }}</mat-label>
+        <input matInput type="number" formControlName="order" numberCheck />
+        @if (form.get('order')?.hasError('required')) {
+          <mat-error>
+            {{ 'IsRequired' | translate: { value: ('Order' | translate) } }}
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <p>
+      <mat-checkbox color="primary" formControlName="isPublic">{{ 'IsPublic' | translate }}</mat-checkbox>
+    </p>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="saving">
+    @if (saving) {
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    }
+    <span>{{ 'Save' | translate }}</span>
+  </button>
+</mat-dialog-actions>

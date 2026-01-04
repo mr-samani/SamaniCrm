@@ -54,6 +54,7 @@ namespace SamaniCrm.Infrastructure.Persistence
             var existingRoleLocalizations = dbContext.Localizations
                 .Where(l => roles.Contains(l.Key))
                 .Select(l => new { l.Key, l.Culture })
+                .IgnoreQueryFilters()
                 .ToHashSet();
             foreach (var roleKey in roles)
             {

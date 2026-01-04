@@ -1,3 +1,4 @@
+import { OpenidAuthCallbackComponent } from './openid-auth-callback/openid-auth-callback.component';
 import { ExternalLoginCalbackComponent } from './external-login-calback/external-login-calback.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -15,7 +16,7 @@ import { AccountServiceProxy } from '@shared/service-proxies';
 import { OtpInputComponent } from '@shared/components/otp-input/otp-input.component';
 
 @NgModule({
-  declarations: [AccountComponent, LoginComponent, RegisterComponent, ExternalLoginCalbackComponent],
+  declarations: [AccountComponent, LoginComponent, RegisterComponent, ExternalLoginCalbackComponent, OpenidAuthCallbackComponent],
   imports: [
     CommonModule,
     AccountRoutingModule,

@@ -31,8 +31,8 @@ public class PageTranslation : IAuditableEntity, ISoftDelete
     public string? Html { get; set; }
 
 
-    public virtual Language Language { get; set; }
-    public virtual Page Page { get; set; }
+    public virtual Language Language { get; set; } = default!;
+    public virtual Page Page { get; set; } = default!;
 
 
 

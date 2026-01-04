@@ -41,7 +41,7 @@ export class CurrenciesComponent extends AppComponentBase implements OnInit {
     private matDialog: MatDialog,
   ) {
     super(injector);
-    this.breadcrumb.list = [{ name: this.l('Currencies'), url: '/dashboard/products/currencies' }];
+    this.breadcrumb.list = [{ name: this.l('Currencies'), url: '/panel/products/currencies' }];
     this.form = this.fb.group({
       filter: [''],
     });
@@ -90,7 +90,7 @@ export class CurrenciesComponent extends AppComponentBase implements OnInit {
 
   onPageChange(ev?: PageEvent) {
     this.getList();
-    this.router.navigate(['/dashboard/products/currencies'], {
+    this.router.navigate(['/panel/products/currencies'], {
       queryParams: {
         page: this.page,
       },

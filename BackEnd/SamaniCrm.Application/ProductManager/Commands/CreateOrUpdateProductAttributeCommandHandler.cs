@@ -21,7 +21,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
 
         public async Task<Guid> Handle(CreateOrUpdateProductAttributeCommand request, CancellationToken cancellationToken)
         {
-            ProductAttribute entity;
+            ProductAttribute? entity = null;
             if (request.Id.HasValue)
             {
                 entity = await _dbContext.ProductAttributes

@@ -1,8 +1,0 @@
-<div class="dashboard-container" [class.header-fixed-top]="AppConst.mainHeaderFixedTop">
-  <app-header></app-header>
-  <!-- <app-side-menu></app-side-menu> -->
-  <braed-crumb *ngIf="dashboardService.breadcrumb.enable()"></braed-crumb>
-  <div class="dashboard-content">
-    <router-outlet></router-outlet>
-  </div>
-</div>

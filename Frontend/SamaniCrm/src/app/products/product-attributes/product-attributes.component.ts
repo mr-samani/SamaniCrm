@@ -58,7 +58,7 @@ export class ProductAttributesComponent extends AppComponentBase implements OnIn
     this.productTypeName = this.route.snapshot.queryParams['name'];
     this.productTypeId = this.route.snapshot.params['productTypeId'];
     this.breadcrumb.list = [
-      { name: this.l('ProductTypes'), url: '/dashboard/products/types' },
+      { name: this.l('ProductTypes'), url: '/panel/products/types' },
       { name: this.productTypeName },
     ];
     this.form = this.fb.group({
@@ -115,7 +115,7 @@ export class ProductAttributesComponent extends AppComponentBase implements OnIn
 
   onPageChange(ev?: PageEvent) {
     this.getList();
-    this.router.navigate(['/dashboard/products/attributes/' + this.productTypeId], {
+    this.router.navigate(['/panel/products/attributes/' + this.productTypeId], {
       queryParams: {
         page: this.page,
         name: this.productTypeName,

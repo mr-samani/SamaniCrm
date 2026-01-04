@@ -46,6 +46,13 @@ export class LoginComponent extends AppComponentBase implements OnInit {
       rememberMe: [true],
     });
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'];
+
+    this.route.queryParams.subscribe((p) => {
+      if (p['error']) {
+        //TODO : check safe html
+        this.notify.error(p['error']);
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -72,7 +79,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
             if (this.returnUrl) {
               window.location.href = this.returnUrl;
             } else {
-              this.router.navigate(['/dashboard']);
+              this.router.navigate(['/panel']);
             }
           } else if (result.success && result.data?.enableTwoFactor) {
             this.getTwoFactorCode = true;
@@ -107,7 +114,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
             if (this.returnUrl) {
               window.location.href = this.returnUrl;
             } else {
-              this.router.navigate(['/dashboard']);
+              this.router.navigate(['/panel']);
             }
           }
         },
@@ -130,11 +137,14 @@ export class LoginComponent extends AppComponentBase implements OnInit {
       });
   }
 
-  loginExternalProvider(provider: ExternalProviderDto) {
+  async loginExternalProvider(provider: ExternalProviderDto) {
     this.loadingExternalProviders = true;
     try {
       let url = '';
       switch (provider.providerType) {
+        case ExternalProviderTypeEnum.OpenIdConnect:
+          url = `${AppConst.apiUrl}/api/ExternalAuth/login/${provider.name}`;
+          break;
         case ExternalProviderTypeEnum.Microsoft:
         case ExternalProviderTypeEnum.Google:
         case ExternalProviderTypeEnum.GitHub:

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Interfaces;
-using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -40,24 +40,14 @@ public class GetExternalProvidersHandler : IRequestHandler<GetExternalProvidersQ
                DisplayName = p.DisplayName,
                ProviderType = p.ProviderType,
                AuthorizationEndpoint = p.AuthorizationEndpoint,
-               ClientId = _secretStore.GetSecret(p.Name + ":ClientId"),
+               ClientId = p.ClientId != null ? p.ClientId : _secretStore.GetSecret(p.Name + ":ClientId"),
                Scopes = p.Scopes,
+               ResponseType = p.ResponseType,
+               ResponseMode = p.ResponseMode,
+               UsePkce = p.UsePkce,
                IsActive = p.IsActive
            })
            .ToListAsync(cancellationToken);
         return result;
     }
-}
-public class ExternalProviderDto
-{
-    public Guid Id { get; set; }
-    public required string Name { get; set; } // "Google", "MyCorpOIDC"
-    public string DisplayName { get; set; } = default!; // "Google Login"
-    public required ExternalProviderTypeEnum ProviderType { get; set; } // "OpenIdConnect" | "OAuth2"
-
-    public required string AuthorizationEndpoint { get; set; }
-    public required string ClientId { get; set; }
-    public required string Scopes { get; set; }
-
-    public bool IsActive { get; set; } = false;
 }

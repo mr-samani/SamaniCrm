@@ -21,7 +21,10 @@ namespace SamaniCrm.Infrastructure.Persistence
 
             var permissions = PermissionsHelper.GetAllPermissions();
 
-            var existingPermissions = dbContext.Permissions.Select(p => p.Name).ToHashSet();
+            var existingPermissions = dbContext.Permissions
+                .Select(p => p.Name)
+                .IgnoreQueryFilters()
+                .ToHashSet();
 
             var newPermissions = permissions
                 .Where(p => !existingPermissions.Contains(p.Value!))

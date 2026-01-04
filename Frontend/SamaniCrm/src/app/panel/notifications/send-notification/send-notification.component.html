@@ -1,0 +1,55 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title">{{ 'Notification' | translate }}</span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="row">
+    <auto-complete-user class="col-md-6" formControlName="user"></auto-complete-user>
+
+    <mat-form-field class="col-md-6">
+      <mat-label>{{ 'Periority' | translate }}</mat-label>
+      <mat-select formControlName="periority">
+        @for (item of NotificationPeriorityEnum | enumToArray; track item) {
+          <mat-option [value]="item">
+            {{ 'NotificationPeriorityEnum_' + item | translate }}
+          </mat-option>
+        }
+      </mat-select>
+      @if (form.get('periority')?.hasError('required')) {
+        <mat-error>
+          {{ 'IsRequired' | translate: { value: ('Periority' | translate) } }}
+        </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field class="col-md-12">
+      <mat-label>{{ 'Title' | translate }}</mat-label>
+      <input matInput formControlName="title" />
+      @if (form.get('title')?.hasError('required')) {
+        <mat-error>
+          {{ 'IsRequired' | translate: { value: ('Title' | translate) } }}
+        </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field class="col-md-12">
+      <mat-label>{{ 'Content' | translate }}</mat-label>
+      <textarea matInput formControlName="content" rows="4"></textarea>
+      @if (form.get('content')?.hasError('required')) {
+        <mat-error>
+          {{ 'IsRequired' | translate: { value: ('Content' | translate) } }}
+        </mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close color="cancel">{{ 'Close' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="saving">
+    @if (saving) {
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    }
+    <span>{{ 'Save' | translate }}</span>
+  </button>
+</mat-dialog-actions>

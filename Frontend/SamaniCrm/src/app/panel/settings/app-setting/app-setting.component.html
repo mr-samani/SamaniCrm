@@ -1,0 +1,38 @@
+<sub-header [title]="'AppSettings' | translate"></sub-header>
+<div class="panel-content">
+  <tab-group>
+    @if (AppPermissions.Administrator | permission) {
+      <tab-item [title]="'General' | translate">
+        <app-general-setting></app-general-setting>
+      </tab-item>
+    }
+
+    <!-- host setting -->
+    @if ([AppPermissions.SecuritySetting_GetSetting, AppPermissions.SecuritySetting_UpdateSetting] | permissionAll) {
+      <tab-item
+        [title]="'HostSecuritySettings' | translate"
+        >
+        <app-security-setting></app-security-setting>
+      </tab-item>
+    }
+    @if ([AppPermissions.SecuritySetting_ExternalProvidersList] | permissionAll) {
+      <tab-item
+        [title]="'ExternalProviders' | translate"
+        >
+        <app-external-providers></app-external-providers>
+      </tab-item>
+    }
+
+    <!-- user security setting -->
+    @if (
+      [AppPermissions.SecuritySetting_GetUserSetting, AppPermissions.SecuritySetting_UpdateUserSetting]
+      | permissionAll
+      ) {
+      <tab-item
+        [title]="'UserSecuritySettings' | translate"
+        >
+        <app-user-security-setting></app-user-security-setting>
+      </tab-item>
+    }
+  </tab-group>
+</div>

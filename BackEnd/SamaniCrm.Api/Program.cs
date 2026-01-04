@@ -22,6 +22,7 @@ services
 services
     .AddCorsPolicy()
     .AddControllersWithDefaults()
+    .AddAutoMapper()
     .AddCustomMediatR()
     .AddFluentValidation()
     .AddInfrastructure(config)
@@ -30,10 +31,21 @@ services
     .AddCacheService(config)
     .AddFileManagerService(config)
     .AddHangfireJobs(config)
-    .LoadExternalProviders(config);
+    .LoadExternalProviders(config)
+    ;
 
 services.AddSignalR();
+// 1. اضافه کردن Cache (اجباری برای Session)
+builder.Services.AddDistributedMemoryCache();
 
+// 2. اضافه کردن Session
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = ".SamaniCrm.Session";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
+});
 
 var app = builder.Build();
 // برای اینکه از همان instance ICaptchaStore استفاده کنم و یک نمون جدید نسازد این جا مقدار دهی میکنم
@@ -53,10 +65,16 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors("DefaultCors");
 app.UseStaticFiles();
+
+app.UseSession();
+
 // آگر این خط کامنت نباشد احراز هویت بر اساس کوکی خواهد بود
 // app.UseIdentityServer();
 app.UseAuthentication();
 app.UseAuthorization();
+
+
+
 
 app.MapControllers();
 //app.MapGroup("/auth2").MapCustomIdentityApi<ApplicationUser>().WithTags(["Auth2"]);

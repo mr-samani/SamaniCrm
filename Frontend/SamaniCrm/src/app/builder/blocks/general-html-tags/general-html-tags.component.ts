@@ -1,12 +1,12 @@
-import { CommonModule, DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, Inject, Injector, OnInit } from '@angular/core';
+
+import { ChangeDetectionStrategy, Component, ElementRef, Inject, Injector, OnInit, DOCUMENT } from '@angular/core';
 import { NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 import { BlockDefinition } from '../block-registry';
 import { FormBuilderService } from '@app/builder/services/form-builder.service';
 @Component({
   selector: 'block-general-html-tags',
   standalone: true,
-  imports: [CommonModule, NgxDragDropKitModule],
+  imports: [NgxDragDropKitModule],
   template: `
     {{ text }}
   `,

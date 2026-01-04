@@ -1,12 +1,42 @@
 <button mat-icon-button (click)="getList()">
   <i class="fa fa-reload"></i>
 </button>
-<mat-progress-bar *ngIf="loading" class="my-5" [mode]="'indeterminate'"></mat-progress-bar>
-<h6>{{roleName}}</h6>
-<tree-view [Items]="list"></tree-view>
-<div class="d-flex align-items-end justify-content-end" *ngIf="!loading">
-  <button mat-raised-button color="primary" (click)="save()" [disabled]="isSaving">
-    {{ 'Save' | translate }}
-  </button>
-</div>
+@if (loading) {
+  <mat-progress-bar class="my-5" [mode]="'indeterminate'"></mat-progress-bar>
+}
+<h6>{{ roleName }}</h6>
+
+<fieldset class="border rounded-4 p-3">
+  <legend class="px-1 h5 mb-0">{{ 'PermissionGroup' | translate }}</legend>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="overflow-auto lpx-scroll-pills-container scroll-in-modal">
+        <ul class="nav nav-pills flex-column">
+          @for (item of list; track $index) {
+            <li class="border nav-item">
+              <a class="nav-link pointer" (click)="selectedBasePermission = item.children">
+                <div class="font-weight-bold">
+                  {{ item.displayName }}
+                  <span>({{ item.children.length }})</span>
+                </div>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-md-8 scroll-in-modal">
+      <tree-view [Items]="selectedBasePermission"></tree-view>
+    </div>
+  </div>
+</fieldset>
+
+@if (!loading) {
+  <div class="d-flex align-items-end justify-content-end">
+    <button mat-raised-button color="primary" (click)="save()" [disabled]="isSaving">
+      {{ 'Save' | translate }}
+    </button>
+  </div>
+}
 <!-- <pre style="text-align: left;direction: ltr;">{{list|json}}</pre> -->

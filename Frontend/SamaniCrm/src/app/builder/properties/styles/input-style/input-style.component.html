@@ -2,8 +2,10 @@
   <span>{{ label }}</span>
   <input type="number" [(ngModel)]="value" (change)="update()" name="top" />
   <select class="select-unit" [(ngModel)]="suffix" (change)="update()">
-    <option [value]="val" *ngFor="let val of sizeUnitList">
-      {{ val }}
-    </option>
+    @for (val of sizeUnitList; track val) {
+      <option [value]="val">
+        {{ val }}
+      </option>
+    }
   </select>
 </div>

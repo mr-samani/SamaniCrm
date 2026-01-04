@@ -1,0 +1,94 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  @if (!isUpdate) {
+    <span cdkDragHandle class="title">{{ 'CreatePage' | translate }}</span>
+  }
+  @if (isUpdate) {
+    <span cdkDragHandle class="title">{{ 'EditPage' | translate }}</span>
+  }
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+  @if (loading) {
+    <div class="d-flex align-items-center justify-content-center py-5">
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    </div>
+  }
+  @if (!loading) {
+    <form [formGroup]="form">
+      <div class="row">
+        @if (isUpdate) {
+          <mat-form-field class="col-md-6">
+            <mat-label>{{ 'Status' | translate }}</mat-label>
+            <mat-select formControlName="status">
+              @for (item of PageStatusEnum | enumToArray; track item) {
+                <mat-option [value]="item">
+                  {{ 'PageStatusEnum_' + item | translate }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+      </div>
+      <p>
+        <mat-checkbox formControlName="isActive" color="primary">
+          {{ 'IsActive' | translate }}
+        </mat-checkbox>
+      </p>
+      <p>
+        <mat-checkbox formControlName="isSystem" color="primary">
+          {{ 'IsSystem' | translate }}
+        </mat-checkbox>
+      </p>
+      <tab-group>
+        @for (translation of translationsArray.controls; track translation; let i = $index) {
+          <tab-item
+            [title]="translation.get('culture')?.value"
+            formArrayName="translations"
+            >
+            <div [formGroupName]="i" class="row">
+              <mat-form-field class="col-sm-12">
+                <mat-label>{{ 'Title' | translate }}</mat-label>
+                <input matInput formControlName="title" required />
+                @if (translation.get('title')?.hasError('required')) {
+                  <mat-error>
+                    {{ 'IsRequired' | translate: { value: ('Title' | translate) } }}
+                  </mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field class="col-sm-12">
+                <mat-label>{{ 'AdminDescription' | translate }}</mat-label>
+                <input matInput formControlName="description" />
+              </mat-form-field>
+              <mat-form-field class="col-sm-12">
+                <mat-label>{{ 'Introduction' | translate }}</mat-label>
+                <textarea matInput formControlName="introduction" rows="2"></textarea>
+              </mat-form-field>
+              <mat-form-field class="col-sm-12">
+                <mat-label>{{ 'MetaDescription' | translate }}</mat-label>
+                <textarea matInput formControlName="metaDescription" rows="2"></textarea>
+              </mat-form-field>
+              <mat-form-field class="col-sm-12">
+                <mat-label>{{ 'MetaKeywords' | translate }}</mat-label>
+                <textarea matInput formControlName="metaKeywords" rows="2"></textarea>
+              </mat-form-field>
+            </div>
+          </tab-item>
+        }
+      </tab-group>
+    </form>
+  }
+
+  <!-- <pre dir="ltr" style="text-align: left;">{{form.value|json}}</pre> -->
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
+  <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
+    @if (saving) {
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    }
+    <span>{{ 'Save' | translate }}</span>
+  </button>
+</mat-dialog-actions>

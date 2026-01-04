@@ -65,7 +65,7 @@ body {
     }
   }
 
-  --mdc-dialog-container-shape: 10px !important;
+  --mat-dialog-container-shape: 10px !important;
   --mat-dialog-container-min-width: 780px !important;
   --mat-dialog-container-max-width: 100vw !important;
 }
@@ -98,4 +98,22 @@ mat-form-field.mat-mdc-form-field {
     font-weight: 400;
     font-size: 18px;
   }
+}
+
+
+/* notify */
+.snackbar-info .mdc-snackbar__surface {
+  background-color: #00adff !important;
+}
+
+.snackbar-warning .mdc-snackbar__surface {
+  background-color: #ffa13d !important;
+}
+
+.snackbar-danger .mdc-snackbar__surface {
+  background-color: #ff003b !important;
+}
+
+.snackbar-success .mdc-snackbar__surface {
+  background-color: #00d181 !important;
 }

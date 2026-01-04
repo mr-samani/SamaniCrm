@@ -18,7 +18,6 @@ public class ChangeLanguageCommandHandler : IRequestHandler<ChangeLanguageComman
 {
     private readonly ICurrentUserService _currentUserService;
     private readonly IMediator _mediator;
-    private readonly ILocalizer _localizer;
 
     public ChangeLanguageCommandHandler(ICurrentUserService currentUserService, IMediator mediator)
     {

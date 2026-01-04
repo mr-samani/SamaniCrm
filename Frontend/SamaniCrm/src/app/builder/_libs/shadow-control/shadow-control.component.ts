@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -23,7 +23,7 @@ import { NgxInputColorModule } from 'ngx-input-color';
   templateUrl: './shadow-control.component.html',
   styleUrls: ['./shadow-control.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxInputColorModule],
+  imports: [FormsModule, NgxInputColorModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

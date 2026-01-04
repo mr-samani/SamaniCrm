@@ -1,37 +1,36 @@
 <div class="tree">
   <ul>
-    <li
-      *ngFor="let item of list; let i = index"
-      class="node"
-      [class.close-child]="!item.isOpen"
-      [class.last]="i == list.length - 1">
-      <div class="inner">
-        <span
-          class="tree-icon"
-          [class.isOpen]="item.isOpen"
-          [class.no-child]="!item.hasChildren && (!item.children || item.children.length == 0)"
-          (click)="openCloseFolder(item)"></span>
-
-        <span
-          [class.icon-folder]="!item.isOpen && item.hasChildren"
-          [class.icon-folder-open]="item.isOpen && item.hasChildren"
-          [class.icon-file]="!item.hasChildren"></span>
-
-        <div class="checkbox-container" (click)="onChange(item)">
+    @for (item of list; track item; let i = $index) {
+      <li
+        class="node"
+        [class.close-child]="!item.isOpen"
+        [class.last]="i == list.length - 1">
+        <div class="inner">
           <span
-            class="checkbox"
-            [class.checked]="item.selected"
-            [class.indeterminate]="item.hasUnSelectedChildren"
+            class="tree-icon"
+            [class.isOpen]="item.isOpen"
+            [class.no-child]="!item.hasChildren && (!item.children || item.children.length == 0)"
+          (click)="openCloseFolder(item)"></span>
+          <span
+            [class.icon-folder]="!item.isOpen && item.hasChildren"
+            [class.icon-folder-open]="item.isOpen && item.hasChildren"
+          [class.icon-file]="!item.hasChildren"></span>
+          <div class="checkbox-container" (click)="onChange(item)">
+            <span
+              class="checkbox"
+              [class.checked]="item.selected"
+              [class.indeterminate]="item.hasUnSelectedChildren"
             [class.squre]="item.selected && item.hasUnSelectedChildren"></span>
-          <span [class.text-bold]="item.isModified" [title]="item.name">{{ item.displayName }}</span>
+            <span [title]="item.name">{{ item.displayName }}</span>
+          </div>
         </div>
-      </div>
-
-      <tree-view
-        *ngIf="item.children"
-        [Items]="item.children"
-        [parent]="item"
-        (changeChild)="checkChild($event, item)"></tree-view>
-    </li>
+        @if (item.children) {
+          <tree-view
+            [Items]="item.children"
+            [parent]="item"
+          (changeChild)="checkChild($event, item)"></tree-view>
+        }
+      </li>
+    }
   </ul>
 </div>

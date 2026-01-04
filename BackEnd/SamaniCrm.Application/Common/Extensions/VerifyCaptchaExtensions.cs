@@ -13,9 +13,9 @@ namespace SamaniCrm.Application
     public static class VerifyCaptchaExtensions
     {
 
-        private static IConfiguration _configuration;
+        private static IConfiguration _configuration = default!;
 
-        private static ICaptchaStore _captchaStore;
+        private static ICaptchaStore _captchaStore = default!;
         public static void Configure(ICaptchaStore captchaStore, IConfiguration configuration)
         {
             _captchaStore = captchaStore;
@@ -49,7 +49,7 @@ namespace SamaniCrm.Application
             }
             catch (Exception ex)
             {
-                // logger.Error($"Captcha validation failed: {ex.Message}");
+                Console.WriteLine($"Captcha validation failed: {ex.Message}");
                 return false;
             }
         }

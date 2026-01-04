@@ -24,6 +24,8 @@ export abstract class AppPermissions {
   public static SecuritySetting_ExternalProviders = 'Administrator.ExternalProviders';
   public static SecuritySetting_ExternalProvidersList = 'Administrator.ExternalProviders.List';
   public static SecuritySetting_ExternalProvidersUpdate = 'Administrator.ExternalProviders.Update';
+  public static SecuritySetting_ExternalProvidersCreate = 'Administrator.ExternalProviders.Create';
+  public static SecuritySetting_ExternalProvidersDelete = 'Administrator.ExternalProviders.Delete';
 
   public static SecuritySetting_GetSetting = 'Administrator.SecuritySetting.GetSetting';
   public static SecuritySetting_UpdateSetting = 'Administrator.SecuritySetting.UpdateSetting';
@@ -106,6 +108,8 @@ export abstract class AppPermissions {
   public static Notification_List = 'Administrator.Notification.List';
   public static Notification_MarkAllAsRead = 'Administrator.Notification.MarkAllAsRead';
   public static Notification_Delete = 'Administrator.Notification.Delete';
+  public static Notification_SendMessageToUser = 'Administrator.Notification.SendMessageToUser';
+  public static Notification_BroadCastMessageToAll = 'Administrator.Notification.BroadCastMessageToAll';
 
   // file manager
   public static FileManager_List = 'Administrator.FileManager.List';

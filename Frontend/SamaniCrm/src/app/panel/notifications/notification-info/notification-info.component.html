@@ -1,0 +1,32 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title">{{ 'Notification' | translate }}</span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+  @if (loading) {
+    <div class="py-5 my-5 text-center">
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    </div>
+  }
+  @if (!loading && notifyInfo) {
+    <div class="notification-info">
+      <h3>{{ notifyInfo.title }}</h3>
+      <div class="row">
+        <div class="col-sm-6">{{ 'NotificationPeriorityEnum_' + notifyInfo.periority | translate }}</div>
+        <div class="col-sm-6">
+          <span>{{ 'Sender' | translate }}:</span>
+          <b>{{ notifyInfo.senderName }}</b>
+        </div>
+      </div>
+      <pre class="text-justify">
+        {{ notifyInfo.content }}
+      </pre>
+    </div>
+  }
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close color="cancel">{{ 'Close' | translate }}</button>
+</mat-dialog-actions>

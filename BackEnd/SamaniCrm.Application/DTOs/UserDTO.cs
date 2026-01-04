@@ -14,22 +14,22 @@ namespace SamaniCrm.Application.DTOs
         [Sortable]
         public required string FirstName { get; set; }
         [Sortable]
-        public required string LastName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
         [Sortable]
-        public required string FullName { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty;
         [Sortable]
-        public required string Email { get; set; } = string.Empty;
-        public required string ProfilePicture { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string ProfilePicture { get; set; } = string.Empty;
 
         [Sortable]
-        public required string Lang { get; set; }
+        public string Lang { get; set; } = "";
 
         public string Address { get; set; } = string.Empty;
-        public required string PhoneNumber { get; set; } = string.Empty;
-        public required DateTime CreationTime { get; set; }
+        public string PhoneNumber { get; set; } = string.Empty;
+        public DateTime? CreationTime { get; set; }
 
-        public required List<string> Roles { get; set; }
+        public List<string> Roles { get; set; } = [];
         public List<string>? Permissions { get; set; }
-
+        public string? GivenName { get; set; }
     }
 }

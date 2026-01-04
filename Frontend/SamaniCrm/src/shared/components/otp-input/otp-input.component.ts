@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, ElementRef, forwardRef, Injector, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
@@ -8,7 +8,7 @@ import { AppComponentBase } from '@app/app-component-base';
   templateUrl: './otp-input.component.html',
   styleUrls: ['./otp-input.component.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

@@ -1,16 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using MimeDetective.Storage;
-using Newtonsoft.Json.Linq;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
-using SamaniCrm.Domain.Entities.ProductEntities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace SamaniCrm.Infrastructure.Persistence
 {
@@ -42,6 +33,10 @@ namespace SamaniCrm.Infrastructure.Persistence
                 var enumValues = Enum.GetValues(enumType).Cast<Enum>();
                 foreach (var enumValue in enumValues)
                 {
+                    if (enumValue == null)
+                    {
+                        continue;
+                    }
                     // کلید: EnumTypeName_Value
                     string key = $"{enumType.Name}_{Convert.ToInt32(enumValue)}";
 
@@ -49,14 +44,18 @@ namespace SamaniCrm.Infrastructure.Persistence
                     string value = enumValue.ToString();
 
                     // اگر میخوای از attribute مثل DisplayName استفاده کنی:
-                    var displayAttr = enumValue.GetType()
-                        .GetField(enumValue.ToString())
-                        .GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), false)
-                        .FirstOrDefault() as System.ComponentModel.DataAnnotations.DisplayAttribute;
+                    DisplayAttribute? displayAttr = null;
+                    if (enumValue != null)
+                    {
 
+                        displayAttr = enumValue.GetType()
+                           ?.GetField(enumValue.ToString())
+                           ?.GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), false)
+                           .FirstOrDefault() as System.ComponentModel.DataAnnotations.DisplayAttribute;
+                    }
                     if (displayAttr != null)
                     {
-                        value = displayAttr.Name; // یا ResourceName
+                        value = displayAttr.Name!; // یا ResourceName
                     }
 
                     seedLocalizations.Add(new Localization

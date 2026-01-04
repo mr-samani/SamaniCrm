@@ -13,6 +13,7 @@ using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Domain.Entities.Dashboard;
 using SamaniCrm.Domain.Entities.PageBuilderEntities;
 using SamaniCrm.Domain.Entities.ProductEntities;
 using SamaniCrm.Domain.Interfaces;
@@ -65,6 +66,11 @@ namespace SamaniCrm.Infrastructure
 
         public DbSet<CustomBlock> CustomBlocks { get; set; }
         public DbSet<ExternalProvider> ExternalProviders { get; set; }
+
+        #region Dashboard
+        public DbSet<Dashboard> Dashboards { get; set; }
+        public DbSet<DashboardItem> DashboardItems { get; set; }
+        #endregion
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, ICurrentUserService currentUserService) : base(options)
         {
