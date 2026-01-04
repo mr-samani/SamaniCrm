@@ -4305,10 +4305,10 @@ ngx-input-color@^4.0.1:
   dependencies:
     tslib "^2.3.0"
 
-ngx-page-builder@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/ngx-page-builder/-/ngx-page-builder-0.0.1.tgz#c8dc627909b55187d3691d18d49c75c6e2c4953b"
-  integrity sha512-64lokPoHbeiOn6XjCv8B2zrtQ/E2t0RbC4sTvQrJVo5p+go37vzIz5uFlgicYt0dhwT1Y8pRevVrcMqzCHWYkg==
+ngx-page-builder@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/ngx-page-builder/-/ngx-page-builder-0.0.3.tgz#cedc74d0c7f9fe2a1a7bff7ca000fb752c1b294e"
+  integrity sha512-73XQFrtGQrrhiPUo1Pi+/qOGvLW5kRiig82PRa+uxMOINQRVRtL1tB8FRosc6kWYsLS2CyV1v7sFzX7FQ723Jw==
   dependencies:
     tslib "^2.3.0"
 

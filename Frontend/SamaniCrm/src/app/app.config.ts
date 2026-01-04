@@ -3,15 +3,12 @@ import {
   ApplicationConfig,
   ErrorHandler,
   importProvidersFrom,
-  provideAppInitializer,
   provideZoneChangeDetection,
-  provideZonelessChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxAlertModalModule } from 'ngx-alert-modal';
@@ -22,7 +19,6 @@ import { AccountServiceProxy } from '@shared/service-proxies/api/account.service
 import { Configuration } from '@shared/service-proxies/configuration';
 import { GlobalErrorHandler } from '@shared/handlers/global-error-handler';
 import { UserServiceProxy } from '@shared/service-proxies';
-import { providePageBuilder } from 'ngx-page-builder';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -56,7 +52,6 @@ export const appConfig: ApplicationConfig = {
     },
     { provide: Configuration, useFactory: configurationFactory },
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
-    providePageBuilder({}),
   ],
 };
 function configurationFactory() {

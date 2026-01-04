@@ -10,3 +10,12 @@ install dotnet ef core
 trust https 
 
 `dotnet dev-certs https --trust`
+
+
+
+# set npm proxy
+`npm config set proxy http://192.168.10.216:10808`
+
+
+
+
