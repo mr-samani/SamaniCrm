@@ -1,8 +1,8 @@
 import {
-  APP_INITIALIZER,
   ApplicationConfig,
   ErrorHandler,
   importProvidersFrom,
+  provideAppInitializer,
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
@@ -19,9 +19,9 @@ import { AccountServiceProxy } from '@shared/service-proxies/api/account.service
 import { Configuration } from '@shared/service-proxies/configuration';
 import { GlobalErrorHandler } from '@shared/handlers/global-error-handler';
 import { UserServiceProxy } from '@shared/service-proxies';
-
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideAppInitializer(() => AppInitializer()),
     // provideZonelessChangeDetection(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
@@ -39,12 +39,6 @@ export const appConfig: ApplicationConfig = {
     ),
     AccountServiceProxy,
     UserServiceProxy,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: (appInitializer: AppInitializer) => appInitializer.init(),
-      deps: [AppInitializer],
-      multi: true,
-    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
