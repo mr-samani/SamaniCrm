@@ -1,6 +1,5 @@
 import { InputGroupItem } from '../input-group-icon/InputGroupItem';
 
-
 export const FlexDirectionItems: InputGroupItem[] = [
   {
     icon: 'fa fa-objects-align-center-horizontal',

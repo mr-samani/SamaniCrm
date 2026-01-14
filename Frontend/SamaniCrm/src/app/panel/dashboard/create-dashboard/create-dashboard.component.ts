@@ -1,4 +1,3 @@
-
 import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -18,9 +17,7 @@ import { finalize } from 'rxjs';
   styleUrls: ['./create-dashboard.component.scss'],
   standalone: true,
   imports: [SharedModule, MaterialCommonModule, ReactiveFormsModule],
-  providers:[
-    DasboardServiceProxy
-  ]
+  providers: [DasboardServiceProxy],
 })
 export class CreateDashboardComponent extends AppComponentBase implements OnInit {
   form: FormGroup;

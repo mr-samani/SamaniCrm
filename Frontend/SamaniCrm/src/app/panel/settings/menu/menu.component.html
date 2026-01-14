@@ -9,9 +9,7 @@
     </div>
   }
   @if (!loading && (AppPermissions.MenuManagement_Edit | permission)) {
-    <div
-      class="d-flex align-items-end justify-content-end"
-      >
+    <div class="d-flex align-items-end justify-content-end">
       <button mat-raised-button color="primary" (click)="save()" [disabled]="isSaving">
         {{ 'Save' | translate }}
       </button>

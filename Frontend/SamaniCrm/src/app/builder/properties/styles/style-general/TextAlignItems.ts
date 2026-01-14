@@ -1,6 +1,5 @@
 import { InputGroupItem } from '../input-group-icon/InputGroupItem';
 
-
 export const TextAlignItems: InputGroupItem[] = [
   {
     icon: 'fa fa-align-left',

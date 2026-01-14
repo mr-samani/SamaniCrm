@@ -10,11 +10,7 @@
     </button>
   </div>
   @if (AppPermissions.UserManagement_Create | permission) {
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="openCreateOrEditUserDialog()"
-      >
+    <button mat-raised-button color="primary" (click)="openCreateOrEditUserDialog()">
       <i class="fa fa-circle-plus mx-1"></i>
       <span>{{ 'CreateNewUser' | translate }}</span>
     </button>
@@ -45,18 +41,18 @@
   [fields]="fields"
   [operations]="operations"
   [loading]="loading"
-(sortChange)="getList($event)"></table-view>
+  (sortChange)="getList($event)"></table-view>
 
 <pagination [total]="totalCount" [(page)]="page" [(perPage)]="perPage" (change)="onPageChange($event)"></pagination>
 
 <ng-template #operations let-item>
   @if (
     [
-    AppPermissions.UserManagement_ChangeAvatar,
-    AppPermissions.UserManagement_Edit,
-    AppPermissions.UserManagement_Delete,
+      AppPermissions.UserManagement_ChangeAvatar,
+      AppPermissions.UserManagement_Edit,
+      AppPermissions.UserManagement_Delete,
     ] | permissionAny
-    ) {
+  ) {
     <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
       <i class="fa fa-ellipsis-v"></i>
     </button>
@@ -68,10 +64,7 @@
         </a>
       }
       @if (AppPermissions.UserManagement_Edit | permission) {
-        <a
-          mat-menu-item
-          (click)="openCreateOrEditUserDialog(item)"
-          >
+        <a mat-menu-item (click)="openCreateOrEditUserDialog(item)">
           <i class="fa fa-edit mx-1"></i>
           <span>{{ 'Edit' | translate }}</span>
         </a>

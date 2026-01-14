@@ -58,7 +58,7 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
       .subscribe((response) => {
         this.list = response.data ?? [];
         this.list.map((x) => {
-          x.flag =AppConst.apiUrl +'/images/flags/' + x.flag + '.png';
+          x.flag = AppConst.apiUrl + '/images/flags/' + x.flag + '.png';
           x.direction = x.isRtl ? 'RTL' : 'LTR';
         });
       });

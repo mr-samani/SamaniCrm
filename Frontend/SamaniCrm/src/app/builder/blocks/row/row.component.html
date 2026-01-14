@@ -4,10 +4,7 @@
       <div class="col cell" ngxDropList [data]="c.children" (drop)="b.drop($event)" [id]="'blc_' + c.rowNumber">
         <!-- <div class="custom-placeholder2" *ngxPlaceholder></div> -->
         @for (child of c.children; track child; let i = $index) {
-          <dynamic-renderer
-            [parent]="block"
-            [block]="child"
-            [loopIndex]="loopIndex" />
+          <dynamic-renderer [parent]="block" [block]="child" [loopIndex]="loopIndex" />
         }
       </div>
     }

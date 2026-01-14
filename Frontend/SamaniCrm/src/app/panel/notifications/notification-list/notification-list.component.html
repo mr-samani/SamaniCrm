@@ -9,21 +9,13 @@
     </div>
     <div class="d-flex gap-2">
       @if (AppPermissions.Notification_SendMessageToUser | permission) {
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="sendMessageToUser()"
-          >
+        <button mat-raised-button color="primary" (click)="sendMessageToUser()">
           <i class="fa fa-bell mx-1"></i>
           <span>{{ 'SendMessage' | translate }}</span>
         </button>
       }
       @if (AppPermissions.Notification_BroadCastMessageToAll | permission) {
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="broadCastMessage()"
-          >
+        <button mat-raised-button color="primary" (click)="broadCastMessage()">
           <i class="fa fa-broadcast mx-1"></i>
           <span>{{ 'BroadcastMessage' | translate }}</span>
         </button>
@@ -83,7 +75,7 @@
         class="fad yellow"
         [class.fa-envelope]="!item.read"
         [class.fa-envelope-open]="item.read"
-      [title]="(item.read ? 'MsgRead' : 'MsgUnread') | translate"></span>
+        [title]="(item.read ? 'MsgRead' : 'MsgUnread') | translate"></span>
     </ng-template>
 
     <ng-template tableCell="periority" let-item>

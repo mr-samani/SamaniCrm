@@ -23,7 +23,7 @@
             <style-general
               [style]="b.selectedBlock.data.style"
               [block]="b.selectedBlock"
-            (styleChange)="updateCss()"></style-general>
+              (styleChange)="updateCss()"></style-general>
           </details>
         }
         @if (b.selectedBlock.data && b.selectedBlock.data.style) {
@@ -33,7 +33,7 @@
               [id]="'prpbg-' + b.selectedBlock.id"
               [block]="b.selectedBlock"
               [style]="b.selectedBlock.data.style"
-            (styleChange)="updateCss()"></style-background>
+              (styleChange)="updateCss()"></style-background>
           </details>
         }
         @if (b.selectedBlock.data.style) {
@@ -43,13 +43,11 @@
               [id]="'prpdim-' + b.selectedBlock.id"
               [block]="b.selectedBlock"
               [style]="b.selectedBlock.data.style"
-            (styleChange)="updateCss()"></style-dimensions>
+              (styleChange)="updateCss()"></style-dimensions>
           </details>
         }
         @if (b.selectedBlock.data.css) {
-          <pre
-            class="cssStyles"
-          [innerHtml]="b.selectedBlock.data.css | styleView"></pre>
+          <pre class="cssStyles" [innerHtml]="b.selectedBlock.data.css | styleView"></pre>
         }
       }
     </div>

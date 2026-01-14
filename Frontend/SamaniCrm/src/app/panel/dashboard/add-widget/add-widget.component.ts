@@ -1,4 +1,3 @@
-
 import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -27,7 +26,7 @@ export class AddDashboardWidgetComponent extends AppComponentBase implements OnI
 
   constructor(
     injector: Injector,
-    @Inject(MAT_DIALOG_DATA) private _data: { dashboardId: string;},
+    @Inject(MAT_DIALOG_DATA) private _data: { dashboardId: string },
     private dialogRef: MatDialogRef<AddDashboardWidgetComponent>,
     private dashboardService: DasboardServiceProxy,
   ) {
@@ -41,7 +40,6 @@ export class AddDashboardWidgetComponent extends AppComponentBase implements OnI
   }
 
   ngOnInit() {}
-
 
   save() {
     if (this.form.invalid) {

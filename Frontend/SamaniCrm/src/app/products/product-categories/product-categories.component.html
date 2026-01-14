@@ -1,31 +1,19 @@
 <div class="tools d-flex justify-content-end align-items-center flex-wrap gap-2">
   <div class="d-flex gap-2">
     @if (AppPermissions.Products_Category_Create | permission) {
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="openCreateOrEditDialog()"
-        >
+      <button mat-raised-button color="primary" (click)="openCreateOrEditDialog()">
         <i class="fa fa-circle-plus mx-1"></i>
         <span>{{ 'CreateNewCategory' | translate }}</span>
       </button>
     }
     @if (AppPermissions.Products_Category_Export | permission) {
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="exportAllLocalizations()"
-        >
+      <button mat-raised-button color="primary" (click)="exportAllLocalizations()">
         <i class="fa fa-circle-plus mx-1"></i>
         <span>{{ 'ExportAllLocalizations' | translate }}</span>
       </button>
     }
     @if (AppPermissions.Products_Category_Import | permission) {
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="importLocalizations()"
-        >
+      <button mat-raised-button color="primary" (click)="importLocalizations()">
         <i class="fa fa-circle-plus mx-1"></i>
         <span>{{ 'ImportAllLocalizations' | translate }}</span>
       </button>
@@ -45,26 +33,23 @@
   <div class="tree">
     <ul>
       @for (item of list; track item; let i = $index) {
-        <li
-          class="node"
-          [class.close-child]="!item.isOpen"
-          [class.last]="i == list.length - 1">
+        <li class="node" [class.close-child]="!item.isOpen" [class.last]="i == list.length - 1">
           <div class="inner">
             <span
               class="tree-icon"
               [class.isOpen]="item.isOpen"
               [class.no-child]="!item.hasChildren && (!item.children || item.children.length == 0)"
-            (click)="openCloseFolder(item)"></span>
+              (click)="openCloseFolder(item)"></span>
             <span
               [class.icon-folder]="!item.isOpen && item.hasChildren"
               [class.icon-folder-open]="item.isOpen && item.hasChildren"
-            [class.icon-file]="!item.hasChildren"></span>
+              [class.icon-file]="!item.hasChildren"></span>
             <div class="checkbox-container" (click)="onChange(item)">
               <span
                 class="checkbox"
                 [class.checked]="item.isActive"
                 [class.indeterminate]="item.hasUnSelectedChildren"
-              [class.squre]="item.isActive && item.hasUnSelectedChildren"></span>
+                [class.squre]="item.isActive && item.hasUnSelectedChildren"></span>
               @if (item.image) {
                 <img [src]="baseUrl + '/' + item.image" class="img-circle" />
               }
@@ -82,7 +67,7 @@
           </div>
           @if (item.children) {
             <ng-container
-            *ngTemplateOutlet="categoryTemplate; context: { $implicit: item.children, parent: item }"></ng-container>
+              *ngTemplateOutlet="categoryTemplate; context: { $implicit: item.children, parent: item }"></ng-container>
           }
         </li>
       }

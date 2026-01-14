@@ -79,6 +79,4 @@ export class RoleListComponent extends AppComponentBase implements OnInit {
       }
     });
   }
-
-  
 }

@@ -1,4 +1,3 @@
-
 import { Component, ElementRef, Injector, OnInit } from '@angular/core';
 import { BlockBase } from '../block-base';
 import { BlockDefinition, BlockTypeEnum } from '../block-registry';

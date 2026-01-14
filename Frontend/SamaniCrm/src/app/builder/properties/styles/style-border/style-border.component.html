@@ -1,95 +1,90 @@
 <div class="input-style" [title]="label">
   <span>{{ label }}</span>
-  <input
-    type="text"
-    name="spacing"
-    #spacing="ngModel"
-    [(ngModel)]="borderString"
-    (change)="stringChange()" />
-    <button class="btn py-0" (click)="togglePanel()">
-      <i class="fa fa-pen-to-square"></i>
+  <input type="text" name="spacing" #spacing="ngModel" [(ngModel)]="borderString" (change)="stringChange()" />
+  <button class="btn py-0" (click)="togglePanel()">
+    <i class="fa fa-pen-to-square"></i>
+  </button>
+</div>
+@if (spacing.hasError('pattern')) {
+  <p class="text-danger">Invalid spacing value</p>
+}
+
+@if (showPopup) {
+  <div class="panel-back-drop" (click)="showPopup = false"></div>
+}
+@if (showPopup && value) {
+  <div class="popup-container" [style.top.px]="top" [style.left.px]="left">
+    <div class="btn-group" role="group">
+      <button type="button" class="btn" [class.active]="value && value.forAll" (click)="onSelectForAll(true)">
+        <i class="fa fa-border-outer"></i>
+        All
+      </button>
+      <button type="button" class="btn" [class.active]="value && !value.forAll" (click)="onSelectForAll(false)">
+        <i class="fa fa-border-top-left"></i>
+        Individual
+      </button>
+      <button type="button" class="btn" (click)="value = undefined; emitChange()" [class.active]="!value">
+        <i class="fa fa-times"></i>
+        Clear
+      </button>
+    </div>
+    @if (value && value.forAll) {
+      <ng-container
+        [ngTemplateOutlet]="BORDER"
+        [ngTemplateOutletContext]="{ $implicit: value.border, title: 'Border', name: 'border' }"></ng-container>
+    } @else if (value && !value.forAll) {
+      <ng-container
+        [ngTemplateOutlet]="BORDER"
+        [ngTemplateOutletContext]="{ $implicit: value.top, title: 'BorderTop', name: 'top' }"></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="BORDER"
+        [ngTemplateOutletContext]="{
+          $implicit: value.right,
+          title: 'BorderRight',
+          name: 'right',
+        }"></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="BORDER"
+        [ngTemplateOutletContext]="{
+          $implicit: value.bottom,
+          title: 'BorderBottom',
+          name: 'bottom',
+        }"></ng-container>
+      <ng-container
+        [ngTemplateOutlet]="BORDER"
+        [ngTemplateOutletContext]="{ $implicit: value.left, title: 'BorderLeft', name: 'left' }"></ng-container>
+    }
+  </div>
+}
+
+<ng-template #BORDER let-border let-title="title" let-name="name">
+  <div class="input-style mt-4">
+    <span>{{ title }}</span>
+    <input type="number" [(ngModel)]="border.size" (change)="emitChange()" />
+    <select class="select-unit" [(ngModel)]="border.unit" (change)="emitChange()">
+      @for (val of sizeUnitList; track val) {
+        <option [value]="val">
+          {{ val }}
+        </option>
+      }
+    </select>
+    <input
+      type="text"
+      readonly
+      class="input-color"
+      [(ngModel)]="border.color"
+      (ngModelChange)="emitChange()"
+      ngxInputColor
+      [simpleMode]="true" />
+    <select class="select-type" placeholder="Type" [(ngModel)]="border.type" (change)="emitChange()">
+      @for (val of borderTypeList; track val) {
+        <option [value]="val">
+          {{ val }}
+        </option>
+      }
+    </select>
+    <button class="btn" (click)="remove(name)">
+      <i class="fa fa-trash"></i>
     </button>
   </div>
-  @if (spacing.hasError('pattern')) {
-    <p class="text-danger">Invalid spacing value</p>
-  }
-
-  @if (showPopup) {
-    <div class="panel-back-drop" (click)="showPopup = false"></div>
-  }
-  @if (showPopup && value) {
-    <div class="popup-container" [style.top.px]="top" [style.left.px]="left">
-      <div class="btn-group" role="group">
-        <button type="button" class="btn" [class.active]="value && value.forAll" (click)="onSelectForAll(true)">
-          <i class="fa fa-border-outer"></i>
-          All
-        </button>
-        <button type="button" class="btn" [class.active]="value && !value.forAll" (click)="onSelectForAll(false)">
-          <i class="fa fa-border-top-left"></i>
-          Individual
-        </button>
-        <button type="button" class="btn" (click)="value = undefined; emitChange()" [class.active]="!value">
-          <i class="fa fa-times"></i>
-          Clear
-        </button>
-      </div>
-      @if (value && value.forAll) {
-        <ng-container
-          [ngTemplateOutlet]="BORDER"
-        [ngTemplateOutletContext]="{ $implicit: value.border, title: 'Border', name: 'border' }"></ng-container>
-      } @else if (value && !value.forAll) {
-        <ng-container
-          [ngTemplateOutlet]="BORDER"
-        [ngTemplateOutletContext]="{ $implicit: value.top, title: 'BorderTop', name: 'top' }"></ng-container>
-        <ng-container
-          [ngTemplateOutlet]="BORDER"
-      [ngTemplateOutletContext]="{
-        $implicit: value.right,
-        title: 'BorderRight',
-        name: 'right',
-      }"></ng-container>
-        <ng-container
-          [ngTemplateOutlet]="BORDER"
-      [ngTemplateOutletContext]="{
-        $implicit: value.bottom,
-        title: 'BorderBottom',
-        name: 'bottom',
-      }"></ng-container>
-        <ng-container
-          [ngTemplateOutlet]="BORDER"
-        [ngTemplateOutletContext]="{ $implicit: value.left, title: 'BorderLeft', name: 'left' }"></ng-container>
-      }
-    </div>
-  }
-
-  <ng-template #BORDER let-border let-title="title" let-name="name">
-    <div class="input-style mt-4">
-      <span>{{ title }}</span>
-      <input type="number" [(ngModel)]="border.size" (change)="emitChange()" />
-      <select class="select-unit" [(ngModel)]="border.unit" (change)="emitChange()">
-        @for (val of sizeUnitList; track val) {
-          <option [value]="val">
-            {{ val }}
-          </option>
-        }
-      </select>
-      <input
-        type="text"
-        readonly
-        class="input-color"
-        [(ngModel)]="border.color"
-        (ngModelChange)="emitChange()"
-        ngxInputColor
-        [simpleMode]="true" />
-        <select class="select-type" placeholder="Type" [(ngModel)]="border.type" (change)="emitChange()">
-          @for (val of borderTypeList; track val) {
-            <option [value]="val">
-              {{ val }}
-            </option>
-          }
-        </select>
-        <button class="btn" (click)="remove(name)">
-          <i class="fa fa-trash"></i>
-        </button>
-      </div>
-    </ng-template>
+</ng-template>

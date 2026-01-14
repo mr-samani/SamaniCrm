@@ -6,11 +6,7 @@
     </button>
   </div>
   @if (AppPermissions.Products_Type_Create | permission) {
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="openCreateOrEditDialog()"
-      >
+    <button mat-raised-button color="primary" (click)="openCreateOrEditDialog()">
       <i class="fa fa-circle-plus mx-1"></i>
       <span>{{ 'CreateNewType' | translate }}</span>
     </button>
@@ -41,7 +37,7 @@
   [fields]="fields"
   [operations]="operations"
   [loading]="loading"
-(sortChange)="getList($event)"></table-view>
+  (sortChange)="getList($event)"></table-view>
 
 <pagination [total]="totalCount" [(page)]="page" [(perPage)]="perPage" (change)="onPageChange($event)"></pagination>
 
@@ -54,10 +50,10 @@
       <a
         mat-menu-item
         [routerLink]="['/panel/products/product-list']"
-      [queryParams]="{
-        typeId: item.id,
-        typeTitle: item.name,
-      }">
+        [queryParams]="{
+          typeId: item.id,
+          typeTitle: item.name,
+        }">
         <i class="fa fa-product mx-1"></i>
         <span>{{ 'Products' | translate }}</span>
       </a>

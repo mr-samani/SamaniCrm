@@ -9,7 +9,7 @@ import {
   Inject,
   ElementRef,
   HostListener,
-  DOCUMENT
+  DOCUMENT,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BLOCK_REGISTRY, BlockDefinition, BlockTypeEnum } from './block-registry';

@@ -1,11 +1,7 @@
 <div class="tools d-flex justify-content-between align-items-center flex-wrap gap-2">
   <div class="d-flex gap-2"></div>
   @if (AppPermissions.RoleManagement_Create | permission) {
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="openCreateOrEditDialog()"
-      >
+    <button mat-raised-button color="primary" (click)="openCreateOrEditDialog()">
       <i class="fa fa-circle-plus mx-1"></i>
       <span>{{ 'CreateNewRole' | translate }}</span>
     </button>
@@ -21,10 +17,7 @@
     </button>
     <mat-menu #menu="matMenu">
       @if (AppPermissions.RoleManagement_EditRolePermissions | permission) {
-        <a
-          mat-menu-item
-          routerLink="/panel/roles/permissions/{{ item.id }}"
-          >
+        <a mat-menu-item routerLink="/panel/roles/permissions/{{ item.id }}">
           <i class="fa fa-check-list mx-1"></i>
           <span>{{ 'Permissions' | translate }}</span>
         </a>

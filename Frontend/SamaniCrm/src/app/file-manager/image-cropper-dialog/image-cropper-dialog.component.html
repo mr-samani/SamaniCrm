@@ -18,7 +18,7 @@
       [onlyScaleDown]="true"
       [format]="format"
       [imageQuality]="60"
-    [allowMoveImage]="true"></image-cropper>
+      [allowMoveImage]="true"></image-cropper>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
@@ -32,15 +32,15 @@
         id="cropperFileSelector"
         (change)="fileChangeEvent($event)"
         [accept]="acceptedInputFile" />
-      </label>
-      <div class="d-flex align-items-center">
-        <button mat-raised-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
-        @if (tusUpoadService.uploading) {
-          <mat-spinner color="default" diameter="25"></mat-spinner>
-        }
-        <button mat-raised-button (click)="uploadImage()" color="default" [disabled]="tusUpoadService.uploading">
-          {{ 'Ok' | translate }}
-        </button>
-      </div>
+    </label>
+    <div class="d-flex align-items-center">
+      <button mat-raised-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
+      @if (tusUpoadService.uploading) {
+        <mat-spinner color="default" diameter="25"></mat-spinner>
+      }
+      <button mat-raised-button (click)="uploadImage()" color="default" [disabled]="tusUpoadService.uploading">
+        {{ 'Ok' | translate }}
+      </button>
     </div>
-  </mat-dialog-actions>
+  </div>
+</mat-dialog-actions>

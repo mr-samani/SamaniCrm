@@ -39,8 +39,6 @@ export class PropertiesComponent extends AppComponentBase implements OnInit {
     this.ch.detectChanges();
   }
 
-
-
   async saveAsBlockDefinition() {
     const { SaveAsBlockDialogComponent } = await import(
       '../_dialogs/save-as-block-dialog/save-as-block-dialog.component'

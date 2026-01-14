@@ -9,28 +9,21 @@
 
     <!-- host setting -->
     @if ([AppPermissions.SecuritySetting_GetSetting, AppPermissions.SecuritySetting_UpdateSetting] | permissionAll) {
-      <tab-item
-        [title]="'HostSecuritySettings' | translate"
-        >
+      <tab-item [title]="'HostSecuritySettings' | translate">
         <app-security-setting></app-security-setting>
       </tab-item>
     }
     @if ([AppPermissions.SecuritySetting_ExternalProvidersList] | permissionAll) {
-      <tab-item
-        [title]="'ExternalProviders' | translate"
-        >
+      <tab-item [title]="'ExternalProviders' | translate">
         <app-external-providers></app-external-providers>
       </tab-item>
     }
 
     <!-- user security setting -->
     @if (
-      [AppPermissions.SecuritySetting_GetUserSetting, AppPermissions.SecuritySetting_UpdateUserSetting]
-      | permissionAll
-      ) {
-      <tab-item
-        [title]="'UserSecuritySettings' | translate"
-        >
+      [AppPermissions.SecuritySetting_GetUserSetting, AppPermissions.SecuritySetting_UpdateUserSetting] | permissionAll
+    ) {
+      <tab-item [title]="'UserSecuritySettings' | translate">
         <app-user-security-setting></app-user-security-setting>
       </tab-item>
     }

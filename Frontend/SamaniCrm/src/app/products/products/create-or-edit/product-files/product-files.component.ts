@@ -42,16 +42,12 @@ export class ProductFilesComponent extends AppComponentBase implements OnInit {
     }
   }
 
-
-
-    removeFile(event: Event, item: ProductFileDto) {
-      event.stopPropagation();
-      event.preventDefault();
-      const index = this.files.findIndex((x) => x.id == item.id);
-      if (index > -1) {
-        this.files.splice(index, 1);
-      }
+  removeFile(event: Event, item: ProductFileDto) {
+    event.stopPropagation();
+    event.preventDefault();
+    const index = this.files.findIndex((x) => x.id == item.id);
+    if (index > -1) {
+      this.files.splice(index, 1);
     }
-
-
+  }
 }

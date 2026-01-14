@@ -14,7 +14,7 @@ import { Component, Input } from '@angular/core';
         }
       </ul>
     </div>
-    `,
+  `,
   imports: [],
 })
 export class ProductCategoryBlockComponent {

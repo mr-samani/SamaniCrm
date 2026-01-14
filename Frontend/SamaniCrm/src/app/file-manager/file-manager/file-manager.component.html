@@ -70,7 +70,7 @@
       <address-bar
         [folderId]="openedFolder?.id"
         [folders]="folders"
-      (selectionChange)="openedFolder = $event"></address-bar>
+        (selectionChange)="openedFolder = $event"></address-bar>
 
       <file-list #fileList (onSelectFile)="onSelectFile($event)" [(openFolder)]="openedFolder"></file-list>
     </div>

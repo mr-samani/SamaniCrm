@@ -34,37 +34,37 @@
                 [allowNegative]="false"
                 [isDecimal]="false"
                 (blur)="changed()" />
-              }
-              @case (ProductAttributeDataTypeEnum.Decimal) {
-                <input
-                  type="number"
-                  class="form-control"
-                  [(ngModel)]="item.value"
-                  numberCheck
-                  [allowNegative]="false"
-                  [isDecimal]="true"
-                  [maxDecimalDigit]="5"
-                  (blur)="changed()" />
+            }
+            @case (ProductAttributeDataTypeEnum.Decimal) {
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="item.value"
+                numberCheck
+                [allowNegative]="false"
+                [isDecimal]="true"
+                [maxDecimalDigit]="5"
+                (blur)="changed()" />
+            }
+            @case (ProductAttributeDataTypeEnum.Bool) {
+              <mat-checkbox [(ngModel)]="item.value" (change)="changed()">
+                @if (item.value) {
+                  <span>{{ 'Yes' | translate }}</span>
                 }
-                @case (ProductAttributeDataTypeEnum.Bool) {
-                  <mat-checkbox [(ngModel)]="item.value" (change)="changed()">
-                    @if (item.value) {
-                      <span>{{ 'Yes' | translate }}</span>
-                    }
-                    @if (!item.value) {
-                      <span>{{ 'No' | translate }}</span>
-                    }
-                  </mat-checkbox>
+                @if (!item.value) {
+                  <span>{{ 'No' | translate }}</span>
                 }
-                @case (ProductAttributeDataTypeEnum.Color) {
-                  <input type="color" class="form-control input-color" [(ngModel)]="item.value" (blur)="changed()" />
-                }
-                @default {
-                  <input type="text" class="form-control" [(ngModel)]="item.value" (blur)="changed()" />
-                }
-              }
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
+              </mat-checkbox>
+            }
+            @case (ProductAttributeDataTypeEnum.Color) {
+              <input type="color" class="form-control input-color" [(ngModel)]="item.value" (blur)="changed()" />
+            }
+            @default {
+              <input type="text" class="form-control" [(ngModel)]="item.value" (blur)="changed()" />
+            }
+          }
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

@@ -6,11 +6,7 @@
     </button>
   </div>
   @if (AppPermissions.Products_Attribute_Create | permission) {
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="openCreateOrEditDialog()"
-      >
+    <button mat-raised-button color="primary" (click)="openCreateOrEditDialog()">
       <i class="fa fa-circle-plus mx-1"></i>
       <span>{{ 'CreateNewAttribute' | translate }}</span>
     </button>
@@ -41,7 +37,7 @@
   [fields]="fields"
   [operations]="operations"
   [loading]="loading"
-(sortChange)="getList($event)"></table-view>
+  (sortChange)="getList($event)"></table-view>
 
 <pagination [total]="totalCount" [(page)]="page" [(perPage)]="perPage" (change)="onPageChange($event)"></pagination>
 
@@ -52,10 +48,7 @@
     </button>
     <mat-menu #menu="matMenu">
       @if (AppPermissions.Products_Attribute_Edit | permission) {
-        <a
-          mat-menu-item
-          (click)="openCreateOrEditDialog(item)"
-          >
+        <a mat-menu-item (click)="openCreateOrEditDialog(item)">
           <i class="fa fa-edit mx-1"></i>
           <span>{{ 'Edit' | translate }}</span>
         </a>

@@ -1,4 +1,3 @@
-
 export interface IPosValue {
   top?: number | 'auto';
   right?: number | 'auto';

@@ -1,4 +1,3 @@
-
 export interface IWidgetBase {
-    edit(): void;
+  edit(): void;
 }

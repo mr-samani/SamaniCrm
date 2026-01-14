@@ -1,11 +1,6 @@
-<div class="d-flex gap-1 flex-wrap">
+<div class="d-flex justify-content-end gap-1 flex-wrap">
   @if (AppPermissions.MenuManagement_Create | permission) {
-    <button
-      mat-stroked-button
-      color="primary"
-      (click)="openCreateOrEditDialog()"
-      [disabled]="loading"
-      >
+    <button mat-stroked-button color="primary" (click)="openCreateOrEditDialog()" [disabled]="loading">
       <i class="fa fa-plus mx-2"></i>
       {{ 'CreateNewMenu' | translate }}
     </button>
@@ -77,8 +72,7 @@
             [(ngModel)]="node.active"
             [disabled]="node.loading"
             color="primary"
-            (toggleChange)="changeActive(node)"
-          ></mat-slide-toggle>
+            (toggleChange)="changeActive(node)"></mat-slide-toggle>
         }
       </div>
     </div>

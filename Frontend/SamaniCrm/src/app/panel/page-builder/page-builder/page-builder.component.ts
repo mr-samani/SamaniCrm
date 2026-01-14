@@ -150,7 +150,10 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
     this.editor.Commands.add('custom-preview', {
       run(editor) {
         // editor.runCommand('preview');
-        window.open(AppConst.publicSiteUrl + '/page-preview-old/' + self.pageInfo?.culture + '/' + self.pageId, '_blank');
+        window.open(
+          AppConst.publicSiteUrl + '/page-preview-old/' + self.pageInfo?.culture + '/' + self.pageId,
+          '_blank',
+        );
       },
     });
 

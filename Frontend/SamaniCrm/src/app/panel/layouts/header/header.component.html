@@ -87,27 +87,27 @@
           <li><a class="dropdown-item" href="#">Something else here</a></li>
         </ul>
       </li> -->
-      @if (AppPermissions.Pages_Builder | permission) {
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/panel/builder" routerLinkActive="active" (click)="closeNavbar()">
-            <i class="fa fa-page"></i>
-            {{ 'PageBuilder' | translate }}
-          </a>
-        </li>
-      }
-    </ul>
-    <div class="flex-fill"></div>
+        @if (AppPermissions.Pages_Builder | permission) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/panel/builder" routerLinkActive="active" (click)="closeNavbar()">
+              <i class="fa fa-page"></i>
+              {{ 'PageBuilder' | translate }}
+            </a>
+          </li>
+        }
+      </ul>
+      <div class="flex-fill"></div>
 
-    @if (AppPermissions.Notification_List | permission) {
-      <last-notifications></last-notifications>
-    }
-    <!-- darkmode -->
-    <label class="switch">
-      <input
-        class="switch__input"
-        type="checkbox"
-        [ngModel]="AppConst.isDarkMode"
-        (change)="colorSchemaService.toggleMode()" />
+      @if (AppPermissions.Notification_List | permission) {
+        <last-notifications></last-notifications>
+      }
+      <!-- darkmode -->
+      <label class="switch">
+        <input
+          class="switch__input"
+          type="checkbox"
+          [ngModel]="AppConst.isDarkMode"
+          (change)="colorSchemaService.toggleMode()" />
         <span class="switch__background">
           <span class="switch__toggle">
             <span class="switch__moon"></span>
@@ -124,10 +124,7 @@
       </button>
       <mat-menu #langMnu="matMenu">
         @for (lang of languages; track lang) {
-          <button
-            mat-menu-item
-            (click)="changeLanguage(lang.culture!)"
-            class="language-menu">
+          <button mat-menu-item (click)="changeLanguage(lang.culture!)" class="language-menu">
             <div class="d-flex align-items-center g-5">
               <!-- <i class="flag" [ngClass]="lang.code"></i> -->
               <img [src]="baseUrl + '/images/flags/' + lang.flag + '.png'" />

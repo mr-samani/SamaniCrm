@@ -21,10 +21,10 @@
             <div class="row">
               <auto-complete-product-category
                 class="col-sm-6 col-md-3"
-              formControlName="category"></auto-complete-product-category>
+                formControlName="category"></auto-complete-product-category>
               <auto-complete-product-type
                 class="col-sm-6 col-md-3"
-              formControlName="productType"></auto-complete-product-type>
+                formControlName="productType"></auto-complete-product-type>
               <div class="col-sm-6 col-md-3">
                 <mat-form-field>
                   <mat-label>{{ 'Slug' | translate }}</mat-label>
@@ -66,7 +66,7 @@
             <add-or-update-product-attributes
               [productTypeId]="form.get('productType')?.value?.id"
               [attributeValues]="attributeValues"
-            (onChange)="attributeValues = $event"></add-or-update-product-attributes>
+              (onChange)="attributeValues = $event"></add-or-update-product-attributes>
             <product-prices [(prices)]="prices"></product-prices>
           </div>
         </div>
@@ -93,27 +93,24 @@
                 [placeholder]="'NewTagThreeDot' | translate"
                 [matChipInputFor]="chipGrid"
                 (matChipInputTokenEnd)="addTag($event)" />
-              </mat-form-field>
-            </div>
+            </mat-form-field>
           </div>
         </div>
       </div>
-      <tab-group>
-        @for (translation of translationsArray.controls; track translation; let i = $index) {
-          <tab-item
-            [title]="translation.get('culture')?.value"
-            formArrayName="translations"
-            >
-            <div [formGroupName]="i" class="row">
-              <mat-form-field class="col-sm-12">
-                <mat-label>{{ 'Title' | translate }}</mat-label>
-                <input matInput formControlName="title" />
-              </mat-form-field>
-              <mat-form-field class="col-sm-12">
-                <mat-label>{{ 'Description' | translate }}</mat-label>
-                <textarea matInput formControlName="description" rows="3"></textarea>
-              </mat-form-field>
-              <!-- <mat-form-field class="col-sm-12">
+    </div>
+    <tab-group>
+      @for (translation of translationsArray.controls; track translation; let i = $index) {
+        <tab-item [title]="translation.get('culture')?.value" formArrayName="translations">
+          <div [formGroupName]="i" class="row">
+            <mat-form-field class="col-sm-12">
+              <mat-label>{{ 'Title' | translate }}</mat-label>
+              <input matInput formControlName="title" />
+            </mat-form-field>
+            <mat-form-field class="col-sm-12">
+              <mat-label>{{ 'Description' | translate }}</mat-label>
+              <textarea matInput formControlName="description" rows="3"></textarea>
+            </mat-form-field>
+            <!-- <mat-form-field class="col-sm-12">
               <mat-label>{{ 'Content' | translate }}</mat-label>
               <textarea matInput formControlName="content" rows="10"></textarea>
             </mat-form-field> -->

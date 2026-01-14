@@ -1,5 +1,3 @@
-
-
 import { Component, Injector, input, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 
@@ -8,10 +6,9 @@ import { AppComponentBase } from '@app/app-component-base';
   templateUrl: './sub-header.component.html',
   styleUrls: ['./sub-header.component.scss'],
   standalone: true,
-  
-}) 
+})
 export class SubHeaderComponent extends AppComponentBase implements OnInit {
-  title=input<string>();
+  title = input<string>();
   constructor(injector: Injector) {
     super(injector);
   }

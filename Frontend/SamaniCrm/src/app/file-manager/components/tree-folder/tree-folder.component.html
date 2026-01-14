@@ -5,7 +5,7 @@
         <span
           class="tree-icon"
           [class.isOpen]="item.isOpen"
-        [class.no-child]="!item.children || item.children.length == 0"></span>
+          [class.no-child]="!item.children || item.children.length == 0"></span>
         @if (item.icon) {
           <img [src]="baseUrl + '/' + item.icon" class="folder-icon" />
         } @else {
@@ -17,7 +17,7 @@
         <tree-folder
           [isOpen]="item.isOpen"
           [folders]="item.children"
-        (openFolder)="onChildOpenFolder($event)"></tree-folder>
+          (openFolder)="onChildOpenFolder($event)"></tree-folder>
       }
     }
   </ul>

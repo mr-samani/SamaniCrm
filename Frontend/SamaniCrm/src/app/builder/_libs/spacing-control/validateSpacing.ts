@@ -1,6 +1,5 @@
 import { IPosValue } from './IPosValue';
 
-
 export function validateSpacing(spacing: IPosValue, allowNegative: boolean): IPosValue {
   const validated: IPosValue = {};
   const keys: (keyof IPosValue)[] = ['top', 'right', 'bottom', 'left'];

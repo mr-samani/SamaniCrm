@@ -149,7 +149,7 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
   }
 
   broadCastMessage() {
-       this.matDialog
+    this.matDialog
       .open(BroadcastNotificationComponent, {
         data: {},
       })

@@ -2,7 +2,7 @@ import { Component, Injector, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
-import { finalize } from 'rxjs'; 
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -28,7 +28,7 @@ export class RegisterComponent extends AppComponentBase implements OnInit {
   ngOnInit(): void {}
 
   signUp() {
-     if (this.registerForm.invalid) {
+    if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
       this.notify.warning(this.l('CompleteFormField'));
       return;

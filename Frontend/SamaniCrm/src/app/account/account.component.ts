@@ -9,7 +9,6 @@ import { AppConst } from '@shared/app-const';
   styleUrls: ['./account.component.scss'],
   encapsulation: ViewEncapsulation.None,
   standalone: false,
-
 })
 export class AccountComponent extends AppComponentBase implements OnInit {
   backgroundImage = '';

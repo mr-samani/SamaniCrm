@@ -1,4 +1,3 @@
-
 import { Component, Injector, Input, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { WidgetNoteData } from './WidgetNoteData';

@@ -7,170 +7,150 @@
     [(ngModel)]="spacingString"
     (change)="stringChange()"
     [pattern]="spacingRegex" />
-    <button class="btn py-0" (click)="togglePanel()">
-      <i class="fa fa-pen-to-square"></i>
-    </button>
-  </div>
-  @if (spacing.hasError('pattern')) {
-    <p class="text-danger">Invalid spacing value</p>
-  }
+  <button class="btn py-0" (click)="togglePanel()">
+    <i class="fa fa-pen-to-square"></i>
+  </button>
+</div>
+@if (spacing.hasError('pattern')) {
+  <p class="text-danger">Invalid spacing value</p>
+}
 
-  @if (showPopup) {
-    <div class="panel-back-drop" (click)="showPopup = false"></div>
-  }
-  @if (showPopup && value) {
-    <div class="popup-container" [style.top.px]="top" [style.left.px]="left">
-      <div class="d-flex align-items-center justify-content-between">
-        <div class="btn-group" role="group">
-          <input
-            type="radio"
-            class="btn-check"
-            name="selectBorderType"
-            id="SAllBorder"
-            autocomplete="off"
-            [(ngModel)]="allBorder"
-            (ngModelChange)="onChangeAllBorder()"
-            [value]="true" />
-            <label class="btn" for="SAllBorder" title="All Border">
-              <i class="fa fa-border-outer"></i>
-              All
-            </label>
-            <input
-              type="radio"
-              class="btn-check"
-              name="selectBorderType"
-              id="SIndividualBorder"
-              autocomplete="off"
-              [(ngModel)]="allBorder"
-              (ngModelChange)="onChangeAllBorder()"
-              [value]="false" />
-              <label class="btn" for="SIndividualBorder" title=" Individual Border">
-                <i class="fa fa-expand"></i>
-                Individual
-              </label>
-            </div>
-            <button class="btn" (click)="showPopup = false"><i class="fa fa-times"></i></button>
-          </div>
-          @if (allBorder) {
-            <div class="d-flex align-items-center justify-content-center py-5">
-              <div class="input-style">
-                <span>All</span>
-                @if (allSpaceing.unit != 'auto') {
-                  <input
-                    type="number"
-                    [(ngModel)]="allSpaceing.size"
-                    (change)="changeAllSpacing()"
-                    class="fw-100px" />
-                }
-                <select class="fw-50px" [(ngModel)]="allSpaceing.unit" (change)="changeAllSpacing()">
-                  @for (val of sizeUnitList; track val) {
-                    <option [value]="val">
-                      {{ val }}
-                    </option>
-                  }
-                </select>
-              </div>
-            </div>
-          } @else {
-            <div class="place-top">
-              @if (value.top) {
-                <div class="mb-3 input-style">
-                  <span>Top</span>
-                  @if (value.top.unit != 'auto') {
-                    <input
-                      class="fw-50px"
-                      type="number"
-                      [(ngModel)]="value.top.size"
-                      (change)="onUiChange()" />
-                  }
-                  <select
-                    class="select-unit"
-                    [class.fw-100px]="value.top.unit == 'auto'"
-                    [(ngModel)]="value.top.unit"
-                    (change)="onUiChange()">
-                    @for (val of sizeUnitList; track val) {
-                      <option [value]="val">
-                        {{ val }}
-                      </option>
-                    }
-                  </select>
-                </div>
-              }
-            </div>
-            <div class="place-left-right">
-              @if (value.left) {
-                <div class="mb-3 input-style">
-                  <span>Left</span>
-                  @if (value.left.unit != 'auto') {
-                    <input
-                      class="fw-50px"
-                      type="number"
-                      [(ngModel)]="value.left.size"
-                      (change)="onUiChange()" />
-                  }
-                  <select
-                    class="select-unit"
-                    [class.fw-100px]="value.left.unit == 'auto'"
-                    [(ngModel)]="value.left.unit"
-                    (change)="onUiChange()">
-                    @for (val of sizeUnitList; track val) {
-                      <option [value]="val">
-                        {{ val }}
-                      </option>
-                    }
-                  </select>
-                </div>
-              }
-              @if (value.right) {
-                <div class="mb-3 input-style">
-                  <span>Right</span>
-                  @if (value.right.unit != 'auto') {
-                    <input
-                      class="fw-50px"
-                      type="number"
-                      [(ngModel)]="value.right.size"
-                      (change)="onUiChange()" />
-                  }
-                  <select
-                    class="select-unit"
-                    [class.fw-100px]="value.right.unit == 'auto'"
-                    [(ngModel)]="value.right.unit"
-                    (change)="onUiChange()">
-                    @for (val of sizeUnitList; track val) {
-                      <option [value]="val">
-                        {{ val }}
-                      </option>
-                    }
-                  </select>
-                </div>
-              }
-            </div>
-            <div class="place-bottom">
-              @if (value.bottom) {
-                <div class="mb-3 input-style">
-                  <span>Bottom</span>
-                  @if (value.bottom.unit != 'auto') {
-                    <input
-                      class="fw-50px"
-                      type="number"
-                      [(ngModel)]="value.bottom.size"
-                      (change)="onUiChange()" />
-                  }
-                  <select
-                    class="select-unit"
-                    [class.fw-100px]="value.bottom.unit == 'auto'"
-                    [(ngModel)]="value.bottom.unit"
-                    (change)="onUiChange()">
-                    @for (val of sizeUnitList; track val) {
-                      <option [value]="val">
-                        {{ val }}
-                      </option>
-                    }
-                  </select>
-                </div>
-              }
-            </div>
+@if (showPopup) {
+  <div class="panel-back-drop" (click)="showPopup = false"></div>
+}
+@if (showPopup && value) {
+  <div class="popup-container" [style.top.px]="top" [style.left.px]="left">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="btn-group" role="group">
+        <input
+          type="radio"
+          class="btn-check"
+          name="selectBorderType"
+          id="SAllBorder"
+          autocomplete="off"
+          [(ngModel)]="allBorder"
+          (ngModelChange)="onChangeAllBorder()"
+          [value]="true" />
+        <label class="btn" for="SAllBorder" title="All Border">
+          <i class="fa fa-border-outer"></i>
+          All
+        </label>
+        <input
+          type="radio"
+          class="btn-check"
+          name="selectBorderType"
+          id="SIndividualBorder"
+          autocomplete="off"
+          [(ngModel)]="allBorder"
+          (ngModelChange)="onChangeAllBorder()"
+          [value]="false" />
+        <label class="btn" for="SIndividualBorder" title=" Individual Border">
+          <i class="fa fa-expand"></i>
+          Individual
+        </label>
+      </div>
+      <button class="btn" (click)="showPopup = false"><i class="fa fa-times"></i></button>
+    </div>
+    @if (allBorder) {
+      <div class="d-flex align-items-center justify-content-center py-5">
+        <div class="input-style">
+          <span>All</span>
+          @if (allSpaceing.unit != 'auto') {
+            <input type="number" [(ngModel)]="allSpaceing.size" (change)="changeAllSpacing()" class="fw-100px" />
           }
-          <!-- <pre style="direction: ltr; text-align: left">{{ value | json }}</pre> -->
+          <select class="fw-50px" [(ngModel)]="allSpaceing.unit" (change)="changeAllSpacing()">
+            @for (val of sizeUnitList; track val) {
+              <option [value]="val">
+                {{ val }}
+              </option>
+            }
+          </select>
         </div>
-      }
+      </div>
+    } @else {
+      <div class="place-top">
+        @if (value.top) {
+          <div class="mb-3 input-style">
+            <span>Top</span>
+            @if (value.top.unit != 'auto') {
+              <input class="fw-50px" type="number" [(ngModel)]="value.top.size" (change)="onUiChange()" />
+            }
+            <select
+              class="select-unit"
+              [class.fw-100px]="value.top.unit == 'auto'"
+              [(ngModel)]="value.top.unit"
+              (change)="onUiChange()">
+              @for (val of sizeUnitList; track val) {
+                <option [value]="val">
+                  {{ val }}
+                </option>
+              }
+            </select>
+          </div>
+        }
+      </div>
+      <div class="place-left-right">
+        @if (value.left) {
+          <div class="mb-3 input-style">
+            <span>Left</span>
+            @if (value.left.unit != 'auto') {
+              <input class="fw-50px" type="number" [(ngModel)]="value.left.size" (change)="onUiChange()" />
+            }
+            <select
+              class="select-unit"
+              [class.fw-100px]="value.left.unit == 'auto'"
+              [(ngModel)]="value.left.unit"
+              (change)="onUiChange()">
+              @for (val of sizeUnitList; track val) {
+                <option [value]="val">
+                  {{ val }}
+                </option>
+              }
+            </select>
+          </div>
+        }
+        @if (value.right) {
+          <div class="mb-3 input-style">
+            <span>Right</span>
+            @if (value.right.unit != 'auto') {
+              <input class="fw-50px" type="number" [(ngModel)]="value.right.size" (change)="onUiChange()" />
+            }
+            <select
+              class="select-unit"
+              [class.fw-100px]="value.right.unit == 'auto'"
+              [(ngModel)]="value.right.unit"
+              (change)="onUiChange()">
+              @for (val of sizeUnitList; track val) {
+                <option [value]="val">
+                  {{ val }}
+                </option>
+              }
+            </select>
+          </div>
+        }
+      </div>
+      <div class="place-bottom">
+        @if (value.bottom) {
+          <div class="mb-3 input-style">
+            <span>Bottom</span>
+            @if (value.bottom.unit != 'auto') {
+              <input class="fw-50px" type="number" [(ngModel)]="value.bottom.size" (change)="onUiChange()" />
+            }
+            <select
+              class="select-unit"
+              [class.fw-100px]="value.bottom.unit == 'auto'"
+              [(ngModel)]="value.bottom.unit"
+              (change)="onUiChange()">
+              @for (val of sizeUnitList; track val) {
+                <option [value]="val">
+                  {{ val }}
+                </option>
+              }
+            </select>
+          </div>
+        }
+      </div>
+    }
+    <!-- <pre style="direction: ltr; text-align: left">{{ value | json }}</pre> -->
+  </div>
+}

@@ -41,10 +41,7 @@
       </button>
     }
     @if (selectedFileInfo.id && (AppPermissions.FileManager_Delete | permission)) {
-      <button
-        (click)="deleteFileOrFolder()"
-        mat-icon-button
-        >
+      <button (click)="deleteFileOrFolder()" mat-icon-button>
         <i class="fa fa-trash"></i>
       </button>
     }

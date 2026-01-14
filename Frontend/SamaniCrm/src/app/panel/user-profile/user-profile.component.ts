@@ -1,4 +1,3 @@
-
 import { Component, Injector, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { TranslateModule } from '@ngx-translate/core';

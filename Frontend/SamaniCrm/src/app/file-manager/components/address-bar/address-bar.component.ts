@@ -50,5 +50,3 @@ export class AddressBarComponent {
     return flatList;
   }
 }
-
-

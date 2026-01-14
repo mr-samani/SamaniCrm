@@ -7,7 +7,7 @@ import { BlockBase } from '../block-base';
   standalone: true,
   imports: [],
   template: `
-    <div class="hero-banner" >Banner</div>
+    <div class="hero-banner">Banner</div>
   `,
 })
 export class BlockHeroBannerComponent extends BlockBase {

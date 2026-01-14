@@ -137,5 +137,4 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
       }
     });
   }
- 
 }

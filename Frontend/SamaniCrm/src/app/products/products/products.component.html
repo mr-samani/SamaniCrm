@@ -6,11 +6,7 @@
     </button>
   </div>
   @if (AppPermissions.Products_Create | permission) {
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="openCreateOrEditDialog()"
-      >
+    <button mat-raised-button color="primary" (click)="openCreateOrEditDialog()">
       <i class="fa fa-circle-plus mx-1"></i>
       <span>{{ 'CreateNewProduct' | translate }}</span>
     </button>
@@ -26,7 +22,7 @@
 
     <auto-complete-product-category
       class="col-sm-6 col-md-4"
-    formControlName="productCategory"></auto-complete-product-category>
+      formControlName="productCategory"></auto-complete-product-category>
 
     <auto-complete-product-type class="col-sm-6 col-md-4" formControlName="productType"></auto-complete-product-type>
   </div>
@@ -47,7 +43,7 @@
   [fields]="fields"
   [operations]="operations"
   [loading]="loading"
-(sortChange)="getList($event)"></table-view>
+  (sortChange)="getList($event)"></table-view>
 
 <pagination [total]="totalCount" [(page)]="page" [(perPage)]="perPage" (change)="onPageChange($event)"></pagination>
 

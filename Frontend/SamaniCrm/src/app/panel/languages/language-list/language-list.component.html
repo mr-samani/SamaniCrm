@@ -1,10 +1,6 @@
 <sub-header [title]="'Content' | translate">
   @if (AppPermissions.LanguageManagement_Create | permission) {
-    <button
-      mat-stroked-button
-      color="primary"
-      (click)="openLanguageDialog()"
-      >
+    <button mat-stroked-button color="primary" (click)="openLanguageDialog()">
       <i class="fa fa-circle-plus mx-1"></i>
       <span>{{ 'CreateNewLanguage' | translate }}</span>
     </button>

@@ -26,7 +26,6 @@ import { IGridLayoutOptions, NgxGridLayoutModule } from 'ngx-drag-drop-kit';
   standalone: true,
   imports: [CommonModule, SharedModule, NgxGridLayoutModule, TabGroupModule, MatProgressBarModule, MatButtonModule],
   providers: [DasboardServiceProxy],
-  
 })
 export class DashboardComponent extends AppComponentBase implements OnInit {
   selectedIndex = -1;

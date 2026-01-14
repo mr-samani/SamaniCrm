@@ -9,6 +9,7 @@
     "test": "ng test",
     "generate-api": "set JAVA_OPTS=-Djavax.net.ssl.trustStoreType=Windows-ROOT -Dlog.level=error&& openapi-generator-cli generate -g typescript-angular -o src/shared/service-proxies -c open-api-config.json --skip-validate-spec",
     "apiGen": "node ./scripts/check-api-and-generate.js",
+    "format": "prettier --write \".//src//app//**//*.{ts,html,css,scss}\"",
     "*ngTo@": "ng g @angular/core:control-flow"
   },
   "private": true,

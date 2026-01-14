@@ -21,6 +21,5 @@ export class MaintenanceComponent extends AppComponentBase implements OnInit {
     ];
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }

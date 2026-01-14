@@ -18,7 +18,7 @@ import { finalize } from 'rxjs';
   templateUrl: './external-provider.component.html',
   styleUrls: ['./external-provider.component.scss'],
   imports: [ReactiveFormsModule, MaterialCommonModule, TranslateModule],
-  providers:[ExternalProvidersServiceProxy]
+  providers: [ExternalProvidersServiceProxy],
 })
 export class CreateOrEditExternalProviderComponent extends AppComponentBase implements OnInit {
   loading = false;
@@ -106,7 +106,7 @@ export class CreateOrEditExternalProviderComponent extends AppComponentBase impl
               scheme: provider.scheme,
               providerType: provider.providerType,
               clientId: provider.clientId,
-              clientSecret:provider.clientSecret,
+              clientSecret: provider.clientSecret,
               authorizationEndpoint: provider.authorizationEndpoint,
               tokenEndpoint: provider.tokenEndpoint,
               userInfoEndpoint: provider.userInfoEndpoint,

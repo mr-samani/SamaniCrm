@@ -1,5 +1,3 @@
-
-
 import { Component, Injector, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 
@@ -8,13 +6,11 @@ import { AppComponentBase } from '@app/app-component-base';
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss'],
   standalone: false,
-  
-}) 
+})
 export class ProductComponent extends AppComponentBase implements OnInit {
   constructor(injector: Injector) {
     super(injector);
     this.breadcrumb.list = [{ name: this.l('Products'), url: '/panel/products' }];
-
   }
 
   ngOnInit() {}

@@ -14,7 +14,6 @@ import { ControlContainer, NgForm } from '@angular/forms';
   standalone: false,
 })
 export class GeneralSettingComponent implements OnInit {
-
   constructor() {}
 
   ngOnInit() {}

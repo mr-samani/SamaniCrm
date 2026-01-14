@@ -12,7 +12,7 @@ import { StyleDimensionsComponent } from './style-dimensions/style-dimensions.co
 import { InputStyleComponent } from './input-style/input-style.component';
 import { InputGroupIconComponent } from './input-group-icon/input-group-icon.component';
 import { SpacingControlComponent } from '@app/builder/_libs/spacing-control/spacing-control.component';
-import { ShadowControlComponent } from "@app/builder/_libs/shadow-control/shadow-control.component";
+import { ShadowControlComponent } from '@app/builder/_libs/shadow-control/shadow-control.component';
 
 const comp = [
   StyleBorderComponent,
@@ -33,8 +33,8 @@ const comp = [
     NgxInputColorModule,
     NgxInputGradientModule,
     SpacingControlComponent,
-    ShadowControlComponent
-],
+    ShadowControlComponent,
+  ],
   exports: [...comp],
 })
 export class StyleProperties {}

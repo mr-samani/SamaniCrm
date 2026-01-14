@@ -1,4 +1,3 @@
-
 import { Component, Injector, OnInit } from '@angular/core';
 import { DynamicRendererComponent } from '../dynamic-renderer.component';
 import { BlockBase } from '../block-base';

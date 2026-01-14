@@ -3,10 +3,9 @@ import { BlockDefinition } from '../blocks/block-registry';
 export function generateCSSFromBlocks(blocks: BlockDefinition[]): string {
   const cssRules: string[] = [];
 
-
   /**
-   * 
-   * @param block 
+   *
+   * @param block
    */
   function traverse(block: BlockDefinition) {
     const selector = `#${block.id}`;

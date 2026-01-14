@@ -21,9 +21,7 @@
     {{ 'IsRequired' | translate: { value: ('Code' | translate) } }}
   </mat-error>
 </mat-form-field> -->
-<otp-input [length]="6" [(ngModel)]="code" name="code"></otp-input>
-
-
+  <otp-input [length]="6" [(ngModel)]="code" name="code"></otp-input>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>

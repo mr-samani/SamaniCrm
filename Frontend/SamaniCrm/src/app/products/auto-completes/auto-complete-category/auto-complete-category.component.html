@@ -9,6 +9,40 @@
       #trigger="matAutocompleteTrigger"
       (click)="openPanel(trigger)"
       (change)="onChangeTextBox()" />
+    <mat-autocomplete #autoGroup="matAutocomplete" [displayWith]="displayFn.bind(this)" (optionSelected)="onChange()">
+      @if (isEmpty) {
+        <mat-option disabled>
+          {{ 'NotACase' | translate }}
+        </mat-option>
+      }
+      @for (item of filteredOptions | async; track item) {
+        <mat-option [value]="item">
+          <span>{{ item.title }}</span>
+        </mat-option>
+      }
+    </mat-autocomplete>
+    @if (loading) {
+      <mat-spinner diameter="20" color="primary" matSuffix></mat-spinner>
+    }
+    @if (myControl.value && !loading) {
+      <button mat-icon-button matSuffix (click)="reset()">
+        <i class="fa fa-times"></i>
+      </button>
+    }
+  </mat-form-field>
+}
+
+@if (theme == 'bootstrap') {
+  <mat-form-field class="w-100">
+    <div class="d-flex">
+      <input
+        type="text"
+        matInput
+        [formControl]="myControl"
+        [matAutocomplete]="autoGroup"
+        #trigger="matAutocompleteTrigger"
+        (click)="openPanel(trigger)"
+        (change)="onChangeTextBox()" />
       <mat-autocomplete #autoGroup="matAutocomplete" [displayWith]="displayFn.bind(this)" (optionSelected)="onChange()">
         @if (isEmpty) {
           <mat-option disabled>
@@ -29,40 +63,6 @@
           <i class="fa fa-times"></i>
         </button>
       }
-    </mat-form-field>
-  }
-
-  @if (theme == 'bootstrap') {
-    <mat-form-field class="w-100">
-      <div class="d-flex">
-        <input
-          type="text"
-          matInput
-          [formControl]="myControl"
-          [matAutocomplete]="autoGroup"
-          #trigger="matAutocompleteTrigger"
-          (click)="openPanel(trigger)"
-          (change)="onChangeTextBox()" />
-          <mat-autocomplete #autoGroup="matAutocomplete" [displayWith]="displayFn.bind(this)" (optionSelected)="onChange()">
-            @if (isEmpty) {
-              <mat-option disabled>
-                {{ 'NotACase' | translate }}
-              </mat-option>
-            }
-            @for (item of filteredOptions | async; track item) {
-              <mat-option [value]="item">
-                <span>{{ item.title }}</span>
-              </mat-option>
-            }
-          </mat-autocomplete>
-          @if (loading) {
-            <mat-spinner diameter="20" color="primary" matSuffix></mat-spinner>
-          }
-          @if (myControl.value && !loading) {
-            <button mat-icon-button matSuffix (click)="reset()">
-              <i class="fa fa-times"></i>
-            </button>
-          }
-        </div>
-      </mat-form-field>
-    }
+    </div>
+  </mat-form-field>
+}

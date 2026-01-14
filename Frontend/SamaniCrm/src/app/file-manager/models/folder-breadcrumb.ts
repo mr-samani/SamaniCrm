@@ -1,4 +1,4 @@
-import { FileManagerDto } from "./file-manager-dto";
+import { FileManagerDto } from './file-manager-dto';
 
 export class FolderBreadcrumb extends FileManagerDto {
   hierarchy?: string;

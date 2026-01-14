@@ -16,7 +16,13 @@ import { AccountServiceProxy } from '@shared/service-proxies';
 import { OtpInputComponent } from '@shared/components/otp-input/otp-input.component';
 
 @NgModule({
-  declarations: [AccountComponent, LoginComponent, RegisterComponent, ExternalLoginCalbackComponent, OpenidAuthCallbackComponent],
+  declarations: [
+    AccountComponent,
+    LoginComponent,
+    RegisterComponent,
+    ExternalLoginCalbackComponent,
+    OpenidAuthCallbackComponent,
+  ],
   imports: [
     CommonModule,
     AccountRoutingModule,
@@ -26,7 +32,7 @@ import { OtpInputComponent } from '@shared/components/otp-input/otp-input.compon
     SharedModule,
     CaptchaModule,
     MaterialCommonModule,
-    OtpInputComponent
+    OtpInputComponent,
   ],
   providers: [AccountServiceProxy],
 })

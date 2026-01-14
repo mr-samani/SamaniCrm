@@ -18,14 +18,14 @@
         (keys)="onChangeDynamicKeyAttr($event, item)"
       [value]="item?.[1]?.value"></select-dynamic-data>
     </div> -->
+    }
+    @case ('string') {
+      <input type="text" class="form-control" [(ngModel)]="item[1].value" name="attrVal" />
+    }
+    @case ('number') {
+      <input type="number" class="form-control" [(ngModel)]="item[1].value" name="attrVal" />
+    }
   }
-  @case ('string') {
-    <input type="text" class="form-control" [(ngModel)]="item[1].value" name="attrVal" />
-  }
-  @case ('number') {
-    <input type="number" class="form-control" [(ngModel)]="item[1].value" name="attrVal" />
-  }
-}
 }
 <!-- <pre>{{ attrList | json }}</pre> -->
 @if (block.data) {
@@ -35,12 +35,12 @@
     class="form-control"
     placeholder="text"
     (ngModelChange)="updateBlock()" />
-    @if (dynamicData) {
-      <div>
-        <select-dynamic-data
-          [list]="dynamicData"
-          (keys)="onChangeDynamicKeyTxt($event)"
+  @if (dynamicData) {
+    <div>
+      <select-dynamic-data
+        [list]="dynamicData"
+        (keys)="onChangeDynamicKeyTxt($event)"
         [value]="block.data.text"></select-dynamic-data>
-      </div>
-    }
+    </div>
   }
+}

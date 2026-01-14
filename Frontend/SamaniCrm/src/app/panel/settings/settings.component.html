@@ -24,10 +24,7 @@
               <div class="menu-container">
                 @for (menu of item.children; track $index) {
                   @if (menu.permission | permission) {
-                    <div
-                      class="menu-item"
-                      [routerLink]="[menu.route]"
-                      routerLinkActive="active">
+                    <div class="menu-item" [routerLink]="[menu.route]" routerLinkActive="active">
                       <div class="icon">
                         <i [class]="menu.icon"></i>
                       </div>

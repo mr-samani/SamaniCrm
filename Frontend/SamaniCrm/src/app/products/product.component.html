@@ -1,10 +1,7 @@
 <div class="d-flex">
   <div class="menu-list">
     @if (AppPermissions.Products_Category_List | permission) {
-      <a
-        class="menu-item"
-        [routerLink]="['/panel/products/categories']"
-        routerLinkActive="active">
+      <a class="menu-item" [routerLink]="['/panel/products/categories']" routerLinkActive="active">
         <div class="icon">
           <i class="fad fa-diagram-project"></i>
         </div>
@@ -15,10 +12,7 @@
       </a>
     }
     @if (AppPermissions.Products_Type_List | permission) {
-      <a
-        class="menu-item"
-        [routerLink]="['/panel/products/types']"
-        routerLinkActive="active">
+      <a class="menu-item" [routerLink]="['/panel/products/types']" routerLinkActive="active">
         <div class="icon">
           <i class="fad fa-box-open-full"></i>
         </div>
@@ -30,10 +24,7 @@
     }
 
     @if (AppPermissions.Products_List | permission) {
-      <a
-        class="menu-item"
-        [routerLink]="['/panel/products/product-list']"
-        routerLinkActive="active">
+      <a class="menu-item" [routerLink]="['/panel/products/product-list']" routerLinkActive="active">
         <div class="icon">
           <i class="fad fa-boxes-packing"></i>
         </div>
@@ -45,10 +36,7 @@
     }
 
     @if (AppPermissions.Products_Currency_List | permission) {
-      <a
-        class="menu-item"
-        [routerLink]="['/panel/products/currencies']"
-        routerLinkActive="active">
+      <a class="menu-item" [routerLink]="['/panel/products/currencies']" routerLinkActive="active">
         <div class="icon">
           <i class="fad fa-money-bills"></i>
         </div>

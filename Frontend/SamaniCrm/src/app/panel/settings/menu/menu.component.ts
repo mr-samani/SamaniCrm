@@ -54,18 +54,18 @@ export class MenuComponent extends AppComponentBase implements OnInit {
       });
   }
 
-  getOrderItems(list: TreeNode[], items: ReorderItem[] = [], orderIndex = 0,parentId?:string): ReorderItem[] {
+  getOrderItems(list: TreeNode[], items: ReorderItem[] = [], orderIndex = 0, parentId?: string): ReorderItem[] {
     for (let i = 0; i < list.length; i++) {
       items.push(
         new ReorderItem({
           menuId: list[i].id,
           orderIndex: orderIndex,
-          parentId:parentId
+          parentId: parentId,
         }),
       );
       orderIndex++;
       if (list[i].children) {
-        this.getOrderItems(list[i].children, items, orderIndex,list[i].id);
+        this.getOrderItems(list[i].children, items, orderIndex, list[i].id);
       }
     }
     return items;

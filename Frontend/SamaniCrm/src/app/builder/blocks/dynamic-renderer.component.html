@@ -8,7 +8,7 @@
   <ng-container #container><ng-content></ng-content></ng-container>
   <ng-container
     [ngTemplateOutlet]="nestedTreeTpl"
-  [ngTemplateOutletContext]="{ $implicit: block, parent: parent }"></ng-container>
+    [ngTemplateOutletContext]="{ $implicit: block, parent: parent }"></ng-container>
 </div>
 
 <ng-template #nestedTreeTpl let-block let-parent="parent">
@@ -33,10 +33,7 @@
       <!-- <span class="custom-placeholder2" *ngxPlaceholder></span> -->
       @if (block.children) {
         @for (child of block.children; track child; let i = $index) {
-          <dynamic-renderer
-            [parent]="block"
-            [block]="child"
-          [loopIndex]="loopIndex"></dynamic-renderer>
+          <dynamic-renderer [parent]="block" [block]="child" [loopIndex]="loopIndex"></dynamic-renderer>
         }
       }
     </div>

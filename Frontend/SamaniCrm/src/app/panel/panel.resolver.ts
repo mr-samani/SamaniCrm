@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ResolveFn, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '@shared/services/auth.service';
- 
+
 export const panelResolver: ResolveFn<boolean> = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot,

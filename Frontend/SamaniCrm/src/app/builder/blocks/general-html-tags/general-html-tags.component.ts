@@ -1,4 +1,3 @@
-
 import { ChangeDetectionStrategy, Component, ElementRef, Inject, Injector, OnInit, DOCUMENT } from '@angular/core';
 import { NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 import { BlockDefinition } from '../block-registry';

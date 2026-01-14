@@ -28,7 +28,6 @@ export class SecuritySettingComponent extends AppComponentBase implements OnInit
     this.getSettings();
   }
 
-
   getSettings() {
     this.loading = true;
     this.securitySettingService
