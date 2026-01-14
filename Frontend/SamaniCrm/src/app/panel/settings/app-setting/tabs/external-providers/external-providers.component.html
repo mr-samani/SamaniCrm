@@ -1,6 +1,6 @@
-<div class="d-flex gap-1 flex-wrap">
+<div class="d-flex justify-content-end gap-1 flex-wrap">
   @if (AppPermissions.SecuritySetting_ExternalProvidersCreate | permission) {
-    <button mat-stroked-button color="primary" (click)="openCreateOrEditDialog()">
+    <button class="btn btn-primary" (click)="openCreateOrEditDialog()">
       <i class="fa fa-plus mx-2"></i>
       {{ 'CreateNew' | translate }}
     </button>

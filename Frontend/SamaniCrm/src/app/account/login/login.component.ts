@@ -87,7 +87,8 @@ export class LoginComponent extends AppComponentBase implements OnInit {
         },
         error: (error: HttpErrorResponse) => {
           if (error.status == 401) {
-            this.notify.warning(this.l('Message.UsernameOrPasswordIsInvalid'));
+            let msg = error.error?.errors?.map((e: { message: string }) => e.message + '\n');
+            this.notify.warning(msg ?? this.l('Message.UsernameOrPasswordIsInvalid'));
           }
           if (this.captcha && AppConst.requireCaptcha) this.captcha.reloadCaptcha();
         },
@@ -120,7 +121,8 @@ export class LoginComponent extends AppComponentBase implements OnInit {
         },
         error: (error: HttpErrorResponse) => {
           if (error.status == 401) {
-            this.notify.warning(this.l('Message.UsernameOrPasswordIsInvalid'));
+            let msg = error.error?.errors?.map((e: { message: string }) => e.message + '\n');
+            this.notify.warning(msg ?? this.l('Message.UsernameOrPasswordIsInvalid'));
           }
           if (this.captcha && AppConst.requireCaptcha) this.captcha.reloadCaptcha();
         },
