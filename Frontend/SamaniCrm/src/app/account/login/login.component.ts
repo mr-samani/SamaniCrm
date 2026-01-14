@@ -138,7 +138,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
   }
 
   async loginExternalProvider(provider: ExternalProviderDto) {
-    this.loadingExternalProviders = true;
+    this.loading = true;
     try {
       let url = '';
       switch (provider.providerType) {
@@ -164,7 +164,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
       //window.open(url, '_blank', 'noopener,noreferrer',);
     } catch (error) {
       console.error('Error occurred while handling external login:', error);
-      this.loadingExternalProviders = false;
+      this.loading = false;
     }
   }
 }

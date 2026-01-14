@@ -5,3 +5,14 @@
   flex-direction: column;
   padding: 2rem;
 }
+.login-btn {
+  .mdc-button__label {
+    position: static;
+  }
+  mat-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+}

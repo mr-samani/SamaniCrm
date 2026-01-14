@@ -13,50 +13,48 @@
           type="userName"
           [placeholder]="'UserName' | translate"
           autocomplete="username" />
-        </mat-form-field>
+      </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>{{ 'Password' | translate }}</mat-label>
-          <input
-            matInput
-            formControlName="password"
-            [type]="showPassword ? 'text' : 'password'"
-            [placeholder]="'Password' | translate"
-            autocomplete="current-password" />
-            @if (!showPassword) {
-              <i matSuffix class="fa fa-eye" (click)="showPassword = true"></i>
-            }
-            @if (showPassword) {
-              <i matSuffix class="fa fa-eye-slash" (click)="showPassword = false"></i>
-            }
-          </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ 'Password' | translate }}</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          [type]="showPassword ? 'text' : 'password'"
+          [placeholder]="'Password' | translate"
+          autocomplete="current-password" />
+        @if (!showPassword) {
+          <i matSuffix class="fa fa-eye" (click)="showPassword = true"></i>
+        }
+        @if (showPassword) {
+          <i matSuffix class="fa fa-eye-slash" (click)="showPassword = false"></i>
+        }
+      </mat-form-field>
 
-          <p>
-            <mat-checkbox formControlName="rememberMe">{{ 'RememberMe' | translate }}</mat-checkbox>
-          </p>
+      <p>
+        <mat-checkbox formControlName="rememberMe">{{ 'RememberMe' | translate }}</mat-checkbox>
+      </p>
 
-          @if (requiredCaptcha) {
-            <captcha formControlName="captcha" #captcha></captcha>
-          }
-          <!-- <p>
+      @if (requiredCaptcha) {
+        <captcha formControlName="captcha" #captcha></captcha>
+      }
+      <!-- <p>
           <a routerLink="/account/forgot-password" class="forgot-link">
             کلمه عبور خود را فراموش کرده اید؟
           </a>
         </p> -->
 
-        <button mat-raised-button color="primary" (click)="login()" [disabled]="loading" type="submit" class="w-100">
-          @if (loading) {
-            <span>loading...</span>
-          }
-          @if (!loading) {
-            <span>{{ 'login' | translate }}</span>
-          }
-        </button>
-        <!-- <button routerLink="/account/register" class="w-100" type="success">
+      <button class="w-100 mb-1 btn btn-primary login-btn" (click)="login()" [disabled]="loading" type="submit">
+        <span>{{ 'login' | translate }}</span>
+        @if (loading) {
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        }
+      </button>
+      <!-- <button routerLink="/account/register" class="w-100" type="success">
         ثبت نام
       </button> -->
       @if (loadingExternalProviders) {
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center align-items-center">
           <mat-spinner color="primary" diameter="25"></mat-spinner>
         </div>
       } @else {
@@ -66,9 +64,12 @@
             @for (provider of externalProviderList; track provider) {
               <button
                 type="button"
-                class="w-100 mb-1 btn btn-primary btn-{{ provider.name }}"
+                class="w-100 mb-1 btn btn-primary btn-{{ provider.name }} login-btn"
                 (click)="loginExternalProvider(provider)">
                 {{ provider.name }}
+                @if (loading) {
+                  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                }
               </button>
             }
           </div>
@@ -84,22 +85,22 @@
       <input matInput [(ngModel)]="code" name="code" type="number" autocomplete="off" #codeEl="ngModel" />
     </mat-form-field> -->
 
-    <otp-input [length]="6" [(ngModel)]="code" name="code"></otp-input>
-    <!-- {{ code }} -->
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="loginWithTwoFactor()"
-      [disabled]="loading"
-      type="submit"
-      class="w-100">
-      @if (loading) {
-        <span>loading...</span>
-      }
-      @if (!loading) {
-        <span>{{ 'login' | translate }}</span>
-      }
-    </button>
-  </form>
-}
+      <otp-input [length]="6" [(ngModel)]="code" name="code"></otp-input>
+      <!-- {{ code }} -->
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="loginWithTwoFactor()"
+        [disabled]="loading"
+        type="submit"
+        class="w-100">
+        @if (loading) {
+          <span>loading...</span>
+        }
+        @if (!loading) {
+          <span>{{ 'login' | translate }}</span>
+        }
+      </button>
+    </form>
+  }
 </div>
