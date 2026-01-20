@@ -3,108 +3,78 @@
     <div class="thead-mrs">
       <div class="tr-mrs">
         @for (item of fields; track item) {
-          <div
-            class="th-mrs"
-            [style.max-width.px]="item.width"
-            [style.min-width.px]="item.width">
-            {{item.title}}
-            <i
-              class="fa sort-icon"
-              [class.active]="sortField == item.column"
-              [class.fa-chevron-down]="sortDirection=='asc'"
-              [class.fa-chevron-up]="sortDirection=='desc'"
+        <div class="th-mrs" [style.max-width.px]="item.width" [style.min-width.px]="item.width">
+          {{item.title}}
+          <i
+            class="fa sort-icon"
+            [class.active]="sortField == item.column"
+            [class.fa-chevron-down]="sortDirection=='asc'"
+            [class.fa-chevron-up]="sortDirection=='desc'"
             (click)="onSortChange(item.column)"></i>
-          </div>
-        }
-        @if (operations) {
-          <div class="th-mrs operations">{{'Operation'|translate}}</div>
+        </div>
+        } @if (operations) {
+        <div class="th-mrs operations">{{'Operation'|translate}}</div>
         }
       </div>
     </div>
     <div class="tbody-mrs">
-      @if (!_loading && _list.length === 0) {
-        <div class="no-data">{{'NoData'|translate}}</div>
-      }
-      @for (item of _list; track item) {
-        <div class="tr-mrs">
-          @for (f of fields; track f) {
-            <div
-              class="td-mrs"
-              vAlign="middle"
-              [style.max-width.px]="f.width"
-              [style.min-width.px]="f.width">
-              <div class="cel">
-                <span class="cell-title">{{f.title}}</span>
-                @switch (f.type) {
-                  @case ('profilePicture') {
-                    @if (item[f.column]) {
-                      <img [src]="item[f.column]" class="img-circle" />
-                    }
-                    @if (!item[f.column]) {
-                      <img src="/images/profile-picture.jpg" class="img-circle" />
-                    }
-                  }
-                  @case ('image') {
-                    @if (item[f.column]) {
-                      <img [src]="item[f.column]" class="img-cover" />
-                    }
-                    @if (!item[f.column]) {
-                      <img src="/images/default-image.png" class="img-cover" />
-                    }
-                  }
-                  @case ('date') {
-                    <span>{{item[f.column]|luxonFormat:'D'}}</span>
-                  }
-                  @case ('time') {
-                    <span>{{item[f.column]|luxonFormat:'HH:ss'}}</span>
-                  }
-                  @case ('number') {
-                    <span>{{item[f.column]|number}}</span>
-                  }
-                  @case ('dateTime') {
-                    <span class="text-wrap">{{item[f.column]|luxonFormat:'F'}}</span>
-                  }
-                  @case ('yesNo') {
-                    @if (item[f.column]) {
-                      <span class="tag tag-success">{{'Yes'|translate}}</span>
-                    }
-                    @if (!item[f.column]) {
-                      <span class="tag tag-danger">{{'No'|translate}}</span>
-                    }
-                  }
-                  @case ('localize') {
-                    <span class="text-wrap">{{f.localizeKey + item[f.column]| translate }}</span>
-                  }
-                  @case ('template') {
-                    @if (templateMap.has(f.column)) {
-                      <ng-container
-                        [ngTemplateOutlet]="templateMap.get(f.column)!"
-                      [ngTemplateOutletContext]="{ $implicit: item }"></ng-container>
-                    }
-                  }
-                  @default {
-                    {{item[f.column]}}
-                  }
-                }
-              </div>
-            </div>
-          }
-          @if (operations) {
-            <div class="td-mrs operations" vAlign="middle">
-              <div class="cel">
-                <span class="cell-title">Operation:</span>
-                <ng-container [ngTemplateOutlet]="operations" [ngTemplateOutletContext]="{$implicit: item}"></ng-container>
-              </div>
-            </div>
-          }
+      @if (!_loading && list.length === 0) {
+      <div class="no-data">{{'NoData'|translate}}</div>
+      } @for (item of list; track item) {
+      <div class="tr-mrs">
+        @for (f of fields; track f) {
+        <div class="td-mrs" vAlign="middle" [style.max-width.px]="f.width" [style.min-width.px]="f.width">
+          <div class="cel">
+            <span class="cell-title">{{f.title}}</span>
+            @switch (f.type) { @case ('profilePicture') { @if (item[f.column]) {
+            <img [src]="item[f.column]" class="img-circle" />
+            } @if (!item[f.column]) {
+            <img src="/images/profile-picture.jpg" class="img-circle" />
+            } } @case ('image') { @if (item[f.column]) {
+            <img [src]="item[f.column]" class="img-cover" />
+            } @if (!item[f.column]) {
+            <img src="/images/default-image.png" class="img-cover" />
+            } } @case ('date') {
+            <span>{{item[f.column]|luxonFormat:'D'}}</span>
+            } @case ('time') {
+            <span>{{item[f.column]|luxonFormat:'HH:ss'}}</span>
+            } @case ('number') {
+            <span>{{item[f.column]|number}}</span>
+            } @case ('dateTime') {
+            <span class="text-wrap">{{item[f.column]|luxonFormat:'F'}}</span>
+            } @case ('yesNo') { @if (item[f.column]) {
+            <span class="tag tag-success">{{'Yes'|translate}}</span>
+            } @if (!item[f.column]) {
+            <span class="tag tag-danger">{{'No'|translate}}</span>
+            } } @case ('localize') {
+            <span class="text-wrap">{{f.localizeKey + item[f.column]| translate }}</span>
+            } @case ('template') { @if (templateMap.has(f.column)) {
+            <ng-container
+              [ngTemplateOutlet]="templateMap.get(f.column)!"
+              [ngTemplateOutletContext]="{ $implicit: item }"></ng-container>
+            } } @default { {{item[f.column]}} } }
+          </div>
         </div>
+        } @if (operations) {
+        <div class="td-mrs operations" vAlign="middle">
+          <div class="cel">
+            <span class="cell-title">Operation:</span>
+            <ng-container [ngTemplateOutlet]="operations" [ngTemplateOutletContext]="{$implicit: item}"></ng-container>
+          </div>
+        </div>
+        }
+      </div>
       }
     </div>
   </div>
 
   @if (_loading) {
-    <div class="loading-container">
-      <div class="loading">{{'Loading...'|translate}}</div>
-    </div>
+  <div class="loading-container">
+    <div class="loading">{{'Loading...'|translate}}</div>
+  </div>
   }
 </div>
+
+@if(lazy == false){
+<pagination [total]="totalCount" [(page)]="page" (onChange)="onPageChange($event)"></pagination>
+}

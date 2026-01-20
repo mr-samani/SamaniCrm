@@ -41,7 +41,7 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
 
   form: FormGroup;
   page = 1;
-  perPage = 10;
+  perPage = AppConst.defaultTablePerPage;
   listSubscription$?: Subscription;
   showFilter = false;
 
@@ -121,6 +121,7 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
   }
 
   onPageChange(ev?: PageEvent) {
+    if (ev) this.perPage = ev.perPage;
     this.getList();
     this.router.navigate(['/panel/products/product-list'], {
       queryParams: {

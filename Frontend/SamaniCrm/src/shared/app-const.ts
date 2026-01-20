@@ -17,4 +17,7 @@ export class AppConst {
   static isDarkMode: boolean;
 
   static mainHeaderFixedTop: boolean = true;
+
+  // default values
+  static defaultTablePerPage = 10;
 }

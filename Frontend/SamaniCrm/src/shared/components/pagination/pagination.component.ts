@@ -1,17 +1,10 @@
-
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Inject,
-  Input,
-  Output,
-} from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { InjectionToken } from '@angular/core';
 import { IPaginationLabel, PaginationLabel } from './labels';
 import { FormsModule } from '@angular/forms';
 import { PaginationLocalize } from '@shared/localize/pagination';
+import { AppConst } from '@shared/app-const';
 
 export const PAGINATION_LABELS = new InjectionToken<IPaginationLabel>('localize pagination label', {
   providedIn: 'root',
@@ -53,14 +46,14 @@ export class PaginationComponent implements AfterViewInit {
     this.totalPages = val;
     this.init();
   }
-  @Input() perPage = 10;
-  @Output() perPageChange = new EventEmitter<number>();
+  @Input() perPage = AppConst.defaultTablePerPage;
   /** start with: 1 */
   @Input() page = 1;
   @Output() pageChange = new EventEmitter<number>();
-  @Output() change = new EventEmitter<PageEvent>();
-  paginationCount = 0;
 
+  @Output() onChange = new EventEmitter<PageEvent>();
+
+  paginationCount = 0;
   pages: any[] = [];
   firstItem = 0;
   lastItem = 0;
@@ -127,8 +120,8 @@ export class PaginationComponent implements AfterViewInit {
   onPageChange(page: number) {
     this.page = page;
     this.setupPage();
-    this.pageChange.emit(this.page);
-    this.change.emit({
+    this.pageChange.emit(page);
+    this.onChange.emit({
       page: this.page,
       perPage: this.perPage,
     });
@@ -138,12 +131,11 @@ export class PaginationComponent implements AfterViewInit {
     this.setupPage();
     if (this.paginationCount < this.page) {
       this.page = 1;
-      this.pageChange.emit(this.page);
     }
-    this.perPageChange.emit(this.perPage);
-    this.change.emit({
+    this.pageChange.emit(this.page);
+    this.onChange.emit({
       page: this.page,
-      perPage: this.perPage,
+      perPage: +this.perPage,
     });
   }
 

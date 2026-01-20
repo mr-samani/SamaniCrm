@@ -16,6 +16,7 @@ import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { CreateOrEditPageMetaDataDialogComponent } from '../create-or-edit-page-meta-data-dialog/create-or-edit-page-meta-data-dialog.component';
+import { AppConst } from '@shared/app-const';
 
 export class PageDtoExtended extends PageDto {
   statusText?: string;
@@ -44,8 +45,8 @@ export class PagesComponent extends AppComponentBase implements OnInit {
   ];
 
   form: FormGroup;
+  perPage = AppConst.defaultTablePerPage;
   page = 1;
-  perPage = 10;
   listSubscription$?: Subscription;
   showFilter = false;
   type: PageTypeEnum = PageTypeEnum.HomePage;
@@ -115,6 +116,7 @@ export class PagesComponent extends AppComponentBase implements OnInit {
   }
 
   onPageChange(ev?: PageEvent) {
+    if (ev) this.perPage = ev.perPage;
     this.getList();
     this.router.navigate(['/panel/content/pages/' + PageTypeEnum[this.type]], {
       queryParams: {

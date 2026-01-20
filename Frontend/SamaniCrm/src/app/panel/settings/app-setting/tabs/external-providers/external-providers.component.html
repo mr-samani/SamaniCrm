@@ -6,12 +6,7 @@
     </button>
   }
 </div>
-<table-view
-  [list]="list"
-  [fields]="fields"
-  [operations]="operations"
-  [loading]="loading"
-  (sortChange)="getList($event)"></table-view>
+<table-view [list]="list" [fields]="fields" [operations]="operations" [loading]="loading" [lazy]="false"></table-view>
 
 <ng-template #operations let-item>
   <div class="d-flex align-items-center gap-1">

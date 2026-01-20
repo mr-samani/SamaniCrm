@@ -17,6 +17,7 @@ import { finalize } from 'rxjs';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { CreateOrEditProductTypeComponent } from '../product-types/create-or-edit/create-or-edit.component';
 import { CreateOrEditProductAttributeComponent } from './create-or-edit/create-or-edit.component';
+import { AppConst } from '@shared/app-const';
 
 @Component({
   selector: 'app-product-attributes',
@@ -42,7 +43,7 @@ export class ProductAttributesComponent extends AppComponentBase implements OnIn
 
   form: FormGroup;
   page = 1;
-  perPage = 10;
+  perPage = AppConst.defaultTablePerPage;
   listSubscription$?: Subscription;
   showFilter = false;
 
@@ -114,6 +115,7 @@ export class ProductAttributesComponent extends AppComponentBase implements OnIn
   }
 
   onPageChange(ev?: PageEvent) {
+    if (ev) this.perPage = ev.perPage;
     this.getList();
     this.router.navigate(['/panel/products/attributes/' + this.productTypeId], {
       queryParams: {

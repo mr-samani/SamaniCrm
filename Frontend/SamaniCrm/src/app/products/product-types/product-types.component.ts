@@ -12,6 +12,7 @@ import {
 } from '@shared/service-proxies';
 import { Subscription, finalize } from 'rxjs';
 import { CreateOrEditProductTypeComponent } from './create-or-edit/create-or-edit.component';
+import { AppConst } from '@shared/app-const';
 
 @Component({
   selector: 'app-product-types',
@@ -34,7 +35,7 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
 
   form: FormGroup;
   page = 1;
-  perPage = 10;
+  perPage = AppConst.defaultTablePerPage;
   listSubscription$?: Subscription;
   showFilter = false;
 
@@ -97,6 +98,7 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
   }
 
   onPageChange(ev?: PageEvent) {
+    if (ev) this.perPage = ev.perPage;
     this.getList();
     this.router.navigate(['/panel/products/types'], {
       queryParams: {

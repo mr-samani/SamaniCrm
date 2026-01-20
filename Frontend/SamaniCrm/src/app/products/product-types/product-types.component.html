@@ -39,7 +39,7 @@
   [loading]="loading"
   (sortChange)="getList($event)"></table-view>
 
-<pagination [total]="totalCount" [(page)]="page" [(perPage)]="perPage" (change)="onPageChange($event)"></pagination>
+<pagination [total]="totalCount" [(page)]="page" (onChange)="onPageChange($event)"></pagination>
 
 <ng-template #operations let-item>
   <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">

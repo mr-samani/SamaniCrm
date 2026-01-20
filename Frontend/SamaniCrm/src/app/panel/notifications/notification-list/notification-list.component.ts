@@ -5,7 +5,6 @@ import { AppComponentBase } from '@app/app-component-base';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
 import {
-  BroadCastNotificationsCommand,
   DeleteNotificationCommand,
   GetAllNotificationQuery,
   NotificationDto,
@@ -18,6 +17,7 @@ import { finalize } from 'rxjs/operators';
 import { NotificationInfoComponent } from '../notification-info/notification-info.component';
 import { SendNotificationDialogComponent } from '../send-notification/send-notification.component';
 import { BroadcastNotificationComponent } from '../broadcast-notification/broadcast-notification.component';
+import { AppConst } from '@shared/app-const';
 
 @Component({
   selector: 'app-notification-list',
@@ -40,7 +40,7 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
   ];
   form: FormGroup;
   page = 1;
-  perPage = 10;
+  perPage = AppConst.defaultTablePerPage;
   listSubscription$?: Subscription;
   showFilter = false;
   constructor(
@@ -113,6 +113,7 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
   }
 
   onPageChange(ev?: PageEvent) {
+    if (ev) this.perPage = ev.perPage;
     this.getList();
     this.router.navigate(['/panel/notifications'], {
       queryParams: {

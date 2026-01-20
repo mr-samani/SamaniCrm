@@ -36,7 +36,7 @@
 
   <table-view [list]="list" [fields]="fields" [operations]="operations" [loading]="loading"></table-view>
 
-  <pagination [total]="totalCount" [(page)]="page" [(perPage)]="perPage" (change)="onPageChange($event)"></pagination>
+  <pagination [total]="totalCount" [(page)]="page" (onChange)="onPageChange($event)"></pagination>
 
   <ng-template #operations let-item>
     @if ([AppPermissions.Pages_Builder, AppPermissions.Pages_Delete] | permissionAny) {

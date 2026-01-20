@@ -88,7 +88,7 @@
     </tbody>
   </table>
 
-  <pagination [total]="totalCount" [(page)]="page" [(perPage)]="perPage" (change)="search($event)"></pagination>
+  <pagination [total]="totalCount" [(page)]="page" (onChange)="search($event)"></pagination>
 </mat-dialog-content>
 <mat-dialog-actions class="d-flex flex-wrap justify-content-between">
   <div class="d-flex gap-2">

@@ -42,7 +42,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
 
   form: FormGroup;
   page = 1;
-  perPage = 10;
+  perPage = AppConst.defaultTablePerPage;
   listSubscription$?: Subscription;
   showFilter = false;
   constructor(
@@ -107,6 +107,7 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
   }
 
   onPageChange(ev?: PageEvent) {
+    if (ev) this.perPage = ev.perPage;
     this.getList();
     this.router.navigate(['/panel/users'], {
       queryParams: {

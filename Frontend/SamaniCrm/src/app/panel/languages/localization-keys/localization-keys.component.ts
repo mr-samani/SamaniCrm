@@ -14,6 +14,7 @@ import { JsonFileReaderService } from '@shared/services/json-file-reader.service
 import { cloneDeep, toLower } from 'lodash-es';
 import { finalize } from 'rxjs/operators';
 import { AddNewLocalizeKeyComponent } from '../add-new-localize-key/add-new-localize-key.component';
+import { AppConst } from '@shared/app-const';
 
 @Component({
   selector: 'app-localization-keys',
@@ -30,8 +31,8 @@ export class LocalizationKeysComponent extends AppComponentBase implements OnIni
   totalCount = 0;
   filterKey: string = '';
   filterValue: string = '';
+  perPage = AppConst.defaultTablePerPage;
   page = 1;
-  perPage = 10;
 
   busy = false;
 
@@ -71,6 +72,7 @@ export class LocalizationKeysComponent extends AppComponentBase implements OnIni
 
   search(ev?: PageEvent, data = this.allLocalizations) {
     if (!ev) this.page = 1;
+    else this.perPage = ev.perPage;
     const filtered = this.allLocalizations.filter((x) => {
       let c = [];
       if (this.filterCategory != undefined) {
