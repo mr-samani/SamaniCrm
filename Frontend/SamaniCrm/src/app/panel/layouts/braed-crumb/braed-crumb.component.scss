@@ -2,11 +2,12 @@
   // border-bottom: 1px var(--border-color) solid;
   background: var(--subheader-bg);
   color: var(--subheader-fg);
-  padding: 10px 15px 0;
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 0.8rem;
+  height: 30px;
+  flex-wrap: wrap;
 
   .tag {
     transition: all 500ms;
