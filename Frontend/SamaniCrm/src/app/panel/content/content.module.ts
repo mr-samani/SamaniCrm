@@ -1,4 +1,3 @@
-import { EditPageComponent } from './edit-page/edit-page.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -16,13 +15,10 @@ import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 import { CreateOrEditPageMetaDataDialogComponent } from './create-or-edit-page-meta-data-dialog/create-or-edit-page-meta-data-dialog.component';
 import {
   providePageBuilder,
-  NgxPageBuilder,
-  NGX_PAGE_BUILDER_FILE_PICKER,
-  NGX_PAGE_BUILDER_HTML_EDITOR,
+  NGX_PAGE_BUILDER_EXPORT_PLUGIN_STORE,
 } from 'ngx-page-builder';
-import { FilePickerService } from './page-builder/file-picker.service';
-import { HtmlEditorService } from './page-builder/html-editor.service';
 import { PagesServiceProxy } from '@shared/service-proxies/api/pages.service';
+import { PluginService } from './page-builder/plugin.service';
 @NgModule({
   declarations: [ContentComponent, PagesComponent],
   imports: [
@@ -43,6 +39,8 @@ import { PagesServiceProxy } from '@shared/service-proxies/api/pages.service';
     PagesServiceProxy,
     providePageBuilder({
       enableHistory: true,
+      enableExportAsPlugin: true,
+      showPlugins: true,
       //  storageType: StorageType.None,
       toolbarConfig: {
         showSaveButton: true,
@@ -54,6 +52,11 @@ import { PagesServiceProxy } from '@shared/service-proxies/api/pages.service';
         showPrintButton: true,
       },
     }),
+    {
+      provide: NGX_PAGE_BUILDER_EXPORT_PLUGIN_STORE,
+      useExisting: PluginService,
+      deps: [],
+    },
   ],
 })
 export class ContentModule {}
