@@ -3,7 +3,7 @@ import {
   Component,
   ContentChildren,
   EventEmitter,
-  Injector,
+  
   Input,
   OnInit,
   Output,
@@ -69,8 +69,8 @@ export class TableViewComponent extends AppComponentBase implements OnInit, Afte
   perPage = AppConst.defaultTablePerPage;
   page = 1;
   totalCount = 0;
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
   }
 
   ngOnInit(): void {}

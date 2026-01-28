@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injector, Input, OnInit, Output, forwardRef } from '@angular/core';
+import { Component, EventEmitter,  Input, OnInit, Output, forwardRef } from '@angular/core';
 import {
   NG_VALUE_ACCESSOR,
   NG_VALIDATORS,
@@ -48,10 +48,9 @@ export class FileSelectorComponent extends AppComponentBase implements OnInit, C
   private _onChange = (t: FileManagerDto) => {};
   private _onTouched = () => {};
   constructor(
-    injector: Injector,
     private fileManagerService: FileManagerService,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit(): void {}

@@ -1,4 +1,4 @@
-import { Component, Injector, Input, OnInit } from '@angular/core';
+import { Component,  Input, OnInit } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 import { finalize } from 'rxjs';
@@ -37,10 +37,9 @@ export class CacheComponent extends AppComponentBase implements OnInit {
   totalSize = 0;
   loading = true;
   constructor(
-    injector: Injector,
     private maintenanceService: MaintenanceServiceProxy,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit() {

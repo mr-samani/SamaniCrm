@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 
 @Component({
@@ -10,8 +10,8 @@ import { AppComponentBase } from '@app/app-component-base';
 export class AppSettingComponent extends AppComponentBase implements OnInit {
   loading = true;
 
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
     this.breadcrumb.list = [
       { name: this.l('Settings'), url: '/panel/setting' },
       { name: this.l('AppSetting'), url: '/panel/app-setting' },

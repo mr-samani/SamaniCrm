@@ -28,8 +28,8 @@ class MenuModel {
 
 @Injectable()
 export class SettingMenuService extends AppComponentBase {
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
   }
   menuList: MenuModel[] = [
     new MenuModel(this.l('System'), AppPermissions.Administrator, '', '', '', [

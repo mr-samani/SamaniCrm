@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -25,12 +25,11 @@ export class EditNoteWidgetComponent extends AppComponentBase implements OnInit 
   widget: Widget<WidgetNoteData>;
   form: FormGroup;
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) private _data: { item: Widget },
     private dialogRef: MatDialogRef<EditNoteWidgetComponent>,
     private dashboardService: DasboardServiceProxy,
   ) {
-    super(injector);
+    super();
     this.widget = _data.item;
     this.form = this.fb.group({
       title: [this.widget.data?.title, [Validators.required]],

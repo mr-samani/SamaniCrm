@@ -10,7 +10,7 @@ import { menus } from './menus/menus';
 })
 export class SideMenuComponent extends AppComponentBase {
   menuItems = menus;
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
   }
 }

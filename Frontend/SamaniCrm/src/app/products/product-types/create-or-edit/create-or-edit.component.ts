@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -24,12 +24,11 @@ export class CreateOrEditProductTypeComponent extends AppComponentBase implement
   translations?: ProductTypeTranslationDto[];
   id: string;
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: { id: string },
     private dialogRef: MatDialogRef<CreateOrEditProductTypeComponent>,
     private productService: ProductServiceProxy,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       translations: this.fb.array([]),
     });

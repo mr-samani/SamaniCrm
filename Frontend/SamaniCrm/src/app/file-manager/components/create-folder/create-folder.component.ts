@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { finalize } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -18,12 +18,11 @@ export class CreateFolderDialogComponent extends AppComponentBase implements OnI
   parentId = '';
   basePath = AppConst.apiUrl;
   constructor(
-    injector: Injector,
     private matDialogRef: MatDialogRef<CreateFolderDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: any,
     private fileManagerService: FileManagerServiceProxy,
   ) {
-    super(injector);
+    super();
     this.parentId = data.parentId;
   }
 

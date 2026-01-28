@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -6,16 +6,12 @@ import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
 import {
   DeleteProductAttributeCommand,
-  DeleteProductTypeCommand,
   GetProductAttributesQuery,
-  GetProductTypesQuery,
   ProductAttributeDto,
   ProductServiceProxy,
-  ProductTypeDto,
 } from '@shared/service-proxies';
 import { finalize } from 'rxjs';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { CreateOrEditProductTypeComponent } from '../product-types/create-or-edit/create-or-edit.component';
 import { CreateOrEditProductAttributeComponent } from './create-or-edit/create-or-edit.component';
 import { AppConst } from '@shared/app-const';
 
@@ -51,11 +47,10 @@ export class ProductAttributesComponent extends AppComponentBase implements OnIn
   productTypeName = '';
 
   constructor(
-    injector: Injector,
     private productService: ProductServiceProxy,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
     this.productTypeName = this.route.snapshot.queryParams['name'];
     this.productTypeId = this.route.snapshot.params['productTypeId'];
     this.breadcrumb.list = [

@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 
 @Component({
@@ -12,8 +12,8 @@ export class MaintenanceComponent extends AppComponentBase implements OnInit {
 
   isSaving = false;
 
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
 
     this.breadcrumb.list = [
       { name: this.l('Settings'), url: '/panel/setting' },

@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { finalize, Subscription } from 'rxjs';
 import { ProductServiceProxy } from '@shared/service-proxies/api/product.service';
@@ -35,13 +35,12 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
 
   baseUrl = AppConst.fileServerUrl;
   constructor(
-    injector: Injector,
     private productService: ProductServiceProxy,
     private matDialog: MatDialog,
     private downloadService: DownloadService,
     private jsonFileReaderService: JsonFileReaderService,
   ) {
-    super(injector);
+    super();
     this.breadcrumb.list = [{ name: this.l('ProductCategories'), url: '/panel/products/categories' }];
   }
 

@@ -8,7 +8,7 @@ import { AppComponentBase } from '@app/app-component-base';
   standalone: false,
 })
 export class FooterComponent extends AppComponentBase {
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
   }
 }

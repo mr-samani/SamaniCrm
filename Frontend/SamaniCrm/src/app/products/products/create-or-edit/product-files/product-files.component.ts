@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injector, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter,  Input, OnInit, Output } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { FileManagerDto } from '@app/file-manager/models/file-manager-dto';
 import { IOptions } from '@app/file-manager/options.interface';
@@ -20,8 +20,8 @@ export class ProductFilesComponent extends AppComponentBase implements OnInit {
     type: 'All',
     showPreview: false,
   };
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
   }
 
   ngOnInit() {}

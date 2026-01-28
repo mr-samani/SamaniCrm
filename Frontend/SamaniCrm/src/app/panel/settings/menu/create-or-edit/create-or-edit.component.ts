@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -21,12 +21,11 @@ export class CreateOrEditMenuComponent extends AppComponentBase implements OnIni
   translations?: MenuTranslationsDTO[];
   id: string;
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: { id: string },
     private dialogRef: MatDialogRef<CreateOrEditMenuComponent>,
     private menuService: MenuServiceProxy,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       url: ['', [Validators.maxLength(500)]],
       icon: ['', [Validators.maxLength(200)]],

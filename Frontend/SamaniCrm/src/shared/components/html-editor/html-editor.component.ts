@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Injector, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef,  Input, OnInit, Output } from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -79,9 +79,8 @@ export class HtmlEditorComponent extends AppComponentBase implements OnInit, Con
   constructor(
     private matDialog: MatDialog,
     public tusUploadService: TusUploadService,
-    injector: Injector,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit(): void {

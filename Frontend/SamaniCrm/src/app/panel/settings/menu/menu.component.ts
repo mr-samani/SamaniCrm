@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { MenuDTO, MenuServiceProxy, ReorderItem, ReorderMenuCommand } from '@shared/service-proxies';
 import { finalize } from 'rxjs';
@@ -15,11 +15,9 @@ export class MenuComponent extends AppComponentBase implements OnInit {
   loading = true;
   isSaving = false;
   constructor(
-    injector: Injector,
-
     private menuService: MenuServiceProxy,
   ) {
-    super(injector);
+    super();
     this.breadcrumb.list = [
       { name: this.l('Settings'), url: '/panel/setting' },
       { name: this.l('Menu'), url: '/panel/menu' },

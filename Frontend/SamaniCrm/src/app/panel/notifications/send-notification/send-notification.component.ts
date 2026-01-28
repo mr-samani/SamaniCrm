@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -21,12 +21,11 @@ export class SendNotificationDialogComponent extends AppComponentBase implements
   notifyInfo?: NotificationDto;
   form: FormGroup;
   constructor(
-    injector: Injector,
     private dialogRef: MatDialogRef<SendNotificationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) _data: NotificationDto,
     private notificationService: NotificationServiceProxy,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       user: ['', [Validators.required]],
       title: ['', [Validators.required]],

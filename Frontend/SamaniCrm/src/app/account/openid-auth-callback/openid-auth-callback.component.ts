@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { TokenService } from '@shared/services/token.service';
 
@@ -9,8 +9,8 @@ import { TokenService } from '@shared/services/token.service';
   standalone: false,
 })
 export class OpenidAuthCallbackComponent extends AppComponentBase implements OnInit {
-  constructor(injector: Injector, tokenService: TokenService) {
-    super(injector);
+  constructor(tokenService: TokenService) {
+    super();
     this.route.queryParams.subscribe((params) => {
       const token = params['token'];
       const refreshToken = params['refreshToken'];

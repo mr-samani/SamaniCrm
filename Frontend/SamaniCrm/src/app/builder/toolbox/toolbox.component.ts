@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { BlockTypeEnum, BlockDefinition } from '../blocks/block-registry';
 import { FormBuilderService } from '../services/form-builder.service';
@@ -12,11 +12,10 @@ import { PageBuilderServiceProxy } from '@shared/service-proxies/api/page-builde
 })
 export class ToolboxComponent extends AppComponentBase implements OnInit {
   constructor(
-    injector: Injector,
     public b: FormBuilderService,
     private pageBuilderService: PageBuilderServiceProxy,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit() {}
@@ -28,13 +27,13 @@ export class ToolboxComponent extends AppComponentBase implements OnInit {
   deleteCustomBlock(t: BlockDefinition) {
     if (!t.canDelete || !t.id) return;
 
-    this.confirmMessage(this.l('AreYouSureForDelete'), t.name ?? '').then((r) => {
-      if (r.isConfirmed) {
-        this.pageBuilderService.deleteCustomBlock(t.id).subscribe((result) => {
-          this.notify.success(this.l('DeleteSuccessfully'));
-          this.b.getCustomBlocks();
-        });
-      }
-    });
+    // this.confirmMessage(this.l('AreYouSureForDelete'), t.name ?? '').then((r) => {
+    //   if (r.isConfirmed) {
+    //     this.pageBuilderService.deleteCustomBlock(t.id).subscribe((result) => {
+    //       this.notify.success(this.l('DeleteSuccessfully'));
+    //       this.b.getCustomBlocks();
+    //     });
+    //   }
+    // });
   }
 }

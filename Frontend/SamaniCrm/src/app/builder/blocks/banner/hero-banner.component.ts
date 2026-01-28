@@ -1,4 +1,4 @@
-import { Component, Injector, Input } from '@angular/core';
+import { Component,  Input } from '@angular/core';
 
 import { BlockBase } from '../block-base';
 
@@ -11,7 +11,7 @@ import { BlockBase } from '../block-base';
   `,
 })
 export class BlockHeroBannerComponent extends BlockBase {
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
   }
 }

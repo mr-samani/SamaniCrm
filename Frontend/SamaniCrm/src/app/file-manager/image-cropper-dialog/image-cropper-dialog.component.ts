@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, Injector, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject,  OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ImageCroppedEvent, OutputFormat, base64ToFile } from 'ngx-image-cropper';
 import { TusUploadService } from '../tus-upload.service';
@@ -67,10 +67,9 @@ export class ImageCropperDialogComponent extends AppComponentBase implements OnI
   constructor(
     private matDialogRef: MatDialogRef<ImageCropperDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private _data: ImageCropperDialogData,
-    injector: Injector,
     public tusUpoadService: TusUploadService,
   ) {
-    super(injector);
+    super();
     this.uploadWithTus = _data.uploadWithTus === false ? false : true;
     this.usage = _data.usage;
     this.additionalId = _data.additionalId;

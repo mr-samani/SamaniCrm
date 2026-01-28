@@ -1,5 +1,5 @@
 import { CommonModule, NgComponentOutlet } from '@angular/common';
-import { Component, ComponentRef, inject, Injector, OnInit, Type } from '@angular/core';
+import { Component, ComponentRef, inject,  OnInit, Type } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AppComponentBase } from '@app/app-component-base';
@@ -41,8 +41,8 @@ export class DashboardComponent extends AppComponentBase implements OnInit {
   };
   private dashboardService = inject(DasboardServiceProxy);
   private dialog = inject(MatDialog);
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
   }
 
   ngOnInit() {

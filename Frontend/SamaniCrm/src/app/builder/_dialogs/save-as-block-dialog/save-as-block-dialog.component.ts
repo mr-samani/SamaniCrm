@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -7,7 +7,7 @@ import { BlockDefinition } from '@app/builder/blocks/block-registry';
 import { getBlocksAsString } from '@app/builder/helpers/get-blocks-as-string';
 import { TranslateModule } from '@ngx-translate/core';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
-import { CreateCustomBlockCommand, PageBuilderServiceProxy } from '@shared/service-proxies';
+import { CreatePluginCommand, PageBuilderServiceProxy } from '@shared/service-proxies';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -25,12 +25,11 @@ export class SaveAsBlockDialogComponent extends AppComponentBase implements OnIn
 
   form: FormGroup;
   constructor(
-    injector: Injector,
     private matDialogRef: MatDialogRef<SaveAsBlockDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { block: BlockDefinition },
     private pageBuilderService: PageBuilderServiceProxy,
   ) {
-    super(injector);
+    super();
     let block = this.data.block;
     this.form = this.fb.group({
       name: ['', [Validators.required]],
@@ -53,10 +52,10 @@ export class SaveAsBlockDialogComponent extends AppComponentBase implements OnIn
     }
     this.saving = true;
     const formValue = this.form.value;
-    const input = new CreateCustomBlockCommand();
+    const input = new CreatePluginCommand();
     input.init(formValue);
     this.pageBuilderService
-      .saveAsBlockDefinition(input)
+      .createPlugin(input)
       .pipe(finalize(() => (this.saving = false)))
       .subscribe((result) => {
         this.notify.success(this.l('SavedSuccessfully'));

@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -24,12 +24,11 @@ export class CreateDashboardComponent extends AppComponentBase implements OnInit
   isUpdate: boolean;
   saving = false;
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: { id?: string },
     private dialogRef: MatDialogRef<CreateDashboardComponent>,
     private dashboardService: DasboardServiceProxy,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(100)]],
       order: ['', [Validators.required]],

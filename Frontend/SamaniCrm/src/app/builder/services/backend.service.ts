@@ -19,9 +19,8 @@ export class FormBuilderBackendService extends AppComponentBase {
   constructor(
     private pageService: PagesServiceProxy,
     private b: FormBuilderService,
-    injector: Injector,
   ) {
-    super(injector);
+    super();
   }
 
   getPageInfo() {

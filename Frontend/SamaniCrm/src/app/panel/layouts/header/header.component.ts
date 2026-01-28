@@ -1,4 +1,4 @@
-import { Component, ElementRef, Injector, ViewChild } from '@angular/core';
+import { Component, ElementRef,  ViewChild } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { AppConst } from '@shared/app-const';
@@ -21,11 +21,10 @@ export class HeaderComponent extends AppComponentBase {
 
   @ViewChild('navbarCollapse') navbarCollapse!: ElementRef;
   constructor(
-    injector: Injector,
     public colorSchemaService: ColorSchemaService,
     private fileManager: FileManagerService,
   ) {
-    super(injector);
+    super();
     this.authService.currentUser.subscribe((u) => {
       this.user = u;
     });

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Injector, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component,  OnDestroy, ViewEncapsulation } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import grapesjs, { Editor } from 'grapesjs';
 import gjsPresetWebpage from 'grapesjs-preset-webpage';
@@ -32,11 +32,10 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
   pageInfo?: PageDto;
 
   constructor(
-    injector: Injector,
     private pageService: PagesServiceProxy,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
     this.panelService.showBreadCrumb = false;
     this.pageId = this.route.snapshot.params['pageId'];
   }

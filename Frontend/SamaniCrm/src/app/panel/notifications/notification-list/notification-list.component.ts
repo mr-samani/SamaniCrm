@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -44,11 +44,10 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
   listSubscription$?: Subscription;
   showFilter = false;
   constructor(
-    injector: Injector,
     private notificationService: NotificationServiceProxy,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
     this.breadcrumb.list = [{ name: this.l('Notifications'), url: '/panel/notifications' }];
     this.form = this.fb.group({
       filter: [''],

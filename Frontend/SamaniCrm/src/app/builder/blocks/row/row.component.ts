@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { DynamicRendererComponent } from '../dynamic-renderer.component';
 import { BlockBase } from '../block-base';
 import { BlockDefinition, BlockTypeEnum } from '../block-registry';
@@ -13,8 +13,8 @@ import { BlockGeneralHtmlTagsComponent } from '../general-html-tags/general-html
   styleUrl: './row.component.scss',
 })
 export class BlockRowComponent extends BlockBase implements OnInit {
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
   }
 
   ngOnInit() {

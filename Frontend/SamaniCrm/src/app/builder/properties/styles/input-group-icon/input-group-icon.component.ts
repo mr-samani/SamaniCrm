@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Injector, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef,  Input, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 import { InputGroupItem } from './InputGroupItem';
@@ -27,8 +27,8 @@ export class InputGroupIconComponent extends AppComponentBase implements Control
   onChange = (_: string | undefined) => {};
   onTouched = () => {};
 
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
   }
 
   writeValue(val: string | undefined): void {

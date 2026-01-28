@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@app/app-component-base';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
@@ -23,11 +23,10 @@ export class RoleListComponent extends AppComponentBase implements OnInit {
     { column: 'displayName', title: this.l('DisplayName') },
   ];
   constructor(
-    injector: Injector,
     private roleService: RoleServiceProxy,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit(): void {

@@ -1,21 +1,16 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component,  OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
 import { PagesServiceProxy } from '@shared/service-proxies/api/pages.service';
-import { PageDto } from '@shared/service-proxies/model/page-dto';
 import { finalize } from 'rxjs/operators';
 import {
   IPage,
-  IPageBuilderDto,
   NGX_PAGE_BUILDER_FILE_PICKER,
   NGX_PAGE_BUILDER_HTML_EDITOR,
   NgxPageBuilder,
-  providePageBuilder,
   NGX_PAGE_BUILDER_STORAGE_SERVICE,
-  IPagebuilderOutput,
   IStyleSheetFile,
 } from 'ngx-page-builder';
-import { style } from '@angular/animations';
 import { PageStorageService } from '../page-builder/page-storage.service';
 import { FilePickerService } from '../page-builder/file-picker.service';
 import { HtmlEditorService } from '../page-builder/html-editor.service';
@@ -42,12 +37,11 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
 
   @ViewChild('pageBuilder') pageBuilder!: NgxPageBuilder;
   constructor(
-    injector: Injector,
     private pageService: PagesServiceProxy,
     private cd: ChangeDetectorRef,
     public sharedPageDataService: SharedPageDataService,
   ) {
-    super(injector);
+    super();
     this.pageId = this.route.snapshot.params['id'];
   }
 

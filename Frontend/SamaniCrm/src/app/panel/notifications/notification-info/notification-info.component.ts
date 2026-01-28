@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { TranslateModule } from '@ngx-translate/core';
@@ -19,12 +19,11 @@ export class NotificationInfoComponent extends AppComponentBase implements OnIni
   id = '';
   notifyInfo?: NotificationDto;
   constructor(
-    injector: Injector,
     private dialogRef: MatDialogRef<NotificationInfoComponent>,
     @Inject(MAT_DIALOG_DATA) _data: NotificationDto,
     private notificationService: NotificationServiceProxy,
   ) {
-    super(injector);
+    super();
     this.id = _data.id!;
   }
 

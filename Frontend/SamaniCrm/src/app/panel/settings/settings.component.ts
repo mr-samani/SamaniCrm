@@ -10,10 +10,9 @@ import { SettingMenuService } from './setting.menu.service';
 })
 export class SettingsComponent extends AppComponentBase {
   constructor(
-    injector: Injector,
     public menuService: SettingMenuService,
   ) {
-    super(injector);
+    super();
     this.breadcrumb.list = [{ name: this.l('Settings'), url: '/panel/setting' }];
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -24,12 +24,11 @@ export class CreateOrEditRoleComponent extends AppComponentBase implements OnIni
   saving = false;
   form: FormGroup;
   constructor(
-    injector: Injector,
     private dialogRef: MatDialogRef<CreateOrEditRoleComponent>,
     @Inject(MAT_DIALOG_DATA) private _data: { role?: RoleDTO },
     private roleService: RoleServiceProxy,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       id: [''],
       roleName: ['', [Validators.required, CustomValidators.checkEnglishAndNumberCharacters]],

@@ -12,10 +12,9 @@ export class TusUploadService extends AppComponentBase {
   uploadedUrl = '';
   chunckSize = 1 * 1024 * 1024; // 1MB
   constructor(
-    injector: Injector,
     private _tokenService: TokenService,
   ) {
-    super(injector);
+    super();
   }
 
   reset() {

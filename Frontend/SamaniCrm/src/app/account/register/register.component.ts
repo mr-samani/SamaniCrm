@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
@@ -14,8 +14,8 @@ import { finalize } from 'rxjs';
 export class RegisterComponent extends AppComponentBase implements OnInit {
   registerForm: FormGroup;
   loading = false;
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
     this.registerForm = this.fb.group({
       name: ['', [Validators.required]],
       username: ['', [Validators.required]],

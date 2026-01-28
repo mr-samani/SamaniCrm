@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Inject, Injector, OnInit, DOCUMENT } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Inject,  OnInit, DOCUMENT } from '@angular/core';
 import { NgxDragDropKitModule } from 'ngx-drag-drop-kit';
 import { BlockDefinition } from '../block-registry';
 import { FormBuilderService } from '@app/builder/services/form-builder.service';
@@ -22,12 +22,11 @@ export class BlockGeneralHtmlTagsComponent implements OnInit {
   block!: BlockDefinition;
   loopIndex!: number;
   constructor(
-    injector: Injector,
     public b: FormBuilderService,
     @Inject(DOCUMENT) private _doc: Document,
     private el: ElementRef<HTMLElement>,
   ) {
-    // super(injector);
+    // super();
   }
 
   ngOnInit() {

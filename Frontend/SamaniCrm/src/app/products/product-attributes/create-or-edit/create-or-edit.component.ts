@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -26,12 +26,11 @@ export class CreateOrEditProductAttributeComponent extends AppComponentBase impl
   id: string;
   productTypeId: string;
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: { id: string; productTypeId: string },
     private dialogRef: MatDialogRef<CreateOrEditProductAttributeComponent>,
     private productService: ProductServiceProxy,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       dataType: [ProductAttributeDataTypeEnum.String, [Validators.required]],
       isRequired: [true],

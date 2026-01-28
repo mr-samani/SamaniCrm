@@ -2,7 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  Injector,
+  
   OnDestroy,
   OnInit,
   ViewEncapsulation,
@@ -30,10 +30,9 @@ export class BuilderComponent extends AppComponentBase implements OnInit, AfterV
   constructor(
     public b: FormBuilderService,
     private backendService: FormBuilderBackendService,
-    injector: Injector,
     private cd: ChangeDetectorRef,
   ) {
-    super(injector);
+    super();
     this.backendService.pageId = this.route.snapshot.params['pageId'];
     this.rightSideWidth = +(localStorage.getItem('builderRightSide') || 220);
     this.propertiesWidth = +(localStorage.getItem('builderProperties') || 340);

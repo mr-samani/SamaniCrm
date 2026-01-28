@@ -1,4 +1,4 @@
-import { Component, forwardRef, Injector, Input, OnInit } from '@angular/core';
+import { Component, forwardRef,  Input, OnInit } from '@angular/core';
 import {
   NG_VALUE_ACCESSOR,
   NG_VALIDATORS,
@@ -37,10 +37,9 @@ export class CaptchaComponent extends AppComponentBase implements OnInit, Contro
   image = '';
   loading = true;
   constructor(
-    injector: Injector,
     private captchaService: CaptchaServiceProxy,
   ) {
-    super(injector);
+    super();
   }
   private _onChange = (t: { captchaKey: string; captchaText: string }) => {};
   private _onTouched = () => {};

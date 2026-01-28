@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -24,12 +24,11 @@ export class AddNewLocalizeKeyComponent extends AppComponentBase implements OnIn
   localizations?: { value: string; culture: string }[];
   culture: string;
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: { culture: string },
     private dialogRef: MatDialogRef<AddNewLocalizeKeyComponent>,
     private languageService: LanguageServiceProxy,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       key: ['', [Validators.required, Validators.maxLength(500)]],
       category: [LocalizationCategoryEnum.Other, [Validators.maxLength(200)]],

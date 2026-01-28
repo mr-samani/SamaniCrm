@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component,  OnInit, ViewEncapsulation } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { FormBuilderService } from '../services/form-builder.service';
 import { BlockData, BlockTypeEnum } from '../blocks/block-registry';
@@ -15,12 +15,11 @@ export class PropertiesComponent extends AppComponentBase implements OnInit {
   tab: 'General' | 'Advanced' = 'General';
 
   constructor(
-    injector: Injector,
     private ch: ChangeDetectorRef,
     public b: FormBuilderService,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit() {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injector, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter,  Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { FileManagerDto } from '@app/file-manager/models/file-manager-dto';
 import {
@@ -42,11 +42,10 @@ export class FileListComponent extends AppComponentBase implements OnInit, OnDes
   defaultFolderIcon = AppConst.apiUrl + FileManagetConsts.DefaultFolderIcon;
   defaultFileIcon = AppConst.apiUrl + FileManagetConsts.DefaultFileIcon;
   constructor(
-    injector: Injector,
     private fileManagerService: FileManagerServiceProxy,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit() {

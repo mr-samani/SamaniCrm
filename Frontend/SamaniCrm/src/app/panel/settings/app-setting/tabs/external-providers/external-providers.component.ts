@@ -1,4 +1,4 @@
-import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
+import { Component,  OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
@@ -33,11 +33,10 @@ export class ExternalProvidersComponent extends AppComponentBase implements OnIn
   showFilter = false;
 
   constructor(
-    injector: Injector,
     private externalProviderService: ExternalProvidersServiceProxy,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
 
     this.getList();
   }

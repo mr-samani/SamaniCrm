@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -54,12 +54,11 @@ export class CreateOrEditExternalProviderComponent extends AppComponentBase impl
   providerId = '';
 
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: { provider?: ExternalProviderDto },
     private dialogRef: MatDialogRef<CreateOrEditExternalProviderComponent>,
     private service: ExternalProvidersServiceProxy,
   ) {
-    super(injector);
+    super();
     this.isEditMode = !!_data?.provider;
     if (this.isEditMode && _data.provider) {
       this.providerId = _data.provider.id!;

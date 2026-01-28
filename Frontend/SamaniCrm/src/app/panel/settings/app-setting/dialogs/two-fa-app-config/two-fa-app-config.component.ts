@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { AccountServiceProxy, Verify2FARequest } from '@shared/service-proxies';
@@ -18,12 +18,11 @@ export class TwoFaAppConfigComponent extends AppComponentBase implements OnInit 
   secret = '';
 
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: any,
     private dialogRef: MatDialogRef<TwoFaAppConfigComponent>,
     private accountService: AccountServiceProxy,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit() {

@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
@@ -20,12 +20,11 @@ export class SelectIconDialogComponent extends AppComponentBase implements OnIni
   selected?: string;
   baseUrl = AppConst.apiUrl;
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: any,
     private matDialogRef: MatDialogRef<SelectIconDialogComponent>,
     private fileManagerService: FileManagerServiceProxy,
   ) {
-    super(injector);
+    super();
     this.folderId = _data.id;
   }
 

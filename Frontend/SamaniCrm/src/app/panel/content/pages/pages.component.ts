@@ -1,10 +1,7 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { finalize, Subscription } from 'rxjs';
-import { PageModel } from '../models/page';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
-import { Apis } from '@shared/apis';
-import { FileManagerService } from '@app/file-manager/file-manager.service';
 import {
   DeletePageCommand,
   GetFilteredPagesQuery,
@@ -51,11 +48,10 @@ export class PagesComponent extends AppComponentBase implements OnInit {
   showFilter = false;
   type: PageTypeEnum = PageTypeEnum.HomePage;
   constructor(
-    injector: Injector,
     private pageService: PagesServiceProxy,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       filter: [''],
     });

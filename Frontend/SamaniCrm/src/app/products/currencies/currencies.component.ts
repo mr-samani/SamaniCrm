@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -37,11 +37,10 @@ export class CurrenciesComponent extends AppComponentBase implements OnInit {
   showFilter = false;
 
   constructor(
-    injector: Injector,
     private productService: ProductServiceProxy,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
     this.breadcrumb.list = [{ name: this.l('Currencies'), url: '/panel/products/currencies' }];
     this.form = this.fb.group({
       filter: [''],

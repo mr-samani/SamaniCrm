@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { ExternalLoginCallbackCommand } from '@shared/service-proxies/model/external-login-callback-command';
 
@@ -14,8 +14,8 @@ export class ExternalLoginCalbackComponent extends AppComponentBase implements O
   loading = true;
   returnUrl = '';
   provider = '';
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
     this.provider = this.route.snapshot.params['provider'];
     this.code = this.route.snapshot.queryParams['code'];
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'];

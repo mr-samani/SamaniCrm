@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { FormGroup, Validators } from '@angular/forms';
@@ -16,12 +16,11 @@ export class CreateOrEditCurrencyComponent extends AppComponentBase implements O
   isUpdate: boolean;
   saving = false;
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: CurrencyDto,
     private dialogRef: MatDialogRef<CreateOrEditCurrencyComponent>,
     private productService: ProductServiceProxy,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       id: [''],
       currencyCode: ['', [Validators.required, Validators.maxLength(5)]],

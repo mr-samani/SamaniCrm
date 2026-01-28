@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
@@ -39,7 +39,6 @@ export class LocalizationKeysComponent extends AppComponentBase implements OnIni
   importCategory = LocalizationCategoryEnum.Other;
   filterCategory?: LocalizationCategoryEnum;
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: { culture: string },
     private matDialogRef: MatDialogRef<LocalizationKeysComponent>,
     private languageService: LanguageServiceProxy,
@@ -47,7 +46,7 @@ export class LocalizationKeysComponent extends AppComponentBase implements OnIni
     private jsonFileReaderService: JsonFileReaderService,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
     this.culture = _data.culture;
   }
 

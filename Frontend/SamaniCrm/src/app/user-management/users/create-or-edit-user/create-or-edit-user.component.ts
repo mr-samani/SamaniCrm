@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -36,14 +36,13 @@ export class CreateOrEditUserComponent extends AppComponentBase implements OnIni
   languageList = AppConst.languageList;
   passwordPolicy?: PasswordComplexityDto;
   constructor(
-    injector: Injector,
     private dialogRef: MatDialogRef<CreateUserCommand>,
     @Inject(MAT_DIALOG_DATA) private _data: { user?: UserDTO },
     private userService: UserServiceProxy,
     private roleService: RoleServiceProxy,
     private securitySettingsService: SecuritySettingsServiceProxy,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       id: [''],
       userName: ['', [Validators.required, CustomValidators.checkEnglishAndNumberCharacters]],

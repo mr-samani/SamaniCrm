@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { TreeViewModel } from '@shared/components/tree-view/tree-view.model';
 import { EditRolePermissionsCommand, RoleServiceProxy } from '@shared/service-proxies';
@@ -19,10 +19,9 @@ export class RolePermissionsListComponent extends AppComponentBase implements On
   selectedBasePermission: TreeViewModel[] = [];
   roleName!: string;
   constructor(
-    injector: Injector,
     private roleService: RoleServiceProxy,
   ) {
-    super(injector);
+    super();
     this.roleId = this.route.snapshot.params['roleId'];
     this.breadcrumb.list = [
       { name: this.l('Settings'), url: '/panel/setting' },

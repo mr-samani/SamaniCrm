@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject,  OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { finalize } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FileManagerDto } from '../models/file-manager-dto';
@@ -34,14 +34,13 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
   @ViewChild('fileList', { static: false }) _fileList?: FileListComponent;
 
   constructor(
-    injector: Injector,
     private dialogRef: MatDialogRef<FileManagerComponent>,
     @Inject(MAT_DIALOG_DATA) _data: IOptions,
     private matDialog: MatDialog,
     private fileManagerService: FileManagerServiceProxy,
     public tusUpoadService: TusUploadService,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit(): void {

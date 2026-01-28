@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Injector, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef,  Input, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 import { SizeUnit, SizeUnitList } from '../models/SizeUnit';
@@ -39,8 +39,8 @@ export class InputStyleComponent extends AppComponentBase implements ControlValu
   onChange = (_: string) => {};
   onTouched = () => {};
 
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
   }
 
   writeValue(val: string | undefined): void {

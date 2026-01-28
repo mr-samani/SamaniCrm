@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { ViewModeEnum } from '../models/view-mode.enum';
 import { FormBuilderService } from '../services/form-builder.service';
@@ -16,9 +16,8 @@ export class ToolbarComponent extends AppComponentBase implements OnInit {
     public b: FormBuilderService,
     public history: HistoryService,
     public backendService: FormBuilderBackendService,
-    injector: Injector,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit() {}
