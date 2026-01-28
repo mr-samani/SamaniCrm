@@ -36,7 +36,6 @@ model/cache-entry-dto-list-api-response.ts
 model/cache-entry-dto.ts
 model/captcha-dto.ts
 model/change-active-menu-command.ts
-model/create-custom-block-command.ts
 model/create-external-provider-command.ts
 model/create-folder-command.ts
 model/create-or-edit-language-command.ts
@@ -52,11 +51,10 @@ model/create-or-update-product-attribute-command.ts
 model/create-or-update-product-category-command.ts
 model/create-or-update-product-command.ts
 model/create-or-update-product-type-command.ts
+model/create-plugin-command.ts
 model/create-user-command.ts
 model/currency-dto-list-api-response.ts
 model/currency-dto.ts
-model/custom-block-dto-list-api-response.ts
-model/custom-block-dto.ts
 model/dashboard-dto-list-api-response.ts
 model/dashboard-dto.ts
 model/dashboard-item-dto-list-api-response.ts
@@ -89,6 +87,7 @@ model/generate-two-factor-code-dto.ts
 model/get-all-notification-query.ts
 model/get-categories-for-admin-query.ts
 model/get-filtered-pages-query.ts
+model/get-plugin-query.ts
 model/get-product-attributes-query.ts
 model/get-product-categories-query.ts
 model/get-product-types-query.ts
@@ -138,6 +137,9 @@ model/paged-product-categories-dto-api-response.ts
 model/paged-product-categories-dto.ts
 model/password-complexity-dto-api-response.ts
 model/password-complexity-dto.ts
+model/plugin-dto-paginated-result-api-response.ts
+model/plugin-dto-paginated-result.ts
+model/plugin-dto.ts
 model/price-type-enum.ts
 model/product-attribute-data-type-enum.ts
 model/product-attribute-dto-api-response.ts

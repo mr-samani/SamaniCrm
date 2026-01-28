@@ -19,6 +19,7 @@ import {
 } from 'ngx-page-builder';
 import { PagesServiceProxy } from '@shared/service-proxies/api/pages.service';
 import { PluginService } from './page-builder/plugin.service';
+import { PageBuilderServiceProxy } from '@shared/service-proxies/api/page-builder.service';
 @NgModule({
   declarations: [ContentComponent, PagesComponent],
   imports: [
@@ -36,6 +37,8 @@ import { PluginService } from './page-builder/plugin.service';
     CreateOrEditPageMetaDataDialogComponent,
   ],
   providers: [
+    PluginService,
+    PageBuilderServiceProxy,
     PagesServiceProxy,
     providePageBuilder({
       enableHistory: true,
