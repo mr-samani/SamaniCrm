@@ -13,6 +13,7 @@ import {
   providePageBuilder,
   NGX_PAGE_BUILDER_STORAGE_SERVICE,
   IPagebuilderOutput,
+  IStyleSheetFile,
 } from 'ngx-page-builder';
 import { style } from '@angular/animations';
 import { PageStorageService } from '../page-builder/page-storage.service';
@@ -37,7 +38,7 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
 
   pageId = '';
   data: IPage[] = [];
-  styles = '';
+  styles: IStyleSheetFile[] = [];
 
   @ViewChild('pageBuilder') pageBuilder!: NgxPageBuilder;
   constructor(
@@ -71,7 +72,12 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
       .pipe(finalize(() => this.hideMainLoading()))
       .subscribe((response) => {
         this.sharedPageDataService.pageInfo = response.data;
-        this.styles = this.sharedPageDataService.pageInfo?.styles ?? '';
+        try {
+          this.styles = JSON.parse(this.sharedPageDataService.pageInfo?.styles ?? '[]');
+        } catch (error) {
+          console.warn('Error on parse styles:', error);
+          this.styles = [];
+        }
         if (this.sharedPageDataService.pageInfo && this.sharedPageDataService.pageInfo.data) {
           const d: IPage[] = JSON.parse(this.sharedPageDataService.pageInfo.data ?? '[]');
           this.data = d ?? [];

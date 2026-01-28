@@ -1,10 +1,10 @@
 <sub-header [title]="'Maintenance' | translate"></sub-header>
 <div class="panel-content">
-  <tab-group>
+  <m-tab-group>
     @if (AppPermissions.CacheEntries_List | permission) {
-      <tab-item [title]="'CacheManagement' | translate">
+      <m-tab-item [title]="'CacheManagement' | translate">
         <app-cache></app-cache>
-      </tab-item>
+      </m-tab-item>
     }
-  </tab-group>
+  </m-tab-group>
 </div>

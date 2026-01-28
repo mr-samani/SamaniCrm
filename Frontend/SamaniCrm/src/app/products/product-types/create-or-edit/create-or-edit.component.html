@@ -18,9 +18,9 @@
   }
   @if (!loading) {
     <form [formGroup]="form">
-      <tab-group>
+      <m-tab-group>
         @for (translation of translationsArray.controls; track translation; let i = $index) {
-          <tab-item [title]="translation.get('culture')?.value" formArrayName="translations">
+          <m-tab-item [title]="translation.get('culture')?.value" formArrayName="translations">
             <div [formGroupName]="i" class="row">
               <mat-form-field class="col-sm-12">
                 <mat-label>{{ 'Name' | translate }}</mat-label>
@@ -31,9 +31,9 @@
                 <textarea matInput formControlName="description" rows="3"></textarea>
               </mat-form-field>
             </div>
-          </tab-item>
+          </m-tab-item>
         }
-      </tab-group>
+      </m-tab-group>
     </form>
   }
 

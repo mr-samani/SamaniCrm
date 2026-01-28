@@ -31,7 +31,7 @@ export class PageStorageService implements IStorageService {
         input.data = JSON.stringify(sanitized.data);
         input.pageId = this.sharedPageDataService.pageInfo.id;
         input.culture = this.sharedPageDataService.pageInfo.culture;
-        input.styles = sanitized.style;
+        input.styles = JSON.stringify(sanitized.styles);
         this.pagesServiceProxy.updatePageContent(input).subscribe((r) => resolve(r.success == true));
       } catch (error) {
         console.error('Error on save page:', error);

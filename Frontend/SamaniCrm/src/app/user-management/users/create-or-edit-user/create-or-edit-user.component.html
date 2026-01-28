@@ -17,8 +17,8 @@
     </div>
   }
   @if (!loading) {
-    <tab-group>
-      <tab-item [title]="'UserInfo' | translate">
+    <m-tab-group>
+      <m-tab-item [title]="'UserInfo' | translate">
         @if (!loading) {
           <form [formGroup]="form">
             <div class="row">
@@ -111,10 +111,10 @@
             </div>
           </form>
         }
-      </tab-item>
+      </m-tab-item>
       <!-- -------------------------------- -->
       @if (AppPermissions.UserManagement_AssignRole | permission) {
-        <tab-item [title]="'Roles' | translate">
+        <m-tab-item [title]="'Roles' | translate">
           @for (role of roles; track role) {
             <p>
               <mat-checkbox color="primary" [(ngModel)]="role.selected">
@@ -122,9 +122,9 @@
               </mat-checkbox>
             </p>
           }
-        </tab-item>
+        </m-tab-item>
       }
-    </tab-group>
+    </m-tab-group>
   }
 </mat-dialog-content>
 <mat-dialog-actions>

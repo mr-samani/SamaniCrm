@@ -17,7 +17,7 @@ import {
 import { TabItemComponent } from './tab-item/tab-item.component';
 
 @Component({
-  selector: 'tab-group',
+  selector: 'm-tab-group',
   templateUrl: './tab-group.component.html',
   styleUrls: ['./tab-group.component.scss'],
   standalone: false,

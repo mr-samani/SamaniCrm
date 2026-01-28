@@ -29,18 +29,18 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <tab-group>
+      <m-tab-group>
         @for (translation of localizationsArray.controls; track translation; let i = $index) {
-          <tab-item [title]="translation.get('culture')?.value" formArrayName="localizations">
+          <m-tab-item [title]="translation.get('culture')?.value" formArrayName="localizations">
             <div [formGroupName]="i" class="row">
               <mat-form-field class="col-sm-12">
                 <mat-label>{{ 'Value' | translate }}</mat-label>
                 <input matInput formControlName="value" />
               </mat-form-field>
             </div>
-          </tab-item>
+          </m-tab-item>
         }
-      </tab-group>
+      </m-tab-group>
     </form>
   }
 

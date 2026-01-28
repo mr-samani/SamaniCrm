@@ -98,9 +98,9 @@
         </div>
       </div>
     </div>
-    <tab-group>
+    <m-tab-group>
       @for (translation of translationsArray.controls; track translation; let i = $index) {
-        <tab-item [title]="translation.get('culture')?.value" formArrayName="translations">
+        <m-tab-item [title]="translation.get('culture')?.value" formArrayName="translations">
           <div [formGroupName]="i" class="row">
             <mat-form-field class="col-sm-12">
               <mat-label>{{ 'Title' | translate }}</mat-label>
@@ -116,9 +116,9 @@
             </mat-form-field> -->
             <html-editor formControlName="content"></html-editor>
           </div>
-        </tab-item>
+        </m-tab-item>
       }
-    </tab-group>
+    </m-tab-group>
   </form>
 }
 
