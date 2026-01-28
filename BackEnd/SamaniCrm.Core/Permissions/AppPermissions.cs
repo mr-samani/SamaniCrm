@@ -87,9 +87,9 @@ namespace SamaniCrm.Core.Permissions
         public const string Pages_Blogs_Edit = "Administrator.Pages.BlogsEdit";
 
         public const string Pages_Builder = "Administrator.Pages.PageBuilder";
-        public const string Pages_CustomBlockList = "Administrator.Pages.CustomBlockList";
-        public const string Pages_CreateCustomBlock = "Administrator.Pages.CreateCustomBlock";
-        public const string Pages_DeleteCustomBlock = "Administrator.Pages.DeleteCustomBlock";
+        public const string Pages_PluginList = "Administrator.Pages.PluginList";
+        public const string Pages_CreatePlugin = "Administrator.Pages.CreatePlugin";
+        public const string Pages_DeletePlugin = "Administrator.Pages.DeletePlugin";
 
 
         // products

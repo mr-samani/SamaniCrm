@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Infrastructure.EntityConfiguration.PageBuilder;
 
-public class CustomBlockConfiguration : IEntityTypeConfiguration<CustomBlock>
+public class PluginConfiguration : IEntityTypeConfiguration<Plugin>
 {
-    public void Configure(EntityTypeBuilder<CustomBlock> builder)
+    public void Configure(EntityTypeBuilder<Plugin> builder)
     {
-        builder.ToTable("CustomBlocks", "Bldr");
+        builder.ToTable("Plugins", "PgB");
         builder.HasKey(x => x.Id);
     }
 }

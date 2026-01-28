@@ -54,7 +54,7 @@ namespace SamaniCrm.Application.Common.Interfaces
 
 
 
-        public DbSet<CustomBlock> CustomBlocks { get; set; }
+        public DbSet<Plugin> Plugins { get; set; }
         public DbSet<ExternalProvider> ExternalProviders { get; set; }
 
         #region Dashboard

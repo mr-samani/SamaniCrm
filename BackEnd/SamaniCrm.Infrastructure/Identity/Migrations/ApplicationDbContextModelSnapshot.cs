@@ -697,7 +697,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("Pages");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.PageBuilderEntities.CustomBlock", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.PageBuilderEntities.Plugin", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -741,7 +741,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CustomBlocks", "Bldr");
+                    b.ToTable("Plugins", "PgB");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.PageTranslation", b =>

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Core;
 using SamaniCrm.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -61,6 +62,16 @@ namespace SamaniCrm.Infrastructure.FileManager
                        Icon ="Images/folder-icons/favorites.svg",
                        IsStatic = true,
                        RelativePath = "Favorites"
+                   },
+            //Page builder plugins
+                   new FileFolder()
+                   {
+                       Id = AppConsts.PluginsFolderId,
+                       Name ="Plugins",
+                       IsFolder = true,
+                       Icon ="Images/folder-icons/plugins.svg",
+                       IsStatic = true,
+                       RelativePath = "Plugins"
                    }
                 ];
     }

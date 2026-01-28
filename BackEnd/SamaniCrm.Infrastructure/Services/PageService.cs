@@ -223,7 +223,7 @@ namespace SamaniCrm.Infrastructure.Services
                            Translations = s.Translations.Select(t => new PageMetaDataDto
                            {
                                Id = t.Id,
-                               Title = t.Title??"",
+                               Title = t.Title ?? "",
                                Culture = t.Culture,
                                Introduction = t.Introduction,
                                Description = t.Description,
@@ -328,10 +328,10 @@ namespace SamaniCrm.Infrastructure.Services
 
 
         #region Blocks
-        public async Task<Guid> CreateCustomBlock(CreateCustomBlockCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> CreatePlugin(CreatePluginCommand request, CancellationToken cancellationToken)
         {
             // New page
-            var block = new CustomBlock
+            var block = new Plugin
             {
                 Name = request.Name,
                 Description = request.Description,
@@ -341,15 +341,15 @@ namespace SamaniCrm.Infrastructure.Services
                 Data = request.Data,
             };
 
-            _context.CustomBlocks.Add(block);
+            await _context.Plugins.AddAsync(block);
 
             await _context.SaveChangesAsync(cancellationToken);
             return block.Id;
         }
 
-        public async Task<Unit> DeleteCustomBlockPage(DeleteCustomBlockCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> DeletePluginPage(DeletePluginCommand request, CancellationToken cancellationToken)
         {
-            var page = await _context.CustomBlocks
+            var page = await _context.Plugins
                .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
 
             if (page is null)
@@ -358,30 +358,63 @@ namespace SamaniCrm.Infrastructure.Services
             {
                 throw new AccessDeniedException("AccessDenied!\nCan not delete this block!");
             }
-            await _context.CustomBlocks.Where(x => x.Id == request.Id).ExecuteDeleteAsync();
+            await _context.Plugins.Where(x => x.Id == request.Id).ExecuteDeleteAsync();
 
 
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
 
-        public async Task<List<CustomBlockDto>> GetCustomBlocks(GetCustomBlockQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<PluginDto>> GetPlugins(GetPluginQuery request, CancellationToken cancellationToken)
         {
-            var result = await _context.CustomBlocks
-                .Select(p => new CustomBlockDto
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Description = p.Description,
-                    CategoryName = p.CategoryName,
-                    Icon = p.Icon,
-                    Image = p.Image,
-                    Data = p.Data,
-                    CanDelete = _currentUserService.UserId == p.CreatedBy,
-                }).ToListAsync(cancellationToken);
+            var query =
+                from plugin in _context.Plugins
+                join user in _context.Users
+                    on plugin.CreatedBy equals user.Id.ToString() into users
+                from author in users.DefaultIfEmpty()
+                select new { plugin, author };
 
-            return result;
+            if (!string.IsNullOrWhiteSpace(request.Filter))
+            {
+                query = query.Where(p =>
+                    (p.author != null && p.author.FullName!.Contains(request.Filter)) ||
+                    (p.plugin.Name != null && p.plugin.Name.Contains(request.Filter)) ||
+                    (p.plugin.Description != null && p.plugin.Description.Contains(request.Filter))
+                );
+            }
+
+            if (!string.IsNullOrEmpty(request.SortBy))
+            {
+                query = query.OrderByDynamic(request.SortBy, request.SortDirection!);
+            }
+
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            var items = await query
+                .Skip((request.PageNumber - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(p => new PluginDto
+                {
+                    Id = p.plugin.Id,
+                    Name = p.plugin.Name,
+                    Description = p.plugin.Description,
+                    CategoryName = p.plugin.CategoryName,
+                    Icon = p.plugin.Icon,
+                    Image = p.plugin.Image,
+                    Data = p.plugin.Data,
+                    CanDelete = _currentUserService.UserId == p.plugin.CreatedBy
+                })
+                .ToListAsync(cancellationToken);
+
+            return new PaginatedResult<PluginDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize
+            };
         }
+
 
         #endregion
     }

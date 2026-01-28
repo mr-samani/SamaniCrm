@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Domain.Entities.PageBuilderEntities;
 
-public class CustomBlock : IAuditableEntity
+public class Plugin : IAuditableEntity
 {
     public Guid Id { get; set; }
 

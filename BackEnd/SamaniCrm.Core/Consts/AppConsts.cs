@@ -23,5 +23,6 @@ public static class AppConsts
         "mp3","ogg",
         // video
         "mp4","3gp","avi" ];
+    public static Guid PluginsFolderId { get; set; } = Guid.Parse("CA49546C-4BAD-4924-80AF-2DF8E641387F");
 }
 
