@@ -52,6 +52,7 @@ export class PluginService extends AppComponentBase implements IPluginStore {
     input.image = plugin.image;
     input.categoryName = 'Default';
     input.description = '';
+    input.data = plugin.plugin;
 
     this.pageBuilderService
       .createPlugin(input)
