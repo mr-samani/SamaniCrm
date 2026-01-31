@@ -69,7 +69,7 @@ namespace SamaniCrm.Infrastructure.FileManager
                        Id = AppConsts.PluginsFolderId,
                        Name ="Plugins",
                        IsFolder = true,
-                       Icon ="Images/folder-icons/plugins.svg",
+                       Icon ="Images/folder-icons/folder-dropbox.svg",
                        IsStatic = true,
                        RelativePath = "Plugins"
                    }
