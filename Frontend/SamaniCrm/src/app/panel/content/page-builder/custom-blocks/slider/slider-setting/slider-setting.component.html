@@ -23,16 +23,26 @@
         data-bs-parent="#accordionSlider">
         <div class="accordion-body">
           <div>
-            <file-selector (change)="onSelectFile(item, $event)" [options]="imagePickerOptions"></file-selector>
+            <file-selector
+              [fileId]="item.image"
+              (change)="onSelectFile(item, $event)"
+              [options]="imagePickerOptions"></file-selector>
           </div>
-          <p>Title</p>
-          <div class="pi-group">
-            <input type="text" placeholder="Title" [(ngModel)]="item.title" name="title" (change)="update()" />
+          <p>{{ 'Title' | translate }}:</p>
+          <div class="input-group">
+            <input
+              class="form-control"
+              type="text"
+              placeholder="Title"
+              [(ngModel)]="item.title"
+              name="title"
+              (change)="update()" />
           </div>
-          <p>Description</p>
-          <div class="pi-group">
+          <p>{{ 'Description' | translate }}:</p>
+          <div class="input-group">
             <textarea
               placeholder="Description"
+              class="form-control"
               rows="2"
               [(ngModel)]="item.description"
               name="description"
@@ -44,6 +54,7 @@
   }
 </div>
 
+<switch [(ngModel)]="settings.showCaptions">{{ 'ShowCaptions' | translate }}</switch>
 <switch [(ngModel)]="settings.showIndicators">{{ 'ShowIndicators' | translate }}</switch>
 <switch [(ngModel)]="settings.showNextPrevious">{{ 'ShowNextPreviousButtons' | translate }}</switch>
 <switch [(ngModel)]="settings.darkMode">{{ 'DarkMode' | translate }}</switch>

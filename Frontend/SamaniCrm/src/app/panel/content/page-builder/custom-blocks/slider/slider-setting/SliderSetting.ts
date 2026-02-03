@@ -4,6 +4,7 @@ export class SliderSetting {
       image: '/images/default-image.png',
     },
   ];
+  showCaptions: boolean = true;
   showIndicators: boolean = true;
   showNextPrevious: boolean = true;
   effect: 'carousel-fade' | 'default' = 'default';

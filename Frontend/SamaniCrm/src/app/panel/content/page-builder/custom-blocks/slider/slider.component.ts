@@ -3,6 +3,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnDest
 import { SliderSetting } from './slider-setting/SliderSetting';
 import { COMPONENT_DATA, ComponentDataContext } from 'ngx-page-builder';
 import { Subscription } from 'rxjs';
+import { AppConst } from '@shared/app-const';
 @Component({
   selector: 'blc-slider',
   templateUrl: './slider.component.html',
@@ -28,7 +29,7 @@ import { Subscription } from 'rxjs';
     }
     .carousel-caption {
       background-color: #ffffffd4;
-      background: linear-gradient(transparent 10%, #ffffffd4);
+      background: linear-gradient(transparent, #ffffffd4);
       color: #000;
       width: 100%;
       left: 0;
@@ -42,7 +43,7 @@ import { Subscription } from 'rxjs';
       justify-content: flex-end;
       &.carousel-dark {
         background-color: #100f14d4;
-        background: linear-gradient(transparent 10%, #100f14d4);
+        background: linear-gradient(transparent, #100f14d4);
         color: #fff;
       }
     }
@@ -67,6 +68,8 @@ export class SliderComponent implements AfterViewInit, OnDestroy {
   settingChangeSubscription?: Subscription;
 
   settings = new SliderSetting();
+
+  baseUrl = AppConst.fileServerUrl + '/';
   constructor(
     private chdr: ChangeDetectorRef,
 

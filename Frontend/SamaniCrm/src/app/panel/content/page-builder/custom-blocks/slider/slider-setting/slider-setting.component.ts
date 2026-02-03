@@ -7,7 +7,7 @@ import { IOptions } from '@app/file-manager/options.interface';
 import { FileManagerDto } from '@app/file-manager/models/file-manager-dto';
 import { AppConst } from '@shared/app-const';
 import { AppComponentBase } from '@app/app-component-base';
-import { SharedModule } from "@shared/shared.module";
+import { SharedModule } from '@shared/shared.module';
 
 @Component({
   selector: 'app-slider-setting',
@@ -29,7 +29,7 @@ export class SliderSettingComponent extends AppComponentBase implements OnInit {
   ngOnInit() {}
   onSelectFile(item: SlideContext, file: FileManagerDto) {
     if (file) {
-      item.image = AppConst.fileServerUrl + '/' + file.id;
+      item.image = file.id ?? '';
     }
     this.update();
   }

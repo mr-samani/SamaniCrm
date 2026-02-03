@@ -23,11 +23,13 @@
   <div class="carousel-inner">
     @for (item of settings.sliders; track $index) {
       <div class="carousel-item" [class.active]="$index == 0">
-        <img [src]="item.image" [alt]="item.title" />
-        <div class="carousel-caption" [class.carousel-dark]="settings.darkMode">
-          <h5>{{ item.title }}</h5>
-          <p>{{ item.description }}</p>
-        </div>
+        <img [src]="baseUrl + item.image" [alt]="item.title" />
+        @if (settings.showCaptions) {
+          <div class="carousel-caption" [class.carousel-dark]="settings.darkMode">
+            <h5>{{ item.title }}</h5>
+            <p>{{ item.description }}</p>
+          </div>
+        }
       </div>
     }
   </div>

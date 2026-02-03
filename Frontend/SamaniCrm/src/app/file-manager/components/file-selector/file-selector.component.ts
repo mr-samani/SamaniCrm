@@ -1,4 +1,4 @@
-import { Component, EventEmitter,  Input, OnInit, Output, forwardRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, forwardRef } from '@angular/core';
 import {
   NG_VALUE_ACCESSOR,
   NG_VALIDATORS,
@@ -36,6 +36,12 @@ export class FileSelectorComponent extends AppComponentBase implements OnInit, C
   @Input() set options(config: IOptions) {
     this._options = { ...this._options, ...config };
   }
+  @Input('fileId') set setFileId(val: string) {
+    if (!this.fileInfo) {
+      this.fileInfo = new FileManagerDto();
+    }
+    this.fileInfo.id = val;
+  }
   @Output() change = new EventEmitter<FileManagerDto>();
 
   loading = false;
@@ -47,9 +53,7 @@ export class FileSelectorComponent extends AppComponentBase implements OnInit, C
 
   private _onChange = (t: FileManagerDto) => {};
   private _onTouched = () => {};
-  constructor(
-    private fileManagerService: FileManagerService,
-  ) {
+  constructor(private fileManagerService: FileManagerService) {
     super();
   }
 
