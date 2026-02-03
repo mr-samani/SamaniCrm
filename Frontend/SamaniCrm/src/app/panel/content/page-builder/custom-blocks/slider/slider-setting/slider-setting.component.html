@@ -1,0 +1,98 @@
+<button class="btn" (click)="addSlide()">Add Slide</button>
+<div class="accordion" id="accordionSlider">
+  @for (item of settings.sliders; track $index; let i = $index) {
+    <div class="accordion-item">
+      <h2 class="accordion-header d-flex align-items-center justify-content-between" id="heading{{ i }}">
+        <button
+          class="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
+          [attr.data-bs-target]="'#collapse' + i"
+          aria-expanded="true"
+          aria-controls="collapse{{ i }}">
+          Slide #{{ i + 1 }}
+        </button>
+        <button class="btn btn-icon" (click)="removeSlide(i)">
+          <i class="fa fa-trash"></i>
+        </button>
+      </h2>
+      <div
+        id="collapse{{ i }}"
+        class="accordion-collapse collapse"
+        aria-labelledby="heading{{ i }}"
+        data-bs-parent="#accordionSlider">
+        <div class="accordion-body">
+          <div>
+            <file-selector (change)="onSelectFile(item, $event)" [options]="imagePickerOptions"></file-selector>
+          </div>
+          <p>Title</p>
+          <div class="pi-group">
+            <input type="text" placeholder="Title" [(ngModel)]="item.title" name="title" (change)="update()" />
+          </div>
+          <p>Description</p>
+          <div class="pi-group">
+            <textarea
+              placeholder="Description"
+              rows="2"
+              [(ngModel)]="item.description"
+              name="description"
+              (change)="update()"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+<switch [(ngModel)]="settings.showIndicators">{{ 'ShowIndicators' | translate }}</switch>
+<switch [(ngModel)]="settings.showNextPrevious">{{ 'ShowNextPreviousButtons' | translate }}</switch>
+<switch [(ngModel)]="settings.darkMode">{{ 'DarkMode' | translate }}</switch>
+<switch [(ngModel)]="settings.keyboard">{{ 'ChangeByKeyboard' | translate }}</switch>
+<switch [(ngModel)]="settings.touch">{{ 'ChangeByTouch' | translate }}</switch>
+
+<table class="properties-table">
+  <tbody>
+    <tr>
+      <td>{{ 'Effect' | translate }}</td>
+      <td>
+        <div class="pi-group">
+          <select id="effect" name="effect" [(ngModel)]="settings.effect">
+            <option value="carousel-fade">Fade</option>
+            <option value="default">Slide</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>{{ 'Pause' | translate }}</td>
+      <td>
+        <div class="pi-group">
+          <select id="pause" name="pause" [(ngModel)]="settings.pause">
+            <option value="hover">Hover</option>
+            <option value="false">False</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>{{ 'Ride' | translate }}</td>
+      <td>
+        <div class="pi-group">
+          <select id="ride" name="ride" [(ngModel)]="settings.ride">
+            <option value="carousel">Carousel</option>
+            <option value="false">False</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>{{ 'TimeInterval' | translate }}</td>
+      <td>
+        <div class="pi-group">
+          <input type="number" name="interval" id="interval" [(ngModel)]="settings.interval" />
+          <span>ms</span>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

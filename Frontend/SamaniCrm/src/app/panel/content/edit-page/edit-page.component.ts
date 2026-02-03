@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component,  OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
 import { PagesServiceProxy } from '@shared/service-proxies/api/pages.service';
@@ -65,6 +65,7 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
       .getPageInfo(this.pageId, AppConst.currentLanguage)
       .pipe(finalize(() => this.hideMainLoading()))
       .subscribe((response) => {
+        console.log(response);
         this.sharedPageDataService.pageInfo = response.data;
         try {
           this.styles = JSON.parse(this.sharedPageDataService.pageInfo?.styles ?? '[]');

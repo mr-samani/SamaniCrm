@@ -8,5 +8,6 @@ export const SLIDER_BLOCK: SourceItem = {
   customComponent: {
     componentKey: 'slider',
     component: () => import('./slider.component').then((c) => c.SliderComponent),
+    componentSettings: () => import('./slider-setting/slider-setting.component').then((s) => s.SliderSettingComponent),
   },
 };
