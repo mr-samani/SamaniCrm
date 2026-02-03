@@ -3,13 +3,19 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnDest
 import { SliderSetting } from './slider-setting/SliderSetting';
 import { COMPONENT_DATA, ComponentDataContext } from 'ngx-page-builder';
 import { Subscription } from 'rxjs';
-declare const bootstrap: any;
 @Component({
   selector: 'blc-slider',
   templateUrl: './slider.component.html',
   styles: `
+    :host {
+      display: block;
+    }
+    .carousel,
+    .carousel-inner {
+      height: 100%;
+    }
     .carousel-item {
-      height: 500px;
+      height: 100%;
       img {
         display: block;
         max-width: 100% !important;

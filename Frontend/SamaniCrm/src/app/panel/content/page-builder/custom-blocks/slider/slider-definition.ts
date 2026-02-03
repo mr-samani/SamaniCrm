@@ -10,4 +10,9 @@ export const SLIDER_BLOCK: SourceItem = {
     component: () => import('./slider.component').then((c) => c.SliderComponent),
     componentSettings: () => import('./slider-setting/slider-setting.component').then((s) => s.SliderSettingComponent),
   },
+  classList: ['slide-show-container'],
+  css: `
+  .slide-show-container{
+    height: 500px;
+  }`,
 };
