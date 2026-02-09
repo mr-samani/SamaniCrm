@@ -28,11 +28,9 @@ export function appInit(): Promise<boolean> {
         AppConst.fileServerUrl = config.fileServerUrl;
         AppConst.dashboardUrl = config.dashboardUrl;
         // console.log(config);
-        debugger;
         // api initialize
         httpClient.get<InitialAppDTOApiResponse>(AppConst.apiUrl + '/api/Common/InitialApp').subscribe({
           next: (resp) => {
-            debugger;
             if (resp.success && resp.data) {
               AppConst.languageList = resp.data.languages ?? [];
               AppConst.defaultLang = resp.data.defaultLang ?? 'fa-IR';

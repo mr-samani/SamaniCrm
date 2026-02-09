@@ -79,4 +79,14 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
         }
       });
   }
+
+  preview() {
+    if (this.sharedPageDataService.pageInfo) {
+      const c = AppConst.currentLanguage.substring(0, 2);
+      window.open(
+        `${AppConst.publicSiteUrl}/${c}/page/preview/${this.sharedPageDataService.pageInfo.culture}/${this.pageId}`,
+        '_blank',
+      );
+    }
+  }
 }

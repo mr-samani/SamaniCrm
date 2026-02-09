@@ -36,7 +36,7 @@ export class PageViewComponent extends BaseComponent implements OnInit, AfterVie
     @Inject(DOCUMENT) private _document: Document
   ) {
     super(injector);
-
+    debugger;
     this.culture = this.route.snapshot.params['culture'];
     this.pageId = this.route.snapshot.params['pageId'];
     this.slug = this.route.snapshot.params['slug'];
