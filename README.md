@@ -19,3 +19,15 @@ trust https
 
 
 
+# PNPM
+## get store path
+  `pnpm store path`
+
+## set store path 
+ `pnpm config set store-dir d:/.pnpm-store`
+
+# نصب وابستگی‌ها در پروژه
+pnpm install
+
+# prune کردن store (حذف پکیج‌های بدون استفاده)
+pnpm store prune

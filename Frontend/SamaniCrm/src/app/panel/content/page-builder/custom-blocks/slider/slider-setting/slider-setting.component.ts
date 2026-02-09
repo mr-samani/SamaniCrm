@@ -5,15 +5,15 @@ import { FormsModule } from '@angular/forms';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { IOptions } from '@app/file-manager/options.interface';
 import { FileManagerDto } from '@app/file-manager/models/file-manager-dto';
-import { AppConst } from '@shared/app-const';
 import { AppComponentBase } from '@app/app-component-base';
-import { SharedModule } from '@shared/shared.module';
+import { TranslateModule } from '@ngx-translate/core';
+import { SwitchModule } from '@shared/components/switch/switch.module';
 
 @Component({
   selector: 'app-slider-setting',
   templateUrl: './slider-setting.component.html',
   styleUrls: ['./slider-setting.component.scss'],
-  imports: [FormsModule, FileManagerModule, SharedModule],
+  imports: [FormsModule, FileManagerModule, SwitchModule, TranslateModule],
 })
 export class SliderSettingComponent extends AppComponentBase implements OnInit {
   settings: SliderSetting;

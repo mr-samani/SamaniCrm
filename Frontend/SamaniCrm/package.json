@@ -53,6 +53,7 @@
     "ngx-page-builder": "^1.0.5",
     "rxjs": "~7.8.0",
     "save-dev": "^0.0.1-security",
+    "swiper": "^12.1.0",
     "tinymce": "^7.9.1",
     "tslib": "^2.3.0",
     "tus-js-client": "^4.3.1",

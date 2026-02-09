@@ -1,0 +1,28 @@
+<div class="swiper" #container>
+  <!-- Additional required wrapper -->
+  <div class="swiper-wrapper">
+    <!-- Slides -->
+    @for (item of settings.sliders; track $index) {
+      <div class="swiper-slide">
+        <div class="img-container">
+          @if (item.image) {
+            <img [src]="baseUrl + item.image" [alt]="item.title" />
+          } @else {
+            <img src="/images/default-image.png" />
+          }
+        </div>
+        <div>{{ item.title }}</div>
+      </div>
+    }
+  </div>
+
+<!--   
+  <div class="swiper-pagination"></div>
+
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+
+  <div class="swiper-scrollbar"></div> -->
+</div>
+
+<button (click)="next()">next</button>

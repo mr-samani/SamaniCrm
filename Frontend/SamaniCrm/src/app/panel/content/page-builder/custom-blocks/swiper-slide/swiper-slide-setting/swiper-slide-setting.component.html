@@ -1,0 +1,233 @@
+<button class="btn" (click)="addSlide()">Add Slide</button>
+<div class="accordion" id="accordionSlider">
+  @for (item of settings.sliders; track $index; let i = $index) {
+    <div class="accordion-item">
+      <h2 class="accordion-header d-flex align-items-center justify-content-between" id="heading{{ i }}">
+        <button
+          class="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
+          [attr.data-bs-target]="'#collapse' + i"
+          aria-expanded="true"
+          aria-controls="collapse{{ i }}">
+          Slide #{{ i + 1 }}
+        </button>
+        <button class="btn btn-icon" (click)="removeSlide(i)">
+          <i class="fa fa-trash"></i>
+        </button>
+      </h2>
+      <div
+        id="collapse{{ i }}"
+        class="accordion-collapse collapse"
+        aria-labelledby="heading{{ i }}"
+        data-bs-parent="#accordionSlider">
+        <div class="accordion-body">
+          <div>
+            <file-selector
+              [fileId]="item.image"
+              (change)="onSelectFile(item, $event)"
+              [options]="imagePickerOptions"></file-selector>
+          </div>
+          <p>{{ 'Title' | translate }}:</p>
+          <div class="input-group">
+            <input
+              class="form-control"
+              type="text"
+              placeholder="Title"
+              [(ngModel)]="item.title"
+              name="title"
+              (change)="update()" />
+          </div>
+          <!-- <p>{{ 'Description' | translate }}:</p>
+          <div class="input-group">
+            <textarea
+              placeholder="Description"
+              class="form-control"
+              rows="2"
+              [(ngModel)]="item.description"
+              name="description"
+              (change)="update()"></textarea>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+<switch (change)="update()" [(ngModel)]="settings.setWrapperSize">
+  {{ 'set width/height on swiper wrapper equal to total size of all slides' | translate }}
+</switch>
+<switch (change)="update()" [(ngModel)]="settings.centeredSlides">{{ 'CenteredSlides' | translate }}</switch>
+<switch (change)="update()" [(ngModel)]="settings.grabCursor">
+  {{ 'User will see the "grab" cursor when hover on Swiper' | translate }}
+</switch>
+<switch (change)="update()" [(ngModel)]="settings.slideToClickedSlide">
+  {{ 'click on any slide will produce transition to this slide' | translate }}
+</switch>
+<switch (change)="update()" [(ngModel)]="settings.watchSlidesProgress">
+  {{ 'calculate each slides progress and visibility' | translate }}
+</switch>
+<switch (change)="update()" [(ngModel)]="settings.loop">{{ 'Continuous loop mode' | translate }}</switch>
+
+<table class="properties-table">
+  <tbody>
+    <tr>
+      <td>{{ 'Effect' | translate }}</td>
+      <td>
+        <div class="pi-group">
+          <select id="effect" name="effect" [(ngModel)]="settings.effect" (change)="update()">
+            <option value="slide">slide</option>
+            <option value="fade">fade</option>
+            <option value="cube">cube</option>
+            <option value="coverflow">coverflow</option>
+            <option value="flip">flip</option>
+            <option value="creative">creative</option>
+            <option value="cards">cards</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>{{ 'Direction' | translate }}</td>
+      <td>
+        <div class="pi-group">
+          <select id="direction" name="direction" [(ngModel)]="settings.direction" (change)="update()">
+            <option value="horizontal">{{ 'Horizontal' | translate }}</option>
+            <option value="vertical">{{ 'Vertical' | translate }}</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td>{{ 'Duration of transition between slides' | translate }}</td>
+      <td>
+        <div class="pi-group">
+          <input type="number" name="speed" id="speed" [(ngModel)]="settings.speed" (change)="update()" />
+          <span>ms</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>{{ 'Distance between slides' | translate }}</td>
+      <td>
+        <div class="pi-group">
+          <input
+            type="number"
+            name="spaceBetween"
+            id="spaceBetween"
+            [(ngModel)]="settings.spaceBetween"
+            (change)="update()" />
+          <span>px</span>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>{{ 'Number of slides per view' | translate }}</td>
+      <td>
+        <div class="pi-group">
+          <input
+            type="number"
+            name="slidesPerView"
+            id="slidesPerView"
+            [(ngModel)]="settings.slidesPerView"
+            (change)="update()" />
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>{{ 'slide offset in the beginning of the container' | translate }}</td>
+      <td>
+        <div class="pi-group">
+          <input
+            type="number"
+            name="slidesOffsetBefore"
+            id="slidesOffsetBefore"
+            [(ngModel)]="settings.slidesOffsetBefore"
+            (change)="update()" />
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>{{ 'slide offset in the end of the container' | translate }}</td>
+      <td>
+        <div class="pi-group">
+          <input
+            type="number"
+            name="slidesOffsetAfter"
+            id="slidesOffsetAfter"
+            [(ngModel)]="settings.slidesOffsetAfter"
+            (change)="update()" />
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="properties-table">
+  <tbody>
+    <tr>
+      <td colspan="2">
+        <span>Responsive Break points</span>
+        <button class="btn" (click)="addBreakPoint()">
+          <i class="fa fa-plus"></i>
+        </button>
+      </td>
+    </tr>
+    @for (b of settings.breakpoints | keyvalue; track $index) {
+      <tr>
+        <td colspan="2">
+          <hr />
+          when window width is >= {{ b.key }}px
+          <button class="btn" (click)="removeBreakPoint(b.key)">
+            <i class="fa fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td>{{ 'ViewPortSize' | translate }}</td>
+        <td>
+          <div class="pi-group">
+            <select
+              name="viewPortSize"
+              id="viewPortSize"
+              [ngModel]="b.key"
+              (change)="updateBreakPointSize(b.key, $event, b.value)">
+              @for (bs of breakPointSizes; track $index) {
+                <option [value]="bs">{{ bs }}</option>
+              }
+            </select>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>{{ 'slidesPerView' | translate }}</td>
+        <td>
+          <div class="pi-group">
+            <input
+              type="number"
+              name="slidesPerView"
+              id="slidesPerView"
+              [(ngModel)]="b.value.slidesPerView"
+              (change)="update()" />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>{{ 'spaceBetween' | translate }}</td>
+        <td>
+          <div class="pi-group">
+            <input
+              type="number"
+              name="spaceBetween"
+              id="spaceBetween"
+              [(ngModel)]="b.value.spaceBetween"
+              (change)="update()" />
+          </div>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+<pre style="text-align: left; direction: ltr">{{ settings.breakpoints | json }}</pre>

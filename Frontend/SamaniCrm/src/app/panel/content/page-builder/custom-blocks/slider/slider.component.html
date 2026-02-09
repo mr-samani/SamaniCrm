@@ -23,7 +23,12 @@
   <div class="carousel-inner">
     @for (item of settings.sliders; track $index) {
       <div class="carousel-item" [class.active]="$index == 0">
-        <img [src]="baseUrl + item.image" [alt]="item.title" />
+        @if (item.image) {
+          <img [src]="baseUrl + item.image" [alt]="item.title" />
+        } @else {
+          <img src="/images/default-image.png" />
+        }
+
         @if (settings.showCaptions) {
           <div class="carousel-caption" [class.carousel-dark]="settings.darkMode">
             <h5>{{ item.title }}</h5>

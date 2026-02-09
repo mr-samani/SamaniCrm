@@ -1,7 +1,7 @@
 export class SliderSetting {
   sliders: SlideContext[] = [
     {
-      image: '/images/default-image.png',
+      image: '',
     },
   ];
   showCaptions: boolean = true;
