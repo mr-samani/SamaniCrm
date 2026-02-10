@@ -1,0 +1,51 @@
+<div
+  [id]="carouselId"
+  class="carousel slide {{ settings.effect }}"
+  [class.carousel-dark]="settings.darkMode"
+  [attr.data-bs-interval]="settings.interval"
+  [attr.data-bs-keyboard]="settings.keyboard"
+  [attr.data-bs-touch]="settings.touch"
+  [attr.data-bs-pause]="settings.pause"
+  [attr.data-bs-ride]="settings.ride"
+  #myCarousel>
+  @if (settings.showIndicators) {
+    <div class="carousel-indicators">
+      @for (item of settings.sliders; track $index; let i = $index) {
+        <button
+          type="button"
+          [attr.data-bs-target]="'#' + carouselId"
+          [attr.data-bs-slide-to]="i"
+          [class.active]="$index == 0"
+          aria-label="Slide {{ i }}"></button>
+      }
+    </div>
+  }
+  <div class="carousel-inner">
+    @for (item of settings.sliders; track $index) {
+      <div class="carousel-item" [class.active]="$index == 0">
+        @if (item.image) {
+          <img [src]="baseUrl + item.image" [alt]="item.title" />
+        } @else {
+          <img src="/images/default-image.png" />
+        }
+
+        @if (settings.showCaptions) {
+          <div class="carousel-caption" [class.carousel-dark]="settings.darkMode">
+            <h5>{{ item.title }}</h5>
+            <p>{{ item.description }}</p>
+          </div>
+        }
+      </div>
+    }
+  </div>
+  @if (settings.showNextPrevious) {
+    <button class="carousel-control-prev" type="button" [attr.data-bs-target]="'#' + carouselId" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" [attr.data-bs-target]="'#' + carouselId" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  }
+</div>

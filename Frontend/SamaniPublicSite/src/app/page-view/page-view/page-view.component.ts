@@ -1,20 +1,8 @@
-import {
-  AfterViewInit,
-  Component,
-  DOCUMENT,
-  Inject,
-  Injector,
-  OnInit,
-  signal,
-  ViewChild,
-  ViewContainerRef,
-} from '@angular/core';
+import { AfterViewInit, Component, DOCUMENT, Inject, Injector, OnInit, signal } from '@angular/core';
 import { BaseComponent } from '@app/base-components';
 import { PageDto, PagesServiceProxy } from '@shared/service-proxies';
 import { finalize } from 'rxjs/operators';
-import { FormBuilderService } from '../form-builder.service';
-import { BLOCK_REGISTRY, BlockDefinition } from '../blocks/block-registry';
-import { CreateBlock } from '../helper/create-block';
+import { IPagebuilderOutput, PageBuilderConfig } from 'ngx-page-builder/core';
 
 @Component({
   selector: 'app-page-view',
@@ -28,15 +16,15 @@ export class PageViewComponent extends BaseComponent implements OnInit, AfterVie
   pageId = '';
   loading = signal(false);
   pageInfo?: PageDto;
-  @ViewChild('container', { read: ViewContainerRef, static: false }) vcr?: ViewContainerRef;
+  dynamicData: any;
+
+  data?: IPagebuilderOutput;
   constructor(
     injector: Injector,
     private pageService: PagesServiceProxy,
-    public b: FormBuilderService,
     @Inject(DOCUMENT) private _document: Document
   ) {
     super(injector);
-    debugger;
     this.culture = this.route.snapshot.params['culture'];
     this.pageId = this.route.snapshot.params['pageId'];
     this.slug = this.route.snapshot.params['slug'];
@@ -58,41 +46,24 @@ export class PageViewComponent extends BaseComponent implements OnInit, AfterVie
       )
       .subscribe((result) => {
         this.pageInfo = result.data ?? new PageDto();
-        const pageData = this.initBlocks(JSON.parse(this.pageInfo.data ?? '[]'));
-        console.log(pageData);
-        this.renderNode(pageData);
-
-        if (this.pageInfo.styles) {
-          let style = this._document.createElement('style');
-          style.id = this.pageInfo.id + '';
-          style.innerHTML = this.pageInfo.styles;
-          this._document.head.appendChild(style);
+        const parsed = JSON.parse(this.pageInfo.data ?? '{}');
+        debugger;
+        let styles = [];
+        try {
+          styles = JSON.parse(this.pageInfo?.styles ?? '[]');
+        } catch (error) {
+          console.warn('Error on parse styles:', error);
+          styles = [];
         }
+
+        this.data = {
+          config: new PageBuilderConfig(),
+          data: parsed,
+          styles: styles,
+        };
+        console.log(this.data);
+
         this.cd.detectChanges();
       });
-  }
-
-  initBlocks(list: BlockDefinition[]) {
-    for (let item of list) {
-      if (item.hidden) {
-        continue;
-      }
-      item = new BlockDefinition(item);
-      if (item.children && item.children.length) {
-        item.children = this.initBlocks(item.children);
-      }
-    }
-    return list;
-  }
-
-  renderNode(list: BlockDefinition[]) {
-    if (!this.vcr) return;
-    for (let item of list) {
-      CreateBlock(this.vcr, item);
-
-      // if (item.children && item.children.length) {
-      //   this.renderNode(item.children);
-      // }
-    }
   }
 }
