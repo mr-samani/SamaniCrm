@@ -1,28 +1,64 @@
-<div class="swiper" #container>
-  <!-- Additional required wrapper -->
-  <div class="swiper-wrapper">
-    <!-- Slides -->
-    @for (item of settings.sliders; track $index) {
-      <div class="swiper-slide">
-        <div class="img-container">
-          @if (item.image) {
-            <img [src]="baseUrl + item.image" [alt]="item.title" />
-          } @else {
-            <img src="/images/default-image.png" />
-          }
+<div class="swiper-container-wrapper" [class.swiper-stories]="settings.preset === 'stories'">
+  <div class="swiper" #container [class.swiper-cards]="settings.effect === 'cards'">
+    <div class="swiper-wrapper">
+      @for (item of settings.sliders; track $index) {
+        <div class="swiper-slide" [class.swiper-lazy]="settings.lazyLoading">
+          <div class="slide-content">
+            <!-- Image Container -->
+            <div class="img-container" [class.swiper-zoom-container]="settings.zoom">
+              @if (item.image) {
+                @if (settings.lazyLoading) {
+                  <img
+                    [attr.data-src]="baseUrl + item.image"
+                    [alt]="item.title"
+                    class="swiper-lazy"
+                  />
+                  <div class="swiper-lazy-preloader"></div>
+                } @else {
+                  <img [src]="baseUrl + item.image" [alt]="item.title" />
+                }
+              } @else {
+                <img src="/images/default-image.png" [alt]="item.title || 'Slide ' + ($index + 1)" />
+              }
+            </div>
+
+            <!-- Title and Description -->
+            @if (item.title || item.description) {
+              <div class="slide-info">
+                @if (item.title) {
+                  <h3 class="slide-title">{{ item.title }}</h3>
+                }
+                @if (item.description) {
+                  <p class="slide-description">{{ item.description }}</p>
+                }
+              </div>
+            }
+
+            <!-- Optional Link -->
+            @if (item.link) {
+              <a [href]="item.link" class="slide-link" target="_blank">
+                View Details
+              </a>
+            }
+          </div>
         </div>
-        <div>{{ item.title }}</div>
-      </div>
+      }
+    </div>
+
+    <!-- Navigation Buttons -->
+    @if (settings.navigation) {
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    }
+
+    <!-- Pagination -->
+    @if (settings.pagination) {
+      <div class="swiper-pagination"></div>
+    }
+
+    <!-- Scrollbar -->
+    @if (settings.scrollbar) {
+      <div class="swiper-scrollbar"></div>
     }
   </div>
-
-<!--   
-  <div class="swiper-pagination"></div>
-
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-button-next"></div>
-
-  <div class="swiper-scrollbar"></div> -->
 </div>
-
-<button (click)="next()">next</button>

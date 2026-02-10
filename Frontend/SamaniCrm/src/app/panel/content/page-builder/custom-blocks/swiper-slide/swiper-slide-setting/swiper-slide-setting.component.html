@@ -1,233 +1,454 @@
-<button class="btn" (click)="addSlide()">Add Slide</button>
-<div class="accordion" id="accordionSlider">
-  @for (item of settings.sliders; track $index; let i = $index) {
-    <div class="accordion-item">
-      <h2 class="accordion-header d-flex align-items-center justify-content-between" id="heading{{ i }}">
-        <button
-          class="accordion-button"
-          type="button"
-          data-bs-toggle="collapse"
-          [attr.data-bs-target]="'#collapse' + i"
-          aria-expanded="true"
-          aria-controls="collapse{{ i }}">
-          Slide #{{ i + 1 }}
-        </button>
-        <button class="btn btn-icon" (click)="removeSlide(i)">
-          <i class="fa fa-trash"></i>
-        </button>
-      </h2>
-      <div
-        id="collapse{{ i }}"
-        class="accordion-collapse collapse"
-        aria-labelledby="heading{{ i }}"
-        data-bs-parent="#accordionSlider">
-        <div class="accordion-body">
-          <div>
-            <file-selector
-              [fileId]="item.image"
-              (change)="onSelectFile(item, $event)"
-              [options]="imagePickerOptions"></file-selector>
-          </div>
-          <p>{{ 'Title' | translate }}:</p>
-          <div class="input-group">
-            <input
-              class="form-control"
-              type="text"
-              placeholder="Title"
-              [(ngModel)]="item.title"
-              name="title"
-              (change)="update()" />
-          </div>
-          <!-- <p>{{ 'Description' | translate }}:</p>
-          <div class="input-group">
-            <textarea
-              placeholder="Description"
-              class="form-control"
-              rows="2"
-              [(ngModel)]="item.description"
-              name="description"
-              (change)="update()"></textarea>
-          </div> -->
+<div class="swiper-settings">
+  <!-- Tabs Navigation -->
+  <div class="settings-tabs">
+    <button
+      class="tab-button"
+      [class.active]="activeTab === 'preset'"
+      (click)="setActiveTab('preset')">
+      <i class="fa fa-magic"></i> Presets
+    </button>
+    <button
+      class="tab-button"
+      [class.active]="activeTab === 'slides'"
+      (click)="setActiveTab('slides')">
+      <i class="fa fa-images"></i> Slides
+    </button>
+    <button
+      class="tab-button"
+      [class.active]="activeTab === 'basic'"
+      (click)="setActiveTab('basic')">
+      <i class="fa fa-sliders"></i> Basic
+    </button>
+    <button
+      class="tab-button"
+      [class.active]="activeTab === 'advanced'"
+      (click)="setActiveTab('advanced')">
+      <i class="fa fa-cogs"></i> Advanced
+    </button>
+    <button
+      class="tab-button"
+      [class.active]="activeTab === 'responsive'"
+      (click)="setActiveTab('responsive')">
+      <i class="fa fa-mobile"></i> Responsive
+    </button>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <!-- ===================== PRESETS TAB ===================== -->
+    @if (activeTab === 'preset') {
+      <div class="preset-section">
+        <h3>Choose a Preset</h3>
+        <p class="section-description">
+          Select a pre-configured template to quickly get started. You can customize it further in other tabs.
+        </p>
+
+        <div class="preset-grid">
+          @for (preset of presetOptions; track preset.value) {
+            <div
+              class="preset-card"
+              [class.active]="settings.preset === preset.value"
+              (click)="onPresetChange(preset.value)">
+              <div class="preset-icon">{{ preset.icon }}</div>
+              <h4>{{ preset.label }}</h4>
+              <p>{{ preset.description }}</p>
+            </div>
+          }
         </div>
       </div>
-    </div>
-  }
-</div>
-
-<switch (change)="update()" [(ngModel)]="settings.setWrapperSize">
-  {{ 'set width/height on swiper wrapper equal to total size of all slides' | translate }}
-</switch>
-<switch (change)="update()" [(ngModel)]="settings.centeredSlides">{{ 'CenteredSlides' | translate }}</switch>
-<switch (change)="update()" [(ngModel)]="settings.grabCursor">
-  {{ 'User will see the "grab" cursor when hover on Swiper' | translate }}
-</switch>
-<switch (change)="update()" [(ngModel)]="settings.slideToClickedSlide">
-  {{ 'click on any slide will produce transition to this slide' | translate }}
-</switch>
-<switch (change)="update()" [(ngModel)]="settings.watchSlidesProgress">
-  {{ 'calculate each slides progress and visibility' | translate }}
-</switch>
-<switch (change)="update()" [(ngModel)]="settings.loop">{{ 'Continuous loop mode' | translate }}</switch>
-
-<table class="properties-table">
-  <tbody>
-    <tr>
-      <td>{{ 'Effect' | translate }}</td>
-      <td>
-        <div class="pi-group">
-          <select id="effect" name="effect" [(ngModel)]="settings.effect" (change)="update()">
-            <option value="slide">slide</option>
-            <option value="fade">fade</option>
-            <option value="cube">cube</option>
-            <option value="coverflow">coverflow</option>
-            <option value="flip">flip</option>
-            <option value="creative">creative</option>
-            <option value="cards">cards</option>
-          </select>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>{{ 'Direction' | translate }}</td>
-      <td>
-        <div class="pi-group">
-          <select id="direction" name="direction" [(ngModel)]="settings.direction" (change)="update()">
-            <option value="horizontal">{{ 'Horizontal' | translate }}</option>
-            <option value="vertical">{{ 'Vertical' | translate }}</option>
-          </select>
-        </div>
-      </td>
-    </tr>
-
-    <tr>
-      <td>{{ 'Duration of transition between slides' | translate }}</td>
-      <td>
-        <div class="pi-group">
-          <input type="number" name="speed" id="speed" [(ngModel)]="settings.speed" (change)="update()" />
-          <span>ms</span>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>{{ 'Distance between slides' | translate }}</td>
-      <td>
-        <div class="pi-group">
-          <input
-            type="number"
-            name="spaceBetween"
-            id="spaceBetween"
-            [(ngModel)]="settings.spaceBetween"
-            (change)="update()" />
-          <span>px</span>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>{{ 'Number of slides per view' | translate }}</td>
-      <td>
-        <div class="pi-group">
-          <input
-            type="number"
-            name="slidesPerView"
-            id="slidesPerView"
-            [(ngModel)]="settings.slidesPerView"
-            (change)="update()" />
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>{{ 'slide offset in the beginning of the container' | translate }}</td>
-      <td>
-        <div class="pi-group">
-          <input
-            type="number"
-            name="slidesOffsetBefore"
-            id="slidesOffsetBefore"
-            [(ngModel)]="settings.slidesOffsetBefore"
-            (change)="update()" />
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>{{ 'slide offset in the end of the container' | translate }}</td>
-      <td>
-        <div class="pi-group">
-          <input
-            type="number"
-            name="slidesOffsetAfter"
-            id="slidesOffsetAfter"
-            [(ngModel)]="settings.slidesOffsetAfter"
-            (change)="update()" />
-        </div>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<table class="properties-table">
-  <tbody>
-    <tr>
-      <td colspan="2">
-        <span>Responsive Break points</span>
-        <button class="btn" (click)="addBreakPoint()">
-          <i class="fa fa-plus"></i>
-        </button>
-      </td>
-    </tr>
-    @for (b of settings.breakpoints | keyvalue; track $index) {
-      <tr>
-        <td colspan="2">
-          <hr />
-          when window width is >= {{ b.key }}px
-          <button class="btn" (click)="removeBreakPoint(b.key)">
-            <i class="fa fa-trash"></i>
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td>{{ 'ViewPortSize' | translate }}</td>
-        <td>
-          <div class="pi-group">
-            <select
-              name="viewPortSize"
-              id="viewPortSize"
-              [ngModel]="b.key"
-              (change)="updateBreakPointSize(b.key, $event, b.value)">
-              @for (bs of breakPointSizes; track $index) {
-                <option [value]="bs">{{ bs }}</option>
-              }
-            </select>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td>{{ 'slidesPerView' | translate }}</td>
-        <td>
-          <div class="pi-group">
-            <input
-              type="number"
-              name="slidesPerView"
-              id="slidesPerView"
-              [(ngModel)]="b.value.slidesPerView"
-              (change)="update()" />
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td>{{ 'spaceBetween' | translate }}</td>
-        <td>
-          <div class="pi-group">
-            <input
-              type="number"
-              name="spaceBetween"
-              id="spaceBetween"
-              [(ngModel)]="b.value.spaceBetween"
-              (change)="update()" />
-          </div>
-        </td>
-      </tr>
     }
-  </tbody>
-</table>
 
-<pre style="text-align: left; direction: ltr">{{ settings.breakpoints | json }}</pre>
+    <!-- ===================== SLIDES TAB ===================== -->
+    @if (activeTab === 'slides') {
+      <div class="slides-section">
+        <div class="section-header">
+          <h3>Manage Slides</h3>
+          <button class="btn btn-primary" (click)="addSlide()">
+            <i class="fa fa-plus"></i> Add Slide
+          </button>
+        </div>
+
+        <div class="accordion" id="accordionSlider">
+          @for (item of settings.sliders; track $index; let i = $index) {
+            <div class="accordion-item">
+              <h2 class="accordion-header d-flex align-items-center justify-content-between">
+                <button
+                  class="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#collapse' + i"
+                  aria-expanded="true"
+                  [attr.aria-controls]="'collapse' + i">
+                  <i class="fa fa-image me-2"></i>
+                  Slide #{{ i + 1 }}
+                  @if (item.title) {
+                    <span class="slide-preview-title">- {{ item.title }}</span>
+                  }
+                </button>
+                <button class="btn btn-icon btn-danger" (click)="removeSlide(i)">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </h2>
+              <div
+                [id]="'collapse' + i"
+                class="accordion-collapse collapse"
+                [attr.aria-labelledby]="'heading' + i"
+                data-bs-parent="#accordionSlider">
+                <div class="accordion-body">
+                  <div class="form-group">
+                    <label>Image:</label>
+                    <file-selector
+                      [fileId]="item.image"
+                      (change)="onSelectFile(item, $event)"
+                      [options]="imagePickerOptions"></file-selector>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Title:</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      placeholder="Enter slide title"
+                      [(ngModel)]="item.title"
+                      [name]="'title-' + i"
+                      (change)="update()" />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Description:</label>
+                    <textarea
+                      placeholder="Enter slide description"
+                      class="form-control"
+                      rows="3"
+                      [(ngModel)]="item.description"
+                      [name]="'description-' + i"
+                      (change)="update()"></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Link (optional):</label>
+                    <input
+                      class="form-control"
+                      type="text"
+                      placeholder="https://example.com"
+                      [(ngModel)]="item.link"
+                      [name]="'link-' + i"
+                      (change)="update()" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        @if (settings.sliders.length === 0) {
+          <div class="empty-state">
+            <i class="fa fa-images fa-3x"></i>
+            <p>No slides yet. Click "Add Slide" to get started.</p>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- ===================== BASIC TAB ===================== -->
+    @if (activeTab === 'basic') {
+      <div class="basic-section">
+        <h3>Basic Settings</h3>
+
+        <table class="properties-table">
+          <tbody>
+            <tr>
+              <td>
+                <label for="effect">Effect:</label>
+              </td>
+              <td>
+                <select id="effect" class="form-control" [(ngModel)]="settings.effect" (change)="update()">
+                  @for (opt of effectOptions; track opt.value) {
+                    <option [value]="opt.value">{{ opt.label }}</option>
+                  }
+                </select>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <label for="direction">Direction:</label>
+              </td>
+              <td>
+                <select id="direction" class="form-control" [(ngModel)]="settings.direction" (change)="update()">
+                  <option value="horizontal">Horizontal</option>
+                  <option value="vertical">Vertical</option>
+                </select>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <label for="slidesPerView">Slides Per View:</label>
+              </td>
+              <td>
+                <input
+                  type="number"
+                  id="slidesPerView"
+                  class="form-control"
+                  min="1"
+                  max="10"
+                  step="1"
+                  [(ngModel)]="settings.slidesPerView"
+                  (change)="update()" />
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <label for="spaceBetween">Space Between (px):</label>
+              </td>
+              <td>
+                <input
+                  type="number"
+                  id="spaceBetween"
+                  class="form-control"
+                  min="0"
+                  max="100"
+                  step="5"
+                  [(ngModel)]="settings.spaceBetween"
+                  (change)="update()" />
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <label for="speed">Transition Speed (ms):</label>
+              </td>
+              <td>
+                <input
+                  type="number"
+                  id="speed"
+                  class="form-control"
+                  min="100"
+                  max="2000"
+                  step="100"
+                  [(ngModel)]="settings.speed"
+                  (change)="update()" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="switches-group">
+          <switch [(ngModel)]="settings.loop" (change)="update()">
+            Loop Mode
+          </switch>
+
+          <switch [(ngModel)]="settings.grabCursor" (change)="update()">
+            Grab Cursor
+          </switch>
+
+          <switch [(ngModel)]="settings.centeredSlides" (change)="update()">
+            Centered Slides
+          </switch>
+
+          <switch [(ngModel)]="settings.slideToClickedSlide" (change)="update()">
+            Click to Slide
+          </switch>
+        </div>
+      </div>
+    }
+
+    <!-- ===================== ADVANCED TAB ===================== -->
+    @if (activeTab === 'advanced') {
+      <div class="advanced-section">
+        <h3>Advanced Settings</h3>
+
+        <!-- Navigation & Controls -->
+        <div class="settings-group">
+          <h4><i class="fa fa-gamepad"></i> Navigation & Controls</h4>
+
+          <switch [(ngModel)]="settings.navigation" (change)="update()">
+            Navigation Arrows
+          </switch>
+
+          <switch [(ngModel)]="settings.pagination" (change)="update()">
+            Pagination
+          </switch>
+
+          @if (settings.pagination) {
+            <div class="form-group indent">
+              <label for="paginationType">Pagination Type:</label>
+              <select
+                id="paginationType"
+                class="form-control"
+                [(ngModel)]="settings.paginationType"
+                (change)="update()">
+                @for (type of paginationTypes; track type.value) {
+                  <option [value]="type.value">{{ type.label }}</option>
+                }
+              </select>
+            </div>
+          }
+
+          <switch [(ngModel)]="settings.scrollbar" (change)="update()">
+            Scrollbar
+          </switch>
+
+          <switch [(ngModel)]="settings.keyboard" (change)="update()">
+            Keyboard Control
+          </switch>
+
+          <switch [(ngModel)]="settings.mousewheel" (change)="update()">
+            Mousewheel Control
+          </switch>
+        </div>
+
+        <!-- Autoplay -->
+        <div class="settings-group">
+          <h4><i class="fa fa-play-circle"></i> Autoplay</h4>
+
+          <switch [(ngModel)]="settings.autoplay" (change)="update()">
+            Enable Autoplay
+          </switch>
+
+          @if (settings.autoplay) {
+            <div class="indent">
+              <div class="form-group">
+                <label for="autoplayDelay">Delay (ms):</label>
+                <input
+                  type="number"
+                  id="autoplayDelay"
+                  class="form-control"
+                  min="1000"
+                  max="10000"
+                  step="500"
+                  [(ngModel)]="settings.autoplayDelay"
+                  (change)="update()" />
+              </div>
+
+              <switch [(ngModel)]="settings.autoplayDisableOnInteraction" (change)="update()">
+                Disable on Interaction
+              </switch>
+
+              <switch [(ngModel)]="settings.autoplayPauseOnMouseEnter" (change)="update()">
+                Pause on Hover
+              </switch>
+            </div>
+          }
+        </div>
+
+        <!-- Performance & Features -->
+        <div class="settings-group">
+          <h4><i class="fa fa-bolt"></i> Performance & Features</h4>
+
+          <switch [(ngModel)]="settings.lazyLoading" (change)="update()">
+            Lazy Load Images
+          </switch>
+
+          <switch [(ngModel)]="settings.zoom" (change)="update()">
+            Image Zoom
+          </switch>
+
+          <switch [(ngModel)]="settings.freeMode" (change)="update()">
+            Free Mode (Stories Style)
+          </switch>
+        </div>
+
+        <!-- Grid Layout (Products) -->
+        <div class="settings-group">
+          <h4><i class="fa fa-th"></i> Grid Layout</h4>
+
+          <div class="form-group">
+            <label for="gridRows">Grid Rows:</label>
+            <input
+              type="number"
+              id="gridRows"
+              class="form-control"
+              min="1"
+              max="4"
+              step="1"
+              [(ngModel)]="settings.gridRows"
+              (change)="update()" />
+          </div>
+
+          @if (settings.gridRows && settings.gridRows > 1) {
+            <div class="form-group">
+              <label for="gridFill">Fill Direction:</label>
+              <select id="gridFill" class="form-control" [(ngModel)]="settings.gridFill" (change)="update()">
+                <option value="row">Row</option>
+                <option value="column">Column</option>
+              </select>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- ===================== RESPONSIVE TAB ===================== -->
+    @if (activeTab === 'responsive') {
+      <div class="responsive-section">
+        <div class="section-header">
+          <h3>Responsive Breakpoints</h3>
+          <button class="btn btn-primary" (click)="addBreakPoint()">
+            <i class="fa fa-plus"></i> Add Breakpoint
+          </button>
+        </div>
+
+        <p class="section-description">
+          Define how your slider behaves at different screen sizes.
+        </p>
+
+        @for (breakpoint of settings.breakpointsList; track $index; let i = $index) {
+          <div class="breakpoint-item">
+            <div class="breakpoint-header">
+              <span class="breakpoint-label">
+                <i class="fa fa-desktop"></i>
+                Screen Width ≥ {{ breakpoint.width }}px
+              </span>
+              <button class="btn btn-icon btn-danger" (click)="removeBreakPoint(i)">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+
+            <div class="breakpoint-body">
+              <div class="form-group">
+                <label>Width (px):</label>
+                <select class="form-control" [(ngModel)]="breakpoint.width" (change)="update()">
+                  @for (size of breakPointSizes; track size) {
+                    <option [value]="size">{{ size }}px</option>
+                  }
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Slides Per View:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  min="1"
+                  max="10"
+                  [(ngModel)]="breakpoint.slidesPerView"
+                  (change)="update()" />
+              </div>
+
+              <div class="form-group">
+                <label>Space Between (px):</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  min="0"
+                  max="100"
+                  [(ngModel)]="breakpoint.spaceBetween"
+                  (change)="update()" />
+              </div>
+            </div>
+          </div>
+        }
+
+        @if (settings.breakpointsList.length === 0) {
+          <div class="empty-state">
+            <i class="fa fa-mobile fa-3x"></i>
+            <p>No breakpoints defined. Your slider will use the basic settings across all screen sizes.</p>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
