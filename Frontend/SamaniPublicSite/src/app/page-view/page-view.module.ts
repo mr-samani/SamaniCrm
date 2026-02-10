@@ -15,7 +15,7 @@ import { CUSTOM_BLOCKS } from './custom-blocks/CustomBlocks';
     providePagePreview({
       customSources: CUSTOM_BLOCKS,
       publicCss: ['/bootstrap/bootstrap.min.css'],
-      publicJs: ['/bootstrap/bootstrap.min.js', 'https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js'],
+      publicJs: ['/bootstrap/bootstrap.min.js'],
     }),
   ],
 })

@@ -3541,10 +3541,10 @@ ngx-alert-modal@^2.0.0:
   dependencies:
     tslib "^2.3.0"
 
-ngx-page-builder@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.npmjs.org/ngx-page-builder/-/ngx-page-builder-2.0.3.tgz"
-  integrity sha512-v71DHKbep/C2Lhjiba38AR7kGv+0ilDK5d9AkI9G5iJmOVBbndjcgtguiNAaVA987HYVWlr84H3SydcxkyIE1Q==
+ngx-page-builder@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.npmjs.org/ngx-page-builder/-/ngx-page-builder-2.0.4.tgz"
+  integrity sha512-rRkA/TiioNPk/Z2f6TjPIAYIDF+1jpfpvV9kGJ9Yifhqub8HyR8O/7x7znDq/I3q2X5tgQt8HBiUYGu+lbY/5w==
   dependencies:
     tslib "^2.3.0"
 

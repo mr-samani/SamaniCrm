@@ -65,8 +65,6 @@ export class SliderComponent implements AfterViewInit, OnDestroy {
   @ViewChild('myCarousel') myCarousel!: ElementRef<HTMLElement>;
   carouselId = 'carousel-' + crypto.randomUUID();
 
-  settingChangeSubscription?: Subscription;
-
   settings = new SliderSetting();
 
   baseUrl = AppConst.fileServerUrl + '/';
@@ -76,10 +74,6 @@ export class SliderComponent implements AfterViewInit, OnDestroy {
     @Inject(COMPONENT_DATA) private context: ComponentDataContext<SliderSetting>
   ) {
     this.settings = context.data ?? new SliderSetting();
-    this.settingChangeSubscription = this.context.onChange.subscribe((data) => {
-      this.settings = data;
-      this.chdr.detectChanges();
-    });
   }
 
   ngAfterViewInit(): void {
@@ -98,8 +92,5 @@ export class SliderComponent implements AfterViewInit, OnDestroy {
     // if (this.slider) {
     //   this.slider.dispose();
     // }
-    if (this.settingChangeSubscription) {
-      this.settingChangeSubscription.unsubscribe();
-    }
   }
 }

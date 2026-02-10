@@ -30,7 +30,7 @@
     "lodash-es": "^4.17.21",
     "luxon": "^3.6.1",
     "ngx-alert-modal": "^2.0.0",
-    "ngx-page-builder": "^2.0.3",
+    "ngx-page-builder": "^2.0.4",
     "rxjs": "~7.8.0",
     "swiper": "^12.1.0",
     "tslib": "^2.3.0"

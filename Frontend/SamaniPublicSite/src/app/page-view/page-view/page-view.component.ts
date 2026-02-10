@@ -3,6 +3,15 @@ import { BaseComponent } from '@app/base-components';
 import { PageDto, PagesServiceProxy } from '@shared/service-proxies';
 import { finalize } from 'rxjs/operators';
 import { IPagebuilderOutput, PageBuilderConfig } from 'ngx-page-builder/core';
+import Swiper from 'swiper';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { EffectCards } from 'swiper/modules';
+
+// CSS ها
+import 'swiper/css';
+import 'swiper/css/effect-cards';
 
 @Component({
   selector: 'app-page-view',
@@ -33,6 +42,14 @@ export class PageViewComponent extends BaseComponent implements OnInit, AfterVie
   ngOnInit() {}
   ngAfterViewInit(): void {
     this.getInfo();
+    setTimeout(() => {
+      var swiper = new Swiper('.mySwiper', {
+        effect: 'cards',
+        grabCursor: true,
+        modules: [EffectCards],
+      });
+      console.log('s', swiper);
+    }, 100);
   }
 
   getInfo() {
@@ -47,7 +64,6 @@ export class PageViewComponent extends BaseComponent implements OnInit, AfterVie
       .subscribe((result) => {
         this.pageInfo = result.data ?? new PageDto();
         const parsed = JSON.parse(this.pageInfo.data ?? '{}');
-        debugger;
         let styles = [];
         try {
           styles = JSON.parse(this.pageInfo?.styles ?? '[]');
