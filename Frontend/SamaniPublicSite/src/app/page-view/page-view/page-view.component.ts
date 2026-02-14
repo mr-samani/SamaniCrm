@@ -3,8 +3,6 @@ import { BaseComponent } from '@app/base-components';
 import { PageDto, PagesServiceProxy } from '@shared/service-proxies';
 import { finalize } from 'rxjs/operators';
 import { IPagebuilderOutput, PageBuilderConfig } from 'ngx-page-builder/core';
-import 'swiper/swiper-bundle.css';
-
 
 @Component({
   selector: 'app-page-view',

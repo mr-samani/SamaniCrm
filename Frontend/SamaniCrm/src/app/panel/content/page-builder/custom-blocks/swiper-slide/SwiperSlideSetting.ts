@@ -192,10 +192,10 @@ export class SwiperSlideSetting {
     this.loop = true;
     this.grabCursor = true;
     this.centeredSlides = true;
-    this.breakpointsList = [
-      { width: 640, slidesPerView: 2 },
-      { width: 1024, slidesPerView: 3 },
-    ];
+    // this.breakpointsList = [
+    //   { width: 640, slidesPerView: 2 },
+    //   { width: 1024, slidesPerView: 3 },
+    // ];
   }
 
   private applyCubePreset() {

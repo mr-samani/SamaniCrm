@@ -26,7 +26,11 @@
                 "input": "public"
               }
             ],
-            "styles": ["./node_modules/bootstrap/dist/css/bootstrap.min.css", "src/styles.scss"],
+            "styles": [
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.scss",
+              "./node_modules/swiper/swiper-bundle.css"
+            ],
             "scripts": ["./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"],
             "server": "src/main.server.ts",
             "outputMode": "server",
