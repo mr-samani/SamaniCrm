@@ -1,5 +1,15 @@
 import { SwiperOptions } from 'swiper/types';
 
+export type SwiperPresetType =
+  | 'default'
+  | 'cards'
+  | 'stories'
+  | 'products'
+  | 'coverflow'
+  | 'cube'
+  | 'creative'
+  | 'custom';
+
 export type SwiperBreakpointItem = {
   width: number;
   slidesPerView?: number | 'auto';
@@ -7,124 +17,218 @@ export type SwiperBreakpointItem = {
 };
 
 export class SwiperSlideSetting {
-  rewind = true;
-  sliders: SwiperSlideContext[];
+  // Preset Selection
+  preset: SwiperPresetType = 'default';
 
+  // Slides Data
+  sliders: SwiperSlideContext[] = [];
+
+  // Basic Settings
   direction: 'horizontal' | 'vertical' = 'horizontal';
-
-  /**
-   * Duration of transition between slides (in ms)
-   *
-   * @default 300
-   */
   speed?: number = 300;
-
-  /**
-   * Enabled this option and plugin will set width/height on swiper wrapper equal to total size of all slides.
-   * Mostly should be used as compatibility fallback option for browser that don't support flexbox layout well
-   *
-   * @default false
-   */
-  setWrapperSize?: boolean;
-
-  /**
-   * Transition effect. Can be `'slide'`, `'fade'`, `'cube'`, `'coverflow'`, `'flip'`, `'creative'` or `'cards'`
-   *
-   * @default 'slide'
-   */
   effect?: 'slide' | 'fade' | 'cube' | 'coverflow' | 'flip' | 'creative' | 'cards' | (string & {}) = 'slide';
-  /**
-   * Distance between slides in px.
-   *
-   * @default 0
-   *
-   * @note If you use "margin" css property to the elements which go into Swiper in which you pass "spaceBetween" into, navigation might not work properly.
-   */
-  spaceBetween?: number | string = 5;
+  spaceBetween?: number | string = 10;
+  slidesPerView?: number | 'auto' = 1;
 
-  /**
-   * Number of slides per view (slides visible at the same time on slider's container).
-   * @note `slidesPerView: 'auto'` is currently not compatible with multirow mode, when `grid.rows` > 1
-   *
-   * @default 1
-   */
-  slidesPerView?: number | 'auto';
+  // Advanced Settings
+  centeredSlides?: boolean = false;
+  loop?: boolean = false;
+  rewind?: boolean = true;
+  grabCursor?: boolean = true;
+  slideToClickedSlide?: boolean = false;
+  watchSlidesProgress?: boolean = false;
+  setWrapperSize?: boolean = false;
+  slidesOffsetBefore?: number = 0;
+  slidesOffsetAfter?: number = 0;
 
-  /**
-   * If `true`, then active slide will be centered, not always on the left side.
-   *
-   * @default false
-   */
-  centeredSlides?: boolean;
-  /**
-   * Add (in px) additional slide offset in the beginning of the container (before all slides)
-   *
-   * @default 0
-   */
-  slidesOffsetBefore?: number;
+  // Navigation & Controls
+  navigation?: boolean = false;
+  pagination?: boolean = false;
+  paginationType?: 'bullets' | 'fraction' | 'progressbar' = 'bullets';
+  scrollbar?: boolean = false;
 
-  /**
-   * Add (in px) additional slide offset in the end of the container (after all slides)
-   *
-   * @default 0
-   */
-  slidesOffsetAfter?: number;
-  /**
-   * This option may a little improve desktop usability. If `true`, user will see the "grab" cursor when hover on Swiper
-   *
-   * @default false
-   */
-  grabCursor?: boolean;
+  // Autoplay
+  autoplay?: boolean = false;
+  autoplayDelay?: number = 3000;
+  autoplayDisableOnInteraction?: boolean = true;
+  autoplayPauseOnMouseEnter?: boolean = true;
 
-  /**
-   * Set to `true` and click on any slide will produce transition to this slide
-   *
-   * @default false
-   */
-  slideToClickedSlide?: boolean;
+  // Advanced Features
+  lazyLoading?: boolean = false;
+  keyboard?: boolean = false;
+  mousewheel?: boolean = false;
+  zoom?: boolean = false;
+  freeMode?: boolean = false;
+  thumbs?: boolean = false;
 
-  // Progress
-  /**
-   * Enable this feature to calculate each slides progress and visibility (slides in viewport will have additional visible class)
-   *
-   * @default false
-   */
-  watchSlidesProgress?: boolean;
+  // Grid (for products showcase)
+  gridRows?: number = 1;
+  gridFill?: 'row' | 'column' = 'row';
 
-  /**
-   * Set to `true` to enable continuous loop mode
-   *
-   * Because of nature of how the loop mode works (it will rearrange slides), total number of slides must be:
-   *
-   * - more than or equal to `slidesPerView` + `slidesPerGroup` (and `+ 1` in case of `centeredSlides`)
-   * - even to `slidesPerGroup` (or use `loopAddBlankSlides` parameter)
-   * - even to `grid.rows` (or use `loopAddBlankSlides` parameter)
-   *
-   * @default false
-   *
-   */
-  loop?: boolean = true;
-  breakpointsList: SwiperBreakpointItem[] = [
-    { width: 320, slidesPerView: 2, spaceBetween: 20 },
-    { width: 480, slidesPerView: 3, spaceBetween: 30 },
-    { width: 640, slidesPerView: 4, spaceBetween: 40 },
-  ];
-  // legacy persisted shape
+  // Creative Effect Options (only used when effect is 'creative')
+  creativeEffectPrev?: {
+    translate?: [number, number, number];
+    rotate?: [number, number, number];
+    opacity?: number;
+    scale?: number;
+  };
+  creativeEffectNext?: {
+    translate?: [number | string, number | string, number | string];
+    rotate?: [number, number, number];
+    opacity?: number;
+    scale?: number;
+  };
+
+  // Breakpoints
+  breakpointsList: SwiperBreakpointItem[] = [];
   breakpoints?: {
     [width: number]: SwiperOptions;
     [ratio: string]: SwiperOptions;
   };
 
   constructor() {
-    this.sliders = Array.from({ length: 10 }).map(
-      (e) =>
-        (e = {
-          image: '',
-        }),
-    );
-    this.slidesPerView = 8;
-    this.slidesOffsetBefore = 10;
-    this.slidesOffsetAfter = 10;
+    this.sliders = Array.from({ length: 5 }).map(() => new SwiperSlideContext());
+    this.applyPreset('default');
+  }
+
+  /**
+   * Apply a preset configuration
+   */
+  applyPreset(preset: SwiperPresetType) {
+    this.preset = preset;
+
+    switch (preset) {
+      case 'cards':
+        this.applyCardsPreset();
+        break;
+      case 'stories':
+        this.applyStoriesPreset();
+        break;
+      case 'products':
+        this.applyProductsPreset();
+        break;
+      case 'coverflow':
+        this.applyCoverflowPreset();
+        break;
+      case 'cube':
+        this.applyCubePreset();
+        break;
+      case 'creative':
+        this.applyCreativePreset();
+        break;
+      case 'default':
+      default:
+        this.applyDefaultPreset();
+        break;
+    }
+  }
+
+  private applyDefaultPreset() {
+    this.effect = 'slide';
+    this.slidesPerView = 1;
+    this.spaceBetween = 10;
+    this.navigation = true;
+    this.pagination = true;
+    this.paginationType = 'bullets';
+    this.loop = true;
+    this.grabCursor = true;
+    this.autoplay = false;
+    this.centeredSlides = false;
+    this.breakpointsList = [
+      { width: 640, slidesPerView: 2, spaceBetween: 20 },
+      { width: 1024, slidesPerView: 3, spaceBetween: 30 },
+    ];
+  }
+
+  private applyCardsPreset() {
+    this.effect = 'cards';
+    this.slidesPerView = 1;
+    this.spaceBetween = 0;
+    this.navigation = false;
+    this.pagination = false;
+    this.loop = false;
+    this.grabCursor = true;
+    this.centeredSlides = true;
+    this.breakpointsList = [];
+  }
+
+  private applyStoriesPreset() {
+    this.effect = 'slide';
+    this.slidesPerView = 'auto';
+    this.spaceBetween = 10;
+    this.navigation = false;
+    this.pagination = false;
+    this.centeredSlides = false;
+    this.freeMode = true;
+    this.grabCursor = true;
+    this.loop = false;
+    this.breakpointsList = [];
+  }
+
+  private applyProductsPreset() {
+    this.effect = 'slide';
+    this.slidesPerView = 2;
+    this.spaceBetween = 15;
+    this.navigation = true;
+    this.pagination = false;
+    this.loop = true;
+    this.grabCursor = true;
+    this.gridRows = 2;
+    this.gridFill = 'row';
+    this.breakpointsList = [
+      { width: 640, slidesPerView: 3, spaceBetween: 20 },
+      { width: 1024, slidesPerView: 4, spaceBetween: 25 },
+      { width: 1280, slidesPerView: 5, spaceBetween: 30 },
+    ];
+  }
+
+  private applyCoverflowPreset() {
+    this.effect = 'coverflow';
+    this.slidesPerView = 3;
+    this.spaceBetween = 30;
+    this.navigation = true;
+    this.pagination = true;
+    this.paginationType = 'bullets';
+    this.loop = true;
+    this.grabCursor = true;
+    this.centeredSlides = true;
+    this.breakpointsList = [
+      { width: 640, slidesPerView: 2 },
+      { width: 1024, slidesPerView: 3 },
+    ];
+  }
+
+  private applyCubePreset() {
+    this.effect = 'cube';
+    this.slidesPerView = 1;
+    this.spaceBetween = 0;
+    this.navigation = true;
+    this.pagination = true;
+    this.paginationType = 'fraction';
+    this.loop = false;
+    this.grabCursor = true;
+    this.breakpointsList = [];
+  }
+
+  private applyCreativePreset() {
+    this.effect = 'creative';
+    this.slidesPerView = 1;
+    this.spaceBetween = 0;
+    this.navigation = true;
+    this.pagination = true;
+    this.loop = true;
+    this.grabCursor = true;
+    this.centeredSlides = true;
+    this.creativeEffectPrev = {
+      translate: [0, 0, -400],
+      rotate: [0, 0, 0],
+      opacity: 0.5,
+      scale: 0.8,
+    };
+    this.creativeEffectNext = {
+      translate: ['100%', 0, 0],
+    };
+    this.breakpointsList = [];
   }
 
   normalizeBreakpoints() {
@@ -158,15 +262,181 @@ export class SwiperSlideSetting {
   }
 
   toSwiperOptions(): SwiperOptions {
-    const { breakpointsList, breakpoints, ...rest } = this as unknown as Record<string, unknown>;
-    return {
-      ...(rest as SwiperOptions),
+    const options: SwiperOptions = {
+      direction: this.direction,
+      speed: this.speed,
+      effect: this.effect,
+      spaceBetween: this.spaceBetween,
+      slidesPerView: this.slidesPerView,
+      centeredSlides: this.centeredSlides,
+      loop: this.loop,
+      rewind: this.rewind,
+      grabCursor: this.grabCursor,
+      slideToClickedSlide: this.slideToClickedSlide,
+      watchSlidesProgress: this.watchSlidesProgress,
+      setWrapperSize: this.setWrapperSize,
+      slidesOffsetBefore: this.slidesOffsetBefore,
+      slidesOffsetAfter: this.slidesOffsetAfter,
       breakpoints: this.buildBreakpoints(),
     };
+
+    // Navigation
+    if (this.navigation) {
+      options.navigation = {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      };
+    }
+
+    // Pagination
+    if (this.pagination) {
+      options.pagination = {
+        el: '.swiper-pagination',
+        type: this.paginationType,
+        clickable: true,
+      };
+    }
+
+    // Scrollbar
+    if (this.scrollbar) {
+      options.scrollbar = {
+        el: '.swiper-scrollbar',
+        draggable: true,
+      };
+    }
+
+    // Autoplay
+    if (this.autoplay) {
+      options.autoplay = {
+        delay: this.autoplayDelay,
+        disableOnInteraction: this.autoplayDisableOnInteraction,
+        pauseOnMouseEnter: this.autoplayPauseOnMouseEnter,
+      };
+    }
+
+    // Lazy Loading
+    if (this.lazyLoading) {
+      // TODO: Property 'lazy' does not exist on type 'SwiperOptions'.ts(2339)
+      // options.lazy = {
+      //   loadPrevNext: true,
+      // };
+    }
+
+    // Keyboard
+    if (this.keyboard) {
+      options.keyboard = {
+        enabled: true,
+      };
+    }
+
+    // Mousewheel
+    if (this.mousewheel) {
+      options.mousewheel = {
+        forceToAxis: true,
+      };
+    }
+
+    // Zoom
+    if (this.zoom) {
+      options.zoom = {
+        maxRatio: 3,
+      };
+    }
+
+    // Free Mode
+    if (this.freeMode) {
+      options.freeMode = {
+        enabled: true,
+        sticky: true,
+      };
+    }
+
+    // Grid
+    if (this.gridRows && this.gridRows > 1) {
+      options.grid = {
+        rows: this.gridRows,
+        fill: this.gridFill,
+      };
+    }
+
+    // Creative Effect
+    if (this.effect === 'creative' && (this.creativeEffectPrev || this.creativeEffectNext)) {
+      options.creativeEffect = {
+        prev: this.creativeEffectPrev,
+        next: this.creativeEffectNext,
+      };
+    }
+
+    // Coverflow Effect
+    if (this.effect === 'coverflow') {
+      options.coverflowEffect = {
+        rotate: 50,
+        stretch: 0,
+        depth: 100,
+        modifier: 1,
+        slideShadows: true,
+      };
+    }
+
+    // Cube Effect
+    if (this.effect === 'cube') {
+      options.cubeEffect = {
+        shadow: true,
+        slideShadows: true,
+        shadowOffset: 20,
+        shadowScale: 0.94,
+      };
+    }
+
+    return options;
+  }
+
+  /**
+   * Get required modules based on settings
+   */
+  getRequiredModules(): string[] {
+    const modules: string[] = [];
+
+    if (this.navigation) modules.push('Navigation');
+    if (this.pagination) modules.push('Pagination');
+    if (this.scrollbar) modules.push('Scrollbar');
+    if (this.autoplay) modules.push('Autoplay');
+    if (this.keyboard) modules.push('Keyboard');
+    if (this.mousewheel) modules.push('Mousewheel');
+    if (this.zoom) modules.push('Zoom');
+    if (this.thumbs) modules.push('Thumbs');
+    if (this.freeMode) modules.push('FreeMode');
+    if (this.gridRows && this.gridRows > 1) modules.push('Grid');
+
+    // Effect modules
+    switch (this.effect) {
+      case 'fade':
+        modules.push('EffectFade');
+        break;
+      case 'cube':
+        modules.push('EffectCube');
+        break;
+      case 'coverflow':
+        modules.push('EffectCoverflow');
+        break;
+      case 'flip':
+        modules.push('EffectFlip');
+        break;
+      case 'creative':
+        modules.push('EffectCreative');
+        break;
+      case 'cards':
+        modules.push('EffectCards');
+        break;
+    }
+
+    return modules;
   }
 }
 
 export class SwiperSlideContext {
   image: string = '';
   title?: string = '';
+  description?: string = '';
+  link?: string = '';
 }

@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { COMPONENT_DATA, ComponentDataContext } from 'ngx-page-builder';
-import { SlideContext, SliderSetting } from './SliderSetting';
+import { SlideContext, SliderSetting } from '../SliderSetting';
 import { FormsModule } from '@angular/forms';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { IOptions } from '@app/file-manager/options.interface';
