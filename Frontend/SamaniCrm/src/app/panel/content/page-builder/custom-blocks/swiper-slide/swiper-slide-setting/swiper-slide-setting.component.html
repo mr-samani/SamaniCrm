@@ -1,35 +1,25 @@
 <div class="swiper-settings">
   <!-- Tabs Navigation -->
   <div class="settings-tabs">
-    <button
-      class="tab-button"
-      [class.active]="activeTab === 'preset'"
-      (click)="setActiveTab('preset')">
-      <i class="fa fa-magic"></i> Presets
+    <button class="btn" [class.active]="activeTab === 'preset'" (click)="setActiveTab('preset')">
+      <i class="fa fa-magic"></i>
+      Presets
     </button>
-    <button
-      class="tab-button"
-      [class.active]="activeTab === 'slides'"
-      (click)="setActiveTab('slides')">
-      <i class="fa fa-images"></i> Slides
+    <button class="btn" [class.active]="activeTab === 'slides'" (click)="setActiveTab('slides')">
+      <i class="fa fa-images"></i>
+      Slides
     </button>
-    <button
-      class="tab-button"
-      [class.active]="activeTab === 'basic'"
-      (click)="setActiveTab('basic')">
-      <i class="fa fa-sliders"></i> Basic
+    <button class="btn" [class.active]="activeTab === 'basic'" (click)="setActiveTab('basic')">
+      <i class="fa fa-sliders"></i>
+      Basic
     </button>
-    <button
-      class="tab-button"
-      [class.active]="activeTab === 'advanced'"
-      (click)="setActiveTab('advanced')">
-      <i class="fa fa-cogs"></i> Advanced
+    <button class="btn" [class.active]="activeTab === 'advanced'" (click)="setActiveTab('advanced')">
+      <i class="fa fa-cogs"></i>
+      Advanced
     </button>
-    <button
-      class="tab-button"
-      [class.active]="activeTab === 'responsive'"
-      (click)="setActiveTab('responsive')">
-      <i class="fa fa-mobile"></i> Responsive
+    <button class="btn" [class.active]="activeTab === 'responsive'" (click)="setActiveTab('responsive')">
+      <i class="fa fa-mobile"></i>
+      Responsive
     </button>
   </div>
 
@@ -38,7 +28,7 @@
     <!-- ===================== PRESETS TAB ===================== -->
     @if (activeTab === 'preset') {
       <div class="preset-section">
-        <h3>Choose a Preset</h3>
+        <h4>Choose a Preset</h4>
         <p class="section-description">
           Select a pre-configured template to quickly get started. You can customize it further in other tabs.
         </p>
@@ -50,7 +40,7 @@
               [class.active]="settings.preset === preset.value"
               (click)="onPresetChange(preset.value)">
               <div class="preset-icon">{{ preset.icon }}</div>
-              <h4>{{ preset.label }}</h4>
+              <h5>{{ preset.label }}</h5>
               <p>{{ preset.description }}</p>
             </div>
           }
@@ -62,16 +52,17 @@
     @if (activeTab === 'slides') {
       <div class="slides-section">
         <div class="section-header">
-          <h3>Manage Slides</h3>
+          <h4>Manage Slides</h4>
           <button class="btn btn-primary" (click)="addSlide()">
-            <i class="fa fa-plus"></i> Add Slide
+            <i class="fa fa-plus"></i>
+            Add Slide
           </button>
         </div>
 
         <div class="accordion" id="accordionSlider">
           @for (item of settings.sliders; track $index; let i = $index) {
             <div class="accordion-item">
-              <h2 class="accordion-header d-flex align-items-center justify-content-between">
+              <div class="accordion-header d-flex align-items-center justify-content-between">
                 <button
                   class="accordion-button"
                   type="button"
@@ -88,7 +79,7 @@
                 <button class="btn btn-icon btn-danger" (click)="removeSlide(i)">
                   <i class="fa fa-trash"></i>
                 </button>
-              </h2>
+              </div>
               <div
                 [id]="'collapse' + i"
                 class="accordion-collapse collapse"
@@ -153,7 +144,7 @@
     <!-- ===================== BASIC TAB ===================== -->
     @if (activeTab === 'basic') {
       <div class="basic-section">
-        <h3>Basic Settings</h3>
+        <h4>Basic Settings</h4>
 
         <table class="properties-table">
           <tbody>
@@ -162,11 +153,13 @@
                 <label for="effect">Effect:</label>
               </td>
               <td>
-                <select id="effect" class="form-control" [(ngModel)]="settings.effect" (change)="update()">
-                  @for (opt of effectOptions; track opt.value) {
-                    <option [value]="opt.value">{{ opt.label }}</option>
-                  }
-                </select>
+                <div class="pi-group">
+                  <select id="effect" [(ngModel)]="settings.effect" (change)="update()">
+                    @for (opt of effectOptions; track opt.value) {
+                      <option [value]="opt.value">{{ opt.label }}</option>
+                    }
+                  </select>
+                </div>
               </td>
             </tr>
 
@@ -175,10 +168,12 @@
                 <label for="direction">Direction:</label>
               </td>
               <td>
-                <select id="direction" class="form-control" [(ngModel)]="settings.direction" (change)="update()">
-                  <option value="horizontal">Horizontal</option>
-                  <option value="vertical">Vertical</option>
-                </select>
+                <div class="pi-group">
+                  <select id="direction" [(ngModel)]="settings.direction" (change)="update()">
+                    <option value="horizontal">Horizontal</option>
+                    <option value="vertical">Vertical</option>
+                  </select>
+                </div>
               </td>
             </tr>
 
@@ -187,15 +182,16 @@
                 <label for="slidesPerView">Slides Per View:</label>
               </td>
               <td>
-                <input
-                  type="number"
-                  id="slidesPerView"
-                  class="form-control"
-                  min="1"
-                  max="10"
-                  step="1"
-                  [(ngModel)]="settings.slidesPerView"
-                  (change)="update()" />
+                <div class="pi-group">
+                  <input
+                    type="number"
+                    id="slidesPerView"
+                    min="1"
+                    max="10"
+                    step="1"
+                    [(ngModel)]="settings.slidesPerView"
+                    (change)="update()" />
+                </div>
               </td>
             </tr>
 
@@ -204,15 +200,16 @@
                 <label for="spaceBetween">Space Between (px):</label>
               </td>
               <td>
-                <input
-                  type="number"
-                  id="spaceBetween"
-                  class="form-control"
-                  min="0"
-                  max="100"
-                  step="5"
-                  [(ngModel)]="settings.spaceBetween"
-                  (change)="update()" />
+                <div class="pi-group">
+                  <input
+                    type="number"
+                    id="spaceBetween"
+                    min="0"
+                    max="100"
+                    step="5"
+                    [(ngModel)]="settings.spaceBetween"
+                    (change)="update()" />
+                </div>
               </td>
             </tr>
 
@@ -221,36 +218,29 @@
                 <label for="speed">Transition Speed (ms):</label>
               </td>
               <td>
-                <input
-                  type="number"
-                  id="speed"
-                  class="form-control"
-                  min="100"
-                  max="2000"
-                  step="100"
-                  [(ngModel)]="settings.speed"
-                  (change)="update()" />
+                <div class="pi-group">
+                  <input
+                    type="number"
+                    id="speed"
+                    min="100"
+                    max="2000"
+                    step="100"
+                    [(ngModel)]="settings.speed"
+                    (change)="update()" />
+                </div>
               </td>
             </tr>
           </tbody>
         </table>
 
         <div class="switches-group">
-          <switch [(ngModel)]="settings.loop" (change)="update()">
-            Loop Mode
-          </switch>
+          <switch [(ngModel)]="settings.loop" (change)="update()">Loop Mode</switch>
 
-          <switch [(ngModel)]="settings.grabCursor" (change)="update()">
-            Grab Cursor
-          </switch>
+          <switch [(ngModel)]="settings.grabCursor" (change)="update()">Grab Cursor</switch>
 
-          <switch [(ngModel)]="settings.centeredSlides" (change)="update()">
-            Centered Slides
-          </switch>
+          <switch [(ngModel)]="settings.centeredSlides" (change)="update()">Centered Slides</switch>
 
-          <switch [(ngModel)]="settings.slideToClickedSlide" (change)="update()">
-            Click to Slide
-          </switch>
+          <switch [(ngModel)]="settings.slideToClickedSlide" (change)="update()">Click to Slide</switch>
         </div>
       </div>
     }
@@ -258,19 +248,18 @@
     <!-- ===================== ADVANCED TAB ===================== -->
     @if (activeTab === 'advanced') {
       <div class="advanced-section">
-        <h3>Advanced Settings</h3>
+        <h4>Advanced Settings</h4>
 
         <!-- Navigation & Controls -->
         <div class="settings-group">
-          <h4><i class="fa fa-gamepad"></i> Navigation & Controls</h4>
+          <h5>
+            <i class="fa fa-gamepad"></i>
+            Navigation & Controls
+          </h5>
 
-          <switch [(ngModel)]="settings.navigation" (change)="update()">
-            Navigation Arrows
-          </switch>
+          <switch [(ngModel)]="settings.navigation" (change)="update()">Navigation Arrows</switch>
 
-          <switch [(ngModel)]="settings.pagination" (change)="update()">
-            Pagination
-          </switch>
+          <switch [(ngModel)]="settings.pagination" (change)="update()">Pagination</switch>
 
           @if (settings.pagination) {
             <div class="form-group indent">
@@ -287,26 +276,21 @@
             </div>
           }
 
-          <switch [(ngModel)]="settings.scrollbar" (change)="update()">
-            Scrollbar
-          </switch>
+          <switch [(ngModel)]="settings.scrollbar" (change)="update()">Scrollbar</switch>
 
-          <switch [(ngModel)]="settings.keyboard" (change)="update()">
-            Keyboard Control
-          </switch>
+          <switch [(ngModel)]="settings.keyboard" (change)="update()">Keyboard Control</switch>
 
-          <switch [(ngModel)]="settings.mousewheel" (change)="update()">
-            Mousewheel Control
-          </switch>
+          <switch [(ngModel)]="settings.mousewheel" (change)="update()">Mousewheel Control</switch>
         </div>
 
         <!-- Autoplay -->
         <div class="settings-group">
-          <h4><i class="fa fa-play-circle"></i> Autoplay</h4>
+          <h5>
+            <i class="fa fa-play-circle"></i>
+            Autoplay
+          </h5>
 
-          <switch [(ngModel)]="settings.autoplay" (change)="update()">
-            Enable Autoplay
-          </switch>
+          <switch [(ngModel)]="settings.autoplay" (change)="update()">Enable Autoplay</switch>
 
           @if (settings.autoplay) {
             <div class="indent">
@@ -327,33 +311,31 @@
                 Disable on Interaction
               </switch>
 
-              <switch [(ngModel)]="settings.autoplayPauseOnMouseEnter" (change)="update()">
-                Pause on Hover
-              </switch>
+              <switch [(ngModel)]="settings.autoplayPauseOnMouseEnter" (change)="update()">Pause on Hover</switch>
             </div>
           }
         </div>
 
         <!-- Performance & Features -->
         <div class="settings-group">
-          <h4><i class="fa fa-bolt"></i> Performance & Features</h4>
+          <h5>
+            <i class="fa fa-bolt"></i>
+            Performance & Features
+          </h5>
 
-          <switch [(ngModel)]="settings.lazyLoading" (change)="update()">
-            Lazy Load Images
-          </switch>
+          <switch [(ngModel)]="settings.lazyLoading" (change)="update()">Lazy Load Images</switch>
 
-          <switch [(ngModel)]="settings.zoom" (change)="update()">
-            Image Zoom
-          </switch>
+          <switch [(ngModel)]="settings.zoom" (change)="update()">Image Zoom</switch>
 
-          <switch [(ngModel)]="settings.freeMode" (change)="update()">
-            Free Mode (Stories Style)
-          </switch>
+          <switch [(ngModel)]="settings.freeMode" (change)="update()">Free Mode (Stories Style)</switch>
         </div>
 
         <!-- Grid Layout (Products) -->
         <div class="settings-group">
-          <h4><i class="fa fa-th"></i> Grid Layout</h4>
+          <h5>
+            <i class="fa fa-th"></i>
+            Grid Layout
+          </h5>
 
           <div class="form-group">
             <label for="gridRows">Grid Rows:</label>
@@ -385,15 +367,14 @@
     @if (activeTab === 'responsive') {
       <div class="responsive-section">
         <div class="section-header">
-          <h3>Responsive Breakpoints</h3>
+          <h4>Responsive Breakpoints</h4>
           <button class="btn btn-primary" (click)="addBreakPoint()">
-            <i class="fa fa-plus"></i> Add Breakpoint
+            <i class="fa fa-plus"></i>
+            Add Breakpoint
           </button>
         </div>
 
-        <p class="section-description">
-          Define how your slider behaves at different screen sizes.
-        </p>
+        <p class="section-description">Define how your slider behaves at different screen sizes.</p>
 
         @for (breakpoint of settings.breakpointsList; track $index; let i = $index) {
           <div class="breakpoint-item">

@@ -97,7 +97,7 @@ export class SwiperSlideSettingComponent extends AppComponentBase implements OnI
 
   constructor(@Inject(COMPONENT_DATA) private context: ComponentDataContext<SwiperSlideSetting>) {
     super();
-    this.settings = this.context.data || new SwiperSlideSetting();
+    this.settings = Object.assign(new SwiperSlideSetting(), this.context.data);
   }
 
   ngOnInit() {

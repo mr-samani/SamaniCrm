@@ -1,22 +1,25 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Inject,
-  OnDestroy,
-  viewChild,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, viewChild } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { SwiperSlideSetting } from './swiper-slide-setting/SwiperSlideSetting';
 import { COMPONENT_DATA, ComponentDataContext } from 'ngx-page-builder';
 import { Subscription } from 'rxjs';
 import Swiper from 'swiper';
-import type { SwiperModule } from 'swiper/types';
+import type { SwiperModule, SwiperOptions } from 'swiper/types';
 import { AppConst } from '@shared/app-const';
 
 // Import basic CSS
-import 'swiper/css';
+// import 'swiper/css';
+// import 'swiper/css/navigation';
+// import 'swiper/css/pagination';
+// import 'swiper/css/scrollbar';
+// import 'swiper/css/effect-fade';
+// import 'swiper/css/effect-cube';
+// import 'swiper/css/effect-coverflow';
+// import 'swiper/css/effect-flip';
+// import 'swiper/css/effect-creative';
+// import 'swiper/css/effect-cards';
+// import 'swiper/css/zoom';
+// import 'swiper/css/grid';
 
 @Component({
   selector: 'swiper-slide',
@@ -40,7 +43,7 @@ export class SwiperSlideComponent extends AppComponentBase implements AfterViewI
     @Inject(COMPONENT_DATA) private context: ComponentDataContext<SwiperSlideSetting>,
   ) {
     super();
-    this.settings = context.data ?? new SwiperSlideSetting();
+    this.settings = Object.assign(new SwiperSlideSetting(), this.context.data);
     this.settingChangeSubscription = this.context.onChange.subscribe((data) => {
       this.settings = data;
       this.update();
@@ -55,7 +58,6 @@ export class SwiperSlideComponent extends AppComponentBase implements AfterViewI
   async update() {
     const container = this.container()?.nativeElement;
     if (!container) return;
-
     // Check if slides exist
     const slides = container.querySelectorAll('.swiper-slide');
     if (slides.length === 0) {
@@ -68,17 +70,18 @@ export class SwiperSlideComponent extends AppComponentBase implements AfterViewI
     try {
       // Load required modules dynamically
       const modules = await this.loadRequiredModules();
-
-      // Load required CSS
-      await this.loadRequiredCSS();
-
-      // Initialize Swiper
-      this.swiper = new Swiper(container, {
+      const opt: SwiperOptions = {
         modules: modules,
         ...this.settings.toSwiperOptions(),
-      });
+      };
+      console.log(opt);
+      // Initialize Swiper
+      this.swiper = new Swiper(container, opt);
 
-      console.log('Swiper initialized with modules:', modules.map((m) => m.name));
+      console.log(
+        'Swiper initialized with modules:',
+        modules.map((m) => m.name),
+      );
     } catch (error) {
       console.error('Failed to initialize Swiper:', error);
     }
@@ -154,60 +157,6 @@ export class SwiperSlideComponent extends AppComponentBase implements AfterViewI
 
     const loadedModules = await Promise.all(modulePromises);
     return loadedModules.filter((m): m is SwiperModule => m !== null);
-  }
-
-  /**
-   * Dynamically load only required CSS files
-   */
-  private async loadRequiredCSS(): Promise<void> {
-    const cssFiles: string[] = [];
-
-    // Add CSS based on enabled features
-    if (this.settings.navigation && !this.loadedCSS.has('navigation')) {
-      cssFiles.push('swiper/css/navigation');
-      this.loadedCSS.add('navigation');
-    }
-
-    if (this.settings.pagination && !this.loadedCSS.has('pagination')) {
-      cssFiles.push('swiper/css/pagination');
-      this.loadedCSS.add('pagination');
-    }
-
-    if (this.settings.scrollbar && !this.loadedCSS.has('scrollbar')) {
-      cssFiles.push('swiper/css/scrollbar');
-      this.loadedCSS.add('scrollbar');
-    }
-
-    if (this.settings.zoom && !this.loadedCSS.has('zoom')) {
-      cssFiles.push('swiper/css/zoom');
-      this.loadedCSS.add('zoom');
-    }
-
-    if (this.settings.gridRows && this.settings.gridRows > 1 && !this.loadedCSS.has('grid')) {
-      cssFiles.push('swiper/css/grid');
-      this.loadedCSS.add('grid');
-    }
-
-    // Add effect CSS
-    const effectKey = `effect-${this.settings.effect}`;
-    if (this.settings.effect && this.settings.effect !== 'slide' && !this.loadedCSS.has(effectKey)) {
-      cssFiles.push(`swiper/css/effect-${this.settings.effect}`);
-      this.loadedCSS.add(effectKey);
-    }
-
-    // Import all required CSS
-    try {
-      await Promise.all(
-        cssFiles.map((cssPath) =>
-          import(
-            /* webpackChunkName: "swiper-css" */
-            `${cssPath}`
-          ).catch((err) => console.error(`Failed to load CSS: ${cssPath}`, err)),
-        ),
-      );
-    } catch (error) {
-      console.error('Failed to load CSS files:', error);
-    }
   }
 
   ngOnDestroy() {

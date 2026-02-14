@@ -5,7 +5,11 @@
 @if (fileInfo && _options.showPreview) {
   <div class="file-preview">
     <div class="image-container">
-      <img [src]="fileServerUrl + '/' + fileInfo.id" [alt]="fileInfo.extension" />
+      @if (fileInfo.id) {
+        <img [src]="fileServerUrl + '/' + fileInfo.id" [alt]="fileInfo.extension" />
+      } @else {
+        <img src="/images/default-image.png" />
+      }
     </div>
     <div class="name">
       {{ fileInfo.name }}

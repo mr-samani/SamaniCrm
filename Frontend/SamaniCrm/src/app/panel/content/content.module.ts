@@ -43,8 +43,8 @@ import { CUSTOM_BLOCKS } from './page-builder/custom-blocks/CustomBlocks';
       enableHistory: true,
       enableExportAsPlugin: true,
       showPlugins: true,
-      publicCss:['/bootstrap/bootstrap.min.css'],
-      publicJs:['/bootstrap/bootstrap.min.js','https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js'],
+      publicCss: ['/bootstrap/bootstrap.min.css', '/swiper/swiper-bundle.min.css'],
+      publicJs: ['/bootstrap/bootstrap.min.js'],
       //  storageType: StorageType.None,
       toolbarConfig: {
         showSaveButton: true,
