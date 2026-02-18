@@ -12,7 +12,7 @@ export const routes: Routes = [
 
   {
     path: 'pagebuilder/:lang/:id',
-    loadComponent: () => import('./panel/content/edit-page/edit-page.component').then((c) => c.EditPageComponent),
+    loadComponent: () => import('./page-builder/edit-page/edit-page.component').then((c) => c.EditPageComponent),
   },
 
   { path: 'testy', component: TestyComponent },

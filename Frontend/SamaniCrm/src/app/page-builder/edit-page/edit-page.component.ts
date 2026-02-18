@@ -4,17 +4,21 @@ import { AppConst } from '@shared/app-const';
 import { PagesServiceProxy } from '@shared/service-proxies/api/pages.service';
 import { finalize } from 'rxjs/operators';
 
-import { PageStorageService } from '../page-builder/page-storage.service';
-import { FilePickerService } from '../page-builder/file-picker.service';
-import { HtmlEditorService } from '../page-builder/html-editor.service';
-import { SharedPageDataService } from '../page-builder/shared-page-data.service';
+import { PageStorageService } from '../services/page-storage.service';
+import { FilePickerService } from '../services/file-picker.service';
+import { HtmlEditorService } from '../services/html-editor.service';
+import { SharedPageDataService } from '../services/shared-page-data.service';
 import {
+  NGX_PAGE_BUILDER_EXPORT_PLUGIN_STORE,
   NGX_PAGE_BUILDER_FILE_PICKER,
   NGX_PAGE_BUILDER_HTML_EDITOR,
   NGX_PAGE_BUILDER_STORAGE_SERVICE,
   NgxPageBuilder,
+  providePageBuilder,
 } from 'ngx-page-builder/designer';
 import { CustomToolbarButtons, IPage, IStyleSheetFile } from 'ngx-page-builder/core';
+import { PluginService } from '../services/plugin.service';
+import { CUSTOM_BLOCKS } from '../custom-blocks/CustomBlocks';
 @Component({
   selector: 'app-edit-page',
   templateUrl: './edit-page.component.html',
@@ -22,6 +26,29 @@ import { CustomToolbarButtons, IPage, IStyleSheetFile } from 'ngx-page-builder/c
   imports: [NgxPageBuilder],
   providers: [
     PagesServiceProxy,
+    providePageBuilder({
+      customSources: CUSTOM_BLOCKS,
+      enableHistory: true,
+      enableExportAsPlugin: true,
+      showPlugins: true,
+      publicCss: ['/bootstrap/bootstrap.min.css', '/swiper/swiper-bundle.min.css'],
+      publicJs: ['/bootstrap/bootstrap.min.js'],
+      //  storageType: StorageType.None,
+      toolbarConfig: {
+        showSaveButton: true,
+        showConfigButton: false,
+        showExportHtmlButton: false,
+        showImportHtmlButton: true,
+        showOpenButton: false,
+        showPreviewButton: true,
+        showPrintButton: true,
+      },
+    }),
+    {
+      provide: NGX_PAGE_BUILDER_EXPORT_PLUGIN_STORE,
+      useExisting: PluginService,
+      deps: [],
+    },
     { provide: NGX_PAGE_BUILDER_FILE_PICKER, useClass: FilePickerService },
     { provide: NGX_PAGE_BUILDER_HTML_EDITOR, useClass: HtmlEditorService },
     { provide: NGX_PAGE_BUILDER_STORAGE_SERVICE, useClass: PageStorageService },
@@ -38,7 +65,6 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
       title: 'close',
       icon: '<i class="fa fa-rectangle-xmark"></i>',
       callback: () => {
-        debugger;
         if (window.opener) {
           window.opener.postMessage('closed', '*');
         }
@@ -50,7 +76,7 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
       icon: '<i class="fa fa-desktop-arrow-down"></i>',
       callback: () => {
         if (this.sharedPageDataService.pageInfo) {
-          const c = AppConst.currentLanguage.substring(0, 2);
+          const c = this.lang.substring(0, 2);
           window.open(
             `${AppConst.publicSiteUrl}/${c}/page/preview/${this.sharedPageDataService.pageInfo.culture}/${this.pageId}`,
             '_blank',
