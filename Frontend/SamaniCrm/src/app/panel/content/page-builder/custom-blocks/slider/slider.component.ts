@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, ViewChild } from '@angular/core';
 import { SliderSetting } from './SliderSetting';
-import { COMPONENT_DATA, ComponentDataContext } from 'ngx-page-builder';
+import { COMPONENT_DATA, ComponentDataContext } from 'ngx-page-builder/core';
 import { Subscription } from 'rxjs';
 import { AppConst } from '@shared/app-const';
 @Component({

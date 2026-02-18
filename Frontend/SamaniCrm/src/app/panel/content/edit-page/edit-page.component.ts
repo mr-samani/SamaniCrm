@@ -3,19 +3,18 @@ import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
 import { PagesServiceProxy } from '@shared/service-proxies/api/pages.service';
 import { finalize } from 'rxjs/operators';
-import {
-  IPage,
-  NGX_PAGE_BUILDER_FILE_PICKER,
-  NGX_PAGE_BUILDER_HTML_EDITOR,
-  NgxPageBuilder,
-  NGX_PAGE_BUILDER_STORAGE_SERVICE,
-  IStyleSheetFile,
-} from 'ngx-page-builder';
+
 import { PageStorageService } from '../page-builder/page-storage.service';
 import { FilePickerService } from '../page-builder/file-picker.service';
 import { HtmlEditorService } from '../page-builder/html-editor.service';
 import { SharedPageDataService } from '../page-builder/shared-page-data.service';
-
+import {
+  NGX_PAGE_BUILDER_FILE_PICKER,
+  NGX_PAGE_BUILDER_HTML_EDITOR,
+  NGX_PAGE_BUILDER_STORAGE_SERVICE,
+  NgxPageBuilder,
+} from 'ngx-page-builder/designer';
+import { CustomToolbarButtons, IPage, IStyleSheetFile } from 'ngx-page-builder/core';
 @Component({
   selector: 'app-edit-page',
   templateUrl: './edit-page.component.html',
@@ -29,12 +28,37 @@ import { SharedPageDataService } from '../page-builder/shared-page-data.service'
   ],
 })
 export class EditPageComponent extends AppComponentBase implements OnInit, AfterViewInit, OnDestroy {
-  previousMainHeaderFixedTop: boolean = AppConst.mainHeaderFixedTop;
-
   pageId = '';
+  lang = '';
   data: IPage[] = [];
   styles: IStyleSheetFile[] = [];
 
+  customButtons: CustomToolbarButtons[] = [
+    {
+      title: 'close',
+      icon: '<i class="fa fa-rectangle-xmark"></i>',
+      callback: () => {
+        debugger;
+        if (window.opener) {
+          window.opener.postMessage('closed', '*');
+        }
+        window.close();
+      },
+    },
+    {
+      title: 'Preview Page',
+      icon: '<i class="fa fa-desktop-arrow-down"></i>',
+      callback: () => {
+        if (this.sharedPageDataService.pageInfo) {
+          const c = AppConst.currentLanguage.substring(0, 2);
+          window.open(
+            `${AppConst.publicSiteUrl}/${c}/page/preview/${this.sharedPageDataService.pageInfo.culture}/${this.pageId}`,
+            '_blank',
+          );
+        }
+      },
+    },
+  ];
   @ViewChild('pageBuilder') pageBuilder!: NgxPageBuilder;
   constructor(
     private pageService: PagesServiceProxy,
@@ -42,27 +66,21 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
     public sharedPageDataService: SharedPageDataService,
   ) {
     super();
+    this.lang = this.route.snapshot.params['lang'];
     this.pageId = this.route.snapshot.params['id'];
   }
 
   ngOnInit() {
     this.getPageInfo();
   }
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      AppConst.mainHeaderFixedTop = false;
-      this.cd.detectChanges();
-      this.doc.querySelector('ngx-page-builder')?.scrollIntoView();
-    });
-  }
-  ngOnDestroy(): void {
-    AppConst.mainHeaderFixedTop = this.previousMainHeaderFixedTop;
-  }
+  ngAfterViewInit(): void {}
+  ngOnDestroy(): void {}
   getPageInfo() {
     if (!this.pageId) return;
     this.showMainLoading();
+    debugger;
     this.pageService
-      .getPageInfo(this.pageId, AppConst.currentLanguage)
+      .getPageInfo(this.pageId, this.lang)
       .pipe(finalize(() => this.hideMainLoading()))
       .subscribe((response) => {
         console.log(response);
@@ -78,15 +96,5 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
           this.data = d ?? [];
         }
       });
-  }
-
-  preview() {
-    if (this.sharedPageDataService.pageInfo) {
-      const c = AppConst.currentLanguage.substring(0, 2);
-      window.open(
-        `${AppConst.publicSiteUrl}/${c}/page/preview/${this.sharedPageDataService.pageInfo.culture}/${this.pageId}`,
-        '_blank',
-      );
-    }
   }
 }

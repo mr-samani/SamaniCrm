@@ -1,4 +1,4 @@
-import { SourceItem } from 'ngx-page-builder';
+import { SourceItem } from 'ngx-page-builder/core';
 
 export const SWIPER_SLIDE_BLOCK: SourceItem = {
   tag: 'swiper-slide',

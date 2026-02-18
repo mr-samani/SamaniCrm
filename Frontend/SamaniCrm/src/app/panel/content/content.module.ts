@@ -13,7 +13,7 @@ import { PaginationComponent } from '@shared/components/pagination/pagination.co
 import { SharedModule } from '@shared/shared.module';
 import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 import { CreateOrEditPageMetaDataDialogComponent } from './create-or-edit-page-meta-data-dialog/create-or-edit-page-meta-data-dialog.component';
-import { providePageBuilder, NGX_PAGE_BUILDER_EXPORT_PLUGIN_STORE } from 'ngx-page-builder';
+import { providePageBuilder, NGX_PAGE_BUILDER_EXPORT_PLUGIN_STORE } from 'ngx-page-builder/designer';
 import { PagesServiceProxy } from '@shared/service-proxies/api/pages.service';
 import { PluginService } from './page-builder/plugin.service';
 import { PageBuilderServiceProxy } from '@shared/service-proxies/api/page-builder.service';

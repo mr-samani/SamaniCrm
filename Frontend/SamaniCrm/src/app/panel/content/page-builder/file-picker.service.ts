@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { AppConst } from '@shared/app-const';
-import { IPageBuilderFilePicker } from 'ngx-page-builder';
+import { IPageBuilderFilePicker } from 'ngx-page-builder/designer';
 
 @Injectable()
 export class FilePickerService implements IPageBuilderFilePicker {

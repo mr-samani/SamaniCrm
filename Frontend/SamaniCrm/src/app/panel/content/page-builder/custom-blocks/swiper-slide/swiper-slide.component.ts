@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, viewChild } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { SwiperSlideSetting } from './SwiperSlideSetting';
-import { COMPONENT_DATA, ComponentDataContext } from 'ngx-page-builder';
+import { COMPONENT_DATA, ComponentDataContext } from 'ngx-page-builder/core';
 import { Subscription } from 'rxjs';
 import Swiper from 'swiper';
 import type { SwiperModule, SwiperOptions } from 'swiper/types';

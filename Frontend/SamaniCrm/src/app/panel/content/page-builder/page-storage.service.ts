@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { PagesServiceProxy } from '@shared/service-proxies/api/pages.service';
 import { UpdatePageContentCommand } from '@shared/service-proxies/model/update-page-content-command';
-import { IPagebuilderOutput, IStorageService, PageBuilderService, preparePageDataForSave } from 'ngx-page-builder';
+import { IStorageService, PageBuilderService, preparePageDataForSave } from 'ngx-page-builder/designer';
 import { SharedPageDataService } from './shared-page-data.service';
+import { IPagebuilderOutput } from 'ngx-page-builder/core';
 
 @Injectable({
   providedIn: 'root',

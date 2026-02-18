@@ -10,6 +10,11 @@ export const routes: Routes = [
   { path: 'account', loadChildren: () => import('./account/account.module').then((m) => m.AccountModule) },
   { path: 'panel', loadChildren: () => import('./panel/panel.module').then((m) => m.PanelModule) },
 
+  {
+    path: 'pagebuilder/:lang/:id',
+    loadComponent: () => import('./panel/content/edit-page/edit-page.component').then((c) => c.EditPageComponent),
+  },
+
   { path: 'testy', component: TestyComponent },
   { path: 'g', component: GridGeneratorComponent },
   { path: 's', component: SpacingControlComponent },

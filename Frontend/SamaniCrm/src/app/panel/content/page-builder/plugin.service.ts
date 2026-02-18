@@ -3,7 +3,8 @@ import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
 import { CreatePluginCommand, GetPluginQuery } from '@shared/service-proxies';
 import { PageBuilderServiceProxy } from '@shared/service-proxies/api/page-builder.service';
-import { IPaginationPlugin, IPlugin, IPluginStore } from 'ngx-page-builder';
+import { IPaginationPlugin, IPlugin } from 'ngx-page-builder/core';
+import { IPluginStore } from 'ngx-page-builder/designer';
 import { finalize } from 'rxjs';
 
 @Injectable()

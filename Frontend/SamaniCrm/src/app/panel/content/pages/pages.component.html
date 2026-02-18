@@ -45,7 +45,7 @@
       </button>
       <mat-menu #menu="matMenu">
         @if (AppPermissions.Pages_Builder | permission) {
-          <a mat-menu-item (click)="updatePage(item)">
+          <a mat-menu-item (click)="openPageBuilder(item)">
             <i class="fa fa-edit mx-1"></i>
             <span>{{ 'EditContent' | translate }}</span>
           </a>

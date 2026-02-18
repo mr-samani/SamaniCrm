@@ -14,7 +14,6 @@ const routes: Routes = [
       { path: 'pages/:type', component: PagesComponent },
     ],
   },
-  { path: 'edit/:id', component: EditPageComponent },
 ];
 
 @NgModule({

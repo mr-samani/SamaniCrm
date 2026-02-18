@@ -1,4 +1,4 @@
-import { Component,  OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { finalize, Subscription } from 'rxjs';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
@@ -143,9 +143,26 @@ export class PagesComponent extends AppComponentBase implements OnInit {
   updatePage2(item: PageDtoExtended) {
     this.router.navigate(['/panel/page-builder/' + item.id]);
   }
-  updatePage(item: PageDtoExtended) {
-    this.router.navigate(['/panel/content/edit/' + item.id]);
+
+  openPageBuilder(item: PageDtoExtended) {
+    const messageListener = (event: MessageEvent) => {
+      if (event.data === 'closed') {
+        window.removeEventListener('message', messageListener);
+        this.reload();
+      }
+    };
+    window.addEventListener('message', messageListener);
+
+    const url = this.router.createUrlTree(['/pagebuilder/' + item.culture + '/' + item.id]);
+    window.open(url.toString(), '_blank');
+
+    // on opened window must be write:
+    // if (window.opener) {
+    //   window.opener.postMessage('closed', '*');
+    // }
+    // window.close();
   }
+
   remove(item: PageDtoExtended) {
     this.confirmMessage(`${this.l('Delete')}:${item?.title}`, this.l('AreYouSureForDelete')).then((result) => {
       if (result.isConfirmed) {
