@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject,  OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { finalize } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FileManagerDto } from '../models/file-manager-dto';
@@ -53,7 +53,12 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
     this.loadingFolders = true;
     this.fileManagerService
       .getTreeFolders()
-      .pipe(finalize(() => (this.loadingFolders = false)))
+      .pipe(
+        finalize(() => {
+          this.loadingFolders = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         this.folders = result.data ?? ([] as any);
         if (this.openedFolder && this.openedFolder.id) {

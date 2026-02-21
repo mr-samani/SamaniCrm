@@ -64,7 +64,12 @@ export class CreateOrEditProductTypeComponent extends AppComponentBase implement
     this.loading = true;
     this.productService
       .getProductTypeForEdit(id)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {

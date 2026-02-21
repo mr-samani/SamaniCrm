@@ -50,7 +50,12 @@ export class AddStatementDescriptionComponent implements OnInit {
     this.loading = true;
     this.agentService
       .getAllStatementDescriptionsFromDEPOSIT(code)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe(
         (res) => {
           if (res.isSuccess) {

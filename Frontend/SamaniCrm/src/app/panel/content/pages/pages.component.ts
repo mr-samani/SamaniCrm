@@ -89,7 +89,12 @@ export class PagesComponent extends AppComponentBase implements OnInit {
     input.pageSize = this.perPage;
     this.listSubscription$ = this.pageService
       .getAllPages(input)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data?.items ?? [];
         for (let item of this.list) {

@@ -69,7 +69,12 @@ export class CurrenciesComponent extends AppComponentBase implements OnInit {
     this.loading = true;
     this.productService
       .getCurrencies()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data ?? [];
         this.totalCount = this.list.length;

@@ -35,7 +35,12 @@ export class NotificationInfoComponent extends AppComponentBase implements OnIni
     this.loading = true;
     this.notificationService
       .getNotificationInfo(this.id)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         this.notifyInfo = result.data;
       });

@@ -147,7 +147,12 @@ export class BlockProductCategoryComponent extends BlockBase implements OnInit {
     input.take = 4;
     this.productService
       .getCategories(input)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         this.list = result.data ?? [];
         this.itemTemplate.dynamicDataCacheKey = this.cacheKey;

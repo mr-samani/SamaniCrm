@@ -1,4 +1,4 @@
-import { Component,  OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
@@ -37,7 +37,12 @@ export class RegisterComponent extends AppComponentBase implements OnInit {
     const formValue = this.registerForm.value;
     // this.authService
     //   .register(formValue)
-    //   .pipe(finalize(() => (this.loading = false)))
+    //   .pipe(
+    //   finalize(() => {
+    //     this.loading = false;
+    //     this.chdr.detectChanges();
+    //   }),
+    // )
     //   .subscribe((result: any) => {
     //     this.notify.success('ثبت نام شما با موفقیت انجام شد');
     //     this.router.navigate(['/app']);

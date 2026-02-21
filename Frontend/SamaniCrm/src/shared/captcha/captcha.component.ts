@@ -73,7 +73,12 @@ export class CaptchaComponent extends AppComponentBase implements OnInit, Contro
     this.loading = true;
     this.captchaService
       .reload()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         this.image = result.img;
         this.key = result.key;

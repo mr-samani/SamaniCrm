@@ -90,7 +90,12 @@ export class ProductAttributesComponent extends AppComponentBase implements OnIn
     input.sortDirection = ev ? ev.direction : '';
     this.listSubscription$ = this.productService
       .getProductAttributes(input)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data?.items ?? [];
         this.totalCount = response.data?.totalCount ?? 0;

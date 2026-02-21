@@ -37,7 +37,12 @@ export class RoleListComponent extends AppComponentBase implements OnInit {
     this.loading = true;
     this.roleService
       .getAllRoles()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data ?? [];
         this.list.map((m) => {

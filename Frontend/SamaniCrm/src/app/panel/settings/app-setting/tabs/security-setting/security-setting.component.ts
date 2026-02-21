@@ -31,7 +31,12 @@ export class SecuritySettingComponent extends AppComponentBase implements OnInit
     this.loading = true;
     this.securitySettingService
       .getSecuritySettings()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.settings = response.data ?? new SecuritySettingDto();
         this.logginAttemptMinute = (this.settings.logginAttemptTimeSecondsLimit ?? 0) / 60;

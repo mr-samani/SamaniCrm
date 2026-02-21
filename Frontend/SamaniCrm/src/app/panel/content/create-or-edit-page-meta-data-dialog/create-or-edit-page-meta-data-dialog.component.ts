@@ -81,7 +81,12 @@ export class CreateOrEditPageMetaDataDialogComponent extends AppComponentBase im
     this.loading = true;
     this.pageService
       .getForEditMetaData(id)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {

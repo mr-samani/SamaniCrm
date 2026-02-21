@@ -39,7 +39,6 @@ export class SwiperSlideComponent extends AppComponentBase implements AfterViewI
   private loadedCSS = new Set<string>();
 
   constructor(
-    private chdr: ChangeDetectorRef,
     @Inject(COMPONENT_DATA) private context: ComponentDataContext<SwiperSlideSetting>,
   ) {
     super();

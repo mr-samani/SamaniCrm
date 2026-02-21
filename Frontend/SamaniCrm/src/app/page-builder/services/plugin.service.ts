@@ -24,7 +24,12 @@ export class PluginService extends AppComponentBase implements IPluginStore {
       this.loading = true;
       this.pageBuilderService
         .getPlugins(input)
-        .pipe(finalize(() => (this.loading = false)))
+        .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
         .subscribe({
           next: (result) => {
             const items: IPlugin[] = (result.data?.items ?? []).map((m) => {

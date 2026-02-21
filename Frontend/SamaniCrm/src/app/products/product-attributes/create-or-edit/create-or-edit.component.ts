@@ -74,7 +74,12 @@ export class CreateOrEditProductAttributeComponent extends AppComponentBase impl
     this.loading = true;
     this.productService
       .getProductAttributeForEdit(id)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {

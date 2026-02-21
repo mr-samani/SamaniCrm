@@ -94,7 +94,12 @@ export class CreateOrEditExternalProviderComponent extends AppComponentBase impl
     this.loading = true;
     this.service
       .getById(id)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (result) => {
           if (result.data) {

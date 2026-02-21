@@ -16,12 +16,13 @@ import {
   NgxPageBuilder,
   providePageBuilder,
 } from 'ngx-page-builder/designer';
-import { CustomToolbarButtons, IPage, IStyleSheetFile } from 'ngx-page-builder/core';
+import { CustomToolbarButtons, DynamicDataStructure, IPage, IStyleSheetFile } from 'ngx-page-builder/core';
 import { PluginService } from '../services/plugin.service';
 import { CUSTOM_BLOCKS } from '../custom-blocks/CustomBlocks';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { CommonModule } from '@angular/common';
 import { PageBuilderServiceProxy } from '@shared/service-proxies';
+import { DYNAMIC_DATA } from '../dynamic-data/dynamic-data';
 @Component({
   selector: 'app-edit-page',
   templateUrl: './edit-page.component.html',
@@ -91,6 +92,8 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
       },
     },
   ];
+
+  dynamicData: DynamicDataStructure[] = DYNAMIC_DATA;
   @ViewChild('pageBuilder') pageBuilder!: NgxPageBuilder;
   constructor(
     private pageService: PagesServiceProxy,

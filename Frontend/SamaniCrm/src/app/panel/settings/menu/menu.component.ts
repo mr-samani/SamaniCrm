@@ -32,7 +32,12 @@ export class MenuComponent extends AppComponentBase implements OnInit {
     this.loading = true;
     this.menuService
       .getAllMenus()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data ?? ([] as any);
       });

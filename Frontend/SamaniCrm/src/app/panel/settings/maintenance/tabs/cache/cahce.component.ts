@@ -50,7 +50,12 @@ export class CacheComponent extends AppComponentBase implements OnInit {
     this.loading = true;
     this.maintenanceService
       .getAllCacheEntries()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.cacheKeys = response.data ?? [];
         this.totalSize = 0;

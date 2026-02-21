@@ -33,7 +33,12 @@ export class TwoFaAppConfigComponent extends AppComponentBase implements OnInit 
     this.loading = true;
     this.accountService
       .generate2FaRequestGenerate()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         if (result.data) {
           this.img = result.data.qrCode ?? '';

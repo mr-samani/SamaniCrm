@@ -37,7 +37,12 @@ export class CreateFolderDialogComponent extends AppComponentBase implements OnI
           parentId: this.parentId,
         }),
       )
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.notify.success(this.l('Message.SaveSuccessfully'));
         this.matDialogRef.close(response.data);

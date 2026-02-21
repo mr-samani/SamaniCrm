@@ -36,7 +36,12 @@ export class RolePermissionsListComponent extends AppComponentBase implements On
   getList() {
     this.loading = true;
     forkJoin([this.roleService.getRoleById(this.roleId), this.roleService.getRolePermissions(this.roleId)])
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe(([role, permissions]) => {
         this.list = permissions.data ?? ([] as any);
         this.roleName = role.data!.roleName;

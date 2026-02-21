@@ -63,7 +63,12 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
     const input = new GetCategoriesForAdminQuery();
     this.listSubscription$ = this.productService
       .getTreeProductCategoriesForAdmin(input)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data ?? [];
       });

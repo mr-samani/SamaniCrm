@@ -50,7 +50,12 @@ export class AddOrUpdateProductAttributesComponent extends AppComponentBase impl
           productTypeId: productTypeId,
         }),
       )
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         this.attributeList = result.data?.items ?? [];
         for (let item of this.attributeList) {

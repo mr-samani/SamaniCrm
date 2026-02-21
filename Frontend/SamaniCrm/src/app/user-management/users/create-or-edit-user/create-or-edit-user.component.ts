@@ -67,7 +67,12 @@ export class CreateOrEditUserComponent extends AppComponentBase implements OnIni
     this.loading = true;
 
     forkJoin([this.roleService.getAllRoles(), this.securitySettingsService.getPasswordComplexity()])
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: ([roles, passwordComplexity]) => {
           this.roles = roles.data ?? [];

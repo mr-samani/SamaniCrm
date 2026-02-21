@@ -1,5 +1,5 @@
 import { CommonModule, NgComponentOutlet } from '@angular/common';
-import { Component, ComponentRef, inject,  OnInit, Type } from '@angular/core';
+import { Component, ComponentRef, inject, OnInit, Type } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AppComponentBase } from '@app/app-component-base';
@@ -53,12 +53,18 @@ export class DashboardComponent extends AppComponentBase implements OnInit {
     this.loading = true;
     this.dashboardService
       .getAllDashboards()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         this.dashboards = result.data ?? [];
         if (this.dashboards.length > 0 && this.selectedIndex < 0) {
           this.onChangeDashboard(0);
         }
+        this.chdr.detectChanges();
       });
   }
 
@@ -70,7 +76,9 @@ export class DashboardComponent extends AppComponentBase implements OnInit {
       .pipe(finalize(() => (this.loadingItems = false)))
       .subscribe(async (result) => {
         this.dashboardItems = await WidgetHelper.loadWidgets(result.data ?? []);
-        console.log(this.dashboardItems);
+        //console.log(this.dashboardItems);
+
+        this.chdr.detectChanges();
       });
   }
 

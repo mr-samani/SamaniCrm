@@ -100,7 +100,12 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
     input.sortDirection = ev ? ev.direction : '';
     this.listSubscription$ = this.productService
       .getProducts(input)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data?.items ?? [];
         this.totalCount = response.data?.totalCount ?? 0;

@@ -36,7 +36,12 @@ export class UserSecuritySettingComponent extends AppComponentBase implements On
     this.loading = true;
     this.securitySettingService
       .getUserSecuritySettings()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.settings = response.data ?? new UserSettingDto();
       });

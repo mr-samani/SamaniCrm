@@ -36,7 +36,12 @@ export class SelectIconDialogComponent extends AppComponentBase implements OnIni
     this.loading = true;
     this.fileManagerService
       .getFileManagerIcons()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         this.list = result.data ?? [];
       });

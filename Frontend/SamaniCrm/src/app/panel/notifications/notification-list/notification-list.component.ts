@@ -92,10 +92,17 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
     input.sortDirection = ev ? ev.direction : '';
     this.notificationService
       .getAllNotifications(input)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data?.items ?? [];
         this.totalCount = response.data?.totalCount ?? 0;
+        
+        this.chdr.detectChanges();
       });
   }
 

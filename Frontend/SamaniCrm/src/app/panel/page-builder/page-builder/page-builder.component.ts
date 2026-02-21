@@ -52,7 +52,12 @@ export class PageBuilderComponent extends AppComponentBase implements AfterViewI
     this.loading = true;
     this.pageService
       .getPageInfo(this.pageId, AppConst.currentLanguage)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.pageInfo = response.data;
         this.setup();

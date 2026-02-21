@@ -73,7 +73,12 @@ export class CreateOrEditProductCategoryComponent extends AppComponentBase imple
     this.loading = true;
     this.productService
       .getProductCategoryForEdit(id)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {

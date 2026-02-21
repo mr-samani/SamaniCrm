@@ -1,4 +1,4 @@
-import { Component, EventEmitter,  Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { FileManagerDto } from '@app/file-manager/models/file-manager-dto';
 import {
@@ -77,7 +77,10 @@ export class FileListComponent extends AppComponentBase implements OnInit, OnDes
               }
               return list;
             }),
-            finalize(() => (this.loading = false)),
+            finalize(() => {
+              this.loading = false;
+              this.chdr.detectChanges();
+            }),
           );
         }),
       )

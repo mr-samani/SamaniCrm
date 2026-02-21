@@ -68,7 +68,12 @@ export class CreateOrEditMenuComponent extends AppComponentBase implements OnIni
     this.loading = true;
     this.menuService
       .getForEdit(id)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {

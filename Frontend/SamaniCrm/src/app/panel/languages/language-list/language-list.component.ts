@@ -53,7 +53,12 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
     this.loading = true;
     this.languageService
       .getAllLanguages()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data ?? [];
         this.list.map((x) => {

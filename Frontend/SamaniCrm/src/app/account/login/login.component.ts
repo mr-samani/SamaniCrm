@@ -70,7 +70,12 @@ export class LoginComponent extends AppComponentBase implements OnInit {
     formValue.captcha = new InputCaptchaDTO(this.loginForm.get('captcha')?.value);
     this.authService
       .login(formValue)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (result) => {
           if (result.success && result.data?.accessToken) {
@@ -106,7 +111,12 @@ export class LoginComponent extends AppComponentBase implements OnInit {
     input.password = this.loginForm.get('password')?.value;
     this.authService
       .loginTwoFactor(input)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (result) => {
           if (result.success && result.data?.accessToken) {

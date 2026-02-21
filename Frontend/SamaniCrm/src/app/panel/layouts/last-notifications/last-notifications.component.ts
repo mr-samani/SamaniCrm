@@ -42,7 +42,12 @@ export class LastNotificationsComponent extends AppComponentBase implements OnIn
     this.loading = true;
     this.notificationServiceProxy
       .getLastUnReadNotifications()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         this.notificationList = result.data ?? [];
         this.count = this.notificationList.length;

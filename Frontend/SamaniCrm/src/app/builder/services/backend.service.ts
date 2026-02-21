@@ -28,7 +28,12 @@ export class FormBuilderBackendService extends AppComponentBase {
     this.loading = true;
     this.pageService
       .getPageInfo(this.pageId, AppConst.currentLanguage)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.pageInfo = response.data;
         if (this.pageInfo && this.pageInfo.data) {

@@ -1,4 +1,4 @@
-import { inject,  DOCUMENT } from '@angular/core';
+import { inject, DOCUMENT, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -27,6 +27,7 @@ export abstract class AppComponentBase {
   panelService = inject(PanelService);
   AppPermissions = AppPermissions;
   doc = inject(DOCUMENT);
+  chdr = inject(ChangeDetectorRef);
   constructor() {
     //
     // this.mainSpinnerService = injector.get(MainSpinnerService);

@@ -57,7 +57,12 @@ export class ExternalProvidersComponent extends AppComponentBase implements OnIn
 
     this.listSubscription$ = this.externalProviderService
       .getAllExternalProviders()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data ?? [];
         this.totalCount = response.data?.length ?? 0;

@@ -1,12 +1,9 @@
-import { ErrorHandler, Injectable, Injector, NgZone } from '@angular/core';
+import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { NgxAlertModalService } from 'ngx-alert-modal';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
-  constructor(
-    private zone: NgZone,
-    private injector: Injector,
-  ) {}
+  constructor(private injector: Injector) {}
 
   handleError(error: any): void {
     const errorMessage = error?.message || '';
@@ -48,9 +45,7 @@ export class GlobalErrorHandler implements ErrorHandler {
         })
         .then((r) => {
           if (r.isConfirmed) {
-            this.zone.run(() => {
-              location.reload();
-            });
+            location.reload();
           }
         });
       return;

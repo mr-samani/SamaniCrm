@@ -62,7 +62,12 @@ export class LocalizationKeysComponent extends AppComponentBase implements OnIni
     this.loading = true;
     this.languageService
       .getAllLanguageKeys(this.culture)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.allLocalizations = response.data ?? [];
         this.search();
