@@ -19,13 +19,19 @@ import {
 import { CustomToolbarButtons, IPage, IStyleSheetFile } from 'ngx-page-builder/core';
 import { PluginService } from '../services/plugin.service';
 import { CUSTOM_BLOCKS } from '../custom-blocks/CustomBlocks';
+import { FileManagerService } from '@app/file-manager/file-manager.service';
+import { CommonModule } from '@angular/common';
+import { PageBuilderServiceProxy } from '@shared/service-proxies';
 @Component({
   selector: 'app-edit-page',
   templateUrl: './edit-page.component.html',
   styleUrls: ['./edit-page.component.scss'],
-  imports: [NgxPageBuilder],
+  imports: [NgxPageBuilder, CommonModule],
   providers: [
     PagesServiceProxy,
+    PageBuilderServiceProxy,
+    FileManagerService,
+    PluginService,
     providePageBuilder({
       customSources: CUSTOM_BLOCKS,
       enableHistory: true,
@@ -104,7 +110,6 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
   getPageInfo() {
     if (!this.pageId) return;
     this.showMainLoading();
-    debugger;
     this.pageService
       .getPageInfo(this.pageId, this.lang)
       .pipe(finalize(() => this.hideMainLoading()))
