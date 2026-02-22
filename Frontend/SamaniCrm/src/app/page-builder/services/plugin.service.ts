@@ -14,6 +14,9 @@ export class PluginService extends AppComponentBase implements IPluginStore {
   constructor(private pageBuilderService: PageBuilderServiceProxy) {
     super();
   }
+  deletePlugin(item: IPlugin, index: number): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
 
   getAllPlugins(take: number, skip: number, filter: string): Promise<IPaginationPlugin> {
     return new Promise<IPaginationPlugin>((resolve, reject) => {

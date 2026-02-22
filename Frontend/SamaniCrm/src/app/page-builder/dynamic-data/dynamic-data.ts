@@ -2,34 +2,37 @@ import { DynamicDataStructure, DynamicValueType } from 'ngx-page-builder/core';
 
 export const DYNAMIC_DATA: DynamicDataStructure[] = [
   {
+    id:'1',
     name: 'ProductCategory',
     displayName: 'Product category',
     type: DynamicValueType.Array,
-    values: [
-      {
-        name: 'Id',
-        displayName: 'Id',
-        type: DynamicValueType.String,
-        value: '',
-      },
-      {
-        name: 'Title',
-        displayName: 'Title',
-        type: DynamicValueType.String,
-        value: '',
-      },
-      {
-        name: 'Description',
-        displayName: 'Description',
-        type: DynamicValueType.String,
-        value: '',
-      },
-      {
-        name: 'Image',
-        displayName: 'Image',
-        type: DynamicValueType.String,
-        value: '',
-      },
+    list: [
+      [
+        {
+          name: 'Id',
+          displayName: 'Id',
+          type: DynamicValueType.String,
+          value: 'SampleId',
+        },
+        {
+          name: 'Title',
+          displayName: 'Title',
+          type: DynamicValueType.String,
+          value: 'Sample Title',
+        },
+        {
+          name: 'Description',
+          displayName: 'Description',
+          type: DynamicValueType.String,
+          value: 'Sample Description',
+        },
+        {
+          name: 'Image',
+          displayName: 'Image',
+          type: DynamicValueType.String,
+          value: 'sampleimg',
+        },
+      ],
     ],
   },
 ];

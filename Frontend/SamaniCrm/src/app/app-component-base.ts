@@ -20,7 +20,7 @@ export abstract class AppComponentBase {
   metaTag = inject(Meta);
   notify = inject(NotifyService);
   private mainSpinnerService = inject(MainSpinnerService);
-  language = inject(LanguageService);
+  readonly language = inject(LanguageService);
   alert = inject(NgxAlertModalService);
   breadcrumb = inject(BreadcrumbService);
 
@@ -45,8 +45,8 @@ export abstract class AppComponentBase {
     // this.doc = injector.get(DOCUMENT) as Document;
   }
 
-  l(key: string, param?: Object) {
-    // console.log(this.language.translate.instant(key, param));
+  l(key: string, param?: Object): string {
+    console.log(this.language.translate.instant(key, param));
     return this.language.translate.instant(key, param);
   }
 

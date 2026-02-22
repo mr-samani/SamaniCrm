@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
-import { accountModuleAnimation } from '@shared/animations/routerTransition';
-import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
-  animations: [accountModuleAnimation()],
   standalone: false,
 })
 export class RegisterComponent extends AppComponentBase implements OnInit {

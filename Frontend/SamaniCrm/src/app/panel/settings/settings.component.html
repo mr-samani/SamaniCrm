@@ -1,7 +1,7 @@
-<sub-header [title]="'Settings' | translate"></sub-header>
+<!-- <sub-header [title]="'Settings' | translate"></sub-header> -->
 <div class="panel-content">
   <div class="accordion" id="accordionExample">
-    @for (item of menuService.menuList; track $index; let i = $index) {
+    @for (item of menuList; track $index; let i = $index) {
       @if (item.permission | permission) {
         <div class="accordion-item">
           <div class="accordion-header" [id]="'mnu-' + i">

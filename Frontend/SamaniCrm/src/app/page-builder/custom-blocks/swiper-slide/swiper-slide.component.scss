@@ -1,9 +1,10 @@
-// :host {
-//   display: block;
-// }
+:host {
+  display: block;
+}
 .swiper-container-wrapper {
   width: 100%;
   position: relative;
+  height: inherit;
 
   // Default Swiper
   .swiper {

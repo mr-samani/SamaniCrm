@@ -35,7 +35,7 @@ import { DYNAMIC_DATA } from '../dynamic-data/dynamic-data';
     PluginService,
     providePageBuilder({
       customSources: CUSTOM_BLOCKS,
-      enableHistory: true,
+      enableHistory: false,
       enableExportAsPlugin: true,
       showPlugins: true,
       publicCss: ['/bootstrap/bootstrap.min.css', '/swiper/swiper-bundle.min.css'],
@@ -115,7 +115,12 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
     this.showMainLoading();
     this.pageService
       .getPageInfo(this.pageId, this.lang)
-      .pipe(finalize(() => this.hideMainLoading()))
+      .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         console.log(response);
         this.sharedPageDataService.pageInfo = response.data;

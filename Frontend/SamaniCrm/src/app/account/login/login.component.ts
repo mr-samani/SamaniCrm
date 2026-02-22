@@ -3,7 +3,6 @@ import { Component,  OnInit, ViewChild } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
-import { accountModuleAnimation } from '@shared/animations/routerTransition';
 import { AppConst } from '@shared/app-const';
 import { CaptchaComponent } from '@shared/captcha/captcha.component';
 import { AccountServiceProxy, ExternalProviderDto, ExternalProviderTypeEnum } from '@shared/service-proxies';
@@ -16,7 +15,6 @@ import { finalize } from 'rxjs';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  animations: [accountModuleAnimation()],
   standalone: false,
 })
 export class LoginComponent extends AppComponentBase implements OnInit {

@@ -3251,10 +3251,10 @@ ngx-input-color@^4.0.1:
   dependencies:
     tslib "^2.3.0"
 
-ngx-page-builder@^2.0.8:
-  version "2.0.8"
-  resolved "https://registry.npmjs.org/ngx-page-builder/-/ngx-page-builder-2.0.8.tgz"
-  integrity sha512-nys55UTyFUt/u4vqMDwV5J2xHW4z2I5Gc03iqGp2UuoEbarkA7SSKMG7JpPCrNr9MVDy3T0Yu4lnO9w7mRn0pw==
+ngx-page-builder@^2.0.9:
+  version "2.0.9"
+  resolved "https://registry.npmjs.org/ngx-page-builder/-/ngx-page-builder-2.0.9.tgz"
+  integrity sha512-sEB8nttrxhqiL1oUeoTycXI/p2pBpHq05T11T5rsCki1mVegIo+UN8QSsuTL7UYJOG5AsaFSA8tY28hm3/X4YQ==
   dependencies:
     tslib "^2.3.0"
 
