@@ -1,6 +1,7 @@
 .tab-group-container {
   --oc-tab-bg: #fff;
   --oc-tab-border: #d7e1ea;
+  --oc-tab-active-border: #3f51b5;
   --oc-tab-hover-bg: rgba(215, 225, 234, 0.7);
   // padding: 20px;
   background-color: inherit; //var(--body-bg);
@@ -22,24 +23,27 @@
       background: transparent;
       font-size: 14px;
       font-weight: 500;
-      margin: 0;
+      margin: 0 4px;
       overflow: visible;
       padding-bottom: 3px;
       position: relative;
-      top: 3px;
+      bottom: -1px;
       z-index: 11;
+      border-top-color: #d6d6d6;
 
       .title {
         box-sizing: border-box;
         display: inline-block;
-        padding: 4px 12px 0;
+        padding: 4px 6px 0;
         position: relative;
         z-index: 10;
         display: flex;
         flex-direction: column;
+        background: var(--oc-tab-bg);
+        border-top-color: #d6d6d6;
 
         span.top-line {
-          border-top: 2px solid transparent;
+          border-top: 2px solid var(--oc-tab-border);
           margin-top: -4px;
           padding-top: 7px;
           display: inline-block;
@@ -52,13 +56,14 @@
         span.tab-name {
           border-radius: 4px;
           padding: 10px 10px;
+          opacity: 0.5;
         }
 
         &:before,
         &:after {
-          background: var(--oc-tab-bg);
+          background: inherit;
           border-top: 2px solid var(--oc-tab-border);
-          bottom: -2px;
+          bottom: 0px;
           content: '';
           display: none;
           position: absolute;
@@ -67,45 +72,34 @@
           width: 20px;
           z-index: -1;
         }
-      }
-
-      &.active {
-        border-top-color: #d6d6d6;
-        z-index: 12;
-
         &:before {
-          background-color: var(--oc-tab-bg);
-          bottom: -3px;
-          content: ' ';
-          height: 7.4px;
-          left: -8px;
-          position: absolute;
-          right: -7px;
-          z-index: 20;
+          display: block;
+          border-left: 2px solid var(--oc-tab-border);
+          border-radius: 8px 0 0 0;
+          left: -12px;
+          transform: skewX(-18deg);
         }
+
+        &:after {
+          display: block;
+          border-radius: 0 8px 0 0;
+          border-right: 2px solid var(--oc-tab-border);
+          right: -12px;
+          transform: skewX(18deg);
+        }
+      }
+      &.active {
+        z-index: 12;
+        transform: scale(1.1);
+        transform-origin: top;
         .title {
-          background: var(--oc-tab-bg);
-          border-top-color: #d6d6d6;
-          z-index: 12;
-
-          span {
-            border-top-color: var(--oc-tab-border);
+          .tab-name {
+            opacity: 1;
           }
-
-          &:before {
-            display: block;
-            border-left: 2px solid var(--oc-tab-border);
-            border-radius: 8px 0 0 0;
-            left: -12px;
-            transform: skewX(-10deg);
-          }
-
-          &:after {
-            display: block;
-            border-radius: 0 8px 0 0;
-            border-right: 2px solid var(--oc-tab-border);
-            right: -12px;
-            transform: skewX(10deg);
+          &:before,
+          &:after,
+          span.top-line {
+            border-color: var(--oc-tab-active-border);
           }
         }
       }

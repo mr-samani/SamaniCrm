@@ -1,5 +1,5 @@
 import { CommonModule, NgComponentOutlet } from '@angular/common';
-import { Component, ComponentRef, inject, OnInit, Type } from '@angular/core';
+import { Component, ComponentRef, inject, OnInit, Type, viewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AppComponentBase } from '@app/app-component-base';
@@ -17,7 +17,7 @@ import { DeleteDashboardItemCommand } from '@shared/service-proxies/model/delete
 import { DeleteDashboardCommand } from '@shared/service-proxies/model/delete-dashboard-command';
 import { MatButtonModule } from '@angular/material/button';
 import { cloneDeep } from 'lodash-es';
-import { IGridLayoutOptions, NgxGridLayoutModule } from 'ngx-drag-drop-kit';
+import { IGridLayoutOptions, NgxGridLayoutComponent, NgxGridLayoutModule } from 'ngx-drag-drop-kit';
 
 @Component({
   selector: 'app-dashboard',
@@ -41,6 +41,8 @@ export class DashboardComponent extends AppComponentBase implements OnInit {
   };
   private dashboardService = inject(DasboardServiceProxy);
   private dialog = inject(MatDialog);
+
+  ngxGridLayout = viewChild<NgxGridLayoutComponent>('ngxGridLayout');
   constructor() {
     super();
   }
@@ -64,7 +66,6 @@ export class DashboardComponent extends AppComponentBase implements OnInit {
         if (this.dashboards.length > 0 && this.selectedIndex < 0) {
           this.onChangeDashboard(0);
         }
-        this.chdr.detectChanges();
       });
   }
 
@@ -76,14 +77,17 @@ export class DashboardComponent extends AppComponentBase implements OnInit {
       .pipe(finalize(() => (this.loadingItems = false)))
       .subscribe(async (result) => {
         this.dashboardItems = await WidgetHelper.loadWidgets(result.data ?? []);
-        //console.log(this.dashboardItems);
-
+        // console.log(this.dashboardItems);
+        setTimeout(() => {
+          this.ngxGridLayout()?.updateGridLayout();
+        }, 1000);
         this.chdr.detectChanges();
       });
   }
 
   onChangeDashboard(index: number) {
-    if (this.selectedIndex == index) return;
+    if (this.selectedIndex == index || !this.dashboards[index]) return;
+
     this.selectedIndex = index;
     this.getItems(this.dashboards[index].id!);
   }
@@ -165,10 +169,10 @@ export class DashboardComponent extends AppComponentBase implements OnInit {
       .deleteDashboardItem(input)
       .pipe(finalize(() => (this.loadingItems = false)))
       .subscribe((r) => {
-        console.log(r);
         const index = this.dashboardItems.findIndex((x) => x.id == item.id);
         this.dashboardItems.splice(index, 1);
         this.notify.success(this.l('DeletedSuccessfully'));
+        this.chdr.detectChanges();
       });
   }
   editWidget(item: Widget, c: NgComponentOutlet) {
@@ -188,8 +192,15 @@ export class DashboardComponent extends AppComponentBase implements OnInit {
           .deleteDashboard(input)
           .pipe(finalize(() => (this.loadingItems = false)))
           .subscribe((r) => {
-            console.log(r);
+            const index = this.dashboards.findIndex((x) => x.id == dashboard.id);
+            this.dashboards.splice(index, 1);
             this.notify.success(this.l('DeletedSuccessfully'));
+            if (this.selectedIndex > 0) {
+              this.onChangeDashboard(this.selectedIndex - 1);
+            } else {
+              this.onChangeDashboard(0);
+            }
+            this.chdr.detectChanges();
           });
       }
     });

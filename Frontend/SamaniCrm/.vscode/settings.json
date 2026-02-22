@@ -2,6 +2,9 @@
     "files.exclude": {
         ".angular":true,
         "**/.git": true,
+        "**/.claude": true,
+        "**/.gemini": true,
+        "**/.github": true,
         "**/.svn": true,
         "**/.hg": true,
         "**/.DS_Store": true,

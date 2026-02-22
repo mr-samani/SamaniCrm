@@ -46,7 +46,7 @@ export abstract class AppComponentBase {
   }
 
   l(key: string, param?: Object): string {
-    console.log(this.language.translate.instant(key, param));
+    // console.log(this.language.translate.instant(key, param));
     return this.language.translate.instant(key, param);
   }
 

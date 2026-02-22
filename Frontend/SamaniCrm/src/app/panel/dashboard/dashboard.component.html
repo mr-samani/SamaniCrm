@@ -10,8 +10,8 @@
 }
 <m-tab-group (selectedIndexChange)="onChangeDashboard($event)" [selectedIndex]="selectedIndex" [color]="'var(--body-bg)'">
   @for (dashboard of dashboards; track dashboard.id; let i = $index) {
-    <m-tab-item [title]="dashboard.title" [active]="i == 0">
-      <ngx-grid-layout [editMode]="editMode" [options]="options" (layoutChange)="onChangeLayout($event)">
+    <m-tab-item [title]="dashboard.title">
+      <ngx-grid-layout [editMode]="editMode" [options]="options" (layoutChange)="onChangeLayout($event)" #ngxGridLayout>
         @for (item of dashboardItems; track item.id) {
           <ngx-grid-item [id]="item.id" [config]="item.config">
             <div class="widget-container card">

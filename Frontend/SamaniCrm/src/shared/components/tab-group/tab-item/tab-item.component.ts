@@ -1,5 +1,4 @@
-
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, input, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'm-tab-item',
@@ -9,8 +8,13 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class TabItemComponent implements OnInit {
   @Input() title = '';
-  @Input() active = false;
-  constructor() {}
+
+  active = false;
+  public  setActive(val: boolean) {
+    this.active = val;
+    this.chdr.detectChanges();
+  }
+  constructor(private chdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {}
 }
