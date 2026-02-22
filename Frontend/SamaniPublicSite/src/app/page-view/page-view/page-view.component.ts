@@ -2,7 +2,8 @@ import { AfterViewInit, Component, DOCUMENT, Inject, Injector, OnInit, signal } 
 import { BaseComponent } from '@app/base-components';
 import { PageDto, PagesServiceProxy } from '@shared/service-proxies';
 import { finalize } from 'rxjs/operators';
-import { IPagebuilderOutput, PageBuilderConfig } from 'ngx-page-builder/core';
+import { DynamicDataStructure, IPagebuilderOutput, PageBuilderConfig } from 'ngx-page-builder/core';
+import { DYNAMIC_DATA } from '../dynamic-data/dynamic-data';
 
 @Component({
   selector: 'app-page-view',
@@ -16,9 +17,10 @@ export class PageViewComponent extends BaseComponent implements OnInit, AfterVie
   pageId = '';
   loading = signal(false);
   pageInfo?: PageDto;
-  dynamicData: any;
 
   data?: IPagebuilderOutput;
+  
+  dynamicData: DynamicDataStructure[] = DYNAMIC_DATA;
   constructor(
     injector: Injector,
     private pageService: PagesServiceProxy,
