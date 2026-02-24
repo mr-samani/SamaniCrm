@@ -50,7 +50,7 @@ export class TabGroupComponent implements OnDestroy, AfterViewInit {
       if (this.index < 0 && activeTabs?.length === 0 && this.tabs) {
         this.selectTab(this.tabs.first, 0);
       }
-    }, 500);
+    });
 
     this.tabGroupContainer()?.nativeElement.style.setProperty('--oc-tab-bg', this.color);
   }

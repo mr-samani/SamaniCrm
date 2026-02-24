@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef,  Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -91,7 +91,7 @@ export class HtmlEditorComponent extends AppComponentBase implements OnInit, Con
     this.tinymceInit = <EditorOptions>{
       license_key: 'gpl',
       branding: false,
-      height: 250,
+      height: '100%',
       draggable_modal: true,
       dragDropUpload: false,
       block_unsupported_drop: true,

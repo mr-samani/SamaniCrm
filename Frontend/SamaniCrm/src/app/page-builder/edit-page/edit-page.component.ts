@@ -22,12 +22,12 @@ import { CUSTOM_BLOCKS } from '../custom-blocks/CustomBlocks';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { CommonModule } from '@angular/common';
 import { PageBuilderServiceProxy } from '@shared/service-proxies';
-import { DYNAMIC_DATA } from '../dynamic-data/dynamic-data';
+import { DYNAMIC_DATA } from '../dynamic-data/dynamic-data'; 
 @Component({
   selector: 'app-edit-page',
   templateUrl: './edit-page.component.html',
   styleUrls: ['./edit-page.component.scss'],
-  imports: [NgxPageBuilder, CommonModule],
+  imports: [NgxPageBuilder, CommonModule, ],
   providers: [
     PagesServiceProxy,
     PageBuilderServiceProxy,
