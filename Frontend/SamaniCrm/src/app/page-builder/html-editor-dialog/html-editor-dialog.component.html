@@ -1,6 +1,6 @@
 <html-editor [(ngModel)]="model"></html-editor>
 <mat-dialog-actions>
-  <button class="btn btn-default" mat-dialog-close>
+  <button class="btn btn-default" (click)="cancel()">
     {{ 'Cancel' | translate }}
   </button>
   <button class="btn btn-primary" (click)="ok()">

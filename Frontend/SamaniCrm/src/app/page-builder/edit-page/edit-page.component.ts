@@ -22,12 +22,12 @@ import { CUSTOM_BLOCKS } from '../custom-blocks/CustomBlocks';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { CommonModule } from '@angular/common';
 import { PageBuilderServiceProxy } from '@shared/service-proxies';
-import { DYNAMIC_DATA } from '../dynamic-data/dynamic-data'; 
+import { DYNAMIC_DATA } from '../dynamic-data/dynamic-data';
 @Component({
   selector: 'app-edit-page',
   templateUrl: './edit-page.component.html',
   styleUrls: ['./edit-page.component.scss'],
-  imports: [NgxPageBuilder, CommonModule, ],
+  imports: [NgxPageBuilder, CommonModule],
   providers: [
     PagesServiceProxy,
     PageBuilderServiceProxy,
@@ -71,25 +71,12 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
     {
       title: 'close',
       icon: '<i class="fa fa-rectangle-xmark"></i>',
-      callback: () => {
-        if (window.opener) {
-          window.opener.postMessage('closed', '*');
-        }
-        window.close();
-      },
+      callback: () => this.handleClose(),
     },
     {
       title: 'Preview Page',
       icon: '<i class="fa fa-desktop-arrow-down"></i>',
-      callback: () => {
-        if (this.sharedPageDataService.pageInfo) {
-          const c = this.lang.substring(0, 2);
-          window.open(
-            `${AppConst.publicSiteUrl}/${c}/page/preview/${this.sharedPageDataService.pageInfo.culture}/${this.pageId}`,
-            '_blank',
-          );
-        }
-      },
+      callback: () => this.handlePreview(),
     },
   ];
 
@@ -135,5 +122,35 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
           this.data = d ?? [];
         }
       });
+  }
+
+  handleClose() {
+    this.alert
+      .show({
+        title: this.l('Close'),
+        text: this.l('AreYouSureToClose'),
+        showCancelButton: true,
+        showConfirmButton: true,
+        cancelButtonText: this.l('Cancel'),
+        confirmButtonText: this.l('Ok'),
+      })
+      .then((r) => {
+        if (r.isConfirmed) {
+          if (window.opener) {
+            window.opener.postMessage('closed', '*');
+          }
+          window.close();
+        }
+      });
+  }
+
+  handlePreview() {
+    if (this.sharedPageDataService.pageInfo) {
+      const c = this.lang.substring(0, 2);
+      window.open(
+        `${AppConst.publicSiteUrl}/${c}/page/preview/${this.sharedPageDataService.pageInfo.culture}/${this.pageId}`,
+        '_blank',
+      );
+    }
   }
 }

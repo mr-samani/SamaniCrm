@@ -29,4 +29,8 @@ export class HtmlEditorDialogComponent extends AppComponentBase implements OnIni
   ok() {
     this.dialogRef.close(this.model);
   }
+
+  cancel() {
+    this.dialogRef.close(undefined);
+  }
 }

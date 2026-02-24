@@ -3,6 +3,7 @@ import { TestyComponent } from './testy/testy.component';
 import { GridGeneratorComponent } from './grid-generator/grid-generator.component';
 import { SpacingControlComponent } from './builder/_libs/spacing-control/spacing-control.component';
 import { CComponent } from './c/c.component';
+import { editPageResolver } from './page-builder/edit-page/edit-page.resolver';
 
 export const routes: Routes = [
   //{ path: '', redirectTo: 'testy', pathMatch: 'full' },
@@ -13,6 +14,7 @@ export const routes: Routes = [
   {
     path: 'pagebuilder/:lang/:id',
     loadComponent: () => import('./page-builder/edit-page/edit-page.component').then((c) => c.EditPageComponent),
+    resolve: { data: editPageResolver },
   },
 
   { path: 'testy', component: TestyComponent },
