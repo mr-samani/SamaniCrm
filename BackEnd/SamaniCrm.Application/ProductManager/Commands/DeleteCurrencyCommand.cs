@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using System;
@@ -28,8 +29,21 @@ namespace SamaniCrm.Application.ProductManager.Commands
             if (entity.IsDefault)
                 throw new UserFriendlyException("Can not delete default currency");
 
+            var now= DateTime.UtcNow;
+
             entity.IsDeleted = true;
-            entity.DeletedTime = DateTime.UtcNow;
+            entity.DeletedTime = now;
+
+            var prices = await _dbContext.ProductPrices
+            .Where(x => x.Currency.Id == request.Id && !x.IsDeleted)
+            .ToListAsync(cancellationToken);
+
+            foreach (var price in prices)
+            {
+                price.IsDeleted = true;
+                price.DeletedTime = now;
+            }
+
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
             return result > 0;
         }

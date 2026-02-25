@@ -47,6 +47,8 @@ namespace SamaniCrm.Infrastructure
         public DbSet<ProductCategoryTranslation> ProductCategoryTranslations { get; set; }
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductTranslation> ProductTranslations { get; set; }
+
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<ProductTypeTranslation> ProductTypeTranslations { get; set; }
 
