@@ -13,6 +13,7 @@ import { FileManagetConsts } from '@app/file-manager/consts/file-manager-consts'
 import { AppConst } from '@shared/app-const';
 import { isImage } from '@app/file-manager/consts/is-image';
 import { isVideo } from '@app/file-manager/consts/is-video';
+import { ContextMenuItem } from '@shared/directives/context-menu/context-menu.model';
 
 @Component({
   selector: 'file-list',
@@ -41,6 +42,13 @@ export class FileListComponent extends AppComponentBase implements OnInit, OnDes
   defaultOpenFolderIcon = AppConst.apiUrl + FileManagetConsts.DefaultOpenFolderIcon;
   defaultFolderIcon = AppConst.apiUrl + FileManagetConsts.DefaultFolderIcon;
   defaultFileIcon = AppConst.apiUrl + FileManagetConsts.DefaultFileIcon;
+
+  fileContextMenu: ContextMenuItem[] = [
+    { title: this.l('Rename'), icon: 'fa fa-i-cursor', callback: () => this.renameFileOrFolder() },
+    { title: this.l('Delete'), icon: 'fa fa-trash', callback: () => this.deleteFileOrFolder(), danger: true },
+    { title: this.l('ChooseThisFile'), icon: 'fa fa-octagon-check', callback: () => this.chooseThisFile() },
+  ];
+
   constructor(
     private fileManagerService: FileManagerServiceProxy,
     private matDialog: MatDialog,
@@ -136,11 +144,11 @@ export class FileListComponent extends AppComponentBase implements OnInit, OnDes
         this.fileManagerService
           .deleteFileOrFolder(new DeleteFileOrFolderCommand({ id: this.selectedFileInfo?.id }))
           .pipe(
-        finalize(() => {
-          this.hideMainLoading();
-          this.chdr.detectChanges();
-        }),
-      )
+            finalize(() => {
+              this.hideMainLoading();
+              this.chdr.detectChanges();
+            }),
+          )
           .subscribe((response) => {
             if (response.data == true) {
               this.notify.success(this.l('DeleteSuccessfully'));
@@ -155,6 +163,8 @@ export class FileListComponent extends AppComponentBase implements OnInit, OnDes
     });
   }
 
+  renameFileOrFolder() {}
+  
   chooseThisFile() {
     if (this.selectedFileInfo && this.selectedFileInfo.isFolder == false) {
       this.onSelectFile.emit(this.selectedFileInfo);

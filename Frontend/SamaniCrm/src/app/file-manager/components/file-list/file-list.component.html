@@ -6,8 +6,11 @@
     <div
       class="file"
       (click)="selectFile(item)"
+      (contextmenu)="selectFile(item)"
       (dblclick)="dblClickFile(item)"
-      [class.active]="item.id == selectedFileInfo?.id">
+      [class.active]="item.id == selectedFileInfo?.id"
+      [contextMenu]="fileContextMenu"
+      [contextMenuTitle]="item.name">
       <div class="icon-container">
         @if (item.icon) {
           <img [src]="baseUrl + '/' + item.icon" />

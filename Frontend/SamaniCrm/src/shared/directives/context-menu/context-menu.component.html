@@ -1,0 +1,30 @@
+<div
+  class="ctx-menu"
+  animate.enter="ctx-menu--enter"
+  animate.leave="ctx-menu--leave"
+  [style.top.px]="y"
+  [style.left.px]="x"
+  role="menu"
+  aria-label="Context menu">
+  @if (contextMenuTitle) {
+    <div class="ctx-menu-header">
+      {{ contextMenuTitle }}
+    </div>
+  }
+
+  @for (item of items; track item.title) {
+    <button
+      class="ctx-menu__item"
+      [class.ctx-menu__item--danger]="item.danger"
+      [class.ctx-menu__item--disabled]="item.disabled"
+      [disabled]="item.disabled"
+      role="menuitem"
+      (click)="select(item)">
+      <i class="ctx-menu__icon" [ngClass]="item.icon" aria-hidden="true"></i>
+      <span class="ctx-menu__title">{{ item.title }}</span>
+    </button>
+    @if (item.dividerAfter) {
+      <div class="ctx-menu__divider" role="separator"></div>
+    }
+  }
+</div>
