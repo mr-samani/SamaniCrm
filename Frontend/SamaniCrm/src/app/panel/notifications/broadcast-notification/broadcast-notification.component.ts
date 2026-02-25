@@ -47,7 +47,12 @@ export class BroadcastNotificationComponent extends AppComponentBase implements 
     input.periority = formValue.periority;
     this.notificationService
       .broadCastMessageToAllUsers(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         if (result.success) {
           this.notify.success(this.l('SentSuccessfully'));

@@ -65,7 +65,12 @@ export class PluginService extends AppComponentBase implements IPluginStore {
 
     this.pageBuilderService
       .createPlugin(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (result) => {
           this.notify.success(this.l('Message.SaveSuccessfully'));

@@ -123,7 +123,12 @@ export class CreateOrEditMenuComponent extends AppComponentBase implements OnIni
     input.id = this.id;
     this.menuService
       .createOrUpdate(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success) {

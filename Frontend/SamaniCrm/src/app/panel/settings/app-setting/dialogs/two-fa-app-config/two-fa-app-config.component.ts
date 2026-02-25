@@ -60,7 +60,12 @@ export class TwoFaAppConfigComponent extends AppComponentBase implements OnInit 
           secret: this.secret,
         }),
       )
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         if (result.data == true) {
           this.notify.success(this.l('SaveSuccessFully'));

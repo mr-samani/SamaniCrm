@@ -133,7 +133,12 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
         this.showMainLoading();
         this.productService
           .deleteProductType(new DeleteProductTypeCommand({ id: item.id }))
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));

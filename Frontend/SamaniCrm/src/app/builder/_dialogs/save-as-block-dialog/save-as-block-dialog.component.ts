@@ -56,7 +56,12 @@ export class SaveAsBlockDialogComponent extends AppComponentBase implements OnIn
     input.init(formValue);
     this.pageBuilderService
       .createPlugin(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         this.notify.success(this.l('SavedSuccessfully'));
         this.matDialogRef.close(true);

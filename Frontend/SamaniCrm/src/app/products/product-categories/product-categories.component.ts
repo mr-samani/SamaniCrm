@@ -1,4 +1,4 @@
-import { Component,  OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { finalize, Subscription } from 'rxjs';
 import { ProductServiceProxy } from '@shared/service-proxies/api/product.service';
@@ -96,7 +96,12 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
         this.showMainLoading();
         this.productService
           .deleteProductCategory(new DeleteProductCategoryCommand({ id: item.id }))
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+            finalize(() => {
+              this.hideMainLoading();
+              this.chdr.detectChanges();
+            }),
+          )
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));
@@ -121,7 +126,12 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
     this.showMainLoading();
     this.productService
       .getAllProductCategoryTranslations()
-      .pipe(finalize(() => this.hideMainLoading()))
+      .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         const data = result.data ?? {};
         this.downloadService.generateDownloadJson(data, 'category_' + AppConst.currentLanguage + '.json');
@@ -135,7 +145,12 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
         this.showMainLoading();
         this.productService
           .importProductCategoryLocalization(data)
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+            finalize(() => {
+              this.hideMainLoading();
+              this.chdr.detectChanges();
+            }),
+          )
           .subscribe((result) => {
             if (result) {
               this.getList();

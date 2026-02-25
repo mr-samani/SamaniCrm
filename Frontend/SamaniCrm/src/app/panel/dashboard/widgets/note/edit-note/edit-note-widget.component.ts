@@ -58,7 +58,12 @@ export class EditNoteWidgetComponent extends AppComponentBase implements OnInit 
     }
     this.dashboardService
       .createOrUpdateDashboardItem(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         if (response.success) {
           this.notify.success('SavedSuccessfully');

@@ -1,9 +1,13 @@
-import { Component, Inject,  OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
-import { ProductServiceProxy, CreateOrUpdateProductCategoryCommand } from '@shared/service-proxies';
+import {
+  ProductServiceProxy,
+  CreateOrUpdateProductCategoryCommand,
+  GuidAutoCompleteDto,
+} from '@shared/service-proxies';
 import { finalize } from 'rxjs';
 import { ProductCategoryTranslationDto } from '@shared/service-proxies/model/product-category-translation-dto';
 import { IOptions } from '@app/file-manager/options.interface';
@@ -37,7 +41,7 @@ export class CreateOrEditProductCategoryComponent extends AppComponentBase imple
       slug: ['', [Validators.maxLength(100)]],
       orderIndex: [0, [Validators.required]],
       image: [''],
-      parentId: [],
+      parent: [],
       translations: this.fb.array([]),
       isActive: [true],
     });
@@ -83,6 +87,12 @@ export class CreateOrEditProductCategoryComponent extends AppComponentBase imple
         next: (response) => {
           if (response.success && response.data) {
             this.form.patchValue(response.data);
+            if (response.data.parentId) {
+              this.form.get('parent')?.patchValue(<GuidAutoCompleteDto>{
+                id: response.data.parentId,
+                title: response.data.parentTitle,
+              });
+            }
             this.translations = response.data.translations;
             this.setTranslations();
           } else {
@@ -123,13 +133,32 @@ export class CreateOrEditProductCategoryComponent extends AppComponentBase imple
       this.notify.warning(this.l('CompleteFormField'));
       return;
     }
+    const formValue = this.form.value;
+
     this.saving = true;
     const input = new CreateOrUpdateProductCategoryCommand();
-    input.init(this.form.value);
+
+    input.init(formValue);
     input.id = this.id;
+    if (formValue.parent) {
+      input.parentId = formValue.parent.id;
+    }
+
+    if (input.id && input.id == input.parentId) {
+      this.form.get('parent')?.reset();
+      this.form.markAllAsTouched();
+      this.notify.warning(this.l('ParentCanNotBeSelf'));
+      this.saving = false;
+      return;
+    }
     this.productService
       .createOrEditProductCategory(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success) {

@@ -52,7 +52,12 @@ export class CreateOrEditLanguageComponent extends AppComponentBase implements O
     input.init(this.form.value);
     this.languageService
       .createOrUpdate(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         if (response.success) {
           this.notify.success('SavedSuccessfully');

@@ -59,7 +59,12 @@ export class SelectIconDialogComponent extends AppComponentBase implements OnIni
           id: this.folderId,
         }),
       )
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         if (response.data) {
           this.matDialogRef.close(this.selected);

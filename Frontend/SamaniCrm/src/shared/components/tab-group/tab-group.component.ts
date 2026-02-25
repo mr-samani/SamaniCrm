@@ -30,7 +30,7 @@ export class TabGroupComponent implements OnDestroy, AfterViewInit {
   @Output() onAddTab = new EventEmitter();
 
   @Input('selectedIndex') set setIndex(val: number) {
-    if (this.tabs && this.tabs.get(val) != undefined) {
+    if (this.tabs && this.tabs.get(val) != undefined && Number.isInteger(val) && val > -1) {
       this.selectTab(this.tabs.get(val)!, val);
     }
   }

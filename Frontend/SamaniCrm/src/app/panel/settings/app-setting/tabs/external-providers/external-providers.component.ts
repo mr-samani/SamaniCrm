@@ -75,7 +75,12 @@ export class ExternalProvidersComponent extends AppComponentBase implements OnIn
         this.showMainLoading();
         this.externalProviderService
           .changeIsActiveExternalProvider(item.id, item.isActive)
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
           .subscribe({
             next: (response) => {
               this.notify.success(this.l('ChangedSuccessfully'));
@@ -113,7 +118,12 @@ export class ExternalProvidersComponent extends AppComponentBase implements OnIn
         this.showMainLoading();
         this.externalProviderService
           ._delete(item.id)
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));

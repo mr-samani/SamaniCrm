@@ -177,7 +177,12 @@ export class PagesComponent extends AppComponentBase implements OnInit {
         });
         this.pageService
           .deletePage(input)
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));

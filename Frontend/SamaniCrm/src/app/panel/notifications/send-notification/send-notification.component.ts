@@ -50,7 +50,12 @@ export class SendNotificationDialogComponent extends AppComponentBase implements
 
     this.notificationService
       .sendMessageToUser(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         if (result.success) {
           this.notify.success(this.l('SentSuccessfully'));

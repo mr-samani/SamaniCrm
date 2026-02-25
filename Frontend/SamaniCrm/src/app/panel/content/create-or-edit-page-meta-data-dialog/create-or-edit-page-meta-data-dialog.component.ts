@@ -140,7 +140,12 @@ export class CreateOrEditPageMetaDataDialogComponent extends AppComponentBase im
     input.type = this.type;
     this.pageService
       .createOrEditPageMetaData(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success) {

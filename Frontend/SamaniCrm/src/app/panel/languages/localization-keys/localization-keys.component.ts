@@ -104,7 +104,12 @@ export class LocalizationKeysComponent extends AppComponentBase implements OnIni
     input.data = this.allLocalizations;
     this.languageService
       .updateBatchLocalizeKey(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         if (response.success) {
           this.notify.success('SavedSuccessfully');
@@ -122,7 +127,12 @@ export class LocalizationKeysComponent extends AppComponentBase implements OnIni
           input.key = item.key;
           this.languageService
             .deleteKey(input)
-            .pipe(finalize(() => this.hideMainLoading()))
+            .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
             .subscribe((response) => {
               if (response.success) {
                 this.notify.success(this.l('DeletedSuccessfully'));

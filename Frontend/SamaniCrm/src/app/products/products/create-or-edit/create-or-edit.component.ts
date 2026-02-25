@@ -183,7 +183,12 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
     input.tags = this.tagList.join(',');
     this.productService
       .createOrEditProduct(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success) {

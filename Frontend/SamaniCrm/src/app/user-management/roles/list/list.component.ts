@@ -73,7 +73,12 @@ export class RoleListComponent extends AppComponentBase implements OnInit {
         this.showMainLoading();
         this.roleService
           .deleteRole(item.id)
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));

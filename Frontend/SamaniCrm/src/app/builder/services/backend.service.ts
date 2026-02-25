@@ -65,7 +65,11 @@ export class FormBuilderBackendService {
     });
     this.pageService
       .updatePageContent(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+        }),
+      )
       .subscribe(() => {
         this.notify.success(this.l('SavedSuccessfully'));
       });

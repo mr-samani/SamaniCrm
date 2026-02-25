@@ -132,7 +132,12 @@ export class CreateOrEditUserComponent extends AppComponentBase implements OnIni
     this.saving = true;
     this.userService
       .createUser(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success) {
@@ -159,7 +164,12 @@ export class CreateOrEditUserComponent extends AppComponentBase implements OnIni
     this.saving = true;
     this.userService
       .updateUser(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success) {

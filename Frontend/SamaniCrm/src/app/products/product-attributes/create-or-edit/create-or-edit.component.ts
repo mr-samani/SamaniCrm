@@ -130,7 +130,12 @@ export class CreateOrEditProductAttributeComponent extends AppComponentBase impl
     input.productTypeId = this.productTypeId;
     this.productService
       .createOrEditProductAttribute(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success) {

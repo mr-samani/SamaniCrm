@@ -52,7 +52,12 @@ export class AddDashboardWidgetComponent extends AppComponentBase implements OnI
     input.init(this.form.value);
     this.dashboardService
       .createOrUpdateDashboardItem(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         if (response.success) {
           this.notify.success('SavedSuccessfully');

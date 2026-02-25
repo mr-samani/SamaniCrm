@@ -92,7 +92,12 @@ export class AddNewLocalizeKeyComponent extends AppComponentBase implements OnIn
     }
     this.languageService
       .createOrEditLocalizeKey(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success) {

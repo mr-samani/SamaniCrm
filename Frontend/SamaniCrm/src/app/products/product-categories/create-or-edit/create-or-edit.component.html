@@ -27,10 +27,8 @@
           <mat-label>{{ 'OrderIndex' | translate }}</mat-label>
           <input matInput formControlName="orderIndex" numberCheck type="number" />
         </mat-form-field>
-        <mat-form-field class="col-md-6">
-          <mat-label>{{ 'Parent' | translate }}</mat-label>
-          <input matInput formControlName="parentId" />
-        </mat-form-field>
+
+        <auto-complete-product-category class="col-md-6" formControlName="parent"></auto-complete-product-category>
       </div>
       <p>
         <mat-checkbox formControlName="isActive" color="primary">

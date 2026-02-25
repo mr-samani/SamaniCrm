@@ -120,7 +120,12 @@ export class CreateOrEditProductTypeComponent extends AppComponentBase implement
     input.id = this.id;
     this.productService
       .createOrEditProductType(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success) {

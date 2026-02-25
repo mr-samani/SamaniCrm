@@ -154,7 +154,12 @@ export class CreateOrEditExternalProviderComponent extends AppComponentBase impl
       input.id = this.providerId;
       this.service
         .update(input)
-        .pipe(finalize(() => (this.saving = false)))
+        .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
         .subscribe({
           next: () => {
             this.dialogRef.close(true);
@@ -169,7 +174,12 @@ export class CreateOrEditExternalProviderComponent extends AppComponentBase impl
 
       this.service
         .create(input)
-        .pipe(finalize(() => (this.saving = false)))
+        .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
         .subscribe({
           next: () => {
             this.dialogRef.close(true);

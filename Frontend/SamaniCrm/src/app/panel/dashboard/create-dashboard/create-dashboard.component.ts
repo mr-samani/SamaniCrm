@@ -56,7 +56,12 @@ export class CreateDashboardComponent extends AppComponentBase implements OnInit
     input.init(this.form.value);
     this.dashboardService
       .createOrUpdateDashboard(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         if (response.success) {
           this.notify.success('SavedSuccessfully');

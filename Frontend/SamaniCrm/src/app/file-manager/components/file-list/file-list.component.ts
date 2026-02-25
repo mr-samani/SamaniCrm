@@ -135,7 +135,12 @@ export class FileListComponent extends AppComponentBase implements OnInit, OnDes
         this.showMainLoading();
         this.fileManagerService
           .deleteFileOrFolder(new DeleteFileOrFolderCommand({ id: this.selectedFileInfo?.id }))
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
           .subscribe((response) => {
             if (response.data == true) {
               this.notify.success(this.l('DeleteSuccessfully'));

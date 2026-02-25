@@ -56,7 +56,12 @@ export class CreateOrEditCurrencyComponent extends AppComponentBase implements O
     }
     this.productService
       .createOrEditCurrency(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         if (response.success) {
           this.notify.success('SavedSuccessfully');
