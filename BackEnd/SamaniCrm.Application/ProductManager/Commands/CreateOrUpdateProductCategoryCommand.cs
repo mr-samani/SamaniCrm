@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.ProductManagerManager.Commands
 {
-    public class CreateOrUpdateProductCategoryCommand:ProductCategoryDto,IRequest<Guid>
+    public class CreateOrUpdateProductCategoryCommand : ProductCategoryDto, IRequest<Guid>
     {
     }
 
@@ -28,13 +28,13 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
 
         public async Task<Guid> Handle(CreateOrUpdateProductCategoryCommand request, CancellationToken cancellationToken)
         {
-            ProductCategory cat;
+            ProductCategory? cat;
 
             if (request.Id.HasValue)
             {
                 cat = await _dbContext.ProductCategories
                      .Include(p => p.Translations)
-                     .FirstOrDefaultAsync(p => p.Id == request.Id.Value, cancellationToken);
+                     .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
                 if (cat == null)
                     throw new NotFoundException("Menu not found.");
             }
@@ -45,8 +45,8 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             }
 
             cat.Image = request.Image;
-            cat.OrderIndex   = request.OrderIndex;
-            cat.Slug = request.Slug;
+            cat.OrderIndex = request.OrderIndex;
+            cat.Slug = request.Slug ?? "";
             cat.IsActive = request.IsActive;
             cat.ParentId = request.ParentId;
 
