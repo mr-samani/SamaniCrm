@@ -2,37 +2,37 @@
   <div class="explorer-header">
     @if (openedFolder) {
       @if (AppPermissions.FileManager_CreateFolder | permission) {
-        <button (click)="createFolder()">
+        <button class="dark-btn" (click)="createFolder()">
           <i class="fa fa-folder"></i>
           {{ 'NewFolder' | translate }}
         </button>
       }
       <input type="file" #file placeholder="Choose file" (change)="uploadFile(file)" style="display: none" />
       @if (AppPermissions.FileManager_CreateFile | permission) {
-        <button (click)="file?.click()">
+        <button class="dark-btn" (click)="file?.click()">
           <i class="fa fa-upload"></i>
           {{ 'Upload' | translate }}
         </button>
       }
       @if (AppPermissions.FileManager_CreateFile | permission) {
-        <button (click)="uploadImage()">
+        <button class="dark-btn" (click)="uploadImage()">
           <i class="fa fa-upload"></i>
           {{ 'UploadImage' | translate }}
         </button>
       }
     }
 
-    <button [disabled]="true">
+    <button class="dark-btn" [disabled]="true">
       <i class="fa fa-sort"></i>
       {{ 'SortBy' | translate }}
     </button>
-    <button (click)="reload(true)">
+    <button class="dark-btn" (click)="reload(true)">
       <i class="fa fa-refresh"></i>
       {{ 'Refresh' | translate }}
     </button>
     <div class="search-bar">
       <input type="text" placeholder="search..." />
-      <button class="button-search">
+      <button class="dark-btn button-search">
         <i class="fa fa-search"></i>
       </button>
     </div>

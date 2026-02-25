@@ -36,12 +36,12 @@
       }
     </div>
     @if (selectedFileInfo.isFolder) {
-      <button class="btn btn-primary" (click)="selectIcon()">
+      <button class="dark-btn btn-primary" (click)="selectIcon()">
         {{ 'ChangeIcon' | translate }}
       </button>
     }
     @if (selectedFileInfo.id && (AppPermissions.FileManager_Delete | permission)) {
-      <button (click)="deleteFileOrFolder()" mat-icon-button>
+      <button (click)="deleteFileOrFolder()" class="dark-btn">
         <i class="fa fa-trash"></i>
       </button>
     }
@@ -67,9 +67,9 @@
       </tr>
     </table>
     @if (!selectedFileInfo.isFolder) {
-      <button class="w-100" mat-raised-button color="primary" (click)="chooseThisFile()">
-        <i class="fa fa-check"></i>
-        <span>{{ 'ChooseThisFile' }}</span>
+      <button class="dark-btn btn-primary btn-choose-file" (click)="chooseThisFile()">
+        <i class="fa fa-octagon-check mx-2"></i>
+        <span>{{ 'ChooseThisFile' | translate }}</span>
       </button>
     }
   </div>

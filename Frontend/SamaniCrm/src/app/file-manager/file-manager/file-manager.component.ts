@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { finalize } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FileManagerDto } from '../models/file-manager-dto';
@@ -20,6 +20,7 @@ import { FileListComponent } from '../components/file-list/file-list.component';
   templateUrl: './file-manager.component.html',
   styleUrls: ['./file-manager.component.scss'],
   standalone: false,
+  encapsulation: ViewEncapsulation.None,
 })
 export class FileManagerComponent extends AppComponentBase implements OnInit, OnDestroy {
   progress = 0;
