@@ -48,6 +48,15 @@
         <i class="fa fa-trash"></i>
       </button>
     }
+    @if (selectedFileInfo.id && !selectedFileInfo.isFolder) {
+      <button (click)="download()" class="dark-btn">
+        <i class="fa fa-download"></i>
+      </button>
+      <a [href]="fileServerUrl + '/' + selectedFileInfo.id" class="dark-btn" target="_blank" [title]="selectFile.name">
+        <i class="fa fa-link"></i>
+      </a>
+    }
+
     <table>
       <tr>
         <td colspan="2">{{ selectedFileInfo.name }}</td>

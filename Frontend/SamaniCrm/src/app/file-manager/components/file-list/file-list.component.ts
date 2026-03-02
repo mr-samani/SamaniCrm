@@ -212,6 +212,19 @@ export class FileListComponent extends AppComponentBase implements OnInit, OnDes
       });
   }
 
+  download() {
+    if (!this.selectedFileInfo || this.selectedFileInfo.isFolder) {
+      return;
+    }
+    const a = this.doc.createElement('a');
+    a.download = this.selectedFileInfo.name ?? 'Download';
+    a.href = this.fileServerUrl + '/' + this.selectedFileInfo.id;
+    a.click();
+    a.remove();
+  }
+
+ 
+
   chooseThisFile() {
     if (this.selectedFileInfo && this.selectedFileInfo.isFolder == false) {
       this.onSelectFile.emit(this.selectedFileInfo);
