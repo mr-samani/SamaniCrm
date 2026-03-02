@@ -137,6 +137,7 @@ export * from './product-type-dto-paginated-result';
 export * from './product-type-dto-paginated-result-api-response';
 export * from './product-type-translation-dto';
 export * from './refresh-token-command';
+export * from './rename-command';
 export * from './reorder-item';
 export * from './reorder-menu-command';
 export * from './revoke-refresh-token-command';

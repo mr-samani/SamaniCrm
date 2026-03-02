@@ -13,7 +13,10 @@ import { FileManagetConsts } from '@app/file-manager/consts/file-manager-consts'
 import { AppConst } from '@shared/app-const';
 import { isImage } from '@app/file-manager/consts/is-image';
 import { isVideo } from '@app/file-manager/consts/is-video';
+import { setPreviousFolderId } from '@app/file-manager/consts/PreviousFolderId';
 import { ContextMenuItem } from '@shared/directives/context-menu/context-menu.model';
+import { RenameDialogComponent } from '../rename/rename.component';
+import { AppPermissions } from '@shared/permissions/app-permissions';
 
 @Component({
   selector: 'file-list',
@@ -27,6 +30,9 @@ export class FileListComponent extends AppComponentBase implements OnInit, OnDes
     if (item) {
       this.selectedFileInfo = item;
       this.getDetailsRequest$.next({ id: item.id! });
+      if (item.isFolder) {
+        setPreviousFolderId(item.id!);
+      }
     }
   }
   @Output() openFolderChange = new EventEmitter<FileManagerDto>();
@@ -43,11 +49,7 @@ export class FileListComponent extends AppComponentBase implements OnInit, OnDes
   defaultFolderIcon = AppConst.apiUrl + FileManagetConsts.DefaultFolderIcon;
   defaultFileIcon = AppConst.apiUrl + FileManagetConsts.DefaultFileIcon;
 
-  fileContextMenu: ContextMenuItem[] = [
-    { title: this.l('Rename'), icon: 'fa fa-i-cursor', callback: () => this.renameFileOrFolder() },
-    { title: this.l('Delete'), icon: 'fa fa-trash', callback: () => this.deleteFileOrFolder(), danger: true },
-    { title: this.l('ChooseThisFile'), icon: 'fa fa-octagon-check', callback: () => this.chooseThisFile() },
-  ];
+  fileContextMenu: ContextMenuItem[] = [];
 
   constructor(
     private fileManagerService: FileManagerServiceProxy,
@@ -57,6 +59,27 @@ export class FileListComponent extends AppComponentBase implements OnInit, OnDes
   }
 
   ngOnInit() {
+    if (this.isGranted(AppPermissions.FileManager_CreateFile)) {
+      this.fileContextMenu.push({
+        title: this.l('Rename'),
+        icon: 'fa fa-i-cursor',
+        callback: () => this.renameFileOrFolder(),
+      });
+    }
+    if (this.isGranted(AppPermissions.FileManager_Delete)) {
+      this.fileContextMenu.push({
+        title: this.l('Delete'),
+        icon: 'fa fa-trash',
+        callback: () => this.deleteFileOrFolder(),
+        danger: true,
+      });
+    }
+    this.fileContextMenu.push({
+      title: this.l('ChooseThisFile'),
+      icon: 'fa fa-octagon-check',
+      callback: () => this.chooseThisFile(),
+    });
+
     this.initGetFolderDetails();
   }
   ngOnDestroy(): void {
@@ -100,7 +123,13 @@ export class FileListComponent extends AppComponentBase implements OnInit, OnDes
   public reload() {
     if (this.selectedFileInfo) {
       this.fileList = [];
-      this.getDetailsRequest$.next({ id: this.selectedFileInfo.id! });
+      let id = '';
+      if (this.selectedFileInfo.isFolder) {
+        id = this.selectedFileInfo.id!;
+      } else {
+        id = this.selectedFileInfo.parentId!;
+      }
+      this.getDetailsRequest$.next({ id });
     }
   }
 
@@ -114,6 +143,7 @@ export class FileListComponent extends AppComponentBase implements OnInit, OnDes
       this.selectedFileInfo = item;
       this.getDetailsRequest$.next({ id: item.id! });
       this.openFolderChange.emit(item);
+      setPreviousFolderId(item.id!);
     }
   }
 
@@ -130,6 +160,7 @@ export class FileListComponent extends AppComponentBase implements OnInit, OnDes
       .subscribe((icon: string) => {
         if (icon && this.selectedFileInfo) {
           this.selectedFileInfo.icon = icon;
+          this.chdr.detectChanges();
         }
       });
   }
@@ -163,8 +194,24 @@ export class FileListComponent extends AppComponentBase implements OnInit, OnDes
     });
   }
 
-  renameFileOrFolder() {}
-  
+  renameFileOrFolder() {
+    if (!this.selectedFileInfo) {
+      return;
+    }
+    this.matDialog
+      .open(RenameDialogComponent, {
+        data: this.selectedFileInfo,
+        width: '768px',
+      })
+      .afterClosed()
+      .subscribe((name: string) => {
+        if (name && this.selectedFileInfo) {
+          this.selectedFileInfo.name = name;
+          this.chdr.detectChanges();
+        }
+      });
+  }
+
   chooseThisFile() {
     if (this.selectedFileInfo && this.selectedFileInfo.isFolder == false) {
       this.onSelectFile.emit(this.selectedFileInfo);

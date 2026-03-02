@@ -140,6 +140,7 @@ namespace SamaniCrm.Core.Permissions
         public const string FileManager_CreateFolder = "Administrator.FileManager.CreateFolder";
         public const string FileManager_CreateFile = "Administrator.FileManager.CreateFile";
         public const string FileManager_Delete = "Administrator.FileManager.Delete";
+        public const string FileManager_Rename = "Administrator.FileManager.Rename";
 
 
 

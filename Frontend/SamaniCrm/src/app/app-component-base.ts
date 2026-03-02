@@ -50,6 +50,11 @@ export abstract class AppComponentBase {
     return this.language.translate.instant(key, param);
   }
 
+  isGranted(permission?: string): boolean {
+    if (!permission) return true;
+    return this.authService.isGranted(permission);
+  }
+
   showMainLoading() {
     this.mainSpinnerService.showLoading = true;
   }

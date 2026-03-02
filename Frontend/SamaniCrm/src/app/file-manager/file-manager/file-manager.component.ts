@@ -14,6 +14,7 @@ import { FileManagerServiceProxy } from '@shared/service-proxies';
 import { CreateFolderDialogComponent } from '../components/create-folder/create-folder.component';
 import { TusUploadService } from '../tus-upload.service';
 import { FileListComponent } from '../components/file-list/file-list.component';
+import { getPreviousFolderId } from '../consts/PreviousFolderId';
 
 @Component({
   selector: 'app-file-manager',
@@ -62,8 +63,9 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
       )
       .subscribe((result) => {
         this.folders = result.data ?? ([] as any);
-        if (this.openedFolder && this.openedFolder.id) {
-          this.tryOpenFolderInTree(this.folders, this.openedFolder.id);
+        let openedFolderId = this.openedFolder ? this.openedFolder.id : getPreviousFolderId();
+        if (openedFolderId) {
+          this.tryOpenFolderInTree(this.folders, openedFolderId);
         }
       });
   }
@@ -72,6 +74,9 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
     for (const f of tree) {
       if (f.id === id) {
         f.isOpen = true;
+        if (this.openedFolder?.id != f.id) {
+          this.openedFolder = f;
+        }
         return true;
       }
 

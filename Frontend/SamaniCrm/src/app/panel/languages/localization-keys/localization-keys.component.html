@@ -108,8 +108,8 @@
     </mat-select>
   </div>
   <div class="d-flex gap-2">
-    <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
-    <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
+    <button  class="btn btn-default" mat-dialog-close >{{ 'Cancel' | translate }}</button>
+    <button  class="btn btn-primary"  (click)="save()" cdkFocusInitial [disabled]="loading || saving">
       @if (saving) {
         <mat-spinner color="primary" diameter="25"></mat-spinner>
       }

@@ -117,4 +117,5 @@ export abstract class AppPermissions {
   public static FileManager_CreateFolder = 'Administrator.FileManager.CreateFolder';
   public static FileManager_CreateFile = 'Administrator.FileManager.CreateFile';
   public static FileManager_Delete = 'Administrator.FileManager.Delete';
+  public static FileManager_Rename = 'Administrator.FileManager.Rename';
 }

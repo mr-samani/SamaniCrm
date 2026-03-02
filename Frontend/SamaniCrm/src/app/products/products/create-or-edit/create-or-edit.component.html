@@ -116,7 +116,7 @@
 }
 
 <div class="actions fixed-bottom">
-  <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
+  <button  class="btn btn-primary"  (click)="save()" cdkFocusInitial [disabled]="loading || saving">
     @if (saving) {
       <mat-spinner color="primary" diameter="25"></mat-spinner>
     }

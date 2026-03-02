@@ -4,6 +4,7 @@
   </button>
   <switch [(ngModel)]="editMode">Edit</switch>
 </sub-header>
+<p></p>
 
 @if (loading || loadingItems) {
   <mat-progress-bar class="my-5" [mode]="'indeterminate'"></mat-progress-bar>
@@ -11,8 +12,7 @@
   <m-tab-group
     (selectedIndexChange)="onChangeDashboard($event)"
     [selectedIndex]="selectedIndex"
-    [color]="'var(--body-bg)'"
-    class="mt-2">
+    [color]="'var(--body-bg)'">
     @for (dashboard of dashboards; track dashboard.id; let i = $index) {
       <m-tab-item [title]="dashboard.title">
         <ngx-grid-layout

@@ -1,0 +1,12 @@
+.list-icon {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  max-width: 768px;
+  overflow: auto;
+  max-height: 80vh;
+  .icon {
+    padding: 5px;
+    border: 1px red solid;
+  }
+}

@@ -17,6 +17,7 @@ export class CreateFolderDialogComponent extends AppComponentBase implements OnI
   folderName = '';
   parentId = '';
   basePath = AppConst.apiUrl;
+
   constructor(
     private matDialogRef: MatDialogRef<CreateFolderDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: any,
@@ -24,6 +25,7 @@ export class CreateFolderDialogComponent extends AppComponentBase implements OnI
   ) {
     super();
     this.parentId = data.parentId;
+
   }
 
   ngOnInit(): void {}

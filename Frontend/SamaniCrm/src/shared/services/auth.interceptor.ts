@@ -119,7 +119,6 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   handleBadRequestError(err: any) {
-    debugger;
     const msg = err?.message ?? this.translateService.instant('Message.InvalidYourRequest');
     let errorList = [];
     if (err?.errors && Array.isArray(err.errors)) {

@@ -18,6 +18,7 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { AppConst } from '@shared/app-const';
 import { HttpErrorResponse } from '@angular/common/http';
+import { removePreviousFolderId } from '@app/file-manager/consts/PreviousFolderId';
 @Injectable({
   providedIn: 'root',
 })
@@ -143,6 +144,7 @@ export class AuthService {
       )
       .subscribe();
     this.tokenService.remove();
+    removePreviousFolderId();
     const returnUrl = window.location.href;
     this.router.navigate(['/account/login'], {
       queryParams: { returnUrl },

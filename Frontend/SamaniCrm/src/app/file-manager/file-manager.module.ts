@@ -17,6 +17,7 @@ import { FileSelectorComponent } from './components/file-selector/file-selector.
 import { TreeFolderComponent } from './components/tree-folder/tree-folder.component';
 import { FileListComponent } from './components/file-list/file-list.component';
 import { ContextMenuDirective } from '@shared/directives/context-menu/context-menu.directive';
+import { RenameDialogComponent } from './components/rename/rename.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ContextMenuDirective } from '@shared/directives/context-menu/context-me
     FileSelectorComponent,
     AddressBarComponent,
     FileListComponent,
+    RenameDialogComponent,
   ],
   imports: [
     CommonModule,

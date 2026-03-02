@@ -233,6 +233,19 @@ namespace SamaniCrm.Infrastructure.FileManager
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
             return result > 0;
         }
+        public async Task<bool> Rename(Guid Id, string Name, CancellationToken cancellationToken)
+        {
+            var found = await _dbContext.FileFolders.FindAsync(Id, cancellationToken);
+            if (found == null)
+            {
+                throw new NotFoundException("Parent not found");
+            }
+
+            found.Name = Name;
+            found.LastModifiedTime = DateTime.UtcNow;
+            var result = await _dbContext.SaveChangesAsync(cancellationToken);
+            return result > 0;
+        }
 
         public async Task<Guid> UploadFile(Guid parentId, Stream fileStream, string fileName, CancellationToken cancellationToken)
         {
