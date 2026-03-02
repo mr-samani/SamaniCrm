@@ -72,7 +72,12 @@ export class CacheComponent extends AppComponentBase implements OnInit {
         item.loading = true;
         this.maintenanceService
           .deleteCache(item.key)
-          .pipe(finalize(() => (item.loading = false)))
+          .pipe(
+        finalize(() => {
+          item.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
           .subscribe((response) => {
             this.notify.success(this.l('DoneSuccessFully') + '(' + response.data + ')');
             this.getData();

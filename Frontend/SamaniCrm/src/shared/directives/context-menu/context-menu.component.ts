@@ -41,6 +41,8 @@ export class ContextMenuComponent implements OnInit {
     private chdr: ChangeDetectorRef,
   ) {
     this.el = elementRef.nativeElement;
+
+    // todo: rtl ltr direction
   }
 
   ngOnInit(): void {

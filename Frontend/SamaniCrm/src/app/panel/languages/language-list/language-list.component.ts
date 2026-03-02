@@ -1,4 +1,4 @@
-import { Component,  OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
@@ -75,7 +75,12 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
     input.isActive = !item.isActive;
     this.languageService
       .activeOrDeactive(input)
-      .pipe(finalize(() => (item.loading = false)))
+      .pipe(
+        finalize(() => {
+          item.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe();
   }
 
@@ -96,11 +101,11 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
         this.languageService
           .deleteLangauuge(input)
           .pipe(
-        finalize(() => {
-          this.hideMainLoading();
-          this.chdr.detectChanges();
-        }),
-      )
+            finalize(() => {
+              this.hideMainLoading();
+              this.chdr.detectChanges();
+            }),
+          )
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));

@@ -118,21 +118,23 @@
       </label>
       <!-- //darkmode -->
       <!-- language -->
-      <button mat-icon-button [matMenuTriggerFor]="langMnu" class="pt-2">
-        <!-- <i class="flag" [ngClass]="currentLang"></i> -->
-        <img [src]="baseUrl + '/images/flags/' + currentLang + '.png'" />
-      </button>
-      <mat-menu #langMnu="matMenu">
-        @for (lang of languages; track lang) {
-          <button mat-menu-item (click)="changeLanguage(lang.culture!)" class="language-menu">
-            <div class="d-flex align-items-center g-5">
-              <!-- <i class="flag" [ngClass]="lang.code"></i> -->
-              <img [src]="baseUrl + '/images/flags/' + lang.flag + '.png'" />
-              <span>{{ lang.name }}</span>
-            </div>
-          </button>
-        }
-      </mat-menu>
+      @if (languages.length > 1) {
+        <button mat-icon-button [matMenuTriggerFor]="langMnu" class="pt-2">
+          <!-- <i class="flag" [ngClass]="currentLang"></i> -->
+          <img [src]="baseUrl + '/images/flags/' + currentLang + '.png'" />
+        </button>
+        <mat-menu #langMnu="matMenu">
+          @for (lang of languages; track lang) {
+            <button mat-menu-item (click)="changeLanguage(lang.culture!)" class="language-menu">
+              <div class="d-flex align-items-center g-5">
+                <!-- <i class="flag" [ngClass]="lang.code"></i> -->
+                <img [src]="baseUrl + '/images/flags/' + lang.flag + '.png'" />
+                <span>{{ lang.name }}</span>
+              </div>
+            </button>
+          }
+        </mat-menu>
+      }
       <!-- //language -->
 
       <div class="user-block navbar-brand" [mat-menu-trigger-for]="userMenu">

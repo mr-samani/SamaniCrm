@@ -1,13 +1,9 @@
-import { Component, Inject,  OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
-import {
-  CreateOrEditLanguageCommand,
-  CreateOrUpdateDashboardCommand,
-  DasboardServiceProxy,
-} from '@shared/service-proxies';
+import { CreateOrUpdateDashboardCommand, DasboardServiceProxy } from '@shared/service-proxies';
 import { SharedModule } from '@shared/shared.module';
 import { finalize } from 'rxjs';
 
@@ -58,7 +54,7 @@ export class CreateDashboardComponent extends AppComponentBase implements OnInit
       .createOrUpdateDashboard(input)
       .pipe(
         finalize(() => {
-          this.saving  = false;
+          this.saving = false;
           this.chdr.detectChanges();
         }),
       )

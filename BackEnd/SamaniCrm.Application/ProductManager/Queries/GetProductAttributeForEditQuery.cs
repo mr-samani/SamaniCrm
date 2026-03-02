@@ -22,6 +22,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
         {
             var entity = await _dbContext.ProductAttributes
                 .Include(x => x.Translations)
+                .ThenInclude(x=>x.Language)
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
             if (entity == null)
                 throw new NotFoundException("ProductAttribute not found.");
@@ -33,7 +34,9 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
                 IsRequired = entity.IsRequired,
                 IsVariant = entity.IsVariant,
                 SortOrder = entity.SortOrder,
-                Translations = entity.Translations?.Select(t => new ProductAttributeTranslationDto
+                Translations = entity.Translations
+                ?.Where(x=>x.Language.IsActive)
+                ?.Select(t => new ProductAttributeTranslationDto
                 {
                     ProductAttributeId = t.ProductAttributeId,
                     Culture = t.Culture,

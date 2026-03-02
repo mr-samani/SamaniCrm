@@ -232,7 +232,12 @@ export class TreeMenuComponent extends AppComponentBase implements OnInit, OnDes
     input.isActive = !item.isActive;
     this.menuService
       .activeOrDeactive(input)
-      .pipe(finalize(() => (item.loading = false)))
+      .pipe(
+        finalize(() => {
+          item.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success) {

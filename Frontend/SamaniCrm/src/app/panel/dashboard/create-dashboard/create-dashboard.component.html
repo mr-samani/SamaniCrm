@@ -1,9 +1,9 @@
 <h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
   @if (!isUpdate) {
-    <span cdkDragHandle class="title">{{ 'CreateLanguage' | translate }}</span>
+    <span cdkDragHandle class="title">{{ 'CreateNewDashboard' | translate }}</span>
   }
   @if (isUpdate) {
-    <span cdkDragHandle class="title">{{ 'EditLanguage' | translate }}</span>
+    <span cdkDragHandle class="title">{{ 'EditDashboard' | translate }}</span>
   }
 
   <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
