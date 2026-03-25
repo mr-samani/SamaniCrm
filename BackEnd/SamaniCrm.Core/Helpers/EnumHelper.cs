@@ -24,7 +24,7 @@ namespace SamaniCrm.Core.Shared.Helpers
             {
                 var attr = field.GetCustomAttribute<DescriptionAttribute>();
                 if (attr != null && attr.Description == description)
-                    return (T)field.GetValue(null);
+                    return (T)field.GetValue(null)!;
             }
             return defaultValue;
             throw new ArgumentException($"No matching enum value found for description '{description}' in {typeof(T).Name}");
