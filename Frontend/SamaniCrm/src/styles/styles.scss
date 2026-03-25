@@ -126,6 +126,19 @@ pre {
   z-index: 10000;
 }
 
+.fixed-form-actions {
+  position: sticky;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1030;
+  background: var(--body-bg);
+  padding: 10px 10%;
+  display: flex;
+  justify-content: flex-end;
+  box-shadow: 0px 0px 10px #2e2e2e6b;
+  margin-top: 32px;
+}
 
 /*notify */
 .notify-success {

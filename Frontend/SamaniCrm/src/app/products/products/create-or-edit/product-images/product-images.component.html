@@ -1,6 +1,10 @@
 <div class="card">
   <div class="card-header">{{ 'Images' | translate }}</div>
   <div class="card-body">
+    <div class="text-info py-3">
+      {{ 'ClickOnImageToChangeDefault' | translate }}
+    </div>
+
     <file-selector (change)="onSelectFile($event)" [options]="fileSelectorOptions"></file-selector>
     <div class="image-list mt-3">
       @for (item of images; track $index) {
@@ -8,8 +12,8 @@
           <img [src]="fileServerUrl + '/' + item.fileId" />
           @if (item.isMain) {
             <span class="default">
-              <i class="fa fa-circle-check"></i>
-              {{ 'Default' | translate }}
+              <!-- <i class="fa fa-circle-check"></i> -->
+              {{ 'MainImage' | translate }}
             </span>
           }
           <span class="delete" (click)="removeFile($event, item)">

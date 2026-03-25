@@ -62,6 +62,7 @@
           [productTypeId]="form.get('productType')?.value?.id"
           [attributeValues]="attributeValues"
           (onChange)="attributeValues = $event"></add-or-update-product-attributes>
+
         <product-prices [(prices)]="prices"></product-prices>
       </div>
       <div class="col-sm-4 d-flex flex-column gap-3">
@@ -70,6 +71,9 @@
         <div class="card">
           <div class="card-header">{{ 'Tags' | translate }}</div>
           <div class="card-body">
+            <div class="text-info py-3">
+              {{ 'TypeNewTagAndEnterToAdd' | translate }}
+            </div>
             <mat-form-field>
               <mat-label>{{ 'Tags' | translate }}</mat-label>
               <mat-chip-grid #chipGrid aria-label="Enter tag">
@@ -115,8 +119,8 @@
   </form>
 }
 
-<div class="actions fixed-bottom">
-  <button  class="btn btn-primary"  (click)="save()" cdkFocusInitial [disabled]="loading || saving">
+<div class="fixed-form-actions">
+  <button class="btn btn-primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
     @if (saving) {
       <mat-spinner color="primary" diameter="25"></mat-spinner>
     }

@@ -38,7 +38,7 @@
                     </span>
                   }
                 </div>
-                @if (form.get('currency')?.hasError('required')) {
+                @if (form.get('currency')?.hasError('required') && form.get('currency')?.dirty) {
                   <span class="text-danger">
                     {{ 'IsRequired' | translate: { value: 'Currency' | translate } }}
                   </span>
@@ -51,7 +51,7 @@
                   numberCheck
                   formControlName="price"
                   [placeholder]="'Price' | translate" />
-                @if (form.get('price')?.hasError('required')) {
+                @if (form.get('price')?.hasError('required') && form.get('price')?.dirty) {
                   <span class="text-danger">
                     {{ 'IsRequired' | translate: { value: 'Price' | translate } }}
                   </span>
@@ -67,7 +67,7 @@
                     }
                   </mat-select>
                 </div>
-                @if (form.get('type')?.hasError('required')) {
+                @if (form.get('type')?.hasError('required') && form.get('type')?.dirty) {
                   <span class="text-danger">
                     {{ 'IsRequired' | translate: { value: 'Type' | translate } }}
                   </span>
@@ -86,7 +86,7 @@
                   <mat-datepicker #dpS></mat-datepicker>
                   <mat-datepicker-toggle class="input-group-text py-0 px-1" [for]="dpS"></mat-datepicker-toggle>
                 </div>
-                @if (form.get('startDate')?.hasError('required')) {
+                @if (form.get('startDate')?.hasError('required') && form.get('startDate')?.dirty) {
                   <span class="text-danger">
                     {{ 'IsRequired' | translate: { value: ('StartDate' | translate) } }}
                   </span>
@@ -118,7 +118,7 @@
                   <mat-datepicker #dpE></mat-datepicker>
                   <mat-datepicker-toggle class="input-group-text py-0 px-1" [for]="dpE"></mat-datepicker-toggle>
                 </div>
-                @if (form.get('endDate')?.hasError('required')) {
+                @if (form.get('endDate')?.hasError('required') && form.get('endDate')?.dirty) {
                   <span class="text-danger">
                     {{ 'IsRequired' | translate: { value: ('EndDate' | translate) } }}
                   </span>
@@ -136,9 +136,10 @@
                   </span>
                 }
               </td>
-              <td>
-                <button mat-icon-button (click)="save()">
-                  <i class="fa fa-save"></i>
+              <td width="100" align="center">
+                <button class="btn btn-default" (click)="save()">
+                  <i class="fa fa-save mx-1"></i>
+                  <span>{{ 'Add' | translate }}</span>
                 </button>
               </td>
             </tr>
@@ -147,8 +148,8 @@
                 <td>{{ item.currency }}</td>
                 <td>{{ item.price | number }}</td>
                 <td>{{ 'PriceTypeEnum_' + item.type | translate }}</td>
-                <td>{{ item.startDate | luxonFormat: 'F' }}</td>
-                <td>{{ item.endDate | luxonFormat: 'F' }}</td>
+                <td>{{ item.startDate | luxonFormat: 'D' }}</td>
+                <td>{{ item.endDate | luxonFormat: 'D' }}</td>
                 <td>
                   <button mat-icon-button (click)="remove(i)">
                     <i class="fa fa-trash"></i>
