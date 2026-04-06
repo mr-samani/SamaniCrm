@@ -31,3 +31,11 @@ pnpm install
 
 # prune کردن store (حذف پکیج‌های بدون استفاده)
 pnpm store prune
+
+
+
+#install node package from mirror 
+
+npm i sanitize-html  --registry=http://192.168.10.220:4873 -d
+
+

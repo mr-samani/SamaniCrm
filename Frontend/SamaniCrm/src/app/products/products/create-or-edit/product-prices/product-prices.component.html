@@ -146,7 +146,7 @@
             @for (item of prices; track item; let i = $index) {
               <tr>
                 <td>{{ item.currency }}</td>
-                <td>{{ item.price | number }}</td>
+                <td>{{ item.price | number }} {{item.price}}</td>
                 <td>{{ 'PriceTypeEnum_' + item.type | translate }}</td>
                 <td>{{ item.startDate | luxonFormat: 'D' }}</td>
                 <td>{{ item.endDate | luxonFormat: 'D' }}</td>

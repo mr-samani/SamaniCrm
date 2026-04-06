@@ -132,7 +132,7 @@
 }
 /** end of  button */
 /* table*/
-table:not(.tbl-bordered) {
+.table:not(.tbl-bordered) {
   width: 100%;
   thead {
     // can not use for sticky table

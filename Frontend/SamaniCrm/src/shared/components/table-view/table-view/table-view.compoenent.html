@@ -52,7 +52,9 @@
             <ng-container
               [ngTemplateOutlet]="templateMap.get(f.column)!"
               [ngTemplateOutletContext]="{ $implicit: item }"></ng-container>
-            } } @default { {{item[f.column]}} } }
+            } } @case ('html') {
+            <span [innerHTML]="item[f.column]|safeHtml"></span>
+            } @default { {{item[f.column]}} } }
           </div>
         </div>
         } @if (operations) {

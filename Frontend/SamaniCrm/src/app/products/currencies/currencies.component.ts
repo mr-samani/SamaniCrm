@@ -1,4 +1,4 @@
-import { Component,  OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -24,7 +24,7 @@ export class CurrenciesComponent extends AppComponentBase implements OnInit {
     // { column: 'id', title: this.l('Id'), width: 100 },
     { column: 'currencyCode', title: this.l('Code') },
     { column: 'name', title: this.l('Name') },
-    { column: 'symbol', title: this.l('Symbol') },
+    { column: 'symbol', title: this.l('Symbol'), type: 'html' },
     { column: 'exchangeRateToBase', title: this.l('ExchangeRateToBase'), type: 'number' },
     { column: 'isDefault', title: this.l('IsDefault'), type: 'yesNo' },
     { column: 'isActive', title: this.l('IsActive'), type: 'yesNo' },
@@ -124,11 +124,11 @@ export class CurrenciesComponent extends AppComponentBase implements OnInit {
         this.productService
           .deleteCurrency(new DeleteCurrencyCommand({ id: item.id }))
           .pipe(
-        finalize(() => {
-          this.hideMainLoading();
-          this.chdr.detectChanges();
-        }),
-      )
+            finalize(() => {
+              this.hideMainLoading();
+              this.chdr.detectChanges();
+            }),
+          )
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));
