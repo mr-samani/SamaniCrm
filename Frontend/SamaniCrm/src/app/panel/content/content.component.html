@@ -46,6 +46,21 @@
           </div>
         </a>
       }
+          @if (AppPermissions.Pages_Product_Edit | permission) {
+        <a
+          class="menu-item"
+          [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.Product]]"
+          routerLinkActive="active">
+          <div class="icon">
+            <i class="fad fa-basket-shopping"></i>
+          </div>
+          <div class="content">
+            <div class="title">{{ 'Products' | translate }}</div>
+            <div class="description">{{ 'ProductsDescription' | translate }}</div>
+          </div>
+        </a>
+      }
+
       @if (AppPermissions.Pages_OtherPage_Edit | permission) {
         <a
           class="menu-item"

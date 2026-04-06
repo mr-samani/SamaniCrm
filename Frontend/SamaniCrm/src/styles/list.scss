@@ -26,11 +26,11 @@
   top: 68px;
   align-self: flex-start;
   .menu-item {
-    background: #161b22;
+    background: color-mix(in srgb, var(--bs-body-bg, #fff), #9cb0cc 10%);
     padding: 15px 5px;
     display: flex;
     gap: 8px;
-    border-bottom: 1px #0d1117 solid;
+    border-bottom: 1px color-mix(in srgb, var(--bs-body-bg, #fff), #9cb0cc 10%) solid;
 
     .icon {
       opacity: 0.5;
@@ -55,7 +55,7 @@
     &.active,
     &:hover {
       cursor: pointer;
-      background: #0d1117;
+      background: color-mix(in srgb, var(--bs-body-bg, #fff), #9cb0cc 50%);
       transition: all 300ms;
       .icon {
         opacity: 1;

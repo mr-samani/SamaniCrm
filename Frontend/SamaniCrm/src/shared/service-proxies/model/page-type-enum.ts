@@ -23,6 +23,8 @@ export enum PageTypeEnum {
 
     Article = 5,
 
-    News = 6
+    News = 6,
+
+    Product = 7
 }
 

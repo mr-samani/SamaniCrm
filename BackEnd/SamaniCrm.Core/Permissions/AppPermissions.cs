@@ -85,6 +85,7 @@ namespace SamaniCrm.Core.Permissions
         public const string Pages_Articles_Edit = "Administrator.Pages.ArticlesEdit";
         public const string Pages_News_Edit = "Administrator.Pages.NewsEdit";
         public const string Pages_Blogs_Edit = "Administrator.Pages.BlogsEdit";
+        public const string Pages_Product_Edit = "Administrator.Pages.ProductEdit";
 
         public const string Pages_Builder = "Administrator.Pages.PageBuilder";
         public const string Pages_PluginList = "Administrator.Pages.PluginList";

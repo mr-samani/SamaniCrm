@@ -68,6 +68,7 @@ export abstract class AppPermissions {
   public static Pages_Articles_Edit = 'Administrator.Pages.ArticlesEdit';
   public static Pages_News_Edit = 'Administrator.Pages.NewsEdit';
   public static Pages_Blogs_Edit = 'Administrator.Pages.BlogsEdit';
+  public static Pages_Product_Edit = 'Administrator.Pages.ProductEdit';
 
   public static Pages_Builder = 'Administrator.Pages.PageBuilder';
   public static Pages_CustomBlockList = 'Administrator.Pages.CustomBlockList';
