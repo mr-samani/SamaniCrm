@@ -1,6 +1,6 @@
-import { Component, Injector } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
-import { SettingMenuService } from './setting.menu.service';
+import { MenuModel, SettingMenuService } from './setting.menu.service';
 
 @Component({
   selector: 'app-settings',
@@ -8,12 +8,14 @@ import { SettingMenuService } from './setting.menu.service';
   styleUrls: ['./settings.component.scss'],
   standalone: false,
 })
-export class SettingsComponent extends AppComponentBase {
-  constructor(
-    injector: Injector,
-    public menuService: SettingMenuService,
-  ) {
-    super(injector);
+export class SettingsComponent extends AppComponentBase implements OnInit {
+  menuList: MenuModel[] = [];
+  constructor(private menuService: SettingMenuService) {
+    super();
     this.breadcrumb.list = [{ name: this.l('Settings'), url: '/panel/setting' }];
+  }
+
+  ngOnInit(): void {
+    this.menuList = this.menuService.getMenuList(this.language);
   }
 }

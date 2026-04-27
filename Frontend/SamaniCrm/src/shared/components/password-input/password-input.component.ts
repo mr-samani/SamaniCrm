@@ -1,5 +1,5 @@
 
-import { Component, forwardRef, Injector, Input, OnInit } from '@angular/core';
+import { Component, forwardRef,  Input, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -47,8 +47,8 @@ export class PasswordInputComponent extends AppComponentBase implements OnInit {
   private onChange = (_: any) => {};
   private onTouched = () => {};
 
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
     this.form = this.fb.group(
       {
         password: [''],

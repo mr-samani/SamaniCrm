@@ -1,4 +1,4 @@
-import { inject, Injector, DOCUMENT } from '@angular/core';
+import { inject, DOCUMENT, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -12,40 +12,47 @@ import { PanelService } from './panel/panel.service';
 
 import { AppPermissions } from '@shared/permissions/app-permissions';
 export abstract class AppComponentBase {
-  fb: FormBuilder;
-  authService: AuthService;
-  router: Router;
-  route: ActivatedRoute;
-  browserTitle: Title;
-  metaTag: Meta;
-  notify: NotifyService;
-  private mainSpinnerService: MainSpinnerService;
-  language: LanguageService;
-  alert: NgxAlertModalService;
-  breadcrumb: BreadcrumbService;
+  fb = inject(FormBuilder);
+  authService = inject(AuthService);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+  browserTitle = inject(Title);
+  metaTag = inject(Meta);
+  notify = inject(NotifyService);
+  private mainSpinnerService = inject(MainSpinnerService);
+  readonly language = inject(LanguageService);
+  alert = inject(NgxAlertModalService);
+  breadcrumb = inject(BreadcrumbService);
 
-  panelService: PanelService;
+  panelService = inject(PanelService);
   AppPermissions = AppPermissions;
-  doc: Document;
-  constructor(injector: Injector) {
-    this.mainSpinnerService = injector.get(MainSpinnerService);
-    this.authService = injector.get(AuthService);
-    this.fb = injector.get(FormBuilder);
-    this.router = injector.get(Router);
-    this.route = injector.get(ActivatedRoute);
-    this.browserTitle = injector.get(Title);
-    this.metaTag = injector.get(Meta);
-    this.notify = injector.get(NotifyService);
-    this.language = injector.get(LanguageService);
-    this.alert = injector.get(NgxAlertModalService);
-    this.breadcrumb = injector.get(BreadcrumbService);
-    this.panelService = injector.get(PanelService);
-    this.doc = injector.get(DOCUMENT) as Document;
+  doc = inject(DOCUMENT);
+  chdr = inject(ChangeDetectorRef);
+  constructor() {
+    //
+    // this.mainSpinnerService = injector.get(MainSpinnerService);
+    // this.authService = injector.get(AuthService);
+    // this.fb = injector.get(FormBuilder);
+    // this.router = injector.get(Router);
+    // this.route = injector.get(ActivatedRoute);
+    // this.browserTitle = injector.get(Title);
+    // this.metaTag = injector.get(Meta);
+    // this.notify = injector.get(NotifyService);
+    // this.language = injector.get(LanguageService);
+    // this.alert = injector.get(NgxAlertModalService);
+    // this.breadcrumb = injector.get(BreadcrumbService);
+    // this.panelService = injector.get(PanelService);
+    // this.doc = injector.get(DOCUMENT) as Document;
   }
 
-  l(key: string, param?: Object) {
+  l(key: string, param?: Object): string {
     // console.log(this.language.translate.instant(key, param));
     return this.language.translate.instant(key, param);
+  }
+
+  isGranted(permission?: string): boolean {
+    if (!permission) return true;
+    return this.authService.isGranted(permission);
   }
 
   showMainLoading() {

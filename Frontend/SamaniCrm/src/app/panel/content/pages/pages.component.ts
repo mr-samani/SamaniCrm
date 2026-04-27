@@ -1,10 +1,7 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { finalize, Subscription } from 'rxjs';
-import { PageModel } from '../models/page';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
-import { Apis } from '@shared/apis';
-import { FileManagerService } from '@app/file-manager/file-manager.service';
 import {
   DeletePageCommand,
   GetFilteredPagesQuery,
@@ -51,11 +48,10 @@ export class PagesComponent extends AppComponentBase implements OnInit {
   showFilter = false;
   type: PageTypeEnum = PageTypeEnum.HomePage;
   constructor(
-    injector: Injector,
     private pageService: PagesServiceProxy,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       filter: [''],
     });
@@ -93,7 +89,12 @@ export class PagesComponent extends AppComponentBase implements OnInit {
     input.pageSize = this.perPage;
     this.listSubscription$ = this.pageService
       .getAllPages(input)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data?.items ?? [];
         for (let item of this.list) {
@@ -147,9 +148,26 @@ export class PagesComponent extends AppComponentBase implements OnInit {
   updatePage2(item: PageDtoExtended) {
     this.router.navigate(['/panel/page-builder/' + item.id]);
   }
-  updatePage(item: PageDtoExtended) {
-    this.router.navigate(['/panel/content/edit/' + item.id]);
+
+  openPageBuilder(item: PageDtoExtended) {
+    const messageListener = (event: MessageEvent) => {
+      if (event.data === 'closed') {
+        window.removeEventListener('message', messageListener);
+        this.reload();
+      }
+    };
+    window.addEventListener('message', messageListener);
+
+    const url = this.router.createUrlTree(['/pagebuilder/' + item.culture + '/' + item.id]);
+    window.open(url.toString(), '_blank');
+
+    // on opened window must be write:
+    // if (window.opener) {
+    //   window.opener.postMessage('closed', '*');
+    // }
+    // window.close();
   }
+
   remove(item: PageDtoExtended) {
     this.confirmMessage(`${this.l('Delete')}:${item?.title}`, this.l('AreYouSureForDelete')).then((result) => {
       if (result.isConfirmed) {
@@ -159,7 +177,12 @@ export class PagesComponent extends AppComponentBase implements OnInit {
         });
         this.pageService
           .deletePage(input)
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));

@@ -1,4 +1,4 @@
-<div class="tree" [class.close-child]="!isOpen">
+<div class="tree-folder" [class.close-child]="!isOpen">
   <ul>
     @for (item of folders; track item; let i = $index) {
       <li class="node" (click)="openCloseFolder(item)">

@@ -1,4 +1,4 @@
-import { Component, Injector, Input, OnInit } from '@angular/core';
+import { Component,  Input, OnInit } from '@angular/core';
 
 import { BlockBase } from '../block-base';
 import { AppConst } from '@shared/app-const';
@@ -26,8 +26,8 @@ import { AppConst } from '@shared/app-const';
 export class BlockImgComponent extends BlockBase implements OnInit {
   imageUrl = 'images/default-image.png';
 
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
   }
 
   ngOnInit(): void {

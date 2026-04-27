@@ -34,10 +34,9 @@ export class StyleShadowComponent extends AppComponentBase implements ControlVal
   onTouched = () => {};
 
   constructor(
-    injector: Injector,
     private el: ElementRef<HTMLElement>,
   ) {
-    super(injector);
+    super();
   }
 
   ngAfterViewInit(): void {

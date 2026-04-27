@@ -1,4 +1,4 @@
-import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
+import { Component,  OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -46,13 +46,12 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
   listSubscription$?: Subscription;
   showFilter = false;
   constructor(
-    injector: Injector,
     private downloadService: DownloadService,
     private fileManager: FileManagerService,
     private userService: UserServiceProxy,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
     this.breadcrumb.list = [
       { name: this.l('Settings'), url: '/panel/setting' },
       { name: this.l('Users'), url: '/panel/users' },
@@ -87,7 +86,12 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
     input.sortDirection = ev ? ev.direction : '';
     this.listSubscription$ = this.userService
       .getAllUser(input)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data?.items ?? [];
         this.totalCount = response.data?.totalCount ?? 0;
@@ -154,7 +158,12 @@ export class UserListComponent extends AppComponentBase implements OnInit, OnDes
         this.showMainLoading();
         this.userService
           .deleteUser(item.id)
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));

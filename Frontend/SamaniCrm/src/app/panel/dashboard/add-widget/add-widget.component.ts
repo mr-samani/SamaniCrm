@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -25,12 +25,11 @@ export class AddDashboardWidgetComponent extends AppComponentBase implements OnI
   widgets = WidgetHelper.WidgetDefinition;
 
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) private _data: { dashboardId: string },
     private dialogRef: MatDialogRef<AddDashboardWidgetComponent>,
     private dashboardService: DasboardServiceProxy,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       dashboardId: [_data.dashboardId, [Validators.required, Validators.maxLength(100)]],
       componentName: ['', [Validators.required]],
@@ -53,7 +52,12 @@ export class AddDashboardWidgetComponent extends AppComponentBase implements OnI
     input.init(this.form.value);
     this.dashboardService
       .createOrUpdateDashboardItem(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         if (response.success) {
           this.notify.success('SavedSuccessfully');

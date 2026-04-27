@@ -1,4 +1,4 @@
-import { Component, Injector, input, OnInit } from '@angular/core';
+import { Component,  input, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 
 @Component({
@@ -9,8 +9,8 @@ import { AppComponentBase } from '@app/app-component-base';
 })
 export class SubHeaderComponent extends AppComponentBase implements OnInit {
   title = input<string>();
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
   }
 
   ngOnInit() {}

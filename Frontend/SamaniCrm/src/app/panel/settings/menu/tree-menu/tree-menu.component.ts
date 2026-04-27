@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, Input, OnDestroy, OnInit, ViewEncapsulation, DOCUMENT } from '@angular/core';
+import { Component, Inject,  Input, OnDestroy, OnInit, ViewEncapsulation, DOCUMENT } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { CdkDragDrop, CdkDragMove } from '@angular/cdk/drag-drop';
 import { Subject, debounceTime, finalize } from 'rxjs';
@@ -40,13 +40,12 @@ export class TreeMenuComponent extends AppComponentBase implements OnInit, OnDes
   dragMoveSubject = new Subject<CdkDragMove<any>>();
   loading?: boolean;
   constructor(
-    injector: Injector,
     @Inject(DOCUMENT) private document: Document,
     private dialog: MatDialog,
     private fileManagerService: FileManagerService,
     private menuService: MenuServiceProxy,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit(): void {
@@ -61,7 +60,12 @@ export class TreeMenuComponent extends AppComponentBase implements OnInit, OnDes
     this.loading = true;
     this.menuService
       .getAllMenus()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data ?? ([] as any);
       });
@@ -228,7 +232,12 @@ export class TreeMenuComponent extends AppComponentBase implements OnInit, OnDes
     input.isActive = !item.isActive;
     this.menuService
       .activeOrDeactive(input)
-      .pipe(finalize(() => (item.loading = false)))
+      .pipe(
+        finalize(() => {
+          item.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success) {

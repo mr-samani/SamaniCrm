@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -44,11 +44,10 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
   listSubscription$?: Subscription;
   showFilter = false;
   constructor(
-    injector: Injector,
     private notificationService: NotificationServiceProxy,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
     this.breadcrumb.list = [{ name: this.l('Notifications'), url: '/panel/notifications' }];
     this.form = this.fb.group({
       filter: [''],
@@ -93,10 +92,17 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
     input.sortDirection = ev ? ev.direction : '';
     this.notificationService
       .getAllNotifications(input)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data?.items ?? [];
         this.totalCount = response.data?.totalCount ?? 0;
+        
+        this.chdr.detectChanges();
       });
   }
 
@@ -128,7 +134,12 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
         this.showMainLoading();
         this.notificationService
           .deleteNotification(new DeleteNotificationCommand({ id: item.id }))
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));

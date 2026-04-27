@@ -5,7 +5,8 @@
   --bs-accordion-btn-padding-x: 1.25rem;
   --bs-accordion-btn-padding-y: 0.5rem;
 
-  --bs-accordion-active-bg: #cfe2ff5e;
+  --bs-accordion-active-bg: #0d1117;
+  --bs-accordion-border-color: #3a3d40;
 }
 
 [dir='rtl'] {
@@ -119,7 +120,7 @@
     color: #198754;
   }
   &.btn-default {
-    border: 1px #e7eaf3 solid;
+    border: 1px #e7eaf369 solid;
   }
   &.btn-default:hover {
     background-color: #eaddff;
@@ -131,7 +132,7 @@
 }
 /** end of  button */
 /* table*/
-table:not(.tbl-bordered) {
+.table:not(.tbl-bordered) {
   width: 100%;
   thead {
     // can not use for sticky table

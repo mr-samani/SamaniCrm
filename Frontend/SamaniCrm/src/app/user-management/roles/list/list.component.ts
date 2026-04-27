@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@app/app-component-base';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
@@ -23,11 +23,10 @@ export class RoleListComponent extends AppComponentBase implements OnInit {
     { column: 'displayName', title: this.l('DisplayName') },
   ];
   constructor(
-    injector: Injector,
     private roleService: RoleServiceProxy,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit(): void {
@@ -38,7 +37,12 @@ export class RoleListComponent extends AppComponentBase implements OnInit {
     this.loading = true;
     this.roleService
       .getAllRoles()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data ?? [];
         this.list.map((m) => {
@@ -69,7 +73,12 @@ export class RoleListComponent extends AppComponentBase implements OnInit {
         this.showMainLoading();
         this.roleService
           .deleteRole(item.id)
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));

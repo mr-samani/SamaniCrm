@@ -85,11 +85,12 @@ namespace SamaniCrm.Core.Permissions
         public const string Pages_Articles_Edit = "Administrator.Pages.ArticlesEdit";
         public const string Pages_News_Edit = "Administrator.Pages.NewsEdit";
         public const string Pages_Blogs_Edit = "Administrator.Pages.BlogsEdit";
+        public const string Pages_Product_Edit = "Administrator.Pages.ProductEdit";
 
         public const string Pages_Builder = "Administrator.Pages.PageBuilder";
-        public const string Pages_CustomBlockList = "Administrator.Pages.CustomBlockList";
-        public const string Pages_CreateCustomBlock = "Administrator.Pages.CreateCustomBlock";
-        public const string Pages_DeleteCustomBlock = "Administrator.Pages.DeleteCustomBlock";
+        public const string Pages_PluginList = "Administrator.Pages.PluginList";
+        public const string Pages_CreatePlugin = "Administrator.Pages.CreatePlugin";
+        public const string Pages_DeletePlugin = "Administrator.Pages.DeletePlugin";
 
 
         // products
@@ -140,6 +141,7 @@ namespace SamaniCrm.Core.Permissions
         public const string FileManager_CreateFolder = "Administrator.FileManager.CreateFolder";
         public const string FileManager_CreateFile = "Administrator.FileManager.CreateFile";
         public const string FileManager_Delete = "Administrator.FileManager.Delete";
+        public const string FileManager_Rename = "Administrator.FileManager.Rename";
 
 
 

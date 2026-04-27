@@ -1,4 +1,4 @@
-import { Component, Injector, Input, OnInit } from '@angular/core';
+import { Component,  Input, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { WidgetNoteData } from './WidgetNoteData';
 import { Widget } from '../widgets';
@@ -19,10 +19,9 @@ export class NoteComponent extends AppComponentBase implements OnInit, IWidgetBa
     this.item = val;
   }
   constructor(
-    injector: Injector,
     private dialog: MatDialog,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit() {}

@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormGroup, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -31,12 +31,11 @@ export class CreateOrEditPageMetaDataDialogComponent extends AppComponentBase im
   id: string;
   type: PageTypeEnum;
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: { id: string; type: PageTypeEnum },
     private dialogRef: MatDialogRef<CreateOrEditPageMetaDataDialogComponent>,
     private pageService: PagesServiceProxy,
   ) {
-    super(injector);
+    super();
     this.type = _data.type;
     this.form = this.fb.group({
       translations: this.fb.array([]),
@@ -82,7 +81,12 @@ export class CreateOrEditPageMetaDataDialogComponent extends AppComponentBase im
     this.loading = true;
     this.pageService
       .getForEditMetaData(id)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {
@@ -136,7 +140,12 @@ export class CreateOrEditPageMetaDataDialogComponent extends AppComponentBase im
     input.type = this.type;
     this.pageService
       .createOrEditPageMetaData(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success) {

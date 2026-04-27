@@ -1,16 +1,17 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { PageDto, PagesServiceProxy } from '@shared/service-proxies';
 import { UpdatePageContentCommand } from '@shared/service-proxies/model/update-page-content-command';
 import { finalize } from 'rxjs/operators';
 import { FormBuilderService } from './form-builder.service';
 import { AppConst } from '@shared/app-const';
-import { AppComponentBase } from '@app/app-component-base';
 import { BlockDefinition } from '../blocks/block-registry';
 import { generateCSSFromBlocks } from '../helpers/generate-css-block';
 import { getBlocksAsString } from '../helpers/get-blocks-as-string';
+import { NotifyService } from '@shared/services/notify.service';
+import { LanguageService } from '@shared/services/language.service';
 
 @Injectable()
-export class FormBuilderBackendService extends AppComponentBase {
+export class FormBuilderBackendService {
   loading = false;
   saving = false;
   pageId: string = '';
@@ -19,9 +20,13 @@ export class FormBuilderBackendService extends AppComponentBase {
   constructor(
     private pageService: PagesServiceProxy,
     private b: FormBuilderService,
-    injector: Injector,
-  ) {
-    super(injector);
+    private notify: NotifyService,
+    private language: LanguageService,
+  ) {}
+
+  l(key: string, param?: Object) {
+    // console.log(this.language.translate.instant(key, param));
+    return this.language.translate.instant(key, param);
   }
 
   getPageInfo() {
@@ -29,7 +34,11 @@ export class FormBuilderBackendService extends AppComponentBase {
     this.loading = true;
     this.pageService
       .getPageInfo(this.pageId, AppConst.currentLanguage)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+        }),
+      )
       .subscribe((response) => {
         this.pageInfo = response.data;
         if (this.pageInfo && this.pageInfo.data) {
@@ -56,7 +65,11 @@ export class FormBuilderBackendService extends AppComponentBase {
     });
     this.pageService
       .updatePageContent(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+        }),
+      )
       .subscribe(() => {
         this.notify.success(this.l('SavedSuccessfully'));
       });

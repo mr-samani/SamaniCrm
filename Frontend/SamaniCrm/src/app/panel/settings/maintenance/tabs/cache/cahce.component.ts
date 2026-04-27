@@ -1,4 +1,4 @@
-import { Component, Injector, Input, OnInit } from '@angular/core';
+import { Component,  Input, OnInit } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 import { finalize } from 'rxjs';
@@ -37,10 +37,9 @@ export class CacheComponent extends AppComponentBase implements OnInit {
   totalSize = 0;
   loading = true;
   constructor(
-    injector: Injector,
     private maintenanceService: MaintenanceServiceProxy,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit() {
@@ -51,7 +50,12 @@ export class CacheComponent extends AppComponentBase implements OnInit {
     this.loading = true;
     this.maintenanceService
       .getAllCacheEntries()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.cacheKeys = response.data ?? [];
         this.totalSize = 0;
@@ -68,7 +72,12 @@ export class CacheComponent extends AppComponentBase implements OnInit {
         item.loading = true;
         this.maintenanceService
           .deleteCache(item.key)
-          .pipe(finalize(() => (item.loading = false)))
+          .pipe(
+        finalize(() => {
+          item.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
           .subscribe((response) => {
             this.notify.success(this.l('DoneSuccessFully') + '(' + response.data + ')');
             this.getData();
@@ -83,7 +92,12 @@ export class CacheComponent extends AppComponentBase implements OnInit {
         this.showMainLoading();
         this.maintenanceService
           .clearAllCahces()
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
           .subscribe((response) => {
             this.notify.success(this.l('DoneSuccessFully') + '(' + response.data + ')');
             this.getData();

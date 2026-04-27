@@ -99,6 +99,8 @@ namespace SamaniCrm.Infrastructure.Persistence
             await SeedCurrencies.TrySeedAsync(_context);
             await SeedEnums.TrySeedAsync(_context);
             await SeedExternalProviders.TrySeedAsync(_context);
+            await SeedPages.TrySeedAsync(_context);
+
         }
     }
 

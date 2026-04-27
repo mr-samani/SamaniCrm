@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, forwardRef, Injector, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, forwardRef,  Input, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 import { getCssFromSpacingStyle, parseSpacing, spacingRegex } from '../helper/parse-spacing';
@@ -40,10 +40,9 @@ export class StyleSpacingComponent extends AppComponentBase implements OnInit, C
   showPopup = false;
 
   constructor(
-    injector: Injector,
     private el: ElementRef<HTMLElement>,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit() {}

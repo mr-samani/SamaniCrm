@@ -16,6 +16,8 @@ import { CreateFolderDialogComponent } from './components/create-folder/create-f
 import { FileSelectorComponent } from './components/file-selector/file-selector.component';
 import { TreeFolderComponent } from './components/tree-folder/tree-folder.component';
 import { FileListComponent } from './components/file-list/file-list.component';
+import { ContextMenuDirective } from '@shared/directives/context-menu/context-menu.directive';
+import { RenameDialogComponent } from './components/rename/rename.component';
 
 @NgModule({
   declarations: [
@@ -27,8 +29,17 @@ import { FileListComponent } from './components/file-list/file-list.component';
     FileSelectorComponent,
     AddressBarComponent,
     FileListComponent,
+    RenameDialogComponent,
   ],
-  imports: [CommonModule, FormsModule, MaterialCommonModule, ImageCropperComponent, TranslateModule, SharedModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MaterialCommonModule,
+    ImageCropperComponent,
+    TranslateModule,
+    SharedModule,
+    ContextMenuDirective,
+  ],
   providers: [TusUploadService, FileManagerService, FileManagerServiceProxy],
   exports: [FileSelectorComponent],
 })

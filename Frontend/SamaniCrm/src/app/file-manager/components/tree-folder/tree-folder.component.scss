@@ -1,4 +1,4 @@
-.tree {
+.tree-folder {
   .close-child {
     display: none;
   }
@@ -39,7 +39,7 @@
       }
       &:hover {
         cursor: pointer;
-        background-color: #e7e7e7;
+        background-color: #292929;
         .tree-icon {
           border-color: #959595;
         }

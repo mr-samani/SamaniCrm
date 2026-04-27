@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Inject, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { finalize } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FileManagerDto } from '../models/file-manager-dto';
@@ -14,12 +14,14 @@ import { FileManagerServiceProxy } from '@shared/service-proxies';
 import { CreateFolderDialogComponent } from '../components/create-folder/create-folder.component';
 import { TusUploadService } from '../tus-upload.service';
 import { FileListComponent } from '../components/file-list/file-list.component';
+import { getPreviousFolderId } from '../consts/PreviousFolderId';
 
 @Component({
   selector: 'app-file-manager',
   templateUrl: './file-manager.component.html',
   styleUrls: ['./file-manager.component.scss'],
   standalone: false,
+  encapsulation: ViewEncapsulation.None,
 })
 export class FileManagerComponent extends AppComponentBase implements OnInit, OnDestroy {
   progress = 0;
@@ -34,14 +36,13 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
   @ViewChild('fileList', { static: false }) _fileList?: FileListComponent;
 
   constructor(
-    injector: Injector,
     private dialogRef: MatDialogRef<FileManagerComponent>,
     @Inject(MAT_DIALOG_DATA) _data: IOptions,
     private matDialog: MatDialog,
     private fileManagerService: FileManagerServiceProxy,
     public tusUpoadService: TusUploadService,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit(): void {
@@ -54,11 +55,17 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
     this.loadingFolders = true;
     this.fileManagerService
       .getTreeFolders()
-      .pipe(finalize(() => (this.loadingFolders = false)))
+      .pipe(
+        finalize(() => {
+          this.loadingFolders = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         this.folders = result.data ?? ([] as any);
-        if (this.openedFolder && this.openedFolder.id) {
-          this.tryOpenFolderInTree(this.folders, this.openedFolder.id);
+        let openedFolderId = this.openedFolder ? this.openedFolder.id : getPreviousFolderId();
+        if (openedFolderId) {
+          this.tryOpenFolderInTree(this.folders, openedFolderId);
         }
       });
   }
@@ -67,6 +74,9 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
     for (const f of tree) {
       if (f.id === id) {
         f.isOpen = true;
+        if (this.openedFolder?.id != f.id) {
+          this.openedFolder = f;
+        }
         return true;
       }
 

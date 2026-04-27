@@ -6,8 +6,11 @@
     <div
       class="file"
       (click)="selectFile(item)"
+      (contextmenu)="selectFile(item)"
       (dblclick)="dblClickFile(item)"
-      [class.active]="item.id == selectedFileInfo?.id">
+      [class.active]="item.id == selectedFileInfo?.id"
+      [contextMenu]="fileContextMenu"
+      [contextMenuTitle]="item.name">
       <div class="icon-container">
         @if (item.icon) {
           <img [src]="baseUrl + '/' + item.icon" />
@@ -36,15 +39,24 @@
       }
     </div>
     @if (selectedFileInfo.isFolder) {
-      <button class="btn btn-primary" (click)="selectIcon()">
+      <button class="dark-btn btn-primary" (click)="selectIcon()">
         {{ 'ChangeIcon' | translate }}
       </button>
     }
     @if (selectedFileInfo.id && (AppPermissions.FileManager_Delete | permission)) {
-      <button (click)="deleteFileOrFolder()" mat-icon-button>
+      <button (click)="deleteFileOrFolder()" class="dark-btn">
         <i class="fa fa-trash"></i>
       </button>
     }
+    @if (selectedFileInfo.id && !selectedFileInfo.isFolder) {
+      <button (click)="download()" class="dark-btn">
+        <i class="fa fa-download"></i>
+      </button>
+      <a [href]="fileServerUrl + '/' + selectedFileInfo.id" class="dark-btn" target="_blank" [title]="selectFile.name">
+        <i class="fa fa-link"></i>
+      </a>
+    }
+
     <table>
       <tr>
         <td colspan="2">{{ selectedFileInfo.name }}</td>
@@ -67,9 +79,9 @@
       </tr>
     </table>
     @if (!selectedFileInfo.isFolder) {
-      <button class="w-100" mat-raised-button color="primary" (click)="chooseThisFile()">
-        <i class="fa fa-check"></i>
-        <span>{{ 'ChooseThisFile' }}</span>
+      <button class="dark-btn btn-primary btn-choose-file" (click)="chooseThisFile()">
+        <i class="fa fa-octagon-check mx-2"></i>
+        <span>{{ 'ChooseThisFile' | translate }}</span>
       </button>
     }
   </div>

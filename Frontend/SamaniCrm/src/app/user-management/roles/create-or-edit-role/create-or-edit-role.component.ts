@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -24,12 +24,11 @@ export class CreateOrEditRoleComponent extends AppComponentBase implements OnIni
   saving = false;
   form: FormGroup;
   constructor(
-    injector: Injector,
     private dialogRef: MatDialogRef<CreateOrEditRoleComponent>,
     @Inject(MAT_DIALOG_DATA) private _data: { role?: RoleDTO },
     private roleService: RoleServiceProxy,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       id: [''],
       roleName: ['', [Validators.required, CustomValidators.checkEnglishAndNumberCharacters]],
@@ -62,7 +61,12 @@ export class CreateOrEditRoleComponent extends AppComponentBase implements OnIni
     this.saving = true;
     this.roleService
       .createRole(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success) {
@@ -79,7 +83,12 @@ export class CreateOrEditRoleComponent extends AppComponentBase implements OnIni
     this.saving = true;
     this.roleService
       .editRole(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success) {

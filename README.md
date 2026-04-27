@@ -19,3 +19,23 @@ trust https
 
 
 
+# PNPM
+## get store path
+  `pnpm store path`
+
+## set store path 
+ `pnpm config set store-dir d:/.pnpm-store`
+
+# نصب وابستگی‌ها در پروژه
+pnpm install
+
+# prune کردن store (حذف پکیج‌های بدون استفاده)
+pnpm store prune
+
+
+
+#install node package from mirror 
+
+npm i sanitize-html  --registry=http://192.168.10.220:4873 -d
+
+

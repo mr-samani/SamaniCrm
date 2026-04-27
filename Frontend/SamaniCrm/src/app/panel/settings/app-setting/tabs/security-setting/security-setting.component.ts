@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -17,11 +17,10 @@ export class SecuritySettingComponent extends AppComponentBase implements OnInit
   loading = true;
   logginAttemptMinute = 0;
   constructor(
-    injector: Injector,
     private securitySettingService: SecuritySettingsServiceProxy,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit() {
@@ -32,7 +31,12 @@ export class SecuritySettingComponent extends AppComponentBase implements OnInit
     this.loading = true;
     this.securitySettingService
       .getSecuritySettings()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.settings = response.data ?? new SecuritySettingDto();
         this.logginAttemptMinute = (this.settings.logginAttemptTimeSecondsLimit ?? 0) / 60;

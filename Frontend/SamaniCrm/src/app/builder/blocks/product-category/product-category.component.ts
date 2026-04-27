@@ -1,4 +1,4 @@
-import { Component, ElementRef, Injector, OnInit } from '@angular/core';
+import { Component, ElementRef,  OnInit } from '@angular/core';
 import { BlockBase } from '../block-base';
 import { BlockDefinition, BlockTypeEnum } from '../block-registry';
 import { DynamicRendererComponent } from '../dynamic-renderer.component';
@@ -126,10 +126,9 @@ export class BlockProductCategoryComponent extends BlockBase implements OnInit {
   cacheKey = '';
 
   constructor(
-    injector: Injector,
     private productService: ProductServiceProxy,
   ) {
-    super(injector);
+    super();
     this.el.nativeElement.style;
   }
 
@@ -148,7 +147,12 @@ export class BlockProductCategoryComponent extends BlockBase implements OnInit {
     input.take = 4;
     this.productService
       .getCategories(input)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         this.list = result.data ?? [];
         this.itemTemplate.dynamicDataCacheKey = this.cacheKey;

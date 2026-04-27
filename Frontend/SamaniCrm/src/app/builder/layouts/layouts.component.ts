@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { FormBuilderService } from '../services/form-builder.service';
 import { BlockTypeEnum } from '../blocks/block-registry';
@@ -12,10 +12,9 @@ import { BlockTypeEnum } from '../blocks/block-registry';
 export class LayoutsComponent extends AppComponentBase implements OnInit {
   open = true;
   constructor(
-    injector: Injector,
     public b: FormBuilderService,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit() {}

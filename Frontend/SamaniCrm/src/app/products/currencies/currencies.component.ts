@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -24,7 +24,7 @@ export class CurrenciesComponent extends AppComponentBase implements OnInit {
     // { column: 'id', title: this.l('Id'), width: 100 },
     { column: 'currencyCode', title: this.l('Code') },
     { column: 'name', title: this.l('Name') },
-    { column: 'symbol', title: this.l('Symbol') },
+    { column: 'symbol', title: this.l('Symbol'), type: 'html' },
     { column: 'exchangeRateToBase', title: this.l('ExchangeRateToBase'), type: 'number' },
     { column: 'isDefault', title: this.l('IsDefault'), type: 'yesNo' },
     { column: 'isActive', title: this.l('IsActive'), type: 'yesNo' },
@@ -37,11 +37,10 @@ export class CurrenciesComponent extends AppComponentBase implements OnInit {
   showFilter = false;
 
   constructor(
-    injector: Injector,
     private productService: ProductServiceProxy,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
     this.breadcrumb.list = [{ name: this.l('Currencies'), url: '/panel/products/currencies' }];
     this.form = this.fb.group({
       filter: [''],
@@ -70,7 +69,12 @@ export class CurrenciesComponent extends AppComponentBase implements OnInit {
     this.loading = true;
     this.productService
       .getCurrencies()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data ?? [];
         this.totalCount = this.list.length;
@@ -119,7 +123,12 @@ export class CurrenciesComponent extends AppComponentBase implements OnInit {
         this.showMainLoading();
         this.productService
           .deleteCurrency(new DeleteCurrencyCommand({ id: item.id }))
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+            finalize(() => {
+              this.hideMainLoading();
+              this.chdr.detectChanges();
+            }),
+          )
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));

@@ -8,12 +8,12 @@
 <mat-dialog-content>
   <mat-form-field class="w-100">
     <mat-label>{{ 'Title' | translate }}</mat-label>
-    <input matInput [(ngModel)]="folderName" name="foldername" required />
+    <input matInput [(ngModel)]="folderName" name="foldername" required  dir="ltr"/>
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
-  <button mat-raised-button color="primary" (click)="createFolder()" cdkFocusInitial [disabled]="loading">
+  <button  class="btn btn-default" mat-dialog-close >{{ 'Cancel' | translate }}</button>
+  <button  class="btn btn-primary"  (click)="createFolder()" cdkFocusInitial [disabled]="loading">
     @if (loading) {
       <mat-spinner color="primary" diameter="25"></mat-spinner>
     }

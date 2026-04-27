@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, forwardRef, Injector, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef,  Input, OnDestroy, OnInit, Output } from '@angular/core';
 import {
   NG_VALUE_ACCESSOR,
   NG_VALIDATORS,
@@ -54,10 +54,9 @@ export class AutoCompleteUserComponent
   private _onTouched: () => void = () => {};
   disabled = false;
   constructor(
-    injector: Injector,
     private userService: UserServiceProxy,
   ) {
-    super(injector);
+    super();
     this.myControl.setValidators([RequireMatch]);
   }
 

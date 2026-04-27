@@ -3,7 +3,6 @@ import {
   ErrorHandler,
   importProvidersFrom,
   provideAppInitializer,
-  provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
@@ -22,8 +21,6 @@ import { UserServiceProxy } from '@shared/service-proxies';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAppInitializer(() => AppInitializer()),
-    // provideZonelessChangeDetection(),
-    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
     importProvidersFrom(

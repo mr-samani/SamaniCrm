@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { LanguageDTOExtended } from '../language-list/language-list.component';
@@ -17,12 +17,11 @@ export class CreateOrEditLanguageComponent extends AppComponentBase implements O
   isUpdate: boolean;
   saving = false;
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: LanguageDTOExtended,
     private dialogRef: MatDialogRef<CreateOrEditLanguageComponent>,
     private languageService: LanguageServiceProxy,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       culture: ['', [Validators.required, Validators.maxLength(5)]],
       name: ['', [Validators.required, Validators.maxLength(100)]],
@@ -53,7 +52,12 @@ export class CreateOrEditLanguageComponent extends AppComponentBase implements O
     input.init(this.form.value);
     this.languageService
       .createOrUpdate(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         if (response.success) {
           this.notify.success('SavedSuccessfully');

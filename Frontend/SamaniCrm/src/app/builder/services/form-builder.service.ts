@@ -85,30 +85,30 @@ export class FormBuilderService {
     });
     this.tools = createTreeFormTools([...advancedBlocks, ...generalTags, ...simpleTags]);
 
-    this.loadingCustomBlocks = true;
-    this.pageBuilderService
-      .getCustomBlocks()
-      .pipe(finalize(() => (this.loadingCustomBlocks = false)))
-      .subscribe((result) => {
-        const list = result.data ?? [];
-        const customBlocks: BlockDefinition[] = [];
-        for (let item of list) {
-          if (item.data) {
-            const b = JSON.parse(item.data ?? '{}');
-            b.isCustomBlock = true;
-            b.canDelete = item.canDelete;
-            b.name = item.name;
-            b.id = item.id;
-            b.description = item.description;
-            b.icon = item.icon;
-            b.image = item.image;
-            customBlocks.push(b);
-          }
-        }
-        const blocks = createTreeFormTools(customBlocks);
-        // console.log('customBlocks', blocks);
-        this.tools.push(...blocks);
-      });
+    // this.loadingCustomBlocks = true;
+    // this.pageBuilderService
+    //   .getCustomBlocks()
+    //   .pipe(finalize(() => (this.loadingCustomBlocks = false)))
+    //   .subscribe((result) => {
+    //     const list = result.data ?? [];
+    //     const customBlocks: BlockDefinition[] = [];
+    //     for (let item of list) {
+    //       if (item.data) {
+    //         const b = JSON.parse(item.data ?? '{}');
+    //         b.isCustomBlock = true;
+    //         b.canDelete = item.canDelete;
+    //         b.name = item.name;
+    //         b.id = item.id;
+    //         b.description = item.description;
+    //         b.icon = item.icon;
+    //         b.image = item.image;
+    //         customBlocks.push(b);
+    //       }
+    //     }
+    //     const blocks = createTreeFormTools(customBlocks);
+    //     // console.log('customBlocks', blocks);
+    //     this.tools.push(...blocks);
+    //   });
   }
 
   addBlock(source: BlockDefinition, parent?: BlockDefinition, index?: number, blocks?: BlockDefinition[]) {

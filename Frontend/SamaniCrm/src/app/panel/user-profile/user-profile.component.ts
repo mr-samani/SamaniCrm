@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '@shared/shared.module';
@@ -11,8 +11,8 @@ import { SharedModule } from '@shared/shared.module';
   imports: [SharedModule],
 })
 export class UserProfileComponent extends AppComponentBase implements OnInit {
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
 
     this.breadcrumb.list = [{ name: this.l('UserProfile'), url: '/panel/user-profile' }];
   }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injector, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter,  Input, OnInit, Output } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 import {
@@ -25,10 +25,9 @@ export class ProductPricesComponent extends AppComponentBase implements OnInit {
 
   form: FormGroup;
   constructor(
-    injector: Injector,
     private productService: ProductServiceProxy,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       currency: ['', Validators.required],
       price: ['', Validators.required],

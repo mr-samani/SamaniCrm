@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using System;
@@ -21,8 +22,23 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             var entity = await _dbContext.Products.FindAsync(request.Id);
             if (entity == null)
                 throw new NotFoundException("Product not found.");
+
+
+            var now = DateTime.UtcNow;
+
             entity.IsDeleted = true;
-            entity.DeletedTime = DateTime.UtcNow;
+            entity.DeletedTime = now;
+
+            var translations = await _dbContext.ProductTranslations
+                .Where(x => x.ProductId == request.Id && !x.IsDeleted)
+                .ToListAsync(cancellationToken);
+
+            foreach (var translation in translations)
+            {
+                translation.IsDeleted = true;
+                translation.DeletedTime = now;
+            }
+
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
             return result > 0;
         }

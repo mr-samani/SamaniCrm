@@ -25,6 +25,14 @@ namespace SamaniCrm.Api.Controllers
         }
 
         #region Language
+        [HttpGet("GetAllActiveLanguages")]
+        [Permission(AppPermissions.LanguageManagement_List)]
+        [ProducesResponseType(typeof(ApiResponse<List<LanguageDTO>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllActiveLanguages()
+        {
+            var result = await _mediator.Send(new GetAllActiveLanguageQuery());
+            return ApiOk<List<LanguageDTO>>(result);
+        }
 
         [HttpGet("GetAllLanguages")]
         [Permission(AppPermissions.LanguageManagement_List)]

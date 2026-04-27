@@ -13,6 +13,7 @@ export class FieldsType {
     | 'localize'
     | 'template'
     | 'enum'
+    | 'html'
     | undefined;
   width?: number;
   wrap?: boolean;

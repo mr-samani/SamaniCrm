@@ -1,0 +1,264 @@
+.swiper-settings {
+  max-width: 100%;
+
+  // ==================== Tabs ====================
+  .settings-tabs {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    .btn {
+      width: 49%;
+      margin: 4px 0;
+      text-align: center;
+      &.active {
+        background-color: #007bff;
+      }
+    }
+  }
+
+  // ==================== Tab Content ====================
+  .tab-content {
+    padding: 24 0px;
+    min-height: 400px;
+  }
+
+  // ==================== Preset Section ====================
+  .preset-section {
+    h4 {
+      font-weight: 600;
+      margin: 10px 0;
+    }
+
+    .section-description {
+      color: #b9b9b9;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 16px;
+
+      .preset-card {
+        padding: 6px;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: #fff;
+
+        &:hover {
+          border-color: #007bff;
+          box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+          transform: translateY(-2px);
+        }
+
+        &.active {
+          border-color: #007bff;
+          background: #89aad0;
+          box-shadow: 0 4px 16px rgba(0, 123, 255, 0.2);
+        }
+
+        .preset-icon {
+          font-size: 40px;
+        }
+
+        h5 {
+          font-size: 14px;
+          font-weight: 600;
+          margin-bottom: 8px;
+          color: #333;
+        }
+
+        p {
+          font-size: 13px;
+          color: #666;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  // ==================== Slides Section ====================
+  .slides-section {
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+
+      h3 {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+        color: #333;
+      }
+    }
+
+    .accordion-item {
+      .accordion-header {
+        display: flex;
+        align-items: center;
+        padding: 0;
+
+        .accordion-button {
+          flex: 1;
+          padding: 10px;
+          background: transparent;
+          border: none;
+          font-weight: 500;
+
+          .slide-preview-title {
+            margin-left: 8px;
+            font-weight: normal;
+            color: #666;
+          }
+        }
+
+        .btn-icon {
+          margin: 0 6px;
+          padding: 0px 8px;
+          border: none;
+          background: transparent;
+          color: #dc3545;
+          cursor: pointer;
+          border-radius: 4px;
+          transition: background 0.2s;
+
+          &:hover {
+            background: rgba(220, 53, 69, 0.1);
+          }
+        }
+      }
+    }
+    .accordion-body {
+      padding: 10px;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+
+      i {
+        color: #ccc;
+        margin-bottom: 16px;
+      }
+
+      p {
+        font-size: 16px;
+        margin: 0;
+      }
+    }
+  }
+
+  // ==================== Switches Group ====================
+  .switches-group {
+    margin-top: 20px;
+  }
+
+  // ==================== Settings Groups ====================
+  .settings-group {
+    margin-bottom: 32px;
+
+    h5 {
+      color: #6f94be;
+      font-size: 14px;
+      i {
+        margin-right: 8px;
+        color: #007bff;
+      }
+    }
+
+    .indent {
+      margin-left: 24px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #e0e0e0;
+    }
+  }
+
+  // ==================== Responsive Section ====================
+  .responsive-section {
+    .section-header {
+      margin-bottom: 16px;
+
+      h3 {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+        color: #4e6cac;
+      }
+    }
+
+    .section-description {
+      color: #c0bebe;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+
+    .breakpoint-item {
+      margin-bottom: 16px;
+      border: 1px solid #544d4d;
+      border-radius: 8px;
+      overflow: hidden;
+
+      .breakpoint-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: #1f1f21;
+        border-bottom: 1px solid #544d4d;
+
+        .breakpoint-label {
+          font-weight: 500;
+
+          i {
+            margin-right: 8px;
+            color: #007bff;
+          }
+        }
+
+        .btn-icon {
+          padding: 6px 12px;
+          border: none;
+          background: transparent;
+          color: #dc3545;
+          cursor: pointer;
+          border-radius: 4px;
+          transition: background 0.2s;
+
+          &:hover {
+            background: rgba(220, 53, 69, 0.1);
+          }
+        }
+      }
+
+      .breakpoint-body {
+        padding: 16px;
+        background: #1f1f21;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+      }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+
+      i {
+        color: #ccc;
+        margin-bottom: 16px;
+      }
+
+      p {
+        font-size: 16px;
+        margin: 0;
+      }
+    }
+  }
+}

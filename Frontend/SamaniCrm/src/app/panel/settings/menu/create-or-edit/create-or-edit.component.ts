@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -21,12 +21,11 @@ export class CreateOrEditMenuComponent extends AppComponentBase implements OnIni
   translations?: MenuTranslationsDTO[];
   id: string;
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: { id: string },
     private dialogRef: MatDialogRef<CreateOrEditMenuComponent>,
     private menuService: MenuServiceProxy,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       url: ['', [Validators.maxLength(500)]],
       icon: ['', [Validators.maxLength(200)]],
@@ -69,7 +68,12 @@ export class CreateOrEditMenuComponent extends AppComponentBase implements OnIni
     this.loading = true;
     this.menuService
       .getForEdit(id)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {
@@ -119,7 +123,12 @@ export class CreateOrEditMenuComponent extends AppComponentBase implements OnIni
     input.id = this.id;
     this.menuService
       .createOrUpdate(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success) {

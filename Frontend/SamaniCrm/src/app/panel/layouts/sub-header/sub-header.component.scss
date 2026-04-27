@@ -3,6 +3,15 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 10px;
+
+  background: var(--subheader-bg);
+  color: var(--subheader-fg);
+
+  .page-title {
+    font-weight: bold;
+    padding: 5px 24px 10px;
+    font-size: 1.3rem;
+  }
 }
 .actions {
   display: flex;

@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -54,12 +54,11 @@ export class CreateOrEditExternalProviderComponent extends AppComponentBase impl
   providerId = '';
 
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: { provider?: ExternalProviderDto },
     private dialogRef: MatDialogRef<CreateOrEditExternalProviderComponent>,
     private service: ExternalProvidersServiceProxy,
   ) {
-    super(injector);
+    super();
     this.isEditMode = !!_data?.provider;
     if (this.isEditMode && _data.provider) {
       this.providerId = _data.provider.id!;
@@ -95,7 +94,12 @@ export class CreateOrEditExternalProviderComponent extends AppComponentBase impl
     this.loading = true;
     this.service
       .getById(id)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (result) => {
           if (result.data) {
@@ -150,7 +154,12 @@ export class CreateOrEditExternalProviderComponent extends AppComponentBase impl
       input.id = this.providerId;
       this.service
         .update(input)
-        .pipe(finalize(() => (this.saving = false)))
+        .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
         .subscribe({
           next: () => {
             this.dialogRef.close(true);
@@ -165,7 +174,12 @@ export class CreateOrEditExternalProviderComponent extends AppComponentBase impl
 
       this.service
         .create(input)
-        .pipe(finalize(() => (this.saving = false)))
+        .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
         .subscribe({
           next: () => {
             this.dialogRef.close(true);

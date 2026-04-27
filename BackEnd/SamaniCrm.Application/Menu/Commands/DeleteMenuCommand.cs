@@ -1,11 +1,12 @@
-﻿using System;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using SamaniCrm.Application.Common.Exceptions;
+using SamaniCrm.Application.Common.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MediatR;
-using SamaniCrm.Application.Common.Exceptions;
-using SamaniCrm.Application.Common.Interfaces;
 
 namespace SamaniCrm.Application.Menu.Commands
 {
@@ -27,8 +28,20 @@ namespace SamaniCrm.Application.Menu.Commands
             if (menu == null)
                 throw new NotFoundException("Menu not found.");
 
+            var now= DateTime.UtcNow;
             menu.IsDeleted = true;
-            menu.DeletedTime = DateTime.UtcNow;
+            menu.DeletedTime = now;
+
+            var translations = await _dbContext.MenuTranslations
+            .Where(x => x.MenuId == request.Id && !x.IsDeleted)
+            .ToListAsync(cancellationToken);
+
+            foreach (var translation in translations)
+            {
+                translation.IsDeleted = true;
+                translation.DeletedTime = now;
+            }
+
 
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
 

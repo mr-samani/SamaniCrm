@@ -1,6 +1,7 @@
 import {
   AfterContentInit,
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ContentChildren,
   DOCUMENT,
@@ -29,7 +30,7 @@ export class TabGroupComponent implements OnDestroy, AfterViewInit {
   @Output() onAddTab = new EventEmitter();
 
   @Input('selectedIndex') set setIndex(val: number) {
-    if (this.tabs && this.tabs.get(val) != undefined) {
+    if (this.tabs && this.tabs.get(val) != undefined && Number.isInteger(val) && val > -1) {
       this.selectTab(this.tabs.get(val)!, val);
     }
   }
@@ -40,6 +41,7 @@ export class TabGroupComponent implements OnDestroy, AfterViewInit {
   private index = -1;
 
   protected doc = inject(DOCUMENT);
+  protected chdr = inject(ChangeDetectorRef);
   constructor() {}
 
   ngAfterViewInit(): void {
@@ -48,7 +50,7 @@ export class TabGroupComponent implements OnDestroy, AfterViewInit {
       if (this.index < 0 && activeTabs?.length === 0 && this.tabs) {
         this.selectTab(this.tabs.first, 0);
       }
-    }, 100);
+    });
 
     this.tabGroupContainer()?.nativeElement.style.setProperty('--oc-tab-bg', this.color);
   }
@@ -61,8 +63,9 @@ export class TabGroupComponent implements OnDestroy, AfterViewInit {
     // deactivate all tabs
     this.tabs?.toArray().forEach((tab) => (tab.active = false));
     // activate the tab the user has clicked on.
-    tab.active = true;
+    tab.setActive(true);
     this.selectedIndexChange.emit(index);
+    this.chdr.detectChanges();
   }
 
   onClickPlus() {

@@ -24,6 +24,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
 
 
         public Guid? ParentId { get; set; }
+        public string? ParentTitle { get; set; }
 
 
         public List<ProductCategoryDto> Children { get; set; } = [];
@@ -39,7 +40,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Dtos
 
     public class ProductCategoryTranslationDto
     {
-        public Guid ProductCategoryId { get; set; }
+        public Guid? ProductCategoryId { get; set; }
         public required string Culture { get; set; }
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;

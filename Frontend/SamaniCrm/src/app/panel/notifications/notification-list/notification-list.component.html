@@ -1,26 +1,26 @@
-<sub-header [title]="'Notifications' | translate"></sub-header>
+<sub-header [title]="'Notifications' | translate">
+  @if (AppPermissions.Notification_SendMessageToUser | permission) {
+    <button  class="btn btn-primary"  (click)="sendMessageToUser()">
+      <i class="fa fa-bell mx-1"></i>
+      <span>{{ 'SendMessage' | translate }}</span>
+    </button>
+  }
+  @if (AppPermissions.Notification_BroadCastMessageToAll | permission) {
+    <button  class="btn btn-primary"  (click)="broadCastMessage()">
+      <i class="fa fa-broadcast mx-1"></i>
+      <span>{{ 'BroadcastMessage' | translate }}</span>
+    </button>
+  }
+</sub-header>
 <div class="panel-content">
   <div class="tools d-flex justify-content-between align-items-center flex-wrap gap-2">
     <div class="d-flex gap-2">
-      <button mat-raised-button color="primary" (click)="showFilter = !showFilter">
+      <button  class="btn btn-primary"  (click)="showFilter = !showFilter">
         <i class="fa fa-filter mx-1"></i>
         <span>{{ 'Filter' | translate }}</span>
       </button>
     </div>
-    <div class="d-flex gap-2">
-      @if (AppPermissions.Notification_SendMessageToUser | permission) {
-        <button mat-raised-button color="primary" (click)="sendMessageToUser()">
-          <i class="fa fa-bell mx-1"></i>
-          <span>{{ 'SendMessage' | translate }}</span>
-        </button>
-      }
-      @if (AppPermissions.Notification_BroadCastMessageToAll | permission) {
-        <button mat-raised-button color="primary" (click)="broadCastMessage()">
-          <i class="fa fa-broadcast mx-1"></i>
-          <span>{{ 'BroadcastMessage' | translate }}</span>
-        </button>
-      }
-    </div>
+    <div class="d-flex gap-2"></div>
   </div>
 
   <form [formGroup]="form" *filterForm="showFilter" class="filter-form">

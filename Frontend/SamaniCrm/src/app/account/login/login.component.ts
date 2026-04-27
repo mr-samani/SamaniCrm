@@ -1,9 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component,  OnInit, ViewChild } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
-import { accountModuleAnimation } from '@shared/animations/routerTransition';
 import { AppConst } from '@shared/app-const';
 import { CaptchaComponent } from '@shared/captcha/captcha.component';
 import { AccountServiceProxy, ExternalProviderDto, ExternalProviderTypeEnum } from '@shared/service-proxies';
@@ -16,7 +15,6 @@ import { finalize } from 'rxjs';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  animations: [accountModuleAnimation()],
   standalone: false,
 })
 export class LoginComponent extends AppComponentBase implements OnInit {
@@ -34,11 +32,10 @@ export class LoginComponent extends AppComponentBase implements OnInit {
   loadingExternalProviders = false;
   externalProviderList: ExternalProviderDto[] = [];
   constructor(
-    injector: Injector,
     private matDialog: MatDialog,
     private accountService: AccountServiceProxy,
   ) {
-    super(injector);
+    super();
     this.loginForm = this.fb.group({
       userName: ['', [Validators.required]],
       password: ['', [Validators.required]],
@@ -71,7 +68,12 @@ export class LoginComponent extends AppComponentBase implements OnInit {
     formValue.captcha = new InputCaptchaDTO(this.loginForm.get('captcha')?.value);
     this.authService
       .login(formValue)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (result) => {
           if (result.success && result.data?.accessToken) {
@@ -107,7 +109,12 @@ export class LoginComponent extends AppComponentBase implements OnInit {
     input.password = this.loginForm.get('password')?.value;
     this.authService
       .loginTwoFactor(input)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (result) => {
           if (result.success && result.data?.accessToken) {

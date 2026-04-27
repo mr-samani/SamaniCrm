@@ -41,7 +41,7 @@ export class LanguageService {
 
     AppConst.currentLanguage = lang;
     AppConst.isRtl = isRtl(lang);
-    this.direction = AppConst.isRtl ? 'rtl' : 'ltr';
+    this.direction = 'ltr'; // AppConst.isRtl ? 'rtl' : 'ltr';
     //this.translate.use(lang);
     this._document.body.dir = this.direction;
     this._document.documentElement.lang = lang.substring(0, 2);

@@ -9,8 +9,8 @@ import { PageTypeEnum } from '@shared/service-proxies';
   standalone: false,
 })
 export class ContentComponent extends AppComponentBase {
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
     this.breadcrumb.list = [{ name: this.l('Content'), url: '/panel/content' }];
   }
 

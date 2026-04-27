@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component,  OnInit, ViewEncapsulation } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
 
@@ -14,10 +14,9 @@ export class AccountComponent extends AppComponentBase implements OnInit {
   backgroundImage = '';
   backgroundColor = '';
   constructor(
-    injector: Injector,
     private http: HttpClient,
   ) {
-    super(injector);
+    super();
     this.setBackgroundImage();
   }
 

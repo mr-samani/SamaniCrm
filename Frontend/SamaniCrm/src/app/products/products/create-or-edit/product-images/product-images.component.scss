@@ -23,18 +23,16 @@
     }
     .default {
       position: absolute;
-      top: 8px;
-      left: 0px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: rgb(0 196 114 / 85%);
-      border-radius: 0 5px 5px 0;
+      top: 18px;
+      left: -62px;
+      right: 0;
+      background-color: rgba(0, 196, 114, 0.85);
       color: #1a1a1a;
       box-shadow: 0 0 4px black;
-      padding: 0 8px;
-      gap: 4px;
+      padding: 5px 8px;
+      transform: rotate(-45deg);
+      transform-origin: center;
+      text-align: center;
       i {
         color: #fff;
         font-weight: bold;

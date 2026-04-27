@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -24,12 +24,11 @@ export class CreateOrEditProductTypeComponent extends AppComponentBase implement
   translations?: ProductTypeTranslationDto[];
   id: string;
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: { id: string },
     private dialogRef: MatDialogRef<CreateOrEditProductTypeComponent>,
     private productService: ProductServiceProxy,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       translations: this.fb.array([]),
     });
@@ -65,7 +64,12 @@ export class CreateOrEditProductTypeComponent extends AppComponentBase implement
     this.loading = true;
     this.productService
       .getProductTypeForEdit(id)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {
@@ -116,7 +120,12 @@ export class CreateOrEditProductTypeComponent extends AppComponentBase implement
     input.id = this.id;
     this.productService
       .createOrEditProductType(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success) {

@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { NotificationDto, NotificationServiceProxy } from '@shared/service-proxies';
@@ -18,12 +18,11 @@ export class LastNotificationsComponent extends AppComponentBase implements OnIn
   loading = true;
   showHaveNewMessage = false;
   constructor(
-    injector: Injector,
     notificationService: NotificationService,
     private notificationServiceProxy: NotificationServiceProxy,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
     notificationService.startConnection().then((result) => {
       notificationService.onReceiveNotification((msg: NotificationDto) => this.recieveMessage(msg));
     });
@@ -43,7 +42,12 @@ export class LastNotificationsComponent extends AppComponentBase implements OnIn
     this.loading = true;
     this.notificationServiceProxy
       .getLastUnReadNotifications()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         this.notificationList = result.data ?? [];
         this.count = this.notificationList.length;

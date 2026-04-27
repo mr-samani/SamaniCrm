@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injector, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter,  Input, OnInit, Output } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import {
   GetProductAttributesQuery,
@@ -31,10 +31,9 @@ export class AddOrUpdateProductAttributesComponent extends AppComponentBase impl
   loading = false;
   attributeList: ProductAttributeDtoExtended[] = [];
   constructor(
-    injector: Injector,
     private productService: ProductServiceProxy,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit() {}
@@ -51,7 +50,12 @@ export class AddOrUpdateProductAttributesComponent extends AppComponentBase impl
           productTypeId: productTypeId,
         }),
       )
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         this.attributeList = result.data?.items ?? [];
         for (let item of this.attributeList) {

@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -21,12 +21,11 @@ export class BroadcastNotificationComponent extends AppComponentBase implements 
   notifyInfo?: NotificationDto;
   form: FormGroup;
   constructor(
-    injector: Injector,
     private dialogRef: MatDialogRef<BroadcastNotificationComponent>,
     @Inject(MAT_DIALOG_DATA) _data: NotificationDto,
     private notificationService: NotificationServiceProxy,
   ) {
-    super(injector);
+    super();
     this.form = this.fb.group({
       title: ['', [Validators.required]],
       content: ['', [Validators.required]],
@@ -48,7 +47,12 @@ export class BroadcastNotificationComponent extends AppComponentBase implements 
     input.periority = formValue.periority;
     this.notificationService
       .broadCastMessageToAllUsers(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         if (result.success) {
           this.notify.success(this.l('SentSuccessfully'));

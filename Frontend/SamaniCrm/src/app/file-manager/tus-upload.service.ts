@@ -3,25 +3,29 @@ import { Upload, UploadOptions } from 'tus-js-client';
 import { TokenService } from '../../shared/services/token.service';
 import { AppConst } from '../../shared/app-const';
 import { FileUsageEnum } from './image-cropper-dialog/image-cropper-dialog.component';
-import { AppComponentBase } from '@app/app-component-base';
+import { NgxAlertModalService } from 'ngx-alert-modal';
+import { LanguageService } from '@shared/services/language.service';
 
 @Injectable()
-export class TusUploadService extends AppComponentBase {
+export class TusUploadService {
   uploading = false;
   progress = 0;
   uploadedUrl = '';
   chunckSize = 1 * 1024 * 1024; // 1MB
   constructor(
-    injector: Injector,
     private _tokenService: TokenService,
-  ) {
-    super(injector);
-  }
+    private alert: NgxAlertModalService,
+    private language: LanguageService,
+  ) {}
 
   reset() {
     this.progress = 0;
     this.uploadedUrl = '';
     this.uploading = false;
+  }
+  l(key: string, param?: Object) {
+    // console.log(this.language.translate.instant(key, param));
+    return this.language.translate.instant(key, param);
   }
   public uploadFile(
     file: File,

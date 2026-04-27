@@ -20,20 +20,17 @@
   display: flex;
 }
 .menu-list {
-  border-right: 1px #83838370 solid;
-  background: #cef2ff24;
   width: 240px;
   min-height: 75vh;
   position: sticky;
   top: 68px;
   align-self: flex-start;
   .menu-item {
-    border: 1px #c3c3c34a solid;
-    margin: 5px;
-    padding: 5px;
-    border-radius: 5px;
+    background: color-mix(in srgb, var(--bs-body-bg, #fff), #9cb0cc 10%);
+    padding: 15px 5px;
     display: flex;
     gap: 8px;
+    border-bottom: 1px color-mix(in srgb, var(--bs-body-bg, #fff), #9cb0cc 10%) solid;
 
     .icon {
       opacity: 0.5;
@@ -58,12 +55,14 @@
     &.active,
     &:hover {
       cursor: pointer;
-      background-color: #00b4df30;
+      background: color-mix(in srgb, var(--bs-body-bg, #fff), #9cb0cc 50%);
       transition: all 300ms;
-
       .icon {
         opacity: 1;
       }
+    }
+    &.active {
+      border-right: 6px var(--primary) solid;
     }
   }
 }

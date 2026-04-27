@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
@@ -20,12 +20,11 @@ export class SelectIconDialogComponent extends AppComponentBase implements OnIni
   selected?: string;
   baseUrl = AppConst.apiUrl;
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: any,
     private matDialogRef: MatDialogRef<SelectIconDialogComponent>,
     private fileManagerService: FileManagerServiceProxy,
   ) {
-    super(injector);
+    super();
     this.folderId = _data.id;
   }
 
@@ -37,7 +36,12 @@ export class SelectIconDialogComponent extends AppComponentBase implements OnIni
     this.loading = true;
     this.fileManagerService
       .getFileManagerIcons()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         this.list = result.data ?? [];
       });
@@ -55,7 +59,12 @@ export class SelectIconDialogComponent extends AppComponentBase implements OnIni
           id: this.folderId,
         }),
       )
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         if (response.data) {
           this.matDialogRef.close(this.selected);

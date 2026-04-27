@@ -44,8 +44,8 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button mat-dialog-close color="cancel">{{ 'Cancel' | translate }}</button>
-  <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="saving">
+  <button  class="btn btn-default" mat-dialog-close >{{ 'Cancel' | translate }}</button>
+  <button  class="btn btn-primary"  (click)="save()" cdkFocusInitial [disabled]="saving">
     @if (saving) {
       <mat-spinner color="primary" diameter="25"></mat-spinner>
     }

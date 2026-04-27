@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
@@ -35,11 +35,10 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
     { column: 'isActive', title: this.l('Active'), type: 'yesNo', width: 100 },
   ];
   constructor(
-    injector: Injector,
     private matDialog: MatDialog,
     private languageService: LanguageServiceProxy,
   ) {
-    super(injector);
+    super();
     this.breadcrumb.list = [
       { name: this.l('Settings'), url: '/panel/setting' },
       { name: this.l('Languages'), url: '/panel/languages' },
@@ -54,7 +53,12 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
     this.loading = true;
     this.languageService
       .getAllLanguages()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data ?? [];
         this.list.map((x) => {
@@ -71,7 +75,12 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
     input.isActive = !item.isActive;
     this.languageService
       .activeOrDeactive(input)
-      .pipe(finalize(() => (item.loading = false)))
+      .pipe(
+        finalize(() => {
+          item.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe();
   }
 
@@ -91,7 +100,12 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
         input.culture = item.culture;
         this.languageService
           .deleteLangauuge(input)
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+            finalize(() => {
+              this.hideMainLoading();
+              this.chdr.detectChanges();
+            }),
+          )
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));

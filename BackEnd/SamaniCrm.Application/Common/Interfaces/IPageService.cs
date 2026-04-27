@@ -26,9 +26,9 @@ namespace SamaniCrm.Application.Common.Interfaces
 
 
         // Blocks
-        Task<Guid> CreateCustomBlock(CreateCustomBlockCommand request, CancellationToken cancellationToken);
-        Task<Unit> DeleteCustomBlockPage(DeleteCustomBlockCommand request, CancellationToken cancellationToken);
-        Task<List<CustomBlockDto>> GetCustomBlocks(GetCustomBlockQuery request, CancellationToken cancellationToken);
+        Task<Guid> CreatePlugin(CreatePluginCommand request, CancellationToken cancellationToken);
+        Task<Unit> DeletePluginPage(DeletePluginCommand request, CancellationToken cancellationToken);
+        Task<PaginatedResult<PluginDto>> GetPlugins(GetPluginQuery request, CancellationToken cancellationToken);
 
     }
 }

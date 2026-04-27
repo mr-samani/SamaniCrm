@@ -9,5 +9,6 @@ public enum PageTypeEnum
     ContactUs,
     Blog,
     Article,
-    News
+    News,
+    Product
 }

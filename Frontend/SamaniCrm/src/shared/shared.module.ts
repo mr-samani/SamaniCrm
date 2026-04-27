@@ -14,6 +14,7 @@ import { SubHeaderComponent } from '@app/panel/layouts/sub-header/sub-header.com
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { SwitchModule } from './components/switch/switch.module';
+import { HtmlSanitizePipe } from './pipes/html-sanatizer.pipe';
 
 const pipes = [
   SanitizerPipe,
@@ -27,6 +28,7 @@ const pipes = [
   PermissionPipe,
   PermissionAnyPipe,
   PermissionAllPipe,
+  HtmlSanitizePipe
 ];
 
 const standalones = [SubHeaderComponent];

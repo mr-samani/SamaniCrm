@@ -1,9 +1,9 @@
 .img-circle {
   width: 50px;
-  max-height: 50px;
   object-fit: contain;
   background: #b1b1b145;
-  border-radius: 8px;
+  height: 50px;
+  border-radius: 100%;
   &.img-cover {
     object-fit: cover;
   }

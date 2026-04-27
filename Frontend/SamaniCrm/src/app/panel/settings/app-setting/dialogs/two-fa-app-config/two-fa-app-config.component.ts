@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { AccountServiceProxy, Verify2FARequest } from '@shared/service-proxies';
@@ -18,12 +18,11 @@ export class TwoFaAppConfigComponent extends AppComponentBase implements OnInit 
   secret = '';
 
   constructor(
-    injector: Injector,
     @Inject(MAT_DIALOG_DATA) _data: any,
     private dialogRef: MatDialogRef<TwoFaAppConfigComponent>,
     private accountService: AccountServiceProxy,
   ) {
-    super(injector);
+    super();
   }
 
   ngOnInit() {
@@ -34,7 +33,12 @@ export class TwoFaAppConfigComponent extends AppComponentBase implements OnInit 
     this.loading = true;
     this.accountService
       .generate2FaRequestGenerate()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         if (result.data) {
           this.img = result.data.qrCode ?? '';
@@ -56,7 +60,12 @@ export class TwoFaAppConfigComponent extends AppComponentBase implements OnInit 
           secret: this.secret,
         }),
       )
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
         if (result.data == true) {
           this.notify.success(this.l('SaveSuccessFully'));

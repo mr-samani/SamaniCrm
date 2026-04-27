@@ -1,4 +1,4 @@
-import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
+import { Component,  OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
@@ -33,11 +33,10 @@ export class ExternalProvidersComponent extends AppComponentBase implements OnIn
   showFilter = false;
 
   constructor(
-    injector: Injector,
     private externalProviderService: ExternalProvidersServiceProxy,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
 
     this.getList();
   }
@@ -58,7 +57,12 @@ export class ExternalProvidersComponent extends AppComponentBase implements OnIn
 
     this.listSubscription$ = this.externalProviderService
       .getAllExternalProviders()
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data ?? [];
         this.totalCount = response.data?.length ?? 0;
@@ -71,7 +75,12 @@ export class ExternalProvidersComponent extends AppComponentBase implements OnIn
         this.showMainLoading();
         this.externalProviderService
           .changeIsActiveExternalProvider(item.id, item.isActive)
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
           .subscribe({
             next: (response) => {
               this.notify.success(this.l('ChangedSuccessfully'));
@@ -109,7 +118,12 @@ export class ExternalProvidersComponent extends AppComponentBase implements OnIn
         this.showMainLoading();
         this.externalProviderService
           ._delete(item.id)
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));

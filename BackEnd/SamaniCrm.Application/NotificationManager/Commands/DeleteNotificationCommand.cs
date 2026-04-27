@@ -28,8 +28,11 @@ namespace SamaniCrm.Application.NotificationManager.Commands
             if (entity == null)
                 throw new NotFoundException("Notification not found."); 
 
+            var now= DateTime.UtcNow;
+
             entity.IsDeleted = true;
-            entity.DeletedTime = DateTime.UtcNow;
+            entity.DeletedTime = now;
+
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
             return result > 0;
         }

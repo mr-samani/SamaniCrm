@@ -1,21 +1,13 @@
-import {
-  HttpErrorResponse,
-  HttpEvent,
-  HttpHandler,
-  HttpHeaders,
-  HttpInterceptor,
-  HttpRequest,
-} from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { catchError, take, filter, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { isArray, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { TokenService } from './token.service';
 import { AppConst } from '../app-const';
 import { NgxAlertModalService } from 'ngx-alert-modal';
 import { RefreshTokenCommand } from '@shared/service-proxies/model/refresh-token-command';
-import { ApiError } from '@shared/service-proxies/model/api-error';
 import { Router } from '@angular/router';
 export const exceptionUrls = ['background.css', '/i18n/'];
 @Injectable()

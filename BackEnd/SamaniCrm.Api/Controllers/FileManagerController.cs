@@ -85,5 +85,12 @@ public class FileManagerController : ApiBaseController
     }
 
 
-
+    [HttpPost("Rename")]
+    [Permission(AppPermissions.FileManager_Rename)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> Rename(RenameCommand request)
+    {
+        bool result = await _mediator.Send(request);
+        return ApiOk(result);
+    }
 }

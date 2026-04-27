@@ -1,19 +1,19 @@
 <div class="tools d-flex justify-content-end align-items-center flex-wrap gap-2">
   <div class="d-flex gap-2">
     @if (AppPermissions.Products_Category_Create | permission) {
-      <button mat-raised-button color="primary" (click)="openCreateOrEditDialog()">
+      <button  class="btn btn-primary"  (click)="openCreateOrEditDialog()">
         <i class="fa fa-circle-plus mx-1"></i>
         <span>{{ 'CreateNewCategory' | translate }}</span>
       </button>
     }
     @if (AppPermissions.Products_Category_Export | permission) {
-      <button mat-raised-button color="primary" (click)="exportAllLocalizations()">
+      <button  class="btn btn-primary"  (click)="exportAllLocalizations()">
         <i class="fa fa-circle-plus mx-1"></i>
         <span>{{ 'ExportAllLocalizations' | translate }}</span>
       </button>
     }
     @if (AppPermissions.Products_Category_Import | permission) {
-      <button mat-raised-button color="primary" (click)="importLocalizations()">
+      <button  class="btn btn-primary"  (click)="importLocalizations()">
         <i class="fa fa-circle-plus mx-1"></i>
         <span>{{ 'ImportAllLocalizations' | translate }}</span>
       </button>
@@ -24,6 +24,10 @@
 @if (loading) {
   <div class="d-flex align-items-center justify-content-center py-5">
     <mat-spinner diameter="30" color="primary"></mat-spinner>
+  </div>
+} @else if (list.length == 0) {
+  <div class="px-2 py-5 my-5 text-center">
+    {{ 'NotACase' | translate }}
   </div>
 }
 

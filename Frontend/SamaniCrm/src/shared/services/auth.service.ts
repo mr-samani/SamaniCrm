@@ -18,11 +18,11 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { AppConst } from '@shared/app-const';
 import { HttpErrorResponse } from '@angular/common/http';
+import { removePreviousFolderId } from '@app/file-manager/consts/PreviousFolderId';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
- 
   private currentUserSubject: BehaviorSubject<UserDTO | undefined> = new BehaviorSubject<UserDTO | undefined>(
     undefined,
   );
@@ -37,9 +37,9 @@ export class AuthService {
     private tokenService: TokenService,
 
     private alert: NgxAlertModalService,
-    injector: Injector,
     private translateService: TranslateService,
     private languageService: LanguageService,
+    injector: Injector,
   ) {
     this.accountService = injector.get(AccountServiceProxy);
     this.userService = injector.get(UserServiceProxy);
@@ -63,7 +63,6 @@ export class AuthService {
       }),
     );
   }
-
 
   loginTwoFactor(input: TwoFactorLoginCommand) {
     return this.accountService.loginTwoFactor(input).pipe(
@@ -145,6 +144,7 @@ export class AuthService {
       )
       .subscribe();
     this.tokenService.remove();
+    removePreviousFolderId();
     const returnUrl = window.location.href;
     this.router.navigate(['/account/login'], {
       queryParams: { returnUrl },

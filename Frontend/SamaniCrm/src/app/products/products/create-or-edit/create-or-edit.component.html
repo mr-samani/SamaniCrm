@@ -1,11 +1,4 @@
-<h2>
-  @if (!isUpdate) {
-    <span cdkDragHandle class="title">{{ 'CreateProduct' | translate }}</span>
-  }
-  @if (isUpdate) {
-    <span cdkDragHandle class="title">{{ 'EditProduct' | translate }}</span>
-  }
-</h2>
+<sub-header [title]="isUpdate ? ('EditProduct' | translate) : ('CreateProduct' | translate)"></sub-header>
 
 @if (loading) {
   <div class="d-flex align-items-center justify-content-center py-5">
@@ -13,9 +6,9 @@
   </div>
 }
 @if (!loading) {
-  <form [formGroup]="form">
+  <form [formGroup]="form" class="container-fluid">
     <div class="row">
-      <div class="col-sm-8">
+      <div class="col-sm-8 d-flex flex-column gap-3">
         <div class="card">
           <div class="card-body">
             <div class="row">
@@ -63,13 +56,14 @@
                 {{ 'IsActive' | translate }}
               </mat-checkbox>
             </p>
-            <add-or-update-product-attributes
-              [productTypeId]="form.get('productType')?.value?.id"
-              [attributeValues]="attributeValues"
-              (onChange)="attributeValues = $event"></add-or-update-product-attributes>
-            <product-prices [(prices)]="prices"></product-prices>
           </div>
         </div>
+        <add-or-update-product-attributes
+          [productTypeId]="form.get('productType')?.value?.id"
+          [attributeValues]="attributeValues"
+          (onChange)="attributeValues = $event"></add-or-update-product-attributes>
+
+        <product-prices [(prices)]="prices"></product-prices>
       </div>
       <div class="col-sm-4 d-flex flex-column gap-3">
         <product-images [(images)]="images"></product-images>
@@ -77,6 +71,9 @@
         <div class="card">
           <div class="card-header">{{ 'Tags' | translate }}</div>
           <div class="card-body">
+            <div class="text-info py-3">
+              {{ 'TypeNewTagAndEnterToAdd' | translate }}
+            </div>
             <mat-form-field>
               <mat-label>{{ 'Tags' | translate }}</mat-label>
               <mat-chip-grid #chipGrid aria-label="Enter tag">
@@ -122,8 +119,8 @@
   </form>
 }
 
-<div class="actions fixed-bottom">
-  <button mat-raised-button color="primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
+<div class="fixed-form-actions">
+  <button class="btn btn-primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
     @if (saving) {
       <mat-spinner color="primary" diameter="25"></mat-spinner>
     }

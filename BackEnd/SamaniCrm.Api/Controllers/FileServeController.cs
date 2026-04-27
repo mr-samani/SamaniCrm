@@ -42,6 +42,7 @@ namespace SamaniCrm.Api.Controllers
             var stream = System.IO.File.OpenRead(physicalPath);
             var fileLength = stream.Length;
             var contentType = fileEntity.ContentType ?? "application/octet-stream";
+            var fileName = fileEntity.Name;
 
             // Handle range requests (video seek support)
             if (Request.Headers.ContainsKey("Range"))
@@ -61,10 +62,14 @@ namespace SamaniCrm.Api.Controllers
                 Response.Headers.ContentRange = $"bytes {from}-{to}/{fileLength}";
                 Response.ContentLength = length;
                 Response.ContentType = contentType;
+                Response.Headers.ContentType = contentType;
+
+                Response.Headers.ContentDisposition = $"attachment; filename=\"{fileName}\"";
 
                 return File(partialStream, contentType, enableRangeProcessing: true);
             }
 
+            Response.Headers.ContentDisposition = $"attachment; filename=\"{fileName}\"";
             Response.Headers.CacheControl = "public,max-age=604800"; // 7 days cache
             return File(stream, contentType, fileEntity.Name, enableRangeProcessing: true);
         }

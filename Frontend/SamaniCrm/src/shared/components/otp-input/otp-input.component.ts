@@ -1,5 +1,5 @@
 
-import { Component, ElementRef, forwardRef, Injector, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, forwardRef,  Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 
@@ -27,8 +27,8 @@ export class OtpInputComponent extends AppComponentBase implements OnInit {
   private onChange: (value: string) => void = () => {};
   private onTouched: () => void = () => {};
 
-  constructor(injector: Injector) {
-    super(injector);
+  constructor() {
+    super();
   }
 
   ngOnInit() {

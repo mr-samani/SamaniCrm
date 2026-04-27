@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component,  OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -46,11 +46,10 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
   showFilter = false;
 
   constructor(
-    injector: Injector,
     private productService: ProductServiceProxy,
     private matDialog: MatDialog,
   ) {
-    super(injector);
+    super();
     this.breadcrumb.list = [{ name: this.l('Products'), url: '/panel/products/product-list' }];
     this.form = this.fb.group({
       filter: [''],
@@ -101,7 +100,12 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
     input.sortDirection = ev ? ev.direction : '';
     this.listSubscription$ = this.productService
       .getProducts(input)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.list = response.data?.items ?? [];
         this.totalCount = response.data?.totalCount ?? 0;
@@ -144,7 +148,12 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
         this.showMainLoading();
         this.productService
           .deleteProduct(new DeleteProductCommand({ id: item.id }))
-          .pipe(finalize(() => this.hideMainLoading()))
+          .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));

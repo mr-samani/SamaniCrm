@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
+import { Component, Inject,  OnInit } from '@angular/core';
 import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { AppComponentBase } from '@app/app-component-base';
@@ -34,10 +34,9 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
   prices: Array<ProductPriceDto> = [];
   tagList: string[] = [];
   constructor(
-    injector: Injector,
     private productService: ProductServiceProxy,
   ) {
-    super(injector);
+    super();
     this.breadcrumb.list = [{ name: this.l('Products'), url: '/panel/products/product-list' }];
 
     this.form = this.fb.group({
@@ -82,7 +81,12 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
     this.loading = true;
     this.productService
       .getProductForEdit(id)
-      .pipe(finalize(() => (this.loading = false)))
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success && response.data) {
@@ -179,7 +183,12 @@ export class CreateOrEditProductComponent extends AppComponentBase implements On
     input.tags = this.tagList.join(',');
     this.productService
       .createOrEditProduct(input)
-      .pipe(finalize(() => (this.saving = false)))
+      .pipe(
+        finalize(() => {
+          this.saving  = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe({
         next: (response) => {
           if (response.success) {

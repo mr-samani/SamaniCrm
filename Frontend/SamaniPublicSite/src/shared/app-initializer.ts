@@ -19,7 +19,7 @@ export function appInit(): Promise<boolean> {
     } else {
       baseUrl = baseUrl + 'appconfig.production.json?v=' + rnd;
     }
-    console.log('start load config');
+    console.log('app initializer:', 'start load config');
     readConfigFile()
       .then((config) => {
         AppConst.apiUrl = config.apiUrl;
@@ -28,11 +28,9 @@ export function appInit(): Promise<boolean> {
         AppConst.fileServerUrl = config.fileServerUrl;
         AppConst.dashboardUrl = config.dashboardUrl;
         // console.log(config);
-        debugger;
         // api initialize
         httpClient.get<InitialAppDTOApiResponse>(AppConst.apiUrl + '/api/Common/InitialApp').subscribe({
           next: (resp) => {
-            debugger;
             if (resp.success && resp.data) {
               AppConst.languageList = resp.data.languages ?? [];
               AppConst.defaultLang = resp.data.defaultLang ?? 'fa-IR';
@@ -78,7 +76,7 @@ async function readConfigFile(): Promise<any> {
           },
         });
       } else {
-        console.log('init node js for read file');
+        console.log('app initializer:', 'init node js for read file');
         const fs = await import('node:fs');
         const path = await import('node:path');
         const filePath = path.join(process.cwd(), './public/appconfig.json');
