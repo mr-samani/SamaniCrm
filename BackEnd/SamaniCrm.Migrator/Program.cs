@@ -24,35 +24,38 @@ public class Program
 
         var services = new ServiceCollection();
         ConfigureServices(services, configuration, connectionString);
-
         var serviceProvider = services.BuildServiceProvider();
+
+        // دریافت دستور از آرگومان یا از کاربر
+        var command = GetCommand(args);
 
         try
         {
             var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
-
-            // بررسی آرگومان‌ها
-            var command = args.Length > 0 ? args[0].ToLower() : "help";
 
             switch (command)
             {
                 case "migrate":
                     await RunMigrationsAsync(dbContext);
                     break;
-
                 case "seed":
                     await RunSeedingAsync(serviceProvider);
                     break;
-
                 case "drop":
                     await DropDatabaseAsync(dbContext);
                     break;
-
                 case "reset":
                     await ResetDatabaseAsync(dbContext, serviceProvider);
                     break;
-
-                case "help":
+                case "info":
+                    await ShowDatabaseInfoAsync(dbContext);
+                    break;
+                case "script":
+                    await GenerateScriptAsync(dbContext);
+                    break;
+                case "exit":
+                    Log.Info("Goodbye!");
+                    break;
                 default:
                     PrintHelp();
                     break;
@@ -67,6 +70,7 @@ public class Program
             }
         }
     }
+
 
     private static void PrintBanner()
     {
@@ -83,20 +87,136 @@ public class Program
     private static void PrintHelp()
     {
         Console.WriteLine();
-        Log.Info("Available Commands:");
+        Console.WriteLine("╔════════════════════════════════════════════════════════╗");
+        Console.WriteLine("║                    Available Commands                  ║");
+        Console.WriteLine("╚════════════════════════════════════════════════════════╝");
         Console.WriteLine();
-        Console.WriteLine("  migrate    - Apply all pending migrations");
-        Console.WriteLine("  seed       - Seed initial data");
-        Console.WriteLine("  drop       - Drop the database");
-        Console.WriteLine("  reset      - Drop, recreate, migrate and seed");
-        Console.WriteLine("  help       - Show this help message");
+        Console.WriteLine("  Usage: dotnet run -- [command|number] [options]");
         Console.WriteLine();
-        Console.WriteLine("Examples:");
-        Console.WriteLine("  dotnet run -- migrate");
-        Console.WriteLine("  dotnet run -- seed");
-        Console.WriteLine("  dotnet run -- reset");
+        Console.WriteLine("  Commands:");
+        Console.WriteLine("  ┌──────────┬──────────────────────────────────────────┐");
+        Console.WriteLine("  │ Number   │ Description                              │");
+        Console.WriteLine("  ├──────────┼──────────────────────────────────────────┤");
+        Console.WriteLine("  │ 1/migrate│ Apply all pending migrations             │");
+        Console.WriteLine("  │ 2/seed   │ Seed initial data                        │");
+        Console.WriteLine("  │ 3/drop   │ Drop the database                        │");
+        Console.WriteLine("  │ 4/reset  │ Drop + Migrate + Seed                    │");
+        Console.WriteLine("  │ 5/info   │ Show database information                │");
+        Console.WriteLine("  │ 6/script │ Generate SQL migration script            │");
+        Console.WriteLine("  │ 7/help   │ Show this help message                   │");
+        Console.WriteLine("  │ 0/exit   │ Exit application                         │");
+        Console.WriteLine("  └──────────┴──────────────────────────────────────────┘");
+        Console.WriteLine();
+        Console.WriteLine("  Options:");
+        Console.WriteLine("    --verbose, -v    Show detailed error information");
+        Console.WriteLine();
+        Console.WriteLine("  Examples:");
+        Console.WriteLine("    dotnet run                    # Interactive mode");
+        Console.WriteLine("    dotnet run -- 1               # Run migrate");
+        Console.WriteLine("    dotnet run -- migrate         # Run migrate");
+        Console.WriteLine("    dotnet run -- 4 --verbose     # Reset with details");
         Console.WriteLine();
     }
+    private static string GetCommand(string[] args)
+    {
+        // اگه آرگومان خط فرمان داده شده، استفاده کن
+        if (args.Length > 0)
+        {
+            var arg = args[0].ToLower();
+
+            // اگه عدد وارد شده، تبدیل به دستور کن
+            if (int.TryParse(arg, out int number))
+            {
+                return NumberToCommand(number);
+            }
+
+            // اگه خود دستور وارد شده
+            return arg;
+        }
+
+        // وگرنه از کاربر بگیر
+        return GetInteractiveCommand();
+    }
+
+    private static string GetInteractiveCommand()
+    {
+        while (true)
+        {
+            Console.WriteLine();
+            Console.WriteLine("╔════════════════════════════════════════════════════════╗");
+            Console.WriteLine("║              Database Management Menu                  ║");
+            Console.WriteLine("╚════════════════════════════════════════════════════════╝");
+            Console.WriteLine();
+
+            Console.WriteLine("  ┌─────────────────────────────────────────────────────┐");
+            Console.WriteLine("  │  [1]  Migrate      - Apply pending migrations       │");
+            Console.WriteLine("  │  [2]  Seed         - Seed initial data              │");
+            Console.WriteLine("  │  [3]  Drop         - Drop the database              │");
+            Console.WriteLine("  │  [4]  Reset        - Drop + Migrate + Seed          │");
+            Console.WriteLine("  │  [5]  Info         - Show database information      │");
+            Console.WriteLine("  │  [6]  Script       - Generate SQL migration script  │");
+            Console.WriteLine("  │  [7]  Help         - Show all commands              │");
+            Console.WriteLine("  │  [0]  Exit         - Exit application               │");
+            Console.WriteLine("  └─────────────────────────────────────────────────────┘");
+            Console.WriteLine();
+
+            Console.Write("  Press a key [0-7] or type command: ");
+
+            var input = Console.ReadLine()?.Trim();
+
+            if (string.IsNullOrEmpty(input))
+            {
+                Log.Warning("Please enter a valid option.");
+                continue;
+            }
+
+            // اگه عدد وارد شده
+            if (int.TryParse(input, out int number))
+            {
+                if (number == 0)
+                {
+                    return "exit";
+                }
+
+                var command = NumberToCommand(number);
+                if (command != null)
+                {
+                    return command;
+                }
+
+                Log.Warning($"Invalid option: {number}. Please choose between 0-7.");
+                continue;
+            }
+
+            // اگه دستور مستقیم وارد شده
+            var validCommands = new[] { "migrate", "seed", "drop", "reset", "info", "script", "help", "exit" };
+            if (validCommands.Contains(input.ToLower()))
+            {
+                return input.ToLower();
+            }
+
+            Log.Warning($"Unknown command: {input}");
+            Console.WriteLine();
+            Log.Info("Type a number [0-7] or command name.");
+        }
+    }
+
+    private static string? NumberToCommand(int number)
+    {
+        return number switch
+        {
+            1 => "migrate",
+            2 => "seed",
+            3 => "drop",
+            4 => "reset",
+            5 => "info",
+            6 => "script",
+            7 => "help",
+            0 => "exit",
+            _ => null
+        };
+    }
+
 
     private static IConfigurationRoot BuildConfiguration()
     {
@@ -205,4 +325,70 @@ public class Program
         var response = Console.ReadLine()?.Trim().ToLower();
         return response == "y" || response == "yes";
     }
+
+
+    private static async Task ShowDatabaseInfoAsync(ApplicationDbContext context)
+    {
+        Log.Info("Gathering database information...");
+        Console.WriteLine();
+
+        // اطلاعات سرور و دیتابیس
+        var serverVersion = context.Database.CanConnect() ? "Connected" : "Disconnected";
+        Log.Info($"Connection Status: {serverVersion}");
+
+        if (context.Database.IsSqlServer())
+        {
+            var connection = context.Database.GetDbConnection();
+            Log.Info($"Server: {connection.DataSource}");
+            Log.Info($"Database: {connection.Database}");
+        }
+
+        // تعداد جداول
+        var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
+        var appliedMigrations = await context.Database.GetAppliedMigrationsAsync();
+
+        Console.WriteLine();
+        Log.Info($"Pending Migrations: {pendingMigrations.Count()}");
+        foreach (var migration in pendingMigrations)
+        {
+            Console.WriteLine($"  → {migration}");
+        }
+
+        Console.WriteLine();
+        Log.Info($"Applied Migrations: {appliedMigrations.Count()}");
+        foreach (var migration in appliedMigrations)
+        {
+            Console.WriteLine($"  ✓ {migration}");
+        }
+
+        // تعداد رکوردهای جداول اصلی
+        Console.WriteLine();
+        Log.Info("Record counts:");
+
+        try
+        {
+            // اینجا اسم جداول خودت رو بذار
+            // var userCount = await context.Users.CountAsync();
+            // Log.Info($"  Users: {userCount}");
+        }
+        catch (Exception ex)
+        {
+            Log.Warning($"Could not get record counts: {ex.Message}");
+        }
+    }
+
+    private static async Task GenerateScriptAsync(ApplicationDbContext context)
+    {
+        Log.Info("Generating SQL migration script...");
+
+        var outputPath = Path.Combine(Directory.GetCurrentDirectory(), "migration_script.sql");
+
+        var script = context.Database.GenerateCreateScript();
+
+        await File.WriteAllTextAsync(outputPath, script);
+
+        Log.Success($"Script generated: {outputPath}");
+        Log.Info($"File size: {new FileInfo(outputPath).Length:N0} bytes");
+    }
+
 }
