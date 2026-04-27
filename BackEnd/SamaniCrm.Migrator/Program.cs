@@ -1,12 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Infrastructure;
+using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Persistence;
 using SamaniCrm.Infrastructure.Services;
 using SamaniCrm.Migrator.Log;
+using System;
 using System.Data;
 
 namespace SamaniCrm.DbMigrator;
@@ -26,51 +29,104 @@ public class Program
         ConfigureServices(services, configuration, connectionString);
         var serviceProvider = services.BuildServiceProvider();
 
-        // دریافت دستور از آرگومان یا از کاربر
-        var command = GetCommand(args);
+        bool continueLoop = true;
 
-        try
+        // حلقه اصلی برای اجرای مداوم
+        while (continueLoop)
         {
-            var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
-
-            switch (command)
+            // ۱. دریافت دستور (از آرگومان یا منوی تعاملی)
+            // نکته: اگر آرگومان داده شده، فقط یکبار اجرا کن و تمام.
+            // اگر آرگومان نداده، منو رو نشون بده و بچرخ.
+            string command;
+            if (args.Length > 0)
             {
-                case "migrate":
-                    await RunMigrationsAsync(dbContext);
-                    break;
-                case "seed":
-                    await RunSeedingAsync(serviceProvider);
-                    break;
-                case "drop":
-                    await DropDatabaseAsync(dbContext);
-                    break;
-                case "reset":
-                    await ResetDatabaseAsync(dbContext, serviceProvider);
-                    break;
-                case "info":
-                    await ShowDatabaseInfoAsync(dbContext);
-                    break;
-                case "script":
-                    await GenerateScriptAsync(dbContext);
-                    break;
-                case "exit":
+                var arg = args[0].ToLower();
+                if (int.TryParse(arg, out int number))
+                {
+                    command = NumberToCommand(number) ?? "help";
+                }
+                else
+                {
+                    command = arg;
+                }
+                // اگر آرگومان بود، حلقه رو یکبار اجرا کن و تمام
+                continueLoop = false;
+            }
+            else
+            {
+                // اگر آرگومان نبود، از کاربر بگیر
+                command = GetInteractiveCommand();
+
+                // اگر کاربر خروج زده، حلقه تمام میشه
+                if (command == "exit")
+                {
+                    continueLoop = false;
                     Log.Info("Goodbye!");
                     break;
-                default:
-                    PrintHelp();
-                    break;
+                }
             }
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"An error occurred: {ex.Message}");
-            if (args.Contains("--verbose") || args.Contains("-v"))
+
+            // ۲. اجرای دستور
+            try
             {
-                Log.Error(ex.StackTrace!);
+                var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+
+                switch (command)
+                {
+                    case "migrate":
+                        await RunMigrationsAsync(dbContext);
+                        break;
+                    case "seed":
+                        await RunSeedingAsync(serviceProvider);
+                        break;
+                    case "drop":
+                        await DropDatabaseAsync(dbContext);
+                        break;
+                    case "reset":
+                        await ResetDatabaseAsync(dbContext, serviceProvider);
+                        break;
+                    case "info":
+                        await ShowDatabaseInfoAsync(dbContext);
+                        break;
+                    case "script":
+                        await GenerateScriptAsync(dbContext);
+                        break;
+                    case "help":
+                        PrintHelp();
+                        break;
+                    default:
+                        Log.Warning("Unknown command. Type 'help' for list.");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"An error occurred: {ex.Message}");
+                if (args.Contains("--verbose") || args.Contains("-v"))
+                {
+                    Log.Error(ex.StackTrace!);
+                }
+            }
+
+            // ۳. پرسیدن برای ادامه (فقط اگر حالت تعاملی بود)
+            if (!args.Any())
+            {
+                Console.WriteLine();
+                Log.Info("Do you want to perform another operation? (Y/N)");
+                var response = Console.ReadLine()?.Trim().ToLower();
+
+                if (response != "y" && response != "yes")
+                {
+                    continueLoop = false;
+                    Log.Info("Exiting application...");
+                }
+                else
+                {
+                    Console.Clear(); // پاک کردن صفحه برای منوی بعدی
+                }
             }
         }
     }
-
 
     private static void PrintBanner()
     {
@@ -241,6 +297,37 @@ public class Program
         //  services.AddScoped<IDataSeeder, DataSeeder>();
         services.AddScoped<ICurrentUserService, DummyCurrentUserService>();
         services.AddScoped<ApplicationDbInitializer>();
+
+        //var serviceProvider = services.BuildServiceProvider();
+        //var logger = serviceProvider.GetService<ILogger<ApplicationDbInitializer>>();
+        //services.AddSingleton(typeof(ILogger), logger!);
+
+        services.AddLogging(logging => logging.AddConsole());
+        services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+        {
+            // 🔐 Password Rules
+            options.Password.RequiredLength = 4;
+            options.Password.RequireDigit = true;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireNonAlphanumeric = false;
+
+            // 👤 User Rules
+            options.User.RequireUniqueEmail = true;
+
+            // 🔒 Lockout
+            options.Lockout.MaxFailedAccessAttempts = 5;
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+            options.Lockout.AllowedForNewUsers = true;
+
+            // 📧 Email confirmation
+            options.SignIn.RequireConfirmedEmail = false;
+        })
+               .AddEntityFrameworkStores<ApplicationDbContext>()
+               .AddDefaultTokenProviders()
+               .AddSignInManager();
+
+        services.AddScoped<ICurrentUserService, DummyCurrentUserService>();
 
         // Configuration
         services.AddSingleton(configuration);
