@@ -14,3 +14,8 @@ BackEnd/SamaniCrm.Api/CacheFiles/
 /BackEnd/SamaniCrm.Api/tusfiles
 /BackEnd/SamaniCrm.Api/Files
 /Frontend/SamaniPublicSite/false
+/BackEnd/SamaniCrm.Application/bin/
+/BackEnd/SamaniCrm.Core/bin/
+/BackEnd/SamaniCrm.Domain/bin/
+/BackEnd/SamaniCrm.Infrastructure/bin/
+/BackEnd/SamaniCrm.Migrator/bin/
