@@ -133,5 +133,37 @@ namespace SamaniCrm.Infrastructure.Identity
                 return services;
             }
         }
+   
+    
+
+        public static IServiceCollection AddIdentityForMigrator(this IServiceCollection services,IConfiguration configuration)
+        {
+
+            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            {
+                // 🔐 Password Rules
+                options.Password.RequiredLength = 4;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+
+                // 👤 User Rules
+                options.User.RequireUniqueEmail = true;
+
+                // 🔒 Lockout
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+                options.Lockout.AllowedForNewUsers = true;
+
+                // 📧 Email confirmation
+                options.SignIn.RequireConfirmedEmail = false;
+            })
+                   .AddEntityFrameworkStores<ApplicationDbContext>()
+                   .AddDefaultTokenProviders()
+                   .AddSignInManager();
+            return services;
+        }
+    
     }
 }

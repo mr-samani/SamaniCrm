@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging.Console;
 
 
 
-namespace SamaniCrm.Migrator.Log;
+namespace SamaniCrm.Migrator;
 
 public static class Log
 {
