@@ -173,6 +173,14 @@ public static class CommandManager
         Console.WriteLine("    dotnet run -- 1               # Run migrate");
         Console.WriteLine("    dotnet run -- migrate         # Run migrate");
         Console.WriteLine("    dotnet run -- 4 --verbose     # Reset with details");
+
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine("  ┌────────────────────────────────────────────────┐ ");
+        Console.WriteLine("  │Example:  .\\SamaniCrm.Migrator.exe migrate      │ ");
+        Console.WriteLine("  └────────────────────────────────────────────────┘ ");
+        Console.ResetColor();
+
+
         Console.WriteLine();
     }
     private static string GetCommand(string[] args)
