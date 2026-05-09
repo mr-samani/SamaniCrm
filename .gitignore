@@ -19,3 +19,4 @@ BackEnd/SamaniCrm.Api/CacheFiles/
 /BackEnd/SamaniCrm.Domain/bin/
 /BackEnd/SamaniCrm.Infrastructure/bin/
 /BackEnd/SamaniCrm.Migrator/bin/
+/VsCodeExtensions
