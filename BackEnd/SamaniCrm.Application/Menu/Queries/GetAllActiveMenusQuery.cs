@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Core.Shared.Interfaces;
-using MenuEntity = SamaniCrm.Domain.Entities.Menu;
+using SamaniCrm.Domain.Entities;
 
 
 
-namespace SamaniCrm.Application.Menu.Queries
+namespace SamaniCrm.Application.MenuQueries
 {
     public record GetAllActiveMenusQuery : IRequest<List<MenuDTO>>;
 
@@ -46,7 +46,7 @@ namespace SamaniCrm.Application.Menu.Queries
 
 
 
-        private static MenuDTO MapToDtoRecursive(MenuEntity menu, string language)
+        private static MenuDTO MapToDtoRecursive(Menu menu, string language)
         {
             return new MenuDTO
             {

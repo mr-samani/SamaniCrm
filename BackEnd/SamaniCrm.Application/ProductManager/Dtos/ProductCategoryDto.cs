@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Domain.Entities;
-using SamaniCrm.Domain.Entities.ProductEntities;
 
 namespace SamaniCrm.Application.ProductManagerManager.Dtos
 {

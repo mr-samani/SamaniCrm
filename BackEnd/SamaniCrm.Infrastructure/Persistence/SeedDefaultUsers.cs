@@ -85,7 +85,6 @@ public static class SeedDefaultUsers
                 Lang = "fa-IR",
                 Address = "سامان",
                 PhoneNumber = "09338972924",
-                IsDeleted = false
             };
 
             var userResult = await userManager.CreateAsync(adminUser, "123qwe");

@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using SamaniCrm.Api.Attributes;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Localize.Queries;
-using SamaniCrm.Application.Menu.Commands;
-using SamaniCrm.Application.Menu.Queries;
+using SamaniCrm.Application.MenuCommands;
+using SamaniCrm.Application.MenuQueries;
 using SamaniCrm.Core.Permissions;
 using SamaniCrm.Host.Models;
 

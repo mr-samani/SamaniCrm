@@ -1,5 +1,5 @@
 using SamaniCrm.Core.Shared.Enums;
-using SamaniCrm.Domain.Entities.ProductEntities;
+using SamaniCrm.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

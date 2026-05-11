@@ -19,18 +19,18 @@ namespace SamaniCrm.Application.NotificationManager.Queries
     public class GetLastUnReadNotificationsQueryHandler : IRequestHandler<GetLastUnReadNotificationsQuery, List<NotificationDto>>
     {
         private readonly IApplicationDbContext _dbContext;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserService _currentUser;
 
 
-        public GetLastUnReadNotificationsQueryHandler(IApplicationDbContext dbContext, ICurrentUserService currentUserService)
+        public GetLastUnReadNotificationsQueryHandler(IApplicationDbContext dbContext, ICurrentUserService currentUser)
         {
             _dbContext = dbContext;
-            _currentUserService = currentUserService;
+            _currentUser = currentUser;
         }
 
         public async Task<List<NotificationDto>> Handle(GetLastUnReadNotificationsQuery request, CancellationToken cancellationToken)
         {
-            Guid.TryParse(_currentUserService.UserId, out var currentUserId);
+            var currentUserId = _currentUser.UserId;
 
             var result = await _dbContext.Notifications
                                     .Where(x => x.Read == false)
@@ -43,7 +43,7 @@ namespace SamaniCrm.Application.NotificationManager.Queries
                                         Type = s.Type,
                                         Periority = s.Periority,
                                         Read = s.Read,
-                                        CreationTime = s.CreationTime.ToUniversalTime(),
+                                        CreationTime = s.CreatedAt.ToUniversalTime(),
                                     })
                                     .Skip(0)
                                     .Take(10)

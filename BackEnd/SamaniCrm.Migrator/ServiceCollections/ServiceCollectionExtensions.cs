@@ -50,10 +50,12 @@ public static class ServiceCollectionExtensions
 
     public class DummyCurrentUserService : ICurrentUserService
     {
-        public string? UserId => "MigrationUser"; // یا null هم میتونی بدی
+        public Guid? UserId => null;//"MigrationUser"; // یا null هم میتونی بدی
         public string? UserName => "MigrationUser"; // یا null هم میتونی بدی
 
         public string lang => "fa-IR";
+
+        public bool IsAuthenticated => throw new NotImplementedException();
 
         string ICurrentUserService.lang { get => lang; set => throw new NotImplementedException(); }
     }

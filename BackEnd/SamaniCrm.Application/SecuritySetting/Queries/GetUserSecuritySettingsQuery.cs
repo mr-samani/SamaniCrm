@@ -25,11 +25,11 @@ namespace SamaniCrm.Application.SecuritySetting.Queries
 
         public async Task<UserSettingDto> Handle(GetUserSecuritySettingsQuery request, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(_currentUser.UserId))
+            if (_currentUser.UserId == null)
             {
                 throw new AccessDeniedException();
             }
-            Guid userId = Guid.Parse(_currentUser.UserId);
+            Guid userId = (Guid)_currentUser.UserId!;
             return await _securitySettingService.GetUserSettingsAsync(userId, cancellationToken);
         }
     }

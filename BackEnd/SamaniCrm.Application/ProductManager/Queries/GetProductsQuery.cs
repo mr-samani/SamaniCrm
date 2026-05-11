@@ -35,7 +35,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
 
             var query = _dbContext.Products
                 .Include(x => x.Category)
-                    .ThenInclude(ct=>ct.Translations)
+                    .ThenInclude(ct => ct.Translations)
                 .Include(x => x.ProductType)
                 .Include(x => x.Images)
                 .AsNoTracking()
@@ -52,7 +52,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
                 var filter = request.Filter;
                 query = query.Where(c =>
                     c.Translations.Any(t => t.Culture == currentLanguage && (
-                        t.Title.Contains(filter) || t.Description.Contains(filter)
+                        t.Title.Contains(filter) || (t.Description != null && t.Description.Contains(filter))
                     )) ||
                     c.Category.Translations.Any(cat => cat.Culture == currentLanguage && cat.Title.Contains(filter)) ||
                     c.ProductType.Translations.Any(pt => pt.Culture == currentLanguage && pt.Name.Contains(filter))
@@ -82,12 +82,12 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
                     SKU = s.SKU.Value,
                     Slug = s.Slug,
                     IsActive = s.IsActive,
-                    CreationTime = s.CreationTime.ToUniversalTime(),
-                    Title = s.Translations.FirstOrDefault(x => x.Culture == currentLanguage).Title ?? "",
-                    Description = s.Translations.FirstOrDefault(x => x.Culture == currentLanguage).Description ?? "",
+                    CreationTime = s.CreatedAt.ToUniversalTime(),
+                    Title = s.Translations != null ? s.Translations.FirstOrDefault(x => x.Culture == currentLanguage)!.Title ?? "" : "",
+                    Description = s.Translations != null ? s.Translations.FirstOrDefault(x => x.Culture == currentLanguage)!.Description ?? "" : "",
                     CategoryTitle = s.Category.Translations.Where(w => w.Culture == currentLanguage).Select(s => s.Title).FirstOrDefault() ?? "",
                     ProductTypeTitle = s.ProductType.Translations.Where(x => x.Culture == currentLanguage).Select(s => s.Name).FirstOrDefault() ?? "",
-                  
+
                 })
                 .ToListAsync(cancellationToken);
             return new PaginatedResult<ProductListDto>()

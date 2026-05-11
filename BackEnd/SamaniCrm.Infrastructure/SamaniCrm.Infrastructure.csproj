@@ -10,6 +10,8 @@
     <PackageReference Include="Duende.IdentityServer" Version="7.2.0" />
     <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.2.0" />
     <PackageReference Include="Hangfire.Console" Version="1.4.3" />
+    <PackageReference Include="Humanizer.Core" Version="3.0.10" />
+    <PackageReference Include="IPAddressRange" Version="6.3.0" />
     <PackageReference Include="MediatR" Version="12.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.4" />
@@ -34,6 +36,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SamaniCrm.Application\SamaniCrm.Application.csproj" />
     <ProjectReference Include="..\SamaniCrm.Core\SamaniCrm.Core.Shared.csproj" />
+    <ProjectReference Include="..\SamaniCrm.Domain\SamaniCrm.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

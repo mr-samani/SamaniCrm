@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
-using SamaniCrm.Domain.Entities.ProductEntities;
+using SamaniCrm.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,13 +48,11 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             foreach (var item in toDelete)
             {
                 item.IsDeleted = true;
-                item.DeletedTime = now;
             }
 
             foreach (var translation in translations)
             {
                 translation.IsDeleted = true;
-                translation.DeletedTime = now;
             }
 
             var result = await _dbContext.SaveChangesAsync(cancellationToken);

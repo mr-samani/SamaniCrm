@@ -17,7 +17,7 @@ namespace SamaniCrm.Infrastructure.Persistence
     {
         public static void AddAsyncSeeding(this DbContextOptionsBuilder builder, IServiceProvider serviceProvider)
         {
-            builder.UseAsyncSeeding(async (context, _, ct) =>
+            builder.UseAsyncSeeding(async (context, _, cancellation) =>
             {
                 var initialiser = serviceProvider.GetRequiredService<ApplicationDbInitializer>();
 

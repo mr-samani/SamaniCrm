@@ -10,9 +10,7 @@ using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.FileManager.Dtos;
 using SamaniCrm.Application.FileManager.Interfaces;
-using SamaniCrm.Application.ProductManagerManager.Dtos;
 using SamaniCrm.Domain.Entities;
-using SamaniCrm.Domain.Entities.ProductEntities;
 using SamaniCrm.Infrastructure.FileManager.Helper;
 using System;
 using System.Collections.Generic;
@@ -72,7 +70,7 @@ namespace SamaniCrm.Infrastructure.FileManager
                 Children = item.Children?
                     .Select(c => MapToDtoRecursive(c))
                     .ToList() ?? [],
-                CreationTime = item.CreationTime.ToUniversalTime(),
+                CreationTime = item.CreatedAt.ToUniversalTime(),
             };
         }
 
@@ -182,7 +180,7 @@ namespace SamaniCrm.Infrastructure.FileManager
                     ParentId = item.ParentId,
                     RelativePath = item.RelativePath,
                     Thumbnails = item.Thumbnails,
-                    CreationTime = item.CreationTime.ToUniversalTime(),
+                    CreationTime = item.CreatedAt.ToUniversalTime(),
                 })
                 .ToListAsync(cancellationToken);
 
@@ -198,7 +196,7 @@ namespace SamaniCrm.Infrastructure.FileManager
             }
 
             found.IsDeleted = true;
-            found.DeletedTime = DateTime.UtcNow;
+            found.DeletedAt = DateTime.UtcNow;
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
             // چون softDelete می باشد - اصل فایل از روی دیسک حذف نمی شود
             return result > 0;
@@ -229,7 +227,6 @@ namespace SamaniCrm.Infrastructure.FileManager
             }
 
             found.Icon = Icon;
-            found.LastModifiedTime = DateTime.UtcNow;
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
             return result > 0;
         }
@@ -242,7 +239,6 @@ namespace SamaniCrm.Infrastructure.FileManager
             }
 
             found.Name = Name;
-            found.LastModifiedTime = DateTime.UtcNow;
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
             return result > 0;
         }

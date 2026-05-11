@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Core.Shared.Enums;
-using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Application.Auth.Commands
 {

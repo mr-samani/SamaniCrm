@@ -18,15 +18,15 @@ namespace SamaniCrm.Infrastructure.Services;
 
 public class TwoFactorService : ITwoFactorService
 {
-    private readonly ICurrentUserService currentUser;
+    private readonly ICurrentUserService _currentUser;
     private readonly IApplicationDbContext applicationDbContext;
     public TwoFactorService(
         ICurrentUserService currentUser,
-        IApplicationDbContext applicationDbContext
+        IApplicationDbContext dbContext
        )
     {
-        this.currentUser = currentUser;
-        this.applicationDbContext = applicationDbContext;
+        _currentUser = currentUser;
+        applicationDbContext = dbContext;
     }
 
 
@@ -37,7 +37,7 @@ public class TwoFactorService : ITwoFactorService
     /// </summary>
     public GenerateTwoFactorCodeDto GenerateSetupCode(string appName)
     {
-        var userName = currentUser.UserName;
+        var userName = _currentUser.UserName;
 
         // تولید secret (20 بایت)
         var key = KeyGeneration.GenerateRandomKey(20);
@@ -80,11 +80,11 @@ public class TwoFactorService : ITwoFactorService
         var totp = new Totp(bytes);
         var checkResult = totp.VerifyTotp(code, out _, new VerificationWindow(previous: 1, future: 1));
         // 30 ثانیه بازه زمانی
-        if (checkResult == false || currentUser.UserId == null)
+        if (checkResult == false || _currentUser.UserId == null)
         {
             return false;
         }
-        var userId = Guid.Parse(currentUser.UserId);
+        Guid userId = (Guid)_currentUser.UserId;
         var data = applicationDbContext.UserSetting.Where(x => x.UserId == userId).FirstOrDefault();
         if (data == null)
         {

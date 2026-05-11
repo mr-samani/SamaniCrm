@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamaniCrm.Application.Menu.Queries
+namespace SamaniCrm.Application.MenuQueries
 {
     public record GetMenuForEditQuery(Guid Id) : IRequest<MenuDTO>;
     public class GetMenuForEditQueryHandler : IRequestHandler<GetMenuForEditQuery, MenuDTO>

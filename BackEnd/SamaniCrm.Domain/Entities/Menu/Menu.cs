@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using SamaniCrm.Core.Shared.Enums;
+
+namespace SamaniCrm.Domain.Entities;
+
+public class Menu : BaseEntity
+{
+    [MaxLength(300)]
+    public string? Icon { get; set; }
+    [MaxLength(2000)]
+    public string? Url { get; set; }
+
+    public int OrderIndex { get; set; }
+
+    public bool IsActive { get; set; } = true;
+    public bool IsSystem { get; set; } = false;
+
+    public Guid? ParentId { get; set; }
+
+    [MaxLength(100)]
+    public MenuTargetEnum Target { get; set; } = MenuTargetEnum.Self;
+
+    public virtual ICollection<Menu> Children { get; set; } = new List<Menu>();
+
+    public virtual ICollection<MenuTranslation>? Translations { get; set; }
+
+
+
+}

@@ -1,15 +1,9 @@
-﻿using Azure.Core;
-using Duende.IdentityServer.Endpoints.Results;
-using Duende.IdentityServer.Models;
-using Hangfire;
-using MediatR;
+﻿using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using SamaniCrm.Application.Auth.Commands;
-using SamaniCrm.Application.Auth.Queries;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
@@ -20,27 +14,18 @@ using SamaniCrm.Application.User.Commands;
 using SamaniCrm.Core;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
-using SamaniCrm.Domain.Constants;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.ExternalLogin;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Notifications;
-using StackExchange.Redis;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
-using System.Diagnostics;
 using System.Linq.Dynamic.Core;
-using System.Net;
-using System.Net.Http.Json;
-using System.Net.NetworkInformation;
-using System.Security.Claims;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading;
 using UnauthorizedAccessException = SamaniCrm.Application.Common.Exceptions.UnauthorizedAccessException;
 
 
 namespace SamaniCrm.Infrastructure.Services;
+
 public class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -220,7 +205,7 @@ public class IdentityService : IIdentityService
                 ProfilePicture = u.ProfilePicture ?? "",
                 Address = u.Address ?? "",
                 PhoneNumber = u.PhoneNumber ?? "",
-                CreationTime = u.CreationTime.ToUniversalTime(),
+                // CreationTime = u.CreatedAt.ToUniversalTime(),
                 Roles = rolesQuery.Where(x => x.UserId == u.Id).Select(x => x.RoleName).ToList()
             })
             .ToListAsync(cancellationToken);
@@ -267,7 +252,7 @@ public class IdentityService : IIdentityService
             ProfilePicture = user.ProfilePicture ?? "",
             Address = user.Address ?? "",
             PhoneNumber = user.PhoneNumber ?? "",
-            CreationTime = user.CreationTime.ToUniversalTime(),
+            // CreationTime = user.CreationTime.ToUniversalTime(),
             Roles = roles.ToList(),
         });
     }
@@ -292,7 +277,7 @@ public class IdentityService : IIdentityService
             ProfilePicture = user.ProfilePicture ?? "",
             Address = user.Address ?? "",
             PhoneNumber = user.PhoneNumber ?? "",
-            CreationTime = user.CreationTime.ToUniversalTime(),
+            // CreationTime = user.CreationTime.ToUniversalTime(),
             Roles = roles.ToList()
         });
     }
@@ -715,11 +700,11 @@ public class IdentityService : IIdentityService
             provider.TokenEndpoint,
             clientId,
             secret,
-            request.codeVerifier,
+            request.codeVerifier ?? "",
             redirectUrl,
             cancellationToken);
 
-        ApplicationUser? user = await FindOrCreateExternalUser(externalLoginResult.Email, externalLoginResult.UserName, externalLoginResult.Name, provider.Name);
+        ApplicationUser? user = await FindOrCreateExternalUser(externalLoginResult.Email!, externalLoginResult.UserName!, externalLoginResult.Name!, provider.Name);
 
         await _signInManager.SignInAsync(user, false);
 
@@ -747,7 +732,7 @@ public class IdentityService : IIdentityService
                 ProfilePicture = user.ProfilePicture ?? "",
                 Address = user.Address ?? "",
                 PhoneNumber = user.PhoneNumber ?? "",
-                CreationTime = user.CreationTime.ToUniversalTime(),
+                // CreationTime = user.CreationTime.ToUniversalTime(),
                 Roles = roles.ToList()
             },
             Roles = roles.ToList(),
@@ -761,7 +746,7 @@ public class IdentityService : IIdentityService
     public async Task<List<Guid>> GetAllActiveUsersIds(CancellationToken cancellationToken)
     {
         List<Guid> list = await _applicationDbContext.Users
-             .Where(x => x.IsDeleted == false)
+             // .Where(x => x.IsDeleted == false)
              .Select(u => u.Id)
              .ToListAsync();
         return list;
@@ -776,8 +761,8 @@ public class IdentityService : IIdentityService
         if (!string.IsNullOrEmpty(filter))
         {
             query = query.Where(c =>
-                c.UserName.Contains(filter) ||
-                c.FirstName.Contains(filter) ||
+               (c.UserName != null && c.UserName.Contains(filter)) ||
+                (c.FirstName != null && c.FirstName.Contains(filter)) ||
                 c.LastName.Contains(filter)
             );
         }

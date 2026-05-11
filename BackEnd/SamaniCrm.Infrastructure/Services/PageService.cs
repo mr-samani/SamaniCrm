@@ -11,7 +11,6 @@ using SamaniCrm.Application.Pages.Queries;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Entities;
-using SamaniCrm.Domain.Entities.PageBuilderEntities;
 using SamaniCrm.Infrastructure.Extensions;
 using SamaniCrm.Infrastructure.Identity;
 using System;
@@ -27,15 +26,15 @@ namespace SamaniCrm.Infrastructure.Services
     public class PageService : IPageService
     {
         private readonly ApplicationDbContext _context;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserService _currentUser;
         private readonly ILocalizer L;
 
 
 
-        public PageService(ApplicationDbContext context, ICurrentUserService currentUserService, ILocalizer l)
+        public PageService(ApplicationDbContext context, ICurrentUserService currentUser, ILocalizer l)
         {
             _context = context;
-            _currentUserService = currentUserService;
+            _currentUser = currentUser;
             L = l;
         }
 
@@ -95,7 +94,7 @@ namespace SamaniCrm.Infrastructure.Services
                 // New page
                 page = new Page
                 {
-                    AuthorId = Guid.Parse(_currentUserService.UserId!),
+                    AuthorId = _currentUser.UserId!,
                     CoverImage = request.CoverImage,
                     IsActive = request.IsActive,
                     IsSystem = false,
@@ -129,14 +128,10 @@ namespace SamaniCrm.Infrastructure.Services
                 throw new NotFoundException("Page not found");
 
             page.IsDeleted = true;
-            page.DeletedBy = request.DeletedBy;
-            page.DeletedTime = DateTime.UtcNow;
 
             foreach (var t in page.Translations)
             {
                 t.IsDeleted = true;
-                t.DeletedBy = request.DeletedBy;
-                t.DeletedTime = DateTime.UtcNow;
             }
 
             await _context.SaveChangesAsync(cancellationToken);
@@ -170,10 +165,10 @@ namespace SamaniCrm.Infrastructure.Services
                 query = query.Where(p => p.Author.FullName != null && p.Author.FullName.Contains(request.AuthorName));
 
             if (request.FromDate.HasValue)
-                query = query.Where(p => p.Page.CreationTime >= request.FromDate);
+                query = query.Where(p => p.Page.CreatedAt >= request.FromDate);
 
             if (request.ToDate.HasValue)
-                query = query.Where(p => p.Page.CreationTime <= request.ToDate);
+                query = query.Where(p => p.Page.CreatedAt <= request.ToDate);
 
             if (request.Status.HasValue)
                 query = query.Where(p => p.Page.Status == request.Status);
@@ -192,7 +187,7 @@ namespace SamaniCrm.Infrastructure.Services
                     Id = p.Page.Id,
                     Status = p.Page.Status,
                     Author = p.Author.FullName,
-                    Created = p.Page.CreationTime,
+                    Created = p.Page.CreatedAt,
                     Culture = p.Translations.FirstOrDefault()!.Culture,
                     Title = p.Translations.FirstOrDefault()!.Title ?? "",
                     Introduction = p.Translations.FirstOrDefault()!.Introduction,
@@ -354,7 +349,7 @@ namespace SamaniCrm.Infrastructure.Services
 
             if (page is null)
                 throw new NotFoundException("Block not found");
-            if (page.CreatedBy != _currentUserService.UserId)
+            if (page.CreatedBy != _currentUser.UserId)
             {
                 throw new AccessDeniedException("AccessDenied!\nCan not delete this block!");
             }
@@ -370,7 +365,7 @@ namespace SamaniCrm.Infrastructure.Services
             var query =
                 from plugin in _context.Plugins
                 join user in _context.Users
-                    on plugin.CreatedBy equals user.Id.ToString() into users
+                    on plugin.CreatedBy equals user.Id into users
                 from author in users.DefaultIfEmpty()
                 select new { plugin, author };
 
@@ -402,7 +397,7 @@ namespace SamaniCrm.Infrastructure.Services
                     Icon = p.plugin.Icon,
                     Image = p.plugin.Image,
                     Data = p.plugin.Data,
-                    CanDelete = _currentUserService.UserId == p.plugin.CreatedBy
+                    CanDelete = _currentUser.UserId == p.plugin.CreatedBy
                 })
                 .ToListAsync(cancellationToken);
 

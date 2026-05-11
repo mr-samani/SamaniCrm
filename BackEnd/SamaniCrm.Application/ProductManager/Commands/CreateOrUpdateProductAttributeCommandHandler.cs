@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
-using SamaniCrm.Domain.Entities.ProductEntities;
+using SamaniCrm.Domain.Entities;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,7 +41,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             entity.IsRequired = request.IsRequired;
             entity.IsVariant = request.IsVariant;
             entity.SortOrder = request.SortOrder;
-            entity.LastModifiedTime = DateTime.UtcNow;
 
             // Handle translations
             if (request.Translations != null)

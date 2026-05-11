@@ -15,26 +15,27 @@ namespace SamaniCrm.Application.User.Queries
 
     public class GetCurrentUserQueryHandler : IRequestHandler<GetCurrentUserQuery, UserDTO>
     {
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserService _currentUser;
         private readonly IIdentityService _identityService;
         private readonly IUserPermissionService _userPermissionService;
 
         public GetCurrentUserQueryHandler(
-            ICurrentUserService currentUserService,
+            ICurrentUserService currentUser,
             IIdentityService identityService,
             IUserPermissionService userPermissionService)
         {
-            _currentUserService = currentUserService;
+            _currentUser = currentUser;
             _identityService = identityService;
             _userPermissionService = userPermissionService;
         }
 
         public async Task<UserDTO> Handle(GetCurrentUserQuery request, CancellationToken cancellationToken)
         {
-            if (!Guid.TryParse(_currentUserService.UserId, out Guid currentUserId))
+            if (_currentUser.UserId == null)
             {
                 throw new UnAuthenticateException();
             }
+            var currentUserId = (Guid)_currentUser.UserId;
 
             var result = await _identityService.GetUserDetailsAsync(currentUserId);
 

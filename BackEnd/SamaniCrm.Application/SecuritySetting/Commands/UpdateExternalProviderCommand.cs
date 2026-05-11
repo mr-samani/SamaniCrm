@@ -64,7 +64,6 @@ public class UpdateExternalProviderCommandHandler : IRequestHandler<UpdateExtern
         provider.ResponseType = request.ResponseType;
         provider.ResponseMode = request.ResponseMode;
         provider.UsePkce = request.UsePkce;
-        provider.LastModifiedTime = DateTime.UtcNow;
 
         await _context.SaveChangesAsync(cancellationToken);
 

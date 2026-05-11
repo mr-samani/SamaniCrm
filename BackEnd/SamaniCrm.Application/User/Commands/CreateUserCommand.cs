@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.User.Commands
 {
-    public class CreateUserCommand : IRequest<int>
+    public class CreateUserCommand : IRequest<Guid>
     {
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
@@ -21,17 +21,17 @@ namespace SamaniCrm.Application.User.Commands
         public required List<string> Roles { get; set; } = new();
     }
 
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, int>
+    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Guid>
     {
         private readonly IIdentityService _identityService;
         public CreateUserCommandHandler(IIdentityService identityService)
         {
             _identityService = identityService;
         }
-        public async Task<int> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             var result = await _identityService.CreateUserAsync(request);
-            return result.isSucceed ? 1 : 0;
+            return result.userId;
         }
     }
 }

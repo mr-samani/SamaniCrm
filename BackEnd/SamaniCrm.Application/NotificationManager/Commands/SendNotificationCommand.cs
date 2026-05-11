@@ -26,23 +26,23 @@ namespace SamaniCrm.Application.NotificationManager.Commands
     {
         private readonly INotificationHubService _hubService;
         private readonly IApplicationDbContext _dbContext;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserService _currentUser;
 
-        public SendNotificationCommandHandler(INotificationHubService hubService, IApplicationDbContext dbContext, ICurrentUserService currentUserService)
+        public SendNotificationCommandHandler(INotificationHubService hubService, IApplicationDbContext dbContext, ICurrentUserService currentUser)
         {
             _hubService = hubService;
             _dbContext = dbContext;
-            _currentUserService = currentUserService;
+            _currentUser = currentUser;
         }
 
         public async Task<Unit> Handle(SendNotificationCommand request, CancellationToken cancellationToken)
         {
-            if (_currentUserService.UserId == null)
+            if (_currentUser.UserId == null)
             {
                 throw new AccessDeniedException();
             }
 
-            var currentUserId = Guid.Parse(_currentUserService.UserId);
+            var currentUserId = _currentUser.UserId;
             var notify = new Notification()
             {
                 RecieverUserId = request.UserId,

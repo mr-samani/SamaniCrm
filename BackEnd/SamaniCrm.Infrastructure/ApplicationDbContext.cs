@@ -1,30 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using Duende.IdentityServer.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Domain.Entities;
-using SamaniCrm.Domain.Entities.Dashboard;
-using SamaniCrm.Domain.Entities.PageBuilderEntities;
-using SamaniCrm.Domain.Entities.ProductEntities;
 using SamaniCrm.Domain.Interfaces;
 using SamaniCrm.Infrastructure.Identity;
+using System.Linq.Expressions;
 using RefreshToken = SamaniCrm.Domain.Entities.RefreshToken;
 
 namespace SamaniCrm.Infrastructure
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>, IApplicationDbContext
     {
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserService _currentUser;
+        private readonly Guid _tenantId;
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
+            ICurrentUserService currentUserService,
+            Guid tenantId) : base(options)
+        {
+            _currentUser = currentUserService;
+            _tenantId = tenantId;
+        }
+
+
+
+
+
+        public DbSet<Tenant> Tenants { get; set; }
+        public DbSet<TenantSetting> TenantSettings { get; set; }
+        public DbSet<TenantDatabaseConnection> TenantDatabaseConnections { get; set; }
+        public DbSet<TenantCategory> TenantCategories { get; set; }
+
 
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
@@ -74,25 +83,21 @@ namespace SamaniCrm.Infrastructure
         public DbSet<DashboardItem> DashboardItems { get; set; }
         #endregion
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, ICurrentUserService currentUserService) : base(options)
-        {
-            _currentUserService = currentUserService;
-        }
 
 
         public override int SaveChanges()
         {
             ApplyAuditInformation();
-            ApplySoftDelete();
             return base.SaveChanges();
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             ApplyAuditInformation();
-            ApplySoftDelete();
             return await base.SaveChangesAsync(cancellationToken);
         }
+
+
 
 
 
@@ -194,18 +199,38 @@ namespace SamaniCrm.Infrastructure
             // global filter
             foreach (var entityType in builder.Model.GetEntityTypes())
             {
-                if (typeof(ISoftDelete).IsAssignableFrom(entityType.ClrType))
+                // Global filter soft Delete
+                if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
                 {
                     var parameter = Expression.Parameter(entityType.ClrType, "e");
                     var filter = Expression.Lambda(
                         Expression.Equal(
-                            Expression.Property(parameter, nameof(ISoftDelete.IsDeleted)),
+                            Expression.Property(parameter, nameof(BaseEntity.IsDeleted)),
                             Expression.Constant(false)
                         ),
                         parameter
                     );
                     entityType.SetQueryFilter(filter);
                 }
+
+
+                // Global filter soft Tenant
+                if (typeof(IMayHaveTenant).IsAssignableFrom(entityType.ClrType))
+                {
+                    var parameter = Expression.Parameter(entityType.ClrType, "e");
+                    var filter = Expression.Lambda(
+                        Expression.Equal(
+                            Expression.Property(parameter, nameof(IMayHaveTenant.TenantId)),
+                            Expression.Constant(_tenantId)
+                            ),
+                        parameter
+                        );
+                    entityType.SetQueryFilter(filter);
+                }
+
+
+
+
             }
         }
 
@@ -217,42 +242,27 @@ namespace SamaniCrm.Infrastructure
 
         private void ApplyAuditInformation()
         {
-            var entries = ChangeTracker.Entries<IAuditableEntity>();
-
-            foreach (var entry in entries)
+            // Apply audit values
+            foreach (var entry in ChangeTracker.Entries<BaseEntity>())
             {
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreationTime = DateTime.UtcNow;
-                        entry.Entity.CreatedBy = _currentUserService.UserId;
+                        entry.Entity.CreatedAt = DateTime.UtcNow;
+                        entry.Entity.CreatedBy = _currentUser.UserId;
                         break;
-
                     case EntityState.Modified:
-                        entry.Entity.LastModifiedTime = DateTime.UtcNow;
-                        entry.Entity.LastModifiedBy = _currentUserService.UserId;
+                        entry.Entity.ModifiedAt = DateTime.UtcNow;
+                        entry.Entity.ModifiedBy = _currentUser.UserId;
+                        break;
+                    case EntityState.Deleted:
+                        entry.Entity.IsDeleted = true;
+                        entry.Entity.DeletedAt = DateTime.UtcNow;
+                        entry.Entity.DeletedBy = _currentUser.UserId;
+                        entry.State = EntityState.Modified;
                         break;
                 }
             }
         }
-
-
-        private void ApplySoftDelete()
-        {
-            foreach (var entry in ChangeTracker.Entries<ISoftDelete>())
-            {
-                if (entry.State == EntityState.Deleted)
-                {
-                    entry.State = EntityState.Modified; // دیگه Delete واقعی نمیشه
-                    entry.Entity.IsDeleted = true;
-                    entry.Entity.DeletedTime = DateTime.UtcNow;
-                    if (_currentUserService.UserId != null)
-                        entry.Entity.DeletedBy = _currentUserService.UserId;
-                }
-            }
-        }
-
-
-
     }
 }

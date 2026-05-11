@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
-using SamaniCrm.Domain.Entities.ProductEntities;
+using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.ValueObjects.Product;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -43,7 +43,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
         }
         public async Task<Guid> Handle(CreateOrUpdateProductCommand request, CancellationToken cancellationToken)
         {
-            Product entity;
+            Product? entity;
             if (request.Id.HasValue)
             {
                 entity = await _dbContext.Products
@@ -66,7 +66,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             entity.Slug = request.Slug;
             entity.SKU = Sku.Create(request.SKU);
             entity.IsActive = request.IsActive;
-            entity.LastModifiedTime = DateTime.UtcNow;
             entity.Tags = request.Tags;
 
             // Handle SKU
@@ -97,7 +96,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                             Title = t.Title,
                             Description = t.Description,
                             Content = t.Content,
-                            CreationTime = DateTime.UtcNow
                         });
                     }
                 }

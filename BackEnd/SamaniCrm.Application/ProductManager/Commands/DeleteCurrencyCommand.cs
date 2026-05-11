@@ -32,7 +32,6 @@ namespace SamaniCrm.Application.ProductManager.Commands
             var now= DateTime.UtcNow;
 
             entity.IsDeleted = true;
-            entity.DeletedTime = now;
 
             var prices = await _dbContext.ProductPrices
             .Where(x => x.Currency.Id == request.Id && !x.IsDeleted)
@@ -41,7 +40,6 @@ namespace SamaniCrm.Application.ProductManager.Commands
             foreach (var price in prices)
             {
                 price.IsDeleted = true;
-                price.DeletedTime = now;
             }
 
             var result = await _dbContext.SaveChangesAsync(cancellationToken);

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SamaniCrm.Domain.Entities.ProductEntities;
+using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Infrastructure.EntityConfiguration;
 public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCategory>

@@ -28,11 +28,11 @@ namespace SamaniCrm.Application.SecuritySetting.Commands
 
         public async Task<bool> Handle(UpdateUserSecuritySettingCommand request, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(_currentUser.UserId))
+            if (_currentUser.UserId == null)
             {
                 throw new AccessDeniedException();
             }
-            Guid userId = Guid.Parse(_currentUser.UserId);
+            Guid userId = (Guid)_currentUser.UserId!;
             request.UserId = userId;
             var result = await _securitySettingService.SetUserSettingsAsync(request, cancellationToken);
             return result;

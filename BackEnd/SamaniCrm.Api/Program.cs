@@ -1,15 +1,16 @@
 ﻿using Hangfire;
 using SamaniCrm.Api.Middlewares;
+using SamaniCrm.Api.TUS;
 using SamaniCrm.Application;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Host.Middlewares;
 using SamaniCrm.Infrastructure.Cache;
 using SamaniCrm.Infrastructure.Extensions;
+using SamaniCrm.Infrastructure.FileManager;
 using SamaniCrm.Infrastructure.Hubs;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Localizer;
-using SamaniCrm.Infrastructure.FileManager;
-using SamaniCrm.Api.TUS;
+using SamaniCrm.Infrastructure.Middleware;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +18,7 @@ var services = builder.Services;
 var config = builder.Configuration;
 
 services
-    .AddCustomServices()
+    .AddCustomServices(config)
     .AddDbContext(config);
 services
     .AddCorsPolicy()
@@ -32,6 +33,7 @@ services
     .AddFileManagerService(config)
     .AddHangfireJobs(config)
     .LoadExternalProviders(config)
+    .AddHelthChecks(config)
     ;
 
 services.AddSignalR();
@@ -68,11 +70,29 @@ app.UseStaticFiles();
 
 app.UseSession();
 
+// Security Headers
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+    context.Response.Headers.Append("X-Frame-Options", "DENY");
+    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
+    context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
+    context.Response.Headers.Append("Content-Security-Policy", "default-src 'self'");
+    await next();
+});
+
+
+
 // آگر این خط کامنت نباشد احراز هویت بر اساس کوکی خواهد بود
 // app.UseIdentityServer();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
+// Multi-Tenant Middleware Pipeline
+app.UseMiddleware<TenantResolverMiddleware>();
+app.UseMiddleware<TenantSecurityMiddleware>();
+app.UseMiddleware<AuditMiddleware>();
 
 
 
@@ -80,6 +100,10 @@ app.MapControllers();
 //app.MapGroup("/auth2").MapCustomIdentityApi<ApplicationUser>().WithTags(["Auth2"]);
 // Hangfire Dashboard
 app.UseHangfireDashboard("/hangfire");
+
+app.MapHub<ProvisioningHub>("/hubs/provisioning");
+app.MapHealthChecks("/health");
+
 
 
 await LanguageService.PreloadAllLocalizationsAsync(app.Services);

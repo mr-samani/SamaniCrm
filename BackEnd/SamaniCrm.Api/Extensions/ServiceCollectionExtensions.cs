@@ -6,7 +6,9 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
@@ -16,25 +18,33 @@ using SamaniCrm.Api.Middlewares;
 using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.Behaviors;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Application.InitialApp.Queries;
 using SamaniCrm.Application.ProductManagerManager.Interfaces;
 using SamaniCrm.Application.Queries.Role;
 using SamaniCrm.Application.User.Queries;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
+using SamaniCrm.Core.Shared.Interfaces.Tenant;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.AuditLog;
 using SamaniCrm.Infrastructure.BackgroundServices;
 using SamaniCrm.Infrastructure.Captcha;
+using SamaniCrm.Infrastructure.Data;
+using SamaniCrm.Infrastructure.Data.Seeder;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.ExternalLogin;
 using SamaniCrm.Infrastructure.FileManager;
+using SamaniCrm.Infrastructure.Hubs;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Jobs;
 using SamaniCrm.Infrastructure.Localizer;
 using SamaniCrm.Infrastructure.MappingProfile;
 using SamaniCrm.Infrastructure.Notifications;
+using SamaniCrm.Infrastructure.Security;
 using SamaniCrm.Infrastructure.Services;
 using SamaniCrm.Infrastructure.Services.Product;
+using SamaniCrm.Infrastructure.Services.TenantService;
 using SamaniCrm.Infrastructure.Storage;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -50,15 +60,23 @@ using System.Text.Json.Serialization;
 using System.Text.Unicode;
 
 namespace SamaniCrm.Infrastructure.Extensions;
+
 public static class ServiceCollectionExtensions
 {
 
     public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration config)
     {
+        var connectionString = config.GetConnectionString("DefaultConnection");
         // ✅ DbContext
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(config.GetConnectionString("DefaultConnection")),
+            options.UseSqlServer(connectionString, sql =>
+            {
+                sql.EnableRetryOnFailure(3);
+                sql.CommandTimeout(30);
+            }),
             ServiceLifetime.Transient);
+
+
         return services;
     }
 
@@ -77,6 +95,16 @@ public static class ServiceCollectionExtensions
             cfg.RegisterServicesFromAssembly(typeof(GetRoleQueryHandler).Assembly);
             cfg.RegisterServicesFromAssembly(typeof(InitialAppQueryHandler).Assembly);
             cfg.RegisterServicesFromAssembly(typeof(GetCurrentUserQueryHandler).Assembly);
+
+
+            cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            // TODO
+            //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(TenantValidationBehavior<,>));
+            //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(TenantAuthorizationBehavior<,>));
+            //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehavior<,>));
+            //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehavior<,>));
+
+
         });
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
@@ -252,7 +280,7 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static IServiceCollection AddCustomServices(this IServiceCollection services)
+    public static IServiceCollection AddCustomServices(this IServiceCollection services, IConfiguration config)
     {
         services.AddHttpContextAccessor();
         services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
@@ -296,6 +324,53 @@ public static class ServiceCollectionExtensions
         services.AddScoped<FileDirectoryInitializer>();
 
 
+        // Multi-Tenancy
+        services.AddScoped<ICurrentTenant, CurrentTenant>();
+        services.AddScoped<ITenantResolver, TenantResolver>();
+
+        services.AddSingleton<IUserIdProvider, TenantUserIdProvider>();
+
+        services.AddScoped<ITenantProvisioningService, TenantProvisioningService>();
+        services.AddScoped<ITenantDatabaseService, TenantDatabaseService>();
+        services.AddScoped<ITenantUniquenessChecker, TenantUniquenessChecker>();
+        services.AddScoped<ITenantNotificationService, TenantNotificationService>();
+        services.AddScoped<IEncryptionService, EncryptionService>();
+        services.AddScoped<IAuditLogService, AuditLogService>();
+
+
+
+        // Encryption
+        services.Configure<EncryptionSettings>(options =>
+        {
+            options.EncryptionKey = config["Encryption:Key"]
+                ?? throw new InvalidOperationException("Encryption key not configured");
+            options.HashSalt = config["Encryption:Salt"] ?? string.Empty;
+        });
+
+        services.AddSingleton<IEncryptionService, EncryptionService>();
+        services.AddSingleton<IConnectionStringEncryptor, ConnectionStringEncryptor>();
+        services.AddSingleton<ISecureRandomGenerator, SecureRandomGenerator>();
+
+        // Data Protection
+        services.AddDataProtection()
+            .SetApplicationName("MultiTenantApp")
+            .SetDefaultKeyLifetime(TimeSpan.FromDays(90));
+
+        services.AddSingleton<ITenantDataProtector, TenantDataProtector>();
+
+        // Tenant DbContext Factory
+        services.AddScoped<ITenantDbContextFactory, TenantDbContextFactory>();
+
+
+        // Seeders
+        // TODO
+        //services.AddScoped<ITenantDataSeeder, CategorySeeder>();
+        //services.AddScoped<ITenantDataSeeder, SettingsSeeder>();
+        //services.AddScoped<ITenantDataSeeder, WorkflowSeeder>();
+
+
+
+
 
         return services;
     }
@@ -317,6 +392,14 @@ public static class ServiceCollectionExtensions
         //});
 
         //services.AddScoped<IAuthorizationHandler, PermissionHandler>();
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("TenantOwner", policy =>
+                policy.RequireClaim("tenant_role", "Owner"));
+            options.AddPolicy("TenantAdmin", policy =>
+                policy.RequireClaim("tenant_role", "Owner", "Admin"));
+        });
 
         return services;
     }
@@ -420,18 +503,18 @@ public static class ServiceCollectionExtensions
                             };
                         });
                         break;
-                    //case ExternalProviderTypeEnum.OpenIdConnect:
-                    //    services.AddAuthentication().AddOpenIdConnect(provider.Scheme!, options =>
-                    //    {
-                    //        options.Authority = provider.MetadataJson; // or metadata URL
-                    //        options.ClientId = provider.ClientId ?? secretStore.GetSecret("OpenIdConnect.ClientId");
-                    //        options.ClientSecret = secretStore.GetSecret("OpenIdConnect.ClientSecret");
-                    //        options.CallbackPath = provider.CallbackPath != "" ? provider.CallbackPath : $"/signin-{provider.Scheme}";
-                    //        options.SignInScheme = IdentityConstants.ExternalScheme;
-                    //        options.ResponseType = "code";
-                    //        // ...map scopes/claims
-                    //    });
-                    //    break;
+                        //case ExternalProviderTypeEnum.OpenIdConnect:
+                        //    services.AddAuthentication().AddOpenIdConnect(provider.Scheme!, options =>
+                        //    {
+                        //        options.Authority = provider.MetadataJson; // or metadata URL
+                        //        options.ClientId = provider.ClientId ?? secretStore.GetSecret("OpenIdConnect.ClientId");
+                        //        options.ClientSecret = secretStore.GetSecret("OpenIdConnect.ClientSecret");
+                        //        options.CallbackPath = provider.CallbackPath != "" ? provider.CallbackPath : $"/signin-{provider.Scheme}";
+                        //        options.SignInScheme = IdentityConstants.ExternalScheme;
+                        //        options.ResponseType = "code";
+                        //        // ...map scopes/claims
+                        //    });
+                        //    break;
                         // ... برای LinkedIn, Twitter, ...
                 }
 
@@ -440,6 +523,22 @@ public static class ServiceCollectionExtensions
         }
         return services;
     }
+
+
+
+
+    public static IServiceCollection AddHelthChecks(this IServiceCollection services, IConfiguration config)
+    {
+        // TODO
+        //services.AddHealthChecks()
+        // .AddDbContextCheck<ApplicationDbContext>("master_db");
+        //  .AddCheck<TenantDatabaseHealthCheck>("tenant_db");
+        return services;
+    }
+
+
+
+
     public class HangfireJobStartupFilter : IStartupFilter
     {
         public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)

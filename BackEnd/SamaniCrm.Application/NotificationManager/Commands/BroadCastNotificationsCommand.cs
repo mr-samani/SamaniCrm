@@ -25,7 +25,7 @@ namespace SamaniCrm.Application.NotificationManager.Commands
         private readonly INotificationHubService _hubService;
         private readonly IApplicationDbContext _dbContext;
         private readonly IIdentityService _identityService;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserService _currentUser;
         public BroadCastNotificationsCommandHandler(
             INotificationHubService hubService,
             IApplicationDbContext dbContext,
@@ -35,17 +35,17 @@ namespace SamaniCrm.Application.NotificationManager.Commands
             _hubService = hubService;
             _dbContext = dbContext;
             _identityService = identityService;
-            _currentUserService = currentUserService;
+            _currentUser = currentUserService;
         }
 
         public async Task<long> Handle(BroadCastNotificationsCommand request, CancellationToken cancellationToken)
         {
-            if (_currentUserService.UserId == null)
+            if (_currentUser.UserId == null)
             {
                 throw new AccessDeniedException();
             }
             var users = await _identityService.GetAllActiveUsersIds(cancellationToken);
-            var currentUserId = Guid.Parse(_currentUserService.UserId);
+            var currentUserId = _currentUser.UserId;
             var count = 0;
             List<Notification> notifyList = [];
             foreach (var userId in users)

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using SamaniCrm.Api.Attributes;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.DTOs;
-using SamaniCrm.Application.Menu.Commands;
+using SamaniCrm.Application.MenuCommands;
 using SamaniCrm.Application.ProductManager.Commands;
 using SamaniCrm.Application.ProductManager.Dtos;
 using SamaniCrm.Application.ProductManager.Queries;

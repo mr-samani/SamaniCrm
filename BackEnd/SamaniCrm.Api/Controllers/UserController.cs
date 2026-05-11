@@ -37,7 +37,7 @@ namespace SamaniCrm.Api.Controllers
 
         [HttpPost("CreateUser")]
         [Permission(AppPermissions.UserManagement_Create)]
-        [ProducesDefaultResponseType(typeof(ApiResponse<int>))]
+        [ProducesDefaultResponseType(typeof(ApiResponse<Guid>))]
         public async Task<IActionResult> CreateUser(CreateUserCommand command)
         {
             return ApiOk(await _mediator.Send(command));

@@ -19,10 +19,20 @@ namespace SamaniCrm.Infrastructure.Services
             _httpContextAccessor = httpContextAccessor;
         }
         private string? _overrideLang;
-        public string? UserId =>
-        _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier)
+        public Guid? UserId
+        {
+            get
+            {
+                string? userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier)
                 ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue("sub")
                 ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue(JwtRegisteredClaimNames.Sub);
+                return String.IsNullOrEmpty(userId) ? null : Guid.Parse(userId);
+
+            }
+
+
+        }
+
 
         public string? UserName =>
         _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name)
@@ -40,7 +50,7 @@ namespace SamaniCrm.Infrastructure.Services
                     _overrideLang =
                         _httpContextAccessor.HttpContext?.Request.Cookies["lang"]
                         ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue("lang")
-                        ?? "fa-IR"; 
+                        ?? "fa-IR";
                 }
                 return _overrideLang!;
             }
@@ -49,5 +59,8 @@ namespace SamaniCrm.Infrastructure.Services
                 _overrideLang = value;
             }
         }
+
+
+        public bool IsAuthenticated { get => UserId != null; }
     }
 }

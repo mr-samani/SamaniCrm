@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.Identity;
 
 namespace SamaniCrm.Infrastructure.EntityConfiguration;

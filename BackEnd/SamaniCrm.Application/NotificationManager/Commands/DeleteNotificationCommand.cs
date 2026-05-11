@@ -31,7 +31,6 @@ namespace SamaniCrm.Application.NotificationManager.Commands
             var now= DateTime.UtcNow;
 
             entity.IsDeleted = true;
-            entity.DeletedTime = now;
 
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
             return result > 0;

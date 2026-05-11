@@ -18,17 +18,17 @@ namespace SamaniCrm.Application.NotificationManager.Commands
     public class MarkAsReadCommanddHandler : IRequestHandler<MarkAsReadCommand, bool>
     {
         private readonly IApplicationDbContext _dbContext;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserService _currentUser;
 
-        public MarkAsReadCommanddHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
+        public MarkAsReadCommanddHandler(IApplicationDbContext context, ICurrentUserService currentUser)
         {
             _dbContext = context;
-            _currentUserService = currentUserService;
+            _currentUser = currentUser;
         }
 
         public async Task<bool> Handle(MarkAsReadCommand request, CancellationToken cancellationToken)
         {
-            Guid.TryParse(_currentUserService.UserId, out var currentUserId);
+            var currentUserId = _currentUser.UserId;
             var entity = await _dbContext.Notifications.Where(x=>x.Id == request.Id && x.RecieverUserId == currentUserId).FirstOrDefaultAsync(cancellationToken);
             if (entity == null)
                 throw new NotFoundException("Notification not found.");

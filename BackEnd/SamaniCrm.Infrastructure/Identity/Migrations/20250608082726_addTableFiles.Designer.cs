@@ -619,7 +619,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("Permissions");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.Currency", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.Currency", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -679,7 +679,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("Currencies", "product");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.Discount", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.Discount", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -730,7 +730,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("Discounts", "Product");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.Product", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -782,7 +782,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("Products", "product");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductAttribute", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductAttribute", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -832,7 +832,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("ProductAttributes", "product");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductAttributeTranslation", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductAttributeTranslation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -880,7 +880,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("ProductAttributeTranslations", "product");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductAttributeValue", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductAttributeValue", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -922,7 +922,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("ProductAttributeValues", "product");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductCategory", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductCategory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -972,7 +972,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("ProductCategories", "product");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductCategoryTranslation", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductCategoryTranslation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1025,7 +1025,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("ProductCategoryTranslations", "product");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductFile", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductFile", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1070,7 +1070,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("ProductFiles", "product");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductImage", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductImage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1117,7 +1117,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("ProductImages", "product");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductPrice", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductPrice", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1174,7 +1174,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("ProductPrices", "product");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductTranslation", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductTranslation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1230,7 +1230,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("ProductTranslations", "product");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductType", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductType", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1262,7 +1262,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("ProductTypes", "product");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductTypeTranslation", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductTypeTranslation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1658,15 +1658,15 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Page");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.Product", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.Product", b =>
                 {
-                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.ProductCategory", "Category")
+                    b.HasOne("SamaniCrm.Domain.Entities.Product.ProductCategory", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.ProductType", "ProductType")
+                    b.HasOne("SamaniCrm.Domain.Entities.Product.ProductType", "ProductType")
                         .WithMany("Products")
                         .HasForeignKey("ProductTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1699,9 +1699,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductAttribute", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductAttribute", b =>
                 {
-                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.ProductType", "ProductType")
+                    b.HasOne("SamaniCrm.Domain.Entities.Product.ProductType", "ProductType")
                         .WithMany("Attributes")
                         .HasForeignKey("ProductTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1710,7 +1710,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("ProductType");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductAttributeTranslation", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductAttributeTranslation", b =>
                 {
                     b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
                         .WithMany()
@@ -1718,7 +1718,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.ProductAttribute", "ProductAttribute")
+                    b.HasOne("SamaniCrm.Domain.Entities.Product.ProductAttribute", "ProductAttribute")
                         .WithMany("Translations")
                         .HasForeignKey("ProductAttributeId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1729,15 +1729,15 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("ProductAttribute");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductAttributeValue", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductAttributeValue", b =>
                 {
-                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.ProductAttribute", "Attribute")
+                    b.HasOne("SamaniCrm.Domain.Entities.Product.ProductAttribute", "Attribute")
                         .WithMany("AttributeValues")
                         .HasForeignKey("AttributeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.Product", "Product")
+                    b.HasOne("SamaniCrm.Domain.Entities.Product.Product", "Product")
                         .WithMany("AttributeValues")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1770,9 +1770,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductCategory", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductCategory", b =>
                 {
-                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.ProductCategory", "Parent")
+                    b.HasOne("SamaniCrm.Domain.Entities.Product.ProductCategory", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1780,9 +1780,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductCategoryTranslation", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductCategoryTranslation", b =>
                 {
-                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.ProductCategory", "ProductCategory")
+                    b.HasOne("SamaniCrm.Domain.Entities.Product.ProductCategory", "ProductCategory")
                         .WithMany("Translations")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1799,9 +1799,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("ProductCategory");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductFile", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductFile", b =>
                 {
-                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.Product", "Product")
+                    b.HasOne("SamaniCrm.Domain.Entities.Product.Product", "Product")
                         .WithMany("Files")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1810,9 +1810,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductImage", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductImage", b =>
                 {
-                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.Product", "Product")
+                    b.HasOne("SamaniCrm.Domain.Entities.Product.Product", "Product")
                         .WithMany("Images")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1821,16 +1821,16 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductPrice", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductPrice", b =>
                 {
-                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.Currency", "Currency")
+                    b.HasOne("SamaniCrm.Domain.Entities.Product.Currency", "Currency")
                         .WithMany("ProductPrices")
                         .HasForeignKey("CurrencyCode")
                         .HasPrincipalKey("CurrencyCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.Product", "Product")
+                    b.HasOne("SamaniCrm.Domain.Entities.Product.Product", "Product")
                         .WithMany("Prices")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1841,7 +1841,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductTranslation", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductTranslation", b =>
                 {
                     b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
                         .WithMany()
@@ -1849,7 +1849,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.Product", "Product")
+                    b.HasOne("SamaniCrm.Domain.Entities.Product.Product", "Product")
                         .WithMany("Translations")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1860,7 +1860,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductTypeTranslation", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductTypeTranslation", b =>
                 {
                     b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
                         .WithMany()
@@ -1868,7 +1868,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SamaniCrm.Domain.Entities.ProductEntities.ProductType", "ProductType")
+                    b.HasOne("SamaniCrm.Domain.Entities.Product.ProductType", "ProductType")
                         .WithMany("Translations")
                         .HasForeignKey("ProductTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1922,12 +1922,12 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Translations");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.Currency", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.Currency", b =>
                 {
                     b.Navigation("ProductPrices");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.Product", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.Product", b =>
                 {
                     b.Navigation("AttributeValues");
 
@@ -1940,14 +1940,14 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Translations");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductAttribute", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductAttribute", b =>
                 {
                     b.Navigation("AttributeValues");
 
                     b.Navigation("Translations");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductCategory", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductCategory", b =>
                 {
                     b.Navigation("Children");
 
@@ -1956,7 +1956,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Translations");
                 });
 
-            modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductEntities.ProductType", b =>
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Product.ProductType", b =>
                 {
                     b.Navigation("Attributes");
 

@@ -7,7 +7,7 @@ using MediatR;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 
-namespace SamaniCrm.Application.Menu.Commands
+namespace SamaniCrm.Application.MenuCommands
 {
 
     public record ChangeActiveMenuCommand(Guid Id, bool IsActive) : IRequest<bool>;
@@ -28,7 +28,6 @@ namespace SamaniCrm.Application.Menu.Commands
                 throw new NotFoundException("Menu not found.");
 
             menu.IsActive = request.IsActive;
-            menu.LastModifiedTime = DateTime.UtcNow;
 
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
             return result > 0;

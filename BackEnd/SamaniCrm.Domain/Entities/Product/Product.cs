@@ -1,0 +1,43 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using SamaniCrm.Domain.ValueObjects.Product;
+
+namespace SamaniCrm.Domain.Entities;
+
+public class Product : BaseEntity
+{
+    public Guid CategoryId { get; set; }
+
+    [Required]
+    [MaxLength(100)]
+    public Sku SKU { get; set; } = default!;
+    //private Sku _sku;
+
+    //public Sku SKU
+    //{
+    //    get => _sku;
+    //    private set => _sku = value ?? throw new ArgumentNullException(nameof(SKU));
+    //}
+
+
+    public string Slug { get; set; } = default!;
+    public bool IsActive { get; set; } = true;
+
+    public ProductCategory Category { get; set; } = default!;
+    public virtual ICollection<ProductTranslation> Translations { get; set; } = new List<ProductTranslation>();
+
+
+    public Guid ProductTypeId { get; set; }
+    [ForeignKey(nameof(ProductTypeId))]
+    public virtual ProductType ProductType { get; set; } = default!;
+
+    public virtual ICollection<ProductAttributeValue> AttributeValues { get; set; } = new List<ProductAttributeValue>();
+    //public ICollection<ProductVariant> Variants { get; set; } = new List<ProductVariant>();
+    public virtual ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
+    public virtual ICollection<ProductFile> Files { get; set; } = new List<ProductFile>();
+    public virtual ICollection<ProductPrice> Prices { get; set; } = new List<ProductPrice>();
+    public string? Tags { get; set; }
+}

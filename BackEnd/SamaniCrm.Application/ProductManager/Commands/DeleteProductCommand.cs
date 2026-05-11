@@ -27,7 +27,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             var now = DateTime.UtcNow;
 
             entity.IsDeleted = true;
-            entity.DeletedTime = now;
 
             var translations = await _dbContext.ProductTranslations
                 .Where(x => x.ProductId == request.Id && !x.IsDeleted)
@@ -36,7 +35,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             foreach (var translation in translations)
             {
                 translation.IsDeleted = true;
-                translation.DeletedTime = now;
             }
 
             var result = await _dbContext.SaveChangesAsync(cancellationToken);

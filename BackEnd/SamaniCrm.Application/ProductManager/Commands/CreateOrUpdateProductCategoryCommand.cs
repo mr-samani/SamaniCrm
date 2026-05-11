@@ -4,7 +4,6 @@ using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
 using SamaniCrm.Domain.Entities;
-using SamaniCrm.Domain.Entities.ProductEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,7 +49,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             cat.IsActive = request.IsActive;
             cat.ParentId = request.ParentId;
 
-            cat.LastModifiedTime = DateTime.UtcNow;
             if (request.Translations != null)
             {
                 var toRemove = cat.Translations.Where(t => !(request.Translations.Any(rt => rt.Culture == t.Culture))).ToList();

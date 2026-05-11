@@ -15,17 +15,17 @@ namespace SamaniCrm.Application.NotificationManager.Queries
     public class GetNotificationInfoQueryHandler : IRequestHandler<GetNotificationInfoQuery, NotificationDto>
     {
         private readonly INotificationService _notificationService;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserService _currentUser;
 
-        public GetNotificationInfoQueryHandler(INotificationService notificationService, ICurrentUserService currentUserService)
+        public GetNotificationInfoQueryHandler(INotificationService notificationService, ICurrentUserService currentUser)
         {
             _notificationService = notificationService;
-            _currentUserService = currentUserService;
+            _currentUser = currentUser;
         }
 
         public async Task<NotificationDto> Handle(GetNotificationInfoQuery request, CancellationToken cancellationToken)
         {
-            Guid.TryParse(_currentUserService.UserId, out var currentUserId);
+            var currentUserId =(Guid) _currentUser.UserId!;
 
             var result = await _notificationService.GetNotification(request.Id, currentUserId, cancellationToken);
             return result;
