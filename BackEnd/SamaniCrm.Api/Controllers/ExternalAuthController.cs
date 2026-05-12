@@ -49,6 +49,7 @@ namespace SamaniCrm.Api.Controllers
                 backendUrl += "/";
             }
             var provider = await _context.ExternalProviders
+                  .OrderBy(x => x.CreatedAt)
                   .FirstOrDefaultAsync(x => x.Name.ToLower() == providerName.ToLower() && x.IsActive);
 
             if (provider == null)
@@ -117,6 +118,7 @@ namespace SamaniCrm.Api.Controllers
                 }
 
                 var provider = await _context.ExternalProviders
+                    .OrderBy(x => x.CreatedAt)
                     .FirstOrDefaultAsync(x => x.Name.ToLower() == providerName.ToLower() && x.IsActive);
 
                 if (provider == null)

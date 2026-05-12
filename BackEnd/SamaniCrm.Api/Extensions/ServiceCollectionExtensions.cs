@@ -5,13 +5,10 @@ using Hangfire.SqlServer;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Localization;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using SamaniCrm.Api.Middlewares;
@@ -26,12 +23,10 @@ using SamaniCrm.Application.User.Queries;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Core.Shared.Interfaces.Tenant;
-using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.AuditLog;
 using SamaniCrm.Infrastructure.BackgroundServices;
 using SamaniCrm.Infrastructure.Captcha;
 using SamaniCrm.Infrastructure.Data;
-using SamaniCrm.Infrastructure.Data.Seeder;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.ExternalLogin;
 using SamaniCrm.Infrastructure.FileManager;
@@ -40,20 +35,16 @@ using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Jobs;
 using SamaniCrm.Infrastructure.Localizer;
 using SamaniCrm.Infrastructure.MappingProfile;
-using SamaniCrm.Infrastructure.Notifications;
+using SamaniCrm.Infrastructure.Repositories;
 using SamaniCrm.Infrastructure.Security;
 using SamaniCrm.Infrastructure.Services;
 using SamaniCrm.Infrastructure.Services.Product;
 using SamaniCrm.Infrastructure.Services.TenantService;
 using SamaniCrm.Infrastructure.Storage;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Security.Claims;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -284,6 +275,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddHttpContextAccessor();
         services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
+        services.AddScoped<IUnitOfWork,UnitOfWork>();
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
         services.AddScoped<ITokenGenerator, TokenGenerator>();
         services.AddScoped<ITwoFactorService, TwoFactorService>();
@@ -327,8 +319,11 @@ public static class ServiceCollectionExtensions
         // Multi-Tenancy
         services.AddScoped<ICurrentTenant, CurrentTenant>();
         services.AddScoped<ITenantResolver, TenantResolver>();
-
         services.AddSingleton<IUserIdProvider, TenantUserIdProvider>();
+        services.AddScoped<ITenantRepository, TenantRepository>();
+        services.AddScoped<ITenantService, TenantService>();
+
+
 
         services.AddScoped<ITenantProvisioningService, TenantProvisioningService>();
         services.AddScoped<ITenantDatabaseService, TenantDatabaseService>();

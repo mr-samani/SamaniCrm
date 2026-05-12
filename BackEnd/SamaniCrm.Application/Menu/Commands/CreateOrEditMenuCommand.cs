@@ -33,6 +33,7 @@ namespace SamaniCrm.Application.MenuCommands
             {
                 menu = await _dbContext.Menus
                      .Include(p => p.Translations)
+                     .OrderBy(x => x.CreatedAt)
                      .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
                 if (menu == null)
                     throw new NotFoundException("Menu not found.");
@@ -56,6 +57,7 @@ namespace SamaniCrm.Application.MenuCommands
             foreach (var item in request.Translations ?? [])
             {
                 var existingTranslation = menu.Translations?
+                    .OrderBy(x => x.CreatedAt)
                     .FirstOrDefault(t => t.Culture == item.Culture);
 
                 if (existingTranslation != null)

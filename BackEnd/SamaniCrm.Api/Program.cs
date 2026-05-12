@@ -92,7 +92,7 @@ app.UseAuthorization();
 // Multi-Tenant Middleware Pipeline
 app.UseMiddleware<TenantResolverMiddleware>();
 app.UseMiddleware<TenantSecurityMiddleware>();
-app.UseMiddleware<AuditMiddleware>();
+// app.UseMiddleware<AuditMiddleware>();
 
 
 
@@ -102,7 +102,7 @@ app.MapControllers();
 app.UseHangfireDashboard("/hangfire");
 
 app.MapHub<ProvisioningHub>("/hubs/provisioning");
-app.MapHealthChecks("/health");
+// app.MapHealthChecks("/health");
 
 
 

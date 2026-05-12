@@ -34,7 +34,9 @@ namespace SamaniCrm.Application.Localize.Commands
             foreach (var item in request.Items)
             {
                 var found = await _dbContext.Localizations
-                .Where(w => w.Key == request.Key && w.Culture == item.Culture).FirstOrDefaultAsync();
+                .Where(w => w.Key == request.Key && w.Culture == item.Culture)
+                    .OrderBy(x => x.CreatedAt)
+                    .FirstOrDefaultAsync();
                 // update value if exist
                 if (found != null)
                 {

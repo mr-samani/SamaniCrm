@@ -63,7 +63,9 @@ namespace SamaniCrm.Application.Localize.Commands
                                                    .Where(x => x.IsActive)
                                                    .ToListAsync();
 
-            var defaultLanguage = allActiveLangs.Where(l => l.IsDefault == true).FirstOrDefault();
+            var defaultLanguage = allActiveLangs.Where(l => l.IsDefault == true)
+                .OrderBy(x => x.CreatedAt)
+                .FirstOrDefault();
 
             List<Localization> defaultKeys = [];
             if (defaultLanguage != null)

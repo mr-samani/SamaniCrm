@@ -28,7 +28,9 @@ namespace SamaniCrm.Application.MenuCommands
 
             foreach (var item in request.Items)
             {
-                var menu = menus.FirstOrDefault(m => m.Id == item.MenuId);
+                var menu = menus
+                        .OrderBy(x => x.CreatedAt)
+                        .FirstOrDefault(m => m.Id == item.MenuId);
                 if (menu != null)
                 {
                     menu.OrderIndex = item.OrderIndex;

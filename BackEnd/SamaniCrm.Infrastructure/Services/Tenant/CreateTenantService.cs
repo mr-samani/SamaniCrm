@@ -24,7 +24,7 @@ public class TenantService : ITenantService
     private readonly ICurrentUserService _currentUser;
     private readonly ITenantNotificationService _notificationService;
     private readonly ILogger<CreateTenantCommandHandler> _logger;
-    private readonly IdentityService _identityService;
+    private readonly IIdentityService _identityService;
 
 
     public TenantService(IApplicationDbContext dbContext,
@@ -32,7 +32,7 @@ public class TenantService : ITenantService
         ICurrentUserService currentUser,
         ITenantNotificationService notificationService,
         ILogger<CreateTenantCommandHandler> logger,
-        IdentityService identityService)
+        IIdentityService identityService)
     {
         _dbContext = dbContext;
         _provisioningService = provisioningService;

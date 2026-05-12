@@ -46,6 +46,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                 foreach (var item in request.Translations ?? [])
                 {
                     var existingTranslation = entity.Translations
+                        .OrderBy(x => x.CreatedAt)
                         .FirstOrDefault(t => t.Culture == item.Culture);
 
                     if (existingTranslation != null)

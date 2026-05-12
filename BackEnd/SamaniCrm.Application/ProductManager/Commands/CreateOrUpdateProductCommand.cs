@@ -52,6 +52,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                     .Include(x => x.Files)
                     .Include(x => x.Prices)
                     .Include(x => x.AttributeValues)
+                    .OrderBy(x => x.CreatedAt)
                     .FirstOrDefaultAsync(x => x.Id == request.Id.Value, cancellationToken);
                 if (entity == null)
                     throw new NotFoundException("Product not found.");
@@ -80,7 +81,9 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                     entity.Translations.Remove(t);
                 foreach (var t in request.Translations)
                 {
-                    var existingTranslation = entity.Translations.FirstOrDefault(x => x.Culture == t.Culture);
+                    var existingTranslation = entity.Translations
+                        .OrderBy(x => x.CreatedAt)
+                        .FirstOrDefault(x => x.Culture == t.Culture);
                     if (existingTranslation != null)
                     {
                         existingTranslation.Title = t.Title;
@@ -108,7 +111,9 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                     entity.Images.Remove(img);
                 foreach (var img in request.Images)
                 {
-                    var existingImage = entity.Images.FirstOrDefault(x => x.FileId == img.FileId);
+                    var existingImage = entity.Images
+                        .OrderBy(x => x.CreatedAt)
+                        .FirstOrDefault(x => x.FileId == img.FileId);
                     if (existingImage != null)
                     {
                         existingImage.IsMain = img.IsMain;
@@ -133,7 +138,9 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                     entity.Files.Remove(f);
                 foreach (var file in request.Files)
                 {
-                    var existingFile = entity.Files.FirstOrDefault(x => x.FileId == file.FileId);
+                    var existingFile = entity.Files
+                        .OrderBy(x => x.CreatedAt)
+                        .FirstOrDefault(x => x.FileId == file.FileId);
                     if (existingFile != null)
                     {
                         existingFile.Description = file.Description;
@@ -156,7 +163,9 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                     entity.Prices.Remove(p);
                 foreach (var price in request.Prices)
                 {
-                    var existingPrice = entity.Prices.FirstOrDefault(x => x.CurrencyCode == price.Currency && x.StartDate == price.StartDate);
+                    var existingPrice = entity.Prices
+                         .OrderBy(x => x.CreatedAt)
+                         .FirstOrDefault(x => x.CurrencyCode == price.Currency && x.StartDate == price.StartDate);
                     if (existingPrice != null)
                     {
                         existingPrice.Price = price.Price;
@@ -183,7 +192,9 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                     entity.AttributeValues.Remove(a);
                 foreach (var attr in request.AttributeValues)
                 {
-                    var existingAttr = entity.AttributeValues.FirstOrDefault(x => x.AttributeId == attr.AttributeId);
+                    var existingAttr = entity.AttributeValues
+                        .OrderBy(x => x.CreatedAt)
+                        .FirstOrDefault(x => x.AttributeId == attr.AttributeId);
                     if (existingAttr != null)
                     {
                         existingAttr.Value = new AttributeValue(attr.Value);

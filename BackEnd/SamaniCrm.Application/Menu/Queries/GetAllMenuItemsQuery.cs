@@ -56,7 +56,7 @@ namespace SamaniCrm.Application.MenuQueries
                 Target = menu.Target,
                 Url = menu.Url,
                 IsActive = menu.IsActive,
-                Title = menu.Translations?.FirstOrDefault(t => t.Culture == language)?.Title ?? "",
+                Title = menu.Translations?.OrderBy(x=>x.CreatedAt)?.FirstOrDefault(t => t.Culture == language)?.Title ?? "",
                 Children = menu.Children?
                     .OrderBy(c => c.OrderIndex)
                     .Select(c => MapToDtoRecursive(c, language))

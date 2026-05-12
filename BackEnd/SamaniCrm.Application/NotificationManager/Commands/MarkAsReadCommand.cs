@@ -29,7 +29,10 @@ namespace SamaniCrm.Application.NotificationManager.Commands
         public async Task<bool> Handle(MarkAsReadCommand request, CancellationToken cancellationToken)
         {
             var currentUserId = _currentUser.UserId;
-            var entity = await _dbContext.Notifications.Where(x=>x.Id == request.Id && x.RecieverUserId == currentUserId).FirstOrDefaultAsync(cancellationToken);
+            var entity = await _dbContext.Notifications
+                .Where(x=>x.Id == request.Id && x.RecieverUserId == currentUserId)
+                .OrderBy(x=>x.CreatedAt)
+                .FirstOrDefaultAsync(cancellationToken);
             if (entity == null)
                 throw new NotFoundException("Notification not found.");
 

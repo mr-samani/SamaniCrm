@@ -26,6 +26,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             {
                 entity = await _dbContext.ProductAttributes
                     .Include(x => x.Translations)
+                    .OrderBy(x => x.CreatedAt)
                     .FirstOrDefaultAsync(x => x.Id == request.Id.Value, cancellationToken);
                 if (entity == null)
                     throw new NotFoundException("ProductAttribute not found.");
@@ -51,6 +52,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                 foreach (var item in request.Translations ?? [])
                 {
                     var existingTranslation = entity.Translations
+                        .OrderBy(x => x.CreatedAt)
                         .FirstOrDefault(t => t.Culture == item.Culture);
 
                     if (existingTranslation != null)

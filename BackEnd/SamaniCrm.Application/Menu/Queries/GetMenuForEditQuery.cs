@@ -25,7 +25,8 @@ namespace SamaniCrm.Application.MenuQueries
         public async Task<MenuDTO> Handle(GetMenuForEditQuery request, CancellationToken cancellationToken)
         {
             var menu = await _dbContext.Menus
-                .FirstOrDefaultAsync(m => m.Id == request.Id, cancellationToken);
+                  .OrderBy(x => x.CreatedAt)
+                  .FirstOrDefaultAsync(m => m.Id == request.Id, cancellationToken);
 
             if (menu == null)
                 throw new NotFoundException("Menu not found.");
