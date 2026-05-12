@@ -7,22 +7,21 @@ using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Interfaces;
 using SamaniCrm.Infrastructure.Identity;
+using SamaniCrm.Infrastructure.Services.TenantService;
 using System.Linq.Expressions;
-using RefreshToken = SamaniCrm.Domain.Entities.RefreshToken;
+using System.Reflection.Emit;
 
 namespace SamaniCrm.Infrastructure
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>, IApplicationDbContext
     {
         private readonly ICurrentUserService _currentUser;
-        private readonly Guid _tenantId;
+        private readonly Guid? _tenantId;
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
-            ICurrentUserService currentUserService,
-            Guid tenantId) : base(options)
+            ICurrentUserService currentUserService) : base(options)
         {
             _currentUser = currentUserService;
-            _tenantId = tenantId;
         }
 
 
@@ -33,6 +32,7 @@ namespace SamaniCrm.Infrastructure
         public DbSet<TenantSetting> TenantSettings { get; set; }
         public DbSet<TenantDatabaseConnection> TenantDatabaseConnections { get; set; }
         public DbSet<TenantCategory> TenantCategories { get; set; }
+        public DbSet<ProvisioningStep> ProvisioningSteps { get; set; }
 
 
 
@@ -192,7 +192,14 @@ namespace SamaniCrm.Infrastructure
             });
 
 
+            builder.Entity<Tenant>(entity =>
+            {
+                entity.Property(t => t.Longitude)
+                      .HasColumnType("decimal(18,8)");
 
+                entity.Property(t => t.Latitude)
+                      .HasColumnType("decimal(18,8)");
+            });
 
 
 

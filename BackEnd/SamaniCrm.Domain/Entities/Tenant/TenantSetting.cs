@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -14,14 +15,11 @@ namespace SamaniCrm.Domain.Entities;
 public class TenantSetting : BaseEntity
 {
 
-    [Key]
     public Guid TenantId { get; set; }
 
-    [Key]
     [MaxLength(100)]
     public required string Category { get; set; }
 
-    [Key]
     [MaxLength(100)]
     public required string Key { get; set; }
 
@@ -31,7 +29,6 @@ public class TenantSetting : BaseEntity
     public TenantSettingValueType ValueType { get; set; } = TenantSettingValueType.String;
 
     public bool IsEncrypted { get; set; } = false;
-
 
     public virtual Tenant Tenant { get; set; } = null!;
 

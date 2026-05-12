@@ -3,7 +3,9 @@ using SamaniCrm.Core.Shared.Interfaces.Tenant;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,6 +31,7 @@ public class Tenant : BaseEntity
     public string City { get; set; } = string.Empty;
     public string? Address { get; set; }
     public string? PostalCode { get; set; }
+
     public decimal? Latitude { get; set; }
     public decimal? Longitude { get; set; }
     
@@ -69,8 +72,9 @@ public class Tenant : BaseEntity
     public int SessionTimeoutMinutes { get; set; } = 30;
     public int PasswordMinLength { get; set; } = 8;
     public bool PasswordRequireSpecialChar { get; set; } = true;
-    
+
     // Feature Flags
+    [NotMapped]
     public Dictionary<string, bool>? FeatureFlags { get; set; }
 
 

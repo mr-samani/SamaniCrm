@@ -64,7 +64,7 @@ public class TenantDbContextFactory : ITenantDbContextFactory
             // , new TenantCommandInterceptor()
             );
 
-        return new ApplicationDbContext(optionsBuilder.Options, _currentUser, Guid.Empty);
+        return new ApplicationDbContext(optionsBuilder.Options, _currentUser);
     }
 
     public async Task<ApplicationDbContext> CreateDbContextAsync(Guid tenantId, CancellationToken cancellation)

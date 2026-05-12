@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ public interface IApplicationDbContext
     public DbSet<TenantSetting> TenantSettings { get; set; }
     public DbSet<TenantDatabaseConnection> TenantDatabaseConnections { get; set; }
     public DbSet<TenantCategory> TenantCategories { get; set; }
+    public DbSet<ProvisioningStep> ProvisioningSteps { get; set; }
 
 
 

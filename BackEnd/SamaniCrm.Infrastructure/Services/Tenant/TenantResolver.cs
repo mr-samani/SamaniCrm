@@ -18,6 +18,7 @@ public record TenantRsolverDto(Guid Id, string Name, string Slug, string Email, 
 
 public interface ITenantResolver
 {
+    Guid? TenantId { get; set; }
     Task<TenantRsolverDto?> ResolveAsync(HttpContext context);
     Task<TenantRsolverDto?> ResolveByIdAsync(Guid tenantId);
     Task<TenantRsolverDto?> ResolveBySlugAsync(string slug);
@@ -28,7 +29,7 @@ public class TenantResolver : ITenantResolver
 {
     private readonly ApplicationDbContext _context;
     private readonly IHttpContextAccessor _httpContextAccessor;
-
+    public Guid? TenantId { get; set; }
     public TenantResolver(
         ApplicationDbContext context,
         IHttpContextAccessor httpContextAccessor)
@@ -40,11 +41,12 @@ public class TenantResolver : ITenantResolver
 
     public async Task<TenantRsolverDto?> ResolveAsync(HttpContext context)
     {
+        TenantRsolverDto? tenant = null;
         // 1️⃣ اول از Header بخون (X-Tenant-Slug)
         var tenantSlug = context.Request.Headers["X-Tenant-Slug"].FirstOrDefault();
         if (!string.IsNullOrEmpty(tenantSlug))
         {
-            return await ResolveBySlugAsync(tenantSlug);
+            tenant = await ResolveBySlugAsync(tenantSlug);
         }
 
         // 2️⃣ از Subdomain بخون (tenant.example.com)
@@ -52,17 +54,19 @@ public class TenantResolver : ITenantResolver
         var subdomain = ExtractSubdomain(host);
         if (!string.IsNullOrEmpty(subdomain))
         {
-            return await ResolveBySlugAsync(subdomain);
+            tenant = await ResolveBySlugAsync(subdomain);
         }
 
         // 3️⃣ از Route بخون (/api/tenant-slug/...)
         var routeSlug = context.Request.RouteValues["tenant"]?.ToString();
         if (!string.IsNullOrEmpty(routeSlug))
         {
-            return await ResolveBySlugAsync(routeSlug);
+            tenant = await ResolveBySlugAsync(routeSlug);
         }
 
-        return null;
+        TenantId = tenant != null ? tenant.Id : null;
+
+        return tenant;
     }
 
 
