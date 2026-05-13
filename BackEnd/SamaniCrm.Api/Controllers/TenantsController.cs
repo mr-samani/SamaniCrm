@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SamaniCrm.Api.Attributes;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Features.Tenants;
 using SamaniCrm.Application.Features.Tenants.Commands;
@@ -8,13 +9,14 @@ using SamaniCrm.Application.Features.Tenants.Dtos;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Queries;
 using SamaniCrm.Application.User.Commands;
+using SamaniCrm.Core.Permissions;
 using SamaniCrm.Domain.Interfaces;
+using SamaniCrm.Host.Models;
 
 namespace SamaniCrm.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-[Authorize(Roles = "SuperAdmin")]
+// [Authorize(Roles = "SuperAdmin")]
 public partial class TenantsController : ApiBaseController
 {
     private readonly IMediator _mediator;
@@ -29,10 +31,11 @@ public partial class TenantsController : ApiBaseController
     /// <summary>
     /// Create a new tenant
     /// </summary>
-    [HttpPost]
-    [ProducesResponseType(typeof(CreateTenantResponse), StatusCodes.Status201Created)]
+    [HttpPost("CreateTenant")]
+    [Permission(AppPermissions.TenantManagement_Create)]
+    [ProducesResponseType(typeof(ApiResponse<CreateTenantResponse>), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create([FromBody] CreateTenantCommand command)
+    public async Task<IActionResult> CreateTenant([FromBody] CreateTenantCommand command)
     {
         var result = await _mediator.Send(command);
         return ApiOk<CreateTenantResponse>(result);
@@ -42,9 +45,10 @@ public partial class TenantsController : ApiBaseController
     /// Get tenant by ID
     /// </summary>
     [HttpGet("{id:guid}")]
-    [ProducesResponseType(typeof(TenantDto), StatusCodes.Status200OK)]
+    [Permission(AppPermissions.TenantManagement)]
+    [ProducesResponseType(typeof(ApiResponse<TenantDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById(Guid id)
+    public async Task<IActionResult> GetTenantById(Guid id)
     {
         var result = await _mediator.Send(new GetTenantByIdQuery(id));
         return ApiOk(result);
@@ -55,9 +59,9 @@ public partial class TenantsController : ApiBaseController
     /// </summary>
     [HttpGet("slug/{slug}")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(TenantDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<TenantDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetBySlug(string slug)
+    public async Task<IActionResult> GetTenantBySlug(string slug)
     {
         var result = await _mediator.Send(new GetTenantBySlugQuery(slug));
         return ApiOk(result);
@@ -66,9 +70,10 @@ public partial class TenantsController : ApiBaseController
     /// <summary>
     /// Get all tenants with pagination
     /// </summary>
-    [HttpGet]
-    [ProducesResponseType(typeof(PaginatedResult<TenantListDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAll([FromQuery] TenantListQuery query)
+    [HttpPost("GetAllTenants")]
+    [Permission(AppPermissions.TenantManagement_List)]
+    [ProducesResponseType(typeof(ApiResponse<PaginatedResult<TenantListDto>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllTenants([FromBody] TenantListQuery query)
     {
         var result = await _mediator.Send(query);
         return ApiOk(result);
@@ -78,9 +83,10 @@ public partial class TenantsController : ApiBaseController
     /// Update tenant
     /// </summary>
     [HttpPut("{id:guid}")]
-    [ProducesResponseType(typeof(TenantDto), StatusCodes.Status200OK)]
+    [Permission(AppPermissions.TenantManagement_Edit)]
+    [ProducesResponseType(typeof(ApiResponse<TenantDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateTenantCommand command)
+    public async Task<IActionResult> UpdateTenant(Guid id, [FromBody] UpdateTenantCommand command)
     {
         if (id != command.Id) return BadRequest();
 
@@ -92,8 +98,9 @@ public partial class TenantsController : ApiBaseController
     /// Suspend tenant
     /// </summary>
     [HttpPost("{id:guid}/suspend")]
+    [Permission(AppPermissions.TenantManagement_ActiveDeActive)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> Suspend(Guid id)
+    public async Task<IActionResult> SuspendTenant(Guid id)
     {
         await _mediator.Send(new SuspendTenantCommand(id));
         return NoContent();
@@ -103,8 +110,9 @@ public partial class TenantsController : ApiBaseController
     /// Activate suspended tenant
     /// </summary>
     [HttpPost("{id:guid}/activate")]
+    [Permission(AppPermissions.TenantManagement_ActiveDeActive)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> Activate(ActivateTenantCommand input)
+    public async Task<IActionResult> ActivateTenant(ActivateTenantCommand input)
     {
         await _mediator.Send(input);
         return NoContent();
@@ -114,8 +122,9 @@ public partial class TenantsController : ApiBaseController
     /// Delete tenant (soft delete)
     /// </summary>
     [HttpDelete("{id:guid}")]
+    [Permission(AppPermissions.TenantManagement_Delete)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> DeleteTenant(Guid id)
     {
         await _mediator.Send(new DeleteTenantCommand(id));
         return NoContent();
@@ -125,8 +134,8 @@ public partial class TenantsController : ApiBaseController
     /// Get tenant settings
     /// </summary>
     [HttpGet("{id:guid}/settings")]
-    [ProducesResponseType(typeof(TenantSettingsDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetSettings(Guid id)
+    [ProducesResponseType(typeof(ApiResponse<TenantSettingsDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetTenantSettings(Guid id)
     {
         var result = await _mediator.Send(new GetTenantSettingsQuery(id));
         return ApiOk(result);
@@ -137,7 +146,7 @@ public partial class TenantsController : ApiBaseController
     /// </summary>
     [HttpPut("{id:guid}/settings")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> UpdateSettings(Guid id, [FromBody] UpdateTenantSettingsCommand command)
+    public async Task<IActionResult> UpdateTenantSettings(Guid id, [FromBody] UpdateTenantSettingsCommand command)
     {
         if (id != command.TenantId) return BadRequest();
         await _mediator.Send(command);
@@ -148,8 +157,8 @@ public partial class TenantsController : ApiBaseController
     /// Get tenant provisioning status
     /// </summary>
     [HttpGet("{id:guid}/provisioning-status")]
-    [ProducesResponseType(typeof(ProvisioningStatusDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetProvisioningStatus(Guid id)
+    [ProducesResponseType(typeof(ApiResponse<ProvisioningStatusDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetProvisioningTenantStatus(Guid id)
     {
         var result = await _mediator.Send(new GetProvisioningStatusQuery(id));
         return ApiOk(result);
@@ -160,7 +169,7 @@ public partial class TenantsController : ApiBaseController
     /// </summary>
     [HttpPost("{id:guid}/retry-provisioning")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
-    public async Task<IActionResult> RetryProvisioning(Guid id)
+    public async Task<IActionResult> RetryProvisioningTenant(Guid id)
     {
         await _mediator.Send(new RetryProvisioningCommand(id));
         return Accepted();
@@ -170,8 +179,8 @@ public partial class TenantsController : ApiBaseController
     /// Get tenant database info
     /// </summary>
     [HttpGet("{id:guid}/database")]
-    [ProducesResponseType(typeof(TenantDatabaseDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetDatabaseInfo(Guid id)
+    [ProducesResponseType(typeof(ApiResponse<TenantDatabaseDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetTenantDatabaseInfo(Guid id)
     {
         var result = await _mediator.Send(new GetTenantDatabaseQuery(id));
         return ApiOk(result);
@@ -181,7 +190,7 @@ public partial class TenantsController : ApiBaseController
     /// Test tenant database connection
     /// </summary>
     [HttpPost("{id:guid}/test-connection")]
-    [ProducesResponseType(typeof(ConnectionTestResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<ConnectionTestResult>), StatusCodes.Status200OK)]
     public async Task<IActionResult> TestConnection(Guid id)
     {
         var result = await _mediator.Send(new TestTenantConnectionQuery(id));
@@ -192,8 +201,8 @@ public partial class TenantsController : ApiBaseController
     /// Get tenant usage statistics
     /// </summary>
     [HttpGet("{id:guid}/usage")]
-    [ProducesResponseType(typeof(TenantUsageDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetUsage(Guid id)
+    [ProducesResponseType(typeof(ApiResponse<TenantUsageDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetTenantUsage(Guid id)
     {
         var result = await _mediator.Send(new GetTenantUsageQuery(id));
         return ApiOk(result);

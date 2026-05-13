@@ -69,16 +69,16 @@ public class TenantResolverMiddleware
             }
         }
 
-        if (tenant == null)
-        {
-            _logger.LogWarning("Tenant could not be resolved for request {Path}", context.Request.Path);
-            context.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await context.Response.WriteAsJsonAsync(new { error = "Tenant not identified" });
-            return;
-        }
+        //if (tenant == null)
+        //{
+        //    _logger.LogWarning("Tenant could not be resolved for request {Path}", context.Request.Path);
+        //    context.Response.StatusCode = StatusCodes.Status400BadRequest;
+        //    await context.Response.WriteAsJsonAsync(new { error = "Tenant not identified" });
+        //    return;
+        //}
 
         // Validate tenant status
-        if (!tenant.IsActive)
+        if (tenant != null && !tenant.IsActive)
         {
             _logger.LogWarning("Tenant {TenantId} is not active", tenant.Id);
             context.Response.StatusCode = StatusCodes.Status403Forbidden;
@@ -86,16 +86,21 @@ public class TenantResolverMiddleware
             return;
         }
 
-        // Set current tenant
-        currentTenant.SetTenant(tenant.Id,tenant.Slug,tenant.Name);
-
-        // Add tenant info to response headers (for debugging)
-        context.Response.OnStarting(() =>
+        if (tenant != null)
         {
-            context.Response.Headers["X-Tenant-Id"] = tenant.Id.ToString();
-            context.Response.Headers["X-Tenant-Slug"] = tenant.Slug;
-            return Task.CompletedTask;
-        });
+            // Set current tenant
+            currentTenant.SetTenant(tenant.Id, tenant.Slug, tenant.Name);
+
+            // Add tenant info to response headers (for debugging)
+            context.Response.OnStarting(() =>
+            {
+                context.Response.Headers["X-Tenant-Id"] = tenant.Id.ToString();
+                context.Response.Headers["X-Tenant-Slug"] = tenant.Slug;
+                return Task.CompletedTask;
+            });
+        }
+
+
 
         await _next(context);
     }

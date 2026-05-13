@@ -1,6 +1,16 @@
 export abstract class AppPermissions {
   public static Administrator = 'Administrator';
 
+  // Multi tenancy
+  public static TenantManagement = 'Administrator.TenantManagement';
+  public static TenantManagement_List = 'Administrator.TenantManagement.List';
+  public static TenantManagement_Create = 'Administrator.TenantManagement.Create';
+  public static TenantManagement_Edit = 'Administrator.TenantManagement.Edit';
+  public static TenantManagement_Delete = 'Administrator.TenantManagement.Delete';
+  public static TenantManagement_ActiveDeActive = 'Administrator.TenantManagement.ActiveDeActive';
+  public static TenantManagement_Users = 'Administrator.TenantManagement.Users';
+  public static TenantManagement_Impersonate = 'Administrator.TenantManagement.Impersonate';
+
   // user management
   public static UserManagement = 'Administrator.UserManagement';
   public static UserManagement_List = 'Administrator.UserManagement.List';

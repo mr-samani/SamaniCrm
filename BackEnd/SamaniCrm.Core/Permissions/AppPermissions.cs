@@ -6,10 +6,26 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Core.Permissions
 {
+
+    /// <summary>
+    /// After add permission 
+    /// - Must be run Migration seed
+    /// - Must be add to app permissions in front end
+    /// </summary>
     public static class AppPermissions
     {
 
         public const string Administrator = "Administrator";
+
+        // Multi tenancy
+        public const string TenantManagement = "Administrator.TenantManagement";
+        public const string TenantManagement_List = "Administrator.TenantManagement.List";
+        public const string TenantManagement_Create = "Administrator.TenantManagement.Create";
+        public const string TenantManagement_Edit = "Administrator.TenantManagement.Edit";
+        public const string TenantManagement_Delete = "Administrator.TenantManagement.Delete";
+        public const string TenantManagement_ActiveDeActive = "Administrator.TenantManagement.ActiveDeActive";
+        public const string TenantManagement_Users = "Administrator.TenantManagement.Users";
+        public const string TenantManagement_Impersonate = "Administrator.TenantManagement.Impersonate";
 
 
         // user management 

@@ -22,6 +22,14 @@
             {{ 'Panel' | translate }}
           </a>
         </li>
+        @if (AppPermissions.TenantManagement_List | permission) {
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/panel/tenants']" routerLinkActive="active" (click)="closeNavbar()">
+              <i class="fa fa-building"></i>
+              {{ 'Tenants' | translate }}
+            </a>
+          </li>
+        }
         @if (AppPermissions.Notification_List | permission) {
           <li class="nav-item">
             <a

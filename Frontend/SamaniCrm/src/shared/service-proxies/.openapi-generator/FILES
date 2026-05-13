@@ -37,6 +37,7 @@ model/cache-entry-dto-list-api-response.ts
 model/cache-entry-dto.ts
 model/captcha-dto.ts
 model/change-active-menu-command.ts
+model/connection-test-result-api-response.ts
 model/connection-test-result.ts
 model/create-external-provider-command.ts
 model/create-folder-command.ts
@@ -55,6 +56,7 @@ model/create-or-update-product-command.ts
 model/create-or-update-product-type-command.ts
 model/create-plugin-command.ts
 model/create-tenant-command.ts
+model/create-tenant-response-api-response.ts
 model/create-tenant-response.ts
 model/create-user-command.ts
 model/currency-dto-list-api-response.ts
@@ -172,6 +174,7 @@ model/product-type-dto-paginated-result-api-response.ts
 model/product-type-dto-paginated-result.ts
 model/product-type-dto.ts
 model/product-type-translation-dto.ts
+model/provisioning-status-dto-api-response.ts
 model/provisioning-status-dto.ts
 model/provisioning-status.ts
 model/refresh-token-command.ts
@@ -193,12 +196,18 @@ model/string-api-response.ts
 model/string-auto-complete-dto-list-api-response.ts
 model/string-auto-complete-dto.ts
 model/string-list-api-response.ts
+model/tenant-database-dto-api-response.ts
 model/tenant-database-dto.ts
+model/tenant-dto-api-response.ts
 model/tenant-dto.ts
+model/tenant-list-dto-paginated-result-api-response.ts
 model/tenant-list-dto-paginated-result.ts
 model/tenant-list-dto.ts
+model/tenant-list-query.ts
+model/tenant-settings-dto-api-response.ts
 model/tenant-settings-dto.ts
 model/tenant-status.ts
+model/tenant-usage-dto-api-response.ts
 model/tenant-usage-dto.ts
 model/token-response-dto-api-response.ts
 model/token-response-dto.ts
