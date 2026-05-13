@@ -19,6 +19,9 @@ export interface IPagedProductCategoriesDto {
   totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
+  totalPages?: number;
+  hasPrevious?: boolean;
+  hasNext?: boolean;
   breadcrumbs?: Array<BreadcrumbResult>;
 }
 
@@ -28,6 +31,9 @@ export class PagedProductCategoriesDto implements IPagedProductCategoriesDto {
   totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
+  totalPages?: number;
+  hasPrevious?: boolean;
+  hasNext?: boolean;
   breadcrumbs?: Array<BreadcrumbResult>;
 
   constructor(data?: IPagedProductCategoriesDto) {
@@ -49,6 +55,9 @@ init(data?: any) {
     this.totalCount = data["totalCount"];
     this.pageNumber = data["pageNumber"];
     this.pageSize = data["pageSize"];
+    this.totalPages = data["totalPages"];
+    this.hasPrevious = data["hasPrevious"];
+    this.hasNext = data["hasNext"];
     if (Array.isArray(data["breadcrumbs"])) {
       this.breadcrumbs = [] as any;
       for (let item of data["breadcrumbs"])

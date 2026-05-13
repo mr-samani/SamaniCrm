@@ -7,14 +7,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { PageDto } from './page-dto';
+import { TenantListDto } from './tenant-list-dto';
 
 
 /* Created with custom template by mohammadreza SAMANI*/
 
-/** Interface for PageDtoPaginatedResult */
-export interface IPageDtoPaginatedResult {
-  items?: Array<PageDto>;
+/** Interface for TenantListDtoPaginatedResult */
+export interface ITenantListDtoPaginatedResult {
+  items?: Array<TenantListDto>;
   totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
@@ -23,9 +23,9 @@ export interface IPageDtoPaginatedResult {
   hasNext?: boolean;
 }
 
-/** Class for PageDtoPaginatedResult */
-export class PageDtoPaginatedResult implements IPageDtoPaginatedResult {
-  items?: Array<PageDto>;
+/** Class for TenantListDtoPaginatedResult */
+export class TenantListDtoPaginatedResult implements ITenantListDtoPaginatedResult {
+  items?: Array<TenantListDto>;
   totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
@@ -33,7 +33,7 @@ export class PageDtoPaginatedResult implements IPageDtoPaginatedResult {
   hasPrevious?: boolean;
   hasNext?: boolean;
 
-  constructor(data?: IPageDtoPaginatedResult) {
+  constructor(data?: ITenantListDtoPaginatedResult) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -47,7 +47,7 @@ init(data?: any) {
     if (Array.isArray(data["items"])) {
       this.items = [] as any;
       for (let item of data["items"])
-        (this.items as any).push(PageDto.fromJS(item));
+        (this.items as any).push(TenantListDto.fromJS(item));
     }
     this.totalCount = data["totalCount"];
     this.pageNumber = data["pageNumber"];
@@ -58,8 +58,8 @@ init(data?: any) {
   }
 }
 
-  static fromJS(data: any): PageDtoPaginatedResult {
-    const instance = new PageDtoPaginatedResult();
+  static fromJS(data: any): TenantListDtoPaginatedResult {
+    const instance = new TenantListDtoPaginatedResult();
     instance.init(data);
     return instance;
   }

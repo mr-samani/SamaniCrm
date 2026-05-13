@@ -18,6 +18,9 @@ export interface IPluginDtoPaginatedResult {
   totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
+  totalPages?: number;
+  hasPrevious?: boolean;
+  hasNext?: boolean;
 }
 
 /** Class for PluginDtoPaginatedResult */
@@ -26,6 +29,9 @@ export class PluginDtoPaginatedResult implements IPluginDtoPaginatedResult {
   totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
+  totalPages?: number;
+  hasPrevious?: boolean;
+  hasNext?: boolean;
 
   constructor(data?: IPluginDtoPaginatedResult) {
     if (data) {
@@ -46,6 +52,9 @@ init(data?: any) {
     this.totalCount = data["totalCount"];
     this.pageNumber = data["pageNumber"];
     this.pageSize = data["pageSize"];
+    this.totalPages = data["totalPages"];
+    this.hasPrevious = data["hasPrevious"];
+    this.hasNext = data["hasNext"];
   }
 }
 

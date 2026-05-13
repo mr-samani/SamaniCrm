@@ -21,12 +21,13 @@ api/product.service.ts
 api/public.service.ts
 api/role.service.ts
 api/security-settings.service.ts
+api/tenants.service.ts
 api/user.service.ts
-api/weather-forecast.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
 index.ts
+model/activate-tenant-command.ts
 model/active-or-deactive-language-command.ts
 model/api-error.ts
 model/boolean-api-response.ts
@@ -36,6 +37,7 @@ model/cache-entry-dto-list-api-response.ts
 model/cache-entry-dto.ts
 model/captcha-dto.ts
 model/change-active-menu-command.ts
+model/connection-test-result.ts
 model/create-external-provider-command.ts
 model/create-folder-command.ts
 model/create-or-edit-language-command.ts
@@ -52,6 +54,8 @@ model/create-or-update-product-category-command.ts
 model/create-or-update-product-command.ts
 model/create-or-update-product-type-command.ts
 model/create-plugin-command.ts
+model/create-tenant-command.ts
+model/create-tenant-response.ts
 model/create-user-command.ts
 model/currency-dto-list-api-response.ts
 model/currency-dto.ts
@@ -59,6 +63,7 @@ model/dashboard-dto-list-api-response.ts
 model/dashboard-dto.ts
 model/dashboard-item-dto-list-api-response.ts
 model/dashboard-item-dto.ts
+model/database-strategy.ts
 model/delete-currency-command.ts
 model/delete-dashboard-command.ts
 model/delete-dashboard-item-command.ts
@@ -141,6 +146,7 @@ model/plugin-dto-paginated-result-api-response.ts
 model/plugin-dto-paginated-result.ts
 model/plugin-dto.ts
 model/price-type-enum.ts
+model/problem-details.ts
 model/product-attribute-data-type-enum.ts
 model/product-attribute-dto-api-response.ts
 model/product-attribute-dto-paginated-result-api-response.ts
@@ -166,6 +172,8 @@ model/product-type-dto-paginated-result-api-response.ts
 model/product-type-dto-paginated-result.ts
 model/product-type-dto.ts
 model/product-type-translation-dto.ts
+model/provisioning-status-dto.ts
+model/provisioning-status.ts
 model/refresh-token-command.ts
 model/rename-command.ts
 model/reorder-item.ts
@@ -185,6 +193,13 @@ model/string-api-response.ts
 model/string-auto-complete-dto-list-api-response.ts
 model/string-auto-complete-dto.ts
 model/string-list-api-response.ts
+model/tenant-database-dto.ts
+model/tenant-dto.ts
+model/tenant-list-dto-paginated-result.ts
+model/tenant-list-dto.ts
+model/tenant-settings-dto.ts
+model/tenant-status.ts
+model/tenant-usage-dto.ts
 model/token-response-dto-api-response.ts
 model/token-response-dto.ts
 model/two-factor-login-command.ts
@@ -196,6 +211,8 @@ model/update-external-provider-command.ts
 model/update-page-content-command.ts
 model/update-role-command.ts
 model/update-security-setting-command.ts
+model/update-tenant-command.ts
+model/update-tenant-settings-command.ts
 model/update-user-security-setting-command.ts
 model/user-dto-api-response.ts
 model/user-dto-paginated-result-api-response.ts
@@ -204,6 +221,5 @@ model/user-dto.ts
 model/user-setting-dto-api-response.ts
 model/user-setting-dto.ts
 model/verify2-fa-request.ts
-model/weather-forecast.ts
 param.ts
 variables.ts
