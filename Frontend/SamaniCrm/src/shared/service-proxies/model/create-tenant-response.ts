@@ -15,7 +15,6 @@ import { ProvisioningStatus } from './provisioning-status';
 /** Interface for CreateTenantResponse */
 export interface ICreateTenantResponse {
   tenantId?: string;
-  adminUserId?: string;
   slug?: string;
   status?: string;
   provisioningStatus?: ProvisioningStatus;
@@ -25,7 +24,6 @@ export interface ICreateTenantResponse {
 /** Class for CreateTenantResponse */
 export class CreateTenantResponse implements ICreateTenantResponse {
   tenantId?: string;
-  adminUserId?: string;
   slug?: string;
   status?: string;
   provisioningStatus?: ProvisioningStatus;
@@ -43,7 +41,6 @@ export class CreateTenantResponse implements ICreateTenantResponse {
 init(data?: any) {
   if (data) {
     this.tenantId = data["tenantId"];
-    this.adminUserId = data["adminUserId"];
     this.slug = data["slug"];
     this.status = data["status"];
     this.provisioningStatus = data["provisioningStatus"];

@@ -1,3 +1,4 @@
+import { ProvisioningTenantComponent } from './provisioning-tenant/provisioning-tenant.component';
 import { TenantAdminUserComponent } from './create-tenant/tenant-admin-user/tenant-admin-user.component';
 import { TenantSettingsComponent } from './create-tenant/tenant-settings/tenant-settings.component';
 import { TenantAddressComponent } from './create-tenant/tenant-address/tenant-address.component';
@@ -22,14 +23,7 @@ import { TenantsRoutingModule } from './Tenants-routing.module';
 import { NgxInputColorModule } from 'ngx-input-color';
 
 @NgModule({
-  declarations: [
-    TenantsComponent,
-    CreateTenantComponent,
-    TenantInfoComponent,
-    TenantAddressComponent,
-    TenantSettingsComponent,
-    TenantAdminUserComponent,
-  ],
+  declarations: [TenantsComponent, CreateTenantComponent, TenantInfoComponent, TenantAddressComponent, TenantSettingsComponent, TenantAdminUserComponent, ProvisioningTenantComponent],
   imports: [
     CommonModule,
     TenantsRoutingModule,

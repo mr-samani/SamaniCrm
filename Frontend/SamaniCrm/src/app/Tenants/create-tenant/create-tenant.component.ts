@@ -129,9 +129,9 @@ export class CreateTenantComponent extends AppComponentBase implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          if (response.success) {
+          if (response.success && response.data) {
             this.notify.success(this.l('SaveSuccessFully'));
-            this.router.navigate(['/panel/tenants']);
+            this.router.navigate(['/panel/tenants/provisioning/' + response.data.slug + '/' + response.data.tenantId]);
           }
         },
       });

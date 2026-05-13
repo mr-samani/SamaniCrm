@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace SamaniCrm.Infrastructure.Hubs;
 
-[Authorize]
+// [Authorize]
 public class ProvisioningHub : Hub<IProvisioningClient>
 {
     private readonly ILogger<ProvisioningHub> _logger;
@@ -38,6 +38,8 @@ public class ProvisioningHub : Hub<IProvisioningClient>
 
     public override async Task OnConnectedAsync()
     {
+        var userId = Context.User?.FindFirst("sub")?.Value;
+        Console.WriteLine($"User {userId} connected to SignalR hub.");
         _logger.LogInformation("Client connected: {ConnectionId}", Context.ConnectionId);
         await base.OnConnectedAsync();
     }

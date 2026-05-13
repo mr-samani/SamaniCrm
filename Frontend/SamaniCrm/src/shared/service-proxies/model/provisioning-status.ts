@@ -13,7 +13,7 @@ export enum ProvisioningStatus {
 
     NotStarted = 0,
 
-    Creating = 1,
+    InProgress = 1,
 
     Ready = 2,
 

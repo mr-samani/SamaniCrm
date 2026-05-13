@@ -2,10 +2,12 @@ import { NgModule } from '@angular/core';
 import { TenantsComponent } from './Tenants.component';
 import { RouterModule, Routes } from '@angular/router';
 import { CreateTenantComponent } from './create-tenant/create-tenant.component';
+import { ProvisioningTenantComponent } from './provisioning-tenant/provisioning-tenant.component';
 
 const routes: Routes = [
   { path: '', component: TenantsComponent },
   { path: 'create', component: CreateTenantComponent },
+  { path: 'provisioning/:tenantSlug/:tenantId', component: ProvisioningTenantComponent },
 ];
 
 @NgModule({

@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Hangfire;
+using Hangfire.Storage;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -161,7 +162,7 @@ public class TenantProvisioningService : ITenantProvisioningService
             await SendNotificationProcessAsync(ProvisioningNotificationStatus.Completed,
            request.Slug,
             tenantId,
-           "Creating admin user...",
+           "Created admin user",
            TenantProvisionStepsEnum.CreateAdminUser);
         }
     }
@@ -171,11 +172,20 @@ public class TenantProvisioningService : ITenantProvisioningService
 
     public async Task ProvisionIsolatedDatabaseAsync(Tenant tenant, CancellationToken cancellation)
     {
+        if (tenant.DatabaseStrategy == DatabaseStrategy.Isolated)
+        {
+            await SendNotificationProcessAsync(ProvisioningNotificationStatus.Completed,
+                 tenant.Slug,
+          tenant.Id,
+                 "Check Database Ok",
+                 TenantProvisionStepsEnum.ProvisionDatabase);
+            return;
+        }
         await SendNotificationProcessAsync(ProvisioningNotificationStatus.InProgress,
-            tenant.Slug,
-            tenant.Id,
-            "Creating isolated database...",
-            TenantProvisionStepsEnum.ProvisionDatabase);
+        tenant.Slug,
+        tenant.Id,
+        "Creating isolated database...",
+        TenantProvisionStepsEnum.ProvisionDatabase);
         var databaseName = $"Tenant_{tenant.Slug}_{tenant.Id:N}";
         var serverName = Environment.GetEnvironmentVariable("DB_SERVER") ?? "localhost";
         var adminUsername = Environment.GetEnvironmentVariable("DB_ADMIN_USER") ?? "sa";
@@ -314,12 +324,18 @@ public class TenantProvisioningService : ITenantProvisioningService
 
         try
         {
-            tenant.ProvisioningStatus = ProvisioningStatus.Ready;
-            tenant.Status = TenantStatus.Active;
-            tenant.ModifiedAt = DateTime.UtcNow;
+            var tenantEntity = await _dbContext.Tenants
+                     .Where(x => x.Id == tenant.Id)
+                 .FirstOrDefaultAsync(cancellation);
+            if (tenantEntity != null)
+            {
 
-            await _dbContext.SaveChangesAsync(cancellation);
+                tenantEntity.ProvisioningStatus = ProvisioningStatus.Ready;
+                tenantEntity.Status = TenantStatus.Active;
+                tenantEntity.ModifiedAt = DateTime.UtcNow;
 
+                await _dbContext.SaveChangesAsync(cancellation);
+            }
             _logger.LogInformation(
                 "Tenant {TenantId} ({Slug}) created successfully", tenant.Id, tenant.Slug);
 

@@ -1,4 +1,4 @@
-import { Component,  OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { NotificationDto, NotificationServiceProxy } from '@shared/service-proxies';
@@ -23,9 +23,8 @@ export class LastNotificationsComponent extends AppComponentBase implements OnIn
     private matDialog: MatDialog,
   ) {
     super();
-    notificationService.startConnection().then((result) => {
-      notificationService.onReceiveNotification((msg: NotificationDto) => this.recieveMessage(msg));
-    });
+    notificationService.startConnection();
+    notificationService.onRecieveMessage$.subscribe((msg: NotificationDto) => this.recieveMessage(msg));
   }
 
   ngOnInit() {
@@ -64,9 +63,8 @@ export class LastNotificationsComponent extends AppComponentBase implements OnIn
   }
 
   async openNotify(item: NotificationDto) {
-    const { NotificationInfoComponent } = await import(
-      '@app/panel/notifications/notification-info/notification-info.component'
-    );
+    const { NotificationInfoComponent } =
+      await import('@app/panel/notifications/notification-info/notification-info.component');
     this.matDialog
       .open(NotificationInfoComponent, {
         data: item,

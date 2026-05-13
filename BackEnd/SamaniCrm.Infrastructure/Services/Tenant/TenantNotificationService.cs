@@ -3,11 +3,6 @@ using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Infrastructure.Hubs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SamaniCrm.Infrastructure.Services.TenantService;
 

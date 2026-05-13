@@ -103,17 +103,15 @@ public class CreateTenantJobService : ICreateTenantJobService
             await Task.Delay(TimeSpan.FromSeconds(30));
             await _provisioningService.ProvisionCreateAdminUser(jobData, tenant.Id, cancellation);
         }
-        await Task.Delay(TimeSpan.FromSeconds(30));
 
 
         // Step : Provision Database (if isolated)
         if (pendingSteps.Contains(TenantProvisionStepsEnum.ProvisionDatabase))
         {
-            if (tenant.DatabaseStrategy == DatabaseStrategy.Isolated)
-            {
+           
                 await Task.Delay(TimeSpan.FromSeconds(30));
                 await _provisioningService.ProvisionIsolatedDatabaseAsync(tenant, cancellation);
-            }
+            
         }
         // Step : Run Migrations
         if (pendingSteps.Contains(TenantProvisionStepsEnum.RunMigrations))
