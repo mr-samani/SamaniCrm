@@ -2,6 +2,7 @@
 using SamaniCrm.Core.Shared.Interfaces.Tenant;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -19,13 +20,13 @@ public class Tenant : BaseEntity
     public string? LegalName { get; set; }
     public string? RegistrationNumber { get; set; }
     public string? TaxId { get; set; }
-    
+
     // Contact
     public string Email { get; set; } = string.Empty;
     public string? Phone { get; set; }
     public string? Mobile { get; set; }
     public string? Website { get; set; }
-    
+
     // Address
     public string Country { get; set; } = "Iran";
     public string City { get; set; } = string.Empty;
@@ -34,38 +35,36 @@ public class Tenant : BaseEntity
 
     public decimal? Latitude { get; set; }
     public decimal? Longitude { get; set; }
-    
+
     // Database Configuration
     public DatabaseStrategy DatabaseStrategy { get; set; } = DatabaseStrategy.Shared;
     public string? ConnectionString { get; set; }
     public string? DatabaseName { get; set; }
     public string? ServerName { get; set; }
-    
+
     // Branding
     public string? LogoUrl { get; set; }
     public string PrimaryColor { get; set; } = "#1976D2";
     public string SecondaryColor { get; set; } = "#424242";
     public string? FaviconUrl { get; set; }
-    
+
     // Subscription
     public string SubscriptionPlan { get; set; } = "Basic";
     public int MaxUsers { get; set; } = 10;
     public long MaxStorageMB { get; set; } = 1024;
     public long? MaxApiCallsPerMonth { get; set; }
     public long CurrentStorageMB { get; set; } = 0;
-    
+
     // Status
+    public ProvisioningStatus ProvisioningStatus { get; set; } = ProvisioningStatus.NotStarted;
     public TenantStatus Status { get; set; } = TenantStatus.Pending;
     public bool IsTrial { get; set; } = true;
     public DateTime? TrialEndsAt { get; set; }
     public DateTime? SubscriptionStartsAt { get; set; }
     public DateTime? SubscriptionEndsAt { get; set; }
-    
-    // Provisioning
-    public ProvisioningStatus ProvisioningStatus { get; set; } = ProvisioningStatus.NotStarted;
-    public List<ProvisioningStep>? ProvisioningSteps { get; set; }
-    public string? ProvisioningError { get; set; }
-    
+
+
+
     // Security
     public List<string>? AllowedIpAddresses { get; set; }
     public bool Require2FA { get; set; } = false;
@@ -87,13 +86,13 @@ public class Tenant : BaseEntity
 
 
     // Navigation
+    public virtual ICollection<TenantProvisioningStep>? ProvisioningSteps { get; set; }
     public virtual ICollection<TenantSetting> Settings { get; set; } = new List<TenantSetting>();
     public virtual ICollection<TenantDatabaseConnection> DatabaseConnections { get; set; } = new List<TenantDatabaseConnection>();
-    
+
     // Computed
     public bool IsActive => Status == TenantStatus.Active;
     public bool IsSuspended => Status == TenantStatus.Suspended;
     public bool IsTrialExpired => IsTrial && TrialEndsAt.HasValue && TrialEndsAt.Value < DateTime.UtcNow;
 
- 
 }

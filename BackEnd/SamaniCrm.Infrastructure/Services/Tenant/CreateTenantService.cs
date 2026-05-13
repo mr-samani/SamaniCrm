@@ -1,31 +1,24 @@
-﻿using Azure.Core;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Hangfire;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants;
 using SamaniCrm.Application.Features.Tenants.Commands;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
-using SamaniCrm.Application.User.Commands;
-using SamaniCrm.Core;
 using SamaniCrm.Core.Shared.Enums;
-using SamaniCrm.Domain.Constants;
 using SamaniCrm.Domain.Entities;
-using SamaniCrm.Infrastructure.Data;
-using System.Security.Cryptography;
+using SamaniCrm.Infrastructure.Jobs;
 using System.Text.Json;
 
 namespace SamaniCrm.Infrastructure.Services.TenantService;
 
+
 public class TenantService : ITenantService
 {
     private readonly IApplicationDbContext _dbContext;
-    private readonly ITenantProvisioningService _provisioningService;
     private readonly ICurrentUserService _currentUser;
-    private readonly ITenantNotificationService _notificationService;
     private readonly ILogger<CreateTenantCommandHandler> _logger;
-    private readonly IIdentityService _identityService;
+    private readonly IRecurringJobManagerV2 _JobManagerV2;
 
 
     public TenantService(IApplicationDbContext dbContext,
@@ -33,14 +26,13 @@ public class TenantService : ITenantService
         ICurrentUserService currentUser,
         ITenantNotificationService notificationService,
         ILogger<CreateTenantCommandHandler> logger,
-        IIdentityService identityService)
+        IIdentityService identityService,
+        IRecurringJobManagerV2 recurringJobManagerV2)
     {
         _dbContext = dbContext;
-        _provisioningService = provisioningService;
         _currentUser = currentUser;
-        _notificationService = notificationService;
         _logger = logger;
-        _identityService = identityService;
+        _JobManagerV2 = recurringJobManagerV2;
     }
 
 
@@ -53,12 +45,8 @@ public class TenantService : ITenantService
     /// <returns></returns>
     public async Task<CreateTenantResponse> CreateTenantAsync(CreateTenantCommand request, CancellationToken cancellation)
     {
-        // Start provisioning tracking
-        var provisioningSteps = GetInitialProvisioningSteps();
         try
         {
-            // Step 1: Create Tenant Entity
-            await _notificationService.SendProgressAsync(request.Slug, "Creating tenant entity...", 1, provisioningSteps, cancellation);
 
             var tenant = new Tenant
             {
@@ -87,7 +75,7 @@ public class TenantService : ITenantService
                 IsTrial = request.IsTrial,
                 TrialEndsAt = request.IsTrial ? DateTime.UtcNow.AddDays(request.TrialDays) : null,
                 Status = TenantStatus.Pending,
-                ProvisioningStatus = ProvisioningStatus.Creating,
+                ProvisioningStatus = ProvisioningStatus.NotStarted,
                 Require2FA = request.Require2FA,
                 SessionTimeoutMinutes = request.SessionTimeoutMinutes,
                 PasswordMinLength = request.PasswordMinLength,
@@ -100,85 +88,38 @@ public class TenantService : ITenantService
             await _dbContext.Tenants.AddAsync(tenant, cancellation);
             await _dbContext.SaveChangesAsync(cancellation);
 
-            // Step 2: Create Admin User
-            await _notificationService.SendProgressAsync(
-                request.Slug, "Creating admin user...", 2, provisioningSteps, cancellation);
 
 
-            var adminUser = new CreateUserCommand()
+            TenantJobProvisioningData jobData = new TenantJobProvisioningData()
             {
-                Email = request.AdminEmail.ToLowerInvariant(),
-                FirstName = request.AdminFirstName,
-                LastName = request.AdminLastName,
-                Password = request.AdminPassword,
-                UserName = request.AdminUserName,
-                PhoneNumber = request.AdminMobile,
-                Address = request.Address,
-                Lang = AppConsts.DefaultLanguage,
-                Roles = [Roles.TenantAdministrator],
+                TenantId = tenant.Id,
+                Slug = request.Slug,
+                AdminEmail = request.AdminEmail.ToLowerInvariant(),
+                AdminFirstName = request.AdminFirstName,
+                AdminLastName = request.AdminLastName,
+                AdminPassword = request.AdminPassword,
+                AdminUserName = request.AdminUserName,
+                AdminMobile = request.AdminMobile,
+                Address = request.Address ?? ""
             };
-            var createUserResult = await _identityService.CreateUserAsync(adminUser);
-            if (createUserResult.isSucceed == false)
-            {
-                throw new Exception("Can not Create AdminUser for tenant");
-            }
-            var adminUserId = createUserResult.userId;
-
-            // Step 3: Create Default Roles
 
 
 
-            // Step 4: Link Admin to Tenant
+            var serializedData = JsonSerializer.Serialize(jobData);
 
 
-            // Step 5: Provision Database (if isolated)
-            if (request.DatabaseStrategy == DatabaseStrategy.Isolated)
-            {
-                await _notificationService.SendProgressAsync(
-                    request.Slug, "Creating isolated database...", 4, provisioningSteps, cancellation);
+            //  Fire-and-Forget Job
+            var jobId = BackgroundJob.Enqueue<ICreateTenantJobService>(
+                job => job.ProvisioningTenantDependenciesAsync(serializedData, cancellation)
+            );
 
-                await _provisioningService.ProvisionIsolatedDatabaseAsync(tenant, cancellation);
-            }
 
-            // Step 6: Run Migrations
-            await _notificationService.SendProgressAsync(
-                request.Slug, "Running database migrations...", 5, provisioningSteps, cancellation);
 
-            await _provisioningService.RunMigrationsAsync(tenant, cancellation);
 
-            // Step 7: Seed Initial Data
-            await _notificationService.SendProgressAsync(
-                request.Slug, "Seeding initial data...", 6, provisioningSteps, cancellation);
-
-            await _provisioningService.SeedInitialDataAsync(tenant, cancellation);
-
-            // Step 8: Complete Provisioning
-            await _notificationService.SendProgressAsync(
-                request.Slug, "Finalizing setup...", 7, provisioningSteps, cancellation);
-
-            tenant.ProvisioningStatus = ProvisioningStatus.Ready;
-            tenant.Status = TenantStatus.Active;
-            tenant.ModifiedAt = DateTime.UtcNow;
-            tenant.ModifiedBy = _currentUser.UserId;
-
-            await _dbContext.SaveChangesAsync(cancellation);
-
-            // Send completion notification
-            await _notificationService.SendCompletionAsync(
-                request.Slug,
-                "Tenant created successfully!",
-                tenant.Id,
-                adminUserId,
-                cancellation);
-
-            _logger.LogInformation(
-                "Tenant {TenantId} ({Slug}) created successfully with admin {AdminId}",
-                tenant.Id, tenant.Slug, adminUserId);
 
             return new CreateTenantResponse
             {
                 TenantId = tenant.Id,
-                AdminUserId = adminUserId,
                 Slug = tenant.Slug,
                 Status = tenant.Status.ToString(),
                 ProvisioningStatus = tenant.ProvisioningStatus,
@@ -188,23 +129,6 @@ public class TenantService : ITenantService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error creating tenant {Slug}", request.Slug);
-
-            // Update provisioning status
-            var tenant = await _dbContext.Tenants
-                .FirstOrDefaultAsync(t => t.Slug == request.Slug, cancellation);
-
-            if (tenant != null)
-            {
-                tenant.ProvisioningStatus = ProvisioningStatus.Failed;
-                tenant.ProvisioningError = ex.Message;
-                await _dbContext.SaveChangesAsync(cancellation);
-            }
-
-            await _notificationService.SendErrorAsync(
-                request.Slug,
-                "Failed to create tenant: " + ex.Message,
-                cancellation);
-
             throw;
         }
 
@@ -235,61 +159,6 @@ public class TenantService : ITenantService
 
 
 
-
-
-
-
-
-    /*-------------------------------------------------------------------------------------------------------*/
-    private List<ProvisioningStep> GetInitialProvisioningSteps() => new()
-{
-    new() { Name = "CreateTenant", Description = "ایجاد موجودیت بهره‌بردار", Status = ProvisioningStepStatus.Pending },
-    new() { Name = "CreateAdminUser", Description = "ایجاد کاربر مدیر", Status = ProvisioningStepStatus.Pending },
-    new() { Name = "CreateRoles", Description = "ایجاد نقش‌های پیش‌فرض", Status = ProvisioningStepStatus.Pending },
-    new() { Name = "ProvisionDatabase", Description = "ایجاد دیتابیس", Status = ProvisioningStepStatus.Pending },
-    new() { Name = "RunMigrations", Description = "اجرای مایگریشن‌ها", Status = ProvisioningStepStatus.Pending },
-    new() { Name = "SeedData", Description = "بارگذاری داده‌های اولیه", Status = ProvisioningStepStatus.Pending },
-    new() { Name = "Finalize", Description = "تکمیل تنظیمات", Status = ProvisioningStepStatus.Pending }
-};
-
-    private Dictionary<string, bool> GetDefaultFeatureFlags() => new()
-    {
-        ["dashboard"] = true,
-        ["reports"] = true,
-        ["api_access"] = true,
-        ["sso"] = false,
-        ["audit_logs"] = true,
-        ["file_storage"] = true,
-        ["notifications"] = true
-    };
-
-    private string GetAllPermissions() => JsonSerializer.Serialize(new[]
-    {
-    "*" // All permissions
-});
-
-    private string GetAdminPermissions() => JsonSerializer.Serialize(new[]
-    {
-    "users.view", "users.create", "users.edit", "users.delete",
-    "roles.view", "roles.create", "roles.edit",
-    "settings.view", "settings.edit",
-    "reports.view", "reports.export",
-    "audit.view"
-});
-
-    private string GetBasicPermissions() => JsonSerializer.Serialize(new[]
-    {
-    "dashboard.view",
-    "profile.view", "profile.edit"
-});
-
-    private string GenerateSecureToken()
-    {
-        var bytes = new byte[32];
-        using var rng = RandomNumberGenerator.Create();
-        rng.GetBytes(bytes);
-        return Convert.ToBase64String(bytes).Replace("+", "-").Replace("/", "_");
-    }
 
     public async Task<bool> RetryProvisioning(Guid id, CancellationToken cancellation)
     {
@@ -327,4 +196,27 @@ public class TenantService : ITenantService
         //var result = await _dbContext.SaveChangesAsync(cancellation);
         //return result > 0;
     }
+
+
+
+
+
+
+
+
+    /*-------------------------------------------------------------------------------------------------------*/
+
+
+    private Dictionary<string, bool> GetDefaultFeatureFlags() => new()
+    {
+        ["dashboard"] = true,
+        ["reports"] = true,
+        ["api_access"] = true,
+        ["sso"] = false,
+        ["audit_logs"] = true,
+        ["file_storage"] = true,
+        ["notifications"] = true
+    };
+
+
 }

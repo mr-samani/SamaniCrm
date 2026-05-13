@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,21 +22,9 @@ public enum DatabaseStrategy
 public enum ProvisioningStatus
 {
     NotStarted = 0,
-    Creating = 1,
+    InProgress = 1,
     Ready = 2,
     Failed = 3
-}
-
-public class ProvisioningStep
-{
-    [Key]
-    public Guid Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public ProvisioningStepStatus Status { get; set; }
-    public string? ErrorMessage { get; set; }
-    public DateTime? StartedAt { get; set; }
-    public DateTime? CompletedAt { get; set; }
 }
 
 public enum ProvisioningStepStatus
@@ -63,3 +50,14 @@ public enum ProvisioningNotificationStatus
     Completed = 2,
     Failed = 3
 }
+
+
+public enum TenantProvisionStepsEnum
+{
+    CreateTenant,
+    CreateAdminUser,
+    ProvisionDatabase,
+    RunMigrations,
+    SeedData,
+    Finalize,
+};

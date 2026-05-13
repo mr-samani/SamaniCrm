@@ -25,17 +25,14 @@ public class TenantNotificationService : ITenantNotificationService
         _logger = logger;
     }
 
-    public async Task SendProgressAsync(string tenantSlug, string message, int step,
-        List<ProvisioningStep> steps, CancellationToken cancellation)
+    public async Task SendProgressAsync(string tenantSlug, string message, TenantProvisionStepsEnum step)
     {
         var notification = new ProvisioningNotification
         {
             TenantSlug = tenantSlug,
             Status = ProvisioningNotificationStatus.InProgress,
             CurrentStep = step,
-            TotalSteps = steps.Count,
             Message = message,
-            Steps = steps,
             Timestamp = DateTime.UtcNow
         };
 
@@ -43,20 +40,16 @@ public class TenantNotificationService : ITenantNotificationService
             .Group($"tenant-{tenantSlug}")
             .OnProgress(notification);
 
-        _logger.LogDebug("Sent progress notification for {TenantSlug}: Step {Step}/{Total}",
-            tenantSlug, step, steps.Count);
+        _logger.LogDebug("Sent progress notification for {TenantSlug}: Step {Step}", tenantSlug, step);
     }
 
-    public async Task SendCompletionAsync(string tenantSlug, string message,
-        Guid tenantId, Guid adminUserId, CancellationToken cancellation)
+    public async Task SendCompletionAsync(string tenantSlug, string message, TenantProvisionStepsEnum step)
     {
         var notification = new ProvisioningNotification
         {
             TenantSlug = tenantSlug,
             Status = ProvisioningNotificationStatus.Completed,
             Message = message,
-            TenantId = tenantId,
-            AdminUserId = adminUserId,
             Timestamp = DateTime.UtcNow
         };
 
@@ -67,8 +60,7 @@ public class TenantNotificationService : ITenantNotificationService
         _logger.LogInformation("Sent completion notification for {TenantSlug}", tenantSlug);
     }
 
-    public async Task SendErrorAsync(string tenantSlug, string errorMessage,
-        CancellationToken cancellation)
+    public async Task SendErrorAsync(string tenantSlug, string errorMessage, TenantProvisionStepsEnum step)
     {
         var notification = new ProvisioningNotification
         {

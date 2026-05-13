@@ -32,7 +32,7 @@ namespace SamaniCrm.Infrastructure
         public DbSet<TenantSetting> TenantSettings { get; set; }
         public DbSet<TenantDatabaseConnection> TenantDatabaseConnections { get; set; }
         public DbSet<TenantCategory> TenantCategories { get; set; }
-        public DbSet<ProvisioningStep> ProvisioningSteps { get; set; }
+        public DbSet<TenantProvisioningStep> TenantProvisioningSteps { get; set; }
 
 
 

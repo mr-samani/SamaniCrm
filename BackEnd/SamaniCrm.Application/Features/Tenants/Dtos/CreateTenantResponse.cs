@@ -5,7 +5,6 @@ namespace SamaniCrm.Application.Features.Tenants;
 public class CreateTenantResponse
 {
     public Guid TenantId { get; set; }
-    public Guid AdminUserId { get; set; }
     public string Slug { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
     public ProvisioningStatus ProvisioningStatus { get; set; }

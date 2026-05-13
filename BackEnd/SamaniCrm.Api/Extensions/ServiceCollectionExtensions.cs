@@ -292,8 +292,10 @@ public static class ServiceCollectionExtensions
 
 
         services.AddScoped<ISecuritySettingService, SecuritySettingService>();
-        services.AddScoped<ILoginJobsService, LoginJobsService>();
 
+        // Jobs
+        services.AddScoped<ILoginJobsService, LoginJobsService>();
+        services.AddScoped<ICreateTenantJobService, CreateTenantJobService>();
 
         //چون حافظه ایه Singleton باشه بهتره.
         services.AddSingleton<ICaptchaStore, InMemoryCaptchaStore>();
