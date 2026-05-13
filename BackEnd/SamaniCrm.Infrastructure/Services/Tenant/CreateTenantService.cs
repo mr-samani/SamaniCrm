@@ -10,6 +10,7 @@ using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Application.User.Commands;
 using SamaniCrm.Core;
 using SamaniCrm.Core.Shared.Enums;
+using SamaniCrm.Domain.Constants;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.Data;
 using System.Security.Cryptography;
@@ -114,7 +115,7 @@ public class TenantService : ITenantService
                 PhoneNumber = request.AdminMobile,
                 Address = request.Address,
                 Lang = AppConsts.DefaultLanguage,
-                Roles = ["admin"],
+                Roles = [Roles.TenantAdministrator],
             };
             var createUserResult = await _identityService.CreateUserAsync(adminUser);
             if (createUserResult.isSucceed == false)
@@ -124,8 +125,6 @@ public class TenantService : ITenantService
             var adminUserId = createUserResult.userId;
 
             // Step 3: Create Default Roles
-            await _notificationService.SendProgressAsync(
-                request.Slug, "Creating default roles...", 3, provisioningSteps, cancellation);
 
 
 

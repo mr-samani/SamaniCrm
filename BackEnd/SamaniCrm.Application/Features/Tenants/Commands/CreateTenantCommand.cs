@@ -59,8 +59,8 @@ public class CreateTenantCommand : IRequest<CreateTenantResponse>
     [StringLength(20)]
     public string? PostalCode { get; set; }
 
-    public decimal? Latitude { get; set; }
-    public decimal? Longitude { get; set; }
+    public decimal? Latitude { get; set; } = default!;
+    public decimal? Longitude { get; set; } = default!;
 
     public DatabaseStrategy DatabaseStrategy { get; set; } = DatabaseStrategy.Shared;
 
@@ -77,7 +77,7 @@ public class CreateTenantCommand : IRequest<CreateTenantResponse>
     [EmailAddress]
     public string AdminEmail { get; set; } = string.Empty;
     [Required]
-    [StringLength(100, MinimumLength = 8)]
+    [StringLength(100, MinimumLength = 3)]
     public string AdminUserName { get; set; } = string.Empty;
     [Required]
     [StringLength(100, MinimumLength = 8)]

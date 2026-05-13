@@ -8,6 +8,9 @@ namespace SamaniCrm.Domain.Constants
 {
     public abstract class Roles
     {
+        // SuserAdmin
         public const string Administrator = nameof(Administrator);
+        // Tenant admin
+        public const string TenantAdministrator = nameof(TenantAdministrator);
     }
 }

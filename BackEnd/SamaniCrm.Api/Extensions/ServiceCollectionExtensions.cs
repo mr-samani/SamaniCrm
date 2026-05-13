@@ -275,7 +275,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddHttpContextAccessor();
         services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
-        services.AddScoped<IUnitOfWork,UnitOfWork>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
         services.AddScoped<ITokenGenerator, TokenGenerator>();
         services.AddScoped<ITwoFactorService, TwoFactorService>();

@@ -130,6 +130,13 @@
     color: #7539ff;
   }
 }
+
+button.btn:has(mat-spinner) {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
 /** end of  button */
 /* table*/
 .table:not(.tbl-bordered) {

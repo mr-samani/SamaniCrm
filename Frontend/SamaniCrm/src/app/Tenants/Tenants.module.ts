@@ -1,3 +1,8 @@
+import { TenantAdminUserComponent } from './create-tenant/tenant-admin-user/tenant-admin-user.component';
+import { TenantSettingsComponent } from './create-tenant/tenant-settings/tenant-settings.component';
+import { TenantAddressComponent } from './create-tenant/tenant-address/tenant-address.component';
+import { TenantInfoComponent } from './create-tenant/tenant-info/tenant-info.component';
+import { CreateTenantComponent } from './create-tenant/create-tenant.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TenantsComponent } from './Tenants.component';
@@ -14,9 +19,17 @@ import { SharedModule } from '@shared/shared.module';
 import { TenantsServiceProxy } from '@shared/service-proxies/api/tenants.service';
 import { UserServiceProxy } from '@shared/service-proxies/api/user.service';
 import { TenantsRoutingModule } from './Tenants-routing.module';
+import { NgxInputColorModule } from 'ngx-input-color';
 
 @NgModule({
-  declarations: [TenantsComponent],
+  declarations: [
+    TenantsComponent,
+    CreateTenantComponent,
+    TenantInfoComponent,
+    TenantAddressComponent,
+    TenantSettingsComponent,
+    TenantAdminUserComponent,
+  ],
   imports: [
     CommonModule,
     TenantsRoutingModule,
@@ -31,6 +44,7 @@ import { TenantsRoutingModule } from './Tenants-routing.module';
     TabGroupModule,
     SharedModule,
     PasswordInputComponent,
+    NgxInputColorModule,
   ],
   providers: [TenantsServiceProxy, UserServiceProxy],
 })

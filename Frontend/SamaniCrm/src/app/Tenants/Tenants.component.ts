@@ -28,7 +28,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit, OnDest
     { column: 'name', title: this.l('Name') },
     { column: 'slug', title: this.l('Slug') },
     { column: 'userCount', title: this.l('userCount'), type: 'number' },
-    { column: 'status', title: this.l('Status'), type: 'enum' },
+    { column: 'status', title: this.l('Status'), type: 'localize', localizeKey: 'TenantStatus_' },
     { column: 'createdAt', title: this.l('CreationTime'), type: 'dateTime' },
   ];
 
@@ -42,9 +42,7 @@ export class TenantsComponent extends AppComponentBase implements OnInit, OnDest
     private matDialog: MatDialog,
   ) {
     super();
-    this.breadcrumb.list = [
-      { name: this.l('Tenants'), url: '/panel/tenants' },
-    ];
+    this.breadcrumb.list = [{ name: this.l('Tenants'), url: '/panel/tenants' }];
     this.form = this.fb.group({
       filter: [''],
     });

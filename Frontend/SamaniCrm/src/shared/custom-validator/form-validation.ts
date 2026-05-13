@@ -57,7 +57,7 @@ export abstract class CustomValidators {
    * use invalid
    * @param control
    */
-  static checkMobileNumber(control: AbstractControl) {
+  static mobile(control: AbstractControl) {
     if (!control.value) return null;
     let mobileNumber = ConvertNumbersToLatin.fixNumbers(control.value.toString());
     let isNumber = /^\d{11}$/.test(mobileNumber);
@@ -128,7 +128,7 @@ export abstract class CustomValidators {
 
   /**
    * بررسی حروف فارسی
-   * use pattern
+   * use invalid
    * @param control
    */
   static checkPersianCharacters(control: AbstractControl) {
@@ -136,12 +136,12 @@ export abstract class CustomValidators {
     let word = control.value;
     let isValid = /^([\u0600-\u06FF]+\s*)+$/.test(word);
     if (isValid) return null;
-    else return { pattern: true };
+    else return { invalid: true };
   }
 
   /**
    * بررسی حروف انگلیسی
-   * use pattern
+   * use invalid
    * @param control
    */
   static checkEnglishCharacters(control: AbstractControl) {
@@ -149,12 +149,12 @@ export abstract class CustomValidators {
     let word = control.value;
     let isValid = /^([a-zA-Z]+\s*)+$/.test(word);
     if (isValid) return null;
-    else return { pattern: true };
+    else return { invalid: true };
   }
   /**
    * بررسی حروف انگلیسی و اعداد
    * با عدد شروع نشود
-   *  use pattern
+   *  use invalid
    * @param control
    */
   static globalVariable(control: AbstractControl) {
@@ -162,12 +162,12 @@ export abstract class CustomValidators {
     let word = control.value;
     let isValid = /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(word);
     if (isValid) return null;
-    else return { pattern: true };
+    else return { invalid: true };
   }
 
   /**
    * بررسی حروف انگلیسی و اعداد
-   * use pattern
+   * use invalid
    * @param control
    */
   static checkEnglishAndNumberCharacters(control: AbstractControl) {
@@ -175,7 +175,7 @@ export abstract class CustomValidators {
     let word = control.value;
     let isValid = /^[a-zA-Z0-9-_]*$/.test(word);
     if (isValid) return null;
-    else return { pattern: true };
+    else return { invalid: true };
   }
 
   /**
@@ -194,34 +194,34 @@ export abstract class CustomValidators {
   /**
    * بررسی تلفن ثابت به همراه کد
    * 0xxxxxxxxxx
-   * use pattern
+   * use invalid
    * @param control
    */
-  static checkPhoneNumber(control: AbstractControl) {
+  static phone(control: AbstractControl) {
     if (!control.value) return null;
     let word = ConvertNumbersToLatin.fixNumbers(control.value.toString());
     let isValid = /^((?:0)[0-9]{10})$/.test(word);
     if (isValid) return null;
-    else return { pattern: true };
+    else return { invalid: true };
   }
 
   /**
    * بررسی صحیت ایمیل
    * a@b.c
-   * use pattern
+   * use invalid
    * @param control
    */
-  static checkEmail(control: AbstractControl) {
+  static email(control: AbstractControl) {
     if (!control.value) return null;
     let word = control.value;
     let isValid = /^[\w-.]+@([\w-]+\.)+[\w-]+$/.test(word); // /^.+@.+\..+$/.test(word);
     if (isValid) return null;
-    else return { pattern: true };
+    else return { invalid: true };
   }
 
   /**
    * بررسی کاراکترهای عددی
-   * use pattern
+   * use invalid
    * @param control
    */
   static checkNumberCharacters(control: AbstractControl) {
@@ -230,7 +230,7 @@ export abstract class CustomValidators {
 
     let isValid = /^-?(0|[1-9]\d*)?$/.test(word);
     if (isValid) return null;
-    else return { pattern: true };
+    else return { invalid: true };
   }
 
   /**
