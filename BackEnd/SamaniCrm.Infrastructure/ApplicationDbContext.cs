@@ -16,7 +16,7 @@ namespace SamaniCrm.Infrastructure
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>, IApplicationDbContext
     {
         private readonly ICurrentUserService _currentUser;
-        private readonly Guid? _tenantId;
+        private readonly Guid? _tenantId = null;
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
             ICurrentUserService currentUserService) : base(options)

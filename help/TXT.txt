@@ -1,0 +1,86 @@
+# نصب داکر 
+sudo apt install docker.io docker-compose
+
+# ساخت پوشه روی درایو a1
+sudo mkdir -p /mnt/a1/DockerData/mssql
+
+# دادن دسترسی
+sudo chmod 777 /mnt/a1/DockerData/mssql
+
+
+
+
+
+راه اندازی sqlserver روی داکر 
+
+
+docker run -e "ACCEPT_EULA=Y"      -e "SA_PASSWORD=sa@123456"      -p 1433:1433      --name sqlserver      --restart always      -v /mnt/a1/DockerData/mssql:/var/opt/mssql      -d docker.devneeds.ir/mssql/server:2022-latest
+Unable to find image 'docker.devneeds.ir/mssql/server:2022-latest' locally
+
+
+
+
+# دیدن کانتینرها
+docker ps -a
+
+# دیدن لاگ‌ها
+docker logs sqlserver
+
+# بررسی اینکه درایو a1 فایل‌ها ساخته شده
+ls -la /mnt/a1/DockerData/mssql/
+
+# مدیریت کانتینر ها 
+# توقف
+docker stop sqlserver
+
+# اجرا
+docker start sqlserver
+
+# ری‌استارت
+docker restart sqlserver
+
+# حذف (داده‌ها پاک نمی‌شوند چون روی درایو a1 هستند)
+docker rm sqlserver
+
+
+# 📝 اتصال به SQL Server
+
+Server:   localhost,1433
+User:     sa
+Password: sa@123456
+
+# 💡 تست اتصال
+
+docker exec -it sqlserver /opt/mssql-tools18/bin/sqlcmd \
+   -S localhost -U sa -P "sa@123456" \
+   -Q "SELECT @@VERSION"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_______________________________
+docker pull kurthunter/sqlserver:v2
+
+docker run -e "ACCEPT_EULA=Y" \
+  -p 1433:1433 \
+  --name sqlserver \
+  --restart always \
+  -v /mnt/a1/DockerData/mssql:/var/opt/mssql \
+  -d kurthunter/sqlserver:v2
+
+
+    "DefaultConnection": "Server=127.0.0.1,1433;Initial Catalog=SamaniCrm2;Persist Security Info=True;User ID=sa;Password=paanssy1234$;Encrypt=false;MultipleActiveResultSets=true;TrustServerCertificate=True"
+
