@@ -1,2 +1,26 @@
-<p>provisioning-tenant works!</p>Angular is running in development mode.
- 
+<p>provisioning-tenant works!</p>
+Angular is running in development mode.
+@if (signalRService.connecting) {
+  <mat-spinner></mat-spinner>
+}
+
+<div class="list-container">
+  @for (item of steps; track $index) {
+    <div class="list-item">
+      <span>{{ 'TenantProvisionStepsEnum_' + item.name | translate }}</span>
+      <span [title]="'ProvisioningStepStatus_' + item.status | translate" class="status">
+        @switch (item.status) {
+          @case (ProvisioningStepStatus.Pending) {
+            <i class="fa fa-circle-stop"></i>
+          }
+          @case (ProvisioningStepStatus.InProgress) {
+            <i class="fa fa-hourglass-clock"></i>
+          }
+          @case (ProvisioningStepStatus.Completed) {
+            <i class="fa fa-circle-check"></i>
+          }
+        }
+      </span>
+    </div>
+  }
+</div>

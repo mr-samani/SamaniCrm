@@ -130,7 +130,7 @@ public class TenantProvisioningService : ITenantProvisioningService
 
     public async Task ProvisionCreateAdminUser(TenantJobProvisioningData request, Guid tenantId, CancellationToken cancellation)
     {
-        await SendNotificationProcessAsync(ProvisioningNotificationStatus.InProgress,
+        await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress,
             request.Slug,
             tenantId,
             "Creating admin user...",
@@ -151,7 +151,7 @@ public class TenantProvisioningService : ITenantProvisioningService
         var createUserResult = await _identityService.CreateUserAsync(adminUser);
         if (createUserResult.isSucceed == false)
         {
-            await SendNotificationProcessAsync(ProvisioningNotificationStatus.Failed,
+            await SendNotificationProcessAsync(ProvisioningStepStatus.Failed,
              request.Slug,
             tenantId,
              "Can not create tenant admin user.",
@@ -159,7 +159,7 @@ public class TenantProvisioningService : ITenantProvisioningService
         }
         else
         {
-            await SendNotificationProcessAsync(ProvisioningNotificationStatus.Completed,
+            await SendNotificationProcessAsync(ProvisioningStepStatus.Completed,
            request.Slug,
             tenantId,
            "Created admin user",
@@ -174,14 +174,14 @@ public class TenantProvisioningService : ITenantProvisioningService
     {
         if (tenant.DatabaseStrategy == DatabaseStrategy.Isolated)
         {
-            await SendNotificationProcessAsync(ProvisioningNotificationStatus.Completed,
+            await SendNotificationProcessAsync(ProvisioningStepStatus.Completed,
                  tenant.Slug,
           tenant.Id,
                  "Check Database Ok",
                  TenantProvisionStepsEnum.ProvisionDatabase);
             return;
         }
-        await SendNotificationProcessAsync(ProvisioningNotificationStatus.InProgress,
+        await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress,
         tenant.Slug,
         tenant.Id,
         "Creating isolated database...",
@@ -229,7 +229,7 @@ public class TenantProvisioningService : ITenantProvisioningService
 
             _logger.LogInformation("Database {DatabaseName} created for tenant {TenantId}",
                 databaseName, tenant.Id);
-            await SendNotificationProcessAsync(ProvisioningNotificationStatus.Completed,
+            await SendNotificationProcessAsync(ProvisioningStepStatus.Completed,
                    tenant.Slug,
             tenant.Id,
                    "Created isolated database",
@@ -238,7 +238,7 @@ public class TenantProvisioningService : ITenantProvisioningService
         catch (Exception ex)
         {
             _logger.LogInformation("Error on Create Database {DatabaseName} for tenant {TenantId}", databaseName, tenant.Id);
-            await SendNotificationProcessAsync(ProvisioningNotificationStatus.Failed,
+            await SendNotificationProcessAsync(ProvisioningStepStatus.Failed,
                        tenant.Slug,
             tenant.Id,
                       ex.Message,
@@ -248,7 +248,7 @@ public class TenantProvisioningService : ITenantProvisioningService
 
     public async Task RunMigrationsAsync(Tenant tenant, CancellationToken cancellation)
     {
-        await SendNotificationProcessAsync(ProvisioningNotificationStatus.InProgress,
+        await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress,
                  tenant.Slug,
             tenant.Id,
                  "Running database migrations...",
@@ -265,7 +265,7 @@ public class TenantProvisioningService : ITenantProvisioningService
                 // For shared database, migrations are handled by EF Core automatically
                 await _dbContext.Database.MigrateAsync(cancellation);
             }
-            await SendNotificationProcessAsync(ProvisioningNotificationStatus.Completed,
+            await SendNotificationProcessAsync(ProvisioningStepStatus.Completed,
                 tenant.Slug,
             tenant.Id,
                 "Complete Runn database migrations",
@@ -273,7 +273,7 @@ public class TenantProvisioningService : ITenantProvisioningService
         }
         catch (Exception ex)
         {
-            await SendNotificationProcessAsync(ProvisioningNotificationStatus.Failed,
+            await SendNotificationProcessAsync(ProvisioningStepStatus.Failed,
                tenant.Slug,
             tenant.Id,
               ex.Message,
@@ -285,7 +285,7 @@ public class TenantProvisioningService : ITenantProvisioningService
 
     public async Task SeedInitialDataAsync(Tenant tenant, CancellationToken cancellation)
     {
-        await SendNotificationProcessAsync(ProvisioningNotificationStatus.InProgress,
+        await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress,
               tenant.Slug,
             tenant.Id,
              "Seeding initial data...",
@@ -297,7 +297,7 @@ public class TenantProvisioningService : ITenantProvisioningService
             {
                 await seeder.SeedAsync(tenant, cancellation);
             }
-            await SendNotificationProcessAsync(ProvisioningNotificationStatus.Completed,
+            await SendNotificationProcessAsync(ProvisioningStepStatus.Completed,
               tenant.Slug,
             tenant.Id,
              "Complete seed database",
@@ -305,7 +305,7 @@ public class TenantProvisioningService : ITenantProvisioningService
         }
         catch (Exception ex)
         {
-            await SendNotificationProcessAsync(ProvisioningNotificationStatus.Failed,
+            await SendNotificationProcessAsync(ProvisioningStepStatus.Failed,
                tenant.Slug,
             tenant.Id,
               ex.Message,
@@ -316,7 +316,7 @@ public class TenantProvisioningService : ITenantProvisioningService
 
     public async Task FinalizeAsync(Tenant tenant, CancellationToken cancellation)
     {
-        await SendNotificationProcessAsync(ProvisioningNotificationStatus.InProgress,
+        await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress,
               tenant.Slug,
             tenant.Id,
              "Finalizing create tenant ...",
@@ -339,7 +339,7 @@ public class TenantProvisioningService : ITenantProvisioningService
             _logger.LogInformation(
                 "Tenant {TenantId} ({Slug}) created successfully", tenant.Id, tenant.Slug);
 
-            await SendNotificationProcessAsync(ProvisioningNotificationStatus.Completed,
+            await SendNotificationProcessAsync(ProvisioningStepStatus.Completed,
               tenant.Slug,
             tenant.Id,
              "Create tenant and activation successfully",
@@ -347,7 +347,7 @@ public class TenantProvisioningService : ITenantProvisioningService
         }
         catch (Exception ex)
         {
-            await SendNotificationProcessAsync(ProvisioningNotificationStatus.Failed,
+            await SendNotificationProcessAsync(ProvisioningStepStatus.Failed,
                tenant.Slug,
             tenant.Id,
               ex.Message,
@@ -376,7 +376,7 @@ public class TenantProvisioningService : ITenantProvisioningService
                .FirstOrDefaultAsync();
         switch (status)
         {
-            case ProvisioningNotificationStatus.InProgress:
+            case ProvisioningStepStatus.InProgress:
                 await _notificationService.SendProgressAsync(tenantSlug, message, step);
                 if (stepEntity != null)
                 {
@@ -386,7 +386,7 @@ public class TenantProvisioningService : ITenantProvisioningService
                     await _dbContext.SaveChangesAsync();
                 }
                 break;
-            case ProvisioningNotificationStatus.Failed:
+            case ProvisioningStepStatus.Failed:
                 await _notificationService.SendErrorAsync(tenantSlug, message, step);
                 if (stepEntity != null)
                 {
@@ -395,7 +395,7 @@ public class TenantProvisioningService : ITenantProvisioningService
                     await _dbContext.SaveChangesAsync();
                 }
                 break;
-            case ProvisioningNotificationStatus.Completed:
+            case ProvisioningStepStatus.Completed:
                 await _notificationService.SendCompletionAsync(tenantSlug, message, step);
                 if (stepEntity != null)
                 {

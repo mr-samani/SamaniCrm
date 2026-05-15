@@ -3,6 +3,14 @@ import { AppComponentBase } from '@app/app-component-base';
 import { HubConnection } from '@microsoft/signalr';
 import { AppConst } from '@shared/app-const';
 import { SignalRService } from '@shared/services/signalr.service';
+import {
+  ProvisioningNotification,
+  ProvisioningStepStatus,
+  TenantProvisionStepsEnum,
+} from './provisioning-notification';
+import { TenantsServiceProxy } from '@shared/service-proxies/api/tenants.service';
+import { finalize } from 'rxjs';
+import { result } from 'lodash-es';
 
 @Component({
   selector: 'app-provisioning-tenant',
@@ -14,13 +22,33 @@ export class ProvisioningTenantComponent extends AppComponentBase implements OnI
   hubConnection?: HubConnection;
   tenantId: string;
   tenantSlug: string;
-  constructor(private signalRService: SignalRService) {
+
+  loading = false;
+
+  steps = [
+    { name: TenantProvisionStepsEnum.CreateTenant, status: ProvisioningStepStatus.Pending },
+    { name: TenantProvisionStepsEnum.CreateAdminUser, status: ProvisioningStepStatus.Pending },
+    { name: TenantProvisionStepsEnum.ProvisionDatabase, status: ProvisioningStepStatus.Pending },
+    { name: TenantProvisionStepsEnum.RunMigrations, status: ProvisioningStepStatus.Pending },
+    { name: TenantProvisionStepsEnum.SeedData, status: ProvisioningStepStatus.Pending },
+    { name: TenantProvisionStepsEnum.Finalize, status: ProvisioningStepStatus.Pending },
+  ];
+  constructor(
+    public signalRService: SignalRService,
+
+    private tenantService: TenantsServiceProxy,
+  ) {
     super();
     this.tenantId = this.route.snapshot.params['tenantId'];
     this.tenantSlug = this.route.snapshot.params['tenantSlug'];
   }
+  public get ProvisioningStepStatus(): typeof ProvisioningStepStatus {
+    return ProvisioningStepStatus;
+  }
 
   ngOnInit() {
+    this.getProvisioningStatuses();
+
     const uri = AppConst.apiUrl + '/hubs/provisioning';
 
     this.signalRService.init(uri, (connection: HubConnection) => {
@@ -40,6 +68,18 @@ export class ProvisioningTenantComponent extends AppComponentBase implements OnI
       this.leaveTenantGroup();
       this.hubConnection.stop();
     }
+  }
+
+  getProvisioningStatuses() {
+    this.loading = true;
+    this.tenantService
+      .getProvisioningTenantStatus(this.tenantId)
+      .pipe(finalize(() => (this.loading = false)))
+
+      .subscribe((result) => {
+        this.steps = result.data ?? [] as any;
+
+      });
   }
 
   // ✅ عضویت در گروه
@@ -75,26 +115,26 @@ export class ProvisioningTenantComponent extends AppComponentBase implements OnI
     if (!this.hubConnection) return;
 
     // Event برای پیشرفت
-    this.hubConnection.on('OnProgress', (notification: any) => {
+    this.hubConnection.on('OnProgress', (notification: ProvisioningNotification) => {
       console.log('📊 Progress:', notification);
       this.handleNotification(notification);
     });
 
     // Event برای تکمیل
-    this.hubConnection.on('OnCompleted', (notification: any) => {
+    this.hubConnection.on('OnCompleted', (notification: ProvisioningNotification) => {
       console.log('✅ Completed:', notification);
       this.handleNotification(notification);
     });
 
     // Event برای خطا
-    this.hubConnection.on('OnError', (notification: any) => {
+    this.hubConnection.on('OnError', (notification: ProvisioningNotification) => {
       console.log('❌ Error:', notification);
       this.handleNotification(notification);
     });
   }
 
   // ✅ پردازش نوتیفیکیشن
-  private handleNotification(notification: any): void {
+  private handleNotification(notification: ProvisioningNotification): void {
     console.log('Tenant:', notification.tenantSlug);
     console.log('Status:', notification.status);
     console.log('Step:', notification.currentStep);

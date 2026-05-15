@@ -33,7 +33,6 @@ public enum ProvisioningStepStatus
     InProgress = 1,
     Completed = 2,
     Failed = 3,
-    Skipped = 4
 }
 
 
@@ -44,12 +43,7 @@ public enum TenantSettingValueType
     Boolean,
     JSON
 }
-public enum ProvisioningNotificationStatus
-{
-    InProgress = 1,
-    Completed = 2,
-    Failed = 3
-}
+ 
 
 
 public enum TenantProvisionStepsEnum

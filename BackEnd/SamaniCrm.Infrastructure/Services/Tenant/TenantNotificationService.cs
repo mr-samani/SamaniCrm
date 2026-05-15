@@ -25,7 +25,7 @@ public class TenantNotificationService : ITenantNotificationService
         var notification = new ProvisioningNotification
         {
             TenantSlug = tenantSlug,
-            Status = ProvisioningNotificationStatus.InProgress,
+            Status = ProvisioningStepStatus.InProgress,
             CurrentStep = step,
             Message = message,
             Timestamp = DateTime.UtcNow
@@ -43,7 +43,7 @@ public class TenantNotificationService : ITenantNotificationService
         var notification = new ProvisioningNotification
         {
             TenantSlug = tenantSlug,
-            Status = ProvisioningNotificationStatus.Completed,
+            Status = ProvisioningStepStatus.Completed,
             Message = message,
             Timestamp = DateTime.UtcNow
         };
@@ -60,7 +60,7 @@ public class TenantNotificationService : ITenantNotificationService
         var notification = new ProvisioningNotification
         {
             TenantSlug = tenantSlug,
-            Status = ProvisioningNotificationStatus.Failed,
+            Status = ProvisioningStepStatus.Failed,
             Message = errorMessage,
             Timestamp = DateTime.UtcNow
         };

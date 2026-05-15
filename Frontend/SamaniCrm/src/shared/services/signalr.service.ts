@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, OnDestroy } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { HubConnection } from '@microsoft/signalr';
 import { TokenService } from './token.service';
@@ -6,13 +6,21 @@ import { TokenService } from './token.service';
 @Injectable({
   providedIn: 'root',
 })
-export class SignalRService {
-  constructor(private tokenService: TokenService) {
+export class SignalRService implements OnDestroy {
+  connecting = false;
+  hubConnection?: HubConnection;
+  constructor(private tokenService: TokenService) {}
+
+  ngOnDestroy(): void {
+    if (this.hubConnection) {
+      this.hubConnection.stop();
+    }
   }
 
   init(signalRUri: string, callback?: any) {
+    this.connecting = true;
     const token = this.tokenService.get();
-    let connection = new signalR.HubConnectionBuilder()
+    this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(signalRUri, {
         transport: signalR.HttpTransportType.WebSockets,
         withCredentials: true,
@@ -23,15 +31,17 @@ export class SignalRService {
       .withAutomaticReconnect()
       .build();
 
-    connection.start().then((result) => {
-      console.log('✅ SignalR connected via WebSocket');
+    this.hubConnection.start().then((result) => {
+      this.connecting = false;
+      console.log('✅ SignalR connected via WebSocket', signalRUri);
       // abp.event.trigger('abp.signalr.connected');
       if (callback) {
-        callback(connection);
+        callback(this.hubConnection);
       }
     });
 
-    connection.onclose((e) => {
+    this.hubConnection.onclose((e) => {
+      this.connecting = false;
       if (e) {
         console.error('❌ SignalR connection error:', e);
         // abp.log.debug('Chat connection closed with error: ' + e);
