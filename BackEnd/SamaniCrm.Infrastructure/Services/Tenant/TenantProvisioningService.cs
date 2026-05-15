@@ -369,7 +369,7 @@ public class TenantProvisioningService : ITenantProvisioningService
 
 
     private async Task SendNotificationProcessAsync(
-        ProvisioningNotificationStatus status, string tenantSlug, Guid tenantId, string message, TenantProvisionStepsEnum step)
+        ProvisioningStepStatus status, string tenantSlug, Guid tenantId, string message, TenantProvisionStepsEnum step)
     {
         var stepEntity = await _dbContext.TenantProvisioningSteps
                .Where(x => x.TenantId == tenantId && x.Name == step.ToString())

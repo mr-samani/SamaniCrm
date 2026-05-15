@@ -16,6 +16,7 @@ public class TenantProvisioningStep
     [MaxLength(500)]
     public string Description { get; set; } = string.Empty;
     public ProvisioningStepStatus Status { get; set; } = ProvisioningStepStatus.Pending;
+    [MaxLength(2000)]
     public string? ErrorMessage { get; set; }
     public DateTime? StartedAt { get; set; }
     public DateTime? CompletedAt { get; set; }

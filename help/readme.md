@@ -23,3 +23,17 @@ https://console.cloud.google.com/auth/clients?project=mr-samani&hl=fa
 
 
 https://localhost:5753/account/external/google
+
+
+
+# instal dotnet runtime in linux 
+
+```
+        sudo apt-get install -y dotnet-runtime-10.0
+
+
+    dotnet --list-runtimes
+
+    dotnet --list-sdks
+```
+

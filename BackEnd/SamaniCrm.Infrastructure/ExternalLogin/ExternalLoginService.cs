@@ -160,7 +160,7 @@ public class ExternalLoginService : IExternalLoginService
     }
 
     // Validate ID Token (basic validation - in production use proper JWT library)
-    private Dictionary<string, object> ValidateIdToken(string idToken, ExternalProvider provider)
+    private Dictionary<string, object>? ValidateIdToken(string idToken, ExternalProvider provider)
     {
         try
         {
