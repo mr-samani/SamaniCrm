@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -17,15 +17,15 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { BooleanApiResponse } from '../model/boolean-api-response';
+import { ApiResponseOfCreateOrUpdateExternalProviderDto } from '../model/api-response-of-create-or-update-external-provider-dto';
+// @ts-ignore
+import { ApiResponseOfGuid } from '../model/api-response-of-guid';
+// @ts-ignore
+import { ApiResponseOfListOfExternalProviderDto } from '../model/api-response-of-list-of-external-provider-dto';
+// @ts-ignore
+import { ApiResponseOfboolean } from '../model/api-response-ofboolean';
 // @ts-ignore
 import { CreateExternalProviderCommand } from '../model/create-external-provider-command';
-// @ts-ignore
-import { CreateOrUpdateExternalProviderDtoApiResponse } from '../model/create-or-update-external-provider-dto-api-response';
-// @ts-ignore
-import { ExternalProviderDtoListApiResponse } from '../model/external-provider-dto-list-api-response';
-// @ts-ignore
-import { GuidApiResponse } from '../model/guid-api-response';
 // @ts-ignore
 import { UpdateExternalProviderCommand } from '../model/update-external-provider-command';
 
@@ -48,9 +48,9 @@ export class ExternalProvidersServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public _delete(id?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<BooleanApiResponse>;
-    public _delete(id?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BooleanApiResponse>>;
-    public _delete(id?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BooleanApiResponse>>;
+    public _delete(id?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfboolean>;
+    public _delete(id?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfboolean>>;
+    public _delete(id?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfboolean>>;
     public _delete(id?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -58,9 +58,6 @@ export class ExternalProvidersServiceProxy extends BaseService {
           <any>id, 'id');
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -88,7 +85,7 @@ export class ExternalProvidersServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/ExternalProviders/DeleteExternalProvider`;
-        return this.httpClient.request<BooleanApiResponse>('delete', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfboolean>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -108,9 +105,9 @@ export class ExternalProvidersServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public changeIsActiveExternalProvider(id?: string, isActive?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<BooleanApiResponse>;
-    public changeIsActiveExternalProvider(id?: string, isActive?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BooleanApiResponse>>;
-    public changeIsActiveExternalProvider(id?: string, isActive?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BooleanApiResponse>>;
+    public changeIsActiveExternalProvider(id?: string, isActive?: boolean, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfboolean>;
+    public changeIsActiveExternalProvider(id?: string, isActive?: boolean, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfboolean>>;
+    public changeIsActiveExternalProvider(id?: string, isActive?: boolean, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfboolean>>;
     public changeIsActiveExternalProvider(id?: string, isActive?: boolean, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -120,9 +117,6 @@ export class ExternalProvidersServiceProxy extends BaseService {
           <any>isActive, 'isActive');
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -150,7 +144,7 @@ export class ExternalProvidersServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/ExternalProviders/ChangeIsActiveExternalProvider`;
-        return this.httpClient.request<BooleanApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfboolean>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -169,15 +163,15 @@ export class ExternalProvidersServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public create(createExternalProviderCommand?: CreateExternalProviderCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<GuidApiResponse>;
-    public create(createExternalProviderCommand?: CreateExternalProviderCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GuidApiResponse>>;
-    public create(createExternalProviderCommand?: CreateExternalProviderCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GuidApiResponse>>;
-    public create(createExternalProviderCommand?: CreateExternalProviderCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public create(createExternalProviderCommand: CreateExternalProviderCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfGuid>;
+    public create(createExternalProviderCommand: CreateExternalProviderCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfGuid>>;
+    public create(createExternalProviderCommand: CreateExternalProviderCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfGuid>>;
+    public create(createExternalProviderCommand: CreateExternalProviderCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (createExternalProviderCommand === null || createExternalProviderCommand === undefined) {
+            throw new Error('Required parameter createExternalProviderCommand was null or undefined when calling create.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -216,7 +210,7 @@ export class ExternalProvidersServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/ExternalProviders/CreateExternalProvider`;
-        return this.httpClient.request<GuidApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfGuid>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createExternalProviderCommand,
@@ -234,15 +228,12 @@ export class ExternalProvidersServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllExternalProviders(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ExternalProviderDtoListApiResponse>;
-    public getAllExternalProviders(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ExternalProviderDtoListApiResponse>>;
-    public getAllExternalProviders(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ExternalProviderDtoListApiResponse>>;
+    public getAllExternalProviders(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfListOfExternalProviderDto>;
+    public getAllExternalProviders(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfListOfExternalProviderDto>>;
+    public getAllExternalProviders(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfListOfExternalProviderDto>>;
     public getAllExternalProviders(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -270,7 +261,7 @@ export class ExternalProvidersServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/ExternalProviders/GetAllExternalProviders`;
-        return this.httpClient.request<ExternalProviderDtoListApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfListOfExternalProviderDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -288,9 +279,9 @@ export class ExternalProvidersServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getById(id?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<CreateOrUpdateExternalProviderDtoApiResponse>;
-    public getById(id?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CreateOrUpdateExternalProviderDtoApiResponse>>;
-    public getById(id?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CreateOrUpdateExternalProviderDtoApiResponse>>;
+    public getById(id?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfCreateOrUpdateExternalProviderDto>;
+    public getById(id?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfCreateOrUpdateExternalProviderDto>>;
+    public getById(id?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfCreateOrUpdateExternalProviderDto>>;
     public getById(id?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -298,9 +289,6 @@ export class ExternalProvidersServiceProxy extends BaseService {
           <any>id, 'id');
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -328,7 +316,7 @@ export class ExternalProvidersServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/ExternalProviders/GetExternalProviderById`;
-        return this.httpClient.request<CreateOrUpdateExternalProviderDtoApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfCreateOrUpdateExternalProviderDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -347,15 +335,15 @@ export class ExternalProvidersServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public update(updateExternalProviderCommand?: UpdateExternalProviderCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<BooleanApiResponse>;
-    public update(updateExternalProviderCommand?: UpdateExternalProviderCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BooleanApiResponse>>;
-    public update(updateExternalProviderCommand?: UpdateExternalProviderCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BooleanApiResponse>>;
-    public update(updateExternalProviderCommand?: UpdateExternalProviderCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public update(updateExternalProviderCommand: UpdateExternalProviderCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfboolean>;
+    public update(updateExternalProviderCommand: UpdateExternalProviderCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfboolean>>;
+    public update(updateExternalProviderCommand: UpdateExternalProviderCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfboolean>>;
+    public update(updateExternalProviderCommand: UpdateExternalProviderCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (updateExternalProviderCommand === null || updateExternalProviderCommand === undefined) {
+            throw new Error('Required parameter updateExternalProviderCommand was null or undefined when calling update.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -394,7 +382,7 @@ export class ExternalProvidersServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/ExternalProviders/UpdateExternalProvider`;
-        return this.httpClient.request<BooleanApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfboolean>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: updateExternalProviderCommand,

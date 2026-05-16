@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,20 +13,20 @@
 
 /** Interface for TenantDatabaseDto */
 export interface ITenantDatabaseDto {
-  tenantId?: string;
-  server?: string;
-  databaseName?: string;
-  lastConnectionTest?: string;
-  isConnectionHealthy?: boolean;
+  tenantId: string;
+  server: string;
+  databaseName: string;
+  lastConnectionTest: string;
+  isConnectionHealthy: boolean;
 }
 
 /** Class for TenantDatabaseDto */
 export class TenantDatabaseDto implements ITenantDatabaseDto {
-  tenantId?: string;
-  server?: string;
-  databaseName?: string;
-  lastConnectionTest?: string;
-  isConnectionHealthy?: boolean;
+  tenantId!: string;
+  server!: string;
+  databaseName!: string;
+  lastConnectionTest!: string;
+  isConnectionHealthy!: boolean;
 
   constructor(data?: ITenantDatabaseDto) {
     if (data) {

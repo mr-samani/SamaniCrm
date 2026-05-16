@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -15,6 +15,7 @@ import { BreadcrumbResult } from './breadcrumb-result';
 
 /** Interface for PagedProductCategoriesDto */
 export interface IPagedProductCategoriesDto {
+  breadcrumbs?: Array<BreadcrumbResult>;
   items?: Array<ProductCategoryDto>;
   totalCount?: number;
   pageNumber?: number;
@@ -22,11 +23,11 @@ export interface IPagedProductCategoriesDto {
   totalPages?: number;
   hasPrevious?: boolean;
   hasNext?: boolean;
-  breadcrumbs?: Array<BreadcrumbResult>;
 }
 
 /** Class for PagedProductCategoriesDto */
 export class PagedProductCategoriesDto implements IPagedProductCategoriesDto {
+  breadcrumbs?: Array<BreadcrumbResult>;
   items?: Array<ProductCategoryDto>;
   totalCount?: number;
   pageNumber?: number;
@@ -34,7 +35,6 @@ export class PagedProductCategoriesDto implements IPagedProductCategoriesDto {
   totalPages?: number;
   hasPrevious?: boolean;
   hasNext?: boolean;
-  breadcrumbs?: Array<BreadcrumbResult>;
 
   constructor(data?: IPagedProductCategoriesDto) {
     if (data) {
@@ -47,6 +47,11 @@ export class PagedProductCategoriesDto implements IPagedProductCategoriesDto {
 
 init(data?: any) {
   if (data) {
+    if (Array.isArray(data["breadcrumbs"])) {
+      this.breadcrumbs = [] as any;
+      for (let item of data["breadcrumbs"])
+        (this.breadcrumbs as any).push(BreadcrumbResult.fromJS(item));
+    }
     if (Array.isArray(data["items"])) {
       this.items = [] as any;
       for (let item of data["items"])
@@ -58,11 +63,6 @@ init(data?: any) {
     this.totalPages = data["totalPages"];
     this.hasPrevious = data["hasPrevious"];
     this.hasNext = data["hasNext"];
-    if (Array.isArray(data["breadcrumbs"])) {
-      this.breadcrumbs = [] as any;
-      for (let item of data["breadcrumbs"])
-        (this.breadcrumbs as any).push(BreadcrumbResult.fromJS(item));
-    }
   }
 }
 

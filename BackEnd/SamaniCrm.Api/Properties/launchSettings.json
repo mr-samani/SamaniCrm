@@ -21,7 +21,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchUrl": "scalar",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "CONNECTION_STRING_ENCRYPTION_KEY": "xo/C0eW3qcDEDeb2+hGzxdfh8aO3wJfE9aG7vB1cQ="

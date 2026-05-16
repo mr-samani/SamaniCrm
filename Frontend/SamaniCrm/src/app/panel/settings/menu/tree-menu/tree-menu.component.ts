@@ -197,7 +197,7 @@ export class TreeMenuComponent extends AppComponentBase implements OnInit, OnDes
     this.confirmMessage('AreYouSureDelete', item.title ?? '').then((r) => {
       if (r.isConfirmed) {
         const input = new DeleteMenuCommand();
-        input.id = item.id;
+        input.id = item.id!;
         this.menuService.deleteMenu(input).subscribe((response) => {
           this.notify.success('DeleteSuccessfully');
           this.deleteFromTree(this.nodes, item.id!);
@@ -228,7 +228,7 @@ export class TreeMenuComponent extends AppComponentBase implements OnInit, OnDes
   changeActive(item: TreeNode) {
     item.loading = true;
     const input = new ChangeActiveMenuCommand();
-    input.id = item.id;
+    input.id = item.id!;
     input.isActive = !item.isActive;
     this.menuService
       .activeOrDeactive(input)

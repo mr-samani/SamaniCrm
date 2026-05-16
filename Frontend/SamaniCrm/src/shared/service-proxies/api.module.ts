@@ -9,7 +9,6 @@ import { DasboardServiceProxy } from './api/dasboard.service';
 import { ExternalAuthServiceProxy } from './api/external-auth.service';
 import { ExternalProvidersServiceProxy } from './api/external-providers.service';
 import { FileManagerServiceProxy } from './api/file-manager.service';
-import { FileServeServiceProxy } from './api/file-serve.service';
 import { LanguageServiceProxy } from './api/language.service';
 import { MaintenanceServiceProxy } from './api/maintenance.service';
 import { MenuServiceProxy } from './api/menu.service';
@@ -35,7 +34,6 @@ import { UserServiceProxy } from './api/user.service';
     ExternalAuthServiceProxy,
     ExternalProvidersServiceProxy,
     FileManagerServiceProxy,
-    FileServeServiceProxy,
     LanguageServiceProxy,
     MaintenanceServiceProxy,
     MenuServiceProxy,

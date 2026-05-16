@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,26 +13,26 @@
 
 /** Interface for UpdateTenantSettingsCommand */
 export interface IUpdateTenantSettingsCommand {
-  tenantId?: string;
-  timeZone?: string;
-  currency?: string;
-  language?: string;
-  maxUsers?: number;
-  maxStorageMb?: number;
-  allowCustomBranding?: boolean;
-  customSettings?: { [key: string]: string; };
+  tenantId: string;
+  timeZone: string;
+  currency: string;
+  language: string;
+  maxUsers: number;
+  maxStorageMb: number;
+  allowCustomBranding: boolean;
+  customSettings: { [key: string]: string; };
 }
 
 /** Class for UpdateTenantSettingsCommand */
 export class UpdateTenantSettingsCommand implements IUpdateTenantSettingsCommand {
-  tenantId?: string;
-  timeZone?: string;
-  currency?: string;
-  language?: string;
-  maxUsers?: number;
-  maxStorageMb?: number;
-  allowCustomBranding?: boolean;
-  customSettings?: { [key: string]: string; };
+  tenantId!: string;
+  timeZone!: string;
+  currency!: string;
+  language!: string;
+  maxUsers!: number;
+  maxStorageMb!: number;
+  allowCustomBranding!: boolean;
+  customSettings!: { [key: string]: string; };
 
   constructor(data?: IUpdateTenantSettingsCommand) {
     if (data) {

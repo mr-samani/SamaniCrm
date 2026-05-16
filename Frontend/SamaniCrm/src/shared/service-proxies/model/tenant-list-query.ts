@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,22 +13,22 @@
 
 /** Interface for TenantListQuery */
 export interface ITenantListQuery {
+  search?: string;
+  status?: string;
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;
   sortDirection?: string;
-  search?: string;
-  status?: string;
 }
 
 /** Class for TenantListQuery */
 export class TenantListQuery implements ITenantListQuery {
+  search?: string;
+  status?: string;
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;
   sortDirection?: string;
-  search?: string;
-  status?: string;
 
   constructor(data?: ITenantListQuery) {
     if (data) {
@@ -41,12 +41,12 @@ export class TenantListQuery implements ITenantListQuery {
 
 init(data?: any) {
   if (data) {
+    this.search = data["search"];
+    this.status = data["status"];
     this.pageNumber = data["pageNumber"];
     this.pageSize = data["pageSize"];
     this.sortBy = data["sortBy"];
     this.sortDirection = data["sortDirection"];
-    this.search = data["search"];
-    this.status = data["status"];
   }
 }
 

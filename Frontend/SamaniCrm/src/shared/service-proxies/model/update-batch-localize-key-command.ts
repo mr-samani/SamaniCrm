@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -14,14 +14,14 @@ import { LocalizationKeyDTO } from './localization-key-dto';
 
 /** Interface for UpdateBatchLocalizeKeyCommand */
 export interface IUpdateBatchLocalizeKeyCommand {
-  data?: Array<LocalizationKeyDTO>;
-  culture?: string;
+  data: Array<LocalizationKeyDTO>;
+  culture: string;
 }
 
 /** Class for UpdateBatchLocalizeKeyCommand */
 export class UpdateBatchLocalizeKeyCommand implements IUpdateBatchLocalizeKeyCommand {
-  data?: Array<LocalizationKeyDTO>;
-  culture?: string;
+  data!: Array<LocalizationKeyDTO>;
+  culture!: string;
 
   constructor(data?: IUpdateBatchLocalizeKeyCommand) {
     if (data) {

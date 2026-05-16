@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,18 +13,18 @@
 
 /** Interface for ConnectionTestResult */
 export interface IConnectionTestResult {
-  tenantId?: string;
-  success?: boolean;
-  message?: string;
-  latencyMs?: number;
+  tenantId: string;
+  success: boolean;
+  message: string;
+  latencyMs: number;
 }
 
 /** Class for ConnectionTestResult */
 export class ConnectionTestResult implements IConnectionTestResult {
-  tenantId?: string;
-  success?: boolean;
-  message?: string;
-  latencyMs?: number;
+  tenantId!: string;
+  success!: boolean;
+  message!: string;
+  latencyMs!: number;
 
   constructor(data?: IConnectionTestResult) {
     if (data) {

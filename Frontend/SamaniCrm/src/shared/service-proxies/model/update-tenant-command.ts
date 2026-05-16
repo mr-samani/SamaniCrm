@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,18 +13,18 @@
 
 /** Interface for UpdateTenantCommand */
 export interface IUpdateTenantCommand {
-  id?: string;
-  name?: string;
-  logo?: string;
-  primaryColor?: string;
+  id: string;
+  name: string;
+  logo: string;
+  primaryColor: string;
 }
 
 /** Class for UpdateTenantCommand */
 export class UpdateTenantCommand implements IUpdateTenantCommand {
-  id?: string;
-  name?: string;
-  logo?: string;
-  primaryColor?: string;
+  id!: string;
+  name!: string;
+  logo!: string;
+  primaryColor!: string;
 
   constructor(data?: IUpdateTenantCommand) {
     if (data) {

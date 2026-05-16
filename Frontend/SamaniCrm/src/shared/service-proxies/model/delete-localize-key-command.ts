@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,12 +13,12 @@
 
 /** Interface for DeleteLocalizeKeyCommand */
 export interface IDeleteLocalizeKeyCommand {
-  key?: string;
+  key: string;
 }
 
 /** Class for DeleteLocalizeKeyCommand */
 export class DeleteLocalizeKeyCommand implements IDeleteLocalizeKeyCommand {
-  key?: string;
+  key!: string;
 
   constructor(data?: IDeleteLocalizeKeyCommand) {
     if (data) {

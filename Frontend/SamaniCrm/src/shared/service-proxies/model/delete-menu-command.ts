@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,12 +13,12 @@
 
 /** Interface for DeleteMenuCommand */
 export interface IDeleteMenuCommand {
-  id?: string;
+  id: string;
 }
 
 /** Class for DeleteMenuCommand */
 export class DeleteMenuCommand implements IDeleteMenuCommand {
-  id?: string;
+  id!: string;
 
   constructor(data?: IDeleteMenuCommand) {
     if (data) {

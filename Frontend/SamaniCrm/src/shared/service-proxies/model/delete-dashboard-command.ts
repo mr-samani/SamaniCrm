@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,12 +13,12 @@
 
 /** Interface for DeleteDashboardCommand */
 export interface IDeleteDashboardCommand {
-  id?: string;
+  id: string;
 }
 
 /** Class for DeleteDashboardCommand */
 export class DeleteDashboardCommand implements IDeleteDashboardCommand {
-  id?: string;
+  id!: string;
 
   constructor(data?: IDeleteDashboardCommand) {
     if (data) {

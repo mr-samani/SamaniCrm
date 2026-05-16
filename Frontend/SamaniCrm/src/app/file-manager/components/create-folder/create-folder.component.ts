@@ -37,6 +37,7 @@ export class CreateFolderDialogComponent extends AppComponentBase implements OnI
         new CreateFolderCommand({
           name: this.folderName,
           parentId: this.parentId,
+          isPublic : false
         }),
       )
       .pipe(

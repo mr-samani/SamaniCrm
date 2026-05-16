@@ -6,7 +6,7 @@ import { AppConst } from '@shared/app-const';
 import {
   ProductServiceProxy,
   CreateOrUpdateProductCategoryCommand,
-  GuidAutoCompleteDto,
+  AutoCompleteDtoOfGuid,
 } from '@shared/service-proxies';
 import { finalize } from 'rxjs';
 import { ProductCategoryTranslationDto } from '@shared/service-proxies/model/product-category-translation-dto';
@@ -88,7 +88,7 @@ export class CreateOrEditProductCategoryComponent extends AppComponentBase imple
           if (response.success && response.data) {
             this.form.patchValue(response.data);
             if (response.data.parentId) {
-              this.form.get('parent')?.patchValue(<GuidAutoCompleteDto>{
+              this.form.get('parent')?.patchValue(<AutoCompleteDtoOfGuid>{
                 id: response.data.parentId,
                 title: response.data.parentTitle,
               });

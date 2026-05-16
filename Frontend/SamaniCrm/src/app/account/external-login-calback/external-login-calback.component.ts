@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component,  OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { ExternalLoginCallbackCommand } from '@shared/service-proxies/model/external-login-callback-command';
 
@@ -23,7 +23,9 @@ export class ExternalLoginCalbackComponent extends AppComponentBase implements O
 
   ngOnInit() {
     this.authService
-      .externalLoginCallback(new ExternalLoginCallbackCommand({ code: this.code, provider: this.provider }))
+      .externalLoginCallback(
+        new ExternalLoginCallbackCommand({ code: this.code, provider: this.provider, codeVerifier: '' }),
+      )
       .subscribe({
         next: (result) => {
           if (result.data?.accessToken) {

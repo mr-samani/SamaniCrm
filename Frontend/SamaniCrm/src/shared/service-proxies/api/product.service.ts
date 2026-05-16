@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -17,7 +17,35 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { BooleanApiResponse } from '../model/boolean-api-response';
+import { ApiResponseOfGuid } from '../model/api-response-of-guid';
+// @ts-ignore
+import { ApiResponseOfListOfAutoCompleteDtoOfGuid } from '../model/api-response-of-list-of-auto-complete-dto-of-guid';
+// @ts-ignore
+import { ApiResponseOfListOfAutoCompleteDtoOfstring } from '../model/api-response-of-list-of-auto-complete-dto-ofstring';
+// @ts-ignore
+import { ApiResponseOfListOfCurrencyDto } from '../model/api-response-of-list-of-currency-dto';
+// @ts-ignore
+import { ApiResponseOfListOfExportAllLocalizationValueDto } from '../model/api-response-of-list-of-export-all-localization-value-dto';
+// @ts-ignore
+import { ApiResponseOfListOfProductCategoryDto } from '../model/api-response-of-list-of-product-category-dto';
+// @ts-ignore
+import { ApiResponseOfPagedProductCategoriesDto } from '../model/api-response-of-paged-product-categories-dto';
+// @ts-ignore
+import { ApiResponseOfPaginatedResultOfProductAttributeDto } from '../model/api-response-of-paginated-result-of-product-attribute-dto';
+// @ts-ignore
+import { ApiResponseOfPaginatedResultOfProductListDto } from '../model/api-response-of-paginated-result-of-product-list-dto';
+// @ts-ignore
+import { ApiResponseOfPaginatedResultOfProductTypeDto } from '../model/api-response-of-paginated-result-of-product-type-dto';
+// @ts-ignore
+import { ApiResponseOfProductAttributeDto } from '../model/api-response-of-product-attribute-dto';
+// @ts-ignore
+import { ApiResponseOfProductCategoryDto } from '../model/api-response-of-product-category-dto';
+// @ts-ignore
+import { ApiResponseOfProductDto } from '../model/api-response-of-product-dto';
+// @ts-ignore
+import { ApiResponseOfProductTypeDto } from '../model/api-response-of-product-type-dto';
+// @ts-ignore
+import { ApiResponseOfboolean } from '../model/api-response-ofboolean';
 // @ts-ignore
 import { CreateOrUpdateCurrencyCommand } from '../model/create-or-update-currency-command';
 // @ts-ignore
@@ -28,8 +56,6 @@ import { CreateOrUpdateProductCategoryCommand } from '../model/create-or-update-
 import { CreateOrUpdateProductCommand } from '../model/create-or-update-product-command';
 // @ts-ignore
 import { CreateOrUpdateProductTypeCommand } from '../model/create-or-update-product-type-command';
-// @ts-ignore
-import { CurrencyDtoListApiResponse } from '../model/currency-dto-list-api-response';
 // @ts-ignore
 import { DeleteCurrencyCommand } from '../model/delete-currency-command';
 // @ts-ignore
@@ -43,8 +69,6 @@ import { DeleteProductTypeCommand } from '../model/delete-product-type-command';
 // @ts-ignore
 import { ExportAllLocalizationValueDto } from '../model/export-all-localization-value-dto';
 // @ts-ignore
-import { ExportAllLocalizationValueDtoListApiResponse } from '../model/export-all-localization-value-dto-list-api-response';
-// @ts-ignore
 import { GetCategoriesForAdminQuery } from '../model/get-categories-for-admin-query';
 // @ts-ignore
 import { GetProductAttributesQuery } from '../model/get-product-attributes-query';
@@ -54,30 +78,6 @@ import { GetProductCategoriesQuery } from '../model/get-product-categories-query
 import { GetProductTypesQuery } from '../model/get-product-types-query';
 // @ts-ignore
 import { GetProductsQuery } from '../model/get-products-query';
-// @ts-ignore
-import { GuidApiResponse } from '../model/guid-api-response';
-// @ts-ignore
-import { GuidAutoCompleteDtoListApiResponse } from '../model/guid-auto-complete-dto-list-api-response';
-// @ts-ignore
-import { PagedProductCategoriesDtoApiResponse } from '../model/paged-product-categories-dto-api-response';
-// @ts-ignore
-import { ProductAttributeDtoApiResponse } from '../model/product-attribute-dto-api-response';
-// @ts-ignore
-import { ProductAttributeDtoPaginatedResultApiResponse } from '../model/product-attribute-dto-paginated-result-api-response';
-// @ts-ignore
-import { ProductCategoryDtoApiResponse } from '../model/product-category-dto-api-response';
-// @ts-ignore
-import { ProductCategoryDtoListApiResponse } from '../model/product-category-dto-list-api-response';
-// @ts-ignore
-import { ProductDtoApiResponse } from '../model/product-dto-api-response';
-// @ts-ignore
-import { ProductListDtoPaginatedResultApiResponse } from '../model/product-list-dto-paginated-result-api-response';
-// @ts-ignore
-import { ProductTypeDtoApiResponse } from '../model/product-type-dto-api-response';
-// @ts-ignore
-import { ProductTypeDtoPaginatedResultApiResponse } from '../model/product-type-dto-paginated-result-api-response';
-// @ts-ignore
-import { StringAutoCompleteDtoListApiResponse } from '../model/string-auto-complete-dto-list-api-response';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -98,15 +98,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createOrEditCurrency(createOrUpdateCurrencyCommand?: CreateOrUpdateCurrencyCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<BooleanApiResponse>;
-    public createOrEditCurrency(createOrUpdateCurrencyCommand?: CreateOrUpdateCurrencyCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BooleanApiResponse>>;
-    public createOrEditCurrency(createOrUpdateCurrencyCommand?: CreateOrUpdateCurrencyCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BooleanApiResponse>>;
-    public createOrEditCurrency(createOrUpdateCurrencyCommand?: CreateOrUpdateCurrencyCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createOrEditCurrency(createOrUpdateCurrencyCommand: CreateOrUpdateCurrencyCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfboolean>;
+    public createOrEditCurrency(createOrUpdateCurrencyCommand: CreateOrUpdateCurrencyCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfboolean>>;
+    public createOrEditCurrency(createOrUpdateCurrencyCommand: CreateOrUpdateCurrencyCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfboolean>>;
+    public createOrEditCurrency(createOrUpdateCurrencyCommand: CreateOrUpdateCurrencyCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (createOrUpdateCurrencyCommand === null || createOrUpdateCurrencyCommand === undefined) {
+            throw new Error('Required parameter createOrUpdateCurrencyCommand was null or undefined when calling createOrEditCurrency.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -145,7 +145,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/CreateOrEditCurrency`;
-        return this.httpClient.request<BooleanApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfboolean>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createOrUpdateCurrencyCommand,
@@ -164,15 +164,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createOrEditProduct(createOrUpdateProductCommand?: CreateOrUpdateProductCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<GuidApiResponse>;
-    public createOrEditProduct(createOrUpdateProductCommand?: CreateOrUpdateProductCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GuidApiResponse>>;
-    public createOrEditProduct(createOrUpdateProductCommand?: CreateOrUpdateProductCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GuidApiResponse>>;
-    public createOrEditProduct(createOrUpdateProductCommand?: CreateOrUpdateProductCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createOrEditProduct(createOrUpdateProductCommand: CreateOrUpdateProductCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfGuid>;
+    public createOrEditProduct(createOrUpdateProductCommand: CreateOrUpdateProductCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfGuid>>;
+    public createOrEditProduct(createOrUpdateProductCommand: CreateOrUpdateProductCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfGuid>>;
+    public createOrEditProduct(createOrUpdateProductCommand: CreateOrUpdateProductCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (createOrUpdateProductCommand === null || createOrUpdateProductCommand === undefined) {
+            throw new Error('Required parameter createOrUpdateProductCommand was null or undefined when calling createOrEditProduct.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -211,7 +211,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/CreateOrEditProduct`;
-        return this.httpClient.request<GuidApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfGuid>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createOrUpdateProductCommand,
@@ -230,15 +230,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createOrEditProductAttribute(createOrUpdateProductAttributeCommand?: CreateOrUpdateProductAttributeCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<GuidApiResponse>;
-    public createOrEditProductAttribute(createOrUpdateProductAttributeCommand?: CreateOrUpdateProductAttributeCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GuidApiResponse>>;
-    public createOrEditProductAttribute(createOrUpdateProductAttributeCommand?: CreateOrUpdateProductAttributeCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GuidApiResponse>>;
-    public createOrEditProductAttribute(createOrUpdateProductAttributeCommand?: CreateOrUpdateProductAttributeCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createOrEditProductAttribute(createOrUpdateProductAttributeCommand: CreateOrUpdateProductAttributeCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfGuid>;
+    public createOrEditProductAttribute(createOrUpdateProductAttributeCommand: CreateOrUpdateProductAttributeCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfGuid>>;
+    public createOrEditProductAttribute(createOrUpdateProductAttributeCommand: CreateOrUpdateProductAttributeCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfGuid>>;
+    public createOrEditProductAttribute(createOrUpdateProductAttributeCommand: CreateOrUpdateProductAttributeCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (createOrUpdateProductAttributeCommand === null || createOrUpdateProductAttributeCommand === undefined) {
+            throw new Error('Required parameter createOrUpdateProductAttributeCommand was null or undefined when calling createOrEditProductAttribute.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -277,7 +277,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/CreateOrEditProductAttribute`;
-        return this.httpClient.request<GuidApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfGuid>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createOrUpdateProductAttributeCommand,
@@ -296,15 +296,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createOrEditProductCategory(createOrUpdateProductCategoryCommand?: CreateOrUpdateProductCategoryCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<GuidApiResponse>;
-    public createOrEditProductCategory(createOrUpdateProductCategoryCommand?: CreateOrUpdateProductCategoryCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GuidApiResponse>>;
-    public createOrEditProductCategory(createOrUpdateProductCategoryCommand?: CreateOrUpdateProductCategoryCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GuidApiResponse>>;
-    public createOrEditProductCategory(createOrUpdateProductCategoryCommand?: CreateOrUpdateProductCategoryCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createOrEditProductCategory(createOrUpdateProductCategoryCommand: CreateOrUpdateProductCategoryCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfGuid>;
+    public createOrEditProductCategory(createOrUpdateProductCategoryCommand: CreateOrUpdateProductCategoryCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfGuid>>;
+    public createOrEditProductCategory(createOrUpdateProductCategoryCommand: CreateOrUpdateProductCategoryCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfGuid>>;
+    public createOrEditProductCategory(createOrUpdateProductCategoryCommand: CreateOrUpdateProductCategoryCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (createOrUpdateProductCategoryCommand === null || createOrUpdateProductCategoryCommand === undefined) {
+            throw new Error('Required parameter createOrUpdateProductCategoryCommand was null or undefined when calling createOrEditProductCategory.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -343,7 +343,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/CreateOrEditProductCategory`;
-        return this.httpClient.request<GuidApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfGuid>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createOrUpdateProductCategoryCommand,
@@ -362,15 +362,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createOrEditProductType(createOrUpdateProductTypeCommand?: CreateOrUpdateProductTypeCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<GuidApiResponse>;
-    public createOrEditProductType(createOrUpdateProductTypeCommand?: CreateOrUpdateProductTypeCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GuidApiResponse>>;
-    public createOrEditProductType(createOrUpdateProductTypeCommand?: CreateOrUpdateProductTypeCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GuidApiResponse>>;
-    public createOrEditProductType(createOrUpdateProductTypeCommand?: CreateOrUpdateProductTypeCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createOrEditProductType(createOrUpdateProductTypeCommand: CreateOrUpdateProductTypeCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfGuid>;
+    public createOrEditProductType(createOrUpdateProductTypeCommand: CreateOrUpdateProductTypeCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfGuid>>;
+    public createOrEditProductType(createOrUpdateProductTypeCommand: CreateOrUpdateProductTypeCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfGuid>>;
+    public createOrEditProductType(createOrUpdateProductTypeCommand: CreateOrUpdateProductTypeCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (createOrUpdateProductTypeCommand === null || createOrUpdateProductTypeCommand === undefined) {
+            throw new Error('Required parameter createOrUpdateProductTypeCommand was null or undefined when calling createOrEditProductType.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -409,7 +409,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/CreateOrEditProductType`;
-        return this.httpClient.request<GuidApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfGuid>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createOrUpdateProductTypeCommand,
@@ -428,15 +428,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteCurrency(deleteCurrencyCommand?: DeleteCurrencyCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<BooleanApiResponse>;
-    public deleteCurrency(deleteCurrencyCommand?: DeleteCurrencyCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BooleanApiResponse>>;
-    public deleteCurrency(deleteCurrencyCommand?: DeleteCurrencyCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BooleanApiResponse>>;
-    public deleteCurrency(deleteCurrencyCommand?: DeleteCurrencyCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteCurrency(deleteCurrencyCommand: DeleteCurrencyCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfboolean>;
+    public deleteCurrency(deleteCurrencyCommand: DeleteCurrencyCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfboolean>>;
+    public deleteCurrency(deleteCurrencyCommand: DeleteCurrencyCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfboolean>>;
+    public deleteCurrency(deleteCurrencyCommand: DeleteCurrencyCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (deleteCurrencyCommand === null || deleteCurrencyCommand === undefined) {
+            throw new Error('Required parameter deleteCurrencyCommand was null or undefined when calling deleteCurrency.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -475,7 +475,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/DeleteCurrency`;
-        return this.httpClient.request<BooleanApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfboolean>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: deleteCurrencyCommand,
@@ -494,15 +494,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteProduct(deleteProductCommand?: DeleteProductCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<BooleanApiResponse>;
-    public deleteProduct(deleteProductCommand?: DeleteProductCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BooleanApiResponse>>;
-    public deleteProduct(deleteProductCommand?: DeleteProductCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BooleanApiResponse>>;
-    public deleteProduct(deleteProductCommand?: DeleteProductCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteProduct(deleteProductCommand: DeleteProductCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfboolean>;
+    public deleteProduct(deleteProductCommand: DeleteProductCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfboolean>>;
+    public deleteProduct(deleteProductCommand: DeleteProductCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfboolean>>;
+    public deleteProduct(deleteProductCommand: DeleteProductCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (deleteProductCommand === null || deleteProductCommand === undefined) {
+            throw new Error('Required parameter deleteProductCommand was null or undefined when calling deleteProduct.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -541,7 +541,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/DeleteProduct`;
-        return this.httpClient.request<BooleanApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfboolean>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: deleteProductCommand,
@@ -560,15 +560,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteProductAttribute(deleteProductAttributeCommand?: DeleteProductAttributeCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<BooleanApiResponse>;
-    public deleteProductAttribute(deleteProductAttributeCommand?: DeleteProductAttributeCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BooleanApiResponse>>;
-    public deleteProductAttribute(deleteProductAttributeCommand?: DeleteProductAttributeCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BooleanApiResponse>>;
-    public deleteProductAttribute(deleteProductAttributeCommand?: DeleteProductAttributeCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteProductAttribute(deleteProductAttributeCommand: DeleteProductAttributeCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfboolean>;
+    public deleteProductAttribute(deleteProductAttributeCommand: DeleteProductAttributeCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfboolean>>;
+    public deleteProductAttribute(deleteProductAttributeCommand: DeleteProductAttributeCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfboolean>>;
+    public deleteProductAttribute(deleteProductAttributeCommand: DeleteProductAttributeCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (deleteProductAttributeCommand === null || deleteProductAttributeCommand === undefined) {
+            throw new Error('Required parameter deleteProductAttributeCommand was null or undefined when calling deleteProductAttribute.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -607,7 +607,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/DeleteProductAttribute`;
-        return this.httpClient.request<BooleanApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfboolean>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: deleteProductAttributeCommand,
@@ -626,15 +626,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteProductCategory(deleteProductCategoryCommand?: DeleteProductCategoryCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<BooleanApiResponse>;
-    public deleteProductCategory(deleteProductCategoryCommand?: DeleteProductCategoryCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BooleanApiResponse>>;
-    public deleteProductCategory(deleteProductCategoryCommand?: DeleteProductCategoryCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BooleanApiResponse>>;
-    public deleteProductCategory(deleteProductCategoryCommand?: DeleteProductCategoryCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteProductCategory(deleteProductCategoryCommand: DeleteProductCategoryCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfboolean>;
+    public deleteProductCategory(deleteProductCategoryCommand: DeleteProductCategoryCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfboolean>>;
+    public deleteProductCategory(deleteProductCategoryCommand: DeleteProductCategoryCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfboolean>>;
+    public deleteProductCategory(deleteProductCategoryCommand: DeleteProductCategoryCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (deleteProductCategoryCommand === null || deleteProductCategoryCommand === undefined) {
+            throw new Error('Required parameter deleteProductCategoryCommand was null or undefined when calling deleteProductCategory.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -673,7 +673,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/DeleteProductCategory`;
-        return this.httpClient.request<BooleanApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfboolean>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: deleteProductCategoryCommand,
@@ -692,15 +692,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteProductType(deleteProductTypeCommand?: DeleteProductTypeCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<BooleanApiResponse>;
-    public deleteProductType(deleteProductTypeCommand?: DeleteProductTypeCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BooleanApiResponse>>;
-    public deleteProductType(deleteProductTypeCommand?: DeleteProductTypeCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BooleanApiResponse>>;
-    public deleteProductType(deleteProductTypeCommand?: DeleteProductTypeCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteProductType(deleteProductTypeCommand: DeleteProductTypeCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfboolean>;
+    public deleteProductType(deleteProductTypeCommand: DeleteProductTypeCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfboolean>>;
+    public deleteProductType(deleteProductTypeCommand: DeleteProductTypeCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfboolean>>;
+    public deleteProductType(deleteProductTypeCommand: DeleteProductTypeCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (deleteProductTypeCommand === null || deleteProductTypeCommand === undefined) {
+            throw new Error('Required parameter deleteProductTypeCommand was null or undefined when calling deleteProductType.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -739,7 +739,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/DeleteProductType`;
-        return this.httpClient.request<BooleanApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfboolean>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: deleteProductTypeCommand,
@@ -757,15 +757,12 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getActiveCurrencies(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<StringAutoCompleteDtoListApiResponse>;
-    public getActiveCurrencies(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<StringAutoCompleteDtoListApiResponse>>;
-    public getActiveCurrencies(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<StringAutoCompleteDtoListApiResponse>>;
+    public getActiveCurrencies(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfListOfAutoCompleteDtoOfstring>;
+    public getActiveCurrencies(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfListOfAutoCompleteDtoOfstring>>;
+    public getActiveCurrencies(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfListOfAutoCompleteDtoOfstring>>;
     public getActiveCurrencies(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -793,7 +790,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetActiveCurrencies`;
-        return this.httpClient.request<StringAutoCompleteDtoListApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfListOfAutoCompleteDtoOfstring>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -810,15 +807,12 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllProductCategoryTranslations(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ExportAllLocalizationValueDtoListApiResponse>;
-    public getAllProductCategoryTranslations(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ExportAllLocalizationValueDtoListApiResponse>>;
-    public getAllProductCategoryTranslations(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ExportAllLocalizationValueDtoListApiResponse>>;
+    public getAllProductCategoryTranslations(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfListOfExportAllLocalizationValueDto>;
+    public getAllProductCategoryTranslations(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfListOfExportAllLocalizationValueDto>>;
+    public getAllProductCategoryTranslations(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfListOfExportAllLocalizationValueDto>>;
     public getAllProductCategoryTranslations(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -846,7 +840,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetAllProductCategoryTranslations`;
-        return this.httpClient.request<ExportAllLocalizationValueDtoListApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfListOfExportAllLocalizationValueDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -864,9 +858,9 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAutoCompleteProductCategory(filter?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<GuidAutoCompleteDtoListApiResponse>;
-    public getAutoCompleteProductCategory(filter?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GuidAutoCompleteDtoListApiResponse>>;
-    public getAutoCompleteProductCategory(filter?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GuidAutoCompleteDtoListApiResponse>>;
+    public getAutoCompleteProductCategory(filter?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfListOfAutoCompleteDtoOfGuid>;
+    public getAutoCompleteProductCategory(filter?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfListOfAutoCompleteDtoOfGuid>>;
+    public getAutoCompleteProductCategory(filter?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfListOfAutoCompleteDtoOfGuid>>;
     public getAutoCompleteProductCategory(filter?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -874,9 +868,6 @@ export class ProductServiceProxy extends BaseService {
           <any>filter, 'filter');
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -904,7 +895,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetAutoCompleteProductCategory`;
-        return this.httpClient.request<GuidAutoCompleteDtoListApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfListOfAutoCompleteDtoOfGuid>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -923,9 +914,9 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAutoCompleteProductType(filter?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<GuidAutoCompleteDtoListApiResponse>;
-    public getAutoCompleteProductType(filter?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GuidAutoCompleteDtoListApiResponse>>;
-    public getAutoCompleteProductType(filter?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GuidAutoCompleteDtoListApiResponse>>;
+    public getAutoCompleteProductType(filter?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfListOfAutoCompleteDtoOfGuid>;
+    public getAutoCompleteProductType(filter?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfListOfAutoCompleteDtoOfGuid>>;
+    public getAutoCompleteProductType(filter?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfListOfAutoCompleteDtoOfGuid>>;
     public getAutoCompleteProductType(filter?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -933,9 +924,6 @@ export class ProductServiceProxy extends BaseService {
           <any>filter, 'filter');
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -963,7 +951,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetAutoCompleteProductType`;
-        return this.httpClient.request<GuidAutoCompleteDtoListApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfListOfAutoCompleteDtoOfGuid>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -982,15 +970,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getCategories(getProductCategoriesQuery?: GetProductCategoriesQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductCategoryDtoListApiResponse>;
-    public getCategories(getProductCategoriesQuery?: GetProductCategoriesQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductCategoryDtoListApiResponse>>;
-    public getCategories(getProductCategoriesQuery?: GetProductCategoriesQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductCategoryDtoListApiResponse>>;
-    public getCategories(getProductCategoriesQuery?: GetProductCategoriesQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getCategories(getProductCategoriesQuery: GetProductCategoriesQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfListOfProductCategoryDto>;
+    public getCategories(getProductCategoriesQuery: GetProductCategoriesQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfListOfProductCategoryDto>>;
+    public getCategories(getProductCategoriesQuery: GetProductCategoriesQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfListOfProductCategoryDto>>;
+    public getCategories(getProductCategoriesQuery: GetProductCategoriesQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (getProductCategoriesQuery === null || getProductCategoriesQuery === undefined) {
+            throw new Error('Required parameter getProductCategoriesQuery was null or undefined when calling getCategories.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -1029,7 +1017,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetCategories`;
-        return this.httpClient.request<ProductCategoryDtoListApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfListOfProductCategoryDto>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: getProductCategoriesQuery,
@@ -1048,15 +1036,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getCategoriesForAdmin(getCategoriesForAdminQuery?: GetCategoriesForAdminQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<PagedProductCategoriesDtoApiResponse>;
-    public getCategoriesForAdmin(getCategoriesForAdminQuery?: GetCategoriesForAdminQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PagedProductCategoriesDtoApiResponse>>;
-    public getCategoriesForAdmin(getCategoriesForAdminQuery?: GetCategoriesForAdminQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PagedProductCategoriesDtoApiResponse>>;
-    public getCategoriesForAdmin(getCategoriesForAdminQuery?: GetCategoriesForAdminQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getCategoriesForAdmin(getCategoriesForAdminQuery: GetCategoriesForAdminQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfPagedProductCategoriesDto>;
+    public getCategoriesForAdmin(getCategoriesForAdminQuery: GetCategoriesForAdminQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfPagedProductCategoriesDto>>;
+    public getCategoriesForAdmin(getCategoriesForAdminQuery: GetCategoriesForAdminQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfPagedProductCategoriesDto>>;
+    public getCategoriesForAdmin(getCategoriesForAdminQuery: GetCategoriesForAdminQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (getCategoriesForAdminQuery === null || getCategoriesForAdminQuery === undefined) {
+            throw new Error('Required parameter getCategoriesForAdminQuery was null or undefined when calling getCategoriesForAdmin.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -1095,7 +1083,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetCategoriesForAdmin`;
-        return this.httpClient.request<PagedProductCategoriesDtoApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfPagedProductCategoriesDto>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: getCategoriesForAdminQuery,
@@ -1113,15 +1101,12 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getCurrencies(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<CurrencyDtoListApiResponse>;
-    public getCurrencies(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<CurrencyDtoListApiResponse>>;
-    public getCurrencies(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<CurrencyDtoListApiResponse>>;
+    public getCurrencies(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfListOfCurrencyDto>;
+    public getCurrencies(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfListOfCurrencyDto>>;
+    public getCurrencies(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfListOfCurrencyDto>>;
     public getCurrencies(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -1149,7 +1134,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetCurrencies`;
-        return this.httpClient.request<CurrencyDtoListApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfListOfCurrencyDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -1167,9 +1152,9 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProductAttributeForEdit(id?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductAttributeDtoApiResponse>;
-    public getProductAttributeForEdit(id?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductAttributeDtoApiResponse>>;
-    public getProductAttributeForEdit(id?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductAttributeDtoApiResponse>>;
+    public getProductAttributeForEdit(id?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfProductAttributeDto>;
+    public getProductAttributeForEdit(id?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfProductAttributeDto>>;
+    public getProductAttributeForEdit(id?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfProductAttributeDto>>;
     public getProductAttributeForEdit(id?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -1177,9 +1162,6 @@ export class ProductServiceProxy extends BaseService {
           <any>id, 'id');
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -1207,7 +1189,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetProductAttributeForEdit`;
-        return this.httpClient.request<ProductAttributeDtoApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfProductAttributeDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -1226,15 +1208,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProductAttributes(getProductAttributesQuery?: GetProductAttributesQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductAttributeDtoPaginatedResultApiResponse>;
-    public getProductAttributes(getProductAttributesQuery?: GetProductAttributesQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductAttributeDtoPaginatedResultApiResponse>>;
-    public getProductAttributes(getProductAttributesQuery?: GetProductAttributesQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductAttributeDtoPaginatedResultApiResponse>>;
-    public getProductAttributes(getProductAttributesQuery?: GetProductAttributesQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getProductAttributes(getProductAttributesQuery: GetProductAttributesQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfPaginatedResultOfProductAttributeDto>;
+    public getProductAttributes(getProductAttributesQuery: GetProductAttributesQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfPaginatedResultOfProductAttributeDto>>;
+    public getProductAttributes(getProductAttributesQuery: GetProductAttributesQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfPaginatedResultOfProductAttributeDto>>;
+    public getProductAttributes(getProductAttributesQuery: GetProductAttributesQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (getProductAttributesQuery === null || getProductAttributesQuery === undefined) {
+            throw new Error('Required parameter getProductAttributesQuery was null or undefined when calling getProductAttributes.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -1273,7 +1255,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetProductAttributes`;
-        return this.httpClient.request<ProductAttributeDtoPaginatedResultApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfPaginatedResultOfProductAttributeDto>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: getProductAttributesQuery,
@@ -1292,9 +1274,9 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProductCategoryForEdit(id?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductCategoryDtoApiResponse>;
-    public getProductCategoryForEdit(id?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductCategoryDtoApiResponse>>;
-    public getProductCategoryForEdit(id?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductCategoryDtoApiResponse>>;
+    public getProductCategoryForEdit(id?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfProductCategoryDto>;
+    public getProductCategoryForEdit(id?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfProductCategoryDto>>;
+    public getProductCategoryForEdit(id?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfProductCategoryDto>>;
     public getProductCategoryForEdit(id?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -1302,9 +1284,6 @@ export class ProductServiceProxy extends BaseService {
           <any>id, 'id');
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -1332,7 +1311,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetProductCategoryForEdit`;
-        return this.httpClient.request<ProductCategoryDtoApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfProductCategoryDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -1351,9 +1330,9 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProductForEdit(id?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductDtoApiResponse>;
-    public getProductForEdit(id?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductDtoApiResponse>>;
-    public getProductForEdit(id?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductDtoApiResponse>>;
+    public getProductForEdit(id?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfProductDto>;
+    public getProductForEdit(id?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfProductDto>>;
+    public getProductForEdit(id?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfProductDto>>;
     public getProductForEdit(id?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -1361,9 +1340,6 @@ export class ProductServiceProxy extends BaseService {
           <any>id, 'id');
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -1391,7 +1367,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetProductForEdit`;
-        return this.httpClient.request<ProductDtoApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfProductDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -1410,9 +1386,9 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProductTypeForEdit(id?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductTypeDtoApiResponse>;
-    public getProductTypeForEdit(id?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductTypeDtoApiResponse>>;
-    public getProductTypeForEdit(id?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductTypeDtoApiResponse>>;
+    public getProductTypeForEdit(id?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfProductTypeDto>;
+    public getProductTypeForEdit(id?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfProductTypeDto>>;
+    public getProductTypeForEdit(id?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfProductTypeDto>>;
     public getProductTypeForEdit(id?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -1420,9 +1396,6 @@ export class ProductServiceProxy extends BaseService {
           <any>id, 'id');
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -1450,7 +1423,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetProductTypeForEdit`;
-        return this.httpClient.request<ProductTypeDtoApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfProductTypeDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -1469,15 +1442,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProductTypes(getProductTypesQuery?: GetProductTypesQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductTypeDtoPaginatedResultApiResponse>;
-    public getProductTypes(getProductTypesQuery?: GetProductTypesQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductTypeDtoPaginatedResultApiResponse>>;
-    public getProductTypes(getProductTypesQuery?: GetProductTypesQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductTypeDtoPaginatedResultApiResponse>>;
-    public getProductTypes(getProductTypesQuery?: GetProductTypesQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getProductTypes(getProductTypesQuery: GetProductTypesQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfPaginatedResultOfProductTypeDto>;
+    public getProductTypes(getProductTypesQuery: GetProductTypesQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfPaginatedResultOfProductTypeDto>>;
+    public getProductTypes(getProductTypesQuery: GetProductTypesQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfPaginatedResultOfProductTypeDto>>;
+    public getProductTypes(getProductTypesQuery: GetProductTypesQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (getProductTypesQuery === null || getProductTypesQuery === undefined) {
+            throw new Error('Required parameter getProductTypesQuery was null or undefined when calling getProductTypes.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -1516,7 +1489,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetProductTypes`;
-        return this.httpClient.request<ProductTypeDtoPaginatedResultApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfPaginatedResultOfProductTypeDto>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: getProductTypesQuery,
@@ -1535,15 +1508,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProducts(getProductsQuery?: GetProductsQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductListDtoPaginatedResultApiResponse>;
-    public getProducts(getProductsQuery?: GetProductsQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductListDtoPaginatedResultApiResponse>>;
-    public getProducts(getProductsQuery?: GetProductsQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductListDtoPaginatedResultApiResponse>>;
-    public getProducts(getProductsQuery?: GetProductsQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getProducts(getProductsQuery: GetProductsQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfPaginatedResultOfProductListDto>;
+    public getProducts(getProductsQuery: GetProductsQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfPaginatedResultOfProductListDto>>;
+    public getProducts(getProductsQuery: GetProductsQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfPaginatedResultOfProductListDto>>;
+    public getProducts(getProductsQuery: GetProductsQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (getProductsQuery === null || getProductsQuery === undefined) {
+            throw new Error('Required parameter getProductsQuery was null or undefined when calling getProducts.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -1582,7 +1555,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetProducts`;
-        return this.httpClient.request<ProductListDtoPaginatedResultApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfPaginatedResultOfProductListDto>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: getProductsQuery,
@@ -1601,15 +1574,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTreeProductCategories(body?: object, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductCategoryDtoListApiResponse>;
-    public getTreeProductCategories(body?: object, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductCategoryDtoListApiResponse>>;
-    public getTreeProductCategories(body?: object, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductCategoryDtoListApiResponse>>;
-    public getTreeProductCategories(body?: object, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getTreeProductCategories(body: object, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfListOfProductCategoryDto>;
+    public getTreeProductCategories(body: object, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfListOfProductCategoryDto>>;
+    public getTreeProductCategories(body: object, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfListOfProductCategoryDto>>;
+    public getTreeProductCategories(body: object, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getTreeProductCategories.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -1648,7 +1621,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetTreeProductCategories`;
-        return this.httpClient.request<ProductCategoryDtoListApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfListOfProductCategoryDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: body,
@@ -1667,15 +1640,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTreeProductCategoriesForAdmin(body?: object, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ProductCategoryDtoListApiResponse>;
-    public getTreeProductCategoriesForAdmin(body?: object, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ProductCategoryDtoListApiResponse>>;
-    public getTreeProductCategoriesForAdmin(body?: object, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ProductCategoryDtoListApiResponse>>;
-    public getTreeProductCategoriesForAdmin(body?: object, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getTreeProductCategoriesForAdmin(body: object, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfListOfProductCategoryDto>;
+    public getTreeProductCategoriesForAdmin(body: object, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfListOfProductCategoryDto>>;
+    public getTreeProductCategoriesForAdmin(body: object, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfListOfProductCategoryDto>>;
+    public getTreeProductCategoriesForAdmin(body: object, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getTreeProductCategoriesForAdmin.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -1714,7 +1687,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/GetTreeProductCategoriesForAdmin`;
-        return this.httpClient.request<ProductCategoryDtoListApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfListOfProductCategoryDto>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: body,
@@ -1733,15 +1706,15 @@ export class ProductServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public importProductCategoryLocalization(exportAllLocalizationValueDto?: Array<ExportAllLocalizationValueDto>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<BooleanApiResponse>;
-    public importProductCategoryLocalization(exportAllLocalizationValueDto?: Array<ExportAllLocalizationValueDto>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BooleanApiResponse>>;
-    public importProductCategoryLocalization(exportAllLocalizationValueDto?: Array<ExportAllLocalizationValueDto>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BooleanApiResponse>>;
-    public importProductCategoryLocalization(exportAllLocalizationValueDto?: Array<ExportAllLocalizationValueDto>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public importProductCategoryLocalization(exportAllLocalizationValueDto: Array<ExportAllLocalizationValueDto>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfboolean>;
+    public importProductCategoryLocalization(exportAllLocalizationValueDto: Array<ExportAllLocalizationValueDto>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfboolean>>;
+    public importProductCategoryLocalization(exportAllLocalizationValueDto: Array<ExportAllLocalizationValueDto>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfboolean>>;
+    public importProductCategoryLocalization(exportAllLocalizationValueDto: Array<ExportAllLocalizationValueDto>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (exportAllLocalizationValueDto === null || exportAllLocalizationValueDto === undefined) {
+            throw new Error('Required parameter exportAllLocalizationValueDto was null or undefined when calling importProductCategoryLocalization.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -1780,7 +1753,7 @@ export class ProductServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Product/ImportProductCategoryLocalization`;
-        return this.httpClient.request<BooleanApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfboolean>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: exportAllLocalizationValueDto,

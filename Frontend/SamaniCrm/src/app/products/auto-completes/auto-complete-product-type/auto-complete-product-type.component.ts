@@ -16,7 +16,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { RequireMatch } from '@shared/custom-validator/requireMatch';
 import { isNullOrEmpty } from '@shared/helper/null-or-empty';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
-import { ProductServiceProxy, GuidAutoCompleteDto } from '@shared/service-proxies';
+import { ProductServiceProxy, AutoCompleteDtoOfGuid } from '@shared/service-proxies';
 import { Observable, startWith, debounceTime, distinctUntilChanged, switchMap, of, finalize, map } from 'rxjs';
 
 @Component({
@@ -44,12 +44,12 @@ export class AutoCompleteProductTypeComponent
   implements OnInit, OnDestroy, ControlValueAccessor, Validator
 {
   @Input() theme: 'material' | 'bootstrap' = 'material';
-  @Output('selectionChange') selectionChange = new EventEmitter<GuidAutoCompleteDto>();
-  myControl = new FormControl<GuidAutoCompleteDto>(new GuidAutoCompleteDto());
-  filteredOptions = new Observable<GuidAutoCompleteDto[]>();
+  @Output('selectionChange') selectionChange = new EventEmitter<AutoCompleteDtoOfGuid>();
+  myControl = new FormControl<AutoCompleteDtoOfGuid>(new AutoCompleteDtoOfGuid());
+  filteredOptions = new Observable<AutoCompleteDtoOfGuid[]>();
   loading = true;
   isEmpty: boolean = false;
-  private _onChange: (val: GuidAutoCompleteDto | undefined) => void = () => {};
+  private _onChange: (val: AutoCompleteDtoOfGuid | undefined) => void = () => {};
   private _onChangeValidate: () => void = () => {};
   private _onTouched: () => void = () => {};
   disabled = false;
@@ -77,7 +77,7 @@ export class AutoCompleteProductTypeComponent
 
   ngOnDestroy(): void {}
 
-  writeValue(val: GuidAutoCompleteDto): void {
+  writeValue(val: AutoCompleteDtoOfGuid): void {
     this.myControl.setValue(val);
   }
 
@@ -106,7 +106,7 @@ export class AutoCompleteProductTypeComponent
     this._onChangeValidate = fn;
   }
 
-  _filter(value: string): Observable<GuidAutoCompleteDto[]> {
+  _filter(value: string): Observable<AutoCompleteDtoOfGuid[]> {
     if (isNullOrEmpty(value)) {
       value = '';
     }
@@ -127,7 +127,7 @@ export class AutoCompleteProductTypeComponent
     );
   }
 
-  displayFn(opt: GuidAutoCompleteDto): string {
+  displayFn(opt: AutoCompleteDtoOfGuid): string {
     return opt && opt.title ? opt.title : '';
   }
   openPanel(trigger: MatAutocompleteTrigger) {

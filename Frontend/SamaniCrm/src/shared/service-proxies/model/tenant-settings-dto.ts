@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,26 +13,26 @@
 
 /** Interface for TenantSettingsDto */
 export interface ITenantSettingsDto {
-  tenantId?: string;
-  timeZone?: string;
-  currency?: string;
-  language?: string;
-  maxUsers?: number;
-  maxStorageMb?: number;
-  allowCustomBranding?: boolean;
-  customSettings?: { [key: string]: string; };
+  tenantId: string;
+  timeZone: string;
+  currency: string;
+  language: string;
+  maxUsers: number;
+  maxStorageMb: number;
+  allowCustomBranding: boolean;
+  customSettings: { [key: string]: string; };
 }
 
 /** Class for TenantSettingsDto */
 export class TenantSettingsDto implements ITenantSettingsDto {
-  tenantId?: string;
-  timeZone?: string;
-  currency?: string;
-  language?: string;
-  maxUsers?: number;
-  maxStorageMb?: number;
-  allowCustomBranding?: boolean;
-  customSettings?: { [key: string]: string; };
+  tenantId!: string;
+  timeZone!: string;
+  currency!: string;
+  language!: string;
+  maxUsers!: number;
+  maxStorageMb!: number;
+  allowCustomBranding!: boolean;
+  customSettings!: { [key: string]: string; };
 
   constructor(data?: ITenantSettingsDto) {
     if (data) {

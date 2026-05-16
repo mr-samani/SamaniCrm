@@ -1,4 +1,5 @@
 ﻿using Hangfire;
+using Microsoft.OpenApi;
 using SamaniCrm.Api.Middlewares;
 using SamaniCrm.Api.TUS;
 using SamaniCrm.Application;
@@ -11,6 +12,9 @@ using SamaniCrm.Infrastructure.Hubs;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Localizer;
 using SamaniCrm.Infrastructure.Middleware;
+using Scalar.AspNetCore;
+
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +31,7 @@ services
     .AddCustomMediatR()
     .AddFluentValidation()
     .AddInfrastructure(config)
-    .AddSwaggerDocumentation()
+    .AddOpenApiDocumentation()
     .AddHangfire(config)
     .AddCacheService(config)
     .AddFileManagerService(config)
@@ -35,6 +39,10 @@ services
     .LoadExternalProviders(config)
     .AddHelthChecks(config)
     ;
+
+
+
+
 
 services.AddSignalR();
 // 1. اضافه کردن Cache (اجباری برای Session)
@@ -60,8 +68,8 @@ app.UseMiddleware<ApiExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
+    app.MapScalarApiReference(options => options.AddDocument("v1"));
 }
 
 app.UseHttpsRedirection();
@@ -71,15 +79,15 @@ app.UseStaticFiles();
 app.UseSession();
 
 // Security Headers
-app.Use(async (context, next) =>
-{
-    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
-    context.Response.Headers.Append("X-Frame-Options", "DENY");
-    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
-    context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
-    context.Response.Headers.Append("Content-Security-Policy", "default-src 'self'");
-    await next();
-});
+//app.Use(async (context, next) =>
+//{
+//    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+//    context.Response.Headers.Append("X-Frame-Options", "DENY");
+//    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
+//    context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
+//    context.Response.Headers.Append("Content-Security-Policy", "default-src 'self'");
+//    await next();
+//});
 
 
 
@@ -119,3 +127,6 @@ using (var scope = app.Services.CreateScope())
 app.InitializeTUS(config);
 
 app.Run();
+
+
+

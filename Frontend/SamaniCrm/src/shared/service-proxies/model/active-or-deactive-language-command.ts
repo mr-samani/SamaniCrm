@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,14 +13,14 @@
 
 /** Interface for ActiveOrDeactiveLanguageCommand */
 export interface IActiveOrDeactiveLanguageCommand {
-  culture?: string;
-  isActive?: boolean;
+  culture: string;
+  isActive: boolean;
 }
 
 /** Class for ActiveOrDeactiveLanguageCommand */
 export class ActiveOrDeactiveLanguageCommand implements IActiveOrDeactiveLanguageCommand {
-  culture?: string;
-  isActive?: boolean;
+  culture!: string;
+  isActive!: boolean;
 
   constructor(data?: IActiveOrDeactiveLanguageCommand) {
     if (data) {

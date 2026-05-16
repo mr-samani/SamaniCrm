@@ -1,11 +1,11 @@
 // import http from "http";
 // import { exec } from "child_process";
 
-// const url = "https://localhost:44343/swagger/v1/swagger.json";
+// const url = "https://localhost:44343/openapi/v1.json";
 
 // http.get(url, (res) => {
 //   if (res.statusCode === 200) {
-//     console.log("✅ Swagger JSON is reachable. Generating...");
+//     console.log("✅ OpenApi JSON is reachable. Generating...");
 //     exec("set JAVA_OPTS=-Djavax.net.ssl.trustStoreType=Windows-ROOT -Dlog.level=error && java -jar tools/openapi-generator-cli-7.12.0.jar generate -g typescript-angular -o src/shared/service-proxies -c open-api-config.json --skip-validate-spec");
 //   } else {
 //     console.error(`❌ Can't read ${url}. Status: ${res.statusCode}`);
@@ -19,12 +19,12 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 const https = require('https');
 const { exec } = require('child_process');
 
-const url = 'https://localhost:44343/swagger/v1/swagger.json';
+const url = 'https://localhost:44343/openapi/v1.json';
 
 https
   .get(url, (res) => {
     if (res.statusCode === 200) {
-      console.log('✅ Swagger JSON is reachable. Generating...');
+      console.log('✅ OpenApi JSON is reachable. Generating...');
       exec(
         'java -Djavax.net.ssl.trustStoreType=Windows-ROOT -Dlog.level=error -jar tools/openapi-generator-cli-7.12.0.jar generate -g typescript-angular -o src/shared/service-proxies -c open-api-config.json --skip-validate-spec',
         (error, stdout, stderr) => {

@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,20 +13,20 @@
 
 /** Interface for GetProductTypesQuery */
 export interface IGetProductTypesQuery {
+  filter?: string;
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;
   sortDirection?: string;
-  filter?: string;
 }
 
 /** Class for GetProductTypesQuery */
 export class GetProductTypesQuery implements IGetProductTypesQuery {
+  filter?: string;
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;
   sortDirection?: string;
-  filter?: string;
 
   constructor(data?: IGetProductTypesQuery) {
     if (data) {
@@ -39,11 +39,11 @@ export class GetProductTypesQuery implements IGetProductTypesQuery {
 
 init(data?: any) {
   if (data) {
+    this.filter = data["filter"];
     this.pageNumber = data["pageNumber"];
     this.pageSize = data["pageSize"];
     this.sortBy = data["sortBy"];
     this.sortDirection = data["sortDirection"];
-    this.filter = data["filter"];
   }
 }
 

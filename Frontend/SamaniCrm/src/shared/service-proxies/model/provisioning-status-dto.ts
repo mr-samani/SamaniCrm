@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -7,6 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ProvisioningStepStatus } from './provisioning-step-status';
+import { TenantProvisionStepsEnum } from './tenant-provision-steps-enum';
 
 
 /* Created with custom template by mohammadreza SAMANI*/
@@ -14,7 +16,8 @@
 /** Interface for ProvisioningStatusDto */
 export interface IProvisioningStatusDto {
   tenantId?: string;
-  status?: string;
+  step?: TenantProvisionStepsEnum;
+  stepStatus?: ProvisioningStepStatus;
   startedAt?: string;
   completedAt?: string;
   errorMessage?: string;
@@ -24,7 +27,8 @@ export interface IProvisioningStatusDto {
 /** Class for ProvisioningStatusDto */
 export class ProvisioningStatusDto implements IProvisioningStatusDto {
   tenantId?: string;
-  status?: string;
+  step?: TenantProvisionStepsEnum;
+  stepStatus?: ProvisioningStepStatus;
   startedAt?: string;
   completedAt?: string;
   errorMessage?: string;
@@ -42,7 +46,8 @@ export class ProvisioningStatusDto implements IProvisioningStatusDto {
 init(data?: any) {
   if (data) {
     this.tenantId = data["tenantId"];
-    this.status = data["status"];
+    this.step = data["step"];
+    this.stepStatus = data["stepStatus"];
     this.startedAt = data["startedAt"];
     this.completedAt = data["completedAt"];
     this.errorMessage = data["errorMessage"];

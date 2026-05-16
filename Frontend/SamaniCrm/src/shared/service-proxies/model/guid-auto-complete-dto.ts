@@ -11,18 +11,18 @@
 
 /* Created with custom template by mohammadreza SAMANI*/
 
-/** Interface for GuidAutoCompleteDto */
-export interface IGuidAutoCompleteDto {
+/** Interface for AutoCompleteDtoOfGuid */
+export interface IAutoCompleteDtoOfGuid {
   id: string;
   title: string;
 }
 
-/** Class for GuidAutoCompleteDto */
-export class GuidAutoCompleteDto implements IGuidAutoCompleteDto {
+/** Class for AutoCompleteDtoOfGuid */
+export class AutoCompleteDtoOfGuid implements IAutoCompleteDtoOfGuid {
   id!: string;
   title!: string;
 
-  constructor(data?: IGuidAutoCompleteDto) {
+  constructor(data?: IAutoCompleteDtoOfGuid) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -38,8 +38,8 @@ init(data?: any) {
   }
 }
 
-  static fromJS(data: any): GuidAutoCompleteDto {
-    const instance = new GuidAutoCompleteDto();
+  static fromJS(data: any): AutoCompleteDtoOfGuid {
+    const instance = new AutoCompleteDtoOfGuid();
     instance.init(data);
     return instance;
   }

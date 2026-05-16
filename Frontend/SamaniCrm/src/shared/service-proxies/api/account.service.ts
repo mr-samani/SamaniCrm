@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -17,25 +17,25 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { BooleanApiResponse } from '../model/boolean-api-response';
+import { ApiResponseOfGenerateTwoFactorCodeDto } from '../model/api-response-of-generate-two-factor-code-dto';
+// @ts-ignore
+import { ApiResponseOfListOfExternalProviderDto } from '../model/api-response-of-list-of-external-provider-dto';
+// @ts-ignore
+import { ApiResponseOfLoginResult } from '../model/api-response-of-login-result';
+// @ts-ignore
+import { ApiResponseOfTokenResponseDto } from '../model/api-response-of-token-response-dto';
+// @ts-ignore
+import { ApiResponseOfboolean } from '../model/api-response-ofboolean';
+// @ts-ignore
+import { ApiResponseOfstring } from '../model/api-response-ofstring';
 // @ts-ignore
 import { ExternalLoginCallbackCommand } from '../model/external-login-callback-command';
 // @ts-ignore
-import { ExternalProviderDtoListApiResponse } from '../model/external-provider-dto-list-api-response';
-// @ts-ignore
-import { GenerateTwoFactorCodeDtoApiResponse } from '../model/generate-two-factor-code-dto-api-response';
-// @ts-ignore
 import { LoginCommand } from '../model/login-command';
-// @ts-ignore
-import { LoginResultApiResponse } from '../model/login-result-api-response';
 // @ts-ignore
 import { RefreshTokenCommand } from '../model/refresh-token-command';
 // @ts-ignore
 import { RevokeRefreshTokenCommand } from '../model/revoke-refresh-token-command';
-// @ts-ignore
-import { StringApiResponse } from '../model/string-api-response';
-// @ts-ignore
-import { TokenResponseDtoApiResponse } from '../model/token-response-dto-api-response';
 // @ts-ignore
 import { TwoFactorLoginCommand } from '../model/two-factor-login-command';
 // @ts-ignore
@@ -60,15 +60,15 @@ export class AccountServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public externalLoginCallback(externalLoginCallbackCommand?: ExternalLoginCallbackCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<LoginResultApiResponse>;
-    public externalLoginCallback(externalLoginCallbackCommand?: ExternalLoginCallbackCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LoginResultApiResponse>>;
-    public externalLoginCallback(externalLoginCallbackCommand?: ExternalLoginCallbackCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LoginResultApiResponse>>;
-    public externalLoginCallback(externalLoginCallbackCommand?: ExternalLoginCallbackCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public externalLoginCallback(externalLoginCallbackCommand: ExternalLoginCallbackCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfLoginResult>;
+    public externalLoginCallback(externalLoginCallbackCommand: ExternalLoginCallbackCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfLoginResult>>;
+    public externalLoginCallback(externalLoginCallbackCommand: ExternalLoginCallbackCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfLoginResult>>;
+    public externalLoginCallback(externalLoginCallbackCommand: ExternalLoginCallbackCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (externalLoginCallbackCommand === null || externalLoginCallbackCommand === undefined) {
+            throw new Error('Required parameter externalLoginCallbackCommand was null or undefined when calling externalLoginCallback.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -107,7 +107,7 @@ export class AccountServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Account/ExternalLoginCallback`;
-        return this.httpClient.request<LoginResultApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfLoginResult>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: externalLoginCallbackCommand,
@@ -125,15 +125,12 @@ export class AccountServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public generate2FaRequestGenerate(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<GenerateTwoFactorCodeDtoApiResponse>;
-    public generate2FaRequestGenerate(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GenerateTwoFactorCodeDtoApiResponse>>;
-    public generate2FaRequestGenerate(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GenerateTwoFactorCodeDtoApiResponse>>;
+    public generate2FaRequestGenerate(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfGenerateTwoFactorCodeDto>;
+    public generate2FaRequestGenerate(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfGenerateTwoFactorCodeDto>>;
+    public generate2FaRequestGenerate(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfGenerateTwoFactorCodeDto>>;
     public generate2FaRequestGenerate(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -161,7 +158,7 @@ export class AccountServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Account/generate2FaRequest`;
-        return this.httpClient.request<GenerateTwoFactorCodeDtoApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfGenerateTwoFactorCodeDto>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -178,15 +175,12 @@ export class AccountServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getExternalProviders(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ExternalProviderDtoListApiResponse>;
-    public getExternalProviders(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ExternalProviderDtoListApiResponse>>;
-    public getExternalProviders(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ExternalProviderDtoListApiResponse>>;
+    public getExternalProviders(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfListOfExternalProviderDto>;
+    public getExternalProviders(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfListOfExternalProviderDto>>;
+    public getExternalProviders(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfListOfExternalProviderDto>>;
     public getExternalProviders(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -214,7 +208,7 @@ export class AccountServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Account/GetExternalProviders`;
-        return this.httpClient.request<ExternalProviderDtoListApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfListOfExternalProviderDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -232,15 +226,15 @@ export class AccountServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public login(loginCommand?: LoginCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<LoginResultApiResponse>;
-    public login(loginCommand?: LoginCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LoginResultApiResponse>>;
-    public login(loginCommand?: LoginCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LoginResultApiResponse>>;
-    public login(loginCommand?: LoginCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public login(loginCommand: LoginCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfLoginResult>;
+    public login(loginCommand: LoginCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfLoginResult>>;
+    public login(loginCommand: LoginCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfLoginResult>>;
+    public login(loginCommand: LoginCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (loginCommand === null || loginCommand === undefined) {
+            throw new Error('Required parameter loginCommand was null or undefined when calling login.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -279,7 +273,7 @@ export class AccountServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Account/login`;
-        return this.httpClient.request<LoginResultApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfLoginResult>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: loginCommand,
@@ -298,15 +292,15 @@ export class AccountServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public loginTwoFactor(twoFactorLoginCommand?: TwoFactorLoginCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<LoginResultApiResponse>;
-    public loginTwoFactor(twoFactorLoginCommand?: TwoFactorLoginCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<LoginResultApiResponse>>;
-    public loginTwoFactor(twoFactorLoginCommand?: TwoFactorLoginCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<LoginResultApiResponse>>;
-    public loginTwoFactor(twoFactorLoginCommand?: TwoFactorLoginCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public loginTwoFactor(twoFactorLoginCommand: TwoFactorLoginCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfLoginResult>;
+    public loginTwoFactor(twoFactorLoginCommand: TwoFactorLoginCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfLoginResult>>;
+    public loginTwoFactor(twoFactorLoginCommand: TwoFactorLoginCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfLoginResult>>;
+    public loginTwoFactor(twoFactorLoginCommand: TwoFactorLoginCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (twoFactorLoginCommand === null || twoFactorLoginCommand === undefined) {
+            throw new Error('Required parameter twoFactorLoginCommand was null or undefined when calling loginTwoFactor.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -345,7 +339,7 @@ export class AccountServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Account/loginTwoFactor`;
-        return this.httpClient.request<LoginResultApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfLoginResult>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: twoFactorLoginCommand,
@@ -364,15 +358,15 @@ export class AccountServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public refresh(refreshTokenCommand?: RefreshTokenCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<TokenResponseDtoApiResponse>;
-    public refresh(refreshTokenCommand?: RefreshTokenCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<TokenResponseDtoApiResponse>>;
-    public refresh(refreshTokenCommand?: RefreshTokenCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<TokenResponseDtoApiResponse>>;
-    public refresh(refreshTokenCommand?: RefreshTokenCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public refresh(refreshTokenCommand: RefreshTokenCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfTokenResponseDto>;
+    public refresh(refreshTokenCommand: RefreshTokenCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfTokenResponseDto>>;
+    public refresh(refreshTokenCommand: RefreshTokenCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfTokenResponseDto>>;
+    public refresh(refreshTokenCommand: RefreshTokenCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (refreshTokenCommand === null || refreshTokenCommand === undefined) {
+            throw new Error('Required parameter refreshTokenCommand was null or undefined when calling refresh.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -411,7 +405,7 @@ export class AccountServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Account/refresh`;
-        return this.httpClient.request<TokenResponseDtoApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfTokenResponseDto>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: refreshTokenCommand,
@@ -430,15 +424,15 @@ export class AccountServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public revoke(revokeRefreshTokenCommand?: RevokeRefreshTokenCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<StringApiResponse>;
-    public revoke(revokeRefreshTokenCommand?: RevokeRefreshTokenCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<StringApiResponse>>;
-    public revoke(revokeRefreshTokenCommand?: RevokeRefreshTokenCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<StringApiResponse>>;
-    public revoke(revokeRefreshTokenCommand?: RevokeRefreshTokenCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public revoke(revokeRefreshTokenCommand: RevokeRefreshTokenCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfstring>;
+    public revoke(revokeRefreshTokenCommand: RevokeRefreshTokenCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfstring>>;
+    public revoke(revokeRefreshTokenCommand: RevokeRefreshTokenCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfstring>>;
+    public revoke(revokeRefreshTokenCommand: RevokeRefreshTokenCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (revokeRefreshTokenCommand === null || revokeRefreshTokenCommand === undefined) {
+            throw new Error('Required parameter revokeRefreshTokenCommand was null or undefined when calling revoke.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -477,7 +471,7 @@ export class AccountServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Account/revoke`;
-        return this.httpClient.request<StringApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfstring>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: revokeRefreshTokenCommand,
@@ -496,15 +490,15 @@ export class AccountServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public verify2FaApp(verify2FARequest?: Verify2FARequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<BooleanApiResponse>;
-    public verify2FaApp(verify2FARequest?: Verify2FARequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BooleanApiResponse>>;
-    public verify2FaApp(verify2FARequest?: Verify2FARequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BooleanApiResponse>>;
-    public verify2FaApp(verify2FARequest?: Verify2FARequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public verify2FaApp(verify2FARequest: Verify2FARequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfboolean>;
+    public verify2FaApp(verify2FARequest: Verify2FARequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfboolean>>;
+    public verify2FaApp(verify2FARequest: Verify2FARequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfboolean>>;
+    public verify2FaApp(verify2FARequest: Verify2FARequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (verify2FARequest === null || verify2FARequest === undefined) {
+            throw new Error('Required parameter verify2FARequest was null or undefined when calling verify2FaApp.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -543,7 +537,7 @@ export class AccountServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Account/Verify2FaApp`;
-        return this.httpClient.request<BooleanApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfboolean>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: verify2FARequest,

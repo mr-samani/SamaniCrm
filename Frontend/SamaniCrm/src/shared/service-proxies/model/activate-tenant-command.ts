@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,14 +13,14 @@
 
 /** Interface for ActivateTenantCommand */
 export interface IActivateTenantCommand {
-  id?: string;
-  description?: string;
+  id: string;
+  description: string;
 }
 
 /** Class for ActivateTenantCommand */
 export class ActivateTenantCommand implements IActivateTenantCommand {
-  id?: string;
-  description?: string;
+  id!: string;
+  description!: string;
 
   constructor(data?: IActivateTenantCommand) {
     if (data) {

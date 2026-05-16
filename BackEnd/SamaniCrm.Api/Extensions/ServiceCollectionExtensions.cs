@@ -48,6 +48,10 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
 
+using Scalar.AspNetCore;
+
+
+
 namespace SamaniCrm.Infrastructure.Extensions;
 
 public static partial class ServiceCollectionExtensions
@@ -185,7 +189,10 @@ public static partial class ServiceCollectionExtensions
                 opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                 // برای اینکه فیلد های خالی را هم در خروجی بیاره
                 opt.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never;
-            });
+
+                // opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                 
+    });
 
         return services;
     }
@@ -196,36 +203,14 @@ public static partial class ServiceCollectionExtensions
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
+    public static IServiceCollection AddOpenApiDocumentation(this IServiceCollection services)
     {
-        services.AddSwaggerGen(c =>
+        services.AddOpenApi("v1", opt =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "SamaniCrm API", Version = "v1" });
-            c.AddServer(new OpenApiServer
-            {
-                Url = "https://localhost:44343",
-                Description = "localhost"
-            });
-            c.AddServer(new OpenApiServer
-            {
-                Url = "https://api.samani-crm.com",
-                Description = "Production Server"
-            });
-            c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
-
-            c.SchemaFilter<AddEnumNamesSchemaFilter>();
-
-            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            {
-                Name = "Authorization",
-                Type = SecuritySchemeType.Http,
-                Scheme = "bearer",
-                BearerFormat = "JWT",
-                In = ParameterLocation.Header,
-                Description = "Enter your JWT token"
-            });
+            opt.AddSchemaTransformer<SchemaTransformer>();
+            opt.AddOperationTransformer<OperationSchmaTransformer>();
+      
         });
-
         return services;
     }
 
@@ -520,7 +505,6 @@ public static partial class ServiceCollectionExtensions
     }
 
 }
-
 
 
 

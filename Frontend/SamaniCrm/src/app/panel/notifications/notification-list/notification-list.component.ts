@@ -133,7 +133,7 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
       if (result.isConfirmed) {
         this.showMainLoading();
         this.notificationService
-          .deleteNotification(new DeleteNotificationCommand({ id: item.id }))
+          .deleteNotification(new DeleteNotificationCommand({ id: item.id! }))
           .pipe(
         finalize(() => {
           this.hideMainLoading();

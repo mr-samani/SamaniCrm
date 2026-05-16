@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,12 +13,12 @@
 
 /** Interface for DeleteCurrencyCommand */
 export interface IDeleteCurrencyCommand {
-  id?: string;
+  id: string;
 }
 
 /** Class for DeleteCurrencyCommand */
 export class DeleteCurrencyCommand implements IDeleteCurrencyCommand {
-  id?: string;
+  id!: string;
 
   constructor(data?: IDeleteCurrencyCommand) {
     if (data) {

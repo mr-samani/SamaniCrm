@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,24 +13,24 @@
 
 /** Interface for TenantUsageDto */
 export interface ITenantUsageDto {
-  tenantId?: string;
-  userCount?: number;
-  maxUsers?: number;
-  storageUsedMb?: number;
-  maxStorageMb?: number;
-  apiCallsThisMonth?: number;
-  lastActivityAt?: string;
+  tenantId: string;
+  userCount: number;
+  maxUsers: number;
+  storageUsedMb: number;
+  maxStorageMb: number;
+  apiCallsThisMonth: number;
+  lastActivityAt: string;
 }
 
 /** Class for TenantUsageDto */
 export class TenantUsageDto implements ITenantUsageDto {
-  tenantId?: string;
-  userCount?: number;
-  maxUsers?: number;
-  storageUsedMb?: number;
-  maxStorageMb?: number;
-  apiCallsThisMonth?: number;
-  lastActivityAt?: string;
+  tenantId!: string;
+  userCount!: number;
+  maxUsers!: number;
+  storageUsedMb!: number;
+  maxStorageMb!: number;
+  apiCallsThisMonth!: number;
+  lastActivityAt!: string;
 
   constructor(data?: ITenantUsageDto) {
     if (data) {
