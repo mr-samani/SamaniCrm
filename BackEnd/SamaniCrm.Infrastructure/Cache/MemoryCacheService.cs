@@ -84,9 +84,9 @@ namespace SamaniCrm.Infrastructure.Cache
             return Task.CompletedTask;
         }
 
-        public Task<IEnumerable<string>> GetKeysAsync(string? pattern = null)
+        public Task<IEnumerable<string?>> GetKeysAsync(string? pattern = null)
         {
-            IEnumerable<string> filtered;
+            IEnumerable<string?> filtered;
             lock (_lock)
             {
                 filtered = string.IsNullOrEmpty(pattern)

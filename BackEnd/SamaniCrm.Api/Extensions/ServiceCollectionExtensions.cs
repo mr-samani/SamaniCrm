@@ -9,8 +9,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using SamaniCrm.Api.Middlewares;
 using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.Behaviors;
@@ -41,7 +40,6 @@ using SamaniCrm.Infrastructure.Services;
 using SamaniCrm.Infrastructure.Services.Product;
 using SamaniCrm.Infrastructure.Services.TenantService;
 using SamaniCrm.Infrastructure.Storage;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Security.Claims;
@@ -52,7 +50,7 @@ using System.Text.Unicode;
 
 namespace SamaniCrm.Infrastructure.Extensions;
 
-public static class ServiceCollectionExtensions
+public static partial class ServiceCollectionExtensions
 {
 
     public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration config)
@@ -214,29 +212,17 @@ public static class ServiceCollectionExtensions
                 Description = "Production Server"
             });
             c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
-            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            {
-                Description = "JWT Authorization header using the Bearer scheme.",
-                Name = "Authorization",
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.ApiKey,
-                Scheme = "Bearer"
-            });
+
             c.SchemaFilter<AddEnumNamesSchemaFilter>();
 
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    Array.Empty<string>()
-                }
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "Enter your JWT token"
             });
         });
 
@@ -533,56 +519,8 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-
-
-
-    public class HangfireJobStartupFilter : IStartupFilter
-    {
-        public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
-        {
-            return app =>
-            {
-                using var scope = app.ApplicationServices.CreateScope();
-                var jobManager = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
-
-                jobManager.AddOrUpdate<ILoginJobsService>(
-                    recurringJobId: "ReleaseExpiredLocksJob",
-                    methodCall: job => job.ReleaseExpiredLocksAsync(null!),
-                    cronExpression: "*/30 * * * * *",
-                     options: new RecurringJobOptions()
-                     {
-                         MisfireHandling = MisfireHandlingMode.Relaxed,
-                         TimeZone = TimeZoneInfo.Utc,
-                     }
-                );
-
-                next(app);
-            };
-        }
-    }
-
 }
 
-
-public class AddEnumNamesSchemaFilter : ISchemaFilter
-{
-    public void Apply(OpenApiSchema schema, SchemaFilterContext context)
-    {
-        var type = context.Type;
-
-        if (type.IsEnum)
-        {
-            var enumNames = Enum.GetNames(type);
-            var enumNamesArray = new OpenApiArray();
-            foreach (var name in enumNames)
-            {
-                enumNamesArray.Add(new OpenApiString(name));
-            }
-
-            schema.Extensions.Add("x-enum-varnames", enumNamesArray);
-        }
-    }
-}
 
 
 

@@ -8,6 +8,6 @@ namespace SamaniCrm.Domain.Entities;
 public class Permission
 {
     public Guid Id { get; set; }
-    public string Name { get; set; } = default!;
-    public string LocalizeKey { get; set; }
+    public required string Name { get; set; }
+    public required string LocalizeKey { get; set; }
 }

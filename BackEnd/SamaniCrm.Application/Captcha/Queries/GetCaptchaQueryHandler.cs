@@ -28,7 +28,7 @@ namespace SamaniCrm.Application.Captcha.Queries
             var randomText = GenerateRandomText(2);
             //   using FileStream fs = File.OpenWrite("d:/1.jpg") ;
             using var ms = new MemoryStream();
-            using (Stream picStream = ImageFactory.BuildImage(randomText, 40, 140, 24, 10, ImageFormat.Jpeg))
+            using (Stream picStream = ImageFactory.BuildImage(randomText, 40, 140, 24, 10))
             {
                 // picStream.CopyTo(fs);
                 picStream.CopyTo(ms);

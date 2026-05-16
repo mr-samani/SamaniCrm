@@ -704,8 +704,12 @@ public class IdentityService : IIdentityService
             redirectUrl,
             cancellationToken);
 
+        ;
+        if (externalLoginResult == null)
+        {
+            throw new UnauthorizedAccessException("External login provider result not found");
+        }
         ApplicationUser? user = await FindOrCreateExternalUser(externalLoginResult.Email!, externalLoginResult.UserName!, externalLoginResult.Name!, provider.Name);
-
         await _signInManager.SignInAsync(user, false);
 
         var roles = await _userManager.GetRolesAsync(user);

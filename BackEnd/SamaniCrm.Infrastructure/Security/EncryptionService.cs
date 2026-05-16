@@ -138,9 +138,14 @@ public class EncryptionService : IEncryptionService
             rng.GetBytes(salt);
         }
 
-        // Create hash
-        using var pbkdf2 = new Rfc2898DeriveBytes(input, salt, Iterations, HashAlgorithmName.SHA256);
-        var hash = pbkdf2.GetBytes(32);
+        // ✅ استفاده از Pbkdf2 استاتیک
+        var hash = Rfc2898DeriveBytes.Pbkdf2(
+            input,
+            salt,
+            Iterations,
+            HashAlgorithmName.SHA256,
+            32  // KeySize
+        );
 
         // Combine salt and hash
         var hashBytes = new byte[salt.Length + hash.Length];
@@ -163,18 +168,20 @@ public class EncryptionService : IEncryptionService
             var salt = new byte[16];
             Buffer.BlockCopy(hashBytes, 0, salt, 0, salt.Length);
 
-            // Compute hash with same salt
-            using var pbkdf2 = new Rfc2898DeriveBytes(input, salt, Iterations, HashAlgorithmName.SHA256);
-            var hash = pbkdf2.GetBytes(32);
+            // ✅ استفاده از Pbkdf2 استاتیک
+            var hash = Rfc2898DeriveBytes.Pbkdf2(
+                input,
+                salt,
+                Iterations,
+                HashAlgorithmName.SHA256,
+                32
+            );
 
-            // Compare
-            for (int i = 0; i < 32; i++)
-            {
-                if (hashBytes[i + salt.Length] != hash[i])
-                    return false;
-            }
-
-            return true;
+            // ✅ مقایسه امن با FixedTimeEquals
+            return CryptographicOperations.FixedTimeEquals(
+                hash,
+                hashBytes.AsSpan(16, 32)
+            );
         }
         catch
         {

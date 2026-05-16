@@ -9,7 +9,7 @@ namespace SamaniCrm.Infrastructure.Captcha
 {
     internal class CaptchaEntry
     {
-        public string Value { get; set; }
+        public required string Value { get; set; }
         public DateTime ExpireAt { get; set; }
     }
 

@@ -25,13 +25,20 @@ namespace SamaniCrm.Infrastructure.Cache
         public async Task<T?> GetAsync<T>(string key)
         {
             var value = await _database.StringGetAsync(key);
-            return value.HasValue ? JsonSerializer.Deserialize<T>(value!) : default;
+            return value.HasValue ? JsonSerializer.Deserialize<T>(value.ToString()!, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) : default;
         }
 
         public async Task SetAsync<T>(string key, T value, TimeSpan? expiration = null)
         {
             var json = JsonSerializer.Serialize(value);
-            await _database.StringSetAsync(key, json, expiration);
+            if (expiration.HasValue)
+            {
+                await _database.StringSetAsync(key, json, expiration.Value);
+            }
+            else
+            {
+                await _database.StringSetAsync(key, json);
+            }
         }
 
         public async Task RemoveAsync(string key)
@@ -39,10 +46,10 @@ namespace SamaniCrm.Infrastructure.Cache
             await _database.KeyDeleteAsync(key);
         }
 
-        public Task<IEnumerable<string>> GetKeysAsync(string? pattern)
+        public Task<IEnumerable<string?>> GetKeysAsync(string? pattern)
         {
             var server = _connection.GetServer(_connection.GetEndPoints().First());
-            return (Task<IEnumerable<string>>)server.Keys(pattern: pattern ?? "*").Select(k => k.ToString());
+            return (Task<IEnumerable<string?>>)server.Keys(pattern: pattern ?? "*").Select(k => k.ToString());
         }
 
         public async Task ClearAsync()
@@ -72,7 +79,7 @@ namespace SamaniCrm.Infrastructure.Cache
                 LastModified = null // Redis به صورت پیش فرض تاریخ ندارد
             };
         }
- 
+
     }
 
 }

@@ -12,7 +12,7 @@ namespace SamaniCrm.Core.Shared.Interfaces
         Task<T?> GetAsync<T>(string key);
         Task SetAsync<T>(string key, T value, TimeSpan? expiration = null);
         Task RemoveAsync(string key);
-        Task<IEnumerable<string>> GetKeysAsync(string? pattern = null);
+        Task<IEnumerable<string?>> GetKeysAsync(string? pattern = null);
         Task ClearAsync();
 
         Task<CacheEntryDto?> GetMetaAsync(string key);
