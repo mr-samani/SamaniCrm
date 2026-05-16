@@ -15,6 +15,10 @@ namespace SamaniCrm.Infrastructure.Cache
         public static IServiceCollection AddCacheService(this IServiceCollection services, IConfiguration config)
         {
             var settings = config.GetSection("CacheSettings").Get<CacheSettings>();
+            if (settings == null)
+            {
+                return services;
+            }
 
             services.Configure<CacheSettings>(config.GetSection("CacheSettings"));
 
