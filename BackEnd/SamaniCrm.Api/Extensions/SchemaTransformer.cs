@@ -1,62 +1,59 @@
-﻿using Microsoft.AspNetCore.OpenApi;
+﻿using System.Text.Json.Nodes;
+using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
-using System.Text.Json.Nodes;
 
 public class SchemaTransformer : IOpenApiSchemaTransformer
 {
-    public Task TransformAsync(OpenApiSchema schema, OpenApiSchemaTransformerContext context, CancellationToken cancellationToken)
+    public Task TransformAsync(
+        OpenApiSchema schema,
+        OpenApiSchemaTransformerContext context,
+        CancellationToken cancellationToken)
     {
         var type = context.JsonTypeInfo.Type;
 
-        if (schema.Type.ToString() == "Integer, String" || schema.Type.ToString() == "Number, String" || schema.Type.ToString() == "Null, Integer, String")
+        // اگر enum باشد
+        if (type?.IsEnum == true)
         {
+            schema.AddExtension("x-enum-varnames", new OpenApiRawExtension(Enum.GetNames(type)));
             schema.Type = JsonSchemaType.Integer;
+            schema.Enum = Enum.GetValues(type)
+                .Cast<Enum>()
+                .Select(e => (JsonNode)JsonValue.Create(Convert.ToInt64(e))!)
+                .ToList();
         }
-        if (schema.Type.ToString() == "Null, String")
+        else
         {
-            schema.Type = JsonSchemaType.String;
-        }
-        if (schema.Type.ToString() == "Null, Number, String")
-        {
-            schema.Type = JsonSchemaType.String;
-        }
-        if (schema.Type.ToString() == "Null, Object")
-        {
-            schema.Type = JsonSchemaType.Object;
-        }
-        if (type == null || !type.IsEnum)
-            return Task.CompletedTask;
-
-        var enumNames = Enum.GetNames(type);
-        var enumValues = Enum.GetValues(type);
-
-        schema.AddExtension("x-enum-varnames", new OpenApiRawExtension(enumNames));
-
-        // تغییر نوع به string
-        schema.Type = JsonSchemaType.Integer;
-
-        // تنظیم مقادیر enum
-        // enum = مقادیر عددی واقعی
-        var enumNodeList = new List<JsonNode>();
-
-        foreach (var value in enumValues)
-        {
-            var rawValue = Convert.ToInt64(value); // 1, 2, 3 ...
-            enumNodeList.Add(JsonValue.Create(rawValue)!);
+            if (schema.Type != null)
+            {
+                schema.Type = SimplifyType((JsonSchemaType)schema.Type);
+            }
         }
 
-        schema.Enum = enumNodeList;
         return Task.CompletedTask;
     }
+
+    private static JsonSchemaType SimplifyType(JsonSchemaType type)
+    {
+        if (type.HasFlag(JsonSchemaType.Integer) && type.HasFlag(JsonSchemaType.String))
+        {
+            return JsonSchemaType.Integer;
+        }
+        else if (type.HasFlag(JsonSchemaType.Number) && type.HasFlag(JsonSchemaType.String))
+        {
+            return JsonSchemaType.Number;
+        }
+        else if (type.HasFlag(JsonSchemaType.Null))
+        {
+            return type switch
+            {
+                var t when t.HasFlag(JsonSchemaType.Integer) => JsonSchemaType.Integer,
+                var t when t.HasFlag(JsonSchemaType.Number) => JsonSchemaType.Integer,
+                var t when t.HasFlag(JsonSchemaType.Object) => JsonSchemaType.Object,
+                var t when t.HasFlag(JsonSchemaType.String) => JsonSchemaType.String,
+                var t when t.HasFlag(JsonSchemaType.Array) => JsonSchemaType.Array,
+                _ => type
+            };
+        }
+        return type;
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
