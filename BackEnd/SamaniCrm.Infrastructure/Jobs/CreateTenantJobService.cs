@@ -7,6 +7,7 @@ using SamaniCrm.Application.Features.Tenants;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Application.User.Commands;
 using SamaniCrm.Core;
+using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Constants;
 using SamaniCrm.Domain.Entities;
@@ -20,20 +21,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SamaniCrm.Infrastructure.Jobs;
-
-
-public class TenantJobProvisioningData
-{
-    public Guid TenantId { get; set; }
-    public required string Slug { get; set; }
-    public required string  AdminEmail { get; set; }
-    public required string  AdminFirstName { get; set; }
-    public required string  AdminLastName { get; set; }
-    public required string  AdminPassword { get; set; }
-    public required string  AdminUserName { get; set; }
-    public required string  AdminMobile { get; set; }
-    public required string  Address { get; set; }
-}
 
 
 public interface ICreateTenantJobService

@@ -5,6 +5,7 @@ using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants;
 using SamaniCrm.Application.Features.Tenants.Commands;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
+using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.Jobs;

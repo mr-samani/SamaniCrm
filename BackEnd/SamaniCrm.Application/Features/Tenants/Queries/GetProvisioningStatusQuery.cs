@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Features.Tenants.Dtos;
+using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Core.Shared.Interfaces.Tenant;
 using System;
 using System.Collections.Generic;
@@ -10,21 +11,22 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.Features.Tenants.Queries;
 
-public record GetProvisioningStatusQuery(Guid TenantId) : IRequest<ProvisioningStatusDto>;
-public class GetProvisioningStatusQueryHandler : IRequestHandler<GetProvisioningStatusQuery, ProvisioningStatusDto>
+public record GetProvisioningStatusQuery(Guid TenantId) : IRequest<List<ProvisioningStatusDto>>;
+public class GetProvisioningStatusQueryHandler : IRequestHandler<GetProvisioningStatusQuery, List<ProvisioningStatusDto>>
 {
-    private readonly ITenantRepository _repository;
+    private readonly ITenantProvisioningService _tenantProvisioningService;
 
-    public GetProvisioningStatusQueryHandler(ITenantRepository repository) => _repository = repository;
-
-    public async Task<ProvisioningStatusDto> Handle(GetProvisioningStatusQuery request, CancellationToken cancellation)
+    public GetProvisioningStatusQueryHandler(
+        ITenantProvisioningService tenantProvisioningService)
     {
-        throw new NotImplementedException();
-        //var tenant = await _repository.GetByIdAsync(request.TenantId)
-        //    ?? throw new NotFoundException("Tenant not found");
-        //return new ProvisioningStatusDto(
-        //    tenant.Id, tenant.Provisioning.Status.ToString(),
-        //    tenant.Provisioning.StartedAt, tenant.Provisioning.CompletedAt,
-        //    tenant.Provisioning.ErrorMessage, tenant.Provisioning.RetryCount);
+        _tenantProvisioningService = tenantProvisioningService;
+    }
+
+    public async Task<List<ProvisioningStatusDto>> Handle(GetProvisioningStatusQuery request, CancellationToken cancellation)
+    {
+
+        var result = await _tenantProvisioningService.GetTenantProvisionSteps(request.TenantId, cancellation);
+
+        return result;
     }
 }

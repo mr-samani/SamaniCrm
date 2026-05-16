@@ -11,11 +11,13 @@ public class TenantProvisioningStep
 
     public Guid? TenantId { get; set; }
 
-    [MaxLength(200)]
-    public string Name { get; set; } = string.Empty;
+    public required TenantProvisionStepsEnum Step { get; set; }
     [MaxLength(500)]
     public string Description { get; set; } = string.Empty;
-    public ProvisioningStepStatus Status { get; set; } = ProvisioningStepStatus.Pending;
+    public ProvisioningStepStatus StepStatus { get; set; } = ProvisioningStepStatus.Pending;
+
+    public int RetryCount { get; set; } = 0;
+
     [MaxLength(2000)]
     public string? ErrorMessage { get; set; }
     public DateTime? StartedAt { get; set; }

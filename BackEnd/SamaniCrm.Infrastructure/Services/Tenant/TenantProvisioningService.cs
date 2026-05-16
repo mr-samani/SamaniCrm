@@ -12,7 +12,6 @@ using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Application.User.Commands;
 using SamaniCrm.Core;
 using SamaniCrm.Core.Shared.Enums;
-using SamaniCrm.Core.Shared.Interfaces.Tenant;
 using SamaniCrm.Domain.Constants;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.Data.Seeder;
@@ -23,26 +22,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HealthStatus = SamaniCrm.Domain.Entities.HealthStatus;
+using SamaniCrm.Application.Features.Tenants.Dtos;
+using SamaniCrm.Core.Shared.DTOs;
+
 
 namespace SamaniCrm.Infrastructure.Services.TenantService;
-
-
-
-
-
-
-public interface ITenantProvisioningService
-{
-    Task InitializeTenantProvisionSteps(Guid tenantId, CancellationToken cancellation);
-    Task<List<TenantProvisionStepsEnum>> GetPendingProvisionSteps(Guid tenantId, CancellationToken cancellation);
-    Task ProvisionCreateAdminUser(TenantJobProvisioningData request, Guid tenantId, CancellationToken cancellation);
-    Task ProvisionIsolatedDatabaseAsync(Tenant tenant, CancellationToken cancellation);
-    Task RunMigrationsAsync(Tenant tenant, CancellationToken cancellation);
-    Task SeedInitialDataAsync(Tenant tenant, CancellationToken cancellation);
-    Task FinalizeAsync(Tenant tenant, CancellationToken cancellation);
-
-    Task<bool> TestDatabaseConnectionAsync(string connectionString, CancellationToken cancellation);
-}
 
 
 public class TenantProvisioningService : ITenantProvisioningService
@@ -88,15 +72,15 @@ public class TenantProvisioningService : ITenantProvisioningService
 
         List<TenantProvisioningStep> allProvisioningSteps = new()
             {
-                new() {TenantId = tenantId, Name = TenantProvisionStepsEnum.CreateTenant.ToString(), Description = "ایجاد موجودیت بهره‌بردار", Status = ProvisioningStepStatus.Pending },
-                new() {TenantId = tenantId, Name = TenantProvisionStepsEnum.CreateAdminUser.ToString(), Description = "ایجاد کاربر مدیر", Status = ProvisioningStepStatus.Pending },
-                new() {TenantId = tenantId, Name = TenantProvisionStepsEnum.ProvisionDatabase.ToString(), Description = "ایجاد دیتابیس", Status = ProvisioningStepStatus.Pending },
-                new() {TenantId = tenantId, Name = TenantProvisionStepsEnum.RunMigrations.ToString(), Description = "اجرای مایگریشن‌ها", Status = ProvisioningStepStatus.Pending },
-                new() {TenantId = tenantId, Name = TenantProvisionStepsEnum.SeedData.ToString(), Description = "بارگذاری داده‌های اولیه", Status = ProvisioningStepStatus.Pending },
-                new() {TenantId = tenantId, Name = TenantProvisionStepsEnum.Finalize.ToString(), Description = "تکمیل تنظیمات", Status = ProvisioningStepStatus.Pending }
+                new() {TenantId = tenantId, Step = TenantProvisionStepsEnum.CreateTenant, Description = "ایجاد موجودیت بهره‌بردار", StepStatus = ProvisioningStepStatus.Pending },
+                new() {TenantId = tenantId, Step = TenantProvisionStepsEnum.CreateAdminUser, Description = "ایجاد کاربر مدیر", StepStatus = ProvisioningStepStatus.Pending },
+                new() {TenantId = tenantId, Step = TenantProvisionStepsEnum.ProvisionDatabase, Description = "ایجاد دیتابیس", StepStatus = ProvisioningStepStatus.Pending },
+                new() {TenantId = tenantId, Step = TenantProvisionStepsEnum.RunMigrations, Description = "اجرای مایگریشن‌ها", StepStatus = ProvisioningStepStatus.Pending },
+                new() {TenantId = tenantId, Step = TenantProvisionStepsEnum.SeedData, Description = "بارگذاری داده‌های اولیه", StepStatus = ProvisioningStepStatus.Pending },
+                new() {TenantId = tenantId, Step = TenantProvisionStepsEnum.Finalize, Description = "تکمیل تنظیمات", StepStatus = ProvisioningStepStatus.Pending }
             };
-        List<string> existSteps = tenant.ProvisioningSteps?.Select(s => s.Name).ToList() ?? new();
-        var notExistSteps = allProvisioningSteps.Where(x => existSteps.Contains(x.Name) == false).ToList();
+        List<TenantProvisionStepsEnum> existSteps = tenant.ProvisioningSteps?.Select(s => s.Step).ToList() ?? new();
+        var notExistSteps = allProvisioningSteps.Where(x => existSteps.Contains(x.Step) == false).ToList();
 
         if (notExistSteps.Any())
         {
@@ -119,7 +103,7 @@ public class TenantProvisioningService : ITenantProvisioningService
         }
 
         return tenant.ProvisioningSteps?
-            .Select(s => Enum.TryParse(s.Name, out TenantProvisionStepsEnum result) ? result : default!)
+            .Select(s => s.Step)
             .Where(w => w != default)
             .ToList() ?? [];
     }
@@ -372,7 +356,7 @@ public class TenantProvisioningService : ITenantProvisioningService
         ProvisioningStepStatus status, string tenantSlug, Guid tenantId, string message, TenantProvisionStepsEnum step)
     {
         var stepEntity = await _dbContext.TenantProvisioningSteps
-               .Where(x => x.TenantId == tenantId && x.Name == step.ToString())
+               .Where(x => x.TenantId == tenantId && x.Step == step)
                .FirstOrDefaultAsync();
         switch (status)
         {
@@ -380,7 +364,7 @@ public class TenantProvisioningService : ITenantProvisioningService
                 await _notificationService.SendProgressAsync(tenantSlug, message, step);
                 if (stepEntity != null)
                 {
-                    stepEntity.Status = ProvisioningStepStatus.InProgress;
+                    stepEntity.StepStatus = ProvisioningStepStatus.InProgress;
                     stepEntity.StartedAt = DateTime.UtcNow;
                     stepEntity.CompletedAt = null;
                     await _dbContext.SaveChangesAsync();
@@ -390,7 +374,7 @@ public class TenantProvisioningService : ITenantProvisioningService
                 await _notificationService.SendErrorAsync(tenantSlug, message, step);
                 if (stepEntity != null)
                 {
-                    stepEntity.Status = ProvisioningStepStatus.Failed;
+                    stepEntity.StepStatus = ProvisioningStepStatus.Failed;
                     stepEntity.CompletedAt = null;
                     await _dbContext.SaveChangesAsync();
                 }
@@ -399,7 +383,7 @@ public class TenantProvisioningService : ITenantProvisioningService
                 await _notificationService.SendCompletionAsync(tenantSlug, message, step);
                 if (stepEntity != null)
                 {
-                    stepEntity.Status = ProvisioningStepStatus.Completed;
+                    stepEntity.StepStatus = ProvisioningStepStatus.Completed;
                     stepEntity.CompletedAt = DateTime.UtcNow;
                     await _dbContext.SaveChangesAsync();
                 }
@@ -411,6 +395,24 @@ public class TenantProvisioningService : ITenantProvisioningService
 
 
 
+    }
+
+    public async Task<List<ProvisioningStatusDto>> GetTenantProvisionSteps(Guid tenantId, CancellationToken cancellation)
+    {
+        var result = await _dbContext.TenantProvisioningSteps
+            .Select(s => new ProvisioningStatusDto()
+            {
+                TenantId = s.Id,
+                Step = s.Step,
+                StepStatus = s.StepStatus,
+                StartedAt = s.StartedAt,
+                CompletedAt = s.CompletedAt,
+                ErrorMessage = s.ErrorMessage,
+                RetryCount = s.RetryCount,
+            })
+               .Where(x => x.TenantId == tenantId)
+               .ToListAsync(cancellation);
+        return result;
     }
 
 }

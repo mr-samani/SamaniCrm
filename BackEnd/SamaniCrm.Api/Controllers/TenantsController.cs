@@ -157,7 +157,7 @@ public partial class TenantsController : ApiBaseController
     /// Get tenant provisioning status
     /// </summary>
     [HttpGet("{id:guid}/provisioning-status")]
-    [ProducesResponseType(typeof(ApiResponse<ProvisioningStatusDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<List<ProvisioningStatusDto>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetProvisioningTenantStatus(Guid id)
     {
         var result = await _mediator.Send(new GetProvisioningStatusQuery(id));
