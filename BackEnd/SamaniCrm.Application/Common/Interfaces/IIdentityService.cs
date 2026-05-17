@@ -24,7 +24,7 @@ namespace SamaniCrm.Application.Common.Interfaces
         Task<(bool isSucceed, Guid userId)> CreateUserAsync(CreateUserCommand input);
         Task<string> GetUserIdAsync(string userName);
         Task<UserDTO> GetUserDetailsAsync(Guid userId);
-        Task<UserDTO> GetUserDetailsByUserNameAsync(string userName);
+        Task<UserDTO> GetUserDetailsByUserNameAsync(string userName,Guid? tenantId);
         Task<string> GetUserNameAsync(Guid userId);
         Task<bool> DeleteUserAsync(Guid userId);
         Task<bool> IsUniqueUserName(string userName);

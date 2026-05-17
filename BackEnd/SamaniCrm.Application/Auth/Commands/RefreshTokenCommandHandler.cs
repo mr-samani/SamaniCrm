@@ -7,6 +7,7 @@ using MediatR;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.Features.Tenants.Interfaces;
 using UnauthorizedAccessException = SamaniCrm.Application.Common.Exceptions.UnauthorizedAccessException;
 
 namespace SamaniCrm.Application.Auth.Commands
@@ -15,11 +16,16 @@ namespace SamaniCrm.Application.Auth.Commands
     {
         private readonly ITokenGenerator _tokenGenerator;
         private readonly IIdentityService _identityService;
+        private readonly ICurrentTenant _currentTenant;
 
-        public RefreshTokenCommandHandler(ITokenGenerator tokenGenerator, IIdentityService identityService)
+        public RefreshTokenCommandHandler(
+            ITokenGenerator tokenGenerator,
+            IIdentityService identityService,
+            ICurrentTenant currentTenant)
         {
             _tokenGenerator = tokenGenerator;
             _identityService = identityService;
+            _currentTenant = currentTenant;
         }
 
         public async Task<TokenResponseDto> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
@@ -27,10 +33,11 @@ namespace SamaniCrm.Application.Auth.Commands
             var result = await _identityService.GetUserIdFromRefreshToken(request.RefreshToken);
             if (result.Equals(Guid.Empty))
                 throw new UnauthorizedAccessException();
+            Guid? tenantId = _currentTenant.TenantId;
 
-            DTOs.UserDTO  userData = await _identityService.GetUserDetailsAsync(result);
-            var accessToken = _tokenGenerator.GenerateAccessToken(userData.Id, userData.UserName, userData.Lang, userData.Roles);
-            var newRefreshToken = await _tokenGenerator.GenerateRefreshToken(userData.Id, accessToken);
+            DTOs.UserDTO userData = await _identityService.GetUserDetailsAsync(result);
+            var accessToken = _tokenGenerator.GenerateAccessToken(userData.Id, userData.UserName, userData.Lang, userData.Roles, tenantId);
+            var newRefreshToken = await _tokenGenerator.GenerateRefreshToken(userData.Id, accessToken, tenantId);
 
             return new TokenResponseDto
             {

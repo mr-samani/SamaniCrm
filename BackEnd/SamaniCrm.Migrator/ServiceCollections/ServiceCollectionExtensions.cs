@@ -19,7 +19,7 @@ public static class ServiceCollectionExtensions
         // ✅ DbContext
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(connectionString),
-            ServiceLifetime.Transient);
+            ServiceLifetime.Scoped);
         return services;
     }
 

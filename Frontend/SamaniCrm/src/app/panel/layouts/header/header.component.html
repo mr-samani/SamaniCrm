@@ -152,7 +152,10 @@
         @if (!user?.profilePicture) {
           <img src="/images/profile-picture.jpg" [alt]="user?.userName" />
         }
-        <span>{{ user?.userName }}</span>
+        <div>
+          <span>{{ user?.userName }}</span>
+          <small>{{ tenancyName }}</small>
+        </div>
       </div>
       <mat-menu #userMenu="matMenu">
         <button mat-menu-item (click)="closeNavbar()" routerLink="/panel/user-profile">

@@ -11,7 +11,7 @@ import { AppConst } from '@shared/app-const';
   standalone: false,
 })
 export class ChangeTenantDialogComponent extends AppComponentBase implements OnInit {
-  tenancyName = '';
+  tenancyName = AppConst.tenancyName;
   dialogRef = inject(MatDialogRef<ChangeTenantDialogComponent>);
   constructor() {
     super();

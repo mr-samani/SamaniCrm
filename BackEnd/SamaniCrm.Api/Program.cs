@@ -22,8 +22,8 @@ var services = builder.Services;
 var config = builder.Configuration;
 
 services
-    .AddCustomServices(config)
-    .AddDbContext(config);
+    .AddDbContext(config)
+    .AddCustomServices(config);
 services
     .AddCorsPolicy()
     .AddControllersWithDefaults()

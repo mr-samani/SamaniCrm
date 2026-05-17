@@ -23,13 +23,17 @@ public class TenantDbContextFactory : ITenantDbContextFactory
     private readonly ITenantResolver _tenantResolver;
     private readonly ILogger<TenantDbContextFactory> _logger;
     private readonly ConcurrentDictionary<Guid, string> _connectionStringCache;
+    private readonly ICurrentTenant _currentTenant;
+    private readonly IServiceProvider _serviceProvider;
 
     public TenantDbContextFactory(
         ITenantDatabaseService databaseService,
         ITenantResolver tenantResolver,
         ILogger<TenantDbContextFactory> logger,
         IApplicationDbContext dbContext,
-        ICurrentUserService currentUser)
+        ICurrentUserService currentUser,
+        ICurrentTenant currentTenant,
+        IServiceProvider serviceProvider)
     {
         _databaseService = databaseService;
         _tenantResolver = tenantResolver;
@@ -37,6 +41,8 @@ public class TenantDbContextFactory : ITenantDbContextFactory
         _connectionStringCache = new ConcurrentDictionary<Guid, string>();
         _dbContext = dbContext;
         _currentUser = currentUser;
+        _currentTenant = currentTenant;
+        _serviceProvider = serviceProvider;
     }
 
     public ApplicationDbContext CreateDbContext(Guid tenantId)
@@ -64,7 +70,7 @@ public class TenantDbContextFactory : ITenantDbContextFactory
             // , new TenantCommandInterceptor()
             );
 
-        return new ApplicationDbContext(optionsBuilder.Options, _currentUser);
+        return new ApplicationDbContext(optionsBuilder.Options, _currentUser, _currentTenant, _serviceProvider);
     }
 
     public async Task<ApplicationDbContext> CreateDbContextAsync(Guid tenantId, CancellationToken cancellation)

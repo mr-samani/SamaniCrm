@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, output } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ChangeTenantDialogComponent } from './change-tenant-dialog/change-tenant-dialog.component';
 import { ChangeTenantResult } from './change-tenant-dialog/ChangeTenantResult';
@@ -18,7 +18,7 @@ export class SelectTenantComponent implements OnInit {
   matDialog = inject(MatDialog);
 
   onChangeTenant = output<string>();
-
+  chdr = inject(ChangeDetectorRef);
   constructor() {
     const c = localStorage.getItem(TENANCY_NAME_KEY) || '';
     if (c) {
@@ -44,6 +44,7 @@ export class SelectTenantComponent implements OnInit {
 
           localStorage.setItem(TENANCY_NAME_KEY, this.tenancyName);
           this.onChangeTenant.emit(this.tenancyName);
+          this.chdr.detectChanges();
         }
       });
   }

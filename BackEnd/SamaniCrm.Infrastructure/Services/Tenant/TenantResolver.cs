@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces.Tenant;
+using SamaniCrm.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,9 +87,10 @@ public class TenantResolver : ITenantResolver
     public async Task<TenantRsolverDto?> ResolveByIdAsync(Guid tenantId)
     {
         var tenant = await _context.Tenants
-            .Select(s => new TenantRsolverDto(s.Id, s.Name, s.Slug, s.Email, s.Status))
-             .AsNoTracking()
-             .FirstOrDefaultAsync(t => t.Id == tenantId);
+                      .AsNoTracking()
+                     .Where(x => x.Id == tenantId)
+                     .Select(s => new TenantRsolverDto(s.Id, s.Name, s.Slug, s.Email, s.Status))
+                     .FirstOrDefaultAsync();
 
 
         return tenant;
@@ -97,9 +99,10 @@ public class TenantResolver : ITenantResolver
     public async Task<TenantRsolverDto?> ResolveBySlugAsync(string slug)
     {
         var tenant = await _context.Tenants
-            .Select(s => new TenantRsolverDto(s.Id, s.Name, s.Slug, s.Email, s.Status))
-            .AsNoTracking()
-            .FirstOrDefaultAsync(t => t.Slug.ToLower() == slug.ToLower());
+                    .AsNoTracking()
+                    .Where(x => x.Slug == slug)
+                    .Select(s => new TenantRsolverDto(s.Id, s.Name, s.Slug, s.Email, s.Status))
+                    .FirstOrDefaultAsync();
 
         return tenant;
     }

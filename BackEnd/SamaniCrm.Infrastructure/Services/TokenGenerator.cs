@@ -29,14 +29,18 @@ namespace SamaniCrm.Infrastructure.Services
         }
 
 
-        public string GenerateAccessToken(Guid userId, string userName, string lang, IList<string> roles)
+        public string GenerateAccessToken(Guid userId, string userName, string lang, IList<string> roles, Guid? tenantId)
         {
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, userName),
-                new Claim("lang",lang)
+                new Claim("lang",lang),
             };
+            if (tenantId != null)
+            {
+                claims.Add(new Claim("tenant_id", tenantId.ToString()!));
+            }
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? ""));
@@ -59,7 +63,7 @@ namespace SamaniCrm.Infrastructure.Services
 
 
 
-        public async Task<string> GenerateRefreshToken(Guid userId, string accessToken)
+        public async Task<string> GenerateRefreshToken(Guid userId, string accessToken, Guid? tenantId)
         {
             var newRefreshToken = new RefreshToken
             {

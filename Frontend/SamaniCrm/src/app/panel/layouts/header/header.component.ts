@@ -1,4 +1,4 @@
-import { Component, ElementRef,  ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { AppConst } from '@shared/app-const';
@@ -19,6 +19,7 @@ export class HeaderComponent extends AppComponentBase {
   baseUrl = AppConst.apiUrl;
   AppConst = AppConst;
 
+  tenancyName = AppConst.tenancyName;
   @ViewChild('navbarCollapse') navbarCollapse!: ElementRef;
   constructor(
     public colorSchemaService: ColorSchemaService,

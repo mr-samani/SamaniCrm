@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NetTools;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
+using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces.Tenant;
 using SamaniCrm.Infrastructure.Services.TenantService;
 using System;
@@ -43,7 +44,7 @@ public class TenantResolverMiddleware
         }
 
         // Try to resolve tenant from multiple sources (in order of priority)
-        ITenant? tenant = null;
+        TenantRsolverDto? tenant = null;
 
         // 1. From subdomain
         tenant = await ResolveFromSubdomainAsync(context, tenantResolver);
@@ -65,7 +66,7 @@ public class TenantResolverMiddleware
         {
             if (IsInternalServiceRequest(context))
             {
-                tenant = (ITenant?)await tenantResolver.ResolveByIdAsync(Guid.Parse(tenantIdHeader!));
+                tenant = await tenantResolver.ResolveByIdAsync(Guid.Parse(tenantIdHeader!));
             }
         }
 
@@ -78,7 +79,7 @@ public class TenantResolverMiddleware
         //}
 
         // Validate tenant status
-        if (tenant != null && !tenant.IsActive)
+        if (tenant != null && tenant.Status != TenantStatus.Active)
         {
             _logger.LogWarning("Tenant {TenantId} is not active", tenant.Id);
             context.Response.StatusCode = StatusCodes.Status403Forbidden;
@@ -105,7 +106,7 @@ public class TenantResolverMiddleware
         await _next(context);
     }
 
-    private async Task<ITenant?> ResolveFromSubdomainAsync(
+    private async Task<TenantRsolverDto?> ResolveFromSubdomainAsync(
         HttpContext context, ITenantResolver resolver)
     {
         var host = context.Request.Host.Host;
@@ -115,29 +116,29 @@ public class TenantResolverMiddleware
         if (parts.Length >= 3 && !parts[0].Equals("www", StringComparison.OrdinalIgnoreCase))
         {
             var slug = parts[0];
-            return (ITenant?)await resolver.ResolveBySlugAsync(slug);
+            return await resolver.ResolveBySlugAsync(slug);
         }
 
         return null;
     }
 
-    private async Task<ITenant?> ResolveFromRouteAsync(
+    private async Task<TenantRsolverDto?> ResolveFromRouteAsync(
         HttpContext context, ITenantResolver resolver)
     {
         if (context.Request.RouteValues.TryGetValue("tenantSlug", out var slug))
         {
-            return (ITenant?)await resolver.ResolveBySlugAsync(slug?.ToString()!);
+            return await resolver.ResolveBySlugAsync(slug?.ToString()!);
         }
 
         if (context.Request.RouteValues.TryGetValue("tenantId", out var id))
         {
-            return (ITenant?)await resolver.ResolveByIdAsync(Guid.Parse(id?.ToString()!));
+            return await resolver.ResolveByIdAsync(Guid.Parse(id?.ToString()!));
         }
 
         return null;
     }
 
-    private async Task<ITenant?> ResolveFromUserSessionAsync(
+    private async Task<TenantRsolverDto?> ResolveFromUserSessionAsync(
         HttpContext context, ITenantResolver resolver)
     {
         // Get tenant ID from user's claims (set during authentication)
@@ -145,7 +146,7 @@ public class TenantResolverMiddleware
 
         if (tenantIdClaim != null && Guid.TryParse(tenantIdClaim.Value, out var tenantId))
         {
-            return (ITenant?)await resolver.ResolveByIdAsync(tenantId);
+            return await resolver.ResolveByIdAsync(tenantId);
         }
 
         return null;

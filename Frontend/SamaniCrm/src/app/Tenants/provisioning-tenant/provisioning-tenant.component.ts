@@ -48,8 +48,10 @@ export class ProvisioningTenantComponent extends AppComponentBase implements OnI
 
     this.signalRService.onConnectionChange.subscribe((state) => {
       if (state == ConnectionStatus.Connected) {
-        this.registerEvents();
-        this.joinTenantGroup();
+        setTimeout(() => {
+          this.registerEvents();
+          this.joinTenantGroup();
+        }, 10);
       }
       this.chdr.detectChanges();
     });

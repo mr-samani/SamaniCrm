@@ -32,7 +32,6 @@ public interface ICreateTenantJobService
 public class CreateTenantJobService : ICreateTenantJobService
 {
 
-    private readonly IIdentityService _identityService;
     private readonly ITenantNotificationService _notificationService;
     private readonly ITenantProvisioningService _provisioningService;
     private readonly IApplicationDbContext _dbContext;
@@ -49,7 +48,6 @@ public class CreateTenantJobService : ICreateTenantJobService
         IApplicationDbContext dbContext,
         ILogger<CreateTenantJobService> logger)
     {
-        _identityService = identityService;
         _notificationService = notificationService;
         _provisioningService = provisioningService;
         _dbContext = dbContext;

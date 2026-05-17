@@ -67,7 +67,7 @@ public static partial class ServiceCollectionExtensions
                 sql.EnableRetryOnFailure(3);
                 sql.CommandTimeout(30);
             }),
-            ServiceLifetime.Transient);
+            ServiceLifetime.Scoped);
 
 
         return services;
@@ -245,12 +245,14 @@ public static partial class ServiceCollectionExtensions
     public static IServiceCollection AddCustomServices(this IServiceCollection services, IConfiguration config)
     {
         services.AddHttpContextAccessor();
-        services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
+        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
         services.AddScoped<ITokenGenerator, TokenGenerator>();
         services.AddScoped<ITwoFactorService, TwoFactorService>();
         services.AddScoped<IExternalLoginService, ExternalLoginService>();
+
+
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IRolePermissionService, RolePermissionService>();
         services.AddSingleton(TimeProvider.System);
