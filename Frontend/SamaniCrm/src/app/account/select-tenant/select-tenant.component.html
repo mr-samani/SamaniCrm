@@ -1,0 +1,10 @@
+<div class="select-tenant d-flex align-items-center justify-content-between">
+  <div>
+    <span>{{ 'Tenant: ' | translate }}</span>
+    <span>{{ tenancyName }}</span>
+  </div>
+
+  <button class="btn btn-default" type="button" (click)="changeTenant()">
+    {{ 'Change' | translate }}
+  </button>
+</div>

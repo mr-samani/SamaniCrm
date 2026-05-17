@@ -243,5 +243,4 @@ public class TenantService : ITenantService
         ["notifications"] = true
     };
 
-
 }

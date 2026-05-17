@@ -10,3 +10,12 @@ public class CreateTenantResponse
     public ProvisioningStatus ProvisioningStatus { get; set; }
     public DateTime? TrialEndsAt { get; set; }
 }
+
+public class SimpleTenantData
+{
+    public required string TenancyName { get; set; }
+    public required Guid TenantId { get; set; }
+    public required string TenantName { get; set; }
+    public required TenantStatus Status { get; set; }
+
+}

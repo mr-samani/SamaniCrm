@@ -17,6 +17,7 @@ export interface IInitialAppDTO {
   languages?: Array<LanguageDTO>;
   defaultLang?: string;
   requireCaptcha?: boolean;
+  multiTenancy?: boolean;
 }
 
 /** Class for InitialAppDTO */
@@ -24,6 +25,7 @@ export class InitialAppDTO implements IInitialAppDTO {
   languages?: Array<LanguageDTO>;
   defaultLang?: string;
   requireCaptcha?: boolean;
+  multiTenancy?: boolean;
 
   constructor(data?: IInitialAppDTO) {
     if (data) {
@@ -43,6 +45,7 @@ init(data?: any) {
     }
     this.defaultLang = data["defaultLang"];
     this.requireCaptcha = data["requireCaptcha"];
+    this.multiTenancy = data["multiTenancy"];
   }
 }
 

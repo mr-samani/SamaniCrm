@@ -33,6 +33,7 @@ export class ExternalAuthServiceProxy extends BaseService {
 
     /**
      * @param providerName 
+     * @param tenancyName 
      * @param code 
      * @param idToken 
      * @param accessToken 
@@ -43,15 +44,17 @@ export class ExternalAuthServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public callback(providerName: string, code?: string, idToken?: string, accessToken?: string, tokenType?: string, state?: string, error?: string, errorDescription?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public callback(providerName: string, code?: string, idToken?: string, accessToken?: string, tokenType?: string, state?: string, error?: string, errorDescription?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public callback(providerName: string, code?: string, idToken?: string, accessToken?: string, tokenType?: string, state?: string, error?: string, errorDescription?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public callback(providerName: string, code?: string, idToken?: string, accessToken?: string, tokenType?: string, state?: string, error?: string, errorDescription?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public callback(providerName: string, tenancyName?: string, code?: string, idToken?: string, accessToken?: string, tokenType?: string, state?: string, error?: string, errorDescription?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public callback(providerName: string, tenancyName?: string, code?: string, idToken?: string, accessToken?: string, tokenType?: string, state?: string, error?: string, errorDescription?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public callback(providerName: string, tenancyName?: string, code?: string, idToken?: string, accessToken?: string, tokenType?: string, state?: string, error?: string, errorDescription?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public callback(providerName: string, tenancyName?: string, code?: string, idToken?: string, accessToken?: string, tokenType?: string, state?: string, error?: string, errorDescription?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (providerName === null || providerName === undefined) {
             throw new Error('Required parameter providerName was null or undefined when calling callback.');
         }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>tenancyName, 'tenancyName');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>code, 'code');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,

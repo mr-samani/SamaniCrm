@@ -13,6 +13,7 @@
 
 /** Interface for CreateUserCommand */
 export interface ICreateUserCommand {
+  tenantId?: string;
   firstName: string;
   lastName: string;
   userName: string;
@@ -26,6 +27,7 @@ export interface ICreateUserCommand {
 
 /** Class for CreateUserCommand */
 export class CreateUserCommand implements ICreateUserCommand {
+  tenantId?: string;
   firstName!: string;
   lastName!: string;
   userName!: string;
@@ -47,6 +49,7 @@ export class CreateUserCommand implements ICreateUserCommand {
 
 init(data?: any) {
   if (data) {
+    this.tenantId = data["tenantId"];
     this.firstName = data["firstName"];
     this.lastName = data["lastName"];
     this.userName = data["userName"];

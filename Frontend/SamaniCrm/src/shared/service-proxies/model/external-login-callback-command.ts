@@ -15,6 +15,7 @@
 export interface IExternalLoginCallbackCommand {
   code: string;
   provider: string;
+  tenancyName: string;
   codeVerifier: string;
 }
 
@@ -22,6 +23,7 @@ export interface IExternalLoginCallbackCommand {
 export class ExternalLoginCallbackCommand implements IExternalLoginCallbackCommand {
   code!: string;
   provider!: string;
+  tenancyName!: string;
   codeVerifier!: string;
 
   constructor(data?: IExternalLoginCallbackCommand) {
@@ -37,6 +39,7 @@ init(data?: any) {
   if (data) {
     this.code = data["code"];
     this.provider = data["provider"];
+    this.tenancyName = data["tenancyName"];
     this.codeVerifier = data["codeVerifier"];
   }
 }

@@ -1,6 +1,7 @@
 ﻿using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Application.Features.Tenants;
 using SamaniCrm.Application.Queries.User;
 using SamaniCrm.Application.Role.Commands;
 using SamaniCrm.Application.User.Commands;
@@ -16,6 +17,9 @@ namespace SamaniCrm.Application.Common.Interfaces
 {
     public interface IIdentityService
     {
+        Task<SimpleTenantData?> GetTenantByTenancyName(string tenancyName, CancellationToken cancellation);
+
+
         // User section
         Task<(bool isSucceed, Guid userId)> CreateUserAsync(CreateUserCommand input);
         Task<string> GetUserIdAsync(string userName);

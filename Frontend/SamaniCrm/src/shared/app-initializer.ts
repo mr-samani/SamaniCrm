@@ -40,6 +40,7 @@ export function AppInitializer(): Promise<boolean> {
               AppConst.languageList = resp.data.languages ?? [];
               AppConst.defaultLang = resp.data.defaultLang ?? 'fa-IR';
               AppConst.requireCaptcha = resp.data.requireCaptcha === true;
+              AppConst.multiTenancy = resp.data.multiTenancy === true;
               const loader = new TranslateHttpLoader(httpClient, AppConst.apiUrl + '/api/language/i18n/', '');
               languageService.translate.currentLoader = loader;
               resolve(true);

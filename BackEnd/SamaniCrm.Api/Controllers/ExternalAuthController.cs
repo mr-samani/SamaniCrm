@@ -94,7 +94,8 @@ namespace SamaniCrm.Api.Controllers
         [HttpGet("callback/{providerName}")]
         public async Task<IActionResult> Callback(
             string providerName,
-            [FromQuery] string? code,
+            [FromQuery] string tenancyName,
+            [FromQuery] string code,
             [FromQuery] string? id_token,
             [FromQuery] string? access_token,
             [FromQuery] string? token_type,
@@ -137,7 +138,7 @@ namespace SamaniCrm.Api.Controllers
                 // TODO :code = idTokenFinal , code , accessTokenFinal
                 var codeVerifier = HttpContext.Session.GetString("pkce_code_verifier");
 
-                var req = new ExternalLoginCallbackCommand(code, providerName, codeVerifier);
+                var req = new ExternalLoginCallbackCommand(code, providerName, tenancyName, codeVerifier);
                 var loginResult = await _identityService.ExternalSignInAsync(req, cancellationToken);
 
                 if (loginResult == null)

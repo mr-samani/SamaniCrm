@@ -13,5 +13,6 @@ namespace SamaniCrm.Application.DTOs
         public List<LanguageDTO> Languages { get; set; } = [];
         public string DefaultLang { get; set; } = string.Empty;
         public bool RequireCaptcha { get; set; }
+        public bool MultiTenancy { get; set; }
     }
 }

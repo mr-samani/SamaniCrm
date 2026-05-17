@@ -22,6 +22,8 @@ public class LoginCommand : IRequest<LoginResult>
     public required string Password { get; set; }
 
     public InputCaptchaDTO? captcha { get; set; }
+
+    public string? TenancyName { get; set; } = null;
 }
 
 

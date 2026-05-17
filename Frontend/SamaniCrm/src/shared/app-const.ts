@@ -13,6 +13,7 @@ export class AppConst {
   static tinyMceApiKey = '';
 
   static requireCaptcha: boolean = true;
+  static multiTenancy: boolean = true;
 
   static isDarkMode: boolean;
 
@@ -20,4 +21,8 @@ export class AppConst {
 
   // default values
   static defaultTablePerPage = 10;
+
+  /** must be set with tenant resolver */
+  static tenantId: string;
+  static tenancyName: string;
 }

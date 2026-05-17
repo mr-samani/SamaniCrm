@@ -39,14 +39,18 @@ public class InitialAppQueryHandler : IRequestHandler<InitialAppQuery, InitialAp
         List<LanguageDTO> languages = await _languageService.GetAllActiveLanguages();
         string defaultLanguage = languages.Find(x => x.IsDefault)?.Culture ?? "";
         var settings = await _securitySettingService.GetSettingsAsync(cancellationToken);
+
         bool.TryParse(_configuration["Captcha:Enabled"], out var requiredCaptchaAppSetting);
+        bool.TryParse(_configuration["MultiTenancy:Enabled"], out var multiTenancy);
+
 
         var requiredCaptcha = settings.RequireCaptchaOnLogin || requiredCaptchaAppSetting;
         return new InitialAppDTO()
         {
             Languages = languages,
             DefaultLang = defaultLanguage,
-            RequireCaptcha = requiredCaptcha
+            RequireCaptcha = requiredCaptcha,
+            MultiTenancy = multiTenancy,
         };
     }
 }

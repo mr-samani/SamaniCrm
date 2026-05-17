@@ -16,6 +16,7 @@ export interface ITwoFactorLoginCommand {
   userName: string;
   password: string;
   code: string;
+  tenancyName: string;
 }
 
 /** Class for TwoFactorLoginCommand */
@@ -23,6 +24,7 @@ export class TwoFactorLoginCommand implements ITwoFactorLoginCommand {
   userName!: string;
   password!: string;
   code!: string;
+  tenancyName!: string;
 
   constructor(data?: ITwoFactorLoginCommand) {
     if (data) {
@@ -38,6 +40,7 @@ init(data?: any) {
     this.userName = data["userName"];
     this.password = data["password"];
     this.code = data["code"];
+    this.tenancyName = data["tenancyName"];
   }
 }
 
