@@ -4,7 +4,7 @@ namespace SamaniCrm.Application.Features.Tenants.Dtos;
 
 public class ProvisioningStatusDto
 {
-    public Guid TenantId { get; set; }
+    public Guid? TenantId { get; set; }
     public TenantProvisionStepsEnum Step { get; set; }
     public ProvisioningStepStatus StepStatus { get; set; }
     public DateTime? StartedAt { get; set; }

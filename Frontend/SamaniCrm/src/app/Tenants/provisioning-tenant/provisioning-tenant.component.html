@@ -1,15 +1,15 @@
-<p>provisioning-tenant works!</p>
-Angular is running in development mode.
-@if (signalRService.connecting) {
-  <mat-spinner></mat-spinner>
+@if (signalRService.isConnecting) {
+  <div class="d-flex align-items-center justify-content-center">
+    <mat-spinner color="primary" diameter="30"></mat-spinner>
+  </div>
 }
 
 <div class="list-container">
   @for (item of steps; track $index) {
     <div class="list-item">
-      <span>{{ 'TenantProvisionStepsEnum_' + item.name | translate }}</span>
-      <span [title]="'ProvisioningStepStatus_' + item.status | translate" class="status">
-        @switch (item.status) {
+      <span>{{ 'TenantProvisionStepsEnum_' + item.step | translate }}</span>
+      <span [title]="'ProvisioningStepStatus_' + item.stepStatus | translate" class="status">
+        @switch (item.stepStatus) {
           @case (ProvisioningStepStatus.Pending) {
             <i class="fa fa-circle-stop"></i>
           }

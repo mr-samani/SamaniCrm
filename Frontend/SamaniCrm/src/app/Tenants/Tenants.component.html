@@ -54,6 +54,13 @@
     </button>
     <mat-menu #menu="matMenu">
       @if (AppPermissions.UserManagement_Edit | permission) {
+        <a mat-menu-item [routerLink]="['/panel/tenants/provisioning/' + item.slug + '/' + item.id]">
+          <i class="fa fa-charging-station  mx-1"></i>
+          <span>{{ 'ProvisionDataStatus' | translate }}</span>
+        </a>
+      }
+
+      @if (AppPermissions.UserManagement_Edit | permission) {
         <a mat-menu-item>
           <i class="fa fa-edit mx-1"></i>
           <span>{{ 'Edit' | translate }}</span>

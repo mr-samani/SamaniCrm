@@ -397,12 +397,13 @@ public class TenantProvisioningService : ITenantProvisioningService
 
     }
 
-    public async Task<List<ProvisioningStatusDto>> GetTenantProvisionSteps(Guid tenantId, CancellationToken cancellation)
+    public async Task<List<ProvisioningStatusDto>> GetTenantProvisionSteps(Guid tenantId, CancellationToken cancellation, bool? ChackInit = true)
     {
         var result = await _dbContext.TenantProvisioningSteps
+            .AsNoTracking()
             .Select(s => new ProvisioningStatusDto()
             {
-                TenantId = s.Id,
+                TenantId = s.TenantId,
                 Step = s.Step,
                 StepStatus = s.StepStatus,
                 StartedAt = s.StartedAt,
@@ -412,6 +413,11 @@ public class TenantProvisioningService : ITenantProvisioningService
             })
                .Where(x => x.TenantId == tenantId)
                .ToListAsync(cancellation);
+        if (result.Count == 0 && ChackInit == true)
+        {
+            await InitializeTenantProvisionSteps(tenantId, cancellation);
+            return await GetTenantProvisionSteps(tenantId, cancellation, false);
+        }
         return result;
     }
 

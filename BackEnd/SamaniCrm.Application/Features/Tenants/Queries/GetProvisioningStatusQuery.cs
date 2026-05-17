@@ -25,7 +25,7 @@ public class GetProvisioningStatusQueryHandler : IRequestHandler<GetProvisioning
     public async Task<List<ProvisioningStatusDto>> Handle(GetProvisioningStatusQuery request, CancellationToken cancellation)
     {
 
-        var result = await _tenantProvisioningService.GetTenantProvisionSteps(request.TenantId, cancellation);
+        var result = await _tenantProvisioningService.GetTenantProvisionSteps(request.TenantId, cancellation, true);
 
         return result;
     }

@@ -1,8 +1,19 @@
-.list-container{
-    .list-item{
-
-        .status{
-            
-        }
+.list-container {
+  max-width: 500px;
+  margin: 10px auto;
+  .list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    margin: 4px;
+    border: 1px rgba(216, 218, 248, 0.216) solid;
+    border-radius: 4px;
+    .status {
+      i {
+        font-weight: bold;
+        font-size: 24px;
+      }
     }
+  }
 }

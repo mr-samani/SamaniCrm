@@ -1,47 +1,80 @@
 import { Injectable, Injector, OnDestroy } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
-import { HubConnection } from '@microsoft/signalr';
+import { HubConnection, HubConnectionState, LogLevel } from '@microsoft/signalr';
 import { TokenService } from './token.service';
+import { BehaviorSubject } from 'rxjs';
+
+export enum ConnectionStatus {
+  Stoped,
+  Connecting,
+  Reconnecting,
+  Connected,
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class SignalRService implements OnDestroy {
-  connecting = false;
+  connectionStatus = ConnectionStatus.Stoped;
   hubConnection?: HubConnection;
+  onConnectionChange = new BehaviorSubject<ConnectionStatus>(this.connectionStatus);
   constructor(private tokenService: TokenService) {}
+
+  public get isConnecting() {
+    return (
+      this.connectionStatus == ConnectionStatus.Connecting || this.connectionStatus == ConnectionStatus.Reconnecting
+    );
+  }
 
   ngOnDestroy(): void {
     if (this.hubConnection) {
       this.hubConnection.stop();
+      this.onConnectionChange.unsubscribe();
     }
   }
 
   init(signalRUri: string, callback?: any) {
-    this.connecting = true;
+    this.connectionStatus = ConnectionStatus.Connecting;
     const token = this.tokenService.get();
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(signalRUri, {
         transport: signalR.HttpTransportType.WebSockets,
         withCredentials: true,
         skipNegotiation: true,
+        // logger: LogLevel.Information,
         accessTokenFactory: () => token.accessToken ?? '',
       })
-      .configureLogging(signalR.LogLevel.Critical)
+      .configureLogging(LogLevel.Critical)
       .withAutomaticReconnect()
       .build();
 
+    this.hubConnection.onreconnecting(() => {
+      console.log('SignalR Reconnectiong', signalRUri);
+      this.connectionStatus = ConnectionStatus.Reconnecting;
+      this.onConnectionChange.next(this.connectionStatus);
+    });
+    this.hubConnection.onreconnected(() => {
+      console.log('✅ SignalR Reconnected', signalRUri);
+      this.connectionStatus = ConnectionStatus.Connected;
+      this.onConnectionChange.next(this.connectionStatus);
+    });
+
     this.hubConnection.start().then((result) => {
-      this.connecting = false;
-      console.log('✅ SignalR connected via WebSocket', signalRUri);
-      // abp.event.trigger('abp.signalr.connected');
-      if (callback) {
-        callback(this.hubConnection);
+      if (this.hubConnection?.state == HubConnectionState.Connected) {
+        this.connectionStatus = ConnectionStatus.Connected;
+        this.onConnectionChange.next(this.connectionStatus);
+        console.log('✅ SignalR connected via WebSocket', signalRUri);
+        // abp.event.trigger('abp.signalr.connected');
+        if (callback) {
+          callback(this.hubConnection);
+        }
       }
     });
 
     this.hubConnection.onclose((e) => {
-      this.connecting = false;
+      console.log('SignalR Disconnected', signalRUri);
+      this.connectionStatus = ConnectionStatus.Stoped;
+      this.onConnectionChange.next(this.connectionStatus);
       if (e) {
         console.error('❌ SignalR connection error:', e);
         // abp.log.debug('Chat connection closed with error: ' + e);

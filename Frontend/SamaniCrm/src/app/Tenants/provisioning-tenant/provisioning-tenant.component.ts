@@ -1,4 +1,4 @@
-import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { HubConnection } from '@microsoft/signalr';
 import { AppConst } from '@shared/app-const';
@@ -11,6 +11,7 @@ import {
 import { TenantsServiceProxy } from '@shared/service-proxies/api/tenants.service';
 import { finalize } from 'rxjs';
 import { result } from 'lodash-es';
+import { ProvisioningStatusDto } from '@shared/service-proxies/model/provisioning-status-dto';
 
 @Component({
   selector: 'app-provisioning-tenant',
@@ -25,17 +26,9 @@ export class ProvisioningTenantComponent extends AppComponentBase implements OnI
 
   loading = false;
 
-  steps = [
-    { name: TenantProvisionStepsEnum.CreateTenant, status: ProvisioningStepStatus.Pending },
-    { name: TenantProvisionStepsEnum.CreateAdminUser, status: ProvisioningStepStatus.Pending },
-    { name: TenantProvisionStepsEnum.ProvisionDatabase, status: ProvisioningStepStatus.Pending },
-    { name: TenantProvisionStepsEnum.RunMigrations, status: ProvisioningStepStatus.Pending },
-    { name: TenantProvisionStepsEnum.SeedData, status: ProvisioningStepStatus.Pending },
-    { name: TenantProvisionStepsEnum.Finalize, status: ProvisioningStepStatus.Pending },
-  ];
+  steps: ProvisioningStatusDto[] = [];
   constructor(
     public signalRService: SignalRService,
-
     private tenantService: TenantsServiceProxy,
   ) {
     super();
@@ -50,21 +43,18 @@ export class ProvisioningTenantComponent extends AppComponentBase implements OnI
     this.getProvisioningStatuses();
 
     const uri = AppConst.apiUrl + '/hubs/provisioning';
-
     this.signalRService.init(uri, (connection: HubConnection) => {
       this.hubConnection = connection;
-
-      // ✅ اول گوش بده به events
+      this.chdr.detectChanges();
       this.registerEvents();
-
-      // ✅ بعد join گروه
       this.joinTenantGroup();
     });
+
+    this.signalRService.onConnectionChange.subscribe((state) => this.chdr.detectChanges());
   }
 
   ngOnDestroy(): void {
     if (this.hubConnection) {
-      // ✅ قبل از بستن، از گروه خارج شو
       this.leaveTenantGroup();
       this.hubConnection.stop();
     }
@@ -74,11 +64,14 @@ export class ProvisioningTenantComponent extends AppComponentBase implements OnI
     this.loading = true;
     this.tenantService
       .getProvisioningTenantStatus(this.tenantId)
-      .pipe(finalize(() => (this.loading = false)))
-
+      .pipe(
+        finalize(() => {
+          this.loading = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((result) => {
-        this.steps = result.data ?? [] as any;
-
+        this.steps = result.data ?? [];
       });
   }
 
@@ -135,14 +128,12 @@ export class ProvisioningTenantComponent extends AppComponentBase implements OnI
 
   // ✅ پردازش نوتیفیکیشن
   private handleNotification(notification: ProvisioningNotification): void {
-    console.log('Tenant:', notification.tenantSlug);
-    console.log('Status:', notification.status);
-    console.log('Step:', notification.currentStep);
-    console.log('Message:', notification.message);
-    console.log('Time:', notification.timestamp);
-
-    // اینجا UI رو آپدیت کن
-    // this.progress = notification.currentStep;
-    // this.status = notification.status;
+    if (notification.tenantId == this.tenantId) {
+      const f = this.steps.find((x) => x.step == notification.currentStep);
+      if (f) {
+        f.errorMessage = notification.message;
+        f.stepStatus = notification.status;
+      }
+    }
   }
 }

@@ -10,7 +10,7 @@ public interface ITenantProvisioningService
 {
     Task InitializeTenantProvisionSteps(Guid tenantId, CancellationToken cancellation);
     Task<List<TenantProvisionStepsEnum>> GetPendingProvisionSteps(Guid tenantId, CancellationToken cancellation);
-    Task<List<ProvisioningStatusDto>> GetTenantProvisionSteps(Guid tenantId, CancellationToken cancellation);
+    Task<List<ProvisioningStatusDto>> GetTenantProvisionSteps(Guid tenantId, CancellationToken cancellation,bool? ChackInit);
     Task ProvisionCreateAdminUser(TenantJobProvisioningData request, Guid tenantId, CancellationToken cancellation);
     Task ProvisionIsolatedDatabaseAsync(Tenant tenant, CancellationToken cancellation);
     Task RunMigrationsAsync(Tenant tenant, CancellationToken cancellation);

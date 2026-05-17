@@ -39,3 +39,10 @@ pnpm store prune
 npm i sanitize-html  --registry=http://192.168.10.220:4873 -d
 
 
+
+
+
+
+PM> Add-Migration FixupTenantProvisioning  -ErrorAction Continue
+
+
