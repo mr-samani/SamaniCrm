@@ -21,7 +21,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     private readonly ICurrentTenant _currentTenant;
     private readonly IServiceProvider _serviceProvider;
 
-
+    private Guid? _tenantId;
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
         ICurrentUserService currentUserService,
         ICurrentTenant currentTenant,
@@ -30,9 +30,15 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         _currentUser = currentUserService;
         _currentTenant = currentTenant;
         _serviceProvider = serviceProvider;
+        var s = _serviceProvider.GetService<ICurrentTenant>();
+        _tenantId = s.GetCurrentTenantId();
     }
 
-
+    public Guid? CurrentTenantId
+    {
+        get => _tenantId ?? _currentTenant.TenantId;
+        set => _tenantId = value;
+    }
 
 
 
@@ -220,7 +226,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     /// </summary>       
     private void SetGLobalFilter(ModelBuilder builder)
     {
-        var tenantId = GetCurrentTenantId();
 
         foreach (var entityType in builder.Model.GetEntityTypes())
         {
@@ -242,14 +247,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             // Tenant filter
             if (typeof(IMayHaveTenant).IsAssignableFrom(entityType.ClrType))
             {
-              
+                // ─── ساخت expression برای this.CurrentTenantId ───
+                var tenantIdProperty = Expression.Property(
+                    Expression.Constant(this),
+                    nameof(CurrentTenantId)
+                );
+
                 var tenantExpression = Expression.Equal(
-                   Expression.Property(parameter, nameof(IMayHaveTenant.TenantId)),
-                   Expression.Property(
-                       Expression.Constant(this),  // ← ارجاع به DbContext
-                       nameof(tenantId)     // ← فیلد/پراپرتی
-                   )
-               );
+                    Expression.Property(parameter, nameof(IMayHaveTenant.TenantId)),
+                    tenantIdProperty
+                );
+
 
                 finalExpression = finalExpression == null
                     ? tenantExpression
@@ -259,17 +267,13 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             if (finalExpression != null)
             {
                 var lambda = Expression.Lambda(finalExpression, parameter);
+                Console.WriteLine(lambda.Body);
                 entityType.SetQueryFilter(lambda);
             }
         }
     }
 
 
-    private Guid? GetCurrentTenantId()
-    {
-        var currentTenant = _serviceProvider?.GetService<ICurrentTenant>();
-        return currentTenant?.TenantId;
-    }
 
 
     private void ApplyAuditInformation()

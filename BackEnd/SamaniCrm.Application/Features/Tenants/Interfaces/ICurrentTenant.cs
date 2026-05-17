@@ -14,5 +14,7 @@ public interface ICurrentTenant
     bool HasTenant { get; }
 
     void SetTenant(Guid tenantId, string slug, string name);
+
+    Guid? GetCurrentTenantId();
     void Clear();
 }
