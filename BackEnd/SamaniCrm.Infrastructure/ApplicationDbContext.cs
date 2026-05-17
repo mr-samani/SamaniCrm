@@ -201,43 +201,53 @@ namespace SamaniCrm.Infrastructure
                       .HasColumnType("decimal(18,8)");
             });
 
+            SetGLobalFilter(builder);
+
+        }
 
 
-            // global filter
+
+        /// <summary>
+        /// Delete Global filter
+        /// </summary>       
+        private void SetGLobalFilter(ModelBuilder builder)
+        {
+
             foreach (var entityType in builder.Model.GetEntityTypes())
             {
-                // Global filter soft Delete
-                if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
+                var parameter = Expression.Parameter(entityType.ClrType, "e");
+                Expression? finalExpression = null;
+
+                // Soft Delete filter
+                var isDeletedProp = entityType.ClrType.GetProperty("IsDeleted");
+                if (isDeletedProp != null && isDeletedProp.PropertyType == typeof(bool))
                 {
-                    var parameter = Expression.Parameter(entityType.ClrType, "e");
-                    var filter = Expression.Lambda(
-                        Expression.Equal(
-                            Expression.Property(parameter, nameof(BaseEntity.IsDeleted)),
-                            Expression.Constant(false)
-                        ),
-                        parameter
+                    var isDeletedExpression = Expression.Equal(
+                        Expression.Property(parameter, isDeletedProp),
+                        Expression.Constant(false)
                     );
-                    entityType.SetQueryFilter(filter);
+
+                    finalExpression = isDeletedExpression;
                 }
 
-
-                // Global filter soft Tenant
+                // Tenant filter
                 if (typeof(IMayHaveTenant).IsAssignableFrom(entityType.ClrType))
                 {
-                    var parameter = Expression.Parameter(entityType.ClrType, "e");
-                    var filter = Expression.Lambda(
-                        Expression.Equal(
-                            Expression.Property(parameter, nameof(IMayHaveTenant.TenantId)),
-                            Expression.Constant(_tenantId)
-                            ),
-                        parameter
-                        );
-                    entityType.SetQueryFilter(filter);
+                    var tenantExpression = Expression.Equal(
+                        Expression.Property(parameter, nameof(IMayHaveTenant.TenantId)),
+                        Expression.Constant(_tenantId)
+                    );
+
+                    finalExpression = finalExpression == null
+                        ? tenantExpression
+                        : Expression.AndAlso(finalExpression, tenantExpression);
                 }
 
-
-
-
+                if (finalExpression != null)
+                {
+                    var lambda = Expression.Lambda(finalExpression, parameter);
+                    entityType.SetQueryFilter(lambda);
+                }
             }
         }
 
@@ -245,27 +255,40 @@ namespace SamaniCrm.Infrastructure
 
 
 
-
-
         private void ApplyAuditInformation()
         {
-            // Apply audit values
-            foreach (var entry in ChangeTracker.Entries<BaseEntity>())
+            var auditableEntries = ChangeTracker.Entries<IAuditedEntity>();
+            var currentUserId = _currentUser.UserId;
+
+            foreach (var entry in auditableEntries)
             {
+                if (entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
+                    continue;
+
                 switch (entry.State)
                 {
                     case EntityState.Added:
                         entry.Entity.CreatedAt = DateTime.UtcNow;
-                        entry.Entity.CreatedBy = _currentUser.UserId;
+                        entry.Entity.CreatedBy = currentUserId;
                         break;
+
                     case EntityState.Modified:
                         entry.Entity.ModifiedAt = DateTime.UtcNow;
-                        entry.Entity.ModifiedBy = _currentUser.UserId;
+                        entry.Entity.ModifiedBy = currentUserId;
+
+                        // اگر Soft Delete شده
+                        if (entry.Entity.IsDeleted)
+                        {
+                            entry.Entity.DeletedAt = DateTime.UtcNow;
+                            entry.Entity.DeletedBy = currentUserId;
+                        }
                         break;
+
                     case EntityState.Deleted:
+                        // تبدیل Hard Delete به Soft Delete
                         entry.Entity.IsDeleted = true;
                         entry.Entity.DeletedAt = DateTime.UtcNow;
-                        entry.Entity.DeletedBy = _currentUser.UserId;
+                        entry.Entity.DeletedBy = currentUserId;
                         entry.State = EntityState.Modified;
                         break;
                 }

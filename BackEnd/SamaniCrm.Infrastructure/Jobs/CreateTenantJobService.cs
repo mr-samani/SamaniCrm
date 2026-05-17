@@ -1,4 +1,6 @@
-﻿using Hangfire;
+﻿using Azure.Core;
+using Hangfire;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Exceptions;
@@ -37,6 +39,10 @@ public class CreateTenantJobService : ICreateTenantJobService
     private readonly ILogger<CreateTenantJobService> _logger;
 
 
+    private readonly int StepDelay = 10;
+    private TenantJobProvisioningData? _jobData;
+    private TenantProvisionStepsEnum _currentStep = TenantProvisionStepsEnum.CreateTenant;
+
     public CreateTenantJobService(IIdentityService identityService,
         ITenantNotificationService notificationService,
         ITenantProvisioningService provisioningService,
@@ -52,11 +58,11 @@ public class CreateTenantJobService : ICreateTenantJobService
     public async Task ProvisioningTenantDependenciesAsync(string serializedJobData, CancellationToken cancellation)
     {
 
-        var jobData = JsonSerializer.Deserialize<TenantJobProvisioningData>(serializedJobData)!;
+        _jobData = JsonSerializer.Deserialize<TenantJobProvisioningData>(serializedJobData)!;
 
         // بررسی آیا این tenant در حال پردازش هست
         var tenant = await _dbContext.Tenants
-            .Where(x => x.Id == jobData.TenantId)
+            .Where(x => x.Id == _jobData.TenantId)
             .FirstOrDefaultAsync(cancellation);
 
         if (tenant == null)
@@ -66,7 +72,7 @@ public class CreateTenantJobService : ICreateTenantJobService
 
         if (tenant.ProvisioningStatus == ProvisioningStatus.InProgress)
         {
-            _logger.LogWarning("Tenant {TenantId} is already being provisioned", jobData.TenantId);
+            _logger.LogWarning("Tenant {TenantId} is already being provisioned", _jobData.TenantId);
             return;
         }
 
@@ -74,52 +80,85 @@ public class CreateTenantJobService : ICreateTenantJobService
         tenant.ProvisioningStatus = ProvisioningStatus.InProgress;
         await _dbContext.SaveChangesAsync(cancellation);
 
-
-
-        // Step : Create Tenant provission steps
-        await _provisioningService.InitializeTenantProvisionSteps(tenant.Id, cancellation);
-        // Start provisioning tracking
-        await _notificationService.SendProgressAsync(jobData.Slug, "Creating tenant entity...", TenantProvisionStepsEnum.CreateTenant);
-
-
-        var pendingSteps = await _provisioningService.GetPendingProvisionSteps(tenant.Id, cancellation);
-
-        // Step : Create Admin User
-        if (pendingSteps.Contains(TenantProvisionStepsEnum.CreateAdminUser))
+        try
         {
-            await Task.Delay(TimeSpan.FromSeconds(30));
-            await _provisioningService.ProvisionCreateAdminUser(jobData, tenant.Id, cancellation);
+            await _provisioningService.InitializeTenantProvisionSteps(tenant.Id, cancellation);
+            var pendingSteps = await _provisioningService.GetPendingProvisionSteps(tenant.Id, cancellation);
+
+            _currentStep = TenantProvisionStepsEnum.CreateTenant;
+
+
+            // Start provisioning tracking
+            await SendNotificationProcessAsync(ProvisioningStepStatus.Completed, "");
+
+            // Step 1: Create Admin User
+            if (pendingSteps.Contains(TenantProvisionStepsEnum.CreateAdminUser))
+            {
+                _currentStep = TenantProvisionStepsEnum.CreateAdminUser;
+                await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress, "");
+                await Task.Delay(TimeSpan.FromSeconds(StepDelay));
+                await _provisioningService.ProvisionCreateAdminUser(_jobData, tenant.Id, cancellation);
+
+                await SendNotificationProcessAsync(ProvisioningStepStatus.Completed, "");
+            }
+
+
+            // Step 2: Provision Database (if isolated)
+            if (pendingSteps.Contains(TenantProvisionStepsEnum.ProvisionDatabase))
+            {
+                _currentStep = TenantProvisionStepsEnum.ProvisionDatabase;
+
+                await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress, "");
+                await Task.Delay(TimeSpan.FromSeconds(StepDelay));
+
+                if (tenant.DatabaseStrategy == DatabaseStrategy.Isolated)
+                {
+                    await _provisioningService.ProvisionIsolatedDatabaseAsync(tenant, cancellation);
+                }
+                await SendNotificationProcessAsync(ProvisioningStepStatus.Completed, "");
+
+            }
+            // Step 3: Run Migrations
+            if (pendingSteps.Contains(TenantProvisionStepsEnum.RunMigrations))
+            {
+                _currentStep = TenantProvisionStepsEnum.RunMigrations;
+
+                await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress, "");
+                await Task.Delay(TimeSpan.FromSeconds(StepDelay));
+                await _provisioningService.RunMigrationsAsync(tenant, cancellation);
+                await SendNotificationProcessAsync(ProvisioningStepStatus.Completed, "");
+            }
+            // Step 4: Seed Initial Data
+            if (pendingSteps.Contains(TenantProvisionStepsEnum.SeedData))
+            {
+                _currentStep = TenantProvisionStepsEnum.SeedData;
+
+                await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress, "");
+                await Task.Delay(TimeSpan.FromSeconds(StepDelay));
+                await _provisioningService.SeedInitialDataAsync(tenant, cancellation);
+                await SendNotificationProcessAsync(ProvisioningStepStatus.Completed, "");
+            }
+
+
+            // Step 5: Finalize
+            if (pendingSteps.Contains(TenantProvisionStepsEnum.Finalize))
+            {
+                _currentStep = TenantProvisionStepsEnum.Finalize;
+
+                await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress, "");
+                await Task.Delay(TimeSpan.FromSeconds(StepDelay));
+                await _provisioningService.FinalizeAsync(tenant, cancellation);
+                await SendNotificationProcessAsync(ProvisioningStepStatus.Completed, "");
+            }
+
+
         }
-
-
-        // Step : Provision Database (if isolated)
-        if (pendingSteps.Contains(TenantProvisionStepsEnum.ProvisionDatabase))
+        catch (Exception ex)
         {
-           
-                await Task.Delay(TimeSpan.FromSeconds(30));
-                await _provisioningService.ProvisionIsolatedDatabaseAsync(tenant, cancellation);
-            
-        }
-        // Step : Run Migrations
-        if (pendingSteps.Contains(TenantProvisionStepsEnum.RunMigrations))
-        {
-            await Task.Delay(TimeSpan.FromSeconds(30));
-            await _provisioningService.RunMigrationsAsync(tenant, cancellation);
-        }
-        // Step : Seed Initial Data
-        if (pendingSteps.Contains(TenantProvisionStepsEnum.SeedData))
-        {
-            await Task.Delay(TimeSpan.FromSeconds(30));
-            await _provisioningService.SeedInitialDataAsync(tenant, cancellation);
-        }
-        if (pendingSteps.Contains(TenantProvisionStepsEnum.Finalize))
-        {
-            await Task.Delay(TimeSpan.FromSeconds(30));
-            await _provisioningService.FinalizeAsync(tenant, cancellation);
-        }
+            _logger.LogInformation("Error on Create tenant {TenantId}:{Message}", tenant.Id, ex.Message);
+            await SendNotificationProcessAsync(ProvisioningStepStatus.Failed, ex.Message);
 
-
-
+        }
 
     }
 
@@ -135,6 +174,67 @@ public class CreateTenantJobService : ICreateTenantJobService
         using var rng = RandomNumberGenerator.Create();
         rng.GetBytes(bytes);
         return Convert.ToBase64String(bytes).Replace("+", "-").Replace("/", "_");
+    }
+
+
+    private async Task SendNotificationProcessAsync(ProvisioningStepStatus status, string? errorMessage)
+    {
+        if (_jobData == null)
+        {
+            return;
+        }
+        var tenantSlug = _jobData.Slug;
+        var tenantId = _jobData.TenantId;
+
+        var stepEntity = await _dbContext.TenantProvisioningSteps
+               .Where(x => x.TenantId == tenantId && x.Step == _currentStep)
+               .FirstOrDefaultAsync();
+
+
+        switch (status)
+        {
+            // InProgress
+            case ProvisioningStepStatus.InProgress:
+                await _notificationService.SendProgressAsync(tenantSlug, _currentStep, "");
+                if (stepEntity != null)
+                {
+                    stepEntity.StepStatus = ProvisioningStepStatus.InProgress;
+                    stepEntity.StartedAt = DateTime.UtcNow;
+                    stepEntity.CompletedAt = null;
+                    await _dbContext.SaveChangesAsync();
+                }
+                break;
+
+            // Failed
+            case ProvisioningStepStatus.Failed:
+                await _notificationService.SendErrorAsync(tenantSlug, _currentStep, errorMessage);
+                if (stepEntity != null)
+                {
+                    stepEntity.StepStatus = ProvisioningStepStatus.Failed;
+                    stepEntity.CompletedAt = null;
+
+                    Tenant? tenant = await _dbContext.Tenants.Where(x => x.Id == tenantId).FirstOrDefaultAsync();
+                    if (tenant != null)
+                    {
+                        tenant.ProvisioningStatus = ProvisioningStatus.Failed;
+                    }
+                    await _dbContext.SaveChangesAsync();
+
+                }
+                break;
+
+            // Done
+            case ProvisioningStepStatus.Completed:
+                await _notificationService.SendCompletionAsync(tenantSlug, _currentStep, "");
+                if (stepEntity != null)
+                {
+                    stepEntity.StepStatus = ProvisioningStepStatus.Completed;
+                    stepEntity.CompletedAt = DateTime.UtcNow;
+                    await _dbContext.SaveChangesAsync();
+                }
+                break;
+
+        }
     }
 
 }

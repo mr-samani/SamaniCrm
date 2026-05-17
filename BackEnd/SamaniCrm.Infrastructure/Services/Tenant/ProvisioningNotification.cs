@@ -4,11 +4,9 @@ namespace SamaniCrm.Infrastructure.Services.TenantService;
 
 public class ProvisioningNotification
 {
-    public string TenantSlug { get; set; } = string.Empty;
-    public ProvisioningStepStatus Status { get; set; }
-    public string Message { get; set; } = string.Empty;
-    public TenantProvisionStepsEnum CurrentStep { get; set; }
-    public Guid? TenantId { get; set; }
-    public Guid? AdminUserId { get; set; }
-    public DateTime Timestamp { get; set; }
+    public required string TenantSlug { get; set; }
+    public required ProvisioningStepStatus Status { get; set; }
+    public string? Message { get; set; }
+    public required TenantProvisionStepsEnum CurrentStep { get; set; }
+    public required DateTime Timestamp { get; set; }
 }

@@ -9,9 +9,13 @@ using SamaniCrm.Domain.Interfaces;
 
 namespace SamaniCrm.Infrastructure.Identity;
 
-// TODO: add base entity for autitable log
-public class ApplicationUser: IdentityUser<Guid>
+
+
+public class ApplicationUser : IdentityUser<Guid>, IMayHaveTenant, IAuditedEntity
 {
+    // ─── IMayHaveTenant ───
+    public Guid? TenantId { get; set; }
+
     public string? FirstName { get; set; }
     public string LastName { get; set; } = string.Empty;
     public string? FullName { get; set; } = string.Empty;
@@ -22,4 +26,15 @@ public class ApplicationUser: IdentityUser<Guid>
 
 
     public virtual UserSetting UserSetting { get; set; } = new UserSetting();
+
+    // ─── IAuditedEntity ───
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public Guid? CreatedBy { get; set; }
+    public DateTime? ModifiedAt { get; set; }
+    public Guid? ModifiedBy { get; set; }
+    public DateTime? DeletedAt { get; set; }
+    public Guid? DeletedBy { get; set; }
+    public bool IsDeleted { get; set; } = false;
+    public byte[]? RowVersion { get; set; }
+
 }

@@ -54,6 +54,6 @@ namespace SamaniCrm.Application.Common.Interfaces
 
         Task<List<Guid>> GetAllActiveUsersIds(CancellationToken cancellationToken);
         Task<List<AutoCompleteDto<Guid>>> GetAutoCompleteUsers(string filter, CancellationToken cancellationToken);
-
+        Task<UserDTO?> GetTenantAdmin(Guid tenantId, CancellationToken cancellation);
     }
 }

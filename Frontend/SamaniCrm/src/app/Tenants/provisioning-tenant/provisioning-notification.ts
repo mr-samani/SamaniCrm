@@ -3,8 +3,6 @@ export class ProvisioningNotification {
   status!: ProvisioningStepStatus;
   message!: string;
   currentStep!: TenantProvisionStepsEnum;
-  tenantId?: string;
-  adminUserId?: string;
   timestamp?: string;
 }
  

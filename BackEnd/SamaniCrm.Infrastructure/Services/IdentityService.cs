@@ -14,10 +14,12 @@ using SamaniCrm.Application.User.Commands;
 using SamaniCrm.Core;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
+using SamaniCrm.Domain.Constants;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.ExternalLogin;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Notifications;
+using StackExchange.Redis;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq.Dynamic.Core;
@@ -100,6 +102,7 @@ public class IdentityService : IIdentityService
     {
         var user = new ApplicationUser()
         {
+            TenantId = input.TenantId,
             FirstName = input.FirstName,
             LastName = input.LastName,
             FullName = input.FirstName + " " + input.LastName,
@@ -804,5 +807,63 @@ public class IdentityService : IIdentityService
             }
         }
         return user;
+    }
+
+    public async Task<UserDTO?> GetTenantAdmin(Guid tenantId, CancellationToken cancellation)
+    {
+        var tenantAdminUser = await _applicationDbContext.Users
+         .Join(
+             _applicationDbContext.UserRoles,
+             user => user.Id,
+             userRole => userRole.UserId,
+             (user, userRole) => new { user, userRole }
+         )
+         .Join(
+             _applicationDbContext.Roles,
+             combined => combined.userRole.RoleId,
+             role => role.Id,
+             (combined, role) => new { combined.user, role }
+         )
+         .Where(x => x.user.TenantId == tenantId
+                  && x.role.Name == Roles.TenantAdministrator)
+         .Select(x => new UserDTO
+         {
+             Id = x.user.Id,
+             UserName = x.user.UserName ?? "",
+             FirstName = x.user.FirstName ?? "",
+             LastName = x.user.LastName ?? "",
+             FullName = x.user.FullName ?? "",
+             Lang = x.user.Lang ?? "",
+             Email = x.user.Email ?? "",
+             ProfilePicture = x.user.ProfilePicture ?? "",
+             Address = x.user.Address ?? "",
+             PhoneNumber = x.user.PhoneNumber ?? "",
+             Roles = new List<string> { x.role.Name! }  
+         })
+         .FirstOrDefaultAsync(cancellation);
+
+        return tenantAdminUser;
+
+        // with Navigation property
+        //return await _applicationDbContext.Users
+        //.Where(u => u.TenantId == tenantId)
+        //.Where(u => u.UserRoles.Any(ur => ur.Role.Name == Roles.TenantAdministrator))
+        //.Select(u => new UserDTO
+        //{
+        //    Id = u.Id,
+        //    UserName = u.UserName ?? "",
+        //    FirstName = u.FirstName ?? "",
+        //    LastName = u.LastName ?? "",
+        //    FullName = u.FullName ?? "",
+        //    Lang = u.Lang ?? "",
+        //    Email = u.Email ?? "",
+        //    ProfilePicture = u.ProfilePicture ?? "",
+        //    Address = u.Address ?? "",
+        //    PhoneNumber = u.PhoneNumber ?? "",
+        //    Roles = u.UserRoles.Select(ur => ur.Role.Name).ToList()
+        //})
+        //.FirstOrDefaultAsync(cancellation);
+
+
     }
 }

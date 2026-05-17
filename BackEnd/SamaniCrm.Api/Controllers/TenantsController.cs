@@ -99,11 +99,11 @@ public partial class TenantsController : ApiBaseController
     /// </summary>
     [HttpPost("{id:guid}/suspend")]
     [Permission(AppPermissions.TenantManagement_ActiveDeActive)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
     public async Task<IActionResult> SuspendTenant(Guid id)
     {
-        await _mediator.Send(new SuspendTenantCommand(id));
-        return NoContent();
+        bool result = await _mediator.Send(new SuspendTenantCommand(id));
+        return ApiOk(result);
     }
 
     /// <summary>
@@ -111,11 +111,11 @@ public partial class TenantsController : ApiBaseController
     /// </summary>
     [HttpPost("{id:guid}/activate")]
     [Permission(AppPermissions.TenantManagement_ActiveDeActive)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ActivateTenant(ActivateTenantCommand input)
     {
-        await _mediator.Send(input);
-        return NoContent();
+        bool result = await _mediator.Send(input);
+        return ApiOk(result);
     }
 
     /// <summary>
@@ -123,11 +123,11 @@ public partial class TenantsController : ApiBaseController
     /// </summary>
     [HttpDelete("{id:guid}")]
     [Permission(AppPermissions.TenantManagement_Delete)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteTenant(Guid id)
     {
-        await _mediator.Send(new DeleteTenantCommand(id));
-        return NoContent();
+        bool result = await _mediator.Send(new DeleteTenantCommand(id));
+        return ApiOk(result);
     }
 
     /// <summary>
@@ -145,12 +145,12 @@ public partial class TenantsController : ApiBaseController
     /// Update tenant settings
     /// </summary>
     [HttpPut("{id:guid}/settings")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateTenantSettings(Guid id, [FromBody] UpdateTenantSettingsCommand command)
     {
         if (id != command.TenantId) return BadRequest();
-        await _mediator.Send(command);
-        return NoContent();
+        bool result = await _mediator.Send(command);
+        return ApiOk(result);
     }
 
     /// <summary>
@@ -168,11 +168,13 @@ public partial class TenantsController : ApiBaseController
     /// Retry failed provisioning
     /// </summary>
     [HttpPost("{id:guid}/retry-provisioning")]
-    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    //  [ProducesResponseType(StatusCodes.Status202Accepted)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
     public async Task<IActionResult> RetryProvisioningTenant(Guid id)
     {
-        await _mediator.Send(new RetryProvisioningCommand(id));
-        return Accepted();
+        var result = await _mediator.Send(new RetryProvisioningCommand(id));
+        //return Accepted();
+        return ApiOk(result);
     }
 
     /// <summary>

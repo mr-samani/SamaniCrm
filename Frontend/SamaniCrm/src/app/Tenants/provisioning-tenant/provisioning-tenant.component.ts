@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, Injector, OnDestroy, OnInit } from '@angu
 import { AppComponentBase } from '@app/app-component-base';
 import { HubConnection } from '@microsoft/signalr';
 import { AppConst } from '@shared/app-const';
-import { SignalRService } from '@shared/services/signalr.service';
+import { ConnectionStatus, SignalRService } from '@shared/services/signalr.service';
 import {
   ProvisioningNotification,
   ProvisioningStepStatus,
@@ -27,6 +27,8 @@ export class ProvisioningTenantComponent extends AppComponentBase implements OnI
   loading = false;
 
   steps: ProvisioningStatusDto[] = [];
+
+  retring = false;
   constructor(
     public signalRService: SignalRService,
     private tenantService: TenantsServiceProxy,
@@ -41,16 +43,16 @@ export class ProvisioningTenantComponent extends AppComponentBase implements OnI
 
   ngOnInit() {
     this.getProvisioningStatuses();
-
     const uri = AppConst.apiUrl + '/hubs/provisioning';
-    this.signalRService.init(uri, (connection: HubConnection) => {
-      this.hubConnection = connection;
-      this.chdr.detectChanges();
-      this.registerEvents();
-      this.joinTenantGroup();
-    });
+    this.hubConnection = this.signalRService.init(uri);
 
-    this.signalRService.onConnectionChange.subscribe((state) => this.chdr.detectChanges());
+    this.signalRService.onConnectionChange.subscribe((state) => {
+      if (state == ConnectionStatus.Connected) {
+        this.registerEvents();
+        this.joinTenantGroup();
+      }
+      this.chdr.detectChanges();
+    });
   }
 
   ngOnDestroy(): void {
@@ -128,12 +130,33 @@ export class ProvisioningTenantComponent extends AppComponentBase implements OnI
 
   // ✅ پردازش نوتیفیکیشن
   private handleNotification(notification: ProvisioningNotification): void {
-    if (notification.tenantId == this.tenantId) {
-      const f = this.steps.find((x) => x.step == notification.currentStep);
-      if (f) {
-        f.errorMessage = notification.message;
-        f.stepStatus = notification.status;
+    console.log('recived', notification);
+    if (notification.tenantSlug == this.tenantSlug) {
+      const f = this.steps.findIndex((x) => x.step == notification.currentStep);
+      if (f > -1) {
+        this.steps[f].errorMessage = notification.message;
+        this.steps[f].stepStatus = notification.status;
       }
     }
+    this.chdr.detectChanges();
+  }
+
+  retryProvisioningData() {
+    this.retring = true;
+    this.tenantService
+      .retryProvisioningTenant(this.tenantId)
+      .pipe(
+        finalize(() => {
+          this.retring = false;
+          this.chdr.detectChanges();
+        }),
+      )
+      .subscribe((result) => {
+        if (result.success) {
+          this.steps.forEach((e) => (e.stepStatus = ProvisioningStepStatus.Pending));
+          this.notify.success(this.l('ProvisioningTenantDataJobStarted'));
+          this.chdr.detectChanges();
+        }
+      });
   }
 }

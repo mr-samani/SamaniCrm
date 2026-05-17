@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Domain.Interfaces;
 
-public class IMayHaveTenant
+public interface IMayHaveTenant
 {
     public Guid? TenantId { get; set; }
 }

@@ -114,14 +114,14 @@ public class TenantProvisioningService : ITenantProvisioningService
 
     public async Task ProvisionCreateAdminUser(TenantJobProvisioningData request, Guid tenantId, CancellationToken cancellation)
     {
-        await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress,
-            request.Slug,
-            tenantId,
-            "Creating admin user...",
-            TenantProvisionStepsEnum.CreateAdminUser);
-
+        var admin = await _identityService.GetTenantAdmin(tenantId, cancellation);
+        if (admin != null && request.AdminUserName == admin.UserName)
+        {
+            return;
+        }
         var adminUser = new CreateUserCommand()
         {
+            TenantId = tenantId,
             Email = request.AdminEmail.ToLowerInvariant(),
             FirstName = request.AdminFirstName,
             LastName = request.AdminLastName,
@@ -135,19 +135,7 @@ public class TenantProvisioningService : ITenantProvisioningService
         var createUserResult = await _identityService.CreateUserAsync(adminUser);
         if (createUserResult.isSucceed == false)
         {
-            await SendNotificationProcessAsync(ProvisioningStepStatus.Failed,
-             request.Slug,
-            tenantId,
-             "Can not create tenant admin user.",
-             TenantProvisionStepsEnum.CreateAdminUser);
-        }
-        else
-        {
-            await SendNotificationProcessAsync(ProvisioningStepStatus.Completed,
-           request.Slug,
-            tenantId,
-           "Created admin user",
-           TenantProvisionStepsEnum.CreateAdminUser);
+            throw new Exception("Can not create Admin User!");
         }
     }
 
@@ -156,187 +144,89 @@ public class TenantProvisioningService : ITenantProvisioningService
 
     public async Task ProvisionIsolatedDatabaseAsync(Tenant tenant, CancellationToken cancellation)
     {
-        if (tenant.DatabaseStrategy == DatabaseStrategy.Isolated)
-        {
-            await SendNotificationProcessAsync(ProvisioningStepStatus.Completed,
-                 tenant.Slug,
-          tenant.Id,
-                 "Check Database Ok",
-                 TenantProvisionStepsEnum.ProvisionDatabase);
-            return;
-        }
-        await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress,
-        tenant.Slug,
-        tenant.Id,
-        "Creating isolated database...",
-        TenantProvisionStepsEnum.ProvisionDatabase);
         var databaseName = $"Tenant_{tenant.Slug}_{tenant.Id:N}";
         var serverName = Environment.GetEnvironmentVariable("DB_SERVER") ?? "localhost";
         var adminUsername = Environment.GetEnvironmentVariable("DB_ADMIN_USER") ?? "sa";
         var adminPassword = Environment.GetEnvironmentVariable("DB_ADMIN_PASSWORD") ?? "";
 
 
-        try
+        // Create database
+        await _databaseService.CreateDatabaseAsync(
+            serverName, databaseName, adminUsername, adminPassword, cancellation);
+
+        // Generate connection string
+        var connectionString = _databaseService.GenerateConnectionString(
+            serverName, databaseName, adminUsername, adminPassword);
+
+        // Save encrypted connection string
+        tenant.DatabaseName = databaseName;
+        tenant.ServerName = serverName;
+        tenant.ConnectionString = _databaseService.EncryptConnectionString(connectionString);
+
+        // Save database connection record
+        var dbConnection = new TenantDatabaseConnection
         {
+            TenantId = tenant.Id,
+            DatabaseType = DatabaseType.SQLServer,
+            ServerName = serverName,
+            DatabaseName = databaseName,
+            Username = adminUsername,
+            EncryptedPassword = _databaseService.Encrypt(adminPassword),
+            ConnectionString = tenant.ConnectionString,
+            IsMaster = false,
+            IsActive = true,
+            HealthStatus = HealthStatus.Healthy,
 
-            // Create database
-            await _databaseService.CreateDatabaseAsync(
-                serverName, databaseName, adminUsername, adminPassword, cancellation);
+        };
 
-            // Generate connection string
-            var connectionString = _databaseService.GenerateConnectionString(
-                serverName, databaseName, adminUsername, adminPassword);
+        await _dbContext.TenantDatabaseConnections.AddAsync(dbConnection, cancellation);
+        await _dbContext.SaveChangesAsync(cancellation);
 
-            // Save encrypted connection string
-            tenant.DatabaseName = databaseName;
-            tenant.ServerName = serverName;
-            tenant.ConnectionString = _databaseService.EncryptConnectionString(connectionString);
+        _logger.LogInformation("Database {DatabaseName} created for tenant {TenantId}",
+            databaseName, tenant.Id);
 
-            // Save database connection record
-            var dbConnection = new TenantDatabaseConnection
-            {
-                TenantId = tenant.Id,
-                DatabaseType = DatabaseType.SQLServer,
-                ServerName = serverName,
-                DatabaseName = databaseName,
-                Username = adminUsername,
-                EncryptedPassword = _databaseService.Encrypt(adminPassword),
-                ConnectionString = tenant.ConnectionString,
-                IsMaster = false,
-                IsActive = true,
-                HealthStatus = HealthStatus.Healthy,
-
-            };
-
-            await _dbContext.TenantDatabaseConnections.AddAsync(dbConnection, cancellation);
-            await _dbContext.SaveChangesAsync(cancellation);
-
-            _logger.LogInformation("Database {DatabaseName} created for tenant {TenantId}",
-                databaseName, tenant.Id);
-            await SendNotificationProcessAsync(ProvisioningStepStatus.Completed,
-                   tenant.Slug,
-            tenant.Id,
-                   "Created isolated database",
-                   TenantProvisionStepsEnum.ProvisionDatabase);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogInformation("Error on Create Database {DatabaseName} for tenant {TenantId}", databaseName, tenant.Id);
-            await SendNotificationProcessAsync(ProvisioningStepStatus.Failed,
-                       tenant.Slug,
-            tenant.Id,
-                      ex.Message,
-                       TenantProvisionStepsEnum.ProvisionDatabase);
-        }
     }
 
     public async Task RunMigrationsAsync(Tenant tenant, CancellationToken cancellation)
     {
-        await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress,
-                 tenant.Slug,
-            tenant.Id,
-                 "Running database migrations...",
-                 TenantProvisionStepsEnum.RunMigrations);
-        try
+        if (tenant.DatabaseStrategy == DatabaseStrategy.Isolated && !string.IsNullOrEmpty(tenant.ConnectionString))
         {
-            if (tenant.DatabaseStrategy == DatabaseStrategy.Isolated && !string.IsNullOrEmpty(tenant.ConnectionString))
-            {
-                var connectionString = _databaseService.DecryptConnectionString(tenant.ConnectionString);
-                await _databaseService.RunMigrationsAsync(connectionString, tenant.Id, cancellation);
-            }
-            else
-            {
-                // For shared database, migrations are handled by EF Core automatically
-                await _dbContext.Database.MigrateAsync(cancellation);
-            }
-            await SendNotificationProcessAsync(ProvisioningStepStatus.Completed,
-                tenant.Slug,
-            tenant.Id,
-                "Complete Runn database migrations",
-                TenantProvisionStepsEnum.RunMigrations);
+            var connectionString = _databaseService.DecryptConnectionString(tenant.ConnectionString);
+            await _databaseService.RunMigrationsAsync(connectionString, tenant.Id, cancellation);
         }
-        catch (Exception ex)
+        else
         {
-            await SendNotificationProcessAsync(ProvisioningStepStatus.Failed,
-               tenant.Slug,
-            tenant.Id,
-              ex.Message,
-               TenantProvisionStepsEnum.RunMigrations);
+            // For shared database, migrations are handled by EF Core automatically
+            await _dbContext.Database.MigrateAsync(cancellation);
         }
-
-
     }
 
     public async Task SeedInitialDataAsync(Tenant tenant, CancellationToken cancellation)
     {
-        await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress,
-              tenant.Slug,
-            tenant.Id,
-             "Seeding initial data...",
-              TenantProvisionStepsEnum.SeedData);
-
-        try
+        foreach (var seeder in _seeders)
         {
-            foreach (var seeder in _seeders)
-            {
-                await seeder.SeedAsync(tenant, cancellation);
-            }
-            await SendNotificationProcessAsync(ProvisioningStepStatus.Completed,
-              tenant.Slug,
-            tenant.Id,
-             "Complete seed database",
-              TenantProvisionStepsEnum.SeedData);
-        }
-        catch (Exception ex)
-        {
-            await SendNotificationProcessAsync(ProvisioningStepStatus.Failed,
-               tenant.Slug,
-            tenant.Id,
-              ex.Message,
-               TenantProvisionStepsEnum.SeedData);
+            await seeder.SeedAsync(tenant, cancellation);
         }
     }
 
 
     public async Task FinalizeAsync(Tenant tenant, CancellationToken cancellation)
     {
-        await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress,
-              tenant.Slug,
-            tenant.Id,
-             "Finalizing create tenant ...",
-              TenantProvisionStepsEnum.Finalize);
-
-        try
+        var tenantEntity = await _dbContext.Tenants
+                 .Where(x => x.Id == tenant.Id)
+             .FirstOrDefaultAsync(cancellation);
+        if (tenantEntity != null)
         {
-            var tenantEntity = await _dbContext.Tenants
-                     .Where(x => x.Id == tenant.Id)
-                 .FirstOrDefaultAsync(cancellation);
-            if (tenantEntity != null)
-            {
 
-                tenantEntity.ProvisioningStatus = ProvisioningStatus.Ready;
-                tenantEntity.Status = TenantStatus.Active;
-                tenantEntity.ModifiedAt = DateTime.UtcNow;
+            tenantEntity.ProvisioningStatus = ProvisioningStatus.Ready;
+            tenantEntity.Status = TenantStatus.Active;
+            tenantEntity.ModifiedAt = DateTime.UtcNow;
 
-                await _dbContext.SaveChangesAsync(cancellation);
-            }
-            _logger.LogInformation(
-                "Tenant {TenantId} ({Slug}) created successfully", tenant.Id, tenant.Slug);
-
-            await SendNotificationProcessAsync(ProvisioningStepStatus.Completed,
-              tenant.Slug,
-            tenant.Id,
-             "Create tenant and activation successfully",
-              TenantProvisionStepsEnum.SeedData);
+            await _dbContext.SaveChangesAsync(cancellation);
         }
-        catch (Exception ex)
-        {
-            await SendNotificationProcessAsync(ProvisioningStepStatus.Failed,
-               tenant.Slug,
-            tenant.Id,
-              ex.Message,
-               TenantProvisionStepsEnum.Finalize);
-        }
+        _logger.LogInformation(
+            "Tenant {TenantId} ({Slug}) created successfully", tenant.Id, tenant.Slug);
+
     }
 
 
@@ -351,51 +241,6 @@ public class TenantProvisioningService : ITenantProvisioningService
 
 
 
-
-    private async Task SendNotificationProcessAsync(
-        ProvisioningStepStatus status, string tenantSlug, Guid tenantId, string message, TenantProvisionStepsEnum step)
-    {
-        var stepEntity = await _dbContext.TenantProvisioningSteps
-               .Where(x => x.TenantId == tenantId && x.Step == step)
-               .FirstOrDefaultAsync();
-        switch (status)
-        {
-            case ProvisioningStepStatus.InProgress:
-                await _notificationService.SendProgressAsync(tenantSlug, message, step);
-                if (stepEntity != null)
-                {
-                    stepEntity.StepStatus = ProvisioningStepStatus.InProgress;
-                    stepEntity.StartedAt = DateTime.UtcNow;
-                    stepEntity.CompletedAt = null;
-                    await _dbContext.SaveChangesAsync();
-                }
-                break;
-            case ProvisioningStepStatus.Failed:
-                await _notificationService.SendErrorAsync(tenantSlug, message, step);
-                if (stepEntity != null)
-                {
-                    stepEntity.StepStatus = ProvisioningStepStatus.Failed;
-                    stepEntity.CompletedAt = null;
-                    await _dbContext.SaveChangesAsync();
-                }
-                break;
-            case ProvisioningStepStatus.Completed:
-                await _notificationService.SendCompletionAsync(tenantSlug, message, step);
-                if (stepEntity != null)
-                {
-                    stepEntity.StepStatus = ProvisioningStepStatus.Completed;
-                    stepEntity.CompletedAt = DateTime.UtcNow;
-                    await _dbContext.SaveChangesAsync();
-                }
-                break;
-
-        }
-
-
-
-
-
-    }
 
     public async Task<List<ProvisioningStatusDto>> GetTenantProvisionSteps(Guid tenantId, CancellationToken cancellation, bool? ChackInit = true)
     {

@@ -20,7 +20,7 @@ public class TenantNotificationService : ITenantNotificationService
         _logger = logger;
     }
 
-    public async Task SendProgressAsync(string tenantSlug, string message, TenantProvisionStepsEnum step)
+    public async Task SendProgressAsync(string tenantSlug, TenantProvisionStepsEnum step, string? message)
     {
         var notification = new ProvisioningNotification
         {
@@ -38,12 +38,13 @@ public class TenantNotificationService : ITenantNotificationService
         _logger.LogDebug("Sent progress notification for {TenantSlug}: Step {Step}", tenantSlug, step);
     }
 
-    public async Task SendCompletionAsync(string tenantSlug, string message, TenantProvisionStepsEnum step)
+    public async Task SendCompletionAsync(string tenantSlug, TenantProvisionStepsEnum step, string? message)
     {
         var notification = new ProvisioningNotification
         {
             TenantSlug = tenantSlug,
             Status = ProvisioningStepStatus.Completed,
+            CurrentStep = step,
             Message = message,
             Timestamp = DateTime.UtcNow
         };
@@ -55,12 +56,13 @@ public class TenantNotificationService : ITenantNotificationService
         _logger.LogInformation("Sent completion notification for {TenantSlug}", tenantSlug);
     }
 
-    public async Task SendErrorAsync(string tenantSlug, string errorMessage, TenantProvisionStepsEnum step)
+    public async Task SendErrorAsync(string tenantSlug, TenantProvisionStepsEnum step, string? errorMessage)
     {
         var notification = new ProvisioningNotification
         {
             TenantSlug = tenantSlug,
             Status = ProvisioningStepStatus.Failed,
+            CurrentStep = step,
             Message = errorMessage,
             Timestamp = DateTime.UtcNow
         };

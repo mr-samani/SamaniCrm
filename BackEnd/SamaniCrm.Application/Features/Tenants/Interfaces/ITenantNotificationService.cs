@@ -9,7 +9,7 @@ namespace SamaniCrm.Application.Features.Tenants.Interfaces;
 
 public interface ITenantNotificationService
 {
-    Task SendProgressAsync(string tenantSlug, string message, TenantProvisionStepsEnum step);
-    Task SendCompletionAsync(string tenantSlug, string message, TenantProvisionStepsEnum step);
-    Task SendErrorAsync(string tenantSlug, string errorMessage, TenantProvisionStepsEnum step);
+    Task SendProgressAsync(string tenantSlug, TenantProvisionStepsEnum step, string? message);
+    Task SendCompletionAsync(string tenantSlug, TenantProvisionStepsEnum step, string? message);
+    Task SendErrorAsync(string tenantSlug, TenantProvisionStepsEnum step, string? errorMessage);
 }

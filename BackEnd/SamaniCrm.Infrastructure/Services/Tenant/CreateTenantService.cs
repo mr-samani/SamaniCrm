@@ -1,4 +1,7 @@
-﻿using Hangfire;
+﻿using Azure.Core;
+using Hangfire;
+using Hangfire.States;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
@@ -20,6 +23,7 @@ public class TenantService : ITenantService
     private readonly ICurrentUserService _currentUser;
     private readonly ILogger<CreateTenantCommandHandler> _logger;
     private readonly IRecurringJobManagerV2 _JobManagerV2;
+    private readonly IIdentityService _identityService;
 
 
     public TenantService(IApplicationDbContext dbContext,
@@ -27,13 +31,14 @@ public class TenantService : ITenantService
         ICurrentUserService currentUser,
         ITenantNotificationService notificationService,
         ILogger<CreateTenantCommandHandler> logger,
-        IIdentityService identityService,
-        IRecurringJobManagerV2 recurringJobManagerV2)
+        IRecurringJobManagerV2 recurringJobManagerV2,
+        IIdentityService identityService)
     {
         _dbContext = dbContext;
         _currentUser = currentUser;
         _logger = logger;
         _JobManagerV2 = recurringJobManagerV2;
+        _identityService = identityService;
     }
 
 
@@ -89,8 +94,7 @@ public class TenantService : ITenantService
             await _dbContext.Tenants.AddAsync(tenant, cancellation);
             await _dbContext.SaveChangesAsync(cancellation);
 
-
-
+            // TODO:Pasword must be hash for security save job
             TenantJobProvisioningData jobData = new TenantJobProvisioningData()
             {
                 TenantId = tenant.Id,
@@ -103,20 +107,32 @@ public class TenantService : ITenantService
                 AdminMobile = request.AdminMobile,
                 Address = request.Address ?? ""
             };
-
-
-
             var serializedData = JsonSerializer.Serialize(jobData);
 
+            var jobId = $"Create-Tenant-{tenant.Id}";
 
             //  Fire-and-Forget Job
-            var jobId = BackgroundJob.Enqueue<ICreateTenantJobService>(
-                job => job.ProvisioningTenantDependenciesAsync(serializedData, cancellation)
-            );
+            //BackgroundJob.Enqueue<ICreateTenantJobService>(
+            //    job => job.ProvisioningTenantDependenciesAsync(serializedData, cancellation)
+            //);
 
+            // Scheduling 
+            //BackgroundJob.Schedule<ICreateTenantJobService>(
+            //    job => job.ProvisioningTenantDependenciesAsync(serializedData, cancellation),
+            //    TimeSpan.FromSeconds(30)
+            //);
+            RecurringJob.AddOrUpdate<ICreateTenantJobService>(jobId,
+                 job => job.ProvisioningTenantDependenciesAsync(serializedData, cancellation),
+               Cron.Never,
+               new RecurringJobOptions { MisfireHandling = MisfireHandlingMode.Relaxed });
 
-
-
+            // ─── اجرا بعد از ۳۰ ثانیه ───
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(TimeSpan.FromSeconds(30), cancellation);
+                RecurringJob.TriggerJob(jobId);
+            }, cancellation);
+            // RecurringJob.TriggerJob(jobId);
 
             return new CreateTenantResponse
             {
@@ -126,6 +142,7 @@ public class TenantService : ITenantService
                 ProvisioningStatus = tenant.ProvisioningStatus,
                 TrialEndsAt = tenant.TrialEndsAt
             };
+
         }
         catch (Exception ex)
         {
@@ -164,20 +181,27 @@ public class TenantService : ITenantService
     public async Task<bool> RetryProvisioning(Guid id, CancellationToken cancellation)
     {
 
-        var tenant = await _dbContext.Tenants.FindAsync(id, cancellation)
-                    ?? throw new NotFoundException("Tenant not found");
-        throw new NotImplementedException();
+        var tenant = await _dbContext.Tenants
+            .Select(s => new
+            {
+                tenantId = s.Id,
+                slug = s.Slug,
+                address = s.Address
+            })
+            .Where(x => x.tenantId == id)
+            .FirstOrDefaultAsync(cancellation);
 
+        if (tenant == null)
+        {
+            throw new NotFoundException("Tenant not found");
+        }
 
-        //tenant.Provisioning.RetryCount++;
-        //tenant.Provisioning.Status = ProvisioningStatus.Pending;
-        //tenant.Provisioning.ErrorMessage = null;
-        //tenant.UpdatedAt = DateTime.UtcNow;
+        var jobId = $"Create-Tenant-{tenant.tenantId}";
+        string job = RecurringJob.TriggerJob(jobId);
 
-        //await _unitOfWork.SaveChangesAsync(cancellation);
-        //_ = Task.Run(() => _provisioningService.ProvisionAsync(tenant.Id));
+        // RecurringJob.RemoveIfExists(jobId);
 
-        //return bool.Value;
+        return true;
     }
 
     public async Task<bool> UpdateTenant(UpdateTenantSettingsCommand request, CancellationToken cancellation)

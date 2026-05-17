@@ -33,7 +33,7 @@ export class SignalRService implements OnDestroy {
     }
   }
 
-  init(signalRUri: string, callback?: any) {
+  init(signalRUri: string) {
     this.connectionStatus = ConnectionStatus.Connecting;
     const token = this.tokenService.get();
     this.hubConnection = new signalR.HubConnectionBuilder()
@@ -65,9 +65,6 @@ export class SignalRService implements OnDestroy {
         this.onConnectionChange.next(this.connectionStatus);
         console.log('✅ SignalR connected via WebSocket', signalRUri);
         // abp.event.trigger('abp.signalr.connected');
-        if (callback) {
-          callback(this.hubConnection);
-        }
       }
     });
 
@@ -82,6 +79,7 @@ export class SignalRService implements OnDestroy {
         //  abp.log.debug('Chat disconnected');
       }
     });
+    return this.hubConnection;
   }
 
   /**
