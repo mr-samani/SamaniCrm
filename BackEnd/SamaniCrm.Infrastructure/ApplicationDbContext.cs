@@ -19,19 +19,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 {
     private readonly ICurrentUserService _currentUser;
     private readonly ICurrentTenant _currentTenant;
-    private readonly IServiceProvider _serviceProvider;
 
     private Guid? _tenantId;
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
         ICurrentUserService currentUserService,
-        ICurrentTenant currentTenant,
-        IServiceProvider serviceProvider) : base(options)
+        ICurrentTenant currentTenant) : base(options)
     {
         _currentUser = currentUserService;
         _currentTenant = currentTenant;
-        _serviceProvider = serviceProvider;
-        var s = _serviceProvider.GetService<ICurrentTenant>();
-        _tenantId = s.GetCurrentTenantId();
     }
 
     public Guid? CurrentTenantId

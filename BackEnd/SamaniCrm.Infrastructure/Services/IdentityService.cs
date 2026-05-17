@@ -45,7 +45,6 @@ public class IdentityService : IIdentityService
     private readonly ISecretStore _secretStore;
     private readonly IConfiguration _config;
     private readonly IExternalLoginService _externalLoginService;
-    private readonly ICurrentTenant _currentTenant;
 
     public IdentityService(
         UserManager<ApplicationUser> userManager,
@@ -60,8 +59,7 @@ public class IdentityService : IIdentityService
         HttpClient httpClient,
         ISecretStore secretStore,
         IConfiguration config,
-        IExternalLoginService externalLoginService,
-        ICurrentTenant currentTenant)
+        IExternalLoginService externalLoginService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -76,7 +74,6 @@ public class IdentityService : IIdentityService
         _secretStore = secretStore;
         _config = config;
         _externalLoginService = externalLoginService;
-        _currentTenant = currentTenant;
     }
 
 
@@ -262,11 +259,8 @@ public class IdentityService : IIdentityService
 
     public async Task<UserDTO> GetUserDetailsAsync(Guid userId)
     {
-        var tenantId = _currentTenant.TenantId;
         var query = _userManager.Users.Where(x => x.Id == userId);
-        var sql = query.ToQueryString();
-        var tenantId2 = _currentTenant.TenantId;
-
+        // var sql = query.ToQueryString();
         var user = await query.FirstOrDefaultAsync();
         if (user == null)
         {

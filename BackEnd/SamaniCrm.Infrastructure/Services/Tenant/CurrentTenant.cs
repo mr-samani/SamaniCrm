@@ -32,9 +32,4 @@ public class CurrentTenant : ICurrentTenant
         _tenantSlug = null;
         _tenantName = null;
     }
-
-    public Guid? GetCurrentTenantId()
-    {
-        return _tenantId;
-    }
 }

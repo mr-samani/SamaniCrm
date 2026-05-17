@@ -14,15 +14,13 @@ public class TenantDatabaseService : ITenantDatabaseService
     private readonly string _encryptionKey;
     private readonly ICurrentUserService _currentUser;
     private readonly ICurrentTenant _currentTenant;
-    private readonly IServiceProvider _serviceProvider;
 
 
     public TenantDatabaseService(
         ILogger<TenantDatabaseService> logger,
         IEncryptionService encryption,
         ICurrentUserService currentUser,
-        ICurrentTenant currentTenant,
-        IServiceProvider serviceProvider)
+        ICurrentTenant currentTenant)
     {
         _logger = logger;
         _encryption = encryption;
@@ -30,7 +28,6 @@ public class TenantDatabaseService : ITenantDatabaseService
             ?? throw new InvalidOperationException("Encryption key not configured");
         _currentUser = currentUser;
         _currentTenant = currentTenant;
-        _serviceProvider = serviceProvider;
     }
 
     public async Task CreateDatabaseAsync(string server, string databaseName,
@@ -98,7 +95,7 @@ public class TenantDatabaseService : ITenantDatabaseService
     {
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
         optionsBuilder.UseSqlServer(connectionString);
-        using var context = new ApplicationDbContext(optionsBuilder.Options, _currentUser, _currentTenant, _serviceProvider);
+        using var context = new ApplicationDbContext(optionsBuilder.Options, _currentUser, _currentTenant);
         await context.Database.MigrateAsync(cancellation);
     }
 
