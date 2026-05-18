@@ -14,9 +14,9 @@ using SamaniCrm.Application.Queries.User;
 using SamaniCrm.Application.Role.Commands;
 using SamaniCrm.Application.User.Commands;
 using SamaniCrm.Core;
+using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
-using SamaniCrm.Domain.Constants;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.ExternalLogin;
 using SamaniCrm.Infrastructure.Identity;
@@ -897,7 +897,7 @@ public class IdentityService : IIdentityService
              (combined, role) => new { combined.user, role }
          )
          .Where(x => x.user.TenantId == tenantId
-                  && x.role.Name == Roles.TenantAdministrator)
+                  && x.role.Name == AppRoles.TenantAdministrator)
          .Select(x => new UserDTO
          {
              Id = x.user.Id,

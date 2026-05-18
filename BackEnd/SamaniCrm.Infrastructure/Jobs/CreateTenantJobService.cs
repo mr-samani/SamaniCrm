@@ -1,26 +1,13 @@
-﻿using Azure.Core;
-using Hangfire;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
-using SamaniCrm.Application.Features.Tenants;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
-using SamaniCrm.Application.User.Commands;
-using SamaniCrm.Core;
 using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Core.Shared.Enums;
-using SamaniCrm.Domain.Constants;
 using SamaniCrm.Domain.Entities;
-using SamaniCrm.Infrastructure.Services.TenantService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace SamaniCrm.Infrastructure.Jobs;
 

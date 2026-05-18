@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using SamaniCrm.Domain.Constants;
 using SamaniCrm.Infrastructure.Identity;
 
 namespace SamaniCrm.Infrastructure.Persistence
@@ -90,10 +84,11 @@ namespace SamaniCrm.Infrastructure.Persistence
             Console.WriteLine("Start Seeding DataBase...");
 
             await SeedPermissions.TrySeedAsync(_context);
+            await SeedRoles.TrySeedAsync(_context, _logger, _roleManager);
             // seeld localization must be after seed permissions
             await SeedLocalization.TrySeedAsync(_context);
             await SeedStaticMenus.TrySeedAsync(_context);
-            await SeedDefaultUsers.TrySeedAsync(_context,_logger,_userManager,_roleManager);
+            await SeedDefaultUsers.TrySeedAsync(_context, _logger, _userManager, _roleManager);
             await SeedSecuritySettings.TrySeedAsync(_context);
             await SeedProductCategoriesFromFile.TrySeedAsync(_context);
             await SeedCurrencies.TrySeedAsync(_context);

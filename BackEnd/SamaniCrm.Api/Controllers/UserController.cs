@@ -10,7 +10,7 @@ using SamaniCrm.Application.Queries.User;
 using SamaniCrm.Application.Role.Commands;
 using SamaniCrm.Application.User.Commands;
 using SamaniCrm.Application.User.Queries;
-using SamaniCrm.Core.Permissions;
+using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Host.Models;
 
 
@@ -36,7 +36,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("CreateUser")]
-        [Permission(AppPermissions.UserManagement_Create)]
+        [Permission(AppPermissions.UserManagement.Create)]
         [ProducesDefaultResponseType(typeof(ApiResponse<Guid>))]
         public async Task<IActionResult> CreateUser(CreateUserCommand command)
         {
@@ -44,7 +44,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("UpdateUser")]
-        [Permission(AppPermissions.UserManagement_Edit)]
+        [Permission(AppPermissions.UserManagement.Edit)]
         [ProducesDefaultResponseType(typeof(ApiResponse<bool>))]
         public async Task<IActionResult> UpdateUser([FromBody] EditUserCommand command)
         {
@@ -54,7 +54,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpPost("GetAllUsers")]
-        [Permission(AppPermissions.UserManagement_List)]
+        [Permission(AppPermissions.UserManagement.List)]
         [ProducesResponseType(typeof(ApiResponse<PaginatedResult<UserDTO>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllUserAsync([FromBody] GetUserQuery request)
         {
@@ -62,7 +62,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("Delete/{userId}")]
-        [Permission(AppPermissions.UserManagement_Delete)]
+        [Permission(AppPermissions.UserManagement.Delete)]
         [ProducesResponseType(typeof(ApiResponse<int>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteUser(Guid userId)
         {
@@ -74,7 +74,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpGet("GetUserDetails/{userId}")]
-        [Permission(AppPermissions.UserManagement_List)]
+        [Permission(AppPermissions.UserManagement.List)]
         [ProducesDefaultResponseType(typeof(ApiResponse<UserDTO>))]
         public async Task<IActionResult> GetUserDetails(Guid userId)
         {
@@ -83,7 +83,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetUserDetailsByUserName/{userName}")]
-        [Permission(AppPermissions.UserManagement_List)]
+        [Permission(AppPermissions.UserManagement.List)]
         [ProducesDefaultResponseType(typeof(ApiResponse<UserDTO>))]
         public async Task<IActionResult> GetUserDetailsByUserName(string userName)
         {
@@ -92,7 +92,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         //[HttpPost("AssignRoles")]
-        //[Permission(AppPermissions.UserManagement_AssignRole)]
+        //[Permission(AppPermissions.UserManagement.AssignRole)]
         //[ProducesDefaultResponseType(typeof(ApiResponse<int>))]
         //public async Task<IActionResult> AssignRoles(AssignUsersRoleCommand command)
         //{
@@ -101,7 +101,7 @@ namespace SamaniCrm.Api.Controllers
         //}
 
         //[HttpPut("EditUserRoles")]
-        //[Permission(AppPermissions.UserManagement_AssignRole)]
+        //[Permission(AppPermissions.UserManagement.AssignRole)]
         //[ProducesDefaultResponseType(typeof(ApiResponse<int>))]
         //public async Task<IActionResult> EditUserRoles(UpdateUserRolesCommand command)
         //{
@@ -121,7 +121,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpGet("GetAutoCompleteUser")]
-        [Permission(AppPermissions.UserManagement_List)]
+        [Permission(AppPermissions.UserManagement.List)]
         [ProducesResponseType(typeof(ApiResponse<List<AutoCompleteDto<Guid>>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAutoCompleteUser(string? filter, CancellationToken cancellationToken)
         {

@@ -1,13 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
-using SamaniCrm.Domain.Entities;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SamaniCrm.Infrastructure.Persistence;
 

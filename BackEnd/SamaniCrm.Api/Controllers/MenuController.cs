@@ -6,7 +6,7 @@ using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Localize.Queries;
 using SamaniCrm.Application.MenuCommands;
 using SamaniCrm.Application.MenuQueries;
-using SamaniCrm.Core.Permissions;
+using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Host.Models;
 
 namespace SamaniCrm.Api.Controllers
@@ -22,7 +22,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetAllMenus")]
-        [Permission(AppPermissions.MenuManagement_List)]
+        [Permission(AppPermissions.MenuManagement.List)]
         [ProducesResponseType(typeof(ApiResponse<List<MenuDTO>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllMenus(CancellationToken cancellationToken)
         {
@@ -32,7 +32,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpGet("GetForEdit")]
-        [Permission(AppPermissions.MenuManagement_List)]
+        [Permission(AppPermissions.MenuManagement.List)]
         [ProducesResponseType(typeof(ApiResponse<MenuDTO>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetForEdit(Guid id, CancellationToken cancellationToken)
         {
@@ -42,8 +42,8 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpPost("CreateOrUpdate")]
-        [Permission(AppPermissions.MenuManagement_Create)]
-        [Permission(AppPermissions.MenuManagement_Edit)]
+        [Permission(AppPermissions.MenuManagement.Create)]
+        [Permission(AppPermissions.MenuManagement.Edit)]
         [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateOrUpdate(CreateOrEditMenuCommand request, CancellationToken cancellationToken)
         {
@@ -52,7 +52,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("DeleteMenu")]
-        [Permission(AppPermissions.MenuManagement_Delete)]
+        [Permission(AppPermissions.MenuManagement.Delete)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteMenu(DeleteMenuCommand request, CancellationToken cancellationToken)
         {
@@ -61,7 +61,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("ReOrderMenu")]
-        [Permission(AppPermissions.MenuManagement_ReOrder)]
+        [Permission(AppPermissions.MenuManagement.ReOrder)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> ReOrderMenu(ReorderMenuCommand request, CancellationToken cancellationToken)
         {
@@ -70,7 +70,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("ActiveOrDeactive")]
-        [Permission(AppPermissions.MenuManagement_Edit)]
+        [Permission(AppPermissions.MenuManagement.Edit)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> ActiveOrDeactive(ChangeActiveMenuCommand request, CancellationToken cancellationToken)
         {

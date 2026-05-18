@@ -8,7 +8,7 @@ using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.SecuritySetting.Commands;
 using SamaniCrm.Application.SecuritySetting.Queries;
-using SamaniCrm.Core.Permissions;
+using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Host.Models;
 
 namespace SamaniCrm.Api.Controllers
@@ -33,7 +33,7 @@ namespace SamaniCrm.Api.Controllers
 
         #region Host security settings
         [HttpGet("GetSecuritySettings")]
-        [Permission(AppPermissions.SecuritySetting_GetSetting)]
+        [Permission(AppPermissions.SecuritySetting.GetSetting)]
         [ProducesResponseType(typeof(ApiResponse<SecuritySettingDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetSecuritySettings()
         {
@@ -42,7 +42,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpPost("UpdateSecuritySettings")]
-        [Permission(AppPermissions.SecuritySetting_UpdateSetting)]
+        [Permission(AppPermissions.SecuritySetting.UpdateSetting)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateSecuritySettings(UpdateSecuritySettingCommand input)
         {
@@ -55,7 +55,7 @@ namespace SamaniCrm.Api.Controllers
         #region User security setting
 
         [HttpGet("GetUserSecuritySettings")]
-        [Permission(AppPermissions.SecuritySetting_GetUserSetting)]
+        [Permission(AppPermissions.SecuritySetting.GetUserSetting)]
         [ProducesResponseType(typeof(ApiResponse<UserSettingDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetUserSecuritySettings()
         {
@@ -64,7 +64,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpPost("UpdateUserSecuritySettings")]
-        [Permission(AppPermissions.SecuritySetting_UpdateUserSetting)]
+        [Permission(AppPermissions.SecuritySetting.UpdateUserSetting)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateUserSecuritySettings(UpdateUserSecuritySettingCommand input)
         {

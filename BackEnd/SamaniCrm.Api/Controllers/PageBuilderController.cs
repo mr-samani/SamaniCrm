@@ -6,7 +6,7 @@ using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.DTOs.PageBuilder;
 using SamaniCrm.Application.Pages.Commands;
 using SamaniCrm.Application.Pages.Queries;
-using SamaniCrm.Core.Permissions;
+using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Host.Models;
 
 namespace SamaniCrm.Api.Controllers
@@ -23,7 +23,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpPost("CreatePlugin")]
-        [Permission(AppPermissions.Pages_CreatePlugin)]
+        [Permission(AppPermissions.Pages.CreatePlugin)]
         [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreatePlugin(CreatePluginCommand request, CancellationToken cancellationToken)
         {
@@ -33,7 +33,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpPost("DeletePlugin")]
-        [Permission(AppPermissions.Pages_DeletePlugin)]
+        [Permission(AppPermissions.Pages.DeletePlugin)]
         [ProducesResponseType(typeof(ApiResponse<Unit>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeletePlugin(Guid Id, CancellationToken cancellationToken)
         {
@@ -42,7 +42,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("GetPlugins")]
-        [Permission(AppPermissions.Pages_PluginList)]
+        [Permission(AppPermissions.Pages.PluginList)]
         [ProducesResponseType(typeof(ApiResponse<PaginatedResult<PluginDto>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPlugins(GetPluginQuery Input,CancellationToken cancellationToken)
         {

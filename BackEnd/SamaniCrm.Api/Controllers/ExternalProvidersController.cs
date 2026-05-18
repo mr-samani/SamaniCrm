@@ -7,7 +7,7 @@ using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.FileManager.Dtos;
 using SamaniCrm.Application.SecuritySetting.Commands;
 using SamaniCrm.Application.SecuritySetting.Queries;
-using SamaniCrm.Core.Permissions;
+using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Host.Models;
 
@@ -23,7 +23,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetAllExternalProviders")]
-        [Permission(AppPermissions.SecuritySetting_ExternalProvidersList)]
+        [Permission(AppPermissions.SecuritySetting.ExternalProviders.List)]
         [ProducesResponseType(typeof(ApiResponse<List<ExternalProviderDto>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllExternalProviders()
         {
@@ -32,7 +32,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("ChangeIsActiveExternalProvider")]
-        [Permission(AppPermissions.SecuritySetting_ExternalProvidersUpdate)]
+        [Permission(AppPermissions.SecuritySetting.ExternalProviders.Update)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> ChangeIsActiveExternalProvider(Guid id, bool isActive)
         {
@@ -42,7 +42,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpPost("CreateExternalProvider")]
-        [Permission(AppPermissions.SecuritySetting_ExternalProvidersCreate)]
+        [Permission(AppPermissions.SecuritySetting.ExternalProviders.Create)]
         [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
         public async Task<IActionResult> Create([FromBody] CreateExternalProviderCommand command)
         {
@@ -51,7 +51,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("UpdateExternalProvider")]
-        [Permission(AppPermissions.SecuritySetting_ExternalProvidersUpdate)]
+        [Permission(AppPermissions.SecuritySetting.ExternalProviders.Update)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> Update([FromBody] UpdateExternalProviderCommand command)
         {
@@ -61,7 +61,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpDelete("DeleteExternalProvider")]
-        [Permission(AppPermissions.SecuritySetting_ExternalProvidersDelete)]
+        [Permission(AppPermissions.SecuritySetting.ExternalProviders.Delete)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -71,7 +71,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetExternalProviderById")]
-        [Permission(AppPermissions.SecuritySetting_ExternalProvidersDelete)]
+        [Permission(AppPermissions.SecuritySetting.ExternalProviders.Delete)]
         [ProducesResponseType(typeof(ApiResponse<CreateOrUpdateExternalProviderDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetById(Guid id)
         {

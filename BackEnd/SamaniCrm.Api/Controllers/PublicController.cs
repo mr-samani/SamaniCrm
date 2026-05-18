@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using SamaniCrm.Api.Attributes;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.MenuQueries;
-using SamaniCrm.Core.Permissions;
 using SamaniCrm.Host.Models;
 
 namespace SamaniCrm.Api.Controllers

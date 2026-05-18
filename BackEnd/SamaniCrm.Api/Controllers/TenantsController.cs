@@ -9,7 +9,7 @@ using SamaniCrm.Application.Features.Tenants.Dtos;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Queries;
 using SamaniCrm.Application.User.Commands;
-using SamaniCrm.Core.Permissions;
+using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Domain.Interfaces;
 using SamaniCrm.Host.Models;
 
@@ -32,7 +32,7 @@ public partial class TenantsController : ApiBaseController
     /// Create a new tenant
     /// </summary>
     [HttpPost("CreateTenant")]
-    [Permission(AppPermissions.TenantManagement_Create)]
+    [Permission(AppPermissions.TenantManagement.Create)]
     [ProducesResponseType(typeof(ApiResponse<CreateTenantResponse>), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateTenant([FromBody] CreateTenantCommand command)
@@ -45,7 +45,7 @@ public partial class TenantsController : ApiBaseController
     /// Get tenant by ID
     /// </summary>
     [HttpGet("{id:guid}")]
-    [Permission(AppPermissions.TenantManagement)]
+    [Permission(AppPermissions.TenantManagement.List)]
     [ProducesResponseType(typeof(ApiResponse<TenantDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetTenantById(Guid id)
@@ -71,7 +71,7 @@ public partial class TenantsController : ApiBaseController
     /// Get all tenants with pagination
     /// </summary>
     [HttpPost("GetAllTenants")]
-    [Permission(AppPermissions.TenantManagement_List)]
+    [Permission(AppPermissions.TenantManagement.List)]
     [ProducesResponseType(typeof(ApiResponse<PaginatedResult<TenantListDto>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllTenants([FromBody] TenantListQuery query)
     {
@@ -83,7 +83,7 @@ public partial class TenantsController : ApiBaseController
     /// Update tenant
     /// </summary>
     [HttpPut("{id:guid}")]
-    [Permission(AppPermissions.TenantManagement_Edit)]
+    [Permission(AppPermissions.TenantManagement.Edit)]
     [ProducesResponseType(typeof(ApiResponse<TenantDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateTenant(Guid id, [FromBody] UpdateTenantCommand command)
@@ -98,7 +98,7 @@ public partial class TenantsController : ApiBaseController
     /// Suspend tenant
     /// </summary>
     [HttpPost("{id:guid}/suspend")]
-    [Permission(AppPermissions.TenantManagement_ActiveDeActive)]
+    [Permission(AppPermissions.TenantManagement.ActiveDeActive)]
     [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
     public async Task<IActionResult> SuspendTenant(Guid id)
     {
@@ -110,7 +110,7 @@ public partial class TenantsController : ApiBaseController
     /// Activate suspended tenant
     /// </summary>
     [HttpPost("{id:guid}/activate")]
-    [Permission(AppPermissions.TenantManagement_ActiveDeActive)]
+    [Permission(AppPermissions.TenantManagement.ActiveDeActive)]
     [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ActivateTenant(ActivateTenantCommand input)
     {
@@ -122,7 +122,7 @@ public partial class TenantsController : ApiBaseController
     /// Delete tenant (soft delete)
     /// </summary>
     [HttpDelete("{id:guid}")]
-    [Permission(AppPermissions.TenantManagement_Delete)]
+    [Permission(AppPermissions.TenantManagement.Delete)]
     [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteTenant(Guid id)
     {
@@ -134,6 +134,7 @@ public partial class TenantsController : ApiBaseController
     /// Get tenant settings
     /// </summary>
     [HttpGet("{id:guid}/settings")]
+    [Permission(AppPermissions.TenantManagement.GetTenantSetting)]
     [ProducesResponseType(typeof(ApiResponse<TenantSettingsDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTenantSettings(Guid id)
     {
@@ -145,6 +146,7 @@ public partial class TenantsController : ApiBaseController
     /// Update tenant settings
     /// </summary>
     [HttpPut("{id:guid}/settings")]
+    [Permission(AppPermissions.TenantManagement.UpdateTenantSetting)]
     [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateTenantSettings(Guid id, [FromBody] UpdateTenantSettingsCommand command)
     {
@@ -157,6 +159,7 @@ public partial class TenantsController : ApiBaseController
     /// Get tenant provisioning status
     /// </summary>
     [HttpGet("{id:guid}/provisioning-status")]
+    [Permission(AppPermissions.TenantManagement.GetProvisioningData)]
     [ProducesResponseType(typeof(ApiResponse<List<ProvisioningStatusDto>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetProvisioningTenantStatus(Guid id)
     {
@@ -168,6 +171,7 @@ public partial class TenantsController : ApiBaseController
     /// Retry failed provisioning
     /// </summary>
     [HttpPost("{id:guid}/retry-provisioning")]
+    [Permission(AppPermissions.TenantManagement.RetryProvisioningData)]
     //  [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
     public async Task<IActionResult> RetryProvisioningTenant(Guid id)
@@ -181,6 +185,7 @@ public partial class TenantsController : ApiBaseController
     /// Get tenant database info
     /// </summary>
     [HttpGet("{id:guid}/database")]
+    [Permission(AppPermissions.TenantManagement.DataBaseInfo)]
     [ProducesResponseType(typeof(ApiResponse<TenantDatabaseDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTenantDatabaseInfo(Guid id)
     {
@@ -192,6 +197,7 @@ public partial class TenantsController : ApiBaseController
     /// Test tenant database connection
     /// </summary>
     [HttpPost("{id:guid}/test-connection")]
+    [Permission(AppPermissions.TenantManagement.TestDataBaseConnection)]
     [ProducesResponseType(typeof(ApiResponse<ConnectionTestResult>), StatusCodes.Status200OK)]
     public async Task<IActionResult> TestConnection(Guid id)
     {
@@ -203,6 +209,7 @@ public partial class TenantsController : ApiBaseController
     /// Get tenant usage statistics
     /// </summary>
     [HttpGet("{id:guid}/usage")]
+    [Permission(AppPermissions.TenantManagement.GetTenantUsage)]
     [ProducesResponseType(typeof(ApiResponse<TenantUsageDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTenantUsage(Guid id)
     {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SamaniCrm.Api.Attributes;
 using SamaniCrm.Api.Controllers;
 using SamaniCrm.Application.DashboardManager;
-using SamaniCrm.Core.Permissions;
+using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Host.Models;
 
 namespace SamaniCrm.Host.Controllers
@@ -19,7 +19,7 @@ namespace SamaniCrm.Host.Controllers
         }
 
         [HttpGet("GetAllDashboards")]
-        [Permission(AppPermissions.Dashboard_List)]
+        [Permission(AppPermissions.Dashboard.List)]
         [ProducesResponseType(typeof(ApiResponse<List<DashboardDto>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllDashboards()
         {
@@ -28,8 +28,8 @@ namespace SamaniCrm.Host.Controllers
         }
 
         [HttpPost("CreateOrUpdateDashboard")]
-        [Permission(AppPermissions.Dashboard_Edit)]
-        [Permission(AppPermissions.Dashboard_Create)]
+        [Permission(AppPermissions.Dashboard.Edit)]
+        [Permission(AppPermissions.Dashboard.Create)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateOrUpdateDashboard(CreateOrUpdateDashboardCommand input)
         {
@@ -38,7 +38,7 @@ namespace SamaniCrm.Host.Controllers
         }
 
         [HttpPost("DeleteDashboard")]
-        [Permission(AppPermissions.Dashboard_Delete)]
+        [Permission(AppPermissions.Dashboard.Delete)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteDashboard(DeleteDashboardCommand input)
         {
@@ -48,7 +48,7 @@ namespace SamaniCrm.Host.Controllers
 
 
         [HttpGet("GetAllDashboardItems")]
-        [Permission(AppPermissions.Dashboard_List)]
+        [Permission(AppPermissions.Dashboard.List)]
         [ProducesResponseType(typeof(ApiResponse<List<DashboardItemDto>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllDashboardItems(Guid dashboardId)
         {
@@ -57,8 +57,8 @@ namespace SamaniCrm.Host.Controllers
         }
 
         [HttpPost("CreateOrUpdateDashboardItem")]
-        [Permission(AppPermissions.Dashboard_Item_Create)]
-        [Permission(AppPermissions.Dashboard_Item_Edit)]
+        [Permission(AppPermissions.Dashboard.Item.Create)]
+        [Permission(AppPermissions.Dashboard.Item.Edit)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateOrUpdateDashboardItem(CreateOrUpdateDashboardItemCommand input)
         {
@@ -67,7 +67,7 @@ namespace SamaniCrm.Host.Controllers
         }
         
         [HttpPost("UpdateDashboardItems")]
-        [Permission(AppPermissions.Dashboard_Item_Edit)]
+        [Permission(AppPermissions.Dashboard.Item.Edit)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateDashboardItems(UpdateDashboardItemsCommand input)
         {
@@ -78,7 +78,7 @@ namespace SamaniCrm.Host.Controllers
 
 
         [HttpPost("DeleteDashboardItem")]
-        [Permission(AppPermissions.Dashboard_Item_Delete)]
+        [Permission(AppPermissions.Dashboard.Item.Delete)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteDashboardItem(DeleteDashboardItemCommand input)
         {

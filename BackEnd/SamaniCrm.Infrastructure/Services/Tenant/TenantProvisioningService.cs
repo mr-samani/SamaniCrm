@@ -12,7 +12,6 @@ using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Application.User.Commands;
 using SamaniCrm.Core;
 using SamaniCrm.Core.Shared.Enums;
-using SamaniCrm.Domain.Constants;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.Data.Seeder;
 using SamaniCrm.Infrastructure.Jobs;
@@ -24,6 +23,7 @@ using System.Threading.Tasks;
 using HealthStatus = SamaniCrm.Domain.Entities.HealthStatus;
 using SamaniCrm.Application.Features.Tenants.Dtos;
 using SamaniCrm.Core.Shared.DTOs;
+using SamaniCrm.Core.Shared.Consts;
 
 
 namespace SamaniCrm.Infrastructure.Services.TenantService;
@@ -130,7 +130,7 @@ public class TenantProvisioningService : ITenantProvisioningService
             PhoneNumber = request.AdminMobile,
             Address = request.Address,
             Lang = AppConsts.DefaultLanguage,
-            Roles = [Roles.TenantAdministrator],
+            Roles = [AppRoles.TenantAdministrator],
         };
         var createUserResult = await _identityService.CreateUserAsync(adminUser);
         if (createUserResult.isSucceed == false)

@@ -262,7 +262,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             if (finalExpression != null)
             {
                 var lambda = Expression.Lambda(finalExpression, parameter);
-                Console.WriteLine(lambda.Body);
+                // Console.WriteLine(lambda.Body);
                 entityType.SetQueryFilter(lambda);
             }
         }
