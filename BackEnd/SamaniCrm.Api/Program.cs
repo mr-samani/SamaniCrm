@@ -1,5 +1,6 @@
 ﻿using Hangfire;
 using Microsoft.OpenApi;
+using SamaniCrm.Api.Extensions;
 using SamaniCrm.Api.Middlewares;
 using SamaniCrm.Api.TUS;
 using SamaniCrm.Application;
@@ -38,7 +39,7 @@ services
     .AddHangfireJobs(config)
     .LoadExternalProviders(config)
     .AddHelthChecks(config)
-    ;
+    .AddLogging(config);
 
 
 
@@ -62,6 +63,19 @@ var app = builder.Build();
 var captchaStore = app.Services.GetRequiredService<ICaptchaStore>();
 VerifyCaptchaExtensions.Configure(captchaStore, config);
 
+// Correlation ID Middleware
+app.Use(async (context, next) =>
+{
+    if (!context.Request.Headers.ContainsKey("X-Correlation-Id"))
+    {
+        context.Request.Headers["X-Correlation-Id"] = Guid.NewGuid().ToString();
+    }
+    context.Response.Headers["X-Correlation-Id"] =
+        context.Request.Headers["X-Correlation-Id"].ToString();
+
+    await next();
+});
+
 app.UseMiddleware<LanguageMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseMiddleware<ApiExceptionHandlingMiddleware>();
@@ -79,6 +93,7 @@ app.UseStaticFiles();
 app.UseSession();
 
 // Security Headers
+//TODO: CSP security :commented for scalar
 //app.Use(async (context, next) =>
 //{
 //    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
@@ -88,6 +103,9 @@ app.UseSession();
 //    context.Response.Headers.Append("Content-Security-Policy", "default-src 'self'");
 //    await next();
 //});
+
+
+
 
 
 

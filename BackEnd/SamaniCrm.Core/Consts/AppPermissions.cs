@@ -27,6 +27,22 @@ public static class AppPermissions
     // 🔒 HOST ONLY - فقط مدیران هاست دسترسی دارند
     // ═══════════════════════════════════════════════════════════════════════
 
+    public static class LoggingSystem
+    {
+        public const string List = "Administrator.LoggingSystem.List";
+        public const string Details = "Administrator.LoggingSystem.Details";
+        public const string GetStats = "Administrator.LoggingSystem.GetStats";
+        public const string ManualCleanUpLog = "Administrator.LoggingSystem.ManualCleanUpLog";
+
+        public static class TenantLogSetting
+        {
+            public const string List = "Administrator.LoggingSystem.Settings.List";
+            public const string Update = "Administrator.LoggingSystem.Settings.Update";
+
+        }
+    }
+
+
     /// <summary>مدیریت مستأجرین (چندمستأجری)</summary>
     public static class TenantManagement
     {

@@ -15,7 +15,7 @@ using SamaniCrm.Host.Models;
 
 namespace SamaniCrm.Api.Controllers;
 
-[ApiController]
+[Authorize]
 // [Authorize(Roles = "SuperAdmin")]
 public partial class TenantsController : ApiBaseController
 {

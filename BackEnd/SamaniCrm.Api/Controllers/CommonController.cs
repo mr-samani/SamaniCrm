@@ -5,25 +5,24 @@ using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.InitialApp.Queries; 
 using SamaniCrm.Host.Models;
 
-namespace SamaniCrm.Api.Controllers
+namespace SamaniCrm.Api.Controllers;
+
+
+public class CommonController : ApiBaseController
 {
+    public readonly IMediator _mediator;
 
-    public class CommonController : ApiBaseController
+    public CommonController(IMediator mediator)
     {
-        public readonly IMediator _mediator;
+        _mediator = mediator;
+    }
 
-        public CommonController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
-        [HttpGet("InitialApp")]
-        [ProducesResponseType(typeof(ApiResponse<InitialAppDTO>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> InitialApp()
-        {
-            return ApiOk<InitialAppDTO>(await _mediator.Send(new InitialAppQuery()));
-
-        }
+    [HttpGet("InitialApp")]
+    [ProducesResponseType(typeof(ApiResponse<InitialAppDTO>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> InitialApp()
+    {
+        return ApiOk<InitialAppDTO>(await _mediator.Send(new InitialAppQuery()));
 
     }
+
 }

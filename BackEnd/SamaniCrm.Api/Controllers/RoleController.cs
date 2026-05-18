@@ -11,92 +11,91 @@ using SamaniCrm.Application.Role.Queries;
 using SamaniCrm.Core.Shared.Consts;
 
 
-namespace SamaniCrm.Api.Controllers
+namespace SamaniCrm.Api.Controllers;
+
+
+[Authorize]
+// [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+//[Authorize(Roles = "Admin, Management")]
+public class RoleController : ApiBaseController
 {
+    public readonly IMediator _mediator;
 
-    [Authorize]
-    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    //[Authorize(Roles = "Admin, Management")]
-    public class RoleController : ApiBaseController
+    public RoleController(IMediator mediator)
     {
-        public readonly IMediator _mediator;
+        _mediator = mediator;
+    }
 
-        public RoleController(IMediator mediator)
+    [HttpPost("CreateRole")]
+    [Permission(AppPermissions.RoleManagement.Create)]
+    [ProducesDefaultResponseType(typeof(ApiResponse<int>))]
+    public async Task<IActionResult> CreateRoleAsync(RoleCreateCommand command)
+    {
+        return ApiOk<int>(await _mediator.Send(command));
+    }
+
+    [HttpGet("GetAllRoles")]
+    [Permission(AppPermissions.RoleManagement.List)]
+    [ProducesResponseType(typeof(ApiResponse<List<RoleDTO>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllRolesAsync()
+    {
+        var result = await _mediator.Send(new GetRoleQuery());
+        return ApiOk<IList<RoleDTO>>(result);
+    }
+
+    [HttpGet("GetRolePermissions")]
+    [Permission(AppPermissions.RoleManagement.List)]
+    [ProducesResponseType(typeof(ApiResponse<List<RolePermissionsDTO>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetRolePermissions(Guid roleId)
+    {
+        var result = await _mediator.Send(new GetRolePermissionQuery(roleId));
+        return ApiOk<IList<RolePermissionsDTO>>(result);
+    }
+
+
+    [HttpGet("{id}")]
+    [Permission(AppPermissions.RoleManagement.List)]
+    [ProducesResponseType(typeof(ApiResponse<RoleDTO>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetRoleByIdAsync(Guid id)
+    {
+        return ApiOk(await _mediator.Send(new GetRoleByIdQuery() { RoleId = id }));
+    }
+
+    [HttpPost("DeleteRole")]
+    [Permission(AppPermissions.RoleManagement.Delete)]
+    [ProducesResponseType(typeof(ApiResponse<int>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> DeleteRoleAsync(Guid id)
+    {
+        int result = await _mediator.Send(new DeleteRoleCommand()
         {
-            _mediator = mediator;
-        }
+            RoleId = id
+        });
+        return ApiOk<int>(result);
+    }
 
-        [HttpPost("CreateRole")]
-        [Permission(AppPermissions.RoleManagement.Create)]
-        [ProducesDefaultResponseType(typeof(ApiResponse<int>))]
-        public async Task<IActionResult> CreateRoleAsync(RoleCreateCommand command)
-        {
-            return ApiOk<int>(await _mediator.Send(command));
-        }
+    [HttpPut("EditRole")]
+    [Permission(AppPermissions.RoleManagement.Edit)]
+    [ProducesResponseType(typeof(ApiResponse<int>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> EditRole([FromBody] UpdateRoleCommand command)
+    {
 
-        [HttpGet("GetAllRoles")]
-        [Permission(AppPermissions.RoleManagement.List)]
-        [ProducesResponseType(typeof(ApiResponse<List<RoleDTO>>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllRolesAsync()
-        {
-            var result = await _mediator.Send(new GetRoleQuery());
-            return ApiOk<IList<RoleDTO>>(result);
-        }
-
-        [HttpGet("GetRolePermissions")]
-        [Permission(AppPermissions.RoleManagement.List)]
-        [ProducesResponseType(typeof(ApiResponse<List<RolePermissionsDTO>>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetRolePermissions(Guid roleId)
-        {
-            var result = await _mediator.Send(new GetRolePermissionQuery(roleId));
-            return ApiOk<IList<RolePermissionsDTO>>(result);
-        }
-
-
-        [HttpGet("{id}")]
-        [Permission(AppPermissions.RoleManagement.List)]
-        [ProducesResponseType(typeof(ApiResponse<RoleDTO>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetRoleByIdAsync(Guid id)
-        {
-            return ApiOk(await _mediator.Send(new GetRoleByIdQuery() { RoleId = id }));
-        }
-
-        [HttpPost("DeleteRole")]
-        [Permission(AppPermissions.RoleManagement.Delete)]
-        [ProducesResponseType(typeof(ApiResponse<int>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> DeleteRoleAsync(Guid id)
-        {
-            int result = await _mediator.Send(new DeleteRoleCommand()
-            {
-                RoleId = id
-            });
-            return ApiOk<int>(result);
-        }
-
-        [HttpPut("EditRole")]
-        [Permission(AppPermissions.RoleManagement.Edit)]
-        [ProducesResponseType(typeof(ApiResponse<int>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> EditRole([FromBody] UpdateRoleCommand command)
-        {
-
-            var result = await _mediator.Send(command);
-            return ApiOk(result);
-
-        }
-
-
-
-        [HttpPut("EditRolePermissions")]
-        [Permission(AppPermissions.RoleManagement.EditRolePermissions)]
-        [ProducesDefaultResponseType(typeof(ApiResponse<bool>))]
-        public async Task<IActionResult> EditRolePermissions(EditRolePermissionsCommand command)
-        {
-            var result = await _mediator.Send(command);
-            return ApiOk(result);
-        }
-
-
-
+        var result = await _mediator.Send(command);
+        return ApiOk(result);
 
     }
+
+
+
+    [HttpPut("EditRolePermissions")]
+    [Permission(AppPermissions.RoleManagement.EditRolePermissions)]
+    [ProducesDefaultResponseType(typeof(ApiResponse<bool>))]
+    public async Task<IActionResult> EditRolePermissions(EditRolePermissionsCommand command)
+    {
+        var result = await _mediator.Send(command);
+        return ApiOk(result);
+    }
+
+
+
+
 }

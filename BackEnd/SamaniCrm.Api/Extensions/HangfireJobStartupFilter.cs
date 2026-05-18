@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Interfaces;
 
-namespace SamaniCrm.Infrastructure.Extensions;
+namespace SamaniCrm.Api.Extensions;
 
 public static partial class ServiceCollectionExtensions
 {

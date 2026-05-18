@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SamaniCrm.Api.Attributes;
 using SamaniCrm.Api.Controllers;
@@ -6,86 +7,86 @@ using SamaniCrm.Application.DashboardManager;
 using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Host.Models;
 
-namespace SamaniCrm.Host.Controllers
+namespace SamaniCrm.Host.Controllers;
+
+[Authorize]
+public class DasboardController : ApiBaseController
 {
-    public class DasboardController : ApiBaseController
+
+    private readonly IMediator _mediator;
+
+    public DasboardController(IMediator mediator)
     {
-
-        private readonly IMediator _mediator;
-
-        public DasboardController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
-        [HttpGet("GetAllDashboards")]
-        [Permission(AppPermissions.Dashboard.List)]
-        [ProducesResponseType(typeof(ApiResponse<List<DashboardDto>>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllDashboards()
-        {
-            List<DashboardDto> result = await _mediator.Send(new GetAllDashboardsQuery());
-            return ApiOk<List<DashboardDto>>(result);
-        }
-
-        [HttpPost("CreateOrUpdateDashboard")]
-        [Permission(AppPermissions.Dashboard.Edit)]
-        [Permission(AppPermissions.Dashboard.Create)]
-        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateOrUpdateDashboard(CreateOrUpdateDashboardCommand input)
-        {
-            var result = await _mediator.Send(input);
-            return ApiOk(result);
-        }
-
-        [HttpPost("DeleteDashboard")]
-        [Permission(AppPermissions.Dashboard.Delete)]
-        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> DeleteDashboard(DeleteDashboardCommand input)
-        {
-            var result = await _mediator.Send(input);
-            return ApiOk(result);
-        }
-
-
-        [HttpGet("GetAllDashboardItems")]
-        [Permission(AppPermissions.Dashboard.List)]
-        [ProducesResponseType(typeof(ApiResponse<List<DashboardItemDto>>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllDashboardItems(Guid dashboardId)
-        {
-            List<DashboardItemDto> result = await _mediator.Send(new GetAllDashboardItemsQuery(dashboardId));
-            return ApiOk<List<DashboardItemDto>>(result);
-        }
-
-        [HttpPost("CreateOrUpdateDashboardItem")]
-        [Permission(AppPermissions.Dashboard.Item.Create)]
-        [Permission(AppPermissions.Dashboard.Item.Edit)]
-        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateOrUpdateDashboardItem(CreateOrUpdateDashboardItemCommand input)
-        {
-            var result = await _mediator.Send(input);
-            return ApiOk(result);
-        }
-        
-        [HttpPost("UpdateDashboardItems")]
-        [Permission(AppPermissions.Dashboard.Item.Edit)]
-        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> UpdateDashboardItems(UpdateDashboardItemsCommand input)
-        {
-            var result = await _mediator.Send(input);
-            return ApiOk(result);
-        }
-
-
-
-        [HttpPost("DeleteDashboardItem")]
-        [Permission(AppPermissions.Dashboard.Item.Delete)]
-        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> DeleteDashboardItem(DeleteDashboardItemCommand input)
-        {
-            var result = await _mediator.Send(input);
-            return ApiOk(result);
-        }
-
-
+        _mediator = mediator;
     }
+
+    [HttpGet("GetAllDashboards")]
+    [Permission(AppPermissions.Dashboard.List)]
+    [ProducesResponseType(typeof(ApiResponse<List<DashboardDto>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllDashboards()
+    {
+        List<DashboardDto> result = await _mediator.Send(new GetAllDashboardsQuery());
+        return ApiOk<List<DashboardDto>>(result);
+    }
+
+    [HttpPost("CreateOrUpdateDashboard")]
+    [Permission(AppPermissions.Dashboard.Edit)]
+    [Permission(AppPermissions.Dashboard.Create)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> CreateOrUpdateDashboard(CreateOrUpdateDashboardCommand input)
+    {
+        var result = await _mediator.Send(input);
+        return ApiOk(result);
+    }
+
+    [HttpPost("DeleteDashboard")]
+    [Permission(AppPermissions.Dashboard.Delete)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> DeleteDashboard(DeleteDashboardCommand input)
+    {
+        var result = await _mediator.Send(input);
+        return ApiOk(result);
+    }
+
+
+    [HttpGet("GetAllDashboardItems")]
+    [Permission(AppPermissions.Dashboard.List)]
+    [ProducesResponseType(typeof(ApiResponse<List<DashboardItemDto>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllDashboardItems(Guid dashboardId)
+    {
+        List<DashboardItemDto> result = await _mediator.Send(new GetAllDashboardItemsQuery(dashboardId));
+        return ApiOk<List<DashboardItemDto>>(result);
+    }
+
+    [HttpPost("CreateOrUpdateDashboardItem")]
+    [Permission(AppPermissions.Dashboard.Item.Create)]
+    [Permission(AppPermissions.Dashboard.Item.Edit)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> CreateOrUpdateDashboardItem(CreateOrUpdateDashboardItemCommand input)
+    {
+        var result = await _mediator.Send(input);
+        return ApiOk(result);
+    }
+    
+    [HttpPost("UpdateDashboardItems")]
+    [Permission(AppPermissions.Dashboard.Item.Edit)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> UpdateDashboardItems(UpdateDashboardItemsCommand input)
+    {
+        var result = await _mediator.Send(input);
+        return ApiOk(result);
+    }
+
+
+
+    [HttpPost("DeleteDashboardItem")]
+    [Permission(AppPermissions.Dashboard.Item.Delete)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> DeleteDashboardItem(DeleteDashboardItemCommand input)
+    {
+        var result = await _mediator.Send(input);
+        return ApiOk(result);
+    }
+
+
 }

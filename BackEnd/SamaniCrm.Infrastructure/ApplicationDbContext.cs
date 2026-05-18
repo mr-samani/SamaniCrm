@@ -36,6 +36,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     }
 
 
+    public DbSet<TenantLogSetting> TenantLogSettings { get; set; }
+    public DbSet<LogEntry> LogEntries { get; set; }
+
 
     public DbSet<Tenant> Tenants { get; set; }
     public DbSet<TenantSetting> TenantSettings { get; set; }

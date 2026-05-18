@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 
+namespace SamaniCrm.Api.Extensions;
 public class SchemaTransformer : IOpenApiSchemaTransformer
 {
     public Task TransformAsync(

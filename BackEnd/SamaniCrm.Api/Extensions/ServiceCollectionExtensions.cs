@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi;
 using SamaniCrm.Api.Middlewares;
 using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.Behaviors;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.Features.Logging.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Application.InitialApp.Queries;
 using SamaniCrm.Application.ProductManagerManager.Interfaces;
@@ -33,6 +33,8 @@ using SamaniCrm.Infrastructure.Hubs;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Jobs;
 using SamaniCrm.Infrastructure.Localizer;
+using SamaniCrm.Infrastructure.Loging;
+using SamaniCrm.Infrastructure.Loging.Sinks;
 using SamaniCrm.Infrastructure.MappingProfile;
 using SamaniCrm.Infrastructure.Repositories;
 using SamaniCrm.Infrastructure.Security;
@@ -40,6 +42,7 @@ using SamaniCrm.Infrastructure.Services;
 using SamaniCrm.Infrastructure.Services.Product;
 using SamaniCrm.Infrastructure.Services.TenantService;
 using SamaniCrm.Infrastructure.Storage;
+using Scalar.AspNetCore;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Security.Claims;
@@ -47,12 +50,13 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
+using SamaniCrm.Infrastructure.Loging.Filters;
+using SamaniCrm.Infrastructure.Loging.Decorators;
+using SamaniCrm.Infrastructure;
 
-using Scalar.AspNetCore;
 
 
-
-namespace SamaniCrm.Infrastructure.Extensions;
+namespace SamaniCrm.Api.Extensions;
 
 public static partial class ServiceCollectionExtensions
 {
@@ -191,8 +195,8 @@ public static partial class ServiceCollectionExtensions
                 opt.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never;
 
                 // opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                 
-    });
+
+            });
 
         return services;
     }
@@ -209,7 +213,7 @@ public static partial class ServiceCollectionExtensions
         {
             opt.AddSchemaTransformer<SchemaTransformer>();
             opt.AddOperationTransformer<OperationSchmaTransformer>();
-      
+
         });
         return services;
     }
@@ -503,6 +507,42 @@ public static partial class ServiceCollectionExtensions
         //services.AddHealthChecks()
         // .AddDbContextCheck<ApplicationDbContext>("master_db");
         //  .AddCheck<TenantDatabaseHealthCheck>("tenant_db");
+        return services;
+    }
+
+
+    public static IServiceCollection AddLogging(this IServiceCollection services, IConfiguration config)
+    {
+        // Sink ها
+        services.AddSingleton<FileLogSink>();
+        services.AddScoped<DatabaseLogSink>();
+        services.AddSingleton<TelegramLogSink>();
+        services.AddSingleton<ExternalApiLogSink>();
+
+        // ثبت Sink ها به صورت IEnumerable
+        services.AddScoped<IEnumerable<ILogSink>>(sp => new ILogSink[]
+        {
+            sp.GetRequiredService<FileLogSink>(),
+            sp.GetRequiredService<DatabaseLogSink>(),
+            sp.GetRequiredService<TelegramLogSink>(),
+            sp.GetRequiredService<ExternalApiLogSink>()
+        });
+
+        // Core Services
+        services.AddScoped<ILogConfigurationService, LogConfigurationService>();
+        services.AddScoped<ILogService, LogService>();
+        // services.AddScoped<ILogRetentionService, LogRetentionService>();
+
+
+        // Background Service
+        services.AddHostedService<LogRetentionService>();
+
+        // Action Filter
+        services.AddLoggingInterceptors();
+
+        // Decorator برای Service ها
+        services.AddLoggedServices();
+
         return services;
     }
 
