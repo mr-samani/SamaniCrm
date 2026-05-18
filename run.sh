@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ═══════════════════════════════════════════════════════════════
-# Mohammadreza Samani - Angular & C#.NET9 Launcher
+# Mohammadreza Samani - Angular & C#.NET10 Launcher
 # Linux Version (Zorin OS)
 # ═══════════════════════════════════════════════════════════════
 
