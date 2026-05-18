@@ -7,6 +7,7 @@ CLS
 ECHO ---- Mohammadreza Samani Angular & C#.net9 ----
 ECHO.
 
+Echo [0]. Generate Front end Permissions by Backend
 ECHO [1]. Start FrontEnd dashboard
 ECHO [2]. Start public site
 ECHO [3]. Run open api generation Dashboard
@@ -15,24 +16,27 @@ ECHO [5]. Update database with seeds
 ECHO [6]. Open dashboard in VScode
 ECHO [7]. Open public site in VScode
 ECHO [8]. Start Host api
-ECHO [9]. Exit
+ECHO [100]. Exit
 ECHO.
 
-CHOICE /C 123456789 /M "Enter your choice:"
 
+
+
+set /p choice=Enter your choice:
 ECHO.
+
 
 :: Note - list ERRORLEVELS in decreasing order
-IF ERRORLEVEL 9 GOTO ExitCMD
-IF ERRORLEVEL 8 GOTO StartHostApi
-IF ERRORLEVEL 7 GOTO OpenPublicVsCode
-IF ERRORLEVEL 6 GOTO OpenDashboardVsCode
-IF ERRORLEVEL 5 GOTO UpdateDbWithSeed
-IF ERRORLEVEL 4 GOTO RunOpenApiGenPublicSite
-IF ERRORLEVEL 3 GOTO RunOpenApiGenDashboard
-IF ERRORLEVEL 2 GOTO StartPublicSite
-IF ERRORLEVEL 1 GOTO StartDashboardFrontEnd
-
+IF "%choice%" == "100" GOTO ExitCMD
+IF "%choice%" == "8" GOTO StartHostApi
+IF "%choice%" == "7" GOTO OpenPublicVsCode
+IF "%choice%" == "6" GOTO OpenDashboardVsCode
+IF "%choice%" == "5" GOTO UpdateDbWithSeed
+IF "%choice%" == "4" GOTO RunOpenApiGenPublicSite
+IF "%choice%" == "3" GOTO RunOpenApiGenDashboard
+IF "%choice%" == "2" GOTO StartPublicSite
+IF "%choice%" == "1" GOTO StartDashboardFrontEnd
+IF "%choice%" == "0" GOTO GenrateFrontEndPermissionsByBackEnd
 ::---------------------------------------------------------
 :ExitCMD
 ECHO *** Exit... ***
@@ -78,7 +82,12 @@ ECHO *** Serve Frontend Dashboard***
 CD /D "%currentDirector%\Frontend\SamaniCrm"
 call npm run start
 GOTO End
-
+::---------------------------------------------------------
+:GenrateFrontEndPermissionsByBackEnd
+ECHO *** Genrate FrontEnd Permissions By BackEnd ***
+CD /D "%currentDirector%\Frontend\SamaniCrm"
+call npm run generate:app-permissions
+GOTO End
 ::---------------------------------------------------------
 :StartHostApi
 ECHO *** Start Dotnet Host Api***

@@ -5,7 +5,6 @@ import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type
 import { finalize, Subscription } from 'rxjs';
 import { CreateOrEditExternalProviderComponent } from '../../dialogs/external-provider/external-provider.component';
 import { ExternalProviderDto } from '@shared/service-proxies/model/external-provider-dto';
-import { SecuritySettingsServiceProxy } from '@shared/service-proxies/api/security-settings.service';
 import { ExternalProvidersServiceProxy } from '@shared/service-proxies/api/external-providers.service';
 
 @Component({

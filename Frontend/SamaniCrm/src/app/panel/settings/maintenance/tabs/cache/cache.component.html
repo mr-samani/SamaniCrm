@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-end my-2">
-  @if (AppPermissions.CacheEntries_ClearAll | permission) {
+  @if (AppPermissions.Maintenance_Cache_ClearAll | permission) {
     <button mat-stroked-button color="primary" (click)="clearAll()">
       <i class="fa fa-trash mx-1"></i>
       <span>{{ 'ClearAll' | translate }}</span>
@@ -19,7 +19,7 @@
     </button>
   }
   <mat-menu #menu="matMenu">
-    @if (AppPermissions.CacheEntries_Delete | permission) {
+    @if (AppPermissions.Maintenance_Cache_Delete | permission) {
       <a mat-menu-item (click)="remove(item)">
         <i class="fa fa-trash mx-1"></i>
         <span>{{ 'Remove' | translate }}</span>

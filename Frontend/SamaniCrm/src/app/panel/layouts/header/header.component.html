@@ -56,7 +56,7 @@
             </a>
           </li>
         }
-        @if (AppPermissions.Pages | permission) {
+        @if (AppPermissions.Pages_List | permission) {
           <li class="nav-item">
             <a class="nav-link" [routerLink]="['/panel/content']" routerLinkActive="active" (click)="closeNavbar()">
               <i class="fa fa-file-contract"></i>
@@ -64,7 +64,7 @@
             </a>
           </li>
         }
-        @if (AppPermissions.Products | permission) {
+        @if (AppPermissions.Products_List | permission) {
           <li class="nav-item">
             <a class="nav-link" [routerLink]="['/panel/products']" routerLinkActive="active" (click)="closeNavbar()">
               <i class="fa fa-file-contract"></i>

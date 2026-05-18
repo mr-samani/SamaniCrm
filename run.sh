@@ -10,11 +10,16 @@ currentDirectory=$(pwd)
 # ───────────────────────────────────────────────────────────────
 # Functions
 # ───────────────────────────────────────────────────────────────
-
 startDashboardFrontEnd() {
     echo "*** Serve Frontend Dashboard ***"
     cd "$currentDirectory/Frontend/SamaniCrm"
     npm run start
+}
+
+GenrateFrontEndPermissionsByBackEnd() {
+    echo "*** Genrate FrontEnd Permissions By BackEnd ***"
+    cd "$currentDirectory/Frontend/SamaniCrm"
+    npm run generate:app-permissions
 }
 
 startPublicSite() {
@@ -74,6 +79,7 @@ showMenu() {
     echo "║     Mohammadreza Samani - Angular & C#.NET9            ║"
     echo "╚══════════════════════════════════════════════════════════╝"
     echo ""
+    echo "  [0]  Generate Front end Permissions by Backend"
     echo "  [1]  Start FrontEnd Dashboard"
     echo "  [2]  Start Public Site"
     echo "  [3]  Run OpenAPI Generation (Dashboard)"
@@ -96,6 +102,7 @@ while true; do
     echo ""
 
     case $choice in
+        0) GenrateFrontEndPermissionsByBackEnd ;;
         1) startDashboardFrontEnd ;;
         2) startPublicSite ;;
         3) runOpenApiGenDashboard ;;

@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-end gap-1 flex-wrap">
-  @if (AppPermissions.SecuritySetting_ExternalProvidersCreate | permission) {
+  @if (AppPermissions.SecuritySetting_ExternalProviders_Create | permission) {
     <button class="btn btn-primary" (click)="openCreateOrEditDialog()">
       <i class="fa fa-plus mx-2"></i>
       {{ 'CreateNew' | translate }}
@@ -10,12 +10,12 @@
 
 <ng-template #operations let-item>
   <div class="d-flex align-items-center gap-1">
-    @if (AppPermissions.SecuritySetting_ExternalProvidersUpdate | permission) {
+    @if (AppPermissions.SecuritySetting_ExternalProviders_Update | permission) {
       <button mat-icon-button (click)="openCreateOrEditDialog(item)">
         <i class="fa fa-edit"></i>
       </button>
     }
-    @if (AppPermissions.SecuritySetting_ExternalProvidersDelete | permission) {
+    @if (AppPermissions.SecuritySetting_ExternalProviders_Delete | permission) {
       <button mat-icon-button (click)="deleteItem(item)">
         <i class="fa fa-trash"></i>
       </button>

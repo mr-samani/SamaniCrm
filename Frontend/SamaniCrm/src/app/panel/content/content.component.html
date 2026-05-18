@@ -2,7 +2,7 @@
 <div class="panel-content">
   <div class="container-with-side-menu">
     <div class="menu-list">
-      @if (AppPermissions.Pages_Home_Edit | permission) {
+      @if (AppPermissions.Pages_HomeEdit | permission) {
         <a
           class="menu-item"
           [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.HomePage]]"
@@ -17,7 +17,7 @@
         </a>
       }
 
-      @if (AppPermissions.Pages_AboutUs_Edit | permission) {
+      @if (AppPermissions.Pages_AboutUsEdit | permission) {
         <a
           class="menu-item"
           [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.AboutUs]]"
@@ -32,7 +32,7 @@
         </a>
       }
 
-      @if (AppPermissions.Pages_ContactUs_Edit | permission) {
+      @if (AppPermissions.Pages_ContactUsEdit | permission) {
         <a
           class="menu-item"
           [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.ContactUs]]"
@@ -46,7 +46,7 @@
           </div>
         </a>
       }
-          @if (AppPermissions.Pages_Product_Edit | permission) {
+          @if (AppPermissions.Pages_ProductEdit | permission) {
         <a
           class="menu-item"
           [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.Product]]"
@@ -61,7 +61,7 @@
         </a>
       }
 
-      @if (AppPermissions.Pages_OtherPage_Edit | permission) {
+      @if (AppPermissions.Pages_OtherPageEdit | permission) {
         <a
           class="menu-item"
           [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.OtherPages]]"
@@ -76,7 +76,7 @@
         </a>
       }
 
-      @if (AppPermissions.Pages_Articles_Edit | permission) {
+      @if (AppPermissions.Pages_ArticlesEdit | permission) {
         <a
           class="menu-item"
           [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.Article]]"
@@ -91,7 +91,7 @@
         </a>
       }
 
-      @if (AppPermissions.Pages_Blogs_Edit | permission) {
+      @if (AppPermissions.Pages_BlogsEdit | permission) {
         <a
           class="menu-item"
           [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.Blog]]"
@@ -106,7 +106,7 @@
         </a>
       }
 
-      @if (AppPermissions.Pages_News_Edit | permission) {
+      @if (AppPermissions.Pages_NewsEdit | permission) {
         <a
           class="menu-item"
           [routerLink]="['/panel/content/pages/' + PageTypeEnum[PageTypeEnum.News]]"
