@@ -15,7 +15,7 @@ public class TenantLogSettingConfiguration : IEntityTypeConfiguration<TenantLogS
 {
     public void Configure(EntityTypeBuilder<TenantLogSetting> builder)
     {
-        builder.ToTable("LogSettings","logs");
+        builder.ToTable("LogSettings", "logs");
         builder.HasIndex(e => e.TenantId).IsUnique();
 
         builder.Property(e => e.EnabledLevels)
@@ -28,10 +28,17 @@ public class TenantLogSettingConfiguration : IEntityTypeConfiguration<TenantLogS
 
 
 public class LogEntryConfiguration : IEntityTypeConfiguration<LogEntry>
-{
+{  // ۱. تنظیمات JsonSerializerOptions با ترتیب کلیدهای قطعی
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        WriteIndented = false,
+        // ✅ این مهم‌ترین بخش است - ترتیب کلیدها را تضمین می‌کند
+        PropertyNameCaseInsensitive = true
+    };
     public void Configure(EntityTypeBuilder<LogEntry> builder)
     {
-        builder.ToTable("LogEntries","logs");
+        builder.ToTable("LogEntries", "logs");
 
         builder.HasIndex(e => e.TenantId);
         builder.HasIndex(e => e.Timestamp);
@@ -46,26 +53,22 @@ public class LogEntryConfiguration : IEntityTypeConfiguration<LogEntry>
             .HasConversion<string>();
 
 
-        // Value Converter برای Dictionary
+
+
+        // ۲. Value Converter
         var dictionaryConverter = new ValueConverter<Dictionary<string, object>?, string?>(
-            v => v == null ? null : JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
-            v => v == null ? null : JsonSerializer.Deserialize<Dictionary<string, object>>(v, (JsonSerializerOptions?)null)
+            v => v == null ? null : JsonSerializer.Serialize(v, JsonOptions),
+            v => string.IsNullOrEmpty(v)
+                ? null
+                : JsonSerializer.Deserialize<Dictionary<string, object>>(v, JsonOptions)
         );
 
-    
 
-        // ✅ Value Comparer برای مقایسه صحیح Dictionary
-        var dictionaryComparer = new ValueComparer<Dictionary<string, object>?>(
-            (left, right) => JsonSerializer.Serialize(left, (JsonSerializerOptions?)null)
-                           == JsonSerializer.Serialize(right, (JsonSerializerOptions?)null),
-            v => v == null ? 0 : JsonSerializer.Serialize(v, (JsonSerializerOptions?)null).GetHashCode(),
-            v => v == null ? null! : JsonSerializer.Deserialize<Dictionary<string, object>>(
-                JsonSerializer.Serialize(v, (JsonSerializerOptions?)null), (JsonSerializerOptions?)null)!
-        );
 
+        // ۴. اعمال روی Property
         builder.Property(e => e.ExtraData)
-                .HasConversion(dictionaryConverter)
-                .Metadata.SetValueComparer(dictionaryComparer);
+        .HasConversion(dictionaryConverter);
+        // .Metadata.SetValueComparer(dictionaryComparer);
 
     }
 }

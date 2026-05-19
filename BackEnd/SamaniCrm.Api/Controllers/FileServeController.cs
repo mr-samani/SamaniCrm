@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
+using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.FileManager.Interfaces;
 using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.FileManager;
@@ -10,13 +11,13 @@ namespace SamaniCrm.Api.Controllers
     [Route("/file")]
     public class FileServeController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IApplicationDbContext _dbContext;
         private readonly IWebHostEnvironment _env;
         private readonly IFileManagerService _fileManagerService;
         private readonly IConfiguration _configuration;
         private string publicRootPath;
 
-        public FileServeController(ApplicationDbContext dbContext, IWebHostEnvironment env, IFileManagerService fileManagerService, IConfiguration configuration)
+        public FileServeController(IApplicationDbContext dbContext, IWebHostEnvironment env, IFileManagerService fileManagerService, IConfiguration configuration)
         {
             _dbContext = dbContext;
             _env = env;

@@ -45,10 +45,11 @@ public class LogActionFilter : IAsyncActionFilter
         var logContext = BuildContext(context, correlationId);
 
         _logService.Log(LogLevel.Information,
-            "Action started: {Controller}.{Action}", null,
+            "Action started: {Controller}.{Action}",
+            null,
             logContext,
             context.Controller.GetType().Name,
-            context.ActionDescriptor.DisplayName ?? "");
+            context.ActionDescriptor.RouteValues["action"] ?? context.ActionDescriptor.DisplayName ?? "");
 
         Exception? caughtException = null;
         ObjectResult? result = null;
@@ -86,7 +87,7 @@ public class LogActionFilter : IAsyncActionFilter
                 "Action failed: {Controller}.{Action} - {Duration}ms",
                 caughtException, logContext,
                 context.Controller.GetType().Name,
-                context.ActionDescriptor.DisplayName ?? "",
+                context.ActionDescriptor.RouteValues["action"] ?? context.ActionDescriptor.DisplayName ?? "",
                 stopwatch.ElapsedMilliseconds);
         }
         else
@@ -95,7 +96,7 @@ public class LogActionFilter : IAsyncActionFilter
                 "Action completed: {Controller}.{Action} - {Duration}ms - Status: {StatusCode}",
                null, logContext,
                 context.Controller.GetType().Name,
-                context.ActionDescriptor.DisplayName ?? "",
+                context.ActionDescriptor.RouteValues["action"] ?? context.ActionDescriptor.DisplayName ?? "",
                 stopwatch.ElapsedMilliseconds,
                 result?.StatusCode ?? 200);
         }
@@ -108,7 +109,7 @@ public class LogActionFilter : IAsyncActionFilter
             IpAddress = context.HttpContext.Connection.RemoteIpAddress?.ToString(),
             CorrelationId = correlationId,
             ControllerName = context.Controller.GetType().Name,
-            ActionName = context.ActionDescriptor.DisplayName,
+            ActionName = context.ActionDescriptor.RouteValues["action"] ?? context.ActionDescriptor.DisplayName,
             HttpMethod = context.HttpContext.Request.Method,
             RequestPath = context.HttpContext.Request.Path,
             ExtraData = new Dictionary<string, object>

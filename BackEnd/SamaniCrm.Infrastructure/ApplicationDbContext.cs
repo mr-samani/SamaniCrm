@@ -9,9 +9,7 @@ using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Interfaces;
 using SamaniCrm.Infrastructure.Identity;
-using SamaniCrm.Infrastructure.Services.TenantService;
 using System.Linq.Expressions;
-using System.Reflection.Emit;
 
 namespace SamaniCrm.Infrastructure;
 

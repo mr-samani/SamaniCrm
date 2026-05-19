@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Dynamic.Core;
 using System.Text;
+using System.Text.RegularExpressions;
 
 
 namespace SamaniCrm.Infrastructure.Loging;
@@ -103,12 +104,14 @@ public class LogService : ILogService
             if (!await _configService.ShouldLogAsync(context.TenantId, level, CancellationToken.None))
                 return;
 
+            var msg = FormatNamed(message, args);
+
             // ساخت LogEntry
             var logEntry = new LogEntry
             {
                 TenantId = context.TenantId,
                 Level = level,
-                Message = string.Format(message, args),
+                Message = msg,
                 ExceptionDetails = exception?.ToString(),
                 UserId = context.UserId,
                 UserName = context.UserName,
@@ -119,9 +122,10 @@ public class LogService : ILogService
                 ControllerName = context.ControllerName,
                 HttpMethod = context.HttpMethod,
                 RequestPath = context.RequestPath,
-                ExtraData = context.ExtraData,
-                Timestamp = DateTime.UtcNow
+                Timestamp = DateTime.UtcNow,
+                ExtraData = context.ExtraData
             };
+
 
             // ارسال به تمام Sink های فعال
             var enabledSinks = await _configService.GetEnabledSinksAsync(context.TenantId, CancellationToken.None);
@@ -279,6 +283,30 @@ public class LogService : ILogService
         };
     }
 
+    public static string FormatNamed(string template, params object[] args)
+    {
+        if (string.IsNullOrEmpty(template))
+            return template;
 
+        var result = template;
+
+        // پیدا کردن تمام placeholder ها: {Name}
+        var matches = Regex.Matches(template, @"\{(\w+)\}");
+
+        for (int i = 0; i < args.Length && i < matches.Count; i++)
+        {
+            var placeholder = matches[i].Value;
+            var value = args[i]?.ToString() ?? "";
+            value = value.Replace("{", "{{").Replace("}", "}}");
+
+            result = result.Replace(placeholder, value);
+        }
+
+        return result;
+    }
 
 }
+
+
+
+
