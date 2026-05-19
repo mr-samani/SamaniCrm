@@ -19,4 +19,7 @@ public class LogEntryDto
     public DateTime Timestamp { get; set; }
     public string? CorrelationId { get; set; }
     public Dictionary<string, object>? ExtraData { get; set; }
+
+    // محاسبه Duration در میلی‌ثانیه
+    public long? Duration { get; set; }
 }

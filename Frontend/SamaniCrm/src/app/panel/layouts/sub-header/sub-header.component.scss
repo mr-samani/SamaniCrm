@@ -6,10 +6,12 @@
 
   background: var(--subheader-bg);
   color: var(--subheader-fg);
+  border-top: 1px #ffffff1a solid;
+  margin-bottom: 12px;
 
   .page-title {
     font-weight: bold;
-    padding: 5px 24px 10px;
+    padding: 5px 24px 0px;
     font-size: 1.3rem;
   }
 }

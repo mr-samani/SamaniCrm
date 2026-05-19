@@ -5,7 +5,13 @@ import { ConvertNumbersToLatin } from '../helper/conver-number-to-latin.helper';
 import { Calendars } from './Calendars';
 @Pipe({ name: 'luxonFormat', standalone: false })
 export class LuxonFormatPipe implements PipeTransform {
-  transform(value: DateTime | string | number | undefined, format: string) {
+     /**
+     * convert date time format to locale
+     * @param value  date time
+     * @param format 'yyyy-LL-dd HH:mm:ss'
+     * @returns
+     */
+  transform(value: DateTime | string | number | undefined, format: string = 'yyyy/LL/dd HH:mm') {
     if (!value) {
       return '';
     }

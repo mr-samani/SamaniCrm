@@ -25,7 +25,7 @@ public class AdminLogController : ApiBaseController
         _mediator = mediator;
     }
 
-  
+
 
     // ═══════════════════════════════════════════════════════════
     // تنظیمات
@@ -34,7 +34,7 @@ public class AdminLogController : ApiBaseController
     /// <summary>
     /// دریافت تنظیمات لاگ‌نویسی Tenant
     /// </summary>
-    [HttpGet("settings/{tenantId:guid}")]
+    [HttpGet("GetSettings")]
     [Permission(AppPermissions.LoggingSystem.TenantLogSetting.List)]
     [ProducesResponseType(typeof(ApiResponse<TenantLogSettingDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetSettings(GetLogSettingQuery input)
@@ -47,7 +47,7 @@ public class AdminLogController : ApiBaseController
     /// <summary>
     /// بروزرسانی تنظیمات لاگ‌نویسی
     /// </summary>
-    [HttpPut("settings/{tenantId:guid}")]
+    [HttpPost("UpdateSettings")]
     [Permission(AppPermissions.LoggingSystem.TenantLogSetting.Update)]
     [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateSettings(UpdateLogSettingCommand input)
@@ -63,49 +63,49 @@ public class AdminLogController : ApiBaseController
     /// <summary>
     /// لیست لاگ‌ها با فیلتر و صفحه‌بندی
     /// </summary>
-    [HttpGet("entries/{tenantId:guid}")]
+    [HttpPost("GetLogs")]
     [Permission(AppPermissions.LoggingSystem.List)]
     [ProducesResponseType(typeof(ApiResponse<PaginatedResult<LogEntryDto>>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetLogs(        GetLogsQuery input)
+    public async Task<IActionResult> GetLogs(GetLogsQuery input)
     {
-       var result= await _mediator.Send(input);
+        var result = await _mediator.Send(input);
         return ApiOk(result);
     }
 
     /// <summary>
     /// جزئیات یک لاگ
     /// </summary>
-    [HttpGet("entries/{tenantId:guid}/{id:long}")]
+    [HttpGet("GetLogDetail")]
     [Permission(AppPermissions.LoggingSystem.Details)]
     [ProducesResponseType(typeof(ApiResponse<LogEntryDto>), StatusCodes.Status200OK)]
-  public async Task<IActionResult> GetLogDetail(Guid tenantId, long id)
+    public async Task<IActionResult> GetLogDetail(Guid tenantId, long id)
     {
-         var result= await _mediator.Send(new GetLogDetailsQuery(tenantId,id));
+        var result = await _mediator.Send(new GetLogDetailsQuery(tenantId, id));
         return ApiOk(result);
     }
 
     /// <summary>
     /// آمار لاگ‌ها
     /// </summary>
-    [HttpGet("getStats")]
+    [HttpPost("GetStats")]
     [Permission(AppPermissions.LoggingSystem.GetStats)]
     [ProducesResponseType(typeof(ApiResponse<LogStatsDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetStats(GetLogStatesQuery request)
     {
-        var result =await _mediator.Send(request);
+        var result = await _mediator.Send(request);
         return ApiOk(result);
-    } 
+    }
 
 
     /// <summary>
     /// حذف دستی لاگ‌های قدیمی
     /// </summary>
-    [HttpDelete("cleanup/{tenantId:guid}")]
+    [HttpPost("ManualCleanup")]
     [Permission(AppPermissions.LoggingSystem.ManualCleanUpLog)]
     [ProducesResponseType(typeof(ApiResponse<CleanupLogResultDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ManualCleanup(ManulaCleanupLogCommand input)
     {
-        var result= await _mediator.Send(input);
+        var result = await _mediator.Send(input);
         return ApiOk(result);
     }
 }

@@ -18,6 +18,8 @@ export class FieldsType {
   width?: number;
   wrap?: boolean;
   localizeKey?: string;
+
+  prefix?: string;
 }
 
 export class SortEvent {

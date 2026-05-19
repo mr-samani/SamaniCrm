@@ -25,10 +25,16 @@ export class JalaliDate {
     return GregorianJalaliHelper.toGregorian(this).getDay();
   }
   format(displayFormat: string) {
+    const pad = (v: number) => v.toString().padStart(2, '0');
     return stringReplaceBulk(
       displayFormat,
       ['YYYY', 'MMMM', 'MM', 'DD'],
-      [this.year, LONG_MONTHS[this.month - 1], this.month, this.day],
+      [
+        this.year.toString(),
+        LONG_MONTHS[this.month - 1],
+        pad(this.month), // 👈 01
+        pad(this.day), // 👈 05
+      ],
     );
   }
 

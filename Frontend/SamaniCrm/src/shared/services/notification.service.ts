@@ -1,8 +1,5 @@
 // notification.service.ts
-import { ChangeDetectorRef, Injectable, OnDestroy } from '@angular/core';
-import * as signalR from '@microsoft/signalr';
-import { AuthService } from './auth.service';
-import { TokenService } from './token.service';
+import { Injectable, OnDestroy } from '@angular/core';
 import { AppConst } from '@shared/app-const';
 import { NotificationDto } from '@shared/service-proxies/model/notification-dto';
 import { ConnectionStatus, SignalRService } from './signalr.service';
@@ -15,9 +12,7 @@ export class NotificationService implements OnDestroy {
 
   onRecieveMessage$ = new Subject<NotificationDto>();
   constructor(
-    private tokenService: TokenService,
     private signalRService: SignalRService,
-    private chdr: ChangeDetectorRef,
   ) {}
 
   ngOnDestroy(): void {
@@ -33,7 +28,6 @@ export class NotificationService implements OnDestroy {
       if (state == ConnectionStatus.Connected) {
         this.registerEvents();
       }
-      this.chdr.detectChanges();
     });
   }
 

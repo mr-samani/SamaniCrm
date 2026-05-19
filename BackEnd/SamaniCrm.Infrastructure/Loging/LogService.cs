@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Text.RegularExpressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 
 namespace SamaniCrm.Infrastructure.Loging;
@@ -159,56 +160,106 @@ public class LogService : ILogService
 
     public async Task<PaginatedResult<LogEntryDto>> GetLogs(GetLogsQuery filter, CancellationToken cancellation)
     {
-        var query = _dbContext.LogEntries
+        // ابتدا فیلترها را اعمال می‌کنیم
+        var baseQuery = _dbContext.LogEntries
             .AsNoTracking()
             .Where(l => l.TenantId == filter.TenantId);
 
-        // فیلترها
+        // اعمال فیلترها
         if (filter.Level.HasValue)
-            query = query.Where(l => l.Level == filter.Level.Value);
-
+            baseQuery = baseQuery.Where(l => l.Level == filter.Level.Value);
         if (filter.FromDate.HasValue)
-            query = query.Where(l => l.Timestamp >= filter.FromDate.Value);
-
+            baseQuery = baseQuery.Where(l => l.Timestamp >= filter.FromDate.Value);
         if (filter.ToDate.HasValue)
-            query = query.Where(l => l.Timestamp <= filter.ToDate.Value);
-
+            baseQuery = baseQuery.Where(l => l.Timestamp <= filter.ToDate.Value);
         if (filter.UserId.HasValue)
-            query = query.Where(l => l.UserId == filter.UserId.Value);
-
+            baseQuery = baseQuery.Where(l => l.UserId == filter.UserId.Value);
         if (!string.IsNullOrEmpty(filter.Search))
-            query = query.Where(l => l.Message.Contains(filter.Search) ||
-                                     l.ExceptionDetails != null &&
-                                     l.ExceptionDetails.Contains(filter.Search));
+            baseQuery = baseQuery.Where(l => l.Message.Contains(filter.Search) ||
+                                             (l.ExceptionDetails != null &&
+                                              l.ExceptionDetails.Contains(filter.Search)));
 
 
 
-        var total = await query.CountAsync(cancellation);
+        // گروه‌بندی بر اساس CorrelationId و محاسبه Duration
+        var groupedQuery = baseQuery
+            .GroupBy(l => l.CorrelationId)
+            .Select(g => new
+            {
+                CorrelationId = g.Key,
+                MinTimestamp = g.Min(x => x.Timestamp),
+                MaxTimestamp = g.Max(x => x.Timestamp),
+                // فقط فیلدهایی که برای ساخت DTO لازم است
+                StartId = g.OrderBy(x => x.Timestamp).Select(x => x.Id).First(),
+                StartLevel = g.OrderBy(x => x.Timestamp).Select(x => x.Level).First(),
+                StartMessage = g.OrderBy(x => x.Timestamp).Select(x => x.Message).First(),
+                StartControllerName = g.OrderBy(x => x.Timestamp).Select(x => x.ControllerName).First(),
+                StartActionName = g.OrderBy(x => x.Timestamp).Select(x => x.ActionName).First(),
+                StartHttpMethod = g.OrderBy(x => x.Timestamp).Select(x => x.HttpMethod).First(),
+                StartRequestPath = g.OrderBy(x => x.Timestamp).Select(x => x.RequestPath).First(),
+                StartSource = g.OrderBy(x => x.Timestamp).Select(x => x.Source).First(),
+                StartUserId = g.OrderBy(x => x.Timestamp).Select(x => x.UserId).First(),
+                StartUserName = g.OrderBy(x => x.Timestamp).Select(x => x.UserName).First(),
+                StartIpAddress = g.OrderBy(x => x.Timestamp).Select(x => x.IpAddress).First(),
+                StartTimestamp = g.OrderBy(x => x.Timestamp).Select(x => x.Timestamp).First(),
+            });
 
+        // شمارش کل قبل از صفحه‌بندی
+        var total = await groupedQuery.CountAsync(cancellation);
+
+        // مرتب‌سازی
+        ////if (!string.IsNullOrEmpty(filter.SortBy))
+        ////{
+        ////    groupedQuery = filter.SortBy.ToLower() switch
+        ////    {
+        ////        "timestamp" => filter.SortDirection?.ToLower() == "desc"
+        ////            ? groupedQuery.OrderByDescending(x => x.StartLog.Timestamp)
+        ////            : groupedQuery.OrderBy(x => x.StartLog.Timestamp),
+        ////        "duration" => filter.SortDirection?.ToLower() == "desc"
+        ////            ? groupedQuery.OrderByDescending(x => x.Duration)
+        ////            : groupedQuery.OrderBy(x => x.Duration),
+        ////        _ => groupedQuery.OrderByDescending(x => x.StartLog.Timestamp)
+        ////    };
+        ////}
+        ////else
+        ////{
+        ////    groupedQuery = groupedQuery.OrderByDescending(x => x.StartLog.Timestamp);
+        ////}
         // Sorting
         if (!string.IsNullOrEmpty(filter.SortBy))
         {
-            var sortString = $"{filter.SortBy} {filter.SortDirection}";
-            query = query.OrderBy(sortString);
+            var sortString = $"Start{filter.SortBy} {filter.SortDirection}";
+            groupedQuery = groupedQuery.OrderBy(sortString);
         }
 
-        var items = await query
-                            .Select(l => new LogEntryDto
-                            {
-                                Id = l.Id,
-                                Level = l.Level,
-                                Message = l.Message,
-                                ExceptionDetails = l.ExceptionDetails,
-                                Source = l.Source,
-                                UserId = l.UserId,
-                                UserName = l.UserName,
-                                IpAddress = l.IpAddress,
-                                Timestamp = l.Timestamp,
-                                CorrelationId = l.CorrelationId
-                            })
-                          .Skip((filter.PageNumber - 1) * filter.PageSize)
-                          .Take(filter.PageSize)
-                          .ToListAsync(cancellation);
+
+        // صفحه‌بندی
+        var rawItems = await groupedQuery
+            .Skip((filter.PageNumber - 1) * filter.PageSize)
+            .Take(filter.PageSize)
+            .ToListAsync(cancellation);
+        // مرحله ۲: محاسبه Duration و ساخت DTO در حافظه
+        var items = rawItems
+            .Select(x => new LogEntryDto
+            {
+                Id = x.StartId,
+                Level = x.StartLevel,
+                Message = x.StartMessage,
+                ControllerName = x.StartControllerName,
+                ActionName = x.StartActionName,
+                HttpMethod = x.StartHttpMethod,
+                RequestPath = x.StartRequestPath,
+                Source = x.StartSource,
+                UserId = x.StartUserId,
+                UserName = x.StartUserName,
+                IpAddress = x.StartIpAddress,
+                Timestamp = x.StartTimestamp,
+                CorrelationId = x.CorrelationId,
+                Duration = (long?)(x.MaxTimestamp - x.MinTimestamp).TotalMilliseconds
+            })
+            .ToList();
+
+
         return new PaginatedResult<LogEntryDto>(items, total, filter.PageNumber, filter.PageSize);
 
     }

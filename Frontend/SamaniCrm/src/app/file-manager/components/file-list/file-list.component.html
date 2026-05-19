@@ -71,11 +71,11 @@
       </tr>
       <tr>
         <td>{{ 'CreationTime' | translate }}:</td>
-        <td>{{ selectedFileInfo.creationTime | luxonFormat: 'F' }}</td>
+        <td>{{ selectedFileInfo.creationTime | luxonFormat }}</td>
       </tr>
       <tr>
         <td>{{ 'LastModifiedTime' | translate }}:</td>
-        <td>{{ selectedFileInfo.lastModifiedTime | luxonFormat: 'F' }}</td>
+        <td>{{ selectedFileInfo.lastModifiedTime | luxonFormat }}</td>
       </tr>
     </table>
     @if (!selectedFileInfo.isFolder) {

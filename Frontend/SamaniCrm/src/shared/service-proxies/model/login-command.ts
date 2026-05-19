@@ -17,7 +17,7 @@ export interface ILoginCommand {
   userName: string;
   password: string;
   captcha?: InputCaptchaDTO;
-  tenancyName: string;
+  tenancyName?: string;
 }
 
 /** Class for LoginCommand */
@@ -25,7 +25,7 @@ export class LoginCommand implements ILoginCommand {
   userName!: string;
   password!: string;
   captcha?: InputCaptchaDTO;
-  tenancyName!: string;
+  tenancyName?: string;
 
   constructor(data?: ILoginCommand) {
     if (data) {

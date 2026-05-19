@@ -2,13 +2,14 @@ import {
   AfterContentInit,
   Component,
   ContentChildren,
+  ElementRef,
   EventEmitter,
-  
   Input,
   OnInit,
   Output,
   QueryList,
   TemplateRef,
+  viewChild,
 } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { FieldsType, SortEvent } from '../fields-type.model';
@@ -27,6 +28,7 @@ export class TableViewComponent extends AppComponentBase implements OnInit, Afte
   [x: string]: any;
   @Input() fields: FieldsType[] = [];
   @Input() operations?: TemplateRef<any>;
+  @Input() operationWidth: number = 60;
 
   private _lazy: boolean = false;
   /**
@@ -44,10 +46,10 @@ export class TableViewComponent extends AppComponentBase implements OnInit, Afte
   private _list: any[] = [];
   private _allList: any[] = [];
   @Input() set list(val: any[]) {
-    this._allList = cloneDeep(val ?? []);
     this._list = val ?? [];
-    this.totalCount = this._list.length;
     if (this.lazy == false) {
+      this.totalCount = this._list.length;
+      this._allList = cloneDeep(val ?? []);
       this.onPageChange({ page: this.page, perPage: this.perPage });
     }
   }
@@ -62,12 +64,15 @@ export class TableViewComponent extends AppComponentBase implements OnInit, Afte
   sortField = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
+  tableContainer = viewChild<ElementRef<HTMLDivElement>>('tableContainer');
   @Output() sortChange = new EventEmitter<SortEvent>();
   @ContentChildren(TableCellDirective) cellTemplates!: QueryList<TableCellDirective>;
   templateMap: Map<string, TemplateRef<any>> = new Map();
 
   perPage = AppConst.defaultTablePerPage;
   page = 1;
+
+// tOdo: must bet get in input
   totalCount = 0;
   constructor() {
     super();
@@ -80,6 +85,7 @@ export class TableViewComponent extends AppComponentBase implements OnInit, Afte
       console.log(cell.columnName, cell.template);
       this.templateMap.set(cell.columnName, cell.template);
     });
+    this.adjustScroll(this.tableContainer()?.nativeElement);
   }
 
   onSortChange(field: string) {
@@ -109,5 +115,18 @@ export class TableViewComponent extends AppComponentBase implements OnInit, Afte
     const f = (ev.page - 1) * ev.perPage;
     const t = f + ev.perPage;
     this._list = this._allList.slice(f, t);
+  }
+
+  /**
+   * اگر بدنه جدول اسکرول شد هدر جدول نیز منطبق شود
+   */
+  private adjustScroll(table?: HTMLElement) {
+    if (!table) return;
+    const body = table.querySelector('.tbody-mrs');
+    const header = table.querySelector('.thead-mrs');
+    if (!body || !header) return;
+    body.addEventListener('scroll', () => {
+      header.scrollLeft = body.scrollLeft;
+    });
   }
 }

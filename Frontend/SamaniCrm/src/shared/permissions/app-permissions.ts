@@ -1,7 +1,7 @@
 /**
  * Auto-generated file - Do not edit manually
  * Generated from: AppPermissions.cs
- * Generated at: 2026-05-18T05:36:56.286Z
+ * Generated at: 2026-05-19T07:34:00.897Z
  */
 
 export class AppPermissions {
@@ -30,6 +30,16 @@ export class AppPermissions {
     static LanguageManagement_Create = "Administrator.LanguageManagement.Create";
     static LanguageManagement_Edit = "Administrator.LanguageManagement.Edit";
     static LanguageManagement_Delete = "Administrator.LanguageManagement.Delete";
+
+    // LoggingSystem
+    static LoggingSystem_List = "Administrator.LoggingSystem.List";
+    static LoggingSystem_Details = "Administrator.LoggingSystem.Details";
+    static LoggingSystem_GetStats = "Administrator.LoggingSystem.GetStats";
+    static LoggingSystem_ManualCleanUpLog = "Administrator.LoggingSystem.ManualCleanUpLog";
+
+    // LoggingSystem > TenantLogSetting
+    static LoggingSystem_TenantLogSetting_List = "Administrator.LoggingSystem.Settings.List";
+    static LoggingSystem_TenantLogSetting_Update = "Administrator.LoggingSystem.Settings.Update";
 
     // Maintenance > Cache
     static Maintenance_Cache_List = "Administrator.Maintenance.Cache.List";
