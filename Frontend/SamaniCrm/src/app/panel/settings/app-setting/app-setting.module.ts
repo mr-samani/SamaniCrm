@@ -13,10 +13,11 @@ import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 import { GeneralSettingComponent } from './tabs/general-setting/general-setting.component';
 import { SecuritySettingComponent } from './tabs/security-setting/security-setting.component';
 import { SwitchModule } from '@shared/components/switch/switch.module';
-import { ExternalProvidersServiceProxy, SecuritySettingsServiceProxy } from '@shared/service-proxies';
+import { AdminLogServiceProxy, ExternalProvidersServiceProxy, SecuritySettingsServiceProxy } from '@shared/service-proxies';
 import { SharedModule } from '@shared/shared.module';
 import { UserSecuritySettingComponent } from './tabs/user-security-setting/user-security-setting.component';
 import { OtpInputComponent } from '@shared/components/otp-input/otp-input.component';
+import { LogSettingComponent } from './tabs/log-setting/log-setting.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { OtpInputComponent } from '@shared/components/otp-input/otp-input.compon
     TwoFaAppConfigComponent,
     UserSecuritySettingComponent,
     ExternalProvidersComponent,
+    LogSettingComponent
   ],
   imports: [
     CommonModule,
@@ -40,6 +42,6 @@ import { OtpInputComponent } from '@shared/components/otp-input/otp-input.compon
     SharedModule,
     OtpInputComponent,
   ],
-  providers: [SecuritySettingsServiceProxy, ExternalProvidersServiceProxy],
+  providers: [SecuritySettingsServiceProxy, ExternalProvidersServiceProxy,AdminLogServiceProxy],
 })
 export class AppSettingModule {}

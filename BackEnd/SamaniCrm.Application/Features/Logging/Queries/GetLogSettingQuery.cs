@@ -9,9 +9,8 @@ using System.Text;
 
 namespace SamaniCrm.Application.Features.Logging.Queries;
 
-public class GetLogSettingQuery:IRequest<TenantLogSettingDto>
+public record GetLogSettingQuery(Guid? tenantId) : IRequest<TenantLogSettingDto>
 {
-    public Guid? TenantId { get; set; }
 }
 
 public class GetLogSettingQueryHandler : IRequestHandler<GetLogSettingQuery, TenantLogSettingDto>
@@ -26,7 +25,7 @@ public class GetLogSettingQueryHandler : IRequestHandler<GetLogSettingQuery, Ten
 
     public async Task<TenantLogSettingDto> Handle(GetLogSettingQuery request, CancellationToken cancellation)
     {
-        var result = await _configService.GetSettingAsync(request.TenantId,cancellation);
+        var result = await _configService.GetSettingAsync(request.tenantId, cancellation);
         if (result == null)
         {
             throw new NotFoundException("Setting not found!");

@@ -37,9 +37,9 @@ public class AdminLogController : ApiBaseController
     [HttpGet("GetSettings")]
     [Permission(AppPermissions.LoggingSystem.TenantLogSetting.List)]
     [ProducesResponseType(typeof(ApiResponse<TenantLogSettingDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetSettings(GetLogSettingQuery input)
+    public async Task<IActionResult> GetSettings(Guid? tenantId)
     {
-        var result = await _mediator.Send(input);
+        var result = await _mediator.Send(new GetLogSettingQuery(tenantId));
 
         return ApiOk(result);
     }

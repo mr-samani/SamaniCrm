@@ -24,6 +24,7 @@ public enum LogSinkMask
     File            = 1 << 0,
     Database        = 1 << 1,
     Telegram        = 1 << 2,
-    ExternalApi     = 1 << 3,
-    All = File | Database | Telegram | ExternalApi
+    Bale            = 1 << 3,
+    ExternalApi     = 1 << 4,
+    All = File | Database | Telegram | ExternalApi | Bale
 }

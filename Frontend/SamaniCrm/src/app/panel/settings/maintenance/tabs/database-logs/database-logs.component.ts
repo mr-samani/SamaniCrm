@@ -63,7 +63,6 @@ export class DatabaseLogsComponent extends AppComponentBase implements OnInit {
     }
   }
   getList(ev?: SortEvent) {
-  debugger
     if (this.listSubscription$) {
       this.listSubscription$.unsubscribe();
     }

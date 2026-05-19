@@ -118,7 +118,6 @@ export * from './generate-two-factor-code-dto';
 export * from './get-all-notification-query';
 export * from './get-categories-for-admin-query';
 export * from './get-filtered-pages-query';
-export * from './get-log-setting-query';
 export * from './get-log-states-query';
 export * from './get-logs-query';
 export * from './get-plugin-query';

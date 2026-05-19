@@ -147,7 +147,6 @@ model/generate-two-factor-code-dto.ts
 model/get-all-notification-query.ts
 model/get-categories-for-admin-query.ts
 model/get-filtered-pages-query.ts
-model/get-log-setting-query.ts
 model/get-log-states-query.ts
 model/get-logs-query.ts
 model/get-plugin-query.ts

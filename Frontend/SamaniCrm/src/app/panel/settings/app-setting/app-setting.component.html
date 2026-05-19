@@ -27,5 +27,17 @@
         <app-user-security-setting></app-user-security-setting>
       </m-tab-item>
     }
+
+    <!-- log setting -->
+    @if (
+      [AppPermissions.LoggingSystem_TenantLogSetting_List, AppPermissions.LoggingSystem_TenantLogSetting_Update] | permissionAll
+    ) {
+      <m-tab-item [title]="'AppLogSettings' | translate">
+        <app-log-setting></app-log-setting>
+      </m-tab-item>
+    }
+
+
+
   </m-tab-group>
 </div>
