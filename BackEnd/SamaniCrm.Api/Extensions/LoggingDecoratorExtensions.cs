@@ -17,6 +17,7 @@ public static class LoggingDecoratorExtensions
         // اسکن تمام سرویس‌ها و اعمال Decorator
         services.Scan(scan => scan
             .FromAssemblyOf<IIdentityService>()
+            .AddClasses(classes => classes.Where(t => t.Name.EndsWith("Controller")))
             .AddClasses(classes => classes.Where(t => t.Name.EndsWith("Service")))
             .AsImplementedInterfaces()
             .WithScopedLifetime()

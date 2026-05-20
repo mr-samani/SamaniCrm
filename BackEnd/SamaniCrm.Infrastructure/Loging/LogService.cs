@@ -135,7 +135,14 @@ public class LogService : ILogService
             {
                 if (enabledSinks.HasFlag(GetSinkMask(sink)))
                 {
-                    await sink.WriteAsync(logEntry);
+                    try
+                    {
+                        await sink.WriteAsync(logEntry);
+                    }catch(Exception ex)
+                    {
+                        // اگر در ثبت یکی از منبع های لاگ خطا رخ داد - بیخیال بشه و بره سراغ لاگ روی منبع بعدی اگر منبعی داشت
+                        // مثلا ارسال لاگ به تلگرام اگر خطا داد متوقف نشود بره سراغ ارسال لاگ بعدی
+                    }
                 }
             }
         }
@@ -151,6 +158,7 @@ public class LogService : ILogService
         FileLogSink => LogSinkMask.File,
         DatabaseLogSink => LogSinkMask.Database,
         TelegramLogSink => LogSinkMask.Telegram,
+        BaleLogSink => LogSinkMask.Bale,
         ExternalApiLogSink => LogSinkMask.ExternalApi,
         _ => LogSinkMask.None
     };

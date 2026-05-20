@@ -31,6 +31,12 @@ public class TelegramLogSink : ILogSink
         if (entry.Level < _minLevel)
             return;
 
+        if (string.IsNullOrEmpty(_botToken) || string.IsNullOrEmpty(_chatId))
+        {
+            throw new Exception("Telegram log config not set!");
+        }
+
+
         var emoji = entry.Level switch
         {
             LogLevel.Critical => "🔴",
@@ -48,6 +54,9 @@ public class TelegramLogSink : ILogSink
             👤 {entry.UserName ?? "Anonymous"}
             🌐 {entry.IpAddress}
             📍 {entry.Source}
+            ⭕ Controller= {entry.ControllerName}
+            🔰 Action= {entry.ActionName}
+            {entry.RequestPath}
             
             {(string.IsNullOrEmpty(entry.ExceptionDetails) ? "" : $"💥 ```\n{entry.ExceptionDetails}\n```")}
             """;

@@ -284,10 +284,10 @@ public static partial class ServiceCollectionExtensions
         services.AddScoped<IProductCategoryService, ProductCategoryService>();
 
 
-        services.AddScoped<PermissionFilter>();
+        services.AddScoped<PermissionFilterMiddleware>();
         services.AddControllers(options =>
         {
-            options.Filters.Add<PermissionFilter>();
+            options.Filters.Add<PermissionFilterMiddleware>();
         });
 
         services.AddScoped<INotificationHubService, NotificationHubService>();
@@ -517,6 +517,7 @@ public static partial class ServiceCollectionExtensions
         services.AddSingleton<FileLogSink>();
         services.AddScoped<DatabaseLogSink>();
         services.AddSingleton<TelegramLogSink>();
+        services.AddSingleton<BaleLogSink>();
         services.AddSingleton<ExternalApiLogSink>();
 
         // ثبت Sink ها به صورت IEnumerable
@@ -525,6 +526,7 @@ public static partial class ServiceCollectionExtensions
             sp.GetRequiredService<FileLogSink>(),
             sp.GetRequiredService<DatabaseLogSink>(),
             sp.GetRequiredService<TelegramLogSink>(),
+            sp.GetRequiredService<BaleLogSink>(),
             sp.GetRequiredService<ExternalApiLogSink>()
         });
 

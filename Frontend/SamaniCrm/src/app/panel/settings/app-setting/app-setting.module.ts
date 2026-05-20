@@ -18,6 +18,7 @@ import { SharedModule } from '@shared/shared.module';
 import { UserSecuritySettingComponent } from './tabs/user-security-setting/user-security-setting.component';
 import { OtpInputComponent } from '@shared/components/otp-input/otp-input.component';
 import { LogSettingComponent } from './tabs/log-setting/log-setting.component';
+import { AutoCompleteTenantComponent } from "@app/Tenants/auto-complete-tenant/auto-complete-tenant.component";
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { LogSettingComponent } from './tabs/log-setting/log-setting.component';
     SwitchModule,
     SharedModule,
     OtpInputComponent,
-  ],
+    AutoCompleteTenantComponent
+],
   providers: [SecuritySettingsServiceProxy, ExternalProvidersServiceProxy,AdminLogServiceProxy],
 })
 export class AppSettingModule {}

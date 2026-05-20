@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
-using SamaniCrm.Application.Common.Interfaces;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using SamaniCrm.Api.Attributes;
+using SamaniCrm.Application.Common.Exceptions;
+using SamaniCrm.Application.Common.Interfaces;
 
 namespace SamaniCrm.Api.Middlewares
 {
-    public class PermissionFilter : IAsyncActionFilter
+    public class PermissionFilterMiddleware : IAsyncActionFilter
     {
         private readonly IUserPermissionService _permissionService;
 
-        public PermissionFilter(IUserPermissionService permissionService)
+        public PermissionFilterMiddleware(IUserPermissionService permissionService)
         {
             _permissionService = permissionService;
         }
@@ -25,8 +26,8 @@ namespace SamaniCrm.Api.Middlewares
                 var hasPermission = await _permissionService.HasPermissionAsync(context.HttpContext.User, attr.Permission);
                 if (!hasPermission)
                 {
-                    context.Result = new ForbidResult(); // یا UnauthorizedResult()
-                    return;
+                    //  context.Result = new ForbidResult(); // یا UnauthorizedResult()
+                    throw new AccessDeniedException();
                 }
             }
 

@@ -19,8 +19,10 @@ export enum LogSinkMask {
 
     Telegram = 4,
 
-    ExternalApi = 8,
+    Bale = 8,
 
-    All = 15
+    ExternalApi = 16,
+
+    All = 31
 }
 

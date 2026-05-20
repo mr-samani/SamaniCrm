@@ -1,8 +1,9 @@
-﻿using SamaniCrm.Application.Common.Interfaces;
+﻿using Microsoft.AspNetCore.Http;
 using SamaniCrm.Core;
 using System.Globalization;
 
-namespace SamaniCrm.Api.Middlewares;
+namespace SamaniCrm.Host.Middlewares;
+
 public class LanguageMiddleware
 {
     private readonly RequestDelegate _next;

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Features.Tenants;
 using SamaniCrm.Application.Features.Tenants.Commands;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
@@ -224,7 +225,31 @@ public class TenantService : ITenantService
 
 
 
+    public async Task<List<AutoCompleteDto<Guid>>> GetTenantsAutoComplete(string? filter, CancellationToken cancellationToken)
+    {
+        var query = _dbContext.Tenants
+             .AsNoTracking()
+             .Where(x => x.Status == TenantStatus.Active);
+        if (filter != null)
+        {
+            query = query.Where(x =>
+                                 x.Slug.ToLower().Contains(filter.ToLower()) == true ||
+                                 x.Name.ToLower().Contains(filter.ToLower()) == true
+                                 );
+        }
 
+        var result = await query.Select(s => new AutoCompleteDto<Guid>()
+            {
+                Id = s.Id,
+                Title = s.Name
+            })
+             .Skip(0)
+             .Take(200)
+             .OrderBy(x => x.Title)
+             .ToListAsync(cancellationToken);
+
+        return result;
+    }
 
 
 
@@ -242,5 +267,6 @@ public class TenantService : ITenantService
         ["file_storage"] = true,
         ["notifications"] = true
     };
+
 
 }

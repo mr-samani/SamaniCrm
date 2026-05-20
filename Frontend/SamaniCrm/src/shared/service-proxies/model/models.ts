@@ -125,6 +125,7 @@ export * from './get-product-attributes-query';
 export * from './get-product-categories-query';
 export * from './get-product-types-query';
 export * from './get-products-query';
+export * from './get-tenants-auto-complete-query';
 export * from './get-user-query';
 export * from './initial-app-dto';
 export * from './input-captcha-dto';

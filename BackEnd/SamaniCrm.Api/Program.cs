@@ -78,7 +78,6 @@ app.Use(async (context, next) =>
 
 app.UseMiddleware<LanguageMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseMiddleware<ApiExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

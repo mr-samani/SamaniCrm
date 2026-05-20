@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Domain.Entities;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace SamaniCrm.Infrastructure.Loging.Sinks;
 
@@ -31,6 +32,11 @@ public class BaleLogSink : ILogSink
         if (entry.Level < _minLevel)
             return;
 
+        if (string.IsNullOrEmpty(_botToken) || string.IsNullOrEmpty(_chatId))
+        {
+            throw new Exception("Bale log config not set!");
+        }
+
         var emoji = entry.Level switch
         {
             LogLevel.Critical => "🔴",
@@ -48,19 +54,29 @@ public class BaleLogSink : ILogSink
             👤 {entry.UserName ?? "Anonymous"}
             🌐 {entry.IpAddress}
             📍 {entry.Source}
+            ⭕ Controller= {entry.ControllerName}
+            🔰 Action= {entry.ActionName}
+            {entry.RequestPath}
             
             {(string.IsNullOrEmpty(entry.ExceptionDetails) ? "" : $"💥 ```\n{entry.ExceptionDetails}\n```")}
             """;
 
-        var url = $"https://api.bale.ai/bot{_botToken}/sendMessage";
-
-      var response=   await _httpClient.PostAsJsonAsync(url, new
+        var url = $"https://tapi.bale.ai/bot{_botToken}/sendMessage";
+        // var r = new HttpRequestMessage();
+        // r.Headers.Add("ContentType", "application/json");
+        // r.Method = HttpMethod.Post;
+        // r.RequestUri =new Uri(url);
+        //var response= await _httpClient.SendAsync(r); 
+        var body = new
         {
             chat_id = _chatId,
             text = message,
             parse_mode = "Markdown"
-        });
-
+        };
+        var response = await _httpClient.PostAsJsonAsync(url,body);
+        Console.WriteLine($"Url:{url}",url);
+       // Console.WriteLine($"Body:{body}",JsonSerializer.Serialize(body));
+        Console.WriteLine(await response.Content.ReadAsStringAsync());
         Console.WriteLine(response);
     }
 }
