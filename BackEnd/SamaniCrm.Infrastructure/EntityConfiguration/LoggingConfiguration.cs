@@ -49,11 +49,6 @@ public class LogEntryConfiguration : IEntityTypeConfiguration<LogEntry>
         // Index ترکیبی برای کوئری‌های رایج
         builder.HasIndex(e => new { e.TenantId, e.Timestamp, e.Level });
 
-        builder.Property(e => e.Level)
-            .HasConversion<string>();
-
-
-
 
         // ۲. Value Converter
         var dictionaryConverter = new ValueConverter<Dictionary<string, object>?, string?>(

@@ -2,9 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
+import { LogLevelFlag } from '@app/panel/settings/app-setting/tabs/log-setting/models/log-level-flag';
+import { LOG_LEVELS } from '@app/panel/settings/app-setting/tabs/log-setting/models/LOG_LEVELS';
 import { AppConst } from '@shared/app-const';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
+import { Bitmask } from '@shared/helper/bit-mask.utils';
 import { LuxonFormatPipe } from '@shared/pipes/luxon-format.pipe';
 import { AdminLogServiceProxy } from '@shared/service-proxies/api/admin-log.service';
 import { GetLogsQuery } from '@shared/service-proxies/model/get-logs-query';
@@ -42,7 +45,7 @@ export class DatabaseLogsComponent extends AppComponentBase implements OnInit {
   perPage = AppConst.defaultTablePerPage;
   listSubscription$?: Subscription;
   showFilter = false;
-
+  logLevels = LOG_LEVELS;
   matDialog = inject(MatDialog);
   constructor(private logService: AdminLogServiceProxy) {
     super();
@@ -52,6 +55,7 @@ export class DatabaseLogsComponent extends AppComponentBase implements OnInit {
     ];
     this.form = this.fb.group({
       filter: [''],
+      filterLevels: [[]],
     });
     this.page = this.route.snapshot.queryParams['page'] ?? 1;
     this.perPage = this.route.snapshot.queryParams['perPage'] ?? 10;
@@ -72,6 +76,7 @@ export class DatabaseLogsComponent extends AppComponentBase implements OnInit {
     this.loading = true;
     const input = new GetLogsQuery();
 
+    input.level = Bitmask.enumArrayToFlag(this.form.get('filterLevels')?.value);
     input.search = this.form.get('filter')?.value;
     input.pageNumber = this.page;
     input.pageSize = this.perPage;

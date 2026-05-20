@@ -175,7 +175,7 @@ public class LogService : ILogService
 
         // اعمال فیلترها
         if (filter.Level.HasValue)
-            baseQuery = baseQuery.Where(l => l.Level == filter.Level.Value);
+            baseQuery = baseQuery.Where(l => l.Level.HasFlag(filter.Level.Value));
         if (filter.FromDate.HasValue)
             baseQuery = baseQuery.Where(l => l.Timestamp >= filter.FromDate.Value);
         if (filter.ToDate.HasValue)
@@ -215,24 +215,7 @@ public class LogService : ILogService
         // شمارش کل قبل از صفحه‌بندی
         var total = await groupedQuery.CountAsync(cancellation);
 
-        // مرتب‌سازی
-        ////if (!string.IsNullOrEmpty(filter.SortBy))
-        ////{
-        ////    groupedQuery = filter.SortBy.ToLower() switch
-        ////    {
-        ////        "timestamp" => filter.SortDirection?.ToLower() == "desc"
-        ////            ? groupedQuery.OrderByDescending(x => x.StartLog.Timestamp)
-        ////            : groupedQuery.OrderBy(x => x.StartLog.Timestamp),
-        ////        "duration" => filter.SortDirection?.ToLower() == "desc"
-        ////            ? groupedQuery.OrderByDescending(x => x.Duration)
-        ////            : groupedQuery.OrderBy(x => x.Duration),
-        ////        _ => groupedQuery.OrderByDescending(x => x.StartLog.Timestamp)
-        ////    };
-        ////}
-        ////else
-        ////{
-        ////    groupedQuery = groupedQuery.OrderByDescending(x => x.StartLog.Timestamp);
-        ////}
+
         // Sorting
         if (!string.IsNullOrEmpty(filter.SortBy))
         {

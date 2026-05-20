@@ -21,6 +21,16 @@
       <mat-label>{{ 'Filter' | translate }}</mat-label>
       <input matInput type="text" maxlength="500" formControlName="filter" />
     </mat-form-field>
+      
+    <mat-form-field>
+        <mat-label>{{ 'LogLevel' | translate }}</mat-label>
+        <mat-select formControlName="filterLevels" multiple>
+          @for (item of logLevels; track $index) {
+            <mat-option [value]="item.value">{{ item.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
   </div>
   <div class="d-flex align-items-center justify-content-end gap-2">
     <button class="btn btn-primary" (click)="resetFilter()" type="reset">
