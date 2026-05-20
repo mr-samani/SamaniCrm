@@ -54,7 +54,7 @@
   }
   <mat-menu #menu="matMenu">
     @if (AppPermissions.LoggingSystem_Details | permission) {
-      <a mat-menu-item>
+      <a mat-menu-item (click)="openLogDetails(item)">
         <i class="fa fa-eye mx-1"></i>
         <span>{{ 'Details' | translate }}</span>
       </a>

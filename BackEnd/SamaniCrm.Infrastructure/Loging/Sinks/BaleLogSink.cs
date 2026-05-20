@@ -74,9 +74,9 @@ public class BaleLogSink : ILogSink
             parse_mode = "Markdown"
         };
         var response = await _httpClient.PostAsJsonAsync(url,body);
-        Console.WriteLine($"Url:{url}",url);
+        //Console.WriteLine($"Url:{url}",url);
        // Console.WriteLine($"Body:{body}",JsonSerializer.Serialize(body));
-        Console.WriteLine(await response.Content.ReadAsStringAsync());
-        Console.WriteLine(response);
+       // Console.WriteLine(await response.Content.ReadAsStringAsync());
+       // Console.WriteLine(response);
     }
 }

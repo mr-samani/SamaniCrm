@@ -1,0 +1,44 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title">{{ 'LogDetails' | translate }}- {{ data.id }}</span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+  <div dir="ltr">
+    <p>
+      <span>CorrelationId: {{ data.correlationId }}</span>
+    </p>
+    <div class="row">
+      <div class="col-sm-3">{{ 'LogLevel_' + data.level }}</div>
+      <div class="col-sm-3">{{ data.source }}</div>
+      <div class="col-sm-3">{{ data.timestamp | luxonFormat }}</div>
+      <div class="col-sm-3">{{ data.duration | number }}ms</div>
+    </div>
+    <p>
+      <span>UserId: {{ data.userId }}</span>
+    </p>
+    <p>
+      <span>UserName: {{ data.userName }}</span>
+    </p>
+    <p>
+      <span>Controller: {{ data.controllerName }}</span>
+    </p>
+    <p>
+      <span>Action: {{ data.actionName }}</span>
+    </p>
+    <p>
+      <span>Request: ({{ data.httpMethod }}) {{ data.requestPath }}</span>
+    </p>
+    <p>
+      <span>Ip: {{ data.ipAddress }}</span>
+    </p>
+    <pre>{{ data.message }}</pre>
+    <pre>{{ data.exceptionDetails }}</pre>
+    <pre>{{ data.extraData | json }}</pre>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="btn btn-default" mat-dialog-close>{{ 'Close' | translate }}</button>
+</mat-dialog-actions>

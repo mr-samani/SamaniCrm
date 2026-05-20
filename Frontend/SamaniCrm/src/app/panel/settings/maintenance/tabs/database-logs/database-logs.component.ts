@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
@@ -41,6 +42,8 @@ export class DatabaseLogsComponent extends AppComponentBase implements OnInit {
   perPage = AppConst.defaultTablePerPage;
   listSubscription$?: Subscription;
   showFilter = false;
+
+  matDialog = inject(MatDialog);
   constructor(private logService: AdminLogServiceProxy) {
     super();
     this.breadcrumb.list = [
@@ -134,6 +137,13 @@ export class DatabaseLogsComponent extends AppComponentBase implements OnInit {
             this.getList();
           });
       }
+    });
+  }
+
+  async openLogDetails(item: LogEntryDto) {
+    const { LogDetailsComponent } = await import('./log-details/log-details.component');
+    this.matDialog.open(LogDetailsComponent, {
+      data: item,
     });
   }
 }

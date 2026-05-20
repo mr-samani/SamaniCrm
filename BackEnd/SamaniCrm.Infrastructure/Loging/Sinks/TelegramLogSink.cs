@@ -63,11 +63,15 @@ public class TelegramLogSink : ILogSink
 
         var url = $"https://api.telegram.org/bot{_botToken}/sendMessage";
 
-        await _httpClient.PostAsJsonAsync(url, new
+        var response= await _httpClient.PostAsJsonAsync(url, new
         {
             chat_id = _chatId,
             text = message,
             parse_mode = "Markdown"
         });
+
+        //Console.WriteLine(url);
+        //Console.WriteLine(response);
+        // Console.WriteLine(await response.Content.ReadAsStringAsync());
     }
 }
