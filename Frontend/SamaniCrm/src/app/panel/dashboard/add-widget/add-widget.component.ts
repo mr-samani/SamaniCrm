@@ -8,7 +8,7 @@ import { CreateOrUpdateDashboardItemCommand } from '@shared/service-proxies/mode
 
 import { SharedModule } from '@shared/shared.module';
 import { finalize } from 'rxjs';
-import { IWidgetDefinition, Widget, WidgetHelper } from '../widgets/widgets';
+import { WidgetHelper } from '../widgets/WidgetHelper';
 
 @Component({
   selector: 'app-add-widget',

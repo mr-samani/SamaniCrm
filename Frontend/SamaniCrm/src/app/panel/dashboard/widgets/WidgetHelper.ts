@@ -1,0 +1,22 @@
+import { DashboardItemDto } from '@shared/service-proxies';
+import { Widget } from './widgets';
+import { IWidgetDefinition } from './IWidgetDefinition';
+import { WIDGET_DEFINITIONS } from './WIDGET_DEFINITIONS';
+
+export class WidgetHelper {
+  public static WidgetDefinition: IWidgetDefinition[] = WIDGET_DEFINITIONS;
+
+  public static async loadWidgets(widgets: DashboardItemDto[]): Promise<Widget[]> {
+    const list: Widget[] = [];
+    for (let item of widgets) {
+      const found = WidgetHelper.WidgetDefinition.find((x) => x.name == item.componentName);
+      if (found) {
+        let w = new Widget(Object.assign(item as any, { component: await found.component() }));
+        list.push(w);
+      } else {
+        console.warn('Widget not found: ', item.componentName);
+      }
+    }
+    return list;
+  }
+}
