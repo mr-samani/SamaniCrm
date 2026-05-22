@@ -9,17 +9,6 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Infrastructure.Data.Seeder;
 
-public class TenantDataSeeder : ITenantDataSeeder
-{
-    public int Order => 0;
-
- 
-
-    public Task SeedAsync(Tenant tenant, CancellationToken cancellation)
-    {
-        throw new NotImplementedException();
-    }
-}
 
 // Base class for tenant seeders
 public abstract class TenantDataSeederBase<TContext> : ITenantDataSeeder

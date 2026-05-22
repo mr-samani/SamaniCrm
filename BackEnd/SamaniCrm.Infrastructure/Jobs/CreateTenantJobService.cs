@@ -25,7 +25,7 @@ public class CreateTenantJobService : ICreateTenantJobService
     private readonly ILogger<CreateTenantJobService> _logger;
 
 
-    private readonly int StepDelay = 10;
+    private readonly int StepDelay = 5;
     private TenantJobProvisioningData? _jobData;
     private TenantProvisionStepsEnum _currentStep = TenantProvisionStepsEnum.CreateTenant;
 
@@ -76,7 +76,7 @@ public class CreateTenantJobService : ICreateTenantJobService
             // Start provisioning tracking
             await SendNotificationProcessAsync(ProvisioningStepStatus.Completed, "");
 
-        
+
 
 
             // Step 1: Provision Database (if isolated)
@@ -92,22 +92,9 @@ public class CreateTenantJobService : ICreateTenantJobService
                     await _provisioningService.ProvisionIsolatedDatabaseAsync(tenant, cancellation);
                 }
                 await SendNotificationProcessAsync(ProvisioningStepStatus.Completed, "");
-
             }
 
-            // Step 2: Create Admin User
-            if (pendingSteps.Contains(TenantProvisionStepsEnum.CreateAdminUser))
-            {
-                _currentStep = TenantProvisionStepsEnum.CreateAdminUser;
-                await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress, "");
-                await Task.Delay(TimeSpan.FromSeconds(StepDelay));
-                await _provisioningService.ProvisionCreateAdminUser(_jobData, tenant.Id, cancellation);
-
-                await SendNotificationProcessAsync(ProvisioningStepStatus.Completed, "");
-            }
-
-
-            // Step 3: Run Migrations
+            // Step 2: Run Migrations
             if (pendingSteps.Contains(TenantProvisionStepsEnum.RunMigrations))
             {
                 _currentStep = TenantProvisionStepsEnum.RunMigrations;
@@ -117,7 +104,9 @@ public class CreateTenantJobService : ICreateTenantJobService
                 await _provisioningService.RunMigrationsAsync(tenant, cancellation);
                 await SendNotificationProcessAsync(ProvisioningStepStatus.Completed, "");
             }
-            // Step 4: Seed Initial Data
+
+
+            // Step 3: Seed Initial Data
             if (pendingSteps.Contains(TenantProvisionStepsEnum.SeedData))
             {
                 _currentStep = TenantProvisionStepsEnum.SeedData;
@@ -125,6 +114,17 @@ public class CreateTenantJobService : ICreateTenantJobService
                 await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress, "");
                 await Task.Delay(TimeSpan.FromSeconds(StepDelay));
                 await _provisioningService.SeedInitialDataAsync(tenant, cancellation);
+                await SendNotificationProcessAsync(ProvisioningStepStatus.Completed, "");
+            }
+
+            // Step 4: Create Admin User
+            if (pendingSteps.Contains(TenantProvisionStepsEnum.CreateAdminUser))
+            {
+                _currentStep = TenantProvisionStepsEnum.CreateAdminUser;
+                await SendNotificationProcessAsync(ProvisioningStepStatus.InProgress, "");
+                await Task.Delay(TimeSpan.FromSeconds(StepDelay));
+                await _provisioningService.ProvisionCreateAdminUser(_jobData, tenant.Id, cancellation);
+
                 await SendNotificationProcessAsync(ProvisioningStepStatus.Completed, "");
             }
 
@@ -146,7 +146,6 @@ public class CreateTenantJobService : ICreateTenantJobService
         {
             _logger.LogInformation("Error on Create tenant {TenantId}:{Message}", tenant.Id, ex.Message);
             await SendNotificationProcessAsync(ProvisioningStepStatus.Failed, ex.Message);
-
         }
 
     }

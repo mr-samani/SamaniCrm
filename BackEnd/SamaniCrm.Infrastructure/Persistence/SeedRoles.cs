@@ -26,7 +26,7 @@ public class SeedRoles
         foreach (string role in allRoles)
         {
             // 1. ایجاد نقش های هاست در صورت عدم وجود
-            var r = await roleManager.FindByNameAsync(role);
+            var r = await roleManager.Roles.FirstOrDefaultAsync(x=>x.Name == role && x.TenantId == null);
             if (r == null)
             {
                 r = new ApplicationRole(role);
