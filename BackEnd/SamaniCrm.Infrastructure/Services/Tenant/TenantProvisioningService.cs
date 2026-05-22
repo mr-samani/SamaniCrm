@@ -119,6 +119,7 @@ public class TenantProvisioningService : ITenantProvisioningService
         {
             return;
         }
+
         var adminUser = new CreateUserCommand()
         {
             TenantId = tenantId,

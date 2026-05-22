@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using SamaniCrm.Domain.Interfaces;
 using SamaniCrm.Domain.ValueObjects.Product;
 
 namespace SamaniCrm.Domain.Entities;
 
-public class Product : BaseEntity
+public class Product : BaseEntity,IMayHaveTenant
 {
+    public Guid? TenantId { get; set; }
     public Guid CategoryId { get; set; }
 
     [Required]

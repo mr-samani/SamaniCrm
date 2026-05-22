@@ -1,10 +1,12 @@
-﻿using System.ComponentModel;
+﻿using SamaniCrm.Domain.Interfaces;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace SamaniCrm.Domain.Entities;
 
-public class PageTranslation : BaseEntity
+public class PageTranslation : BaseEntity,IMayHaveTenant
 {
+    public Guid? TenantId { get; set; }
     public Guid PageId { get; set; }
 
     [MaxLength(10)]

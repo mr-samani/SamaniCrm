@@ -6,11 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamaniCrm.Core.Shared.Enums;
+using SamaniCrm.Domain.Interfaces;
 
 namespace SamaniCrm.Domain.Entities;
 
-public class Menu : BaseEntity
+public class Menu : BaseEntity,IMayHaveTenant
 {
+    public Guid? TenantId { get; set; }
     [MaxLength(300)]
     public string? Icon { get; set; }
     [MaxLength(2000)]

@@ -15,7 +15,7 @@ using SamaniCrm.Host.Models;
 namespace SamaniCrm.Api.Controllers;
 
 [Route("api/admin/logs")]
-[Authorize(Roles = AppRoles.Administrator)]
+[Authorize(Roles = AppRoles.SysAdmin)]
 public class AdminLogController : ApiBaseController
 {
     private readonly IMediator _mediator;

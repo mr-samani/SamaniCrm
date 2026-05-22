@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamaniCrm.Domain.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,8 +10,9 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Domain.Entities;
 
-public class Currency : BaseEntity
+public class Currency : BaseEntity,IMayHaveTenant
 {
+    public Guid? TenantId { get; set; }
     [MaxLength(5)]
     public required string CurrencyCode { get; set; }
     [MaxLength(100)]

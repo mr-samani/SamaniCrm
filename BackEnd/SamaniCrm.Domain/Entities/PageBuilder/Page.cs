@@ -7,11 +7,13 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using SamaniCrm.Core.Shared.Enums;
+using SamaniCrm.Domain.Interfaces;
 
 namespace SamaniCrm.Domain.Entities;
 
-public class Page : BaseEntity
+public class Page : BaseEntity,IMayHaveTenant
 {
+    public Guid? TenantId { get; set; }
     public string? CoverImage { get; set; }
     public Guid? AuthorId { get; set; }
     public DateTime? PublishedAt { get; set; }

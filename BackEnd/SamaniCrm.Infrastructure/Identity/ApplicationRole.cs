@@ -5,11 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Domain.Interfaces;
 
 namespace SamaniCrm.Infrastructure.Identity
 {
-    public class ApplicationRole : IdentityRole<Guid>,IAuditedEntity
+    public class ApplicationRole : IdentityRole<Guid>, IAuditedEntity, IMayHaveTenant
     {
+
+        public Guid? TenantId { get; set; }
+
+        public int Level { get; set; } = 2;
+        public bool IsSystem { get; set; } = false;
+
         public ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
 
         public ApplicationRole() : base()
