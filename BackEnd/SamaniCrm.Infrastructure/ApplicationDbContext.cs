@@ -28,9 +28,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         _currentUser = currentUserService;
         _currentTenant = currentTenant;
     }
-   
 
-    
+
+
     public Guid? CurrentTenantId
     {
         get => _tenantId ?? _currentTenant?.TenantId;
@@ -117,8 +117,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         base.OnModelCreating(builder);
+        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
         SetGLobalFilter(builder);
     }

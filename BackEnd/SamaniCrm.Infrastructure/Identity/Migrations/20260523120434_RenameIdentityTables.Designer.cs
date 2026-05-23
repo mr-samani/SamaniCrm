@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SamaniCrm.Infrastructure;
 
@@ -11,9 +12,11 @@ using SamaniCrm.Infrastructure;
 namespace SamaniCrm.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260523120434_RenameIdentityTables")]
+    partial class RenameIdentityTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,7 +46,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RoleClaims", "auth");
+                    b.ToTable("RoleClaims", "idnty");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -67,7 +70,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserClaims", "auth");
+                    b.ToTable("UserClaims", "idnty");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
@@ -88,7 +91,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserLogins", "auth");
+                    b.ToTable("UserLogins", "idnty");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
@@ -103,7 +106,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRoles", "auth");
+                    b.ToTable("UserRoles", "idnty");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -122,7 +125,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("UserTokens", "auth");
+                    b.ToTable("UserTokens", "idnty");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Cart", b =>
@@ -1185,7 +1188,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.HasIndex("LocalizeKey")
                         .IsUnique();
 
-                    b.ToTable("Permissions", "auth");
+                    b.ToTable("Permissions", "idnty");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Plugin", b =>
@@ -1943,7 +1946,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasKey("RefreshTokenId");
 
-                    b.ToTable("RefreshTokens", "auth");
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.RolePermission", b =>
@@ -1969,7 +1972,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.HasIndex("RoleId", "PermissionId")
                         .IsUnique();
 
-                    b.ToTable("RolePermissions", "auth");
+                    b.ToTable("RolePermissions", "idnty");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.SecuritySetting", b =>
@@ -2174,7 +2177,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tenants", "Tenant");
+                    b.ToTable("Tenants");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.TenantCategory", b =>
@@ -2232,7 +2235,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("TenantCategories", "Tenant");
+                    b.ToTable("TenantCategories");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.TenantDatabaseConnection", b =>
@@ -2311,7 +2314,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("TenantDatabaseConnections", "Tenant");
+                    b.ToTable("TenantDatabaseConnections");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.TenantLogSetting", b =>
@@ -2395,7 +2398,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("TenantProvisioningSteps", "Tenant");
+                    b.ToTable("TenantProvisioningSteps");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.TenantSetting", b =>
@@ -2454,7 +2457,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("TenantSettings", "Tenant");
+                    b.ToTable("TenantSettings");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.UserSetting", b =>
@@ -2490,7 +2493,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserSettings", "auth");
+                    b.ToTable("UserSetting");
                 });
 
             modelBuilder.Entity("SamaniCrm.Infrastructure.Identity.ApplicationRole", b =>
@@ -2555,7 +2558,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .IsUnique()
                         .HasFilter("[Name] IS NOT NULL AND [TenantId] IS NOT NULL");
 
-                    b.ToTable("Roles", "auth");
+                    b.ToTable("Roles", "idnty");
                 });
 
             modelBuilder.Entity("SamaniCrm.Infrastructure.Identity.ApplicationUser", b =>
@@ -2673,7 +2676,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("Users", "auth");
+                    b.ToTable("Users", "idnty");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

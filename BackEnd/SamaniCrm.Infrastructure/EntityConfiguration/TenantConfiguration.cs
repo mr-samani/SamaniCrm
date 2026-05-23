@@ -11,12 +11,45 @@ public class TenantConfiguration : IEntityTypeConfiguration<Tenant>
 {
     public void Configure(EntityTypeBuilder<Tenant> builder)
     {
+        builder.ToTable("Tenants", "Tenant");
 
         builder.Property(t => t.Longitude)
               .HasColumnType("decimal(18,8)");
 
         builder.Property(t => t.Latitude)
                   .HasColumnType("decimal(18,8)");
+
+    }
+}
+public class TenantCategoryConfiguration : IEntityTypeConfiguration<TenantCategory>
+{
+    public void Configure(EntityTypeBuilder<TenantCategory> builder)
+    {
+        builder.ToTable("TenantCategories", "Tenant");
+
+    }
+}
+public class TenantDatabaseConnectionConfiguration : IEntityTypeConfiguration<TenantDatabaseConnection>
+{
+    public void Configure(EntityTypeBuilder<TenantDatabaseConnection> builder)
+    {
+        builder.ToTable("TenantDatabaseConnections", "Tenant");
+
+    }
+}
+public class TenantProvisioningStepConfiguration : IEntityTypeConfiguration<TenantProvisioningStep>
+{
+    public void Configure(EntityTypeBuilder<TenantProvisioningStep> builder)
+    {
+        builder.ToTable("TenantProvisioningSteps", "Tenant");
+
+    }
+}
+public class TenantSettingConfiguration : IEntityTypeConfiguration<TenantSetting>
+{
+    public void Configure(EntityTypeBuilder<TenantSetting> builder)
+    {
+        builder.ToTable("TenantSettings", "Tenant");
 
     }
 }

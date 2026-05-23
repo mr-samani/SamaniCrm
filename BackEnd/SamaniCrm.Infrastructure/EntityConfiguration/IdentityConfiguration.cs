@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.Identity;
@@ -12,7 +13,7 @@ public class IdentityUserConfiguration : IEntityTypeConfiguration<ApplicationUse
 {
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
-        builder.ToTable("Users", "identity");
+        builder.ToTable("Users", "auth");
         builder.Property(e => e.FirstName).HasMaxLength(50);
         builder.Property(e => e.LastName).HasMaxLength(50);
         builder.Property(e => e.Address).HasMaxLength(200);
@@ -26,9 +27,70 @@ public class IdentityRoleConfiguration : IEntityTypeConfiguration<ApplicationRol
 {
     public void Configure(EntityTypeBuilder<ApplicationRole> builder)
     {
-        builder.ToTable("Roles", "identity");
-        builder.HasKey(x => new { x.Name, x.TenantId });
-        builder.HasIndex(x => new { x.Id, x.Name, x.TenantId });
+        builder.ToTable("Roles", "auth");
+        builder.HasIndex(x => new { x.Id, x.Name, x.TenantId }).IsUnique();
+    }
+}
+public class IdentityRoleClaimConfiguration : IEntityTypeConfiguration<IdentityRoleClaim<Guid>>
+{
+    public void Configure(EntityTypeBuilder<IdentityRoleClaim<Guid>> builder)
+    {
+        builder.ToTable("RoleClaims", "auth"); 
+
+    }
+}
+public class IdentityUserClaimConfiguration : IEntityTypeConfiguration<IdentityUserClaim<Guid>>
+{
+    public void Configure(EntityTypeBuilder<IdentityUserClaim<Guid>> builder)
+    {
+        builder.ToTable("UserClaims", "auth");
+
+    }
+}
+public class IdentityUserLoginConfiguration : IEntityTypeConfiguration<IdentityUserLogin<Guid>>
+{
+    public void Configure(EntityTypeBuilder<IdentityUserLogin<Guid>> builder)
+    {
+        builder.ToTable("UserLogins", "auth");
+
+    }
+}
+public class IdentityUserRoleConfiguration : IEntityTypeConfiguration<IdentityUserRole<Guid>>
+{
+    public void Configure(EntityTypeBuilder<IdentityUserRole<Guid>> builder)
+    {
+        builder.ToTable("UserRoles", "auth");
+
+    }
+}
+public class IdentityUserTokenConfiguration : IEntityTypeConfiguration<IdentityUserToken<Guid>>
+{
+    public void Configure(EntityTypeBuilder<IdentityUserToken<Guid>> builder)
+    {
+        builder.ToTable("UserTokens", "auth");
+
+    }
+}
+public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
+{
+    public void Configure(EntityTypeBuilder<RefreshToken> builder)
+    {
+        builder.ToTable("RefreshTokens", "auth");
+
+    }
+}
+public class UserSettingConfiguration : IEntityTypeConfiguration<UserSetting>
+{
+    public void Configure(EntityTypeBuilder<UserSetting> builder)
+    {
+        builder.ToTable("UserSettings", "auth"); 
+        builder.HasKey(pc => pc.Id);
+        builder.HasOne<ApplicationUser>()               // navigation property in UserSetting
+               .WithOne(x => x.UserSetting)       // navigation property in ApplicationUser
+               .HasForeignKey<UserSetting>(x => x.UserId) // FK in UserSetting
+               .OnDelete(DeleteBehavior.Restrict);
+
+
     }
 }
 
@@ -38,8 +100,9 @@ public class IdentityRolePermissionConfiguration : IEntityTypeConfiguration<Role
     public void Configure(EntityTypeBuilder<RolePermission> builder)
     {
 
-        builder.ToTable("RolePermissions", "identity");
+        builder.ToTable("RolePermissions", "auth");
         builder.HasKey(rp => new { rp.RoleId, rp.PermissionId });
+        builder.HasIndex(rp => new { rp.RoleId, rp.PermissionId }).IsUnique();
 
         builder.HasOne<ApplicationRole>()
                 .WithMany()
@@ -60,7 +123,7 @@ public class IdentityPermissionConfiguration : IEntityTypeConfiguration<Permissi
 {
     public void Configure(EntityTypeBuilder<Permission> builder)
     {
-        builder.ToTable("Permissions", "identity");
+        builder.ToTable("Permissions", "auth");
         builder.HasIndex(p => p.LocalizeKey)
                 .IsUnique();
     }
@@ -69,4 +132,3 @@ public class IdentityPermissionConfiguration : IEntityTypeConfiguration<Permissi
 
 
 
- 

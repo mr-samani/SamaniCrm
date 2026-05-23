@@ -1,35 +1,35 @@
 /**
  * Auto-generated file - Do not edit manually
  * Generated from: AppPermissions.cs
- * Generated at: 2026-05-20T05:34:34.752Z
+ * Generated at: 2026-05-23T11:34:23.183Z
  */
 
 export class AppPermissions {
     static Administrator = "Administrator";
 
     // Dashboard
-    static Dashboard_List = "Panel.Dashboard.Cache.List";
-    static Dashboard_Create = "Panel.Dashboard.Create";
-    static Dashboard_Edit = "Panel.Dashboard.Edit";
-    static Dashboard_Delete = "Panel.Dashboard.Delete";
+    static Dashboard_List = "DashboardManagement.List";
+    static Dashboard_Create = "DashboardManagement.Create";
+    static Dashboard_Edit = "DashboardManagement.Edit";
+    static Dashboard_Delete = "DashboardManagement.Delete";
 
     // Dashboard > Item
-    static Dashboard_Item_Create = "Panel.Dashboard.Item.Create";
-    static Dashboard_Item_Edit = "Panel.Dashboard.Item.Edit";
-    static Dashboard_Item_Delete = "Panel.Dashboard.Item.Delete";
+    static Dashboard_Item_Create = "DashboardManagement.Item.Create";
+    static Dashboard_Item_Edit = "DashboardManagement.Item.Edit";
+    static Dashboard_Item_Delete = "DashboardManagement.Item.Delete";
 
     // FileManager
-    static FileManager_List = "Administrator.FileManager.List";
-    static FileManager_CreateFolder = "Administrator.FileManager.CreateFolder";
-    static FileManager_CreateFile = "Administrator.FileManager.CreateFile";
-    static FileManager_Delete = "Administrator.FileManager.Delete";
-    static FileManager_Rename = "Administrator.FileManager.Rename";
+    static FileManager_List = "FileManagement.FileManager.List";
+    static FileManager_CreateFolder = "FileManagement.FileManager.CreateFolder";
+    static FileManager_CreateFile = "FileManagement.FileManager.CreateFile";
+    static FileManager_Delete = "FileManagement.FileManager.Delete";
+    static FileManager_Rename = "FileManagement.FileManager.Rename";
 
     // LanguageManagement
-    static LanguageManagement_List = "Administrator.LanguageManagement.List";
-    static LanguageManagement_Create = "Administrator.LanguageManagement.Create";
-    static LanguageManagement_Edit = "Administrator.LanguageManagement.Edit";
-    static LanguageManagement_Delete = "Administrator.LanguageManagement.Delete";
+    static LanguageManagement_List = "LanguageManagement.List";
+    static LanguageManagement_Create = "LanguageManagement.Create";
+    static LanguageManagement_Edit = "LanguageManagement.Edit";
+    static LanguageManagement_Delete = "LanguageManagement.Delete";
 
     // LoggingSystem
     static LoggingSystem_List = "Administrator.LoggingSystem.List";
@@ -47,75 +47,75 @@ export class AppPermissions {
     static Maintenance_Cache_ClearAll = "Administrator.Maintenance.Cache.ClearAll";
 
     // MenuManagement
-    static MenuManagement_List = "Administrator.MenuManagement.List";
-    static MenuManagement_Create = "Administrator.MenuManagement.Create";
-    static MenuManagement_Edit = "Administrator.MenuManagement.Edit";
-    static MenuManagement_Delete = "Administrator.MenuManagement.Delete";
-    static MenuManagement_ReOrder = "Administrator.MenuManagement.ReOrder";
+    static MenuManagement_List = "MenuManagement.List";
+    static MenuManagement_Create = "MenuManagement.Create";
+    static MenuManagement_Edit = "MenuManagement.Edit";
+    static MenuManagement_Delete = "MenuManagement.Delete";
+    static MenuManagement_ReOrder = "MenuManagement.ReOrder";
 
     // Notification
-    static Notification_List = "Administrator.Notification.List";
-    static Notification_Delete = "Administrator.Notification.Delete";
-    static Notification_MarkAllAsRead = "Administrator.Notification.MarkAllAsRead";
-    static Notification_SendMessageToUser = "Administrator.Notification.SendMessageToUser";
-    static Notification_BroadCastMessageToAll = "Administrator.Notification.BroadCastMessageToAll";
+    static Notification_List = "NotificationManagement.List";
+    static Notification_Delete = "NotificationManagement.Delete";
+    static Notification_MarkAllAsRead = "NotificationManagement.MarkAllAsRead";
+    static Notification_SendMessageToUser = "NotificationManagement.SendMessageToUser";
+    static Notification_BroadCastMessageToAll = "NotificationManagement.BroadCastMessageToAll";
 
     // Pages
-    static Pages_List = "Administrator.Pages.List";
-    static Pages_Create = "Administrator.Pages.Create";
-    static Pages_Update = "Administrator.Pages.Update";
-    static Pages_Delete = "Administrator.Pages.Delete";
-    static Pages_HomeEdit = "Administrator.Pages.HomeEdit";
-    static Pages_AboutUsEdit = "Administrator.Pages.AboutUsEdit";
-    static Pages_ContactUsEdit = "Administrator.Pages.ContactUsEdit";
-    static Pages_OtherPageEdit = "Administrator.Pages.OtherPageEdit";
-    static Pages_ArticlesEdit = "Administrator.Pages.ArticlesEdit";
-    static Pages_NewsEdit = "Administrator.Pages.NewsEdit";
-    static Pages_BlogsEdit = "Administrator.Pages.BlogsEdit";
-    static Pages_ProductEdit = "Administrator.Pages.ProductEdit";
-    static Pages_Builder = "Administrator.Pages.PageBuilder";
-    static Pages_PluginList = "Administrator.Pages.PluginList";
-    static Pages_CreatePlugin = "Administrator.Pages.CreatePlugin";
-    static Pages_DeletePlugin = "Administrator.Pages.DeletePlugin";
+    static Pages_List = "PageManagement.List";
+    static Pages_Create = "PageManagement.Create";
+    static Pages_Update = "PageManagement.Update";
+    static Pages_Delete = "PageManagement.Delete";
+    static Pages_HomeEdit = "PageManagement.HomeEdit";
+    static Pages_AboutUsEdit = "PageManagement.AboutUsEdit";
+    static Pages_ContactUsEdit = "PageManagement.ContactUsEdit";
+    static Pages_OtherPageEdit = "PageManagement.OtherPageEdit";
+    static Pages_ArticlesEdit = "PageManagement.ArticlesEdit";
+    static Pages_NewsEdit = "PageManagement.NewsEdit";
+    static Pages_BlogsEdit = "PageManagement.BlogsEdit";
+    static Pages_ProductEdit = "PageManagement.ProductEdit";
+    static Pages_Builder = "PageManagement.PageBuilder";
+    static Pages_PluginList = "PageManagement.PluginList";
+    static Pages_CreatePlugin = "PageManagement.CreatePlugin";
+    static Pages_DeletePlugin = "PageManagement.DeletePlugin";
 
     // Products
-    static Products_List = "Administrator.Products.List";
-    static Products_Create = "Administrator.Products.Create";
-    static Products_Edit = "Administrator.Products.Edit";
-    static Products_Delete = "Administrator.Products.Delete";
+    static Products_List = "ProductManagement.List";
+    static Products_Create = "ProductManagement.Create";
+    static Products_Edit = "ProductManagement.Edit";
+    static Products_Delete = "ProductManagement.Delete";
 
     // Products > Attribute
-    static Products_Attribute_List = "Administrator.Products.Attribute.List";
-    static Products_Attribute_Create = "Administrator.Products.Attribute.Create";
-    static Products_Attribute_Edit = "Administrator.Products.Attribute.Edit";
-    static Products_Attribute_Delete = "Administrator.Products.Attribute.Delete";
+    static Products_Attribute_List = "ProductManagement.Attribute.List";
+    static Products_Attribute_Create = "ProductManagement.Attribute.Create";
+    static Products_Attribute_Edit = "ProductManagement.Attribute.Edit";
+    static Products_Attribute_Delete = "ProductManagement.Attribute.Delete";
 
     // Products > Category
-    static Products_Category_List = "Administrator.Products.Category.List";
-    static Products_Category_Export = "Administrator.Products.Category.Export";
-    static Products_Category_Import = "Administrator.Products.Category.Import";
-    static Products_Category_Create = "Administrator.Products.Category.Create";
-    static Products_Category_Edit = "Administrator.Products.Category.Edit";
-    static Products_Category_Delete = "Administrator.Products.Category.Delete";
+    static Products_Category_List = "ProductManagement.Category.List";
+    static Products_Category_Export = "ProductManagement.Category.Export";
+    static Products_Category_Import = "ProductManagement.Category.Import";
+    static Products_Category_Create = "ProductManagement.Category.Create";
+    static Products_Category_Edit = "ProductManagement.Category.Edit";
+    static Products_Category_Delete = "ProductManagement.Category.Delete";
 
     // Products > Currency
-    static Products_Currency_List = "Administrator.Products.Currency.List";
-    static Products_Currency_Create = "Administrator.Products.Currency.Create";
-    static Products_Currency_Edit = "Administrator.Products.Currency.Edit";
-    static Products_Currency_Delete = "Administrator.Products.Currency.Delete";
+    static Products_Currency_List = "ProductManagement.Currency.List";
+    static Products_Currency_Create = "ProductManagement.Currency.Create";
+    static Products_Currency_Edit = "ProductManagement.Currency.Edit";
+    static Products_Currency_Delete = "ProductManagement.Currency.Delete";
 
     // Products > Type
-    static Products_Type_List = "Administrator.Products.Type.List";
-    static Products_Type_Create = "Administrator.Products.Type.Create";
-    static Products_Type_Edit = "Administrator.Products.Type.Edit";
-    static Products_Type_Delete = "Administrator.Products.Type.Delete";
+    static Products_Type_List = "ProductManagement.Type.List";
+    static Products_Type_Create = "ProductManagement.Type.Create";
+    static Products_Type_Edit = "ProductManagement.Type.Edit";
+    static Products_Type_Delete = "ProductManagement.Type.Delete";
 
     // RoleManagement
-    static RoleManagement_List = "Administrator.RoleManagement.List";
-    static RoleManagement_Create = "Administrator.RoleManagement.Create";
-    static RoleManagement_Edit = "Administrator.RoleManagement.Edit";
-    static RoleManagement_Delete = "Administrator.RoleManagement.Delete";
-    static RoleManagement_EditRolePermissions = "Administrator.RoleManagement.EditRolePermissions";
+    static RoleManagement_List = "UserManagement.Role.List";
+    static RoleManagement_Create = "UserManagement.Role.Create";
+    static RoleManagement_Edit = "UserManagement.Role.Edit";
+    static RoleManagement_Delete = "UserManagement.Role.Delete";
+    static RoleManagement_EditRolePermissions = "UserManagement.Role.EditRolePermissions";
 
     // SecuritySetting
     static SecuritySetting_GetSetting = "Administrator.SecuritySetting.GetSetting";
@@ -148,10 +148,10 @@ export class AppPermissions {
     static TenantManagement_GetTenantUsage = "Administrator.TenantManagement.GetTenantUsage";
 
     // UserManagement
-    static UserManagement_List = "Administrator.UserManagement.List";
-    static UserManagement_Create = "Administrator.UserManagement.Create";
-    static UserManagement_ChangeAvatar = "Administrator.UserManagement.ChangeAvatar";
-    static UserManagement_Edit = "Administrator.UserManagement.Edit";
-    static UserManagement_Delete = "Administrator.UserManagement.Delete";
-    static UserManagement_AssignRole = "Administrator.UserManagement.AssignRole";
+    static UserManagement_List = "UserManagement.User.List";
+    static UserManagement_Create = "UserManagement.User.Create";
+    static UserManagement_ChangeAvatar = "UserManagement.User.ChangeAvatar";
+    static UserManagement_Edit = "UserManagement.User.Edit";
+    static UserManagement_Delete = "UserManagement.User.Delete";
+    static UserManagement_AssignRole = "UserManagement.User.AssignRole";
 }
