@@ -5,28 +5,29 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Core.Shared.Settings;
 
 namespace SamaniCrm.Application
 {
     public static class VerifyCaptchaExtensions
     {
 
-        private static IConfiguration _configuration = default!;
 
-        private static ICaptchaStore _captchaStore = default!;
+        private static ICaptchaStore? _captchaStore;
+        private static bool _isCaptchaEnabled;
         public static void Configure(ICaptchaStore captchaStore, IConfiguration configuration)
         {
             _captchaStore = captchaStore;
-            _configuration = configuration;
+            _isCaptchaEnabled = (configuration.GetSection("Captcha").Get<CaptchaSettings>() ?? new CaptchaSettings()).Enabled;
         }
 
 
         public static bool VerifyCaptcha(this InputCaptchaDTO? captcha)
         {
-            bool.TryParse(_configuration["Captcha:Enabled"], out var requiredCaptcha);
-            if (requiredCaptcha == false)
+            if (_isCaptchaEnabled == false)
             {
                 return true;
             }

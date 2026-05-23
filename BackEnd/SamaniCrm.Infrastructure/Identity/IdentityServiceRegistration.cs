@@ -17,8 +17,6 @@ namespace SamaniCrm.Infrastructure.Identity
     {
         public static IServiceCollection AddIdentityInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {  
-            
- 
 
             using (var scope = services.BuildServiceProvider().CreateScope())
             {

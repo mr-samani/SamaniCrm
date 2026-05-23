@@ -3,6 +3,7 @@ using HeyRed.Mime;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using MimeDetective;
 using MimeDetective.Engine;
 using Pipelines.Sockets.Unofficial.Arenas;
@@ -26,17 +27,13 @@ namespace SamaniCrm.Infrastructure.FileManager
     public class LocaleFileManagerService : IFileManagerService
     {
         private readonly IApplicationDbContext _dbContext;
-        private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _env;
         private readonly ImageResizeService _imageResizeService = new ImageResizeService();
 
-        private FileManagerSetting settings;
         private string publicRootPath;
-        public LocaleFileManagerService(IConfiguration configuration, IApplicationDbContext dbContext, IWebHostEnvironment env)
+        public LocaleFileManagerService(IApplicationDbContext dbContext, IWebHostEnvironment env, IOptions<FileManagerSettings> options)
         {
-            settings = configuration.GetSection("FileManager").Get<FileManagerSetting>() ?? new FileManagerSetting();
-            publicRootPath = settings.PublicFolderPath;
-            _configuration = configuration;
+            publicRootPath = options.Value.PublicFolderPath;
             _dbContext = dbContext;
             _env = env;
         }

@@ -16,14 +16,11 @@ namespace SamaniCrm.Host.Controllers;
 public class AccountController : ApiBaseController
 {
 
-    private readonly IConfiguration _configuration;
     private readonly IMediator _mediator;
     private readonly ITwoFactorService _twoFactorService;
 
-    public AccountController(
-        IConfiguration configuration, IMediator mediator, ITwoFactorService twoFactorService)
+    public AccountController( IMediator mediator, ITwoFactorService twoFactorService)
     {
-        _configuration = configuration;
         _mediator = mediator;
         _twoFactorService = twoFactorService;
     }

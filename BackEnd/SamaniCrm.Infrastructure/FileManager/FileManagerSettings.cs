@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Infrastructure.FileManager
 {
-    public class FileManagerSetting
+    public class FileManagerSettings
     {
         public string Provider { get; set; } = "locale";
 
@@ -14,6 +14,6 @@ namespace SamaniCrm.Infrastructure.FileManager
         /// Base Path = ./Files
         /// </summary>
         public string PublicFolderPath { get; set; } = "./Files";
-
+        public string? tusFilesPath { get; set; } = "./tusfiles";
     }
 }

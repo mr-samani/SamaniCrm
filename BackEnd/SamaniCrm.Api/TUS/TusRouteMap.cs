@@ -1,6 +1,8 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Options;
 using SamaniCrm.Application.FileManager.Commands;
 using SamaniCrm.Core;
+using SamaniCrm.Infrastructure.FileManager;
 using System.Net;
 using System.Text;
 using tusdotnet;
@@ -13,7 +15,7 @@ namespace SamaniCrm.Api.TUS
 
         public static WebApplication InitializeTUS(this WebApplication app, IConfiguration configuration)
         {
-            var path = configuration.GetSection("Filemanger:tusfiles").Value ?? "./tusfiles";
+            var path = (configuration.GetSection("FileManager").Get<FileManagerSettings>() ?? new FileManagerSettings()).tusFilesPath!;
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);

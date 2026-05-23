@@ -1,13 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.FileManager.Interfaces;
-using SamaniCrm.Infrastructure.Cache;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SamaniCrm.Infrastructure.FileManager;
 
@@ -15,7 +10,9 @@ public static class FileManagerFactory
 {
     public static IServiceCollection AddFileManagerService(this IServiceCollection services, IConfiguration configuration)
     {
-        var settings = configuration.GetSection("FileManager").Get<FileManagerSetting>() ?? new FileManagerSetting();
+
+        var settings = configuration.GetSection("FileManager")
+            .Get<FileManagerSettings>() ?? new FileManagerSettings();
         var rootPath = settings.PublicFolderPath;
 
         if (rootPath == null)
