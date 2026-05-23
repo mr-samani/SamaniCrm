@@ -13,13 +13,13 @@ export enum TenantProvisionStepsEnum {
 
     CreateTenant = 0,
 
-    CreateAdminUser = 1,
+    ProvisionDatabase = 1,
 
-    ProvisionDatabase = 2,
+    RunMigrations = 2,
 
-    RunMigrations = 3,
+    SeedData = 3,
 
-    SeedData = 4,
+    CreateAdminUser = 4,
 
     Finalize = 5
 }

@@ -15,7 +15,7 @@ import { LogLevel } from './log-level';
 /** Interface for GetLogsQuery */
 export interface IGetLogsQuery {
   tenantId?: string;
-  level?: LogLevel;
+  levels?: Array<LogLevel>;
   fromDate?: string;
   toDate?: string;
   userId?: string;
@@ -29,7 +29,7 @@ export interface IGetLogsQuery {
 /** Class for GetLogsQuery */
 export class GetLogsQuery implements IGetLogsQuery {
   tenantId?: string;
-  level?: LogLevel;
+  levels?: Array<LogLevel>;
   fromDate?: string;
   toDate?: string;
   userId?: string;
@@ -51,7 +51,11 @@ export class GetLogsQuery implements IGetLogsQuery {
 init(data?: any) {
   if (data) {
     this.tenantId = data["tenantId"];
-    this.level = data["level"];
+    if (Array.isArray(data["levels"])) {
+      this.levels = [] as any;
+      for (let item of data["levels"])
+        (this.levels as any).push(item);
+    }
     this.fromDate = data["fromDate"];
     this.toDate = data["toDate"];
     this.userId = data["userId"];

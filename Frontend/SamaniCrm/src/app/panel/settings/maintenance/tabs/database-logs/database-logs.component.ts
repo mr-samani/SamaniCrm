@@ -12,6 +12,7 @@ import { LuxonFormatPipe } from '@shared/pipes/luxon-format.pipe';
 import { AdminLogServiceProxy } from '@shared/service-proxies/api/admin-log.service';
 import { GetLogsQuery } from '@shared/service-proxies/model/get-logs-query';
 import { LogEntryDto } from '@shared/service-proxies/model/log-entry-dto';
+import { LogLevel } from '@shared/service-proxies/model/log-level';
 import { ManulaCleanupLogCommand } from '@shared/service-proxies/model/manula-cleanup-log-command';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { finalize } from 'rxjs/operators';
@@ -44,8 +45,7 @@ export class DatabaseLogsComponent extends AppComponentBase implements OnInit {
   page = 1;
   perPage = AppConst.defaultTablePerPage;
   listSubscription$?: Subscription;
-  showFilter = false;
-  logLevels = LOG_LEVELS;
+  showFilter = false; 
   matDialog = inject(MatDialog);
   constructor(private logService: AdminLogServiceProxy) {
     super();
@@ -69,6 +69,11 @@ export class DatabaseLogsComponent extends AppComponentBase implements OnInit {
       this.listSubscription$.unsubscribe();
     }
   }
+
+  public get LogLevel():typeof LogLevel{
+return LogLevel;
+  }
+
   getList(ev?: SortEvent) {
     if (this.listSubscription$) {
       this.listSubscription$.unsubscribe();
@@ -76,7 +81,7 @@ export class DatabaseLogsComponent extends AppComponentBase implements OnInit {
     this.loading = true;
     const input = new GetLogsQuery();
 
-    input.level = Bitmask.enumArrayToFlag(this.form.get('filterLevels')?.value);
+    input.levels = this.form.get('filterLevels')?.value;
     input.search = this.form.get('filter')?.value;
     input.pageNumber = this.page;
     input.pageSize = this.perPage;

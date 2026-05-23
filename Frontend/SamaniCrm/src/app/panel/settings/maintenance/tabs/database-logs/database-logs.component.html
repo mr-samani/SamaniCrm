@@ -22,11 +22,11 @@
       <input matInput type="text" maxlength="500" formControlName="filter" />
     </mat-form-field>
       
-    <mat-form-field>
+    <mat-form-field class="col-sm-6 col-md-4">
         <mat-label>{{ 'LogLevel' | translate }}</mat-label>
         <mat-select formControlName="filterLevels" multiple>
-          @for (item of logLevels; track $index) {
-            <mat-option [value]="item.value">{{ item.label }}</mat-option>
+          @for (item of LogLevel|enumToArray; track $index) {
+            <mat-option [value]="+item">{{ 'LogLevel_'+item|translate }}</mat-option>
           }
         </mat-select>
       </mat-form-field>

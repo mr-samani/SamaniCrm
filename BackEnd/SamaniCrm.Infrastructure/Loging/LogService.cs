@@ -14,11 +14,13 @@ using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Core.Shared.Logging;
 using SamaniCrm.Core.Shared.Logging.Dtos;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.Extensions;
 using SamaniCrm.Infrastructure.Loging.Sinks;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using System.Text;
 using System.Text.RegularExpressions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -138,7 +140,8 @@ public class LogService : ILogService
                     try
                     {
                         await sink.WriteAsync(logEntry);
-                    }catch(Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         // اگر در ثبت یکی از منبع های لاگ خطا رخ داد - بیخیال بشه و بره سراغ لاگ روی منبع بعدی اگر منبعی داشت
                         // مثلا ارسال لاگ به تلگرام اگر خطا داد متوقف نشود بره سراغ ارسال لاگ بعدی
@@ -173,9 +176,10 @@ public class LogService : ILogService
             .AsNoTracking()
             .Where(l => l.TenantId == filter.TenantId);
 
-        // اعمال فیلترها
-        if (filter.Level.HasValue)
-            baseQuery = baseQuery.Where(l => l.Level.HasFlag(filter.Level.Value));
+        // فیلتر سطح با Flags
+        if (filter.Levels != null && filter.Levels.Any())
+            baseQuery = baseQuery.Where(l => filter.Levels.Contains(l.Level));
+
         if (filter.FromDate.HasValue)
             baseQuery = baseQuery.Where(l => l.Timestamp >= filter.FromDate.Value);
         if (filter.ToDate.HasValue)
