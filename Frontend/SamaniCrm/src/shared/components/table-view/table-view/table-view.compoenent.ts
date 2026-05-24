@@ -72,7 +72,7 @@ export class TableViewComponent extends AppComponentBase implements OnInit, Afte
   perPage = AppConst.defaultTablePerPage;
   page = 1;
 
-// tOdo: must bet get in input
+  // tOdo: must bet get in input
   totalCount = 0;
   constructor() {
     super();
@@ -82,7 +82,7 @@ export class TableViewComponent extends AppComponentBase implements OnInit, Afte
   ngAfterContentInit(): void {
     this.templateMap.clear();
     this.cellTemplates.forEach((cell) => {
-      console.log(cell.columnName, cell.template);
+      // console.log(cell.columnName, cell.template);
       this.templateMap.set(cell.columnName, cell.template);
     });
     this.adjustScroll(this.tableContainer()?.nativeElement);

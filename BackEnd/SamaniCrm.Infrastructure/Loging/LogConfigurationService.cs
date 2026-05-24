@@ -27,39 +27,46 @@ public class LogConfigurationService : ILogConfigurationService
 
     public async Task<TenantLogSettingDto?> GetSettingAsync(Guid? tenantId, CancellationToken cancellation)
     {
-        var cacheKey = $"LogSetting_{tenantId}";
-        TenantLogSettingDto? setting = await _cache.GetAsync<TenantLogSettingDto>(cacheKey);
-        if (setting != null)
-            return setting;
-
-        setting = await _dbContext.TenantLogSettings
-            .Select(s => new TenantLogSettingDto()
-            {
-                TenantId = s.TenantId,
-                IsEnabled = s.IsEnabled,
-                EnabledLevels = s.EnabledLevels,
-                EnabledSinks = s.EnabledSinks,
-                RetentionDays = s.RetentionDays,
-                CustomSettings = s.CustomSettings
-            })
-            .AsNoTracking()
-            .FirstOrDefaultAsync(s => s.TenantId == tenantId, cancellation);
-
-        if (setting == null)
+        try
         {
-            // تنظیمات پیش‌فرض
-            setting = new TenantLogSettingDto
-            {
-                TenantId = tenantId,
-                IsEnabled = true,
-                EnabledLevels = LogLevelMask.All,
-                EnabledSinks = LogSinkMask.Database,
-                RetentionDays = 30
-            };
-        }
+            var cacheKey = $"LogSetting_{tenantId}";
+            TenantLogSettingDto? setting = await _cache.GetAsync<TenantLogSettingDto>(cacheKey);
+            if (setting != null)
+                return setting;
 
-        await _cache.SetAsync(cacheKey, setting, CacheDuration);
-        return setting;
+            setting = await _dbContext.TenantLogSettings
+                .Select(s => new TenantLogSettingDto()
+                {
+                    TenantId = s.TenantId,
+                    IsEnabled = s.IsEnabled,
+                    EnabledLevels = s.EnabledLevels,
+                    EnabledSinks = s.EnabledSinks,
+                    RetentionDays = s.RetentionDays,
+                    CustomSettings = s.CustomSettings
+                })
+                .AsNoTracking()
+                .FirstOrDefaultAsync(s => s.TenantId == tenantId, cancellation);
+
+            if (setting == null)
+            {
+                // تنظیمات پیش‌فرض
+                setting = new TenantLogSettingDto
+                {
+                    TenantId = tenantId,
+                    IsEnabled = true,
+                    EnabledLevels = LogLevelMask.All,
+                    EnabledSinks = LogSinkMask.Database,
+                    RetentionDays = 30
+                };
+            }
+
+            await _cache.SetAsync(cacheKey, setting, CacheDuration);
+            return setting;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 
     public async Task<bool> UpdateSettingAsync(TenantLogSettingDto setting, CancellationToken cancellation)

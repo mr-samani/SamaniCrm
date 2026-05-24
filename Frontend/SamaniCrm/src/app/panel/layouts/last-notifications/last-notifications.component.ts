@@ -32,6 +32,7 @@ export class LastNotificationsComponent extends AppComponentBase implements OnIn
   }
 
   recieveMessage(msg: NotificationDto) {
+    debugger
     this.notificationList.unshift(msg);
     this.count = this.notificationList.length;
     this.showNewMessage();

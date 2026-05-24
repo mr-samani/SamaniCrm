@@ -2,7 +2,7 @@
   @if (loading) {
     <mat-spinner color="primary" diameter="25"></mat-spinner>
   }
-  @for (item of fileList; track item) {
+  @for (item of fileList; track $index) {
     <div
       class="file"
       (click)="selectFile(item)"

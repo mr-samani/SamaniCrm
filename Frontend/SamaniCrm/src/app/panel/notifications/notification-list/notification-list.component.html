@@ -33,7 +33,7 @@
       <mat-form-field class="col-sm-6 col-md-4">
         <mat-label>{{ 'Type' | translate }}</mat-label>
         <mat-select formControlName="type" multiple>
-          @for (item of NotificationTypeEnum | enumToArray; track item) {
+          @for (item of NotificationTypeEnum | enumToArray; track $index) {
             <mat-option [value]="+item">
               {{ 'NotificationTypeEnum_' + item | translate }}
             </mat-option>
@@ -44,7 +44,7 @@
       <mat-form-field class="col-sm-6 col-md-4">
         <mat-label>{{ 'Periority' | translate }}</mat-label>
         <mat-select formControlName="periority" multiple>
-          @for (item of NotificationPeriorityEnum | enumToArray; track item) {
+          @for (item of NotificationPeriorityEnum | enumToArray; track $index) {
             <mat-option [value]="+item">
               {{ 'NotificationPeriorityEnum_' + item | translate }}
             </mat-option>

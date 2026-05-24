@@ -3,7 +3,7 @@
   (selectionChange)="onSelectionChange()"
   class="form-control my-2"
   [compareWith]="compareFn">
-  @for (item of list; track item) {
+  @for (item of list; track $index) {
     <mat-option [value]="item">{{ item.nameSpace }}</mat-option>
   }
 </mat-select>

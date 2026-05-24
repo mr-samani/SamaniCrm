@@ -1,5 +1,5 @@
 <ngx-grid-layout [options]="options" (layoutChange)="onLayoutChange($event)">
-  @for (item of layouts; track item) {
+  @for (item of layouts; track $index) {
     <ngx-grid-item [config]="item.config" class="grid-item" [id]="item.id">
       {{ item.id }}
     </ngx-grid-item>

@@ -1,6 +1,6 @@
 @if (block.type == BlockTypeEnum.GeneralHtmlTag) {
   <select class="form-select" [(ngModel)]="block.tagName">
-    @for (item of htmlTags; track item) {
+    @for (item of htmlTags; track $index) {
       <option [value]="item">{{ item }}</option>
     }
   </select>

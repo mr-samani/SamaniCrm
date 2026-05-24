@@ -10,7 +10,7 @@
     <mat-form-field class="col-md-6">
       <mat-label>{{ 'Periority' | translate }}</mat-label>
       <mat-select formControlName="periority">
-        @for (item of NotificationPeriorityEnum | enumToArray; track item) {
+        @for (item of NotificationPeriorityEnum | enumToArray; track $index) {
           <mat-option [value]="item">
             {{ 'NotificationPeriorityEnum_' + item | translate }}
           </mat-option>

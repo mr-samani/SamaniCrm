@@ -20,7 +20,7 @@
           {{ 'NotACase' | translate }}
         </div>
       }
-      @for (item of notificationList; track item) {
+      @for (item of notificationList; track $index) {
         <div class="notify-item" (click)="openNotify(item)">
           <div class="title">
             {{ item.title }}

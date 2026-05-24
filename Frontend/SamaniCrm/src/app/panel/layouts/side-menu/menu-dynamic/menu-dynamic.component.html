@@ -1,5 +1,5 @@
 <ul class="accordion accordion--animated">
-  @for (item of menuItems; track item) {
+  @for (item of menuItems; track $index) {
     @if (checkPermission(item)) {
       <li class="accordion__item">
         @if (item.url) {

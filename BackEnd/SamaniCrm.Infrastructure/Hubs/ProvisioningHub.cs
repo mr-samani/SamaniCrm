@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Infrastructure.Services.TenantService;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 
 namespace SamaniCrm.Infrastructure.Hubs;
@@ -38,7 +40,9 @@ public class ProvisioningHub : Hub<IProvisioningClient>
 
     public override async Task OnConnectedAsync()
     {
-        var userId = Context.User?.FindFirst("sub")?.Value;
+        string? userId = Context?.User?.FindFirstValue(ClaimTypes.NameIdentifier)
+               ?? Context?.User?.FindFirstValue("sub")
+               ?? Context?.User?.FindFirstValue(JwtRegisteredClaimNames.Sub);
         Console.WriteLine($"User {userId} connected to SignalR hub.");
         _logger.LogInformation("Client connected: {ConnectionId}", Context.ConnectionId);
         await base.OnConnectedAsync();

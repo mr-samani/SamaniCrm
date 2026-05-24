@@ -52,7 +52,7 @@
       <div class="form-group d-flex align-items-center">
         <span class="text-nowrap">{{ labels.perPage }}:</span>
         <select [(ngModel)]="perPage" class="form-control" name="perPage" (change)="onPerPageChange()">
-          @for (item of perPageList; track item) {
+          @for (item of perPageList; track $index) {
             <option [value]="item">
               {{ item }}
             </option>
