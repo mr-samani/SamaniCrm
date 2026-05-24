@@ -44,7 +44,7 @@ public class ProvisioningHub : Hub<IProvisioningClient>
                ?? Context?.User?.FindFirstValue("sub")
                ?? Context?.User?.FindFirstValue(JwtRegisteredClaimNames.Sub);
         Console.WriteLine($"User {userId} connected to SignalR hub.");
-        _logger.LogInformation("Client connected: {ConnectionId}", Context.ConnectionId);
+        _logger.LogInformation("Client connected: {ConnectionId}", Context?.ConnectionId);
         await base.OnConnectedAsync();
     }
 
@@ -72,11 +72,4 @@ public interface IProvisioningClient
     Task OnError(ProvisioningNotification notification);
 }
 
-public class TenantUserIdProvider : IUserIdProvider
-{
-    public string GetUserId(HubConnectionContext connection)
-    {
-        return connection.User?.FindFirst("sub")?.Value
-            ?? connection.ConnectionId;
-    }
-}
+ 

@@ -238,14 +238,14 @@ public class TenantService : ITenantService
                                  );
         }
 
-        var result = await query.Select(s => new AutoCompleteDto<Guid>()
-            {
-                Id = s.Id,
-                Title = s.Name
-            })
+        var result = await query
+             .OrderBy(x => x.Name)
              .Skip(0)
-             .Take(200)
-             .OrderBy(x => x.Title)
+             .Take(200).Select(s => new AutoCompleteDto<Guid>()
+             {
+                 Id = s.Id,
+                 Title = s.Name
+             })
              .ToListAsync(cancellationToken);
 
         return result;

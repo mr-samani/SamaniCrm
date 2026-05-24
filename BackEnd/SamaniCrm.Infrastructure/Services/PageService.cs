@@ -382,6 +382,10 @@ namespace SamaniCrm.Infrastructure.Services
             {
                 query = query.OrderByDynamic(request.SortBy, request.SortDirection!);
             }
+            else
+            {
+                query = query.OrderBy(x => x.plugin.CreatedAt);
+            }
 
             var totalCount = await query.CountAsync(cancellationToken);
 

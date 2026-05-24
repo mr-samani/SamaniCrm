@@ -50,7 +50,6 @@ public class LogEntryConfiguration : IEntityTypeConfiguration<LogEntry>
         builder.HasIndex(e => new { e.TenantId, e.Timestamp, e.Level });
 
 
-        // ۲. Value Converter
         var dictionaryConverter = new ValueConverter<Dictionary<string, object>?, string?>(
             v => v == null ? null : JsonSerializer.Serialize(v, JsonOptions),
             v => string.IsNullOrEmpty(v)
@@ -58,12 +57,21 @@ public class LogEntryConfiguration : IEntityTypeConfiguration<LogEntry>
                 : JsonSerializer.Deserialize<Dictionary<string, object>>(v, JsonOptions)
         );
 
+        var dictionaryComparer = new ValueComparer<Dictionary<string, object>?>(
+            (d1, d2) => JsonSerializer.Serialize(d1, JsonOptions) == JsonSerializer.Serialize(d2, JsonOptions),
+            d => d == null ? 0 : JsonSerializer.Serialize(d, JsonOptions).GetHashCode(),
+            d => d == null
+                ? null
+                : JsonSerializer.Deserialize<Dictionary<string, object>>(
+                    JsonSerializer.Serialize(d, JsonOptions),
+                    JsonOptions)
+        );
 
-
-        // ۴. اعمال روی Property
         builder.Property(e => e.ExtraData)
-        .HasConversion(dictionaryConverter);
-        // .Metadata.SetValueComparer(dictionaryComparer);
+            .HasConversion(dictionaryConverter)
+            .Metadata.SetValueComparer(dictionaryComparer);
+
+          
 
     }
 }

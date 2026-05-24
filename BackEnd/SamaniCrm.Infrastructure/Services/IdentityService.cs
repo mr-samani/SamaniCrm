@@ -215,7 +215,7 @@ public class IdentityService : IIdentityService
 
         int total = await query.CountAsync(cancellationToken);
 
-        var users = await query
+        var users = await query.OrderBy(x => x.CreatedAt)
             .Skip(request.PageSize * (request.PageNumber - 1))
             .Take(request.PageSize)
             .Select(u => new UserDTO
@@ -846,13 +846,14 @@ public class IdentityService : IIdentityService
             );
         }
 
-        var items = await query.Select(s => new AutoCompleteDto<Guid>
-        {
-            Id = s.Id,
-            Title = s.FirstName + " " + s.LastName + " (" + s.UserName + ")",
-        })
+        var items = await query.OrderBy(x => x.CreatedAt)
             .Skip(0)
             .Take(50)
+            .Select(s => new AutoCompleteDto<Guid>
+                    {
+                        Id = s.Id,
+                        Title = s.FirstName + " " + s.LastName + " (" + s.UserName + ")",
+                    })
             .ToListAsync(cancellationToken);
         return items;
     }

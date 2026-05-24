@@ -7,30 +7,35 @@ using System.Text;
 using System.Threading.Tasks;
 using SamaniCrm.Core.Shared.Enums;
 
-namespace SamaniCrm.Application.DTOs
+namespace SamaniCrm.Application.DTOs;
+
+
+public class UnReadNotificationListDto
 {
-    public class NotificationDto
-    {
-        public Guid? Id { get; set; }
+    public int UnreadCount { get; set; }
+    public List<NotificationDto> items { get; set; } = [];
+}
+public class NotificationDto
+{
+    public Guid? Id { get; set; }
 
 
-        [MaxLength(1000)]
-        public required string Title { get; set; }
-        public string? Content { get; set; }
-        public NotificationPeriorityEnum Periority { get; set; }
+    [MaxLength(1000)]
+    public required string Title { get; set; }
+    public string? Content { get; set; }
+    public NotificationPeriorityEnum Periority { get; set; }
 
-        public NotificationTypeEnum Type { get; set; }
+    public NotificationTypeEnum Type { get; set; }
 
-        public Guid? RecieverUserId { get; set; }
-        public string? RecieverName { get; set; }
-        public Guid? SenderUserId { get; set; }
-        public string? SenderName { get; set; }
+    public Guid? RecieverUserId { get; set; }
+    public string? RecieverName { get; set; }
+    public Guid? SenderUserId { get; set; }
+    public string? SenderName { get; set; }
 
-        public bool Read { get; set; } = false;
+    public bool Read { get; set; } = false;
 
-        public string? Data { get; set; }
+    public string? Data { get; set; }
 
-        public DateTime? CreationTime { get; set; }
+    public DateTime? CreationTime { get; set; }
 
-    }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 using SamaniCrm.Api.Middlewares;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
+using SamaniCrm.Application.NotificationManager.Interfaces;
 using SamaniCrm.Application.ProductManagerManager.Interfaces;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Core.Shared.Interfaces.Tenant;
@@ -11,6 +12,7 @@ using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.AuditLog;
 using SamaniCrm.Infrastructure.BackgroundServices;
 using SamaniCrm.Infrastructure.Captcha;
+using SamaniCrm.Infrastructure.Connections;
 using SamaniCrm.Infrastructure.Data;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.ExternalLogin;
@@ -40,6 +42,14 @@ public static partial class ServiceCollectionExtensions
     public static IServiceCollection AddCustomServices(this IServiceCollection services, IConfiguration config)
     {
         services.AddHttpContextAccessor();
+        services.AddSingleton(TimeProvider.System);
+        services.AddSingleton<LocalizationMemoryCache>();
+        services.AddSingleton<ISecretStore, ConfigurationSecretStore>();
+        services.AddSingleton<IConnectionManager, SignalRConnectionManager>();
+        services.AddScoped<INotificationSender, NotificationSender>();
+
+
+
         services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
@@ -50,12 +60,9 @@ public static partial class ServiceCollectionExtensions
 
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IRolePermissionService, RolePermissionService>();
-        services.AddSingleton(TimeProvider.System);
 
         services.AddScoped<ILanguageService, LanguageService>();
-        services.AddSingleton<LocalizationMemoryCache>();
         services.AddScoped<ILocalizer, CachedStringLocalizer>();
-        services.AddSingleton<ISecretStore, ConfigurationSecretStore>();
 
 
 
@@ -81,7 +88,6 @@ public static partial class ServiceCollectionExtensions
             options.Filters.Add<PermissionFilterMiddleware>();
         });
 
-        services.AddScoped<INotificationHubService, NotificationHubService>();
         services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<FileDirectoryInitializer>();
 
@@ -89,7 +95,7 @@ public static partial class ServiceCollectionExtensions
         // Multi-Tenancy
         services.AddScoped<ICurrentTenant, CurrentTenant>();
         services.AddScoped<ITenantResolver, TenantResolver>();
-        services.AddSingleton<IUserIdProvider, TenantUserIdProvider>();
+       // services.AddSingleton<IUserIdProvider, TenantUserIdProvider>();
         services.AddScoped<ITenantRepository, TenantRepository>();
         services.AddScoped<ITenantService, TenantService>();
 

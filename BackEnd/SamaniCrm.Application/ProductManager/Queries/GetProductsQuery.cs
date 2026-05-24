@@ -71,7 +71,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
 
 
 
-            var items = await query
+            var items = await query.OrderBy(x => x.CreatedAt)
                 .Skip(request.PageSize * (request.PageNumber - 1))
                 .Take(request.PageSize)
                 .Select(s => new ProductListDto

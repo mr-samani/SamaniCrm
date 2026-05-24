@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Application.NotificationManager.Interfaces;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
 using System;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace SamaniCrm.Application.NotificationManager.Commands
 {
@@ -22,20 +24,20 @@ namespace SamaniCrm.Application.NotificationManager.Commands
 
     public class BroadCastNotificationsCommandHandler : IRequestHandler<BroadCastNotificationsCommand, long>
     {
-        private readonly INotificationHubService _hubService;
+        private readonly INotificationSender _notificationSender;
         private readonly IApplicationDbContext _dbContext;
         private readonly IIdentityService _identityService;
         private readonly ICurrentUserService _currentUser;
         public BroadCastNotificationsCommandHandler(
-            INotificationHubService hubService,
             IApplicationDbContext dbContext,
             IIdentityService identityService,
-            ICurrentUserService currentUserService)
-        {
-            _hubService = hubService;
+            ICurrentUserService currentUserService,
+            INotificationSender notificationSender)
+        { 
             _dbContext = dbContext;
             _identityService = identityService;
             _currentUser = currentUserService;
+            _notificationSender = notificationSender;
         }
 
         public async Task<long> Handle(BroadCastNotificationsCommand request, CancellationToken cancellationToken)
@@ -72,7 +74,7 @@ namespace SamaniCrm.Application.NotificationManager.Commands
                     SenderUserId = currentUserId,
                     CreationTime = DateTime.UtcNow,
                 };
-                await _hubService.SendToUserAsync(userId, notifyDto);
+                await _notificationSender.SendToUserAsync(userId.ToString(), "ReceiveNotification", notifyDto);
                 count++;
             }
             await _dbContext.Notifications.AddRangeAsync(notifyList, cancellationToken);

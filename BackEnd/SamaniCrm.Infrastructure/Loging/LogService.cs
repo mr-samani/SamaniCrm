@@ -143,6 +143,7 @@ public class LogService : ILogService
                     }
                     catch (Exception ex)
                     {
+                        Console.Error.WriteLine($"[LOG ERROR] {ex.Message}");
                         // اگر در ثبت یکی از منبع های لاگ خطا رخ داد - بیخیال بشه و بره سراغ لاگ روی منبع بعدی اگر منبعی داشت
                         // مثلا ارسال لاگ به تلگرام اگر خطا داد متوقف نشود بره سراغ ارسال لاگ بعدی
                     }
@@ -225,6 +226,10 @@ public class LogService : ILogService
         {
             var sortString = $"Start{filter.SortBy} {filter.SortDirection}";
             groupedQuery = groupedQuery.OrderBy(sortString);
+        }
+        else
+        {
+            groupedQuery.OrderByDescending(x => x.StartTimestamp);
         }
 
 

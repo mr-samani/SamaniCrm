@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.Features.Logging.Interfaces;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Core.Shared.Logging;
 using SamaniCrm.Core.Shared.Logging.Dtos;
-using SamaniCrm.Application.Features.Logging.Interfaces;
 using SamaniCrm.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -15,14 +16,14 @@ namespace SamaniCrm.Infrastructure.Loging;
 
 public class LogConfigurationService : ILogConfigurationService
 {
-    private readonly IApplicationDbContext _dbContext;
+    private readonly IServiceScopeFactory _scopeFactory;
     private readonly ICacheService _cache;
     private static readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(5);
 
-    public LogConfigurationService(IApplicationDbContext context, ICacheService cache)
+    public LogConfigurationService(ICacheService cache, IServiceScopeFactory scopeFactory)
     {
-        _dbContext = context;
         _cache = cache;
+        _scopeFactory = scopeFactory;
     }
 
     public async Task<TenantLogSettingDto?> GetSettingAsync(Guid? tenantId, CancellationToken cancellation)
@@ -34,34 +35,39 @@ public class LogConfigurationService : ILogConfigurationService
             if (setting != null)
                 return setting;
 
-            setting = await _dbContext.TenantLogSettings
-                .Select(s => new TenantLogSettingDto()
-                {
-                    TenantId = s.TenantId,
-                    IsEnabled = s.IsEnabled,
-                    EnabledLevels = s.EnabledLevels,
-                    EnabledSinks = s.EnabledSinks,
-                    RetentionDays = s.RetentionDays,
-                    CustomSettings = s.CustomSettings
-                })
-                .AsNoTracking()
-                .FirstOrDefaultAsync(s => s.TenantId == tenantId, cancellation);
-
-            if (setting == null)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                // تنظیمات پیش‌فرض
-                setting = new TenantLogSettingDto
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                setting = await dbContext.TenantLogSettings
+                      .Select(s => new TenantLogSettingDto()
+                      {
+                          TenantId = s.TenantId,
+                          IsEnabled = s.IsEnabled,
+                          EnabledLevels = s.EnabledLevels,
+                          EnabledSinks = s.EnabledSinks,
+                          RetentionDays = s.RetentionDays,
+                          CustomSettings = s.CustomSettings
+                      })
+                      .AsNoTracking()
+                      .FirstOrDefaultAsync(s => s.TenantId == tenantId, cancellation);
+
+                if (setting == null)
                 {
-                    TenantId = tenantId,
-                    IsEnabled = true,
-                    EnabledLevels = LogLevelMask.All,
-                    EnabledSinks = LogSinkMask.Database,
-                    RetentionDays = 30
-                };
+                    // تنظیمات پیش‌فرض
+                    setting = new TenantLogSettingDto
+                    {
+                        TenantId = tenantId,
+                        IsEnabled = true,
+                        EnabledLevels = LogLevelMask.All,
+                        EnabledSinks = LogSinkMask.Database,
+                        RetentionDays = 30
+                    };
+                }
+
+                await _cache.SetAsync(cacheKey, setting, CacheDuration);
+                return setting;
             }
 
-            await _cache.SetAsync(cacheKey, setting, CacheDuration);
-            return setting;
         }
         catch (Exception ex)
         {
@@ -71,38 +77,42 @@ public class LogConfigurationService : ILogConfigurationService
 
     public async Task<bool> UpdateSettingAsync(TenantLogSettingDto setting, CancellationToken cancellation)
     {
-        var existing = await _dbContext.TenantLogSettings
+        using (var scope = _scopeFactory.CreateScope())
+        {
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var existing = await dbContext.TenantLogSettings
             .FirstOrDefaultAsync(s => s.TenantId == setting.TenantId, cancellation);
 
-        if (existing == null)
-        {
-            var tls = new TenantLogSetting()
+            if (existing == null)
             {
-                TenantId = setting.TenantId,
-                IsEnabled = setting.IsEnabled,
-                EnabledLevels = setting.EnabledLevels,
-                EnabledSinks = setting.EnabledSinks,
-                RetentionDays = setting.RetentionDays,
-                CustomSettings = setting.CustomSettings
-            };
+                var tls = new TenantLogSetting()
+                {
+                    TenantId = setting.TenantId,
+                    IsEnabled = setting.IsEnabled,
+                    EnabledLevels = setting.EnabledLevels,
+                    EnabledSinks = setting.EnabledSinks,
+                    RetentionDays = setting.RetentionDays,
+                    CustomSettings = setting.CustomSettings
+                };
 
-            _dbContext.TenantLogSettings.Add(tls);
+                dbContext.TenantLogSettings.Add(tls);
+            }
+            else
+            {
+                existing.EnabledLevels = setting.EnabledLevels;
+                existing.EnabledSinks = setting.EnabledSinks;
+                existing.RetentionDays = setting.RetentionDays;
+                existing.IsEnabled = setting.IsEnabled;
+                existing.CustomSettings = setting.CustomSettings;
+                existing.ModifiedAt = DateTime.UtcNow;
+            }
+
+            var result = await dbContext.SaveChangesAsync(cancellation);
+
+            // پاک کردن Cache
+            await _cache.RemoveAsync($"LogSetting_{setting.TenantId}");
+            return result > 0;
         }
-        else
-        {
-            existing.EnabledLevels = setting.EnabledLevels;
-            existing.EnabledSinks = setting.EnabledSinks;
-            existing.RetentionDays = setting.RetentionDays;
-            existing.IsEnabled = setting.IsEnabled;
-            existing.CustomSettings = setting.CustomSettings;
-            existing.ModifiedAt = DateTime.UtcNow;
-        }
-
-        var result = await _dbContext.SaveChangesAsync(cancellation);
-
-        // پاک کردن Cache
-        await _cache.RemoveAsync($"LogSetting_{setting.TenantId}");
-        return result > 0;
     }
 
     public async Task<bool> ShouldLogAsync(Guid? tenantId, LogLevel level, CancellationToken cancellation)

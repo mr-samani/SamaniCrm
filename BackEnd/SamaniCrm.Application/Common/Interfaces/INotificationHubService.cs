@@ -12,6 +12,8 @@ namespace SamaniCrm.Application.Common.Interfaces
         Task SendToUserAsync(Guid userId, NotificationDto message);
         Task SendMessage(Guid userId, string message);
 
+
+        Task SendAsync(string method, object? message);
     }
 
 }

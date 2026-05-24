@@ -49,7 +49,6 @@ model/api-response-of-list-of-file-node-dto.ts
 model/api-response-of-list-of-language-dto.ts
 model/api-response-of-list-of-localization-key-dto.ts
 model/api-response-of-list-of-menu-dto.ts
-model/api-response-of-list-of-notification-dto.ts
 model/api-response-of-list-of-product-category-dto.ts
 model/api-response-of-list-of-provisioning-status-dto.ts
 model/api-response-of-list-of-role-dto.ts
@@ -85,6 +84,7 @@ model/api-response-of-tenant-log-setting-dto.ts
 model/api-response-of-tenant-settings-dto.ts
 model/api-response-of-tenant-usage-dto.ts
 model/api-response-of-token-response-dto.ts
+model/api-response-of-un-read-notification-list-dto.ts
 model/api-response-of-unit.ts
 model/api-response-of-user-dto.ts
 model/api-response-of-user-setting-dto.ts
@@ -176,6 +176,7 @@ model/menu-translations-dto.ts
 model/meta.ts
 model/models.ts
 model/notification-dto.ts
+model/notification-payload.ts
 model/notification-periority-enum.ts
 model/notification-type-enum.ts
 model/page-dto.ts
@@ -237,6 +238,7 @@ model/tenant-usage-dto.ts
 model/token-response-dto.ts
 model/two-factor-login-command.ts
 model/two-factor-type-enum.ts
+model/un-read-notification-list-dto.ts
 model/update-batch-localize-key-command.ts
 model/update-dashboard-items-command.ts
 model/update-external-provider-command.ts

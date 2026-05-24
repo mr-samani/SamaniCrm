@@ -60,7 +60,7 @@ public class ProductCategoryService : IProductCategoryService
 
         int total = await query.CountAsync(cancellationToken);
 
-        var items = await query
+        var items = await query.OrderBy(x => x.CreatedAt)
        .Skip(request.PageSize * (request.PageNumber - 1))
        .Take(request.PageSize)
        .Select(c => new ProductCategoryDto

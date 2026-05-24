@@ -32,10 +32,10 @@ export class LastNotificationsComponent extends AppComponentBase implements OnIn
   }
 
   recieveMessage(msg: NotificationDto) {
-    debugger
     this.notificationList.unshift(msg);
-    this.count = this.notificationList.length;
+    this.count++;
     this.showNewMessage();
+    this.chdr.detectChanges();
   }
 
   getLastNotifications() {
@@ -49,8 +49,8 @@ export class LastNotificationsComponent extends AppComponentBase implements OnIn
         }),
       )
       .subscribe((result) => {
-        this.notificationList = result.data ?? [];
-        this.count = this.notificationList.length;
+        this.notificationList = result.data?.items ?? [];
+        this.count = result.data?.unreadCount ?? 0;
       });
   }
 
@@ -75,14 +75,17 @@ export class LastNotificationsComponent extends AppComponentBase implements OnIn
         if (item.read == false) {
           item.read = true;
           if (this.count > 0) this.count--;
+          this.chdr.detectChanges();
         }
       });
   }
 
   showNewMessage() {
     this.showHaveNewMessage = true;
+    this.chdr.detectChanges();
     setTimeout(() => {
       this.showHaveNewMessage = false;
+      this.chdr.detectChanges();
     }, 5000);
   }
 }

@@ -62,7 +62,7 @@ namespace SamaniCrm.Infrastructure.Services
 
             int total = await query.CountAsync(cancellationToken);
 
-            var notifications = await query
+            var notifications = await query.OrderBy(x => x.CreatedAt)
                 .Skip(request.PageSize * (request.PageNumber - 1))
                 .Take(request.PageSize)
                 .Select(n => new

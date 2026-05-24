@@ -1,4 +1,4 @@
-import { Component,  OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -58,12 +58,12 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
     this.route.queryParams.subscribe((p) => {
       this.page = p['page'] ?? 1;
       this.perPage = p['perPage'] ?? 10;
-
-      this.getList();
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getList();
+  }
 
   public get NotificationPeriorityEnum(): typeof NotificationPeriorityEnum {
     return NotificationPeriorityEnum;
@@ -101,8 +101,6 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
       .subscribe((response) => {
         this.list = response.data?.items ?? [];
         this.totalCount = response.data?.totalCount ?? 0;
-        
-        this.chdr.detectChanges();
       });
   }
 
@@ -135,11 +133,11 @@ export class NotificationListComponent extends AppComponentBase implements OnIni
         this.notificationService
           .deleteNotification(new DeleteNotificationCommand({ id: item.id! }))
           .pipe(
-        finalize(() => {
-          this.hideMainLoading();
-          this.chdr.detectChanges();
-        }),
-      )
+            finalize(() => {
+              this.hideMainLoading();
+              this.chdr.detectChanges();
+            }),
+          )
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));
