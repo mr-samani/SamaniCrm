@@ -102,7 +102,7 @@ namespace SamaniCrm.Infrastructure.Services
                 SenderName = n.SenderUserId != null && userMap.ContainsKey((Guid)n.SenderUserId)
                     ? userMap[n.SenderUserId.Value]
                     : "System",
-                CreationTime = n.CreatedAt.ToUniversalTime()
+                CreationTime = n.CreatedAt
             }).ToList();
 
             return new PaginatedResult<NotificationDto>
@@ -147,7 +147,7 @@ namespace SamaniCrm.Infrastructure.Services
                 Type = notification.Type,
                 Periority = notification.Periority,
                 Read = notification.Read,
-                CreationTime = notification.CreatedAt.ToUniversalTime(),
+                CreationTime = notification.CreatedAt,
                 RecieverName = userMap.ContainsKey(notification.RecieverUserId)
                     ? userMap[notification.RecieverUserId]
                     : "",

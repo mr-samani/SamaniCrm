@@ -43,10 +43,11 @@ namespace SamaniCrm.Application.NotificationManager.Queries
                                         Type = s.Type,
                                         Periority = s.Periority,
                                         Read = s.Read,
-                                        CreationTime = s.CreatedAt.ToUniversalTime(),
+                                        CreationTime = s.CreatedAt,
                                     })
                                     .Skip(0)
                                     .Take(10)
+                                    .OrderBy(x => x.CreationTime)
                                     .ToListAsync(cancellationToken);
             return result;
         }

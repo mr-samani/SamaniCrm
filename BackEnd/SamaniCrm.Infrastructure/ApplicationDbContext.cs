@@ -184,7 +184,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     {
         var currentUserId = _currentUser?.UserId;
 
-        // فقط یک پیمایش روی همه entity ها
+        // فقط یک پیمایش روی هم entity ها
         var entries = ChangeTracker.Entries()
             .Where(e => e.State != EntityState.Detached &&
                         e.State != EntityState.Unchanged)
@@ -200,7 +200,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
                     // فقط اگر قبلاً ست نشده باشد
                     if (tenantEntity.TenantId == default)
                     {
-                        tenantEntity.TenantId = currentUserId;
+                        tenantEntity.TenantId = CurrentTenantId;
                     }
                 }
             }

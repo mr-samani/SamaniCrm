@@ -79,7 +79,7 @@ public class ProductCategoryService : IProductCategoryService
            OrderIndex = c.OrderIndex,
            ParentId = c.ParentId,
            Slug = c.Slug,
-           CreationTime = c.CreatedAt.ToUniversalTime(),
+           CreationTime = c.CreatedAt,
 
            // فقط چک کن که فرزند داره یا نه، بدون کوئری اضافه
            ChildCount = _context.ProductCategories.Count(x => x.ParentId == c.Id),

@@ -16,9 +16,9 @@ public static class AppConsts
 
     public static string[] AllowedTusUploadTypes { get; set; } = [
         // images
-        "jpg", "png", "jpeg", "gif", "hiec", "tiff",
+        "jpg", "png", "jpeg", "gif", "hiec", "tiff","webp",
         // documents
-        "pdf","doc", "docx" ,
+        "pdf","doc", "docx" ,"xls","xlsx",
         // audio
         "mp3","ogg",
         // video

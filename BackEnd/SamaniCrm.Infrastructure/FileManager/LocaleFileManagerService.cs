@@ -11,12 +11,14 @@ using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.FileManager.Dtos;
 using SamaniCrm.Application.FileManager.Interfaces;
+using SamaniCrm.Core;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.FileManager.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using static MimeDetective.Definitions.DefaultDefinitions;
 
@@ -67,7 +69,7 @@ namespace SamaniCrm.Infrastructure.FileManager
                 Children = item.Children?
                     .Select(c => MapToDtoRecursive(c))
                     .ToList() ?? [],
-                CreationTime = item.CreatedAt.ToUniversalTime(),
+                CreationTime = item.CreatedAt,
             };
         }
 
@@ -177,8 +179,9 @@ namespace SamaniCrm.Infrastructure.FileManager
                     ParentId = item.ParentId,
                     RelativePath = item.RelativePath,
                     Thumbnails = item.Thumbnails,
-                    CreationTime = item.CreatedAt.ToUniversalTime(),
+                    CreationTime = item.CreatedAt,
                 })
+                .OrderBy(x => x.CreationTime)
                 .ToListAsync(cancellationToken);
 
             return result;
@@ -274,13 +277,18 @@ namespace SamaniCrm.Infrastructure.FileManager
             if (result == null || result.Count() == 0)
                 throw new UserFriendlyException("Could not determine file type");
 
-            var mime = result.First().Definition.File.MimeType;           // مانند image/png
-            var extension = result.First().Definition.File.Extensions.First(); // مانند png
+            var mime = result.Last().Definition.File.MimeType;           // مانند image/png
+            var extension = result.Last().Definition.File.Extensions.Last(); // مانند png
 
+            // TODO:check mime type  
             // بررسی مجاز بودن نوع فایل
-            var allowedMimeTypes = new[] { "image/png", "image/jpeg", "image/tiff" };
-            if (!allowedMimeTypes.Contains(mime))
-                throw new UserFriendlyException($"File type {mime} is not allowed");
+            if (!AppConsts.AllowedTusUploadTypes.Contains(extension))
+            {
+                throw new UserFriendlyException(($"unsupported file type:{extension}"));
+            }
+
+            // TODO:check max size 
+
 
             // تولید نام نهایی فایل
             var fileId = Guid.NewGuid();
@@ -293,7 +301,7 @@ namespace SamaniCrm.Infrastructure.FileManager
             {
                 relativePath = relativePath.Substring(1);
             }
-            var thumbnails = await _imageResizeService.GenerateThumbnailsAsync(fileId, fileStream, extension, destinationFolder, cancellationToken);
+            List<Thumbnail>? thumbnails = await _imageResizeService.GenerateThumbnailsAsync(fileId, fileStream, extension, destinationFolder, cancellationToken);
             var entity = new FileFolder
             {
                 Id = fileId,
@@ -307,7 +315,7 @@ namespace SamaniCrm.Infrastructure.FileManager
                 RelativePath = relativePath,
                 ParentId = parent.Id,
                 Icon = FileIcon.GetIcon(extension),
-                Thumbnails = thumbnails != null ? thumbnails.ToString() : null
+                Thumbnails = thumbnails != null ? (JsonSerializer.Serialize(thumbnails)) : null
             };
 
             await _dbContext.FileFolders.AddAsync(entity, cancellationToken);

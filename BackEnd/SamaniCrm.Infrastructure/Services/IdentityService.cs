@@ -230,7 +230,7 @@ public class IdentityService : IIdentityService
                 ProfilePicture = u.ProfilePicture ?? "",
                 Address = u.Address ?? "",
                 PhoneNumber = u.PhoneNumber ?? "",
-                // CreationTime = u.CreatedAt.ToUniversalTime(),
+                CreationTime = u.CreatedAt,
                 Roles = rolesQuery.Where(x => x.UserId == u.Id).Select(x => x.RoleName).ToList()
             })
             .ToListAsync(cancellationToken);
@@ -279,7 +279,7 @@ public class IdentityService : IIdentityService
             ProfilePicture = user.ProfilePicture ?? "",
             Address = user.Address ?? "",
             PhoneNumber = user.PhoneNumber ?? "",
-            // CreationTime = user.CreationTime.ToUniversalTime(),
+            CreationTime = user.CreatedAt,
             Roles = roles.ToList(),
         });
     }
@@ -306,7 +306,7 @@ public class IdentityService : IIdentityService
             ProfilePicture = user.ProfilePicture ?? "",
             Address = user.Address ?? "",
             PhoneNumber = user.PhoneNumber ?? "",
-            // CreationTime = user.CreationTime.ToUniversalTime(),
+            CreationTime = user.CreatedAt,
             Roles = roles.ToList()
         });
     }
@@ -811,7 +811,7 @@ public class IdentityService : IIdentityService
                 ProfilePicture = user.ProfilePicture ?? "",
                 Address = user.Address ?? "",
                 PhoneNumber = user.PhoneNumber ?? "",
-                // CreationTime = user.CreationTime.ToUniversalTime(),
+                CreationTime = user.CreatedAt,
                 Roles = roles.ToList()
             },
             Roles = roles.ToList(),

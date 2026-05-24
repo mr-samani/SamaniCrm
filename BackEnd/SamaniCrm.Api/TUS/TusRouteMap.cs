@@ -30,12 +30,24 @@ namespace SamaniCrm.Api.TUS
                 Store = new tusdotnet.Stores.TusDiskStore(path),
                 Events = new()
                 {
-                    OnAuthorizeAsync = ctx =>
+                    OnAuthorizeAsync = async ctx =>
                     {
                         ctx.HttpContext.Request.EnableBuffering();
                         if (!ctx.HttpContext.User.Identity?.IsAuthenticated ?? true)
-                            ctx.FailRequest(HttpStatusCode.Unauthorized.ToString());
-                        return Task.CompletedTask;
+                        {
+                            ctx.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            ctx.HttpContext.Response.ContentType = "application/json";
+                            await ctx.HttpContext.Response.WriteAsJsonAsync(new
+                            {
+                                error = "Unauthorized",
+                                message = "Authentication required"
+                            }).ConfigureAwait(false);
+
+                            // terminate the request manually
+                            await ctx.HttpContext.Response.CompleteAsync();
+                            return;
+
+                        }
                     },
                     OnBeforeCreateAsync = ctx =>
                     {

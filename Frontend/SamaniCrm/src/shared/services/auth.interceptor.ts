@@ -101,7 +101,7 @@ export class AuthInterceptor implements HttpInterceptor {
             catchError((err: HttpErrorResponse) => {
               this.isRefreshing = false;
               if (err.status == 401) {
-                this.authService.logOut();
+                this.authService.logout();
               }
               // this.matDialog.closeAll();
               return throwError(() => err);
@@ -182,7 +182,7 @@ export class AuthInterceptor implements HttpInterceptor {
       })
       .then((r) => {
         if (r.isConfirmed) {
-          this.authService.logOut();
+          this.authService.logout();
         } else {
           this.router.navigate(['/']);
         }

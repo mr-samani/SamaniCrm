@@ -16,14 +16,14 @@ namespace SamaniCrm.Api.Controllers
         private readonly IFileManagerService _fileManagerService;
         private string publicRootPath;
 
-        public FileServeController( 
+        public FileServeController(
             IWebHostEnvironment env,
             IFileManagerService fileManagerService,
             IOptions<FileManagerSettings> settings)
         {
             _env = env;
             _fileManagerService = fileManagerService;
-             publicRootPath = settings.Value.PublicFolderPath;
+            publicRootPath = settings.Value.PublicFolderPath;
         }
 
         [HttpGet("{id:guid}")]
@@ -63,13 +63,17 @@ namespace SamaniCrm.Api.Controllers
                 Response.ContentLength = length;
                 Response.ContentType = contentType;
                 Response.Headers.ContentType = contentType;
-
-                Response.Headers.ContentDisposition = $"attachment; filename=\"{fileName}\"";
+                var cd = new ContentDispositionHeaderValue("attachment");
+                cd.SetHttpFileName(fileName);
+                Response.Headers.ContentDisposition = cd.ToString();
+                // Response.Headers.ContentDisposition = $"attachment; filename=\"{fileName}\"";
 
                 return File(partialStream, contentType, enableRangeProcessing: true);
             }
-
-            Response.Headers.ContentDisposition = $"attachment; filename=\"{fileName}\"";
+            var contentDisposition = new ContentDispositionHeaderValue("attachment");
+            contentDisposition.SetHttpFileName(fileName);
+            Response.Headers.ContentDisposition = contentDisposition.ToString();
+            // Response.Headers.ContentDisposition = $"attachment; filename=\"{fileName}\"";
             Response.Headers.CacheControl = "public,max-age=604800"; // 7 days cache
             return File(stream, contentType, fileEntity.Name, enableRangeProcessing: true);
         }

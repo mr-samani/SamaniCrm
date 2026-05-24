@@ -41,7 +41,7 @@ export class HeaderComponent extends AppComponentBase {
   }
 
   logout() {
-    this.authService.logOut();
+    this.authService.logout();
   }
 
   closeNavbar() {

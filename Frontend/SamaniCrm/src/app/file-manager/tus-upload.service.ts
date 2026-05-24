@@ -1,10 +1,13 @@
 import { Injectable, Injector } from '@angular/core';
-import { Upload, UploadOptions } from 'tus-js-client';
+import { DetailedError, Upload, UploadOptions } from 'tus-js-client';
 import { TokenService } from '../../shared/services/token.service';
 import { AppConst } from '../../shared/app-const';
 import { FileUsageEnum } from './image-cropper-dialog/image-cropper-dialog.component';
 import { NgxAlertModalService } from 'ngx-alert-modal';
 import { LanguageService } from '@shared/services/language.service';
+import { AuthService } from '@shared/services/auth.service';
+import { RefreshTokenCommand } from '@shared/service-proxies';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class TusUploadService {
@@ -12,10 +15,13 @@ export class TusUploadService {
   progress = 0;
   uploadedUrl = '';
   chunckSize = 1 * 1024 * 1024; // 1MB
+
+  upload?: Upload;
   constructor(
     private _tokenService: TokenService,
     private alert: NgxAlertModalService,
     private language: LanguageService,
+    private authService: AuthService,
   ) {}
 
   reset() {
@@ -38,8 +44,9 @@ export class TusUploadService {
       this.uploadedUrl = '';
       this.progress = 0;
       this.uploading = true;
-      var filetype = file.name.split('.').pop() ?? '';
-      let metadata = {
+
+      const filetype = file.name.split('.').pop() ?? '';
+      const metadata = {
         filename: file.name,
         filetype: filetype,
         emptyMetaKey: '',
@@ -50,81 +57,127 @@ export class TusUploadService {
         parentId: parentId + '',
       };
       console.info('tus metadata', metadata);
-      let upload = new Upload(file, {
-        endpoint: AppConst.apiUrl + '/api/tus',
-        retryDelays: [0, 1000, 2000, 5000],
-        chunkSize: this.chunckSize,
-        overridePatchMethod: true,
-        onShouldRetry: (error: Error, retryAttempt: number, options: UploadOptions) => {
-          // TODO
-          let status = 0; // error.originalResponse ? error.originalResponse.getStatus() : 0;
-          // Do not retry if the status is a 403.
-          if ([417, 403, 401, 400].indexOf(status) > -1) {
-            return false;
-          }
-          return true;
-        },
-        metadata,
-        headers: {
-          Authorization: 'Bearer ' + this._tokenService.get().accessToken,
-          fileToken: token,
-        },
-        onError: (error) => {
-          this.alert.show({
-            title: this.l('FileUpload'),
-            text: this.l('Message.ErrorOccurred') + '\n' + error.message,
-          });
-          console.error('Failed because: ' + error);
-          this.uploading = false;
-          // tslint:disable-next-line:forin
-          for (let key in localStorage) {
-            if (key.includes('tus')) {
-              localStorage.removeItem(key);
+
+      // تابع برای ساخت upload instance
+      const createUpload = (accessToken: string): Upload => {
+        return new Upload(file, {
+          endpoint: AppConst.apiUrl + '/api/tus',
+          retryDelays: [0, 1000, 2000, 5000],
+          chunkSize: this.chunckSize,
+          overridePatchMethod: true,
+          metadata,
+          headers: {
+            Authorization: 'Bearer ' + accessToken,
+            fileToken: token,
+          },
+          onShouldRetry: (err: DetailedError, retryAttempt: number, options: UploadOptions) => {
+            const status = err.originalResponse ? err.originalResponse.getStatus() : 0;
+
+            if (status === 401) {
+              return this.handle401AndRetry(options);
             }
-          }
-          reject(error);
-        },
-        onSuccess: () => {
-          // tus-js-client has bug: after error 417 dont call on error
-          if (this.uploadedUrl) {
-            this.uploading = false;
-            // tslint:disable-next-line:forin
-            for (let key in localStorage) {
-              if (key.includes('tus')) {
-                localStorage.removeItem(key);
-              }
+            if ([417, 403, 400].indexOf(status) > -1) {
+              return false;
             }
-            resolve(this.uploadedUrl);
-          } else {
+
+            return true;
+          },
+          onError: (error) => {
             this.alert.show({
               title: this.l('FileUpload'),
-              text: this.l('Message.ErrorOccurred'),
+              text: this.translateTUSresponseError(error.message),
             });
-            reject();
-          }
-          this.uploading = false;
-        },
-        onAfterResponse: (req, res) => {
-          // let value = res.getHeader('fileaddressurl');
-          let value = res.getHeader('Fileid');
-          if (value) {
-            this.uploadedUrl = AppConst.apiUrl + '/' + value;
-          }
-        },
-        onProgress: (bytesUploaded, bytesTotal) => {
-          const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(0);
-          this.progress = +percentage;
-          // console.log(this.progress);
-        },
-      });
-      upload.findPreviousUploads().then((previousUploads) => {
+            console.error('Failed because: ' + error);
+            this.uploading = false;
+            this.clearTusLocalStorage();
+            reject(error);
+          },
+          onSuccess: () => {
+            if (this.uploadedUrl) {
+              this.uploading = false;
+              this.clearTusLocalStorage();
+              resolve(this.uploadedUrl);
+            } else {
+              this.alert.show({
+                title: this.l('FileUpload'),
+                text: this.l('Message.ErrorOccurred'),
+              });
+              this.uploading = false;
+              reject(new Error('Upload completed but no URL returned'));
+            }
+          },
+          onAfterResponse: (req, res) => {
+            const value = res.getHeader('Fileid');
+            if (value) {
+              this.uploadedUrl = AppConst.apiUrl + '/' + value;
+            }
+          },
+          onProgress: (bytesUploaded, bytesTotal) => {
+            const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(0);
+            this.progress = +percentage;
+          },
+        });
+      };
+
+      // شروع آپلود
+      const accessToken = this._tokenService.get().accessToken ?? '';
+      this.upload = createUpload(accessToken);
+
+      this.upload.findPreviousUploads().then((previousUploads) => {
         this.uploadedUrl = '';
         this.uploading = true;
         if (previousUploads.length) {
-          upload.resumeFromPreviousUpload(previousUploads[0]);
+          this.upload?.resumeFromPreviousUpload(previousUploads[0]);
         }
-        upload.start();
+        this.upload?.start();
       });
     });
+  }
+
+  // متد کمکی برای پاک کردن localStorage
+  private clearTusLocalStorage(): void {
+    for (const key in localStorage) {
+      if (key.includes('tus')) {
+        localStorage.removeItem(key);
+      }
+    }
+  }
+  private handle401AndRetry(options: UploadOptions): boolean {
+    const refreshToken = this._tokenService.get().refreshToken ?? '';
+
+    this.authService.refreshToken(new RefreshTokenCommand({ refreshToken })).subscribe({
+      next: () => {
+        options.headers = {
+          ...options.headers,
+          Authorization: 'Bearer ' + this._tokenService.get().accessToken,
+        };
+        // دوباره تلاش کن
+        this.upload?.start();
+      },
+      error: () => {
+        this.authService.logout();
+      },
+    });
+
+    return true; // به tus بگو که retry می‌کنیم
+  }
+
+  /**
+   * Determines the translated error message based on the HTTP response content
+   * and status codes.
+   *
+   */
+  translateTUSresponseError(httpResponseMessageContent: string, httpStatusCode?: number | null): string {
+    // Initialize output
+    let errorTranslatedString = '';
+    // Prepare lowercase trimmed version of the message
+    const msg = (httpResponseMessageContent || '').toLowerCase().trim();
+    if (msg.includes('unsupported file type') || msg.includes('Could not determine file type')) {
+      return this.l('Message.UnSupportedFileType');
+    } else if (msg.includes('is not allowed')) {
+      return this.l('Message.NotAllowedFileType');
+    }
+    // todo check max size
+    return errorTranslatedString;
   }
 }

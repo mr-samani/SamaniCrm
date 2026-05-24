@@ -82,13 +82,14 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
                     SKU = s.SKU.Value,
                     Slug = s.Slug,
                     IsActive = s.IsActive,
-                    CreationTime = s.CreatedAt.ToUniversalTime(),
+                    CreationTime = s.CreatedAt,
                     Title = s.Translations != null ? s.Translations.FirstOrDefault(x => x.Culture == currentLanguage)!.Title ?? "" : "",
                     Description = s.Translations != null ? s.Translations.FirstOrDefault(x => x.Culture == currentLanguage)!.Description ?? "" : "",
                     CategoryTitle = s.Category.Translations.Where(w => w.Culture == currentLanguage).Select(s => s.Title).FirstOrDefault() ?? "",
                     ProductTypeTitle = s.ProductType.Translations.Where(x => x.Culture == currentLanguage).Select(s => s.Name).FirstOrDefault() ?? "",
 
                 })
+                .OrderBy(x => x.CreationTime)
                 .ToListAsync(cancellationToken);
             return new PaginatedResult<ProductListDto>()
             {
