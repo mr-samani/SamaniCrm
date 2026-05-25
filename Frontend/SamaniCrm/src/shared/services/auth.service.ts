@@ -139,7 +139,7 @@ export class AuthService {
     this.accountService
       .revoke(
         new RevokeRefreshTokenCommand({
-          token: this.tokenService.get().accessToken,
+          token: this.tokenService.get().accessToken ?? '',
         }),
       )
       .subscribe();

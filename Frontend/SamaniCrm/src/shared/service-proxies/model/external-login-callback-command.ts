@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,16 +13,18 @@
 
 /** Interface for ExternalLoginCallbackCommand */
 export interface IExternalLoginCallbackCommand {
-  code?: string;
-  provider?: string;
-  codeVerifier?: string;
+  code: string;
+  provider: string;
+  tenancyName: string;
+  codeVerifier: string;
 }
 
 /** Class for ExternalLoginCallbackCommand */
 export class ExternalLoginCallbackCommand implements IExternalLoginCallbackCommand {
-  code?: string;
-  provider?: string;
-  codeVerifier?: string;
+  code!: string;
+  provider!: string;
+  tenancyName!: string;
+  codeVerifier!: string;
 
   constructor(data?: IExternalLoginCallbackCommand) {
     if (data) {
@@ -37,6 +39,7 @@ init(data?: any) {
   if (data) {
     this.code = data["code"];
     this.provider = data["provider"];
+    this.tenancyName = data["tenancyName"];
     this.codeVerifier = data["codeVerifier"];
   }
 }

@@ -81,13 +81,13 @@ namespace SamaniCrm.Infrastructure.Cache
             return Task.CompletedTask;
         }
 
-        public Task<IEnumerable<string>> GetKeysAsync(string? pattern = null)
+        public Task<IEnumerable<string?>> GetKeysAsync(string? pattern = null)
         {
             var files = Directory.GetFiles(_basePath, "*.json");
             var keys = files.Select(Path.GetFileNameWithoutExtension);
 
             if (!string.IsNullOrEmpty(pattern))
-                keys = keys.Where(k => k.Contains(pattern));
+                keys = keys.Where(k => k != null && k.Contains(pattern));
 
             return Task.FromResult(keys);
         }

@@ -9,16 +9,16 @@ namespace SamaniCrm.Application.NotificationManager.Commands
     public class MarkAllAsReadCommanddHandler : IRequestHandler<MarkAllAsReadCommand, bool>
     {
         private readonly IApplicationDbContext _dbContext;
-        private readonly ICurrentUserService _currentUserService;
-        public MarkAllAsReadCommanddHandler(IApplicationDbContext context, ICurrentUserService currentUserService)
+        private readonly ICurrentUserService _currentUser;
+        public MarkAllAsReadCommanddHandler(IApplicationDbContext context, ICurrentUserService currentUser)
         {
             _dbContext = context;
-            _currentUserService = currentUserService;
+            _currentUser = currentUser;
         }
 
         public async Task<bool> Handle(MarkAllAsReadCommand request, CancellationToken cancellationToken)
         {
-            Guid.TryParse(_currentUserService.UserId, out var currentUserId);
+            var currentUserId = _currentUser.UserId;
             var list = await _dbContext.Notifications.Where(x => x.RecieverUserId == currentUserId && x.Read == false).ToListAsync(cancellationToken);
             if (list.Count > 0)
             {

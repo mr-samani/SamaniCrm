@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
-using SamaniCrm.Domain.Entities.ProductEntities;
+using SamaniCrm.Domain.Entities;
 using System;
 
 namespace SamaniCrm.Application.ProductManagerManager.Commands
@@ -37,7 +37,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                 entity = new ProductType();
                 _dbContext.ProductTypes.Add(entity);
             }
-            entity.LastModifiedTime = DateTime.UtcNow;
             // Handle translations
             if (request != null)
             {
@@ -47,6 +46,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                 foreach (var item in request.Translations ?? [])
                 {
                     var existingTranslation = entity.Translations
+                        .OrderBy(x => x.CreatedAt)
                         .FirstOrDefault(t => t.Culture == item.Culture);
 
                     if (existingTranslation != null)

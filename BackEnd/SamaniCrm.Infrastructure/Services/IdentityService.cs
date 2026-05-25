@@ -1,26 +1,22 @@
-﻿using Azure.Core;
-using Duende.IdentityServer.Endpoints.Results;
-using Duende.IdentityServer.Models;
-using Hangfire;
-using MediatR;
+﻿using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using SamaniCrm.Application.Auth.Commands;
-using SamaniCrm.Application.Auth.Queries;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Application.Features.Tenants;
+using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Application.Queries.User;
 using SamaniCrm.Application.Role.Commands;
 using SamaniCrm.Application.User.Commands;
 using SamaniCrm.Core;
+using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
-using SamaniCrm.Domain.Constants;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.ExternalLogin;
 using SamaniCrm.Infrastructure.Identity;
@@ -28,19 +24,12 @@ using SamaniCrm.Infrastructure.Notifications;
 using StackExchange.Redis;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
-using System.Diagnostics;
 using System.Linq.Dynamic.Core;
-using System.Net;
-using System.Net.Http.Json;
-using System.Net.NetworkInformation;
-using System.Security.Claims;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading;
 using UnauthorizedAccessException = SamaniCrm.Application.Common.Exceptions.UnauthorizedAccessException;
 
 
 namespace SamaniCrm.Infrastructure.Services;
+
 public class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -87,6 +76,26 @@ public class IdentityService : IIdentityService
         _externalLoginService = externalLoginService;
     }
 
+
+
+    public async Task<SimpleTenantData?> GetTenantByTenancyName(string tenancyName, CancellationToken cancellation)
+    {
+        var tenant = await _applicationDbContext.Tenants
+            .Select(s => new SimpleTenantData()
+            {
+                TenantId = s.Id,
+                TenancyName = s.Slug,
+                TenantName = s.Name,
+                Status = s.Status
+            })
+            .AsNoTracking()
+            .Where(x => x.TenancyName == tenancyName && x.Status == TenantStatus.Active)
+            .FirstOrDefaultAsync(cancellation);
+        return tenant;
+    }
+
+
+
     public async Task<bool> AssignUserToRole(string userName, IList<string> roles)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == userName);
@@ -115,6 +124,7 @@ public class IdentityService : IIdentityService
     {
         var user = new ApplicationUser()
         {
+            TenantId = input.TenantId,
             FirstName = input.FirstName,
             LastName = input.LastName,
             FullName = input.FirstName + " " + input.LastName,
@@ -220,7 +230,7 @@ public class IdentityService : IIdentityService
                 ProfilePicture = u.ProfilePicture ?? "",
                 Address = u.Address ?? "",
                 PhoneNumber = u.PhoneNumber ?? "",
-                CreationTime = u.CreationTime.ToUniversalTime(),
+                // CreationTime = u.CreatedAt.ToUniversalTime(),
                 Roles = rolesQuery.Where(x => x.UserId == u.Id).Select(x => x.RoleName).ToList()
             })
             .ToListAsync(cancellationToken);
@@ -249,7 +259,9 @@ public class IdentityService : IIdentityService
 
     public async Task<UserDTO> GetUserDetailsAsync(Guid userId)
     {
-        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
+        var query = _userManager.Users.Where(x => x.Id == userId);
+        // var sql = query.ToQueryString();
+        var user = await query.FirstOrDefaultAsync();
         if (user == null)
         {
             throw new NotFoundException("User not found");
@@ -267,14 +279,16 @@ public class IdentityService : IIdentityService
             ProfilePicture = user.ProfilePicture ?? "",
             Address = user.Address ?? "",
             PhoneNumber = user.PhoneNumber ?? "",
-            CreationTime = user.CreationTime.ToUniversalTime(),
+            // CreationTime = user.CreationTime.ToUniversalTime(),
             Roles = roles.ToList(),
         });
     }
 
-    public async Task<UserDTO> GetUserDetailsByUserNameAsync(string userName)
+    public async Task<UserDTO> GetUserDetailsByUserNameAsync(string userName, Guid? tenantId)
     {
-        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == userName);
+        var user = await _userManager.Users
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x => x.UserName == userName && x.TenantId == tenantId && !x.IsDeleted);
         if (user == null)
         {
             throw new NotFoundException("User not found");
@@ -292,7 +306,7 @@ public class IdentityService : IIdentityService
             ProfilePicture = user.ProfilePicture ?? "",
             Address = user.Address ?? "",
             PhoneNumber = user.PhoneNumber ?? "",
-            CreationTime = user.CreationTime.ToUniversalTime(),
+            // CreationTime = user.CreationTime.ToUniversalTime(),
             Roles = roles.ToList()
         });
     }
@@ -346,10 +360,26 @@ public class IdentityService : IIdentityService
         return await _userManager.FindByNameAsync(userName) == null;
     }
 
-    private async Task<bool> SigninUserAsync(string userName, string password)
+    private async Task<bool> SigninUserAsync(string userName, string password, Guid? tenantId)
     {
-        var result = await _signInManager.PasswordSignInAsync(userName, password, true, false);
-        return result.Succeeded;
+        var user = await _userManager.Users
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x => x.UserName == userName && x.TenantId == tenantId && !x.IsDeleted);
+        if (user == null)
+        {
+            return false;
+        }
+
+        var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
+
+        if (!result.Succeeded)
+            return false;
+
+        await _signInManager.SignInAsync(user, isPersistent: true);
+
+
+        //  var result = await _signInManager.PasswordSignInAsync(userName, password, true, false);
+        return true;
 
 
     }
@@ -571,20 +601,32 @@ public class IdentityService : IIdentityService
         };
     }
 
-    public async Task<LoginResult> SignInAsync(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<LoginResult> SignInAsync(LoginCommand request, CancellationToken cancellation)
     {
+        Guid? tenantId = null;
+        if (string.IsNullOrEmpty(request.TenancyName) == false)
+        {
+            var tenant = await GetTenantByTenancyName(request.TenancyName, cancellation);
+            if (tenant == null)
+            {
+                throw new InvalidLoginException("Invalid tenant!");
+            }
+            tenantId = tenant?.TenantId;
+        }
 
 
-        var result = await SigninUserAsync(request.UserName, request.Password);
+
+
+        var result = await SigninUserAsync(request.UserName, request.Password, tenantId);
 
         if (!result)
         {
-            BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification(request.UserName));
+            BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification(request.UserName, request.TenancyName));
             throw new InvalidLoginException();
         }
-        UserDTO userData = await GetUserDetailsByUserNameAsync(request.UserName);
+        UserDTO userData = await GetUserDetailsByUserNameAsync(request.UserName, tenantId);
         // check two factor
-        var twoFactor = await getUserTwoFactorData(userData.Id, cancellationToken);
+        var twoFactor = await getUserTwoFactorData(userData.Id, cancellation);
         if (twoFactor.EnableTwoFactor)
         {
             LoginResult output = new LoginResult()
@@ -603,10 +645,11 @@ public class IdentityService : IIdentityService
             var accessToken = _tokenGenerator.GenerateAccessToken(userData.Id,
                                userData.UserName,
                                userData.Lang,
-                               userData.Roles);
-            var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.Id, accessToken);
-            var permissions = await _userPermissionService.GetUserPermissionsAsync(userData.Id, cancellationToken);
-            BackgroundJob.Enqueue(() => LoginNotification.SendLoginNotification(request.UserName));
+                               userData.Roles,
+                               tenantId);
+            var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.Id, accessToken, tenantId);
+            var permissions = await _userPermissionService.GetUserPermissionsAsync(userData.Id, cancellation);
+            BackgroundJob.Enqueue(() => LoginNotification.SendLoginNotification(request.UserName, request.TenancyName));
             LoginResult output = new LoginResult()
             {
                 AccessToken = accessToken,
@@ -619,20 +662,27 @@ public class IdentityService : IIdentityService
         }
     }
 
-    public async Task<LoginResult> TwofactorSignInAsync(TwoFactorLoginCommand request, CancellationToken cancellationToken)
+    public async Task<LoginResult> TwofactorSignInAsync(TwoFactorLoginCommand request, CancellationToken cancellation)
     {
-        var result = await SigninUserAsync(request.UserName, request.Password);
+        var tenant = await GetTenantByTenancyName(request.TenancyName, cancellation);
+        if (tenant == null)
+        {
+            throw new InvalidLoginException();
+        }
+        Guid tenantId = tenant.TenantId;
+
+        var result = await SigninUserAsync(request.UserName, request.Password, tenantId);
 
         if (!result)
         {
-            BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification(request.UserName));
+            BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification(request.UserName, request.TenancyName));
             throw new InvalidLoginException();
         }
-        UserDTO userData = await GetUserDetailsByUserNameAsync(request.UserName);
+        UserDTO userData = await GetUserDetailsByUserNameAsync(request.UserName, tenantId);
         // verify two factor
-        var hostSettings = await _securitySettingService.GetSettingsAsync(cancellationToken);
-        var settings = await _securitySettingService.GetUserSettingsAsync(userData.Id, cancellationToken);
-        var twoFactor = await getUserTwoFactorData(userData.Id, cancellationToken);
+        var hostSettings = await _securitySettingService.GetSettingsAsync(cancellation);
+        var settings = await _securitySettingService.GetUserSettingsAsync(userData.Id, cancellation);
+        var twoFactor = await getUserTwoFactorData(userData.Id, cancellation);
 
         if (twoFactor.AttemptCount >= hostSettings.LogginAttemptCountLimit)
         {
@@ -645,11 +695,12 @@ public class IdentityService : IIdentityService
             var accessToken = _tokenGenerator.GenerateAccessToken(userData.Id,
                                userData.UserName,
                                userData.Lang,
-                               userData.Roles);
-            var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.Id, accessToken);
-            var permissions = await _userPermissionService.GetUserPermissionsAsync(userData.Id, cancellationToken);
+                               userData.Roles,
+                               tenantId);
+            var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.Id, accessToken, tenantId);
+            var permissions = await _userPermissionService.GetUserPermissionsAsync(userData.Id, cancellation);
 
-            BackgroundJob.Enqueue(() => LoginNotification.SendLoginNotification(request.UserName));
+            BackgroundJob.Enqueue(() => LoginNotification.SendLoginNotification(request.UserName, request.TenancyName));
             LoginResult output = new LoginResult()
             {
                 AccessToken = accessToken,
@@ -672,8 +723,15 @@ public class IdentityService : IIdentityService
 
 
 
-    public async Task<LoginResult> ExternalSignInAsync(ExternalLoginCallbackCommand request, CancellationToken cancellationToken)
+    public async Task<LoginResult> ExternalSignInAsync(ExternalLoginCallbackCommand request, CancellationToken cancellation)
     {
+        var tenant = await GetTenantByTenancyName(request.tenancyName, cancellation);
+        if (tenant == null)
+        {
+            throw new InvalidLoginException();
+        }
+        Guid tenantId = tenant.TenantId;
+
         //var info = await _signInManager.GetExternalLoginInfoAsync();
         //if (info == null) throw new UnauthorizedAccessException("External login info not found");
 
@@ -694,7 +752,7 @@ public class IdentityService : IIdentityService
                 s.ClientId,
                 s.ClientSecret,
             })
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync(cancellation);
         if (provider == null)
         {
             throw new UnauthorizedAccessException("External login provider not found");
@@ -715,22 +773,28 @@ public class IdentityService : IIdentityService
             provider.TokenEndpoint,
             clientId,
             secret,
-            request.codeVerifier,
+            request.codeVerifier ?? "",
             redirectUrl,
-            cancellationToken);
+            cancellation);
 
-        ApplicationUser? user = await FindOrCreateExternalUser(externalLoginResult.Email, externalLoginResult.UserName, externalLoginResult.Name, provider.Name);
-
+        ;
+        if (externalLoginResult == null)
+        {
+            throw new UnauthorizedAccessException("External login provider result not found");
+        }
+        ApplicationUser? user = await FindOrCreateExternalUser(
+            externalLoginResult.Email!, externalLoginResult.UserName!, externalLoginResult.Name!, provider.Name, tenantId);
         await _signInManager.SignInAsync(user, false);
 
         var roles = await _userManager.GetRolesAsync(user);
         var accessToken = _tokenGenerator.GenerateAccessToken(user.Id,
                          user.UserName!,
                          user.Lang,
-                         roles);
-        var refreshToken = await _tokenGenerator.GenerateRefreshToken(user.Id, accessToken);
-        var permissions = await _userPermissionService.GetUserPermissionsAsync(user.Id, cancellationToken);
-        BackgroundJob.Enqueue(() => LoginNotification.SendLoginNotification(user.UserName!));
+                         roles,
+                         tenantId);
+        var refreshToken = await _tokenGenerator.GenerateRefreshToken(user.Id, accessToken, tenantId);
+        var permissions = await _userPermissionService.GetUserPermissionsAsync(user.Id, cancellation);
+        BackgroundJob.Enqueue(() => LoginNotification.SendLoginNotification(user.UserName!, request.tenancyName));
         LoginResult output = new LoginResult()
         {
             AccessToken = accessToken,
@@ -747,7 +811,7 @@ public class IdentityService : IIdentityService
                 ProfilePicture = user.ProfilePicture ?? "",
                 Address = user.Address ?? "",
                 PhoneNumber = user.PhoneNumber ?? "",
-                CreationTime = user.CreationTime.ToUniversalTime(),
+                // CreationTime = user.CreationTime.ToUniversalTime(),
                 Roles = roles.ToList()
             },
             Roles = roles.ToList(),
@@ -761,7 +825,7 @@ public class IdentityService : IIdentityService
     public async Task<List<Guid>> GetAllActiveUsersIds(CancellationToken cancellationToken)
     {
         List<Guid> list = await _applicationDbContext.Users
-             .Where(x => x.IsDeleted == false)
+             // .Where(x => x.IsDeleted == false)
              .Select(u => u.Id)
              .ToListAsync();
         return list;
@@ -776,8 +840,8 @@ public class IdentityService : IIdentityService
         if (!string.IsNullOrEmpty(filter))
         {
             query = query.Where(c =>
-                c.UserName.Contains(filter) ||
-                c.FirstName.Contains(filter) ||
+               (c.UserName != null && c.UserName.Contains(filter)) ||
+                (c.FirstName != null && c.FirstName.Contains(filter)) ||
                 c.LastName.Contains(filter)
             );
         }
@@ -793,7 +857,7 @@ public class IdentityService : IIdentityService
         return items;
     }
 
-    public async Task<ApplicationUser> FindOrCreateExternalUser(string email, string userName, string name, string providerName)
+    private async Task<ApplicationUser> FindOrCreateExternalUser(string email, string userName, string name, string providerName, Guid tenantId)
     {
         var user = await _userManager.FindByEmailAsync(email);
         if (user == null)
@@ -810,10 +874,68 @@ public class IdentityService : IIdentityService
             var createResult = await _userManager.CreateAsync(user);
             if (!createResult.Succeeded)
             {
-                BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification("provider: " + providerName));
+                BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification("provider: " + providerName, tenantId.ToString()));
                 throw new ValidationException(createResult.Errors.Select(e => e.Description).FirstOrDefault());
             }
         }
         return user;
+    }
+
+    public async Task<UserDTO?> GetTenantAdmin(Guid tenantId, CancellationToken cancellation)
+    {
+        var tenantAdminUser = await _applicationDbContext.Users
+         .Join(
+             _applicationDbContext.UserRoles,
+             user => user.Id,
+             userRole => userRole.UserId,
+             (user, userRole) => new { user, userRole }
+         )
+         .Join(
+             _applicationDbContext.Roles,
+             combined => combined.userRole.RoleId,
+             role => role.Id,
+             (combined, role) => new { combined.user, role }
+         )
+         .Where(x => x.user.TenantId == tenantId
+                  && x.role.Name == AppRoles.TenantAdministrator)
+         .Select(x => new UserDTO
+         {
+             Id = x.user.Id,
+             UserName = x.user.UserName ?? "",
+             FirstName = x.user.FirstName ?? "",
+             LastName = x.user.LastName ?? "",
+             FullName = x.user.FullName ?? "",
+             Lang = x.user.Lang ?? "",
+             Email = x.user.Email ?? "",
+             ProfilePicture = x.user.ProfilePicture ?? "",
+             Address = x.user.Address ?? "",
+             PhoneNumber = x.user.PhoneNumber ?? "",
+             Roles = new List<string> { x.role.Name! }
+         })
+         .FirstOrDefaultAsync(cancellation);
+
+        return tenantAdminUser;
+
+        // with Navigation property
+        //return await _applicationDbContext.Users
+        //.Where(u => u.TenantId == tenantId)
+        //.Where(u => u.UserRoles.Any(ur => ur.Role.Name == Roles.TenantAdministrator))
+        //.Select(u => new UserDTO
+        //{
+        //    Id = u.Id,
+        //    UserName = u.UserName ?? "",
+        //    FirstName = u.FirstName ?? "",
+        //    LastName = u.LastName ?? "",
+        //    FullName = u.FullName ?? "",
+        //    Lang = u.Lang ?? "",
+        //    Email = u.Email ?? "",
+        //    ProfilePicture = u.ProfilePicture ?? "",
+        //    Address = u.Address ?? "",
+        //    PhoneNumber = u.PhoneNumber ?? "",
+        //    Roles = u.UserRoles.Select(ur => ur.Role.Name).ToList()
+        //})
+        //.FirstOrDefaultAsync(cancellation);
+
+
     }
 }

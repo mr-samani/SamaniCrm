@@ -22,7 +22,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             if (entity == null)
                 throw new NotFoundException("ProductType not found.");
             entity.IsDeleted = true;
-            entity.DeletedTime = DateTime.UtcNow;
             var result = await _dbContext.SaveChangesAsync(cancellationToken);
             return result > 0;
         }

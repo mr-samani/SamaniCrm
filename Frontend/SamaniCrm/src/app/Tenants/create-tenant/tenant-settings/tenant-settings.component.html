@@ -1,0 +1,168 @@
+<div class="card">
+  <div class="card-header">
+    <i class="fa fa-gear mx-2"></i>
+    <span>{{ 'TenantSetting' | translate }}</span>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'DatabaseStrategy' | translate }}</mat-label>
+          <mat-select formControlName="databaseStrategy">
+            @for (item of DatabaseStrategy | enumToArray; track $index) {
+              <mat-option [value]="+item">
+                {{ 'DatabaseStrategy_' + item | translate }}
+              </mat-option>
+            }
+          </mat-select>
+          @if (form.get('databaseStrategy')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('DatabaseStrategy' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'SubscriptionPlan' | translate }}</mat-label>
+          <input matInput formControlName="subscriptionPlan" />
+          @if (form.get('subscriptionPlan')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('SubscriptionPlan' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('subscriptionPlan')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'IsInvalid' | translate: { value: ('SubscriptionPlan' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'MaxUsers' | translate }}</mat-label>
+          <input matInput formControlName="maxUsers" type="number" />
+          @if (form.get('maxUsers')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('MaxUsers' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'MaxStorageMB' | translate }}</mat-label>
+          <input matInput formControlName="maxStorageMB" type="number" />
+          <span matSuffix>MB</span>
+          @if (form.get('maxStorageMB')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('MaxStorageMB' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('maxStorageMB')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'IsInvalid' | translate: { value: ('MaxStorageMB' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'PrimaryColor' | translate }}</mat-label>
+          <input matInput formControlName="primaryColor" ngxInputColor />
+          @if (form.get('primaryColor')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('PrimaryColor' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('primaryColor')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'IsInvalid' | translate: { value: ('PrimaryColor' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'SecondaryColor' | translate }}</mat-label>
+          <input matInput formControlName="secondaryColor" ngxInputColor />
+          @if (form.get('secondaryColor')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('SecondaryColor' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('secondaryColor')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'IsInvalid' | translate: { value: ('SecondaryColor' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <p class="col-sm-12">
+        <mat-checkbox formControlName="isTrial" color="primary">
+          {{ 'IsTrial' | translate }}
+        </mat-checkbox>
+      </p>
+
+      @if (form.get('isTrial')?.value) {
+        <div class="col-sm-6 col-md-3">
+          <mat-form-field>
+            <mat-label>{{ 'TrialDays' | translate }}</mat-label>
+            <input matInput formControlName="trialDays" type="number" />
+            @if (form.get('trialDays')?.hasError('required')) {
+              <mat-error>
+                {{ 'IsRequired' | translate: { value: ('TrialDays' | translate) } }}
+              </mat-error>
+            }
+            @if (form.get('trialDays')?.hasError('invalid')) {
+              <mat-error>
+                {{ 'IsInvalid' | translate: { value: ('TrialDays' | translate) } }}
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      }
+
+      <p class="col-sm-12">
+        <mat-checkbox formControlName="require2FA" color="primary">
+          {{ 'Require2FA' | translate }}
+        </mat-checkbox>
+      </p>
+
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'SessionTimeoutMinutes' | translate }}</mat-label>
+          <input matInput formControlName="sessionTimeoutMinutes" type="number" />
+          <span matSuffix>{{ 'Minute' | translate }}</span>
+          @if (form.get('sessionTimeoutMinutes')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('SessionTimeoutMinutes' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'PasswordMinLength' | translate }}</mat-label>
+          <input matInput formControlName="passwordMinLength" type="number" />
+          @if (form.get('passwordMinLength')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('PasswordMinLength' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <p class="col-sm-12">
+        <mat-checkbox formControlName="passwordRequireSpecialChar" color="primary">
+          {{ 'PasswordRequireSpecialChar' | translate }}
+        </mat-checkbox>
+      </p>
+    </div>
+  </div>
+</div>

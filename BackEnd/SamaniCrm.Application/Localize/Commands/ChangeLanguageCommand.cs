@@ -16,18 +16,18 @@ public record ChangeLanguageCommand(string culture) : IRequest<bool>;
 
 public class ChangeLanguageCommandHandler : IRequestHandler<ChangeLanguageCommand, bool>
 {
-    private readonly ICurrentUserService _currentUserService;
+    private readonly ICurrentUserService _currentUser;
     private readonly IMediator _mediator;
 
     public ChangeLanguageCommandHandler(ICurrentUserService currentUserService, IMediator mediator)
     {
-        _currentUserService = currentUserService;
+        _currentUser = currentUserService;
         _mediator = mediator;
     }
 
     public async Task<bool> Handle(ChangeLanguageCommand request, CancellationToken cancellationToken)
     {
-        if (_currentUserService.UserId != null)
+        if (_currentUser.UserId != null)
         {
             return await _mediator.Send(new ChangeUserLanguageCommand(request.culture), cancellationToken);
         }

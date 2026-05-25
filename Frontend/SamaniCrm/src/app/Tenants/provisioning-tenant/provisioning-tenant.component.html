@@ -1,0 +1,38 @@
+@if (signalRService.isConnecting) {
+  <div class="d-flex align-items-center justify-content-center">
+    <mat-spinner color="primary" diameter="30"></mat-spinner>
+  </div>
+}
+
+<div class="list-container">
+  @for (item of steps; track $index) {
+    <div class="list-item">
+      <span>{{ 'TenantProvisionStepsEnum_' + item.step | translate }}</span>
+      <span [title]="'ProvisioningStepStatus_' + item.stepStatus | translate" class="status">
+        @switch (item.stepStatus) {
+          @case (ProvisioningStepStatus.Pending) {
+            <i class="fa fa-circle-stop text-pirmary"></i>
+          }
+          @case (ProvisioningStepStatus.InProgress) {
+            <i class="fa fa-hourglass-clock text-warning"></i>
+          }
+          @case (ProvisioningStepStatus.Completed) {
+            <i class="fa fa-circle-check text-success"></i>
+          }
+          @case (ProvisioningStepStatus.Failed) {
+            <i class="fa fa-circle-x text-danger"></i>
+          }
+        }
+      </span>
+    </div>
+  }
+
+  <div class="actions">
+    <button class="btn btn-default" [disabled]="retring" (click)="retryProvisioningData()">
+      @if (retring) {
+        <mat-spinner color="primary" diameter="20"></mat-spinner>
+      }
+      <span>{{ 'RetryProvisioningData' | translate }}</span>
+    </button>
+  </div>
+</div>

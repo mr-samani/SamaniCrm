@@ -48,7 +48,7 @@ export class CreateOrEditUserComponent extends AppComponentBase implements OnIni
       userName: ['', [Validators.required, CustomValidators.checkEnglishAndNumberCharacters]],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      email: ['', [Validators.required, CustomValidators.checkEmail]],
+      email: ['', [Validators.required, CustomValidators.email]],
       phoneNumber: ['', [Validators.required]],
       password: ['', [Validators.required]],
       lang: [AppConst.currentLanguage],

@@ -4,7 +4,9 @@
   </a>
 
   <h4 class="page-title">ثبت نام</h4>
-
+   @if (multiTenancy) {
+      <select-tenant></select-tenant>
+    }
   <form [formGroup]="registerForm">
     <div class="form-group">
       <label>نام</label>

@@ -10,6 +10,7 @@ namespace SamaniCrm.Application.Common.Exceptions;
 public class InvalidLoginException : BaseAppException
 {
     public InvalidLoginException() : base("Invalid UserName or Password!", HttpStatusCode.Unauthorized) { }
+    public InvalidLoginException(string message) : base(message, HttpStatusCode.Unauthorized) { }
 
 }
 

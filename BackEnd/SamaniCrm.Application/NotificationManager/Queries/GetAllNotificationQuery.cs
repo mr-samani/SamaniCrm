@@ -31,20 +31,24 @@ namespace SamaniCrm.Application.NotificationManager.Queries
     public class GetAllNotificationQueryHandler : IRequestHandler<GetAllNotificationQuery, PaginatedResult<NotificationDto>>
     {
         private readonly INotificationService _notificationService;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserService _currentUser;
 
-        public GetAllNotificationQueryHandler(INotificationService notificationService, ICurrentUserService currentUserService)
+        public GetAllNotificationQueryHandler(INotificationService notificationService, ICurrentUserService currentUser)
         {
             _notificationService = notificationService;
-            _currentUserService = currentUserService;
+            _currentUser = currentUser;
         }
 
 
 
         public async Task<PaginatedResult<NotificationDto>> Handle(GetAllNotificationQuery request, CancellationToken cancellationToken)
         {
-            Guid.TryParse(_currentUserService.UserId, out var currentUserId);
+            if(_currentUser.UserId == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
 
+            Guid currentUserId = (Guid)_currentUser.UserId!;
             var result = await _notificationService.GetAllNotifications(request, currentUserId, cancellationToken);
             return result;
         }

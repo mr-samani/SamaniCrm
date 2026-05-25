@@ -132,7 +132,7 @@ export class ProductTypesComponent extends AppComponentBase implements OnInit {
       if (result.isConfirmed) {
         this.showMainLoading();
         this.productService
-          .deleteProductType(new DeleteProductTypeCommand({ id: item.id }))
+          .deleteProductType(new DeleteProductTypeCommand({ id: item.id! }))
           .pipe(
         finalize(() => {
           this.hideMainLoading();

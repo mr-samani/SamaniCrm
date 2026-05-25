@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component,  OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -31,6 +31,9 @@ export class LoginComponent extends AppComponentBase implements OnInit {
 
   loadingExternalProviders = false;
   externalProviderList: ExternalProviderDto[] = [];
+
+  multiTenancy = AppConst.multiTenancy;
+
   constructor(
     private matDialog: MatDialog,
     private accountService: AccountServiceProxy,
@@ -65,7 +68,9 @@ export class LoginComponent extends AppComponentBase implements OnInit {
     }
     this.loading = true;
     let formValue: LoginCommand = this.loginForm.value;
+    formValue.tenancyName = AppConst.tenancyName ?? null;
     formValue.captcha = new InputCaptchaDTO(this.loginForm.get('captcha')?.value);
+
     this.authService
       .login(formValue)
       .pipe(

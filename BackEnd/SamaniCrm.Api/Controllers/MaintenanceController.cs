@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SamaniCrm.Api.Attributes;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Maintenance.Queries;
-using SamaniCrm.Core.Permissions;
+using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Host.Models;
@@ -25,7 +25,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetAllCacheEntries")]
-        [Permission(AppPermissions.CacheEntries_List)]
+        [Permission(AppPermissions.Maintenance.Cache.List)]
         [ProducesResponseType(typeof(ApiResponse<List<CacheEntryDto>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllCacheEntries([FromQuery] string? pattern)
         {
@@ -34,7 +34,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("DeleteCache")]
-        [Permission(AppPermissions.CacheEntries_Delete)]
+        [Permission(AppPermissions.Maintenance.Cache.Delete)]
         [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteCache(string key)
         {
@@ -44,7 +44,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("ClearAllCahces")]
-        [Permission(AppPermissions.CacheEntries_ClearAll)]
+        [Permission(AppPermissions.Maintenance.Cache.ClearAll)]
         [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status200OK)]
         public async Task<IActionResult> ClearAllCahces()
         {

@@ -17,28 +17,28 @@ namespace SamaniCrm.Application.User.Commands
     public class ChangeUserLanguageCommandHandler : IRequestHandler<ChangeUserLanguageCommand, bool>
     {
         private readonly IApplicationDbContext _context;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserService _currentUser;
         private readonly IIdentityService _identityService;
 
 
-        public ChangeUserLanguageCommandHandler(ICurrentUserService currentUserService, IApplicationDbContext context, IIdentityService identityService)
+        public ChangeUserLanguageCommandHandler(ICurrentUserService currentUser, IApplicationDbContext context, IIdentityService identityService)
         {
-            _currentUserService = currentUserService;
+            _currentUser = currentUser;
             _context = context;
             this._identityService = identityService;
         }
 
         public async Task<bool> Handle(ChangeUserLanguageCommand request, CancellationToken cancellationToken)
         {
-            if (_currentUserService.UserId == null)
+            if (_currentUser.UserId == null)
             {
                 throw new NotFoundException("User not found");
             }
-            var userId = Guid.Parse(_currentUserService.UserId);
+            var userId = (Guid)_currentUser.UserId!;
             var result = await _identityService.updateUserLanguage(request.culture, userId, cancellationToken);
             if (result == true)
             {
-                _currentUserService.lang = request.culture;
+                _currentUser.lang = request.culture;
             }
             return result;
 

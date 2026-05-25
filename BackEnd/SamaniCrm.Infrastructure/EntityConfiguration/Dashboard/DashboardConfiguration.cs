@@ -1,7 +1,7 @@
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SamaniCrm.Domain.Entities.Dashboard;
+using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Infrastructure.EntityConfiguration.PageBuilder;
 

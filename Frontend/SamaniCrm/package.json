@@ -11,6 +11,7 @@
     "apiGen": "node ./scripts/check-api-and-generate.js",
     "format": "prettier --write \".//src//app//**//*.{ts,html,css,scss}\"",
     "*ngTo@": "ng g @angular/core:control-flow",
+    "generate:app-permissions":"node ./scripts/update-apppermission-file.js  ../../BackEnd/SamaniCrm.Core/Consts/AppPermissions.cs ./src/shared/permissions/app-permissions.ts",
     "update-all": "npx npm-check-updates -u -d"
   },
   "private": true,

@@ -8,7 +8,7 @@ using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Infrastructure.Identity
 {
-    public class ApplicationRole : IdentityRole<Guid>
+    public class ApplicationRole : IdentityRole<Guid>,IAuditedEntity
     {
         public ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
 
@@ -18,6 +18,16 @@ namespace SamaniCrm.Infrastructure.Identity
         public ApplicationRole(string roleName) : base(roleName)
         {
         }
+
+        // ─── IAuditedEntity ───
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public Guid? CreatedBy { get; set; }
+        public DateTime? ModifiedAt { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public DateTime? DeletedAt { get; set; }
+        public Guid? DeletedBy { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public byte[]? RowVersion { get; set; }
     }
-    
+
 }

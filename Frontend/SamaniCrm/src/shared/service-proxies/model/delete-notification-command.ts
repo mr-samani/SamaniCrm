@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,12 +13,12 @@
 
 /** Interface for DeleteNotificationCommand */
 export interface IDeleteNotificationCommand {
-  id?: string;
+  id: string;
 }
 
 /** Class for DeleteNotificationCommand */
 export class DeleteNotificationCommand implements IDeleteNotificationCommand {
-  id?: string;
+  id!: string;
 
   constructor(data?: IDeleteNotificationCommand) {
     if (data) {

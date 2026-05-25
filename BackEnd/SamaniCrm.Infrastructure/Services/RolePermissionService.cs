@@ -2,15 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Core.Shared.Interfaces;
-using SamaniCrm.Core.Shared.Permissions;
-using SamaniCrm.Domain.Constants;
 using SamaniCrm.Infrastructure.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SamaniCrm.Infrastructure.Services
 {

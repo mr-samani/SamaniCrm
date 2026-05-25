@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -17,6 +17,7 @@ export interface ILoginCommand {
   userName: string;
   password: string;
   captcha?: InputCaptchaDTO;
+  tenancyName: string;
 }
 
 /** Class for LoginCommand */
@@ -24,6 +25,7 @@ export class LoginCommand implements ILoginCommand {
   userName!: string;
   password!: string;
   captcha?: InputCaptchaDTO;
+  tenancyName!: string;
 
   constructor(data?: ILoginCommand) {
     if (data) {
@@ -39,6 +41,7 @@ init(data?: any) {
     this.userName = data["userName"];
     this.password = data["password"];
     this.captcha = data["captcha"];
+    this.tenancyName = data["tenancyName"];
   }
 }
 

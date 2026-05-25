@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
-using SamaniCrm.Core.Permissions;
-using SamaniCrm.Core.Shared.Permissions;
+﻿using Microsoft.EntityFrameworkCore;
+using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Infrastructure.Persistence

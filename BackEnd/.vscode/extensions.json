@@ -1,6 +1,13 @@
 {
     "recommendations": [
+        "ms-dotnettools.csharp",
         "ms-dotnettools.csdevkit",
-        "ms-mssql.mssql"
+        "cweijan.vscode-database-client2",
+        "FUTURETECH6.gitlens-v11-7-0",
+        "PKief.material-icon-theme",
+        "ms-dotnettools.vscode-dotnet-runtime",
+        "jmrog.vscode-nuget-package-manager",
+        "christian-kohler.path-intellisense",
+        "esbenp.prettier-vscode"
     ]
 }

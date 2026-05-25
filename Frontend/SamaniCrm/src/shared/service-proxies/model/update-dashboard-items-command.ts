@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -14,12 +14,12 @@ import { DashboardItemDto } from './dashboard-item-dto';
 
 /** Interface for UpdateDashboardItemsCommand */
 export interface IUpdateDashboardItemsCommand {
-  list?: Array<DashboardItemDto>;
+  list: Array<DashboardItemDto>;
 }
 
 /** Class for UpdateDashboardItemsCommand */
 export class UpdateDashboardItemsCommand implements IUpdateDashboardItemsCommand {
-  list?: Array<DashboardItemDto>;
+  list!: Array<DashboardItemDto>;
 
   constructor(data?: IUpdateDashboardItemsCommand) {
     if (data) {

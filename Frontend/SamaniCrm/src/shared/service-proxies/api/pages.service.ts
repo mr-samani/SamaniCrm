@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -17,21 +17,21 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
+import { ApiResponseOfGuid } from '../model/api-response-of-guid';
+// @ts-ignore
+import { ApiResponseOfPageDto } from '../model/api-response-of-page-dto';
+// @ts-ignore
+import { ApiResponseOfPageForEditDto } from '../model/api-response-of-page-for-edit-dto';
+// @ts-ignore
+import { ApiResponseOfPaginatedResultOfPageDto } from '../model/api-response-of-paginated-result-of-page-dto';
+// @ts-ignore
+import { ApiResponseOfUnit } from '../model/api-response-of-unit';
+// @ts-ignore
 import { CreateOrEditPageMetaDataCommand } from '../model/create-or-edit-page-meta-data-command';
 // @ts-ignore
 import { DeletePageCommand } from '../model/delete-page-command';
 // @ts-ignore
 import { GetFilteredPagesQuery } from '../model/get-filtered-pages-query';
-// @ts-ignore
-import { GuidApiResponse } from '../model/guid-api-response';
-// @ts-ignore
-import { PageDtoApiResponse } from '../model/page-dto-api-response';
-// @ts-ignore
-import { PageDtoPaginatedResultApiResponse } from '../model/page-dto-paginated-result-api-response';
-// @ts-ignore
-import { PageForEditDtoApiResponse } from '../model/page-for-edit-dto-api-response';
-// @ts-ignore
-import { UnitApiResponse } from '../model/unit-api-response';
 // @ts-ignore
 import { UpdatePageContentCommand } from '../model/update-page-content-command';
 
@@ -54,15 +54,15 @@ export class PagesServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createOrEditPageMetaData(createOrEditPageMetaDataCommand?: CreateOrEditPageMetaDataCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<GuidApiResponse>;
-    public createOrEditPageMetaData(createOrEditPageMetaDataCommand?: CreateOrEditPageMetaDataCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GuidApiResponse>>;
-    public createOrEditPageMetaData(createOrEditPageMetaDataCommand?: CreateOrEditPageMetaDataCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GuidApiResponse>>;
-    public createOrEditPageMetaData(createOrEditPageMetaDataCommand?: CreateOrEditPageMetaDataCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createOrEditPageMetaData(createOrEditPageMetaDataCommand: CreateOrEditPageMetaDataCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfGuid>;
+    public createOrEditPageMetaData(createOrEditPageMetaDataCommand: CreateOrEditPageMetaDataCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfGuid>>;
+    public createOrEditPageMetaData(createOrEditPageMetaDataCommand: CreateOrEditPageMetaDataCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfGuid>>;
+    public createOrEditPageMetaData(createOrEditPageMetaDataCommand: CreateOrEditPageMetaDataCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (createOrEditPageMetaDataCommand === null || createOrEditPageMetaDataCommand === undefined) {
+            throw new Error('Required parameter createOrEditPageMetaDataCommand was null or undefined when calling createOrEditPageMetaData.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -101,7 +101,7 @@ export class PagesServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Pages/CreateOrEditPageMetaData`;
-        return this.httpClient.request<GuidApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfGuid>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createOrEditPageMetaDataCommand,
@@ -120,15 +120,15 @@ export class PagesServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deletePage(deletePageCommand?: DeletePageCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<UnitApiResponse>;
-    public deletePage(deletePageCommand?: DeletePageCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UnitApiResponse>>;
-    public deletePage(deletePageCommand?: DeletePageCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UnitApiResponse>>;
-    public deletePage(deletePageCommand?: DeletePageCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deletePage(deletePageCommand: DeletePageCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfUnit>;
+    public deletePage(deletePageCommand: DeletePageCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfUnit>>;
+    public deletePage(deletePageCommand: DeletePageCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfUnit>>;
+    public deletePage(deletePageCommand: DeletePageCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (deletePageCommand === null || deletePageCommand === undefined) {
+            throw new Error('Required parameter deletePageCommand was null or undefined when calling deletePage.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -167,7 +167,7 @@ export class PagesServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Pages/DeletePage`;
-        return this.httpClient.request<UnitApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfUnit>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: deletePageCommand,
@@ -186,15 +186,15 @@ export class PagesServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllPages(getFilteredPagesQuery?: GetFilteredPagesQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<PageDtoPaginatedResultApiResponse>;
-    public getAllPages(getFilteredPagesQuery?: GetFilteredPagesQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageDtoPaginatedResultApiResponse>>;
-    public getAllPages(getFilteredPagesQuery?: GetFilteredPagesQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageDtoPaginatedResultApiResponse>>;
-    public getAllPages(getFilteredPagesQuery?: GetFilteredPagesQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getAllPages(getFilteredPagesQuery: GetFilteredPagesQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfPaginatedResultOfPageDto>;
+    public getAllPages(getFilteredPagesQuery: GetFilteredPagesQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfPaginatedResultOfPageDto>>;
+    public getAllPages(getFilteredPagesQuery: GetFilteredPagesQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfPaginatedResultOfPageDto>>;
+    public getAllPages(getFilteredPagesQuery: GetFilteredPagesQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (getFilteredPagesQuery === null || getFilteredPagesQuery === undefined) {
+            throw new Error('Required parameter getFilteredPagesQuery was null or undefined when calling getAllPages.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -233,7 +233,7 @@ export class PagesServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Pages/GetAllPages`;
-        return this.httpClient.request<PageDtoPaginatedResultApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfPaginatedResultOfPageDto>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: getFilteredPagesQuery,
@@ -252,9 +252,9 @@ export class PagesServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getForEditMetaData(pageId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<PageForEditDtoApiResponse>;
-    public getForEditMetaData(pageId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageForEditDtoApiResponse>>;
-    public getForEditMetaData(pageId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageForEditDtoApiResponse>>;
+    public getForEditMetaData(pageId?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfPageForEditDto>;
+    public getForEditMetaData(pageId?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfPageForEditDto>>;
+    public getForEditMetaData(pageId?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfPageForEditDto>>;
     public getForEditMetaData(pageId?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -262,9 +262,6 @@ export class PagesServiceProxy extends BaseService {
           <any>pageId, 'pageId');
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -292,7 +289,7 @@ export class PagesServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Pages/GetForEditMetaData`;
-        return this.httpClient.request<PageForEditDtoApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfPageForEditDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -312,9 +309,9 @@ export class PagesServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPageInfo(pageId?: string, culture?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<PageDtoApiResponse>;
-    public getPageInfo(pageId?: string, culture?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageDtoApiResponse>>;
-    public getPageInfo(pageId?: string, culture?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageDtoApiResponse>>;
+    public getPageInfo(pageId?: string, culture?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfPageDto>;
+    public getPageInfo(pageId?: string, culture?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfPageDto>>;
+    public getPageInfo(pageId?: string, culture?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfPageDto>>;
     public getPageInfo(pageId?: string, culture?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -324,9 +321,6 @@ export class PagesServiceProxy extends BaseService {
           <any>culture, 'culture');
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -354,7 +348,7 @@ export class PagesServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Pages/GetPageInfo`;
-        return this.httpClient.request<PageDtoApiResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfPageDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -373,15 +367,15 @@ export class PagesServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updatePageContent(updatePageContentCommand?: UpdatePageContentCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<UnitApiResponse>;
-    public updatePageContent(updatePageContentCommand?: UpdatePageContentCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UnitApiResponse>>;
-    public updatePageContent(updatePageContentCommand?: UpdatePageContentCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UnitApiResponse>>;
-    public updatePageContent(updatePageContentCommand?: UpdatePageContentCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public updatePageContent(updatePageContentCommand: UpdatePageContentCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfUnit>;
+    public updatePageContent(updatePageContentCommand: UpdatePageContentCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfUnit>>;
+    public updatePageContent(updatePageContentCommand: UpdatePageContentCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfUnit>>;
+    public updatePageContent(updatePageContentCommand: UpdatePageContentCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (updatePageContentCommand === null || updatePageContentCommand === undefined) {
+            throw new Error('Required parameter updatePageContentCommand was null or undefined when calling updatePageContent.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -420,7 +414,7 @@ export class PagesServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Pages/UpdatePageContent`;
-        return this.httpClient.request<UnitApiResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfUnit>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: updatePageContentCommand,

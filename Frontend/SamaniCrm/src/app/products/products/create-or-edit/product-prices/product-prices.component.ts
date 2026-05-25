@@ -6,7 +6,7 @@ import {
   PriceTypeEnum,
   ProductPriceDto,
   ProductServiceProxy,
-  StringAutoCompleteDto,
+  AutoCompleteDtoOfstring,
 } from '@shared/service-proxies';
 import { finalize } from 'rxjs/operators';
 
@@ -20,7 +20,7 @@ export class ProductPricesComponent extends AppComponentBase implements OnInit {
   @Input() prices: ProductPriceDto[] = [];
   @Output() pricesChange = new EventEmitter<ProductPriceDto[]>();
 
-  currencyList: StringAutoCompleteDto[] = [];
+  currencyList: AutoCompleteDtoOfstring[] = [];
   loadingCurrency = true;
 
   form: FormGroup;

@@ -7,28 +7,34 @@ using Microsoft.AspNetCore.Identity;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Interfaces;
 
-namespace SamaniCrm.Infrastructure.Identity
+namespace SamaniCrm.Infrastructure.Identity;
+
+
+
+public class ApplicationUser : IdentityUser<Guid>, IMayHaveTenant, IAuditedEntity
 {
-    public class ApplicationUser: IdentityUser<Guid>,IAuditableEntity,ISoftDelete
-    {
-        public string? FirstName { get; set; }
-        public string LastName { get; set; } = string.Empty;
-        public string? FullName { get; set; } = string.Empty;
-        public string? Address { get; set; }
-        // public string? PhoneNumber { get; set; }
-        public string? ProfilePicture { get; set; }
-        public required string Lang { get; set; }
+    // ─── IMayHaveTenant ───
+    public Guid? TenantId { get; set; }
 
-        // Implementing IAuditableEntity properties
-        public DateTime CreationTime { get; set; }
-        public string? CreatedBy { get; set; }
-        public DateTime? LastModifiedTime { get; set; }
-        public string? LastModifiedBy { get; set; }
+    public string? FirstName { get; set; }
+    public string LastName { get; set; } = string.Empty;
+    public string? FullName { get; set; } = string.Empty;
+    public string? Address { get; set; }
+    // public string? PhoneNumber { get; set; }
+    public string? ProfilePicture { get; set; }
+    public required string Lang { get; set; }
 
-        // Implementing ISoftDelete properties
-        public bool IsDeleted { get; set; }
-        public DateTime? DeletedTime { get; set; }
-        public string? DeletedBy { get; set; }
-        public virtual UserSetting UserSetting { get; set; } = new UserSetting();
-    }
+
+    public virtual UserSetting UserSetting { get; set; } = new UserSetting();
+
+    // ─── IAuditedEntity ───
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public Guid? CreatedBy { get; set; }
+    public DateTime? ModifiedAt { get; set; }
+    public Guid? ModifiedBy { get; set; }
+    public DateTime? DeletedAt { get; set; }
+    public Guid? DeletedBy { get; set; }
+    public bool IsDeleted { get; set; } = false;
+    public byte[]? RowVersion { get; set; }
+
 }

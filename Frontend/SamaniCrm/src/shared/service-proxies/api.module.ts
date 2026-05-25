@@ -9,7 +9,6 @@ import { DasboardServiceProxy } from './api/dasboard.service';
 import { ExternalAuthServiceProxy } from './api/external-auth.service';
 import { ExternalProvidersServiceProxy } from './api/external-providers.service';
 import { FileManagerServiceProxy } from './api/file-manager.service';
-import { FileServeServiceProxy } from './api/file-serve.service';
 import { LanguageServiceProxy } from './api/language.service';
 import { MaintenanceServiceProxy } from './api/maintenance.service';
 import { MenuServiceProxy } from './api/menu.service';
@@ -20,8 +19,8 @@ import { ProductServiceProxy } from './api/product.service';
 import { PublicServiceProxy } from './api/public.service';
 import { RoleServiceProxy } from './api/role.service';
 import { SecuritySettingsServiceProxy } from './api/security-settings.service';
+import { TenantsServiceProxy } from './api/tenants.service';
 import { UserServiceProxy } from './api/user.service';
-import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
 
 @NgModule({
   imports:      [],
@@ -35,7 +34,6 @@ import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
     ExternalAuthServiceProxy,
     ExternalProvidersServiceProxy,
     FileManagerServiceProxy,
-    FileServeServiceProxy,
     LanguageServiceProxy,
     MaintenanceServiceProxy,
     MenuServiceProxy,
@@ -46,8 +44,8 @@ import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
     PublicServiceProxy,
     RoleServiceProxy,
     SecuritySettingsServiceProxy,
-    UserServiceProxy,
-    WeatherForecastServiceProxy ]
+    TenantsServiceProxy,
+    UserServiceProxy ]
 })
 export class SamaniApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<SamaniApiModule> {

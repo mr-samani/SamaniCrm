@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -14,14 +14,14 @@ import { LocalizationKeyDTO } from './localization-key-dto';
 
 /** Interface for CreateOrEditLocalizeKeyCommand */
 export interface ICreateOrEditLocalizeKeyCommand {
-  key?: string;
-  items?: Array<LocalizationKeyDTO>;
+  key: string;
+  items: Array<LocalizationKeyDTO>;
 }
 
 /** Class for CreateOrEditLocalizeKeyCommand */
 export class CreateOrEditLocalizeKeyCommand implements ICreateOrEditLocalizeKeyCommand {
-  key?: string;
-  items?: Array<LocalizationKeyDTO>;
+  key!: string;
+  items!: Array<LocalizationKeyDTO>;
 
   constructor(data?: ICreateOrEditLocalizeKeyCommand) {
     if (data) {

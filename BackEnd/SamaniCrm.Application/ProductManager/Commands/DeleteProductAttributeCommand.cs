@@ -28,7 +28,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             var now = DateTime.Now;
 
             entity.IsDeleted = true;
-            entity.DeletedTime = now;
 
             var translations = await _dbContext.ProductAttributeTranslations
             .Where(x => x.ProductAttributeId == request.Id && !x.IsDeleted)
@@ -37,7 +36,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             foreach (var translation in translations)
             {
                 translation.IsDeleted = true;
-                translation.DeletedTime = now;
             }
 
 
@@ -48,7 +46,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             foreach (var attr in attrValues)
             {
                 attr.IsDeleted = true;
-                attr.DeletedTime = now;
             }
 
 

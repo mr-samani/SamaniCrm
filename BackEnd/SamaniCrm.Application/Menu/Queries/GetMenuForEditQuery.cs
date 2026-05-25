@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamaniCrm.Application.Menu.Queries
+namespace SamaniCrm.Application.MenuQueries
 {
     public record GetMenuForEditQuery(Guid Id) : IRequest<MenuDTO>;
     public class GetMenuForEditQueryHandler : IRequestHandler<GetMenuForEditQuery, MenuDTO>
@@ -25,7 +25,8 @@ namespace SamaniCrm.Application.Menu.Queries
         public async Task<MenuDTO> Handle(GetMenuForEditQuery request, CancellationToken cancellationToken)
         {
             var menu = await _dbContext.Menus
-                .FirstOrDefaultAsync(m => m.Id == request.Id, cancellationToken);
+                  .OrderBy(x => x.CreatedAt)
+                  .FirstOrDefaultAsync(m => m.Id == request.Id, cancellationToken);
 
             if (menu == null)
                 throw new NotFoundException("Menu not found.");

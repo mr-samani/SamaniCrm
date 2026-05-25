@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,12 +13,12 @@
 
 /** Interface for RefreshTokenCommand */
 export interface IRefreshTokenCommand {
-  refreshToken?: string;
+  refreshToken: string;
 }
 
 /** Class for RefreshTokenCommand */
 export class RefreshTokenCommand implements IRefreshTokenCommand {
-  refreshToken?: string;
+  refreshToken!: string;
 
   constructor(data?: IRefreshTokenCommand) {
     if (data) {

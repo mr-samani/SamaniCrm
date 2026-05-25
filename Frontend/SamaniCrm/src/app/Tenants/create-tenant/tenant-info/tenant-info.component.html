@@ -1,0 +1,101 @@
+<div class="card">
+  <div class="card-header">
+    <i class="fa fa-building mx-2"></i>
+    <span>{{ 'TenantInfo' | translate }}</span>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'Name' | translate }}</mat-label>
+          <input matInput formControlName="name" />
+          @if (form.get('name')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('Name' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'LegalName' | translate }}</mat-label>
+          <input matInput formControlName="legalName" />
+          @if (form.get('legalName')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('LegalName' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('legalName')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'IsInvalid' | translate: { value: ('LegalName' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'Slug' | translate }}</mat-label>
+          <input matInput formControlName="slug" />
+          @if (form.get('slug')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('Slug' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'Email' | translate }}</mat-label>
+          <input matInput formControlName="email" />
+          @if (form.get('email')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('Email' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('email')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'IsInvalid' | translate: { value: ('Email' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'Phone' | translate }}</mat-label>
+          <input matInput formControlName="phone" />
+          @if (form.get('phone')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('Phone' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('phone')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'IsInvalid' | translate: { value: ('Phone' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'Mobile' | translate }}</mat-label>
+          <input matInput formControlName="mobile" />
+          @if (form.get('mobile')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('Mobile' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('mobile')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'IsInvalid' | translate: { value: ('Mobile' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</div>

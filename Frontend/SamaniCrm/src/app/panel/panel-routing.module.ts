@@ -31,6 +31,11 @@ const routes: Routes = [
       //   loadChildren: () => import('../file-manager/file-manager.module').then((m) => m.FileManagerModule),
       // },
       { path: 'languages', loadChildren: () => import('./languages/languages.module').then((m) => m.LanguagesModule) },
+
+      {
+        path: 'tenants',
+        loadChildren: () => import('../Tenants/Tenants.module').then((m) => m.TenantsModule),
+      },
       {
         path: 'users',
         loadChildren: () => import('../user-management/users/users.module').then((m) => m.UsersModule),

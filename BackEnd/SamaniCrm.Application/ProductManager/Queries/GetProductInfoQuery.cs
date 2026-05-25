@@ -5,7 +5,7 @@ using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
-using SamaniCrm.Domain.Entities.ProductEntities;
+using SamaniCrm.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

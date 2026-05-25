@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamaniCrm.Application.Menu.Commands
+namespace SamaniCrm.Application.MenuCommands
 {
     public record DeleteMenuCommand(Guid Id) : IRequest<bool>;
     public class DeleteMenuCommandHandler : IRequestHandler<DeleteMenuCommand, bool>
@@ -30,7 +30,6 @@ namespace SamaniCrm.Application.Menu.Commands
 
             var now= DateTime.UtcNow;
             menu.IsDeleted = true;
-            menu.DeletedTime = now;
 
             var translations = await _dbContext.MenuTranslations
             .Where(x => x.MenuId == request.Id && !x.IsDeleted)
@@ -39,7 +38,6 @@ namespace SamaniCrm.Application.Menu.Commands
             foreach (var translation in translations)
             {
                 translation.IsDeleted = true;
-                translation.DeletedTime = now;
             }
 
 

@@ -95,7 +95,7 @@ export class ProductCategoriesComponent extends AppComponentBase implements OnIn
       if (result.isConfirmed) {
         this.showMainLoading();
         this.productService
-          .deleteProductCategory(new DeleteProductCategoryCommand({ id: item.id }))
+          .deleteProductCategory(new DeleteProductCategoryCommand({ id: item.id! }))
           .pipe(
             finalize(() => {
               this.hideMainLoading();

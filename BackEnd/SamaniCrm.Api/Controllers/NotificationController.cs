@@ -7,7 +7,7 @@ using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.NotificationManager.Commands;
 using SamaniCrm.Application.NotificationManager.Queries;
-using SamaniCrm.Core.Permissions;
+using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Host.Models;
 
 namespace SamaniCrm.Api.Controllers
@@ -25,7 +25,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpPost("SendMessageToUser")]
-        [Permission(AppPermissions.Notification_SendMessageToUser)]
+        [Permission(AppPermissions.Notification.SendMessageToUser)]
         [ProducesResponseType(typeof(ApiResponse<Unit>), StatusCodes.Status200OK)]
         public async Task<IActionResult> SendMessageToUser(SendNotificationCommand request)
         {
@@ -35,7 +35,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("BroadCastMessageToAllUsers")]
-        [Permission(AppPermissions.Notification_BroadCastMessageToAll)]
+        [Permission(AppPermissions.Notification.BroadCastMessageToAll)]
         [ProducesResponseType(typeof(ApiResponse<long>), StatusCodes.Status200OK)]
         public async Task<IActionResult> BroadCastMessageToAllUsers(BroadCastNotificationsCommand request)
         {
@@ -47,7 +47,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpPost("GetAllNotifications")]
-        [Permission(AppPermissions.Notification_List)]
+        [Permission(AppPermissions.Notification.List)]
         [ProducesResponseType(typeof(ApiResponse<PaginatedResult<NotificationDto>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllNotifications([FromBody] GetAllNotificationQuery command)
         {
@@ -58,7 +58,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpPost("DeleteNotification")]
-        [Permission(AppPermissions.Notification_Delete)]
+        [Permission(AppPermissions.Notification.Delete)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteNotification([FromBody] DeleteNotificationCommand command)
         {
@@ -68,7 +68,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpPost("MarkAsRead")]
-        [Permission(AppPermissions.Notification_List)]
+        [Permission(AppPermissions.Notification.List)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> MarkAsRead([FromBody] MarkAsReadCommand command)
         {
@@ -77,7 +77,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("MarkAllAsRead")]
-        [Permission(AppPermissions.Notification_MarkAllAsRead)]
+        [Permission(AppPermissions.Notification.MarkAllAsRead)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> MarkAllAsRead()
         {
@@ -86,7 +86,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetNotificationInfo")]
-        [Permission(AppPermissions.Notification_List)]
+        [Permission(AppPermissions.Notification.List)]
         [ProducesResponseType(typeof(ApiResponse<NotificationDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetNotificationInfo(Guid Id)
         {
@@ -96,7 +96,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpGet("GetLastUnReadNotifications")]
-        [Permission(AppPermissions.Notification_List)]
+        [Permission(AppPermissions.Notification.List)]
         [ProducesResponseType(typeof(ApiResponse<List<NotificationDto>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetLastUnReadNotifications()
         {

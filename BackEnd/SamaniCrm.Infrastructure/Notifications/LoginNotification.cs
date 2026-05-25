@@ -10,14 +10,14 @@ namespace SamaniCrm.Infrastructure.Notifications;
 
 public abstract class LoginNotification
 {
-    public static Task SendLoginNotification(string username)
+    public static Task SendLoginNotification(string username, string? TenancyName)
     {
         // کد ارسال نوتیفیکیشن یا لاگ
         Console.WriteLine($"User {username} logged in successfully!");
         return Task.CompletedTask;
     }
 
-    public static Task SendLoginFailureNotification(string username)
+    public static Task SendLoginFailureNotification(string username, string? TenancyName)
     {
         // کد ارسال نوتیفیکیشن یا لاگ
         Console.WriteLine($"User {username} failed to log in.");

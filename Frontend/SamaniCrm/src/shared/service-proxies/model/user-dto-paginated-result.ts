@@ -18,6 +18,9 @@ export interface IUserDTOPaginatedResult {
   totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
+  totalPages?: number;
+  hasPrevious?: boolean;
+  hasNext?: boolean;
 }
 
 /** Class for UserDTOPaginatedResult */
@@ -26,6 +29,9 @@ export class UserDTOPaginatedResult implements IUserDTOPaginatedResult {
   totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
+  totalPages?: number;
+  hasPrevious?: boolean;
+  hasNext?: boolean;
 
   constructor(data?: IUserDTOPaginatedResult) {
     if (data) {
@@ -46,6 +52,9 @@ init(data?: any) {
     this.totalCount = data["totalCount"];
     this.pageNumber = data["pageNumber"];
     this.pageSize = data["pageSize"];
+    this.totalPages = data["totalPages"];
+    this.hasPrevious = data["hasPrevious"];
+    this.hasNext = data["hasNext"];
   }
 }
 

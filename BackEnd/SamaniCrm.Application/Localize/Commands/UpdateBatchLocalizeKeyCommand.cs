@@ -32,6 +32,7 @@ namespace SamaniCrm.Application.Localize.Commands
             {
                 var found = await _dbContext.Localizations
                     .Where(w => w.Culture == request.culture && w.Key == item.Key && w.Category == item.Category)
+                    .OrderBy(x => x.CreatedAt)
                     .FirstOrDefaultAsync();
                 if (found == null)
                 {

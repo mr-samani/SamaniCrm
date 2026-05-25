@@ -9,9 +9,8 @@ using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Domain.Entities;
-using MenuEntity = SamaniCrm.Domain.Entities.Menu;
 
-namespace SamaniCrm.Application.Menu.Commands
+namespace SamaniCrm.Application.MenuCommands
 {
     public class CreateOrEditMenuCommand : MenuDTO, IRequest<Guid>
     { }
@@ -28,19 +27,20 @@ namespace SamaniCrm.Application.Menu.Commands
 
         public async Task<Guid> Handle(CreateOrEditMenuCommand request, CancellationToken cancellationToken)
         {
-            MenuEntity? menu = null;
+            Menu? menu = null;
 
             if (request.Id != null)
             {
                 menu = await _dbContext.Menus
                      .Include(p => p.Translations)
+                     .OrderBy(x => x.CreatedAt)
                      .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
                 if (menu == null)
                     throw new NotFoundException("Menu not found.");
             }
             else
             {
-                menu = new MenuEntity();
+                menu = new Menu();
                 _dbContext.Menus.Add(menu);
             }
 
@@ -50,13 +50,14 @@ namespace SamaniCrm.Application.Menu.Commands
             menu.IsActive = request.IsActive;
             menu.ParentId = request.ParentId;
             menu.Target = request.Target;
-            menu.LastModifiedTime = DateTime.UtcNow;
+
             // نباید مقدار سیستمی توسط برنامه قایل تغییر باشد 
             // menu.IsSystem = request.IsSystem;
             // Update translations
             foreach (var item in request.Translations ?? [])
             {
                 var existingTranslation = menu.Translations?
+                    .OrderBy(x => x.CreatedAt)
                     .FirstOrDefault(t => t.Culture == item.Culture);
 
                 if (existingTranslation != null)

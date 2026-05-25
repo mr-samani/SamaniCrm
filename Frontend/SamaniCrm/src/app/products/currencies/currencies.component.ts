@@ -122,7 +122,7 @@ export class CurrenciesComponent extends AppComponentBase implements OnInit {
       if (result.isConfirmed) {
         this.showMainLoading();
         this.productService
-          .deleteCurrency(new DeleteCurrencyCommand({ id: item.id }))
+          .deleteCurrency(new DeleteCurrencyCommand({ id: item.id! }))
           .pipe(
             finalize(() => {
               this.hideMainLoading();

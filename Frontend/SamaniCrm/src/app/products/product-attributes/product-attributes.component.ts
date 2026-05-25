@@ -147,7 +147,7 @@ export class ProductAttributesComponent extends AppComponentBase implements OnIn
       if (result.isConfirmed) {
         this.showMainLoading();
         this.productService
-          .deleteProductAttribute(new DeleteProductAttributeCommand({ id: item.id }))
+          .deleteProductAttribute(new DeleteProductAttributeCommand({ id: item.id! }))
           .pipe(
         finalize(() => {
           this.hideMainLoading();

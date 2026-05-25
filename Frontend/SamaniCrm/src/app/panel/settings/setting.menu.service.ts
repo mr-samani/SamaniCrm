@@ -44,35 +44,35 @@ export class SettingMenuService {
         ),
         new MenuModel(
           l('Maintenance'),
-          AppPermissions.Maintenance,
+          AppPermissions.Maintenance_Cache_List,
           l('MaintenanceDescription'),
           'fa fa-folder-gear',
           '/panel/maintenance',
         ),
         new MenuModel(
           l('Menu'),
-          AppPermissions.MenuManagement,
+          AppPermissions.MenuManagement_List,
           l('MenuDescription'),
           'fa  fa-list-tree',
           '/panel/menu',
         ),
         new MenuModel(
           l('Lanaguages'),
-          AppPermissions.LanguageManagement,
+          AppPermissions.LanguageManagement_List,
           l('LanguageDescription'),
           'fa  fa-language',
           '/panel/languages',
         ),
       ]),
-      new MenuModel(l('Users'), AppPermissions.UserManagement, '', '', '', [
+      new MenuModel(l('Users'), AppPermissions.UserManagement_List, '', '', '', [
         new MenuModel(
           l('Roles'),
-          AppPermissions.RoleManagement,
+          AppPermissions.RoleManagement_List,
           l('RolesDescription'),
           'fa fa-users-gear',
           '/panel/roles',
         ),
-        new MenuModel(l('Users'), AppPermissions.UserManagement, l('UsersDescription'), 'fa fa-users', '/panel/users'),
+        new MenuModel(l('Users'), AppPermissions.UserManagement_List, l('UsersDescription'), 'fa fa-users', '/panel/users'),
       ]),
     ];
     return menuList;

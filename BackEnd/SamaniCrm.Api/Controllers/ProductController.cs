@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 using SamaniCrm.Api.Attributes;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.DTOs;
-using SamaniCrm.Application.Menu.Commands;
+using SamaniCrm.Application.MenuCommands;
 using SamaniCrm.Application.ProductManager.Commands;
 using SamaniCrm.Application.ProductManager.Dtos;
 using SamaniCrm.Application.ProductManager.Queries;
 using SamaniCrm.Application.ProductManagerManager.Commands;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
 using SamaniCrm.Application.ProductManagerManager.Queries;
-using SamaniCrm.Core.Permissions;
+using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Host.Models;
 using System.Linq.Dynamic.Core;
 
@@ -45,7 +45,7 @@ namespace SamaniCrm.Api.Controllers
 
         #region Category
         [HttpPost("GetCategoriesForAdmin")]
-        [Permission(AppPermissions.Products_Category_List)]
+        [Permission(AppPermissions.Products.Category.List)]
         [ProducesResponseType(typeof(ApiResponse<PagedProductCategoriesDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCategoriesForAdmin([FromBody] GetCategoriesForAdminQuery request, CancellationToken cancellationToken)
         {
@@ -55,7 +55,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpPost("GetTreeProductCategoriesForAdmin")]
-        [Permission(AppPermissions.Products_Category_List)]
+        [Permission(AppPermissions.Products.Category.List)]
         [ProducesResponseType(typeof(ApiResponse<List<ProductCategoryDto>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetTreeProductCategoriesForAdmin([FromBody] GetTreeProductCategoryForAdminQuery request, CancellationToken cancellationToken)
         {
@@ -75,7 +75,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpGet("GetProductCategoryForEdit")]
-        [Permission(AppPermissions.Products_Category_Edit)]
+        [Permission(AppPermissions.Products.Category.Edit)]
         [ProducesResponseType(typeof(ApiResponse<ProductCategoryDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetProductCategoryForEdit(Guid id, CancellationToken cancellationToken)
         {
@@ -84,8 +84,8 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpPost("CreateOrEditProductCategory")]
-        [Permission(AppPermissions.Products_Category_Edit)]
-        [Permission(AppPermissions.Products_Category_Create)]
+        [Permission(AppPermissions.Products.Category.Edit)]
+        [Permission(AppPermissions.Products.Category.Create)]
         [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateOrEditProductCategory([FromBody] CreateOrUpdateProductCategoryCommand request, CancellationToken cancellationToken)
         {
@@ -93,7 +93,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("DeleteProductCategory")]
-        [Permission(AppPermissions.Products_Category_Delete)]
+        [Permission(AppPermissions.Products.Category.Delete)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteProductCategory(DeleteProductCategoryCommand request, CancellationToken cancellationToken)
         {
@@ -104,7 +104,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpGet("GetAutoCompleteProductCategory")]
-        [Permission(AppPermissions.Products_Category_List)]
+        [Permission(AppPermissions.Products.Category.List)]
         [ProducesResponseType(typeof(ApiResponse<List<AutoCompleteDto<Guid>>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAutoCompleteProductCategory(string? filter, CancellationToken cancellationToken)
         {
@@ -113,7 +113,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetAllProductCategoryTranslations")]
-        [Permission(AppPermissions.Products_Category_Export)]
+        [Permission(AppPermissions.Products.Category.Export)]
         [ProducesResponseType(typeof(ApiResponse<List<ExportAllLocalizationValueDto>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllProductCategoryTranslations(CancellationToken cancellationToken)
         {
@@ -121,7 +121,7 @@ namespace SamaniCrm.Api.Controllers
             return ApiOk(result);
         }
         [HttpPost("ImportProductCategoryLocalization")]
-        [Permission(AppPermissions.Products_Category_Import)]
+        [Permission(AppPermissions.Products.Category.Import)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> ImportProductCategoryLocalization([FromBody] List<ExportAllLocalizationValueDto> data, CancellationToken cancellationToken)
         {
@@ -134,7 +134,7 @@ namespace SamaniCrm.Api.Controllers
         #region Types
 
         [HttpPost("GetProductTypes")]
-        [Permission(AppPermissions.Products_Type_List)]
+        [Permission(AppPermissions.Products.Type.List)]
         [ProducesResponseType(typeof(ApiResponse<PaginatedResult<ProductTypeDto>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetProductTypes([FromBody] GetProductTypesQuery request, CancellationToken cancellationToken)
         {
@@ -143,7 +143,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetProductTypeForEdit")]
-        [Permission(AppPermissions.Products_Type_Edit)]
+        [Permission(AppPermissions.Products.Type.Edit)]
         [ProducesResponseType(typeof(ApiResponse<ProductTypeDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetProductTypeForEdit(Guid id, CancellationToken cancellationToken)
         {
@@ -152,8 +152,8 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("CreateOrEditProductType")]
-        [Permission(AppPermissions.Products_Type_Edit)]
-        [Permission(AppPermissions.Products_Type_Create)]
+        [Permission(AppPermissions.Products.Type.Edit)]
+        [Permission(AppPermissions.Products.Type.Create)]
         [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateOrEditProductType([FromBody] CreateOrUpdateProductTypeCommand request, CancellationToken cancellationToken)
         {
@@ -161,7 +161,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("DeleteProductType")]
-        [Permission(AppPermissions.Products_Type_Delete)]
+        [Permission(AppPermissions.Products.Type.Delete)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteProductType(DeleteProductTypeCommand request, CancellationToken cancellationToken)
         {
@@ -171,7 +171,7 @@ namespace SamaniCrm.Api.Controllers
 
 
         [HttpGet("GetAutoCompleteProductType")]
-        [Permission(AppPermissions.Products_Type_List)]
+        [Permission(AppPermissions.Products.Type.List)]
         [ProducesResponseType(typeof(ApiResponse<List<AutoCompleteDto<Guid>>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAutoCompleteProductType(string? filter, CancellationToken cancellationToken)
         {
@@ -184,7 +184,7 @@ namespace SamaniCrm.Api.Controllers
         #region Attributes
 
         [HttpPost("GetProductAttributes")]
-        [Permission(AppPermissions.Products_Attribute_List)]
+        [Permission(AppPermissions.Products.Attribute.List)]
         [ProducesResponseType(typeof(ApiResponse<PaginatedResult<ProductAttributeDto>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetProductAttributes([FromBody] GetProductAttributesQuery request, CancellationToken cancellationToken)
         {
@@ -193,7 +193,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetProductAttributeForEdit")]
-        [Permission(AppPermissions.Products_Attribute_Edit)]
+        [Permission(AppPermissions.Products.Attribute.Edit)]
         [ProducesResponseType(typeof(ApiResponse<ProductAttributeDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetProductAttributeForEdit(Guid id, CancellationToken cancellationToken)
         {
@@ -201,8 +201,8 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("CreateOrEditProductAttribute")]
-        [Permission(AppPermissions.Products_Attribute_Edit)]
-        [Permission(AppPermissions.Products_Attribute_Create)]
+        [Permission(AppPermissions.Products.Attribute.Edit)]
+        [Permission(AppPermissions.Products.Attribute.Create)]
         [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateOrEditProductAttribute([FromBody] CreateOrUpdateProductAttributeCommand request, CancellationToken cancellationToken)
         {
@@ -210,7 +210,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("DeleteProductAttribute")]
-        [Permission(AppPermissions.Products_Attribute_Delete)]
+        [Permission(AppPermissions.Products.Attribute.Delete)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteProductAttribute(DeleteProductAttributeCommand request, CancellationToken cancellationToken)
         {
@@ -223,7 +223,7 @@ namespace SamaniCrm.Api.Controllers
         #region product 
 
         [HttpPost("GetProducts")]
-        [Permission(AppPermissions.Products_List)]
+        [Permission(AppPermissions.Products.List)]
         [ProducesResponseType(typeof(ApiResponse<PaginatedResult<ProductListDto>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetProducts([FromBody] GetProductsQuery request, CancellationToken cancellationToken)
         {
@@ -232,7 +232,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpGet("GetProductForEdit")]
-        [Permission(AppPermissions.Products_Edit)]
+        [Permission(AppPermissions.Products.Edit)]
         [ProducesResponseType(typeof(ApiResponse<ProductDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetProductForEdit(Guid id, CancellationToken cancellationToken)
         {
@@ -240,8 +240,8 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("CreateOrEditProduct")]
-        [Permission(AppPermissions.Products_Edit)]
-        [Permission(AppPermissions.Products_Create)]
+        [Permission(AppPermissions.Products.Edit)]
+        [Permission(AppPermissions.Products.Create)]
         [ProducesResponseType(typeof(ApiResponse<Guid>), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateOrEditProduct([FromBody] CreateOrUpdateProductCommand request, CancellationToken cancellationToken)
         {
@@ -249,7 +249,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("DeleteProduct")]
-        [Permission(AppPermissions.Products_Delete)]
+        [Permission(AppPermissions.Products.Delete)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteProduct(DeleteProductCommand request, CancellationToken cancellationToken)
         {
@@ -261,7 +261,7 @@ namespace SamaniCrm.Api.Controllers
 
         #region Currency
         [HttpGet("GetCurrencies")]
-        [Permission(AppPermissions.Products_Currency_List)]
+        [Permission(AppPermissions.Products.Currency.List)]
         [ProducesResponseType(typeof(ApiResponse<List<CurrencyDto>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCurrencies(CancellationToken cancellationToken)
         {
@@ -269,7 +269,7 @@ namespace SamaniCrm.Api.Controllers
             return ApiOk(result);
         }
         [HttpGet("GetActiveCurrencies")]
-        [Permission(AppPermissions.Products_Currency_List)]
+        [Permission(AppPermissions.Products.Currency.List)]
         [ProducesResponseType(typeof(ApiResponse<List<AutoCompleteDto<string>>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetActiveCurrencies(CancellationToken cancellationToken)
         {
@@ -278,8 +278,8 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("CreateOrEditCurrency")]
-        [Permission(AppPermissions.Products_Currency_Edit)]
-        [Permission(AppPermissions.Products_Currency_Create)]
+        [Permission(AppPermissions.Products.Currency.Edit)]
+        [Permission(AppPermissions.Products.Currency.Create)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateOrEditCurrency([FromBody] CreateOrUpdateCurrencyCommand request, CancellationToken cancellationToken)
         {
@@ -288,7 +288,7 @@ namespace SamaniCrm.Api.Controllers
         }
 
         [HttpPost("DeleteCurrency")]
-        [Permission(AppPermissions.Products_Currency_Delete)]
+        [Permission(AppPermissions.Products.Currency.Delete)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DeleteCurrency(DeleteCurrencyCommand request, CancellationToken cancellationToken)
         {

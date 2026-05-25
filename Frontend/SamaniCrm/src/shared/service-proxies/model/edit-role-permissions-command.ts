@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,14 +13,14 @@
 
 /** Interface for EditRolePermissionsCommand */
 export interface IEditRolePermissionsCommand {
-  grantedPermissions?: Array<string>;
-  roleName?: string;
+  grantedPermissions: Array<string>;
+  roleName: string;
 }
 
 /** Class for EditRolePermissionsCommand */
 export class EditRolePermissionsCommand implements IEditRolePermissionsCommand {
-  grantedPermissions?: Array<string>;
-  roleName?: string;
+  grantedPermissions!: Array<string>;
+  roleName!: string;
 
   constructor(data?: IEditRolePermissionsCommand) {
     if (data) {

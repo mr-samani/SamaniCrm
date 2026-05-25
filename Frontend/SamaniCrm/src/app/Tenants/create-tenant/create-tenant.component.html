@@ -1,0 +1,37 @@
+<sub-header [title]="isUpdate ? ('EditTenant' | translate) : ('CreateTenant' | translate)"></sub-header>
+
+@if (loading) {
+  <div class="d-flex align-items-center justify-content-center py-5">
+    <mat-spinner color="primary" diameter="25"></mat-spinner>
+  </div>
+}
+@if (!loading) {
+  <form [formGroup]="form" class="container-fluid">
+    <div class="row">
+      <div class="col-sm-6 d-flex flex-column gap-3 mt-3">
+        <app-tenant-info [form]="form"></app-tenant-info>
+      </div>
+      <div class="col-sm-6 d-flex flex-column gap-3 mt-3">
+        <app-tenant-admin-user [form]="form"></app-tenant-admin-user>
+      </div>
+      <div class="col-sm-6 d-flex flex-column gap-3 mt-3">
+        <app-tenant-settings [form]="form"></app-tenant-settings>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-sm-12 d-flex flex-column gap-3 mt-3">
+        <app-tenant-address [form]="form"></app-tenant-address>
+      </div>
+    </div>
+  </form>
+}
+
+<div class="fixed-form-actions">
+  <button class="btn btn-primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
+    @if (saving) {
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    }
+    <span>{{ 'Save' | translate }}</span>
+  </button>
+</div>

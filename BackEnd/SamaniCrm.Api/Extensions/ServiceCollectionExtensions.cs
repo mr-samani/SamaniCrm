@@ -5,60 +5,71 @@ using Hangfire.SqlServer;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Localization;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using SamaniCrm.Api.Middlewares;
 using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.Behaviors;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Application.InitialApp.Queries;
 using SamaniCrm.Application.ProductManagerManager.Interfaces;
 using SamaniCrm.Application.Queries.Role;
 using SamaniCrm.Application.User.Queries;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
-using SamaniCrm.Domain.Entities;
+using SamaniCrm.Core.Shared.Interfaces.Tenant;
+using SamaniCrm.Infrastructure.AuditLog;
 using SamaniCrm.Infrastructure.BackgroundServices;
 using SamaniCrm.Infrastructure.Captcha;
+using SamaniCrm.Infrastructure.Data;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.ExternalLogin;
 using SamaniCrm.Infrastructure.FileManager;
+using SamaniCrm.Infrastructure.Hubs;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Jobs;
 using SamaniCrm.Infrastructure.Localizer;
 using SamaniCrm.Infrastructure.MappingProfile;
-using SamaniCrm.Infrastructure.Notifications;
+using SamaniCrm.Infrastructure.Repositories;
+using SamaniCrm.Infrastructure.Security;
 using SamaniCrm.Infrastructure.Services;
 using SamaniCrm.Infrastructure.Services.Product;
+using SamaniCrm.Infrastructure.Services.TenantService;
 using SamaniCrm.Infrastructure.Storage;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Security.Claims;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
 
+using Scalar.AspNetCore;
+
+
+
 namespace SamaniCrm.Infrastructure.Extensions;
-public static class ServiceCollectionExtensions
+
+public static partial class ServiceCollectionExtensions
 {
 
     public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration config)
     {
+        var connectionString = config.GetConnectionString("DefaultConnection");
         // ✅ DbContext
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(config.GetConnectionString("DefaultConnection")),
-            ServiceLifetime.Transient);
+            options.UseSqlServer(connectionString, sql =>
+            {
+                sql.EnableRetryOnFailure(3);
+                sql.CommandTimeout(30);
+            }),
+            ServiceLifetime.Scoped);
+
+
         return services;
     }
 
@@ -77,6 +88,16 @@ public static class ServiceCollectionExtensions
             cfg.RegisterServicesFromAssembly(typeof(GetRoleQueryHandler).Assembly);
             cfg.RegisterServicesFromAssembly(typeof(InitialAppQueryHandler).Assembly);
             cfg.RegisterServicesFromAssembly(typeof(GetCurrentUserQueryHandler).Assembly);
+
+
+            cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            // TODO
+            //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(TenantValidationBehavior<,>));
+            //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(TenantAuthorizationBehavior<,>));
+            //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehavior<,>));
+            //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehavior<,>));
+
+
         });
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
@@ -168,7 +189,10 @@ public static class ServiceCollectionExtensions
                 opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                 // برای اینکه فیلد های خالی را هم در خروجی بیاره
                 opt.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never;
-            });
+
+                // opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                 
+    });
 
         return services;
     }
@@ -179,48 +203,14 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
+    public static IServiceCollection AddOpenApiDocumentation(this IServiceCollection services)
     {
-        services.AddSwaggerGen(c =>
+        services.AddOpenApi("v1", opt =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "SamaniCrm API", Version = "v1" });
-            c.AddServer(new OpenApiServer
-            {
-                Url = "https://localhost:44343",
-                Description = "localhost"
-            });
-            c.AddServer(new OpenApiServer
-            {
-                Url = "https://api.samani-crm.com",
-                Description = "Production Server"
-            });
-            c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
-            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            {
-                Description = "JWT Authorization header using the Bearer scheme.",
-                Name = "Authorization",
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.ApiKey,
-                Scheme = "Bearer"
-            });
-            c.SchemaFilter<AddEnumNamesSchemaFilter>();
-
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    Array.Empty<string>()
-                }
-            });
+            opt.AddSchemaTransformer<SchemaTransformer>();
+            opt.AddOperationTransformer<OperationSchmaTransformer>();
+      
         });
-
         return services;
     }
 
@@ -252,14 +242,17 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static IServiceCollection AddCustomServices(this IServiceCollection services)
+    public static IServiceCollection AddCustomServices(this IServiceCollection services, IConfiguration config)
     {
         services.AddHttpContextAccessor();
-        services.AddTransient<IApplicationDbContext, ApplicationDbContext>();
+        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
         services.AddScoped<ITokenGenerator, TokenGenerator>();
         services.AddScoped<ITwoFactorService, TwoFactorService>();
         services.AddScoped<IExternalLoginService, ExternalLoginService>();
+
+
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IRolePermissionService, RolePermissionService>();
         services.AddSingleton(TimeProvider.System);
@@ -272,8 +265,10 @@ public static class ServiceCollectionExtensions
 
 
         services.AddScoped<ISecuritySettingService, SecuritySettingService>();
-        services.AddScoped<ILoginJobsService, LoginJobsService>();
 
+        // Jobs
+        services.AddScoped<ILoginJobsService, LoginJobsService>();
+        services.AddScoped<ICreateTenantJobService, CreateTenantJobService>();
 
         //چون حافظه ایه Singleton باشه بهتره.
         services.AddSingleton<ICaptchaStore, InMemoryCaptchaStore>();
@@ -294,6 +289,56 @@ public static class ServiceCollectionExtensions
         services.AddScoped<INotificationHubService, NotificationHubService>();
         services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<FileDirectoryInitializer>();
+
+
+        // Multi-Tenancy
+        services.AddScoped<ICurrentTenant, CurrentTenant>();
+        services.AddScoped<ITenantResolver, TenantResolver>();
+        services.AddSingleton<IUserIdProvider, TenantUserIdProvider>();
+        services.AddScoped<ITenantRepository, TenantRepository>();
+        services.AddScoped<ITenantService, TenantService>();
+
+
+
+        services.AddScoped<ITenantProvisioningService, TenantProvisioningService>();
+        services.AddScoped<ITenantDatabaseService, TenantDatabaseService>();
+        services.AddScoped<ITenantUniquenessChecker, TenantUniquenessChecker>();
+        services.AddScoped<ITenantNotificationService, TenantNotificationService>();
+        services.AddScoped<IEncryptionService, EncryptionService>();
+        services.AddScoped<IAuditLogService, AuditLogService>();
+
+
+
+        // Encryption
+        services.Configure<EncryptionSettings>(options =>
+        {
+            options.EncryptionKey = config["Encryption:Key"]
+                ?? throw new InvalidOperationException("Encryption key not configured");
+            options.HashSalt = config["Encryption:Salt"] ?? string.Empty;
+        });
+
+        services.AddSingleton<IEncryptionService, EncryptionService>();
+        services.AddSingleton<IConnectionStringEncryptor, ConnectionStringEncryptor>();
+        services.AddSingleton<ISecureRandomGenerator, SecureRandomGenerator>();
+
+        // Data Protection
+        services.AddDataProtection()
+            .SetApplicationName("MultiTenantApp")
+            .SetDefaultKeyLifetime(TimeSpan.FromDays(90));
+
+        services.AddSingleton<ITenantDataProtector, TenantDataProtector>();
+
+        // Tenant DbContext Factory
+        services.AddScoped<ITenantDbContextFactory, TenantDbContextFactory>();
+
+
+        // Seeders
+        // TODO
+        //services.AddScoped<ITenantDataSeeder, CategorySeeder>();
+        //services.AddScoped<ITenantDataSeeder, SettingsSeeder>();
+        //services.AddScoped<ITenantDataSeeder, WorkflowSeeder>();
+
+
 
 
 
@@ -317,6 +362,14 @@ public static class ServiceCollectionExtensions
         //});
 
         //services.AddScoped<IAuthorizationHandler, PermissionHandler>();
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("TenantOwner", policy =>
+                policy.RequireClaim("tenant_role", "Owner"));
+            options.AddPolicy("TenantAdmin", policy =>
+                policy.RequireClaim("tenant_role", "Owner", "Admin"));
+        });
 
         return services;
     }
@@ -420,18 +473,18 @@ public static class ServiceCollectionExtensions
                             };
                         });
                         break;
-                    //case ExternalProviderTypeEnum.OpenIdConnect:
-                    //    services.AddAuthentication().AddOpenIdConnect(provider.Scheme!, options =>
-                    //    {
-                    //        options.Authority = provider.MetadataJson; // or metadata URL
-                    //        options.ClientId = provider.ClientId ?? secretStore.GetSecret("OpenIdConnect.ClientId");
-                    //        options.ClientSecret = secretStore.GetSecret("OpenIdConnect.ClientSecret");
-                    //        options.CallbackPath = provider.CallbackPath != "" ? provider.CallbackPath : $"/signin-{provider.Scheme}";
-                    //        options.SignInScheme = IdentityConstants.ExternalScheme;
-                    //        options.ResponseType = "code";
-                    //        // ...map scopes/claims
-                    //    });
-                    //    break;
+                        //case ExternalProviderTypeEnum.OpenIdConnect:
+                        //    services.AddAuthentication().AddOpenIdConnect(provider.Scheme!, options =>
+                        //    {
+                        //        options.Authority = provider.MetadataJson; // or metadata URL
+                        //        options.ClientId = provider.ClientId ?? secretStore.GetSecret("OpenIdConnect.ClientId");
+                        //        options.ClientSecret = secretStore.GetSecret("OpenIdConnect.ClientSecret");
+                        //        options.CallbackPath = provider.CallbackPath != "" ? provider.CallbackPath : $"/signin-{provider.Scheme}";
+                        //        options.SignInScheme = IdentityConstants.ExternalScheme;
+                        //        options.ResponseType = "code";
+                        //        // ...map scopes/claims
+                        //    });
+                        //    break;
                         // ... برای LinkedIn, Twitter, ...
                 }
 
@@ -440,52 +493,19 @@ public static class ServiceCollectionExtensions
         }
         return services;
     }
-    public class HangfireJobStartupFilter : IStartupFilter
+
+
+
+
+    public static IServiceCollection AddHelthChecks(this IServiceCollection services, IConfiguration config)
     {
-        public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
-        {
-            return app =>
-            {
-                using var scope = app.ApplicationServices.CreateScope();
-                var jobManager = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
-
-                jobManager.AddOrUpdate<ILoginJobsService>(
-                    recurringJobId: "ReleaseExpiredLocksJob",
-                    methodCall: job => job.ReleaseExpiredLocksAsync(null!),
-                    cronExpression: "*/30 * * * * *",
-                     options: new RecurringJobOptions()
-                     {
-                         MisfireHandling = MisfireHandlingMode.Relaxed,
-                         TimeZone = TimeZoneInfo.Utc,
-                     }
-                );
-
-                next(app);
-            };
-        }
+        // TODO
+        //services.AddHealthChecks()
+        // .AddDbContextCheck<ApplicationDbContext>("master_db");
+        //  .AddCheck<TenantDatabaseHealthCheck>("tenant_db");
+        return services;
     }
 
-}
-
-
-public class AddEnumNamesSchemaFilter : ISchemaFilter
-{
-    public void Apply(OpenApiSchema schema, SchemaFilterContext context)
-    {
-        var type = context.Type;
-
-        if (type.IsEnum)
-        {
-            var enumNames = Enum.GetNames(type);
-            var enumNamesArray = new OpenApiArray();
-            foreach (var name in enumNames)
-            {
-                enumNamesArray.Add(new OpenApiString(name));
-            }
-
-            schema.Extensions.Add("x-enum-varnames", enumNamesArray);
-        }
-    }
 }
 
 

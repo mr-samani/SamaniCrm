@@ -11,18 +11,18 @@
 
 /* Created with custom template by mohammadreza SAMANI*/
 
-/** Interface for StringAutoCompleteDto */
-export interface IStringAutoCompleteDto {
+/** Interface for AutoCompleteDtoOfstring */
+export interface IAutoCompleteDtoOfstring {
   id: string;
   title: string;
 }
 
-/** Class for StringAutoCompleteDto */
-export class StringAutoCompleteDto implements IStringAutoCompleteDto {
+/** Class for AutoCompleteDtoOfstring */
+export class AutoCompleteDtoOfstring implements IAutoCompleteDtoOfstring {
   id!: string;
   title!: string;
 
-  constructor(data?: IStringAutoCompleteDto) {
+  constructor(data?: IAutoCompleteDtoOfstring) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -38,8 +38,8 @@ init(data?: any) {
   }
 }
 
-  static fromJS(data: any): StringAutoCompleteDto {
-    const instance = new StringAutoCompleteDto();
+  static fromJS(data: any): AutoCompleteDtoOfstring {
+    const instance = new AutoCompleteDtoOfstring();
     instance.init(data);
     return instance;
   }

@@ -4,7 +4,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Migrator.Manager;
-using SixLabors.ImageSharp;
 
 using SamaniCrm.DbMigrator;
 

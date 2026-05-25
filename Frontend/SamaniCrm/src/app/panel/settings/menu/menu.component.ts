@@ -61,9 +61,9 @@ export class MenuComponent extends AppComponentBase implements OnInit {
     for (let i = 0; i < list.length; i++) {
       items.push(
         new ReorderItem({
-          menuId: list[i].id,
+          menuId: list[i].id!,
           orderIndex: orderIndex,
-          parentId: parentId,
+          parentId: parentId ?? "",
         }),
       );
       orderIndex++;

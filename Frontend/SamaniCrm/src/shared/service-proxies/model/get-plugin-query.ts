@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,20 +13,20 @@
 
 /** Interface for GetPluginQuery */
 export interface IGetPluginQuery {
+  filter?: string;
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;
   sortDirection?: string;
-  filter?: string;
 }
 
 /** Class for GetPluginQuery */
 export class GetPluginQuery implements IGetPluginQuery {
+  filter?: string;
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;
   sortDirection?: string;
-  filter?: string;
 
   constructor(data?: IGetPluginQuery) {
     if (data) {
@@ -39,11 +39,11 @@ export class GetPluginQuery implements IGetPluginQuery {
 
 init(data?: any) {
   if (data) {
+    this.filter = data["filter"];
     this.pageNumber = data["pageNumber"];
     this.pageSize = data["pageSize"];
     this.sortBy = data["sortBy"];
     this.sortDirection = data["sortDirection"];
-    this.filter = data["filter"];
   }
 }
 

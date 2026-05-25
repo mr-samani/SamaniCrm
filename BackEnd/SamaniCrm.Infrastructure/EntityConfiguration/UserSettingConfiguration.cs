@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SamaniCrm.Domain.Entities;
-using SamaniCrm.Domain.Entities.ProductEntities;
 using SamaniCrm.Infrastructure.Identity;
 using System;
 using System.Collections.Generic;

@@ -1,18 +1,15 @@
-﻿using Duende.IdentityServer.Endpoints.Results;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Http.Headers;
-using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 
 namespace SamaniCrm.Infrastructure.ExternalLogin;
+
 public class ExternalLoginService : IExternalLoginService
 {
     private readonly HttpClient _httpClient;
@@ -24,7 +21,7 @@ public class ExternalLoginService : IExternalLoginService
         _logger = logger;
     }
 
-    public async Task<ExternalLoginResult> ExchangeCodeAsync(
+    public async Task<ExternalLoginResult?> ExchangeCodeAsync(
         ExternalProviderTypeEnum provider,
         string code,
         string tokenEndpoint,
@@ -58,16 +55,16 @@ public class ExternalLoginService : IExternalLoginService
         _logger.LogInformation("Token response from {TokenEndpoint}: {Content}", tokenEndpoint, content);
 
         var result = await ParseTokenResponseAsync(response, cancellationToken);
-        if (response.StatusCode != HttpStatusCode.OK)
+        if (response.StatusCode != HttpStatusCode.OK || result == null)
         {
-            throw new ExternalLoginException(result.ErrorDescription ?? "Error on login with external: " + provider);
+            throw new ExternalLoginException(result?.ErrorDescription ?? "Error on login with external: " + provider);
         }
 
         response.EnsureSuccessStatusCode();
 
         string access_token = result.AccessToken;
-        string refresh_token = result.RefreshToken;
-        string idToken = result.IdToken;
+        string? refresh_token = result.RefreshToken;
+        string? idToken = result.IdToken;
 
         var output = new ExternalLoginResult();
         switch (provider)
@@ -160,10 +157,14 @@ public class ExternalLoginService : IExternalLoginService
     }
 
     // Validate ID Token (basic validation - in production use proper JWT library)
-    private Dictionary<string, object> ValidateIdToken(string idToken, ExternalProvider provider)
+    private Dictionary<string, object>? ValidateIdToken(string? idToken, ExternalProvider? provider)
     {
         try
         {
+            if (idToken == null)
+            {
+                return null;
+            }
             // Decode JWT (without signature verification for now)
             var parts = idToken.Split('.');
             if (parts.Length != 3) return null;

@@ -7,7 +7,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Interfaces;
 
-namespace SamaniCrm.Application.Menu.Commands
+namespace SamaniCrm.Application.MenuCommands
 {
     public record ReorderMenuCommand(List<ReorderItem> Items) : IRequest<bool>;
 
@@ -28,11 +28,12 @@ namespace SamaniCrm.Application.Menu.Commands
 
             foreach (var item in request.Items)
             {
-                var menu = menus.FirstOrDefault(m => m.Id == item.MenuId);
+                var menu = menus
+                        .OrderBy(x => x.CreatedAt)
+                        .FirstOrDefault(m => m.Id == item.MenuId);
                 if (menu != null)
                 {
                     menu.OrderIndex = item.OrderIndex;
-                    menu.LastModifiedTime = DateTime.UtcNow;
                     menu.ParentId = item.ParentId;
                 }
             }

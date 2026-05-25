@@ -1,3 +1,4 @@
+import { ChangeTenantDialogComponent } from './select-tenant/change-tenant-dialog/change-tenant-dialog.component';
 import { OpenidAuthCallbackComponent } from './openid-auth-callback/openid-auth-callback.component';
 import { ExternalLoginCalbackComponent } from './external-login-calback/external-login-calback.component';
 import { NgModule } from '@angular/core';
@@ -14,15 +15,10 @@ import { CaptchaModule } from '@shared/captcha/captcha.module';
 import { SharedModule } from '@shared/shared.module';
 import { AccountServiceProxy } from '@shared/service-proxies';
 import { OtpInputComponent } from '@shared/components/otp-input/otp-input.component';
+import { SelectTenantComponent } from './select-tenant/select-tenant.component';
 
 @NgModule({
-  declarations: [
-    AccountComponent,
-    LoginComponent,
-    RegisterComponent,
-    ExternalLoginCalbackComponent,
-    OpenidAuthCallbackComponent,
-  ],
+  declarations: [AccountComponent, LoginComponent, RegisterComponent, ExternalLoginCalbackComponent, OpenidAuthCallbackComponent, SelectTenantComponent, ChangeTenantDialogComponent],
   imports: [
     CommonModule,
     AccountRoutingModule,

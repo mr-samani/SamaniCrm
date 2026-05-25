@@ -9,27 +9,27 @@
  */
 import { Meta } from './meta';
 import { ApiError } from './api-error';
-import { GuidAutoCompleteDto } from './guid-auto-complete-dto';
+import { AutoCompleteDtoOfGuid } from './guid-auto-complete-dto';
 
 
 /* Created with custom template by mohammadreza SAMANI*/
 
-/** Interface for GuidAutoCompleteDtoListApiResponse */
-export interface IGuidAutoCompleteDtoListApiResponse {
+/** Interface for AutoCompleteDtoOfGuidListApiResponse */
+export interface IAutoCompleteDtoOfGuidListApiResponse {
   success?: boolean;
-  data?: Array<GuidAutoCompleteDto>;
+  data?: Array<AutoCompleteDtoOfGuid>;
   errors?: Array<ApiError>;
   meta?: Meta;
 }
 
-/** Class for GuidAutoCompleteDtoListApiResponse */
-export class GuidAutoCompleteDtoListApiResponse implements IGuidAutoCompleteDtoListApiResponse {
+/** Class for AutoCompleteDtoOfGuidListApiResponse */
+export class AutoCompleteDtoOfGuidListApiResponse implements IAutoCompleteDtoOfGuidListApiResponse {
   success?: boolean;
-  data?: Array<GuidAutoCompleteDto>;
+  data?: Array<AutoCompleteDtoOfGuid>;
   errors?: Array<ApiError>;
   meta?: Meta;
 
-  constructor(data?: IGuidAutoCompleteDtoListApiResponse) {
+  constructor(data?: IAutoCompleteDtoOfGuidListApiResponse) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -44,7 +44,7 @@ init(data?: any) {
     if (Array.isArray(data["data"])) {
       this.data = [] as any;
       for (let item of data["data"])
-        (this.data as any).push(GuidAutoCompleteDto.fromJS(item));
+        (this.data as any).push(AutoCompleteDtoOfGuid.fromJS(item));
     }
     if (Array.isArray(data["errors"])) {
       this.errors = [] as any;
@@ -55,8 +55,8 @@ init(data?: any) {
   }
 }
 
-  static fromJS(data: any): GuidAutoCompleteDtoListApiResponse {
-    const instance = new GuidAutoCompleteDtoListApiResponse();
+  static fromJS(data: any): AutoCompleteDtoOfGuidListApiResponse {
+    const instance = new AutoCompleteDtoOfGuidListApiResponse();
     instance.init(data);
     return instance;
   }

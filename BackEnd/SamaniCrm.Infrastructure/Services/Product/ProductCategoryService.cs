@@ -9,7 +9,7 @@ using SamaniCrm.Application.ProductManagerManager.Dtos;
 using SamaniCrm.Application.ProductManagerManager.Interfaces;
 using SamaniCrm.Application.ProductManagerManager.Queries;
 using SamaniCrm.Core.Shared.Interfaces;
-using SamaniCrm.Domain.Entities.ProductEntities;
+using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.Identity;
 using System;
 using System.Collections.Generic;
@@ -25,13 +25,13 @@ public class ProductCategoryService : IProductCategoryService
 {
     private readonly ApplicationDbContext _context;
 
-    private readonly ICurrentUserService _currentUserService;
+    private readonly ICurrentUserService _currentUser;
     private readonly ILocalizer L;
 
-    public ProductCategoryService(ApplicationDbContext context, ICurrentUserService currentUserService, ILocalizer l)
+    public ProductCategoryService(ApplicationDbContext context, ICurrentUserService currentUser, ILocalizer l)
     {
         _context = context;
-        _currentUserService = currentUserService;
+        _currentUser = currentUser;
         L = l;
     }
 
@@ -79,7 +79,7 @@ public class ProductCategoryService : IProductCategoryService
            OrderIndex = c.OrderIndex,
            ParentId = c.ParentId,
            Slug = c.Slug,
-           CreationTime = c.CreationTime.ToUniversalTime(),
+           CreationTime = c.CreatedAt.ToUniversalTime(),
 
            // فقط چک کن که فرزند داره یا نه، بدون کوئری اضافه
            ChildCount = _context.ProductCategories.Count(x => x.ParentId == c.Id),

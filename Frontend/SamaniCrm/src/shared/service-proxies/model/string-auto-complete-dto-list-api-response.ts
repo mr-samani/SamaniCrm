@@ -8,28 +8,28 @@
  * Do not edit the class manually.
  */
 import { Meta } from './meta';
-import { StringAutoCompleteDto } from './string-auto-complete-dto';
+import { AutoCompleteDtoOfstring } from './string-auto-complete-dto';
 import { ApiError } from './api-error';
 
 
 /* Created with custom template by mohammadreza SAMANI*/
 
-/** Interface for StringAutoCompleteDtoListApiResponse */
-export interface IStringAutoCompleteDtoListApiResponse {
+/** Interface for AutoCompleteDtoOfstringListApiResponse */
+export interface IAutoCompleteDtoOfstringListApiResponse {
   success?: boolean;
-  data?: Array<StringAutoCompleteDto>;
+  data?: Array<AutoCompleteDtoOfstring>;
   errors?: Array<ApiError>;
   meta?: Meta;
 }
 
-/** Class for StringAutoCompleteDtoListApiResponse */
-export class StringAutoCompleteDtoListApiResponse implements IStringAutoCompleteDtoListApiResponse {
+/** Class for AutoCompleteDtoOfstringListApiResponse */
+export class AutoCompleteDtoOfstringListApiResponse implements IAutoCompleteDtoOfstringListApiResponse {
   success?: boolean;
-  data?: Array<StringAutoCompleteDto>;
+  data?: Array<AutoCompleteDtoOfstring>;
   errors?: Array<ApiError>;
   meta?: Meta;
 
-  constructor(data?: IStringAutoCompleteDtoListApiResponse) {
+  constructor(data?: IAutoCompleteDtoOfstringListApiResponse) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -44,7 +44,7 @@ init(data?: any) {
     if (Array.isArray(data["data"])) {
       this.data = [] as any;
       for (let item of data["data"])
-        (this.data as any).push(StringAutoCompleteDto.fromJS(item));
+        (this.data as any).push(AutoCompleteDtoOfstring.fromJS(item));
     }
     if (Array.isArray(data["errors"])) {
       this.errors = [] as any;
@@ -55,8 +55,8 @@ init(data?: any) {
   }
 }
 
-  static fromJS(data: any): StringAutoCompleteDtoListApiResponse {
-    const instance = new StringAutoCompleteDtoListApiResponse();
+  static fromJS(data: any): AutoCompleteDtoOfstringListApiResponse {
+    const instance = new AutoCompleteDtoOfstringListApiResponse();
     instance.init(data);
     return instance;
   }

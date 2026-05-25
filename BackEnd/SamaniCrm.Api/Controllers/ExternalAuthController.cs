@@ -49,6 +49,7 @@ namespace SamaniCrm.Api.Controllers
                 backendUrl += "/";
             }
             var provider = await _context.ExternalProviders
+                  .OrderBy(x => x.CreatedAt)
                   .FirstOrDefaultAsync(x => x.Name.ToLower() == providerName.ToLower() && x.IsActive);
 
             if (provider == null)
@@ -93,7 +94,8 @@ namespace SamaniCrm.Api.Controllers
         [HttpGet("callback/{providerName}")]
         public async Task<IActionResult> Callback(
             string providerName,
-            [FromQuery] string? code,
+            [FromQuery] string tenancyName,
+            [FromQuery] string code,
             [FromQuery] string? id_token,
             [FromQuery] string? access_token,
             [FromQuery] string? token_type,
@@ -117,6 +119,7 @@ namespace SamaniCrm.Api.Controllers
                 }
 
                 var provider = await _context.ExternalProviders
+                    .OrderBy(x => x.CreatedAt)
                     .FirstOrDefaultAsync(x => x.Name.ToLower() == providerName.ToLower() && x.IsActive);
 
                 if (provider == null)
@@ -135,7 +138,7 @@ namespace SamaniCrm.Api.Controllers
                 // TODO :code = idTokenFinal , code , accessTokenFinal
                 var codeVerifier = HttpContext.Session.GetString("pkce_code_verifier");
 
-                var req = new ExternalLoginCallbackCommand(code, providerName, codeVerifier);
+                var req = new ExternalLoginCallbackCommand(code, providerName, tenancyName, codeVerifier);
                 var loginResult = await _identityService.ExternalSignInAsync(req, cancellationToken);
 
                 if (loginResult == null)
@@ -171,22 +174,22 @@ namespace SamaniCrm.Api.Controllers
     public class TokenResponse
     {
         [JsonPropertyName("access_token")]
-        public string AccessToken { get; set; }
+        public string AccessToken { get; set; } = default!;
 
         [JsonPropertyName("token_type")]
-        public string TokenType { get; set; }
+        public string TokenType { get; set; } = default!;
 
         [JsonPropertyName("expires_in")]
         public int ExpiresIn { get; set; }
 
         [JsonPropertyName("refresh_token")]
-        public string RefreshToken { get; set; }
+        public string RefreshToken { get; set; } = default!;
 
         [JsonPropertyName("id_token")]
-        public string IdToken { get; set; }
+        public string IdToken { get; set; } = default!;
 
         [JsonPropertyName("scope")]
-        public string Scope { get; set; }
+        public string Scope { get; set; } = default!;
     }
 
 

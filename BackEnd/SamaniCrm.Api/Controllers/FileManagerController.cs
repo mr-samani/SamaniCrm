@@ -6,7 +6,7 @@ using SamaniCrm.Application.FileManager.Commands;
 using SamaniCrm.Application.FileManager.Dtos;
 using SamaniCrm.Application.FileManager.Queries;
 using SamaniCrm.Application.Localize.Queries;
-using SamaniCrm.Core.Permissions;
+using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Host.Models;
 
@@ -24,7 +24,7 @@ public class FileManagerController : ApiBaseController
     }
 
     [HttpGet("GetTreeFolders")]
-    [Permission(AppPermissions.FileManager_List)]
+    [Permission(AppPermissions.FileManager.List)]
     [ProducesResponseType(typeof(ApiResponse<List<FileNodeDto>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTreeFolders()
     {
@@ -34,7 +34,7 @@ public class FileManagerController : ApiBaseController
 
 
     [HttpGet("GetFolderDetails")]
-    [Permission(AppPermissions.FileManager_List)]
+    [Permission(AppPermissions.FileManager.List)]
     [ProducesResponseType(typeof(ApiResponse<List<FileNodeDto>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetFolderDetails(Guid parentId)
     {
@@ -44,7 +44,7 @@ public class FileManagerController : ApiBaseController
 
 
     [HttpPost("CreateFolder")]
-    [Permission(AppPermissions.FileManager_CreateFolder)]
+    [Permission(AppPermissions.FileManager.CreateFolder)]
     [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
     public async Task<IActionResult> CreateFolder(CreateFolderCommand request)
     {
@@ -54,7 +54,7 @@ public class FileManagerController : ApiBaseController
 
 
     [HttpPost("DeleteFileOrFolder")]
-    [Permission(AppPermissions.FileManager_Delete)]
+    [Permission(AppPermissions.FileManager.Delete)]
     [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteFileOrFolder(DeleteFileOrFolderCommand request)
     {
@@ -66,7 +66,7 @@ public class FileManagerController : ApiBaseController
 
 
     [HttpGet("GetFileManagerIcons")]
-    [Permission(AppPermissions.FileManager_List)]
+    [Permission(AppPermissions.FileManager.List)]
     [ProducesResponseType(typeof(ApiResponse<List<string>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetFileManagerIcons()
     {
@@ -76,7 +76,7 @@ public class FileManagerController : ApiBaseController
 
 
     [HttpPost("SetFolderIcon")]
-    [Permission(AppPermissions.FileManager_Delete)]
+    [Permission(AppPermissions.FileManager.Delete)]
     [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
     public async Task<IActionResult> SetFolderIcon(SetFolderIconCommand request)
     {
@@ -86,7 +86,7 @@ public class FileManagerController : ApiBaseController
 
 
     [HttpPost("Rename")]
-    [Permission(AppPermissions.FileManager_Rename)]
+    [Permission(AppPermissions.FileManager.Rename)]
     [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
     public async Task<IActionResult> Rename(RenameCommand request)
     {

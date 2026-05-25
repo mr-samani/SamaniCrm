@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { AppComponentBase } from '@app/app-component-base';
 import { FileManagerDto } from '@app/file-manager/models/file-manager-dto';
 import {
+  ApiResponseOfListOfFileNodeDto,
   DeleteFileOrFolderCommand,
   FileManagerServiceProxy,
-  FileNodeDtoListApiResponse,
 } from '@shared/service-proxies';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, catchError, of, map, finalize } from 'rxjs';
 import { SelectIconDialogComponent } from '../select-icon/select-icon.component';
@@ -98,7 +98,7 @@ export class FileListComponent extends AppComponentBase implements OnInit, OnDes
           this.fileList = [];
           return this.fileManagerService.getFolderDetails(input.id).pipe(
             catchError((err, caught) => {
-              return of(new FileNodeDtoListApiResponse());
+              return of(new ApiResponseOfListOfFileNodeDto());
             }),
             map((response) => {
               var list: FileManagerDto[] = response.data ?? [];

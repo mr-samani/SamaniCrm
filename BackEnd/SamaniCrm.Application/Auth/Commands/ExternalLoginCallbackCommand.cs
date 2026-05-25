@@ -1,20 +1,9 @@
-﻿using Hangfire;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
+﻿using MediatR;
 using SamaniCrm.Application.Common.Interfaces;
-using SamaniCrm.Application.DTOs;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.Auth.Commands;
 
-public record ExternalLoginCallbackCommand(string code,string provider,string? codeVerifier) : IRequest<LoginResult>;
+public record ExternalLoginCallbackCommand(string code,string provider,string tenancyName,string? codeVerifier) : IRequest<LoginResult>;
 
 public class ExternalLoginCallbackHandler : IRequestHandler<ExternalLoginCallbackCommand, LoginResult>
 {

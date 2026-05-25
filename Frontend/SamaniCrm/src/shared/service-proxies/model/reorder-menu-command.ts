@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -14,12 +14,12 @@ import { ReorderItem } from './reorder-item';
 
 /** Interface for ReorderMenuCommand */
 export interface IReorderMenuCommand {
-  items?: Array<ReorderItem>;
+  items: Array<ReorderItem>;
 }
 
 /** Class for ReorderMenuCommand */
 export class ReorderMenuCommand implements IReorderMenuCommand {
-  items?: Array<ReorderItem>;
+  items!: Array<ReorderItem>;
 
   constructor(data?: IReorderMenuCommand) {
     if (data) {

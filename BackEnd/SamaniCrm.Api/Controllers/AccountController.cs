@@ -1,25 +1,14 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using SamaniCrm.Api.Attributes;
 using SamaniCrm.Api.Controllers;
 using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Auth.Queries;
 using SamaniCrm.Application.Common.DTOs;
-using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
-using SamaniCrm.Core.Permissions;
+using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Host.Models;
-using SamaniCrm.Infrastructure.Identity;
-using SamaniCrm.Infrastructure.Identity.Migrations;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SamaniCrm.Host.Controllers
 {
@@ -80,7 +69,7 @@ namespace SamaniCrm.Host.Controllers
 
 
         [HttpPost("generate2FaRequest")]
-        [Permission(AppPermissions.SecuritySetting_TwoFactorApp)]
+        [Permission(AppPermissions.SecuritySetting.TwoFactorApp)]
         [ProducesResponseType(typeof(ApiResponse<GenerateTwoFactorCodeDto>), StatusCodes.Status200OK)]
         public IActionResult generate2FaRequestGenerate()
         {
@@ -89,7 +78,7 @@ namespace SamaniCrm.Host.Controllers
         }
 
         [HttpPost("Verify2FaApp")]
-        [Permission(AppPermissions.SecuritySetting_TwoFactorApp)]
+        [Permission(AppPermissions.SecuritySetting.TwoFactorApp)]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         public async Task<IActionResult> Verify2FaApp([FromBody] Verify2FARequest req)
         {

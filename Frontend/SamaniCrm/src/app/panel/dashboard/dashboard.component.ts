@@ -164,7 +164,7 @@ export class DashboardComponent extends AppComponentBase implements OnInit {
   deleteWidget(item: Widget) {
     this.loadingItems = true;
     const input = new DeleteDashboardItemCommand();
-    input.id = item.id;
+    input.id = item.id!;
     this.dashboardService
       .deleteDashboardItem(input)
       .pipe(finalize(() => (this.loadingItems = false)))
@@ -187,7 +187,7 @@ export class DashboardComponent extends AppComponentBase implements OnInit {
       if (c.isConfirmed) {
         this.loadingItems = true;
         const input = new DeleteDashboardCommand();
-        input.id = dashboard.id;
+        input.id = dashboard.id!;
         this.dashboardService
           .deleteDashboard(input)
           .pipe(finalize(() => (this.loadingItems = false)))

@@ -13,7 +13,7 @@
         <app-security-setting></app-security-setting>
       </m-tab-item>
     }
-    @if ([AppPermissions.SecuritySetting_ExternalProvidersList] | permissionAll) {
+    @if ([AppPermissions.SecuritySetting_ExternalProviders_List] | permissionAll) {
       <m-tab-item [title]="'ExternalProviders' | translate">
         <app-external-providers></app-external-providers>
       </m-tab-item>

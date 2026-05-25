@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SamaniCrm.Core.Shared.Interfaces.Tenant;
+using SamaniCrm.Application.Features.Tenants.Interfaces;
 
 namespace SamaniCrm.Application.Queries.User
 {
@@ -17,14 +19,17 @@ namespace SamaniCrm.Application.Queries.User
     public class GetUserDetailsByUserNameQueryHandler : IRequestHandler<GetUserDetailsByUserNameQuery, UserDTO>
     {
         private readonly IIdentityService _identityService;
+        private readonly ICurrentTenant _currentTenant;
 
-        public GetUserDetailsByUserNameQueryHandler(IIdentityService identityService)
+        public GetUserDetailsByUserNameQueryHandler(IIdentityService identityService, ICurrentTenant currentTenant)
         {
             _identityService = identityService;
+            _currentTenant = currentTenant;
         }
         public async Task<UserDTO> Handle(GetUserDetailsByUserNameQuery request, CancellationToken cancellationToken)
         {
-            var result = await _identityService.GetUserDetailsByUserNameAsync(request.UserName);
+            Guid? tenantId = _currentTenant.TenantId;
+            var result = await _identityService.GetUserDetailsByUserNameAsync(request.UserName, tenantId);
             return new UserDTO()
             {
                 Id = result.Id,

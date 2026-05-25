@@ -147,7 +147,7 @@ export class ProductsComponent extends AppComponentBase implements OnInit {
       if (result.isConfirmed) {
         this.showMainLoading();
         this.productService
-          .deleteProduct(new DeleteProductCommand({ id: item.id }))
+          .deleteProduct(new DeleteProductCommand({ id: item.id! }))
           .pipe(
         finalize(() => {
           this.hideMainLoading();

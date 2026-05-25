@@ -34,7 +34,7 @@ namespace SamaniCrm.Infrastructure.Cache
             var redisValue = await _redisDb.StringGetAsync(key);
             if (redisValue.IsNullOrEmpty) return default;
 
-            var value = JsonSerializer.Deserialize<T>(redisValue!);
+            T? value = JsonSerializer.Deserialize<T>(redisValue.ToString(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             _memoryCache.Set(key, value); // optional: you can add expiration here
             return value;
         }
@@ -43,12 +43,21 @@ namespace SamaniCrm.Infrastructure.Cache
         {
             var json = JsonSerializer.Serialize(value);
 
+            // Memory Cache
             var memOptions = new MemoryCacheEntryOptions();
             if (expiration.HasValue)
                 memOptions.SetAbsoluteExpiration(expiration.Value);
-
             _memoryCache.Set(key, value, memOptions);
-            await _redisDb.StringSetAsync(key, json, expiration);
+
+            // Redis
+            if (expiration.HasValue)
+            {
+                await _redisDb.StringSetAsync(key, json, expiration.Value);
+            }
+            else
+            {
+                await _redisDb.StringSetAsync(key, json);
+            }
 
             lock (_lock)
             {
@@ -69,7 +78,7 @@ namespace SamaniCrm.Infrastructure.Cache
             return Task.CompletedTask;
         }
 
-        public async Task<IEnumerable<string>> GetKeysAsync(string? pattern = null)
+        public async Task<IEnumerable<string?>> GetKeysAsync(string? pattern = null)
         {
             // Redis does not support full scan directly from IDatabase
             var keys = _keys.ToList();
@@ -101,7 +110,7 @@ namespace SamaniCrm.Infrastructure.Cache
             {
                 var ttl = await _redisDb.KeyTimeToLiveAsync(key);
                 var value = await _redisDb.StringGetAsync(key);
-                var size = Encoding.UTF8.GetByteCount(value);
+                var size = value.HasValue ? Encoding.UTF8.GetByteCount(value!) : 0;
 
                 return new CacheEntryDto
                 {

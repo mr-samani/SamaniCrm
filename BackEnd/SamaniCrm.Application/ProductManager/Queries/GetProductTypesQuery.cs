@@ -42,7 +42,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
             {
                 query = query.Where(c =>
                             c.Translations.Any(t => t.Culture == currentLanguage &&
-                            (t.Name.Contains(request.Filter) || t.Description.Contains(request.Filter))
+                            (t.Name.Contains(request.Filter) || (t.Description != null &&  t.Description.Contains(request.Filter)))
                             )
                     );
             }
@@ -67,7 +67,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
                     Id = s.Id,
                     Name = s.Translations.Where(w => w.Culture == currentLanguage).Select(s => s.Name).FirstOrDefault() ?? "",
                     Description = s.Translations.Where(w => w.Culture == currentLanguage).Select(s => s.Description).FirstOrDefault() ?? "",
-                    CreationTime = s.CreationTime,
+                    CreationTime = s.CreatedAt,
                 })
                 .ToListAsync(cancellationToken);
             return new PaginatedResult<ProductTypeDto>()

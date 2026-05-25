@@ -74,7 +74,7 @@ namespace SamaniCrm.Infrastructure.Services
                     n.Title,
                     n.RecieverUserId,
                     n.SenderUserId,
-                    n.CreationTime,
+                    n.CreatedAt,
                 })
                 .ToListAsync(cancellationToken);
 
@@ -102,7 +102,7 @@ namespace SamaniCrm.Infrastructure.Services
                 SenderName = n.SenderUserId != null && userMap.ContainsKey((Guid)n.SenderUserId)
                     ? userMap[n.SenderUserId.Value]
                     : "System",
-                CreationTime = n.CreationTime.ToUniversalTime()
+                CreationTime = n.CreatedAt.ToUniversalTime()
             }).ToList();
 
             return new PaginatedResult<NotificationDto>
@@ -147,7 +147,7 @@ namespace SamaniCrm.Infrastructure.Services
                 Type = notification.Type,
                 Periority = notification.Periority,
                 Read = notification.Read,
-                CreationTime = notification.CreationTime.ToUniversalTime(),
+                CreationTime = notification.CreatedAt.ToUniversalTime(),
                 RecieverName = userMap.ContainsKey(notification.RecieverUserId)
                     ? userMap[notification.RecieverUserId]
                     : "",

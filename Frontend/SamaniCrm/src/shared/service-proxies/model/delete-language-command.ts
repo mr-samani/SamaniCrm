@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,12 +13,12 @@
 
 /** Interface for DeleteLanguageCommand */
 export interface IDeleteLanguageCommand {
-  culture?: string;
+  culture: string;
 }
 
 /** Class for DeleteLanguageCommand */
 export class DeleteLanguageCommand implements IDeleteLanguageCommand {
-  culture?: string;
+  culture!: string;
 
   constructor(data?: IDeleteLanguageCommand) {
     if (data) {

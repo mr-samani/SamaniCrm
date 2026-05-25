@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SamaniCrm.Domain.Entities.ProductEntities;
+using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Infrastructure.EntityConfiguration;
 

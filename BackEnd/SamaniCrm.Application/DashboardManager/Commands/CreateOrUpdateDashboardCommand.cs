@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
-using SamaniCrm.Domain.Entities.Dashboard;
+using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Application.DashboardManager
 {
@@ -23,7 +23,7 @@ namespace SamaniCrm.Application.DashboardManager
 
         public async Task<bool> Handle(CreateOrUpdateDashboardCommand request, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(_currentUser.UserId))
+            if (_currentUser.UserId == null)
             {
                 throw new AccessDeniedException();
             }
@@ -35,7 +35,7 @@ namespace SamaniCrm.Application.DashboardManager
             }
             if (found == null)
             {
-                var userId = Guid.Parse(_currentUser.UserId);
+                var userId = _currentUser.UserId;
                 var newItem = new Dashboard
                 {
                     Title = request.Title,

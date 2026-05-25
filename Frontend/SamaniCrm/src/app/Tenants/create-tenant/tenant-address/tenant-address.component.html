@@ -1,0 +1,120 @@
+<div class="card">
+      <div class="card-header">
+    <i class="fa fa-map-location mx-2"></i>
+    <span>{{ 'TenantAddress' | translate }}</span>
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'RegistrationNumber' | translate }}</mat-label>
+          <input matInput formControlName="registrationNumber" />
+          @if (form.get('registrationNumber')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('RegistrationNumber' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'TaxId' | translate }}</mat-label>
+          <input matInput formControlName="taxId" />
+          @if (form.get('taxId')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('TaxId' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('taxId')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'IsInvalid' | translate: { value: ('TaxId' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'Website' | translate }}</mat-label>
+          <input matInput formControlName="website" />
+          @if (form.get('website')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('Website' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('website')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'IsInvalid' | translate: { value: ('Website' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'Country' | translate }}</mat-label>
+          <input matInput formControlName="country" />
+          @if (form.get('country')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('Country' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('country')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'IsInvalid' | translate: { value: ('Country' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'City' | translate }}</mat-label>
+          <input matInput formControlName="city" />
+          @if (form.get('city')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('City' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'PostalCode' | translate }}</mat-label>
+          <input matInput formControlName="postalCode" maxlength="10" />
+          @if (form.get('postalCode')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('PostalCode' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('postalCode')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'IsInvalid' | translate: { value: ('PostalCode' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-12">
+        <mat-form-field>
+          <mat-label>{{ 'Address' | translate }}</mat-label>
+          <textarea matInput formControlName="address" rows="5"></textarea>
+          @if (form.get('address')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('Address' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('address')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'IsInvalid' | translate: { value: ('Address' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--    
+      latitude: ['', []],
+      longitude: ['', []], -->

@@ -1,0 +1,97 @@
+<div class="card">  <div class="card-header">
+    <i class="fa fa-address-card mx-2"></i>
+    <span>{{ 'TenantAdminUser' | translate }}</span>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'AdminFirstName' | translate }}</mat-label>
+          <input matInput formControlName="adminFirstName" />
+          @if (form.get('adminFirstName')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('FirstName' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'AdminLastName' | translate }}</mat-label>
+          <input matInput formControlName="adminLastName" />
+          @if (form.get('adminLastName')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('LastName' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('adminLastName')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'IsInvalid' | translate: { value: ('astName' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'Email' | translate }}</mat-label>
+          <input matInput formControlName="adminEmail" />
+          @if (form.get('adminEmail')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('Email' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('adminEmail')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'IsInvalid' | translate: { value: ('Email' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'Mobile' | translate }}</mat-label>
+          <input matInput formControlName="adminMobile" />
+          @if (form.get('adminMobile')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('Mobile' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('adminMobile')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'IsInvalid' | translate: { value: ('Mobile' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'AdminUserName' | translate }}</mat-label>
+          <input matInput formControlName="adminUserName" />
+          @if (form.get('adminUserName')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('UserName' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="col-sm-6 col-md-3">
+        <mat-form-field>
+          <mat-label>{{ 'AdminPassword' | translate }}</mat-label>
+          <input matInput formControlName="adminPassword" />
+          @if (form.get('adminPassword')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('Password' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('adminPassword')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'IsInvalid' | translate: { value: ('Password' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</div>

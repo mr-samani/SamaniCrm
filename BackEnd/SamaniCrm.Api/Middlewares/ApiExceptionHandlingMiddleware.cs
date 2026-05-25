@@ -101,7 +101,7 @@ public class ApiExceptionHandlingMiddleware
         {
             Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+          //  DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 
         var json = JsonSerializer.Serialize(response, options);

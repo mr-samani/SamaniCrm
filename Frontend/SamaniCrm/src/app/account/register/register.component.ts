@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
+import { AppConst } from '@shared/app-const';
 
 @Component({
   selector: 'app-register',
@@ -11,6 +12,7 @@ import { AppComponentBase } from '@app/app-component-base';
 export class RegisterComponent extends AppComponentBase implements OnInit {
   registerForm: FormGroup;
   loading = false;
+  multiTenancy = AppConst.multiTenancy;
   constructor() {
     super();
     this.registerForm = this.fb.group({

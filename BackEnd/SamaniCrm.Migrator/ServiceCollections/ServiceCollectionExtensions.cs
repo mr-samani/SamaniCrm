@@ -3,14 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.Persistence;
-using SixLabors.ImageSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SamaniCrm.Infrastructure.Services.TenantService;
 
 namespace SamaniCrm.DbMigrator;
 
@@ -25,7 +21,7 @@ public static class ServiceCollectionExtensions
         // ✅ DbContext
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(connectionString),
-            ServiceLifetime.Transient);
+            ServiceLifetime.Scoped);
         return services;
     }
 
@@ -34,6 +30,7 @@ public static class ServiceCollectionExtensions
     {
         // Application Services
         services.AddScoped<ICurrentUserService, DummyCurrentUserService>();
+        services.AddScoped<ICurrentTenant, CurrentTenant>();
         services.AddScoped<ApplicationDbInitializer>();
 
         //var serviceProvider = services.BuildServiceProvider();
@@ -50,10 +47,12 @@ public static class ServiceCollectionExtensions
 
     public class DummyCurrentUserService : ICurrentUserService
     {
-        public string? UserId => "MigrationUser"; // یا null هم میتونی بدی
+        public Guid? UserId => null;//"MigrationUser"; // یا null هم میتونی بدی
         public string? UserName => "MigrationUser"; // یا null هم میتونی بدی
 
         public string lang => "fa-IR";
+
+        public bool IsAuthenticated => throw new NotImplementedException();
 
         string ICurrentUserService.lang { get => lang; set => throw new NotImplementedException(); }
     }

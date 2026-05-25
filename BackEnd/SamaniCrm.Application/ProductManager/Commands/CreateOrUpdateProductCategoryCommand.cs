@@ -4,7 +4,6 @@ using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
 using SamaniCrm.Domain.Entities;
-using SamaniCrm.Domain.Entities.ProductEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +33,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             {
                 cat = await _dbContext.ProductCategories
                      .Include(p => p.Translations)
+                     .OrderBy(x => x.CreatedAt)
                      .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
                 if (cat == null)
                     throw new NotFoundException("Menu not found.");
@@ -50,7 +50,6 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
             cat.IsActive = request.IsActive;
             cat.ParentId = request.ParentId;
 
-            cat.LastModifiedTime = DateTime.UtcNow;
             if (request.Translations != null)
             {
                 var toRemove = cat.Translations.Where(t => !(request.Translations.Any(rt => rt.Culture == t.Culture))).ToList();
@@ -60,6 +59,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                 foreach (var item in request.Translations ?? [])
                 {
                     var existingTranslation = cat.Translations
+                        .OrderBy(x => x.CreatedAt)
                         .FirstOrDefault(t => t.Culture == item.Culture);
 
                     if (existingTranslation != null)

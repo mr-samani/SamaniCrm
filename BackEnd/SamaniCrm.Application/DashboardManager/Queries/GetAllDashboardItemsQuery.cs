@@ -29,11 +29,11 @@ public class GetAllDashboardItemsQueryHandler : IRequestHandler<GetAllDashboardI
 
     public async Task<List<DashboardItemDto>> Handle(GetAllDashboardItemsQuery request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(_currentUser.UserId))
+        if (_currentUser.UserId == null)
         {
             throw new AccessDeniedException();
         }
-        var userId = Guid.Parse(_currentUser.UserId);
+        var userId = _currentUser.UserId;
 
         var result = await _context.DashboardItems
                .AsNoTracking()

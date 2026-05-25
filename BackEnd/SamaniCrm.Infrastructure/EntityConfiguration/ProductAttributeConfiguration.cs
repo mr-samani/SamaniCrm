@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Helpers;
-using SamaniCrm.Domain.Entities.ProductEntities;
+using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Infrastructure.EntityConfiguration;
 

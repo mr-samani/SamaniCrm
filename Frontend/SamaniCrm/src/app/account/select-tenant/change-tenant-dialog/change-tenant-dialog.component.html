@@ -1,0 +1,20 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title">{{ 'SelectTenant' | translate }}</span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+    <mat-form-field>
+      <mat-label>{{ 'TenancyName' | translate }}</mat-label>
+      <input matInput type="text" name="tenancyName" [(ngModel)]="tenancyName" (keydown.enter)="ok()"/>
+    </mat-form-field>
+  <!-- <pre dir="ltr" style="text-align: left;">{{form.value|json}}</pre> -->
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="btn btn-default" mat-dialog-close>{{ 'Cancel' | translate }}</button>
+  <button class="btn btn-primary" (click)="ok()" cdkFocusInitial>
+    <span>{{ 'Ok' | translate }}</span>
+  </button>
+</mat-dialog-actions>
