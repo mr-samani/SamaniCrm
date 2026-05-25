@@ -36,6 +36,6 @@ public class Subscription : BaseEntity, IMayHaveTenant
 
 
     public virtual Plan Plan { get; set; } = default!;
-    public virtual PlanPrice Price { get; set; } = default!;
+    public virtual PlanPrice PlanPrice { get; set; } = default!;
 
 }

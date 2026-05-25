@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Domain.Entities.Subscription;
 using SecuritySettingEntity = SamaniCrm.Domain.Entities.SecuritySetting;
 
 
@@ -65,6 +66,18 @@ public interface IApplicationDbContext
     public DbSet<DashboardItem> DashboardItems { get; set; }
     #endregion
 
+
+
+    #region Subscription
+
+    public DbSet<Plan> Plans { get; set; }
+    public DbSet<PlanFeature> PlanFeatures { get; set; }
+    public DbSet<PlanPrice> PlanPrices { get; set; }
+    public DbSet<Subscription> Subscriptions { get; set; }
+    public DbSet<AddOn> AddOns { get; set; }
+    public DbSet<SubscriptionAddOn> SubscriptionAddOns { get; set; }
+
+    #endregion
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     int SaveChanges();

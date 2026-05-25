@@ -6,6 +6,7 @@ using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Application.NotificationManager.Interfaces;
 using SamaniCrm.Application.ProductManagerManager.Interfaces;
+using SamaniCrm.Application.SubscriptionManager.Interfaces;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Core.Shared.Interfaces.Tenant;
 using SamaniCrm.Infrastructure;
@@ -27,6 +28,7 @@ using SamaniCrm.Infrastructure.Services;
 using SamaniCrm.Infrastructure.Services.Product;
 using SamaniCrm.Infrastructure.Services.TenantService;
 using SamaniCrm.Infrastructure.Storage;
+using SamaniCrm.Infrastructure.SubscriptionManager;
 
 namespace SamaniCrm.Api.Extensions;
 
@@ -139,6 +141,10 @@ public static partial class ServiceCollectionExtensions
         //services.AddScoped<ITenantDataSeeder, SettingsSeeder>();
         //services.AddScoped<ITenantDataSeeder, WorkflowSeeder>();
 
+
+
+
+        services.AddScoped<ISubscriptionService, SubscriptionService>();
 
 
 

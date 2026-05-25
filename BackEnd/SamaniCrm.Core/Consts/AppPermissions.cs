@@ -246,4 +246,22 @@ public static class AppPermissions
             public const string Delete = "DashboardManagement.Item.Delete";
         }
     }
+
+    /// <summary>
+    /// Subscription
+    /// </summary>
+    public static class SubscriptionManagement
+    {
+        public const string Page = "SubscriptionManagement.Page";
+        public static class Plans
+        {
+
+            public const string List = "SubscriptionManagement.Plans.List";
+            public const string Create = "SubscriptionManagement.Plans.Create";
+            public const string Edit = "SubscriptionManagement.Plans.Edit";
+            public const string Delete = "SubscriptionManagement.Plans.Delete";
+        }
+    }
+
+
 }

@@ -8,6 +8,7 @@ using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Domain.Entities.Subscription;
 using SamaniCrm.Domain.Interfaces;
 using SamaniCrm.Infrastructure.Identity;
 using System.Linq.Expressions;
@@ -98,6 +99,16 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     #endregion
 
 
+    #region Subscription
+
+    public DbSet<Plan> Plans { get; set; }
+    public DbSet<PlanFeature> PlanFeatures { get; set; }
+    public DbSet<PlanPrice> PlanPrices { get; set; }
+    public DbSet<Subscription> Subscriptions { get; set; }
+    public DbSet<AddOn> AddOns { get; set; }
+    public DbSet<SubscriptionAddOn> SubscriptionAddOns { get; set; }
+
+    #endregion
 
     public override int SaveChanges()
     {
