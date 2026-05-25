@@ -11,131 +11,130 @@ using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Host.Models;
 using System.Threading.Tasks;
 
-namespace SamaniCrm.Api.Controllers
+namespace SamaniCrm.Api.Controllers;
+
+
+[Authorize]
+public class LanguageController : ApiBaseController
 {
+    private readonly IMediator _mediator;
 
-    [Authorize]
-    public class LanguageController : ApiBaseController
+    public LanguageController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+    }
 
-        public LanguageController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+    #region Language
+    [HttpGet("GetAllActiveLanguages")]
+    [Permission(AppPermissions.LanguageManagement.List)]
+    [ProducesResponseType(typeof(ApiResponse<List<LanguageDTO>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllActiveLanguages()
+    {
+        var result = await _mediator.Send(new GetAllActiveLanguageQuery());
+        return ApiOk<List<LanguageDTO>>(result);
+    }
 
-        #region Language
-        [HttpGet("GetAllActiveLanguages")]
-        [Permission(AppPermissions.LanguageManagement.List)]
-        [ProducesResponseType(typeof(ApiResponse<List<LanguageDTO>>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllActiveLanguages()
-        {
-            var result = await _mediator.Send(new GetAllActiveLanguageQuery());
-            return ApiOk<List<LanguageDTO>>(result);
-        }
-
-        [HttpGet("GetAllLanguages")]
-        [Permission(AppPermissions.LanguageManagement.List)]
-        [ProducesResponseType(typeof(ApiResponse<List<LanguageDTO>>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllLanguages()
-        {
-            var result = await _mediator.Send(new GetAllLanguageForAdminQuery());
-            return ApiOk<List<LanguageDTO>>(result);
-        }
+    [HttpGet("GetAllLanguages")]
+    [Permission(AppPermissions.LanguageManagement.List)]
+    [ProducesResponseType(typeof(ApiResponse<List<LanguageDTO>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllLanguages()
+    {
+        var result = await _mediator.Send(new GetAllLanguageForAdminQuery());
+        return ApiOk<List<LanguageDTO>>(result);
+    }
 
 
 
 
 
-        [HttpPost("CreateOrUpdate")]
-        [Permission(AppPermissions.LanguageManagement.Create)]
-        [Permission(AppPermissions.LanguageManagement.Edit)]
-        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateOrUpdate(CreateOrEditLanguageCommand input)
-        {
-            var result = await _mediator.Send(input);
-            return ApiOk(result);
-        }
+    [HttpPost("CreateOrUpdate")]
+    [Permission(AppPermissions.LanguageManagement.Create)]
+    [Permission(AppPermissions.LanguageManagement.Edit)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> CreateOrUpdate(CreateOrEditLanguageCommand input)
+    {
+        var result = await _mediator.Send(input);
+        return ApiOk(result);
+    }
 
 
-        [HttpPost("DeleteLangauuge")]
-        [Permission(AppPermissions.LanguageManagement.Delete)]
-        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> DeleteLangauuge(DeleteLanguageCommand input)
-        {
-            var result = await _mediator.Send(input);
-            return ApiOk(result);
-        }
+    [HttpPost("DeleteLangauuge")]
+    [Permission(AppPermissions.LanguageManagement.Delete)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> DeleteLangauuge(DeleteLanguageCommand input)
+    {
+        var result = await _mediator.Send(input);
+        return ApiOk(result);
+    }
 
-        [HttpPost("ActiveOrDeactive")]
-        [Permission(AppPermissions.LanguageManagement.Edit)]
-        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> ActiveOrDeactive(ActiveOrDeactiveLanguageCommand input)
-        {
-            var result = await _mediator.Send(input);
-            return ApiOk(result);
-        }
+    [HttpPost("ActiveOrDeactive")]
+    [Permission(AppPermissions.LanguageManagement.Edit)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> ActiveOrDeactive(ActiveOrDeactiveLanguageCommand input)
+    {
+        var result = await _mediator.Send(input);
+        return ApiOk(result);
+    }
 
-        #endregion
+    #endregion
 
-        #region Localization keys
-        [HttpGet("GetAllLanguageKeys")]
-        [Permission(AppPermissions.LanguageManagement.List)]
-        [ProducesResponseType(typeof(ApiResponse<List<LocalizationKeyDTO>>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllLanguageKeys(string culture)
-        {
-            var result = await _mediator.Send(new GetAllLanguageKeys(culture));
-            return ApiOk<List<LocalizationKeyDTO>>(result);
-        }
-
-
+    #region Localization keys
+    [HttpGet("GetAllLanguageKeys")]
+    [Permission(AppPermissions.LanguageManagement.List)]
+    [ProducesResponseType(typeof(ApiResponse<List<LocalizationKeyDTO>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllLanguageKeys(string culture)
+    {
+        var result = await _mediator.Send(new GetAllLanguageKeys(culture));
+        return ApiOk<List<LocalizationKeyDTO>>(result);
+    }
 
 
-        /// <summary>
-        /// افزودن یک کلید به کلیه زبان ها
-        /// </summary>
-        /// <param name="culture"></param>
-        /// <param name="items"></param>
-        /// <returns></returns>
-        [HttpPost("CreateOrEditLocalizeKey")]
-        [Permission(AppPermissions.LanguageManagement.Create)]
-        [Permission(AppPermissions.LanguageManagement.Edit)]
-        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateOrEditLocalizeKey(CreateOrEditLocalizeKeyCommand input)
-        {
-            var result = await _mediator.Send(input);
-            return ApiOk(result);
-        }
-
-        [HttpPost("DeleteKey")]
-        [Permission(AppPermissions.LanguageManagement.Delete)]
-        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> DeleteKey(DeleteLocalizeKeyCommand input)
-        {
-            var result = await _mediator.Send(input);
-            return ApiOk(result);
-        }
 
 
-        [HttpPost("UpdateBatchLocalizeKey")]
-        [Permission(AppPermissions.LanguageManagement.Create)]
-        [Permission(AppPermissions.LanguageManagement.Edit)]
-        [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> UpdateBatchLocalizeKey(UpdateBatchLocalizeKeyCommand input)
-        {
-            var result = await _mediator.Send(input);
-            return ApiOk(result);
-        }
+    /// <summary>
+    /// افزودن یک کلید به کلیه زبان ها
+    /// </summary>
+    /// <param name="culture"></param>
+    /// <param name="items"></param>
+    /// <returns></returns>
+    [HttpPost("CreateOrEditLocalizeKey")]
+    [Permission(AppPermissions.LanguageManagement.Create)]
+    [Permission(AppPermissions.LanguageManagement.Edit)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> CreateOrEditLocalizeKey(CreateOrEditLocalizeKeyCommand input)
+    {
+        var result = await _mediator.Send(input);
+        return ApiOk(result);
+    }
 
-        #endregion
+    [HttpPost("DeleteKey")]
+    [Permission(AppPermissions.LanguageManagement.Delete)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> DeleteKey(DeleteLocalizeKeyCommand input)
+    {
+        var result = await _mediator.Send(input);
+        return ApiOk(result);
+    }
 
 
-        [AllowAnonymous]
-        [HttpGet("i18n/{culture}")]
-        public async Task<Dictionary<string, string>> i18n(string culture)
-        {
-            var result = await _mediator.Send(new GetFrontEndLocalizationsCommand(culture));
-            return result;
-        }
+    [HttpPost("UpdateBatchLocalizeKey")]
+    [Permission(AppPermissions.LanguageManagement.Create)]
+    [Permission(AppPermissions.LanguageManagement.Edit)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> UpdateBatchLocalizeKey(UpdateBatchLocalizeKeyCommand input)
+    {
+        var result = await _mediator.Send(input);
+        return ApiOk(result);
+    }
+
+    #endregion
+
+
+    [AllowAnonymous]
+    [HttpGet("i18n/{culture}")]
+    public async Task<Dictionary<string, string>> i18n(string culture)
+    {
+        var result = await _mediator.Send(new GetFrontEndLocalizationsCommand(culture));
+        return result;
     }
 }

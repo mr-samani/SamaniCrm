@@ -12,7 +12,7 @@
     </div>
   }
   <div class="list-icon">
-    @for (item of list; track item) {
+    @for (item of list; track $index) {
       <div class="icon" [class.selected]="item == selected" (click)="selected = item">
         <img [src]="baseUrl + item" />
       </div>

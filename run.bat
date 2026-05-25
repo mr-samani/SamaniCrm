@@ -4,7 +4,7 @@ set "currentDirector=%CD%"
 
 :MainMenu
 CLS
-ECHO ---- Mohammadreza Samani Angular & C#.net10 ----
+ECHO ---- Mohammadreza Samani Angular - C#.net10 ----
 ECHO.
 
 Echo [0]. Generate Front end Permissions by Backend

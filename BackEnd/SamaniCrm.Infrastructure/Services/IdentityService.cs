@@ -215,7 +215,7 @@ public class IdentityService : IIdentityService
 
         int total = await query.CountAsync(cancellationToken);
 
-        var users = await query
+        var users = await query.OrderBy(x => x.CreatedAt)
             .Skip(request.PageSize * (request.PageNumber - 1))
             .Take(request.PageSize)
             .Select(u => new UserDTO
@@ -230,7 +230,7 @@ public class IdentityService : IIdentityService
                 ProfilePicture = u.ProfilePicture ?? "",
                 Address = u.Address ?? "",
                 PhoneNumber = u.PhoneNumber ?? "",
-                // CreationTime = u.CreatedAt.ToUniversalTime(),
+                CreationTime = u.CreatedAt,
                 Roles = rolesQuery.Where(x => x.UserId == u.Id).Select(x => x.RoleName).ToList()
             })
             .ToListAsync(cancellationToken);
@@ -279,7 +279,7 @@ public class IdentityService : IIdentityService
             ProfilePicture = user.ProfilePicture ?? "",
             Address = user.Address ?? "",
             PhoneNumber = user.PhoneNumber ?? "",
-            // CreationTime = user.CreationTime.ToUniversalTime(),
+            CreationTime = user.CreatedAt,
             Roles = roles.ToList(),
         });
     }
@@ -306,7 +306,7 @@ public class IdentityService : IIdentityService
             ProfilePicture = user.ProfilePicture ?? "",
             Address = user.Address ?? "",
             PhoneNumber = user.PhoneNumber ?? "",
-            // CreationTime = user.CreationTime.ToUniversalTime(),
+            CreationTime = user.CreatedAt,
             Roles = roles.ToList()
         });
     }
@@ -811,7 +811,7 @@ public class IdentityService : IIdentityService
                 ProfilePicture = user.ProfilePicture ?? "",
                 Address = user.Address ?? "",
                 PhoneNumber = user.PhoneNumber ?? "",
-                // CreationTime = user.CreationTime.ToUniversalTime(),
+                CreationTime = user.CreatedAt,
                 Roles = roles.ToList()
             },
             Roles = roles.ToList(),
@@ -846,13 +846,14 @@ public class IdentityService : IIdentityService
             );
         }
 
-        var items = await query.Select(s => new AutoCompleteDto<Guid>
-        {
-            Id = s.Id,
-            Title = s.FirstName + " " + s.LastName + " (" + s.UserName + ")",
-        })
+        var items = await query.OrderBy(x => x.CreatedAt)
             .Skip(0)
             .Take(50)
+            .Select(s => new AutoCompleteDto<Guid>
+                    {
+                        Id = s.Id,
+                        Title = s.FirstName + " " + s.LastName + " (" + s.UserName + ")",
+                    })
             .ToListAsync(cancellationToken);
         return items;
     }

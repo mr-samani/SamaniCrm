@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Application.NotificationManager.Interfaces;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
 using System;
@@ -24,15 +25,18 @@ namespace SamaniCrm.Application.NotificationManager.Commands
 
     public class SendNotificationCommandHandler : IRequestHandler<SendNotificationCommand, Unit>
     {
-        private readonly INotificationHubService _hubService;
+        private readonly INotificationSender _notificationSender;
         private readonly IApplicationDbContext _dbContext;
         private readonly ICurrentUserService _currentUser;
 
-        public SendNotificationCommandHandler(INotificationHubService hubService, IApplicationDbContext dbContext, ICurrentUserService currentUser)
+        public SendNotificationCommandHandler(
+            IApplicationDbContext dbContext,
+            ICurrentUserService currentUser,
+            INotificationSender notificationSender)
         {
-            _hubService = hubService;
             _dbContext = dbContext;
             _currentUser = currentUser;
+            _notificationSender = notificationSender;
         }
 
         public async Task<Unit> Handle(SendNotificationCommand request, CancellationToken cancellationToken)
@@ -66,7 +70,7 @@ namespace SamaniCrm.Application.NotificationManager.Commands
                 CreationTime = DateTime.UtcNow,
                 SenderUserId = currentUserId
             };
-            await _hubService.SendToUserAsync(request.UserId, notifyDto);
+            await _notificationSender.SendToUserAsync(request.UserId.ToString(), "ReceiveNotification", notifyDto);
             return Unit.Value;
         }
     }

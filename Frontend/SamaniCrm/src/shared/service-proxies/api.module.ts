@@ -3,6 +3,7 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 import { AccountServiceProxy } from './api/account.service';
+import { AdminLogServiceProxy } from './api/admin-log.service';
 import { CaptchaServiceProxy } from './api/captcha.service';
 import { CommonServiceProxy } from './api/common.service';
 import { DasboardServiceProxy } from './api/dasboard.service';
@@ -28,6 +29,7 @@ import { UserServiceProxy } from './api/user.service';
   exports:      [],
   providers: [
     AccountServiceProxy,
+    AdminLogServiceProxy,
     CaptchaServiceProxy,
     CommonServiceProxy,
     DasboardServiceProxy,

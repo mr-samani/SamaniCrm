@@ -6,11 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamaniCrm.Core.Shared.Enums;
+using SamaniCrm.Domain.Interfaces;
 
 namespace SamaniCrm.Domain.Entities;
 
-public class ProductAttribute : BaseEntity
+public class ProductAttribute : BaseEntity,IMayHaveTenant
 {
+    public Guid? TenantId { get; set; }
     public Guid ProductTypeId { get; set; }
 
     public ProductAttributeDataTypeEnum DataType { get; set; } = default!; // string, int, decimal, bool...

@@ -5,7 +5,7 @@
 <ng-template #tree let-items>
   @if (items && items.length > 0) {
     <div ngxDropList class="example-list" (drop)="drop($event)" [data]="items" id="base">
-      @for (item of items; track item) {
+      @for (item of items; track $index) {
         <div class="example-box" [id]="item.name">
           <div>
             <div>

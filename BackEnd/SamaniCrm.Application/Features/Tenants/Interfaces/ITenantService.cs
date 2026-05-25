@@ -1,4 +1,5 @@
-﻿using SamaniCrm.Application.Features.Tenants.Commands;
+﻿using SamaniCrm.Application.DTOs;
+using SamaniCrm.Application.Features.Tenants.Commands;
 
 namespace SamaniCrm.Application.Features.Tenants.Interfaces;
 
@@ -9,4 +10,5 @@ public interface ITenantService
     Task<bool> ActiveOrDeactiveTenant(Guid id,bool isSusspend, string? reason, CancellationToken cancellation);
     Task<bool> RetryProvisioning(Guid id, CancellationToken cancellation);
     Task<bool> UpdateTenant(UpdateTenantSettingsCommand request, CancellationToken cancellation);
+    Task<List<AutoCompleteDto<Guid>>> GetTenantsAutoComplete(string? filter, CancellationToken cancellationToken);
 }

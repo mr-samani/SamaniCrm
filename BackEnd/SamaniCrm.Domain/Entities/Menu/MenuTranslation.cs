@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamaniCrm.Domain.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Domain.Entities;
 
-public class MenuTranslation : BaseTranslation
+public class MenuTranslation : BaseTranslation,IMayHaveTenant
 {
+    public Guid? TenantId { get; set; }
     public Guid MenuId { get; set; }
 
 

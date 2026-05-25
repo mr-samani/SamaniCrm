@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SamaniCrm.Domain.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace SamaniCrm.Domain.Entities;
 
-public class ProductFile : BaseEntity
+public class ProductFile : BaseEntity,IMayHaveTenant
 {
+    public Guid? TenantId { get; set; }
     public Guid ProductId { get; set; }
 
     public Guid FileId { get; set; } 

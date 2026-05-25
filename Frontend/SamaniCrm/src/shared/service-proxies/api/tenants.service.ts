@@ -23,6 +23,8 @@ import { ApiResponseOfConnectionTestResult } from '../model/api-response-of-conn
 // @ts-ignore
 import { ApiResponseOfCreateTenantResponse } from '../model/api-response-of-create-tenant-response';
 // @ts-ignore
+import { ApiResponseOfListOfAutoCompleteDtoOfGuid } from '../model/api-response-of-list-of-auto-complete-dto-of-guid';
+// @ts-ignore
 import { ApiResponseOfListOfProvisioningStatusDto } from '../model/api-response-of-list-of-provisioning-status-dto';
 // @ts-ignore
 import { ApiResponseOfPaginatedResultOfTenantListDto } from '../model/api-response-of-paginated-result-of-tenant-list-dto';
@@ -38,6 +40,8 @@ import { ApiResponseOfTenantUsageDto } from '../model/api-response-of-tenant-usa
 import { ApiResponseOfboolean } from '../model/api-response-ofboolean';
 // @ts-ignore
 import { CreateTenantCommand } from '../model/create-tenant-command';
+// @ts-ignore
+import { GetTenantsAutoCompleteQuery } from '../model/get-tenants-auto-complete-query';
 // @ts-ignore
 import { ProblemDetails } from '../model/problem-details';
 // @ts-ignore
@@ -631,6 +635,72 @@ export class TenantsServiceProxy extends BaseService {
         return this.httpClient.request<ApiResponseOfTenantUsageDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param getTenantsAutoCompleteQuery 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getTenantsAutoComplete(getTenantsAutoCompleteQuery: GetTenantsAutoCompleteQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfListOfAutoCompleteDtoOfGuid>;
+    public getTenantsAutoComplete(getTenantsAutoCompleteQuery: GetTenantsAutoCompleteQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfListOfAutoCompleteDtoOfGuid>>;
+    public getTenantsAutoComplete(getTenantsAutoCompleteQuery: GetTenantsAutoCompleteQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfListOfAutoCompleteDtoOfGuid>>;
+    public getTenantsAutoComplete(getTenantsAutoCompleteQuery: GetTenantsAutoCompleteQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (getTenantsAutoCompleteQuery === null || getTenantsAutoCompleteQuery === undefined) {
+            throw new Error('Required parameter getTenantsAutoCompleteQuery was null or undefined when calling getTenantsAutoComplete.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/Tenants/GetTenantsAutoComplete`;
+        return this.httpClient.request<ApiResponseOfListOfAutoCompleteDtoOfGuid>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: getTenantsAutoCompleteQuery,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

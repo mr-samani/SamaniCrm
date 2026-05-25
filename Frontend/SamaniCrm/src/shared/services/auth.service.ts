@@ -111,7 +111,7 @@ export class AuthService {
           this.tokenService.set(response.data);
           return response.data.accessToken;
         } else {
-          this.logOut();
+          this.logout();
           this.alert
             .show({
               title: this.translateService.instant('Message.AccessDenied'),
@@ -135,7 +135,7 @@ export class AuthService {
     );
   }
 
-  logOut() {
+  logout() {
     this.accountService
       .revoke(
         new RevokeRefreshTokenCommand({

@@ -1,11 +1,13 @@
-<div class="table-responsive">
+<div class="table-responsive" #tableContainer>
   <div class="table-mrs">
     <div class="thead-mrs">
       <div class="tr-mrs">
         @if (operations) {
-          <div class="th-mrs operations">{{ 'Operation' | translate }}</div>
+          <div class="th-mrs operations" [style.max-width.px]="operationWidth" [style.min-width.px]="operationWidth">
+            {{ 'Operation' | translate }}
+          </div>
         }
-        @for (item of fields; track item) {
+        @for (item of fields; track $index) {
           <div class="th-mrs" [style.max-width.px]="item.width" [style.min-width.px]="item.width">
             {{ item.title }}
             <i
@@ -22,10 +24,14 @@
       @if (!_loading && list.length === 0) {
         <div class="no-data">{{ 'NoData' | translate }}</div>
       }
-      @for (item of list; track item) {
+      @for (item of list; track $index) {
         <div class="tr-mrs">
           @if (operations) {
-            <div class="td-mrs operations" vAlign="middle">
+            <div
+              class="td-mrs operations"
+              vAlign="middle"
+              [style.max-width.px]="operationWidth"
+              [style.min-width.px]="operationWidth">
               <div class="cel">
                 <span class="cell-title">Operation:</span>
                 <ng-container
@@ -36,7 +42,7 @@
           }
           @for (f of fields; track f) {
             <div class="td-mrs" vAlign="middle" [style.max-width.px]="f.width" [style.min-width.px]="f.width">
-              <div class="cel">
+              <div class="cel" [class.wrap]="f.wrap">
                 <span class="cell-title">{{ f.title }}</span>
                 @switch (f.type) {
                   @case ('profilePicture') {
@@ -65,7 +71,7 @@
                     <span>{{ item[f.column] | number }}</span>
                   }
                   @case ('dateTime') {
-                    <span class="text-wrap">{{ item[f.column] | luxonFormat: 'F' }}</span>
+                    <span class="text-wrap">{{ item[f.column] | luxonFormat }}</span>
                   }
                   @case ('yesNo') {
                     @if (item[f.column]) {
@@ -91,6 +97,10 @@
                   @default {
                     {{ item[f.column] }}
                   }
+                }
+
+                @if (f.prefix) {
+                  <span>{{ f.prefix }}</span>
                 }
               </div>
             </div>

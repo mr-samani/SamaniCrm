@@ -1,6 +1,8 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Options;
 using SamaniCrm.Application.FileManager.Commands;
 using SamaniCrm.Core;
+using SamaniCrm.Infrastructure.FileManager;
 using System.Net;
 using System.Text;
 using tusdotnet;
@@ -13,7 +15,7 @@ namespace SamaniCrm.Api.TUS
 
         public static WebApplication InitializeTUS(this WebApplication app, IConfiguration configuration)
         {
-            var path = configuration.GetSection("Filemanger:tusfiles").Value ?? "./tusfiles";
+            var path = (configuration.GetSection("FileManager").Get<FileManagerSettings>() ?? new FileManagerSettings()).tusFilesPath!;
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -28,12 +30,24 @@ namespace SamaniCrm.Api.TUS
                 Store = new tusdotnet.Stores.TusDiskStore(path),
                 Events = new()
                 {
-                    OnAuthorizeAsync = ctx =>
+                    OnAuthorizeAsync = async ctx =>
                     {
                         ctx.HttpContext.Request.EnableBuffering();
                         if (!ctx.HttpContext.User.Identity?.IsAuthenticated ?? true)
-                            ctx.FailRequest(HttpStatusCode.Unauthorized.ToString());
-                        return Task.CompletedTask;
+                        {
+                            ctx.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            ctx.HttpContext.Response.ContentType = "application/json";
+                            await ctx.HttpContext.Response.WriteAsJsonAsync(new
+                            {
+                                error = "Unauthorized",
+                                message = "Authentication required"
+                            }).ConfigureAwait(false);
+
+                            // terminate the request manually
+                            await ctx.HttpContext.Response.CompleteAsync();
+                            return;
+
+                        }
                     },
                     OnBeforeCreateAsync = ctx =>
                     {

@@ -1,11 +1,14 @@
+using SamaniCrm.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http.Json;
 using System.Text.Json.Nodes;
 
 namespace SamaniCrm.Domain.Entities;
 
-public class DashboardItem : BaseEntity
+public class DashboardItem : BaseEntity, IMayHaveTenant
 {
+    public Guid? TenantId { get; set; }
+
     public Guid DashboardId { get; set; }
     public virtual Dashboard Dashboard { get; set; } = default!;
     [MaxLength(500)]

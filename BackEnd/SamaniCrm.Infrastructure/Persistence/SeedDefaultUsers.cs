@@ -19,7 +19,7 @@ public static class SeedDefaultUsers
 
 
         Console.WriteLine("Try seed Admin user");
-        var administratorRole = await roleManager.FindByNameAsync(AppRoles.Administrator);
+        var administratorRole = await roleManager.FindByNameAsync(AppRoles.SysAdmin);
         if (administratorRole == null)
         {
             throw new Exception("Administrator role not found on DB!");

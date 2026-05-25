@@ -1,23 +1,10 @@
+import { ProvisioningStepStatus } from '@shared/service-proxies/model/provisioning-step-status';
+import { TenantProvisionStepsEnum } from '@shared/service-proxies/model/tenant-provision-steps-enum';
+
 export class ProvisioningNotification {
   tenantSlug!: string;
   status!: ProvisioningStepStatus;
   message!: string;
   currentStep!: TenantProvisionStepsEnum;
   timestamp?: string;
-}
- 
-export enum TenantProvisionStepsEnum
-{
-    CreateTenant,
-    CreateAdminUser,
-    ProvisionDatabase,
-    RunMigrations,
-    SeedData,
-    Finalize,
-};export enum ProvisioningStepStatus
-{
-    Pending = 0,
-    InProgress = 1,
-    Completed = 2,
-    Failed = 3,
 }

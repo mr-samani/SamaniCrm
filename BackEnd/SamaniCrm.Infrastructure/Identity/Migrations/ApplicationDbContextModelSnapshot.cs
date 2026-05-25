@@ -43,7 +43,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("RoleClaims", "auth");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -67,7 +67,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("UserClaims", "auth");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
@@ -88,7 +88,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("UserLogins", "auth");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
@@ -103,7 +103,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("UserRoles", "auth");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -122,7 +122,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("UserTokens", "auth");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Cart", b =>
@@ -157,6 +157,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Property<byte[]>("RowVersion")
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -211,6 +214,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Property<byte[]>("RowVersion")
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -274,6 +280,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CurrencyCode")
@@ -317,6 +326,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Property<byte[]>("RowVersion")
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -377,6 +389,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<byte[]>("RowVersion")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DashboardId");
@@ -428,6 +443,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Value")
                         .HasPrecision(18, 2)
@@ -612,6 +630,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<byte[]>("RowVersion")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Thumbnails")
                         .HasColumnType("nvarchar(max)");
 
@@ -739,6 +760,93 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.ToTable("Localizations");
                 });
 
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.LogEntry", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ActionName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("ControllerName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("CorrelationId")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("ExceptionDetails")
+                        .HasMaxLength(10000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExtraData")
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HttpMethod")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("RequestPath")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Source")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("TenantSettingId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CorrelationId");
+
+                    b.HasIndex("Level");
+
+                    b.HasIndex("TenantId");
+
+                    b.HasIndex("TenantSettingId");
+
+                    b.HasIndex("Timestamp");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("TenantId", "Timestamp", "Level");
+
+                    b.ToTable("LogEntries", "logs");
+                });
+
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Menu", b =>
                 {
                     b.Property<Guid>("Id")
@@ -790,6 +898,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Url")
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
@@ -836,6 +947,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Property<byte[]>("RowVersion")
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -894,6 +1008,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<Guid?>("SenderUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
@@ -956,6 +1073,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -1032,6 +1152,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<string>("Styles")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Title")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
@@ -1062,7 +1185,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.HasIndex("LocalizeKey")
                         .IsUnique();
 
-                    b.ToTable("Permissions");
+                    b.ToTable("Permissions", "auth");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Plugin", b =>
@@ -1119,6 +1242,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<byte[]>("RowVersion")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.ToTable("Plugins", "PgB");
@@ -1169,6 +1295,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Property<string>("Tags")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -1225,6 +1354,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<int>("SortOrder")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductTypeId");
@@ -1274,6 +1406,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<byte[]>("RowVersion")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Culture");
@@ -1318,6 +1453,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Property<byte[]>("RowVersion")
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -1374,6 +1512,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ParentId");
@@ -1422,6 +1563,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Property<byte[]>("RowVersion")
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -1477,6 +1621,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<byte[]>("RowVersion")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasAlternateKey("FileId");
@@ -1530,6 +1677,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Property<int>("SortOrder")
                         .HasColumnType("int");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -1591,6 +1741,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
@@ -1648,6 +1801,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<byte[]>("RowVersion")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(250)
@@ -1691,6 +1847,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Property<byte[]>("RowVersion")
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -1742,6 +1901,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<byte[]>("RowVersion")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Culture");
@@ -1781,7 +1943,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasKey("RefreshTokenId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", "auth");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.RolePermission", b =>
@@ -1795,13 +1957,19 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<Guid?>("ApplicationRoleId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("RoleId", "PermissionId");
 
                     b.HasIndex("ApplicationRoleId");
 
                     b.HasIndex("PermissionId");
 
-                    b.ToTable("RolePermissions");
+                    b.HasIndex("RoleId", "PermissionId")
+                        .IsUnique();
+
+                    b.ToTable("RolePermissions", "auth");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.SecuritySetting", b =>
@@ -1833,6 +2001,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Property<int>("RequiredLength")
                         .HasColumnType("int");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -2003,7 +2174,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tenants");
+                    b.ToTable("Tenants", "Tenant");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.TenantCategory", b =>
@@ -2061,7 +2232,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("TenantCategories");
+                    b.ToTable("TenantCategories", "Tenant");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.TenantDatabaseConnection", b =>
@@ -2140,7 +2311,51 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("TenantDatabaseConnections");
+                    b.ToTable("TenantDatabaseConnections", "Tenant");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.TenantLogSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CustomSettings")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("EnabledLevels")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EnabledSinks")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("RetentionDays")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId")
+                        .IsUnique()
+                        .HasFilter("[TenantId] IS NOT NULL");
+
+                    b.ToTable("LogSettings", "logs");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.TenantProvisioningStep", b =>
@@ -2180,7 +2395,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("TenantProvisioningSteps");
+                    b.ToTable("TenantProvisioningSteps", "Tenant");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.TenantSetting", b =>
@@ -2239,7 +2454,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("TenantSettings");
+                    b.ToTable("TenantSettings", "Tenant");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.UserSetting", b =>
@@ -2275,7 +2490,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserSetting");
+                    b.ToTable("UserSettings", "auth");
                 });
 
             modelBuilder.Entity("SamaniCrm.Infrastructure.Identity.ApplicationRole", b =>
@@ -2303,6 +2518,12 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -2320,6 +2541,9 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Property<byte[]>("RowVersion")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
@@ -2327,7 +2551,11 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.HasIndex("Id", "Name", "TenantId")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL AND [TenantId] IS NOT NULL");
+
+                    b.ToTable("Roles", "auth");
                 });
 
             modelBuilder.Entity("SamaniCrm.Infrastructure.Identity.ApplicationUser", b =>
@@ -2445,7 +2673,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users", "auth");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -2540,6 +2768,15 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .IsRequired();
 
                     b.Navigation("Language");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.LogEntry", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.TenantLogSetting", "TenantSetting")
+                        .WithMany()
+                        .HasForeignKey("TenantSettingId");
+
+                    b.Navigation("TenantSetting");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Menu", b =>

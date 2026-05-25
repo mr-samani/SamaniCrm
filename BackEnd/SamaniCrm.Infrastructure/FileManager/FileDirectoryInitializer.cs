@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Core;
 using SamaniCrm.Domain.Entities;
@@ -78,23 +79,20 @@ namespace SamaniCrm.Infrastructure.FileManager
 
     public class FileDirectoryInitializer
     {
-        private readonly IWebHostEnvironment _env;
         private readonly IApplicationDbContext _dbContext;
-        private readonly IConfiguration _configuration;
+        private readonly FileManagerSettings _settings;
 
-        public FileDirectoryInitializer(IWebHostEnvironment env, IApplicationDbContext dbContext, IConfiguration configuration)
+        public FileDirectoryInitializer(IApplicationDbContext dbContext, IOptions<FileManagerSettings> settings)
         {
-            _env = env;
+            _settings = settings.Value;
             _dbContext = dbContext;
-            _configuration = configuration;
         }
 
 
         public async Task EnsureBaseDirectoriesAsync()
         {
             // var wwwrootPath = Path.Combine(_env.WebRootPath, "uploads");
-            var settings = _configuration.GetSection("FileManager").Get<FileManagerSetting>() ?? new FileManagerSetting();
-            var rootPath = settings.PublicFolderPath;
+            var rootPath = _settings.PublicFolderPath;
 
             if (Directory.Exists(rootPath) == false)
             {

@@ -3,7 +3,7 @@
     <i class="fa fa-home px-2"></i>
     <span>{{ 'Panel' | translate }}</span>
   </a>
-  @for (item of breadcrumb.list; track item) {
+  @for (item of breadcrumb.list; track $index) {
     @if (item.url) {
       <a [routerLink]="[item.url]" routerLinkActive="active" [queryParams]="item.queryParams" class="tag">
         <span>{{ item.name }}</span>

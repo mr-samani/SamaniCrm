@@ -9,7 +9,8 @@ import { SharedModule } from '@shared/shared.module';
 import { finalize } from 'rxjs';
 import { CreateDashboardComponent } from './create-dashboard/create-dashboard.component';
 import { AddDashboardWidgetComponent } from './add-widget/add-widget.component';
-import { Widget, WidgetHelper } from './widgets/widgets';
+import { Widget } from './widgets/widgets';
+import { WidgetHelper } from './widgets/WidgetHelper';
 import { DashboardDto } from '@shared/service-proxies/model/dashboard-dto';
 import { DasboardServiceProxy } from '@shared/service-proxies/api/dasboard.service';
 import { UpdateDashboardItemsCommand } from '@shared/service-proxies/model/update-dashboard-items-command';
@@ -18,6 +19,8 @@ import { DeleteDashboardCommand } from '@shared/service-proxies/model/delete-das
 import { MatButtonModule } from '@angular/material/button';
 import { cloneDeep } from 'lodash-es';
 import { IGridLayoutOptions, NgxGridLayoutComponent, NgxGridLayoutModule } from 'ngx-drag-drop-kit';
+import { IWidgetDefinition } from './widgets/IWidgetDefinition';
+import { WIDGET_DEFINITIONS } from './widgets/WIDGET_DEFINITIONS';
 
 @Component({
   selector: 'app-dashboard',
@@ -43,8 +46,12 @@ export class DashboardComponent extends AppComponentBase implements OnInit {
   private dialog = inject(MatDialog);
 
   ngxGridLayout = viewChild<NgxGridLayoutComponent>('ngxGridLayout');
+
+  widgetDefinitions: IWidgetDefinition[] = [];
+
   constructor() {
     super();
+    this.widgetDefinitions = WIDGET_DEFINITIONS.filter((x) => this.isGranted(x.permission));
   }
 
   ngOnInit() {
@@ -76,7 +83,7 @@ export class DashboardComponent extends AppComponentBase implements OnInit {
       .getAllDashboardItems(id)
       .pipe(finalize(() => (this.loadingItems = false)))
       .subscribe(async (result) => {
-        this.dashboardItems = await WidgetHelper.loadWidgets(result.data ?? []);
+        this.dashboardItems = await WidgetHelper.loadWidgets(result.data ?? [], this.widgetDefinitions);
         // console.log(this.dashboardItems);
         setTimeout(() => {
           this.ngxGridLayout()?.updateGridLayout();

@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 
 
-namespace SamaniCrm.Infrastructure.Extensions;
+namespace SamaniCrm.Api.Extensions;
 
 public class OperationSchmaTransformer : IOpenApiOperationTransformer
 {

@@ -1,0 +1,26 @@
+<p>
+  {{ 'LogStatsFromWidget' | translate }}
+</p>
+
+@if (loading) {
+  <div class="d-flex align-items-center align-items-center">
+    <mat-spinner color="primary" diameter="25"></mat-spinner>
+  </div>
+}
+@if (stats) {
+  <div class="row">
+    <div class="col-sm-6">{{ stats.fromDate | luxonFormat }}</div>
+    <div class="col-sm-6 text-end">{{ stats.toDate | luxonFormat }}</div>
+  </div>
+  <div>
+    {{ 'TotalCount' | translate }}:
+    <strong>{{ stats.totalCount | number }}</strong>
+  </div>
+
+  @for (item of stats.levelCounts | keyvalue; track $index) {
+    <div class="record">
+      <span>{{ item.key }}:</span>
+      <span>{{ item.value | number }}</span>
+    </div>
+  }
+}

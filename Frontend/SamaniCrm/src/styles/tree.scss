@@ -110,8 +110,8 @@
 
 /*-------------------LTR----------------------------*/
 
-::ng-deep body[dir='ltr'],
-::ng-deep html[dir='ltr'] {
+body[dir='ltr'],
+html[dir='ltr'] {
   .tree {
     ul {
       li.node {

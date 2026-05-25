@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamaniCrm.Domain.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -7,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Domain.Entities;
 
-public class ProductTypeTranslation : BaseTranslation
+public class ProductTypeTranslation : BaseTranslation,IMayHaveTenant
 {
+    public Guid? TenantId { get; set; }
     public Guid ProductTypeId { get; set; }
     public string Name { get; set; } = default!;
     public string? Description { get; set; }

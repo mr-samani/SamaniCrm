@@ -6,11 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamaniCrm.Core.Shared.Enums;
+using SamaniCrm.Domain.Interfaces;
 
 namespace SamaniCrm.Domain.Entities;
 
-public class Notification : BaseEntity
+public class Notification : BaseEntity,IMayHaveTenant
 {
+    public Guid? TenantId { get; set; }
     [MaxLength(1000)]
     public required string Title { get; set; }
     public string? Content { get; set; }

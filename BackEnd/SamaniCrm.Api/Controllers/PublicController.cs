@@ -7,24 +7,23 @@ using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.MenuQueries;
 using SamaniCrm.Host.Models;
 
-namespace SamaniCrm.Api.Controllers
+namespace SamaniCrm.Api.Controllers;
+
+[AllowAnonymous]
+public class PublicController : ApiBaseController
 {
-    [AllowAnonymous]
-    public class PublicController : ApiBaseController
+    private readonly IMediator _mediator;
+
+    public PublicController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+    }
 
-        public PublicController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
-        [HttpGet("GetAllActiveMenus")]
-        [ProducesResponseType(typeof(ApiResponse<List<MenuDTO>>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllActiveMenus(CancellationToken cancellationToken)
-        {
-            var result = await _mediator.Send(new GetAllActiveMenusQuery(), cancellationToken);
-            return ApiOk<List<MenuDTO>>(result);
-        }
+    [HttpGet("GetAllActiveMenus")]
+    [ProducesResponseType(typeof(ApiResponse<List<MenuDTO>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllActiveMenus(CancellationToken cancellationToken)
+    {
+        var result = await _mediator.Send(new GetAllActiveMenusQuery(), cancellationToken);
+        return ApiOk<List<MenuDTO>>(result);
     }
 }

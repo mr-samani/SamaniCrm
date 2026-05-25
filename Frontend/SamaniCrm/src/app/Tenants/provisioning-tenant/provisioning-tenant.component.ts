@@ -1,17 +1,13 @@
-import { ChangeDetectorRef, Component, Injector, OnDestroy, OnInit } from '@angular/core';
+import {  Component,  OnDestroy, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { HubConnection } from '@microsoft/signalr';
 import { AppConst } from '@shared/app-const';
 import { ConnectionStatus, SignalRService } from '@shared/services/signalr.service';
-import {
-  ProvisioningNotification,
-  ProvisioningStepStatus,
-  TenantProvisionStepsEnum,
-} from './provisioning-notification';
+import { ProvisioningNotification } from './provisioning-notification';
 import { TenantsServiceProxy } from '@shared/service-proxies/api/tenants.service';
-import { finalize } from 'rxjs';
-import { result } from 'lodash-es';
+import { finalize } from 'rxjs'; 
 import { ProvisioningStatusDto } from '@shared/service-proxies/model/provisioning-status-dto';
+import { ProvisioningStepStatus } from '@shared/service-proxies/model/provisioning-step-status';
 
 @Component({
   selector: 'app-provisioning-tenant',

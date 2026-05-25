@@ -36,7 +36,6 @@ public class UserPermissionService : IUserPermissionService
         var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrWhiteSpace(userId))
             return false;
-        var cacheKey = CacheKeys.UserPermissions_ + userId;
         List<string> permissions = await GetUserPermissionsAsync(Guid.Parse(userId), CancellationToken.None);
         return permissions == null ? false : permissions.Contains(permission);
     }

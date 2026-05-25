@@ -1,19 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SamaniCrm.Application.DTOs;
-using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SecuritySettingEntity = SamaniCrm.Domain.Entities.SecuritySetting;
 
 
 namespace SamaniCrm.Application.Common.Interfaces;
 
 public interface IApplicationDbContext
-{  
+{
+
+    public DbSet<TenantLogSetting> TenantLogSettings { get; set; }
+    public DbSet<LogEntry> LogEntries { get; set; }
+
+
     public DbSet<Tenant> Tenants { get; set; }
     public DbSet<TenantSetting> TenantSettings { get; set; }
     public DbSet<TenantDatabaseConnection> TenantDatabaseConnections { get; set; }

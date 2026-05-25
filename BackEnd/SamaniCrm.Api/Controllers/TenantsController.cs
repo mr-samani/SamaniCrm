@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SamaniCrm.Api.Attributes;
 using SamaniCrm.Application.Common.DTOs;
+using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Features.Tenants;
 using SamaniCrm.Application.Features.Tenants.Commands;
 using SamaniCrm.Application.Features.Tenants.Dtos;
@@ -15,7 +16,7 @@ using SamaniCrm.Host.Models;
 
 namespace SamaniCrm.Api.Controllers;
 
-[ApiController]
+[Authorize]
 // [Authorize(Roles = "SuperAdmin")]
 public partial class TenantsController : ApiBaseController
 {
@@ -74,6 +75,15 @@ public partial class TenantsController : ApiBaseController
     [Permission(AppPermissions.TenantManagement.List)]
     [ProducesResponseType(typeof(ApiResponse<PaginatedResult<TenantListDto>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllTenants([FromBody] TenantListQuery query)
+    {
+        var result = await _mediator.Send(query);
+        return ApiOk(result);
+    }
+
+    [HttpPost("GetTenantsAutoComplete")]
+    [Permission(AppPermissions.TenantManagement.AutoComplete)]
+    [ProducesResponseType(typeof(ApiResponse<List<AutoCompleteDto<Guid>>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetTenantsAutoComplete([FromBody] GetTenantsAutoCompleteQuery query)
     {
         var result = await _mediator.Send(query);
         return ApiOk(result);

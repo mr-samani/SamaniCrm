@@ -15,27 +15,29 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { SwitchModule } from './components/switch/switch.module';
 import { HtmlSanitizePipe } from './pipes/html-sanatizer.pipe';
+import { HasFlagPipe } from './pipes/has-flag.pipe';
 
 const pipes = [
-  SanitizerPipe,
-  LuxonFormatPipe,
-  LuxonFromNowPipe,
-  FileSizePipe,
-  EnumToArrayPipe,
-  EnumToArrayStringValuePipe,
-  NumberCheckDirective,
-  FilteFormrDirective,
-  PermissionPipe,
-  PermissionAnyPipe,
-  PermissionAllPipe,
-  HtmlSanitizePipe
+    SanitizerPipe,
+    LuxonFormatPipe,
+    LuxonFromNowPipe,
+    FileSizePipe,
+    EnumToArrayPipe,
+    EnumToArrayStringValuePipe,
+    NumberCheckDirective,
+    FilteFormrDirective,
+    PermissionPipe,
+    PermissionAnyPipe,
+    PermissionAllPipe,
+    HtmlSanitizePipe,
+    HasFlagPipe,
 ];
 
 const standalones = [SubHeaderComponent];
 const modules = [TranslateModule, FormsModule, SwitchModule];
 @NgModule({
-  declarations: [...pipes],
-  imports: [CommonModule, ...standalones, ...modules],
-  exports: [...pipes, ...standalones, ...modules],
+    declarations: [...pipes],
+    imports: [CommonModule, ...standalones, ...modules],
+    exports: [...pipes, ...standalones, ...modules],
 })
 export class SharedModule {}

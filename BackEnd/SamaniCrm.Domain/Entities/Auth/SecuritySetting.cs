@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamaniCrm.Domain.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Domain.Entities;
 
-public class SecuritySetting
+public class SecuritySetting : IMayHaveTenant
 {
     public Guid Id { get; set; }
+    public Guid? TenantId { get; set; }
+
     public int RequiredLength { get; set; }
     public bool RequireDigit { get; set; }
     public bool RequireLowercase { get; set; }

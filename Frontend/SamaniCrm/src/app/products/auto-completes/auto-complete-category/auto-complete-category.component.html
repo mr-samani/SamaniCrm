@@ -15,7 +15,7 @@
           {{ 'NotACase' | translate }}
         </mat-option>
       }
-      @for (item of filteredOptions | async; track item) {
+      @for (item of filteredOptions | async; track $index) {
         <mat-option [value]="item">
           <span>{{ item.title }}</span>
         </mat-option>
@@ -49,7 +49,7 @@
             {{ 'NotACase' | translate }}
           </mat-option>
         }
-        @for (item of filteredOptions | async; track item) {
+        @for (item of filteredOptions | async; track $index) {
           <mat-option [value]="item">
             <span>{{ item.title }}</span>
           </mat-option>

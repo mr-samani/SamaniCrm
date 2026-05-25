@@ -25,11 +25,24 @@ public class SeedRoles
 
         foreach (string role in allRoles)
         {
-            // 1. ایجاد نقش ادمین در صورت عدم وجود
-            var r = await roleManager.FindByNameAsync(role);
+            // 1. ایجاد نقش های هاست در صورت عدم وجود
+            var r = await roleManager.Roles.FirstOrDefaultAsync(x=>x.Name == role && x.TenantId == null);
             if (r == null)
             {
                 r = new ApplicationRole(role);
+                switch (role)
+                {
+                    case AppRoles.SysAdmin:
+                        r.Level = 0;
+                        break;
+                    case AppRoles.TenantAdministrator:
+                        r.Level = 1;
+                        break;
+                    default:
+                        r.Level = 2;
+                        break;
+                }
+                r.IsSystem = true;
                 var roleResult = await roleManager.CreateAsync(r);
                 if (!roleResult.Succeeded)
                 {
@@ -47,7 +60,7 @@ public class SeedRoles
         Console.WriteLine("Try seed Administrator Role Permissions");
 
 
-        var administratorRole = await roleManager.FindByNameAsync(AppRoles.Administrator);
+        var administratorRole = await roleManager.FindByNameAsync(AppRoles.SysAdmin);
 
         if (administratorRole == null)
         {

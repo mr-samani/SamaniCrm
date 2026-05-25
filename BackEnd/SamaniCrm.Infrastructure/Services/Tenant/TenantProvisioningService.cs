@@ -119,6 +119,7 @@ public class TenantProvisioningService : ITenantProvisioningService
         {
             return;
         }
+
         var adminUser = new CreateUserCommand()
         {
             TenantId = tenantId,
@@ -147,7 +148,7 @@ public class TenantProvisioningService : ITenantProvisioningService
         var databaseName = $"Tenant_{tenant.Slug}_{tenant.Id:N}";
         var serverName = Environment.GetEnvironmentVariable("DB_SERVER") ?? "localhost";
         var adminUsername = Environment.GetEnvironmentVariable("DB_ADMIN_USER") ?? "sa";
-        var adminPassword = Environment.GetEnvironmentVariable("DB_ADMIN_PASSWORD") ?? "";
+        var adminPassword = Environment.GetEnvironmentVariable("DB_ADMIN_PASSWORD") ?? "123456";
 
 
         // Create database

@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.Extensions.DependencyInjection;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Core.Shared.Enums;
@@ -9,32 +10,36 @@ using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Interfaces;
 using SamaniCrm.Infrastructure.Identity;
-using SamaniCrm.Infrastructure.Services.TenantService;
 using System.Linq.Expressions;
-using System.Reflection.Emit;
 
 namespace SamaniCrm.Infrastructure;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>, IApplicationDbContext
 {
-    private readonly ICurrentUserService _currentUser;
-    private readonly ICurrentTenant _currentTenant;
+    private readonly ICurrentUserService? _currentUser;
+    private readonly ICurrentTenant? _currentTenant;
 
     private Guid? _tenantId;
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
-        ICurrentUserService currentUserService,
-        ICurrentTenant currentTenant) : base(options)
+        ICurrentUserService? currentUserService,
+        ICurrentTenant? currentTenant) : base(options)
     {
         _currentUser = currentUserService;
         _currentTenant = currentTenant;
     }
 
+
+
     public Guid? CurrentTenantId
     {
-        get => _tenantId ?? _currentTenant.TenantId;
+        get => _tenantId ?? _currentTenant?.TenantId;
         set => _tenantId = value;
     }
 
+
+    public DbSet<TenantLogSetting> TenantLogSettings { get; set; }
+    public DbSet<LogEntry> LogEntries { get; set; }
 
 
     public DbSet<Tenant> Tenants { get; set; }
@@ -112,106 +117,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         base.OnModelCreating(builder);
-
-        builder.Entity<SecuritySetting>(b =>
-        {
-            b.HasKey(k => k.Id);
-        });
-
-        builder.Entity<ApplicationUser>(b =>
-        {
-            b.ToTable("Users");
-            b.Property(e => e.FirstName).HasMaxLength(50);
-            b.Property(e => e.LastName).HasMaxLength(50);
-            b.Property(e => e.Address).HasMaxLength(200);
-            b.Property(e => e.PhoneNumber).HasMaxLength(15);
-            b.Property(e => e.ProfilePicture).HasMaxLength(200);
-        });
-        builder.Entity<RolePermission>(b =>
-        {
-            b.HasKey(rp => new { rp.RoleId, rp.PermissionId });
-
-            b.HasOne<ApplicationRole>()
-                .WithMany()
-                .HasForeignKey(rp => rp.RoleId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
-
-            b.HasOne(rp => rp.Permission)
-                .WithMany()
-                .HasForeignKey(rp => rp.PermissionId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
-        });
-
-
-        builder.Entity<Permission>()
-            .HasIndex(p => p.LocalizeKey)
-            .IsUnique();
-
-        builder.Entity<Language>(l =>
-        {
-            l.HasKey(x => x.Culture);
-            l.HasIndex(c => c.Culture).IsUnique();
-        });
-        builder.Entity<Localization>(l =>
-        {
-            l.HasKey(k => k.Id);
-            l.HasIndex(c => c.Culture);
-            l.HasOne(x => x.Language)
-                .WithMany(x => x.Localizations)
-                .HasForeignKey(x => x.Culture)
-                .OnDelete(DeleteBehavior.Cascade);
-            l.HasIndex(x => new { x.Key, x.Culture, x.Category }).IsUnique();
-
-
-            var converter = new ValueConverter<LocalizationCategoryEnum, string>(
-                                v => EnumHelper.GetDescription(v),
-                                v => EnumHelper.GetValueFromDescription<LocalizationCategoryEnum>(v, LocalizationCategoryEnum.Other)
-                            );
-            l.Property(l => l.Category).HasConversion(converter);
-        });
-
-
-        builder.Entity<Menu>(l =>
-        {
-            l.HasKey(k => k.Id);
-            l.HasMany(c => c.Children)
-                .WithOne()
-                .HasForeignKey(m => m.ParentId)
-                .OnDelete(DeleteBehavior.Restrict);
-            var converter = new ValueConverter<MenuTargetEnum, string>(
-                                v => EnumHelper.GetDescription(v),
-                                v => EnumHelper.GetValueFromDescription<MenuTargetEnum>(v, MenuTargetEnum.Self)
-                            );
-            l.Property(l => l.Target).HasConversion(converter);
-        });
-        builder.Entity<MenuTranslation>(t =>
-        {
-            t.HasKey(t => new { t.MenuId, t.Culture });
-            t.HasOne(x => x.Language)
-                .WithMany().HasForeignKey(x => x.Culture)
-                .OnDelete(DeleteBehavior.Cascade);
-            t.HasOne(x => x.Menu)
-                .WithMany(x => x.Translations)
-                .HasForeignKey(x => x.MenuId)
-                .OnDelete(DeleteBehavior.Cascade);
-        });
-
-
-        builder.Entity<Tenant>(entity =>
-        {
-            entity.Property(t => t.Longitude)
-                  .HasColumnType("decimal(18,8)");
-
-            entity.Property(t => t.Latitude)
-                  .HasColumnType("decimal(18,8)");
-        });
+        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
         SetGLobalFilter(builder);
-
     }
 
 
@@ -273,40 +182,58 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 
     private void ApplyAuditInformation()
     {
-        var auditableEntries = ChangeTracker.Entries<IAuditedEntity>();
-        var currentUserId = _currentUser.UserId;
+        var currentUserId = _currentUser?.UserId;
 
-        foreach (var entry in auditableEntries)
+        // فقط یک پیمایش روی هم entity ها
+        var entries = ChangeTracker.Entries()
+            .Where(e => e.State != EntityState.Detached &&
+                        e.State != EntityState.Unchanged)
+            .ToList();
+
+        foreach (var entry in entries)
         {
-            if (entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
-                continue;
-
-            switch (entry.State)
+            // --- TenantId فقط برای entity های جدید ---
+            if (entry.Entity is IMayHaveTenant tenantEntity)
             {
-                case EntityState.Added:
-                    entry.Entity.CreatedAt = DateTime.UtcNow;
-                    entry.Entity.CreatedBy = currentUserId;
-                    break;
-
-                case EntityState.Modified:
-                    entry.Entity.ModifiedAt = DateTime.UtcNow;
-                    entry.Entity.ModifiedBy = currentUserId;
-
-                    // اگر Soft Delete شده
-                    if (entry.Entity.IsDeleted)
+                if (entry.State == EntityState.Added)
+                {
+                    // فقط اگر قبلاً ست نشده باشد
+                    if (tenantEntity.TenantId == default)
                     {
-                        entry.Entity.DeletedAt = DateTime.UtcNow;
-                        entry.Entity.DeletedBy = currentUserId;
+                        tenantEntity.TenantId = CurrentTenantId;
                     }
-                    break;
+                }
+            }
 
-                case EntityState.Deleted:
-                    // تبدیل Hard Delete به Soft Delete
-                    entry.Entity.IsDeleted = true;
-                    entry.Entity.DeletedAt = DateTime.UtcNow;
-                    entry.Entity.DeletedBy = currentUserId;
-                    entry.State = EntityState.Modified;
-                    break;
+            // --- Audit Fields ---
+            if (entry.Entity is IAuditedEntity auditedEntity)
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        auditedEntity.CreatedAt = DateTime.UtcNow;
+                        auditedEntity.CreatedBy = currentUserId;
+                        break;
+
+                    case EntityState.Modified:
+                        auditedEntity.ModifiedAt = DateTime.UtcNow;
+                        auditedEntity.ModifiedBy = currentUserId;
+
+                        if (auditedEntity.IsDeleted)
+                        {
+                            auditedEntity.DeletedAt = DateTime.UtcNow;
+                            auditedEntity.DeletedBy = currentUserId;
+                        }
+                        break;
+
+                    case EntityState.Deleted:
+                        // تبدیل Hard Delete به Soft Delete
+                        auditedEntity.IsDeleted = true;
+                        auditedEntity.DeletedAt = DateTime.UtcNow;
+                        auditedEntity.DeletedBy = currentUserId;
+                        entry.State = EntityState.Modified;
+                        break;
+                }
             }
         }
     }

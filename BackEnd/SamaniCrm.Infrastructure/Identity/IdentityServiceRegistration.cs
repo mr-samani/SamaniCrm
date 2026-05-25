@@ -17,8 +17,6 @@ namespace SamaniCrm.Infrastructure.Identity
     {
         public static IServiceCollection AddIdentityInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {  
-            
- 
 
             using (var scope = services.BuildServiceProvider().CreateScope())
             {
@@ -84,7 +82,7 @@ namespace SamaniCrm.Infrastructure.Identity
                             ValidateIssuerSigningKey = true,
                             ValidIssuer = configuration["Jwt:Issuer"],
                             ValidAudience = configuration["Jwt:Audience"],
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
                         };
                         options.Events = new JwtBearerEvents
                         {

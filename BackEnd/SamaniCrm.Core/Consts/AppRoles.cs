@@ -8,8 +8,11 @@ namespace SamaniCrm.Core.Shared.Consts;
 
 public abstract class AppRoles
 {
-    // SuserAdmin
-    public const string Administrator = nameof(Administrator);
+    // host system administrator 
+    public const string SysAdmin = nameof(SysAdmin);
     // Tenant admin
     public const string TenantAdministrator = nameof(TenantAdministrator);
+    // tenant users
+    public const string TenantUser = nameof(TenantUser);
+
 }

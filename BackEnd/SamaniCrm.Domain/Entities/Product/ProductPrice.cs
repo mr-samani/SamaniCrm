@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SamaniCrm.Core.Shared.Enums;
+using SamaniCrm.Domain.Interfaces;
 
 namespace SamaniCrm.Domain.Entities;
 
-public class ProductPrice : BaseEntity
+public class ProductPrice : BaseEntity,IMayHaveTenant
 {
+    public Guid? TenantId { get; set; }
     public Guid ProductId { get; set; }
 
     [MaxLength(5)]

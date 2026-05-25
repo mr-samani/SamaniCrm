@@ -1,9 +1,12 @@
+using SamaniCrm.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace SamaniCrm.Domain.Entities;
 
-public class Dashboard : BaseEntity
+public class Dashboard : BaseEntity, IMayHaveTenant
 {
+    public Guid? TenantId { get; set; }
+
     [Required]
     [MaxLength(100)]
     public required string Title { get; set; }

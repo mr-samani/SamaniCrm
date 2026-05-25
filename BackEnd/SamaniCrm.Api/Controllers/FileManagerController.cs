@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SamaniCrm.Api.Attributes;
@@ -12,7 +13,7 @@ using SamaniCrm.Host.Models;
 
 namespace SamaniCrm.Api.Controllers;
 
-
+[Authorize]
 public class FileManagerController : ApiBaseController
 {
 

@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.OpenApi;
 
-internal class OpenApiRawExtension : IOpenApiExtension
+
+namespace SamaniCrm.Api.Extensions;
+
+public class OpenApiRawExtension : IOpenApiExtension
 {
     private readonly string[] _names;
 

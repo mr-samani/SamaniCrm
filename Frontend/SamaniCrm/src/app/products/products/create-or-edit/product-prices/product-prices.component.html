@@ -23,7 +23,7 @@
               <td>
                 <div class="input-group">
                   <mat-select class="form-control" formControlName="currency" [placeholder]="'Currency' | translate">
-                    @for (item of currencyList; track item) {
+                    @for (item of currencyList; track $index) {
                       <mat-option [value]="item.id">{{ item.title }} ({{ item.id }})</mat-option>
                     }
                     @if (!loadingCurrency && currencyList.length == 0) {
@@ -60,7 +60,7 @@
               <td>
                 <div class="">
                   <mat-select class="form-control" formControlName="type" [placeholder]="'Type' | translate">
-                    @for (item of PriceTypeEnum | enumToArray; track item) {
+                    @for (item of PriceTypeEnum | enumToArray; track $index) {
                       <mat-option [value]="item">
                         {{ 'PriceTypeEnum_' + item | translate }}
                       </mat-option>

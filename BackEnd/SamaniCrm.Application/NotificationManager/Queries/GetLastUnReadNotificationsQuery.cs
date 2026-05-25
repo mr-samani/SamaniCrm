@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.NotificationManager.Queries
 {
-    public class GetLastUnReadNotificationsQuery : IRequest<List<NotificationDto>>
+    public class GetLastUnReadNotificationsQuery : IRequest<UnReadNotificationListDto>
     {
     }
 
 
 
-    public class GetLastUnReadNotificationsQueryHandler : IRequestHandler<GetLastUnReadNotificationsQuery, List<NotificationDto>>
+    public class GetLastUnReadNotificationsQueryHandler : IRequestHandler<GetLastUnReadNotificationsQuery, UnReadNotificationListDto>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly ICurrentUserService _currentUser;
@@ -28,27 +28,39 @@ namespace SamaniCrm.Application.NotificationManager.Queries
             _currentUser = currentUser;
         }
 
-        public async Task<List<NotificationDto>> Handle(GetLastUnReadNotificationsQuery request, CancellationToken cancellationToken)
+        public async Task<UnReadNotificationListDto> Handle(GetLastUnReadNotificationsQuery request, CancellationToken cancellationToken)
         {
             var currentUserId = _currentUser.UserId;
 
             var result = await _dbContext.Notifications
+                                    .AsNoTracking()
                                     .Where(x => x.Read == false)
                                     .Where(x => x.RecieverUserId == currentUserId)
-                                    .Select(s => new NotificationDto()
-                                    {
-                                        Id = s.Id,
-                                        Title = s.Title,
-                                        Data = s.Data,
-                                        Type = s.Type,
-                                        Periority = s.Periority,
-                                        Read = s.Read,
-                                        CreationTime = s.CreatedAt.ToUniversalTime(),
-                                    })
+                                    .OrderByDescending(x => x.CreatedAt)
                                     .Skip(0)
                                     .Take(10)
+                                     .Select(s => new NotificationDto()
+                                     {
+                                         Id = s.Id,
+                                         Title = s.Title,
+                                         Data = s.Data,
+                                         Type = s.Type,
+                                         Periority = s.Periority,
+                                         Read = s.Read,
+                                         CreationTime = s.CreatedAt,
+                                     })
                                     .ToListAsync(cancellationToken);
-            return result;
+            int unreadCount = await _dbContext.Notifications
+                                    .AsNoTracking()
+                                    .Where(x => x.Read == false)
+                                    .Where(x => x.RecieverUserId == currentUserId)
+                                    .CountAsync(cancellationToken);
+
+            return new UnReadNotificationListDto()
+            {
+                items = result,
+                UnreadCount = unreadCount
+            };
         }
     }
 }

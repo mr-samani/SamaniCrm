@@ -60,7 +60,7 @@ public class ProductCategoryService : IProductCategoryService
 
         int total = await query.CountAsync(cancellationToken);
 
-        var items = await query
+        var items = await query.OrderBy(x => x.CreatedAt)
        .Skip(request.PageSize * (request.PageNumber - 1))
        .Take(request.PageSize)
        .Select(c => new ProductCategoryDto
@@ -79,7 +79,7 @@ public class ProductCategoryService : IProductCategoryService
            OrderIndex = c.OrderIndex,
            ParentId = c.ParentId,
            Slug = c.Slug,
-           CreationTime = c.CreatedAt.ToUniversalTime(),
+           CreationTime = c.CreatedAt,
 
            // فقط چک کن که فرزند داره یا نه، بدون کوئری اضافه
            ChildCount = _context.ProductCategories.Count(x => x.ParentId == c.Id),

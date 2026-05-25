@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.FileManager.Interfaces;
 using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.FileManager;
@@ -10,20 +12,18 @@ namespace SamaniCrm.Api.Controllers
     [Route("/file")]
     public class FileServeController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
         private readonly IWebHostEnvironment _env;
         private readonly IFileManagerService _fileManagerService;
-        private readonly IConfiguration _configuration;
         private string publicRootPath;
 
-        public FileServeController(ApplicationDbContext dbContext, IWebHostEnvironment env, IFileManagerService fileManagerService, IConfiguration configuration)
+        public FileServeController(
+            IWebHostEnvironment env,
+            IFileManagerService fileManagerService,
+            IOptions<FileManagerSettings> settings)
         {
-            _dbContext = dbContext;
             _env = env;
             _fileManagerService = fileManagerService;
-            _configuration = configuration;
-            var settings = configuration.GetSection("FileManager").Get<FileManagerSetting>() ?? new FileManagerSetting();
-            publicRootPath = settings.PublicFolderPath;
+            publicRootPath = settings.Value.PublicFolderPath;
         }
 
         [HttpGet("{id:guid}")]
@@ -63,13 +63,17 @@ namespace SamaniCrm.Api.Controllers
                 Response.ContentLength = length;
                 Response.ContentType = contentType;
                 Response.Headers.ContentType = contentType;
-
-                Response.Headers.ContentDisposition = $"attachment; filename=\"{fileName}\"";
+                var cd = new ContentDispositionHeaderValue("attachment");
+                cd.SetHttpFileName(fileName);
+                Response.Headers.ContentDisposition = cd.ToString();
+                // Response.Headers.ContentDisposition = $"attachment; filename=\"{fileName}\"";
 
                 return File(partialStream, contentType, enableRangeProcessing: true);
             }
-
-            Response.Headers.ContentDisposition = $"attachment; filename=\"{fileName}\"";
+            var contentDisposition = new ContentDispositionHeaderValue("attachment");
+            contentDisposition.SetHttpFileName(fileName);
+            Response.Headers.ContentDisposition = contentDisposition.ToString();
+            // Response.Headers.ContentDisposition = $"attachment; filename=\"{fileName}\"";
             Response.Headers.CacheControl = "public,max-age=604800"; // 7 days cache
             return File(stream, contentType, fileEntity.Name, enableRangeProcessing: true);
         }

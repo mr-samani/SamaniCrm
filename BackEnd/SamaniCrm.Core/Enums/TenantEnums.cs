@@ -43,15 +43,15 @@ public enum TenantSettingValueType
     Boolean,
     JSON
 }
- 
+
 
 
 public enum TenantProvisionStepsEnum
 {
     CreateTenant,
-    CreateAdminUser,
     ProvisionDatabase,
     RunMigrations,
     SeedData,
+    CreateAdminUser,
     Finalize,
 };

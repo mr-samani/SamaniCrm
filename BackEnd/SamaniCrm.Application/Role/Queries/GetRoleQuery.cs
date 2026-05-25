@@ -28,12 +28,14 @@ namespace SamaniCrm.Application.Queries.Role
         public async Task<IList<RoleDTO>> Handle(GetRoleQuery request, CancellationToken cancellationToken)
         {
             var roles = await _identityService.GetRolesAsync();
-            return roles.Select(role => new RoleDTO()
+            var query= roles.Select(role => new RoleDTO()
             {
                 Id = role.id,
                 RoleName = role.roleName,
                 DisplayName = L["Role:" + role.roleName],
-            }).ToList();
+            });
+
+            return query.ToList();
         }
     }
 }

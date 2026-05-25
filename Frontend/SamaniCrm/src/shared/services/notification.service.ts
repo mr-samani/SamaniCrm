@@ -1,8 +1,5 @@
 // notification.service.ts
-import { ChangeDetectorRef, Injectable, OnDestroy } from '@angular/core';
-import * as signalR from '@microsoft/signalr';
-import { AuthService } from './auth.service';
-import { TokenService } from './token.service';
+import { Injectable, OnDestroy } from '@angular/core';
 import { AppConst } from '@shared/app-const';
 import { NotificationDto } from '@shared/service-proxies/model/notification-dto';
 import { ConnectionStatus, SignalRService } from './signalr.service';
@@ -15,9 +12,7 @@ export class NotificationService implements OnDestroy {
 
   onRecieveMessage$ = new Subject<NotificationDto>();
   constructor(
-    private tokenService: TokenService,
     private signalRService: SignalRService,
-    private chdr: ChangeDetectorRef,
   ) {}
 
   ngOnDestroy(): void {
@@ -33,7 +28,6 @@ export class NotificationService implements OnDestroy {
       if (state == ConnectionStatus.Connected) {
         this.registerEvents();
       }
-      this.chdr.detectChanges();
     });
   }
 
@@ -45,8 +39,9 @@ export class NotificationService implements OnDestroy {
 
   private registerEvents() {
     if (!this.hubConnection) return;
-    this.signalRService.on(this.hubConnection, 'ReceiveNotification', (msg: NotificationDto) => {
-      console.log('📨 Notification:', msg.title);
+    //{"type":1,"target":"SendAsync","arguments":["ReceiveNotification",{"id":"333b83e0-eb11-45f0-bb0f-08addb35a73e","title":"5454","content":"thgbhnklm,\n","periority":0,"type":1,"recieverUserId":"93b02a5b-5b2e-4ae9-0def-08deb7bf8122","recieverName":null,"senderUserId":"93b02a5b-5b2e-4ae9-0def-08deb7bf8122","senderName":null,"read":false,"data":null,"creationTime":"2026-05-24T14:45:07.4597343Z"}]}
+    this.signalRService.on(this.hubConnection, 'SendAsync', (method:string,msg: NotificationDto) => {
+      console.log('📨 Notification:', msg);
       this.onRecieveMessage$.next(msg);
     });
   }

@@ -25,7 +25,7 @@
             </td>
           </tr>
         }
-        @for (item of attributeList; track item) {
+        @for (item of attributeList; track $index) {
           <tr>
             <td [vAlign]="'middle'" align="end">{{ item.name }}:</td>
             <td [vAlign]="'middle'">

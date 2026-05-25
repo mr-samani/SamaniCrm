@@ -1,4 +1,5 @@
-﻿using SamaniCrm.Domain.ValueObjects.Product;
+﻿using SamaniCrm.Domain.Interfaces;
+using SamaniCrm.Domain.ValueObjects.Product;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,8 +10,9 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Domain.Entities;
 
-public class ProductAttributeValue : BaseEntity
+public class ProductAttributeValue : BaseEntity,IMayHaveTenant
 {
+    public Guid? TenantId { get; set; }
     public Guid ProductId { get; set; }
     public Guid AttributeId { get; set; }
 

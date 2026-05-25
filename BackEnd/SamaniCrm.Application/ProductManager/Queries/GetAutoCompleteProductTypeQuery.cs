@@ -43,14 +43,16 @@ public class GetAutoCompleteProductTypeQueryHandler : IRequestHandler<GetAutoCom
             );
         }
 
-        var items = await query.Select(s => new AutoCompleteDto<Guid>
-        {
-            Id = s.Id,
-            Title = s.Translations.Where(w => w.Culture == currentLanguage).Select(s => s.Name).FirstOrDefault() ??
-            s.Translations.Where(w => w.Name != null).Select(s => s.Name).FirstOrDefault() ?? "",
-        })
+        var items = await query
+            .OrderBy(x=>x.CreatedAt)
             .Skip(0)
             .Take(50)
+            .Select(s => new AutoCompleteDto<Guid>
+                {
+                    Id = s.Id,
+                    Title = s.Translations.Where(w => w.Culture == currentLanguage).Select(s => s.Name).FirstOrDefault() ??
+                s.Translations.Where(w => w.Name != null).Select(s => s.Name).FirstOrDefault() ?? "",
+                })
             .ToListAsync(cancellationToken);
         return items;
 

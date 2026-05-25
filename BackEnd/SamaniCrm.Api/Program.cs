@@ -1,12 +1,10 @@
 ﻿using Hangfire;
-using Microsoft.OpenApi;
-using SamaniCrm.Api.Middlewares;
+using SamaniCrm.Api.Extensions;
 using SamaniCrm.Api.TUS;
 using SamaniCrm.Application;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Host.Middlewares;
 using SamaniCrm.Infrastructure.Cache;
-using SamaniCrm.Infrastructure.Extensions;
 using SamaniCrm.Infrastructure.FileManager;
 using SamaniCrm.Infrastructure.Hubs;
 using SamaniCrm.Infrastructure.Identity;
@@ -22,32 +20,28 @@ var services = builder.Services;
 var config = builder.Configuration;
 
 services
+    .AddConfigurations(config)
     .AddDbContext(config)
     .AddCustomServices(config);
 services
     .AddCorsPolicy()
     .AddControllersWithDefaults()
     .AddAutoMapper()
-    .AddCustomMediatR()
+    .AddMediatR()
     .AddFluentValidation()
-    .AddInfrastructure(config)
+    .AddIdentityInfrastructure(config)
     .AddOpenApiDocumentation()
     .AddHangfire(config)
     .AddCacheService(config)
     .AddFileManagerService(config)
-    .AddHangfireJobs(config)
-    .LoadExternalProviders(config)
+    .AddExternalProviders(config)
     .AddHelthChecks(config)
-    ;
+    .AddLogging(config)
+    .AddHelthChecks(config)
+    .AddSignalR();
 
-
-
-
-
-services.AddSignalR();
 // 1. اضافه کردن Cache (اجباری برای Session)
 builder.Services.AddDistributedMemoryCache();
-
 // 2. اضافه کردن Session
 builder.Services.AddSession(options =>
 {
@@ -62,9 +56,11 @@ var app = builder.Build();
 var captchaStore = app.Services.GetRequiredService<ICaptchaStore>();
 VerifyCaptchaExtensions.Configure(captchaStore, config);
 
+ 
+app.UseMiddleware<AddCorrelationIdToRequests>();
+
 app.UseMiddleware<LanguageMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseMiddleware<ApiExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
@@ -79,6 +75,7 @@ app.UseStaticFiles();
 app.UseSession();
 
 // Security Headers
+//TODO: CSP security :commented for scalar
 //app.Use(async (context, next) =>
 //{
 //    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
@@ -88,6 +85,9 @@ app.UseSession();
 //    context.Response.Headers.Append("Content-Security-Policy", "default-src 'self'");
 //    await next();
 //});
+
+
+
 
 
 

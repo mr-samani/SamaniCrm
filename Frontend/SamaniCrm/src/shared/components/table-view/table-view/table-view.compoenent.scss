@@ -51,6 +51,8 @@
   height: var(--header-height);
   padding: var(--header-padding-y) 0px;
   box-shadow: 0px 0px 10px 5px var(--header-shadow-color);
+  /* auto scroled by body*/
+  overflow: hidden;
 }
 
 .tbody-mrs {
@@ -81,6 +83,7 @@
   justify-content: space-between;
   display: flex;
   gap: 5px;
+  overflow: hidden;
   &:hover {
     .sort-icon {
       opacity: 1;
@@ -101,9 +104,11 @@
 
 .td-mrs .cel {
   overflow: hidden;
-  text-overflow: ellipsis;
   max-width: 100%;
-  white-space: nowrap;
+  :not(.wrap) {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
   /* margin: auto 0; */
 }
 
@@ -113,11 +118,6 @@
 
 .text-wrap {
   white-space: normal;
-}
-
-.operations {
-  width: 100px !important;
-  max-width: 200px !important;
 }
 
 @media (max-width: 768px) {

@@ -108,7 +108,7 @@ export class FileManagerComponent extends AppComponentBase implements OnInit, On
         .then((result) => {
           // this.progress = Math.round((100 * event.loaded) / (event.total ?? 0));
           this.notify.success(this.l('Message.UploadedSuccessFully'));
-          this.reload();
+          this.reload(true);
         })
         .catch((error) => {
           this.notify.error(this.l('Message.AnErrorOccurred'));

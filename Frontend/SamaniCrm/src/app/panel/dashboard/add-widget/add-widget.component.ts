@@ -1,4 +1,4 @@
-import { Component, Inject,  OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -8,7 +8,9 @@ import { CreateOrUpdateDashboardItemCommand } from '@shared/service-proxies/mode
 
 import { SharedModule } from '@shared/shared.module';
 import { finalize } from 'rxjs';
-import { IWidgetDefinition, Widget, WidgetHelper } from '../widgets/widgets';
+import { WidgetHelper } from '../widgets/WidgetHelper';
+import { WIDGET_DEFINITIONS } from '../widgets/WIDGET_DEFINITIONS';
+import { IWidgetDefinition } from '../widgets/IWidgetDefinition';
 
 @Component({
   selector: 'app-add-widget',
@@ -22,7 +24,7 @@ export class AddDashboardWidgetComponent extends AppComponentBase implements OnI
   form: FormGroup;
   saving = false;
 
-  widgets = WidgetHelper.WidgetDefinition;
+  widgets: IWidgetDefinition[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private _data: { dashboardId: string },
@@ -30,6 +32,8 @@ export class AddDashboardWidgetComponent extends AppComponentBase implements OnI
     private dashboardService: DasboardServiceProxy,
   ) {
     super();
+
+    this.widgets = WIDGET_DEFINITIONS.filter((x) => this.isGranted(x.permission));
     this.form = this.fb.group({
       dashboardId: [_data.dashboardId, [Validators.required, Validators.maxLength(100)]],
       componentName: ['', [Validators.required]],
@@ -54,7 +58,7 @@ export class AddDashboardWidgetComponent extends AppComponentBase implements OnI
       .createOrUpdateDashboardItem(input)
       .pipe(
         finalize(() => {
-          this.saving  = false;
+          this.saving = false;
           this.chdr.detectChanges();
         }),
       )

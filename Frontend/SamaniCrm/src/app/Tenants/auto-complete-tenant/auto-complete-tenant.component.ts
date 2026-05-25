@@ -1,0 +1,150 @@
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  NG_VALUE_ACCESSOR,
+  NG_VALIDATORS,
+  AbstractControl,
+  ControlValueAccessor,
+  FormControl,
+  ValidationErrors,
+  Validator,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { AppComponentBase } from '@app/app-component-base';
+import { TranslateModule } from '@ngx-translate/core';
+import { RequireMatch } from '@shared/custom-validator/requireMatch';
+import { isNullOrEmpty } from '@shared/helper/null-or-empty';
+import { MaterialCommonModule } from '@shared/material/material.common.module';
+import { GetTenantsAutoCompleteQuery, TenantsServiceProxy } from '@shared/service-proxies';
+import { AutoCompleteDtoOfGuid } from '@shared/service-proxies/model/guid-auto-complete-dto';
+import { Observable, startWith, debounceTime, distinctUntilChanged, switchMap, of, finalize, map } from 'rxjs';
+
+@Component({
+  selector: 'auto-complete-tenant',
+  templateUrl: './auto-complete-tenant.component.html',
+  styleUrls: ['./auto-complete-tenant.component.scss'],
+  standalone: true,
+  imports: [CommonModule, MaterialCommonModule, MatAutocompleteModule, ReactiveFormsModule, TranslateModule],
+  providers: [
+    TenantsServiceProxy,
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AutoCompleteTenantComponent),
+      multi: true,
+    },
+    {
+      provide: NG_VALIDATORS,
+      multi: true,
+      useExisting: AutoCompleteTenantComponent,
+    },
+  ],
+})
+export class AutoCompleteTenantComponent
+  extends AppComponentBase
+  implements OnInit, OnDestroy, ControlValueAccessor, Validator
+{
+  @Input() theme: 'material' | 'bootstrap' = 'material';
+  @Output('selectionChange') selectionChange = new EventEmitter<AutoCompleteDtoOfGuid>();
+  myControl = new FormControl<AutoCompleteDtoOfGuid>(new AutoCompleteDtoOfGuid());
+  filteredOptions = new Observable<AutoCompleteDtoOfGuid[]>();
+  loading = true;
+  isEmpty: boolean = false;
+  private _onChange: (val: AutoCompleteDtoOfGuid | undefined) => void = () => {};
+  private _onChangeValidate: () => void = () => {};
+  private _onTouched: () => void = () => {};
+  disabled = false;
+  constructor(private tenantService: TenantsServiceProxy) {
+    super();
+    this.myControl.setValidators([RequireMatch]);
+  }
+
+  ngOnInit(): void {
+    this.update();
+  }
+
+  public update() {
+    this.filteredOptions = this.myControl.valueChanges.pipe(
+      startWith(''),
+      debounceTime(200),
+      distinctUntilChanged(),
+      switchMap((value: any) => {
+        return this._filter(value);
+      }),
+    );
+  }
+
+  ngOnDestroy(): void {}
+
+  writeValue(val: AutoCompleteDtoOfGuid): void {
+    this.myControl.setValue(val);
+  }
+
+  registerOnChange(fn: any): void {
+    this._onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this._onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+    if (isDisabled) {
+      this.myControl.disable();
+    } else {
+      this.myControl.enable();
+    }
+  }
+
+  validate(control: AbstractControl): ValidationErrors | null {
+    return this.myControl.errors;
+  }
+
+  registerOnValidatorChange(fn: any): void {
+    this._onChangeValidate = fn;
+  }
+
+  _filter(value: string): Observable<AutoCompleteDtoOfGuid[]> {
+    if (isNullOrEmpty(value)) {
+      value = '';
+    }
+    let filterValue = '';
+    if (typeof value === 'string') {
+      filterValue = value.toLowerCase();
+    } else if (typeof value === 'object') {
+      return of([value]);
+    }
+    this.loading = true;
+    return this.tenantService.getTenantsAutoComplete(new GetTenantsAutoCompleteQuery({ filter: filterValue })).pipe(
+      finalize(() => (this.loading = false)),
+      map((data) => {
+        const list = data.data ?? [];
+        this.isEmpty = list.length == 0;
+        return list;
+      }),
+    );
+  }
+
+  displayFn(opt: AutoCompleteDtoOfGuid): string {
+    return opt && opt.title ? opt.title : '';
+  }
+  openPanel(trigger: MatAutocompleteTrigger) {
+    trigger.openPanel();
+  }
+
+  onChange() {
+    const val = this.myControl.value ?? undefined;
+    this._onChange(val);
+    this.selectionChange.emit(val);
+  }
+
+  onChangeTextBox() {
+    this.onChange();
+  }
+
+  reset() {
+    this.myControl.reset();
+    this.onChange();
+  }
+}
