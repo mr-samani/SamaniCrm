@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PlanTranslationDto } from './plan-translation-dto';
 import { BillingType } from './billing-type';
 
 
@@ -15,25 +16,27 @@ import { BillingType } from './billing-type';
 /** Interface for PlanDto */
 export interface IPlanDto {
   id?: string;
-  name: string;
+  title?: string;
   code: string;
   description?: string;
   billingType?: BillingType;
   isActive?: boolean;
   isPublic?: boolean;
   createdAt?: string;
+  translations?: Array<PlanTranslationDto>;
 }
 
 /** Class for PlanDto */
 export class PlanDto implements IPlanDto {
   id?: string;
-  name!: string;
+  title?: string;
   code!: string;
   description?: string;
   billingType?: BillingType;
   isActive?: boolean;
   isPublic?: boolean;
   createdAt?: string;
+  translations?: Array<PlanTranslationDto>;
 
   constructor(data?: IPlanDto) {
     if (data) {
@@ -47,13 +50,18 @@ export class PlanDto implements IPlanDto {
 init(data?: any) {
   if (data) {
     this.id = data["id"];
-    this.name = data["name"];
+    this.title = data["title"];
     this.code = data["code"];
     this.description = data["description"];
     this.billingType = data["billingType"];
     this.isActive = data["isActive"];
     this.isPublic = data["isPublic"];
     this.createdAt = data["createdAt"];
+    if (Array.isArray(data["translations"])) {
+      this.translations = [] as any;
+      for (let item of data["translations"])
+        (this.translations as any).push(PlanTranslationDto.fromJS(item));
+    }
   }
 }
 

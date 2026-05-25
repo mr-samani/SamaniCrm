@@ -1,7 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Core;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Application.ProductManagerManager.Dtos;
 using SamaniCrm.Application.SubscriptionManager.Interfaces;
+using SamaniCrm.Core.Shared.Enums;
+using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Core.Shared.Subscriptions;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Entities.Subscription;
@@ -11,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SamaniCrm.Infrastructure.SubscriptionManager;
@@ -19,10 +25,12 @@ namespace SamaniCrm.Infrastructure.SubscriptionManager;
 public class SubscriptionService : ISubscriptionService
 {
     private readonly IApplicationDbContext _dbContext;
+    private readonly ILocalizer L;
 
-    public SubscriptionService(IApplicationDbContext dbContext)
+    public SubscriptionService(IApplicationDbContext dbContext, ILocalizer l)
     {
         _dbContext = dbContext;
+        L = l;
     }
 
     public async Task<bool> CreateOrEditPlan(PlanDto input, CancellationToken cancellation)
@@ -30,14 +38,13 @@ public class SubscriptionService : ISubscriptionService
         Plan? plan;
         if (input.Id.HasValue)
         {
-            plan = await _dbContext.Plans.FindAsync(input.Id, cancellation);
+            plan = await _dbContext.Plans
+                 .Include(p => p.Translations)
+                 .OrderBy(x => x.CreatedAt)
+                 .FirstOrDefaultAsync(p => p.Id == input.Id, cancellation);
             if (plan == null)
-            {
-                throw new NotFoundException("Plan not found");
-            }
-            plan.Name = input.Name;
+                throw new NotFoundException("Plan not found.");
             plan.Code = input.Code;
-            plan.Description = input.Description;
             plan.BillingType = input.BillingType;
             plan.IsActive = input.IsActive;
             plan.IsPublic = input.IsPublic;
@@ -46,40 +53,129 @@ public class SubscriptionService : ISubscriptionService
         {
             plan = new Plan()
             {
-                Name = input.Name,
                 Code = input.Code,
-                Description = input.Description,
                 BillingType = input.BillingType,
                 IsActive = input.IsActive,
                 IsPublic = input.IsPublic,
             };
-            await _dbContext.Plans.AddAsync(plan, cancellation);
+            _dbContext.Plans.Add(plan);
+
         }
+
+
+        if (input.Translations != null)
+        {
+            var toRemove = plan.Translations.Where(t => !(input.Translations.Any(rt => rt.Culture == t.Culture))).ToList();
+            foreach (var t in toRemove)
+                plan.Translations.Remove(t);
+
+            foreach (var item in input.Translations ?? [])
+            {
+                var existingTranslation = plan.Translations
+                    .OrderBy(x => x.CreatedAt)
+                    .FirstOrDefault(t => t.Culture == item.Culture);
+
+                if (existingTranslation != null)
+                {
+                    // Update existing translation
+                    existingTranslation.Title = item.Title;
+                    existingTranslation.Description = item.Description;
+                }
+                else
+                {
+                    // Add new translation
+                    plan.Translations.Add(new PlanTranslation
+                    {
+                        Culture = item.Culture,
+                        Title = item.Title,
+                        Description = item.Description,
+                    });
+                }
+            }
+        }
+
+
 
         var result = await _dbContext.SaveChangesAsync(cancellation);
 
         return result > 0;
     }
 
-
-
-    public async Task<List<PlanDto>> GetAllPlans(CancellationToken cancellation)
+    public async Task<PlanDto> GetPlanForEdit(Guid planId, CancellationToken cancellation)
     {
-        var result = await _dbContext.Plans
-            .OrderBy(x => x.CreatedAt)
-                        .Select(s => new PlanDto()
-                        {
-                            Id = s.Id,
-                            Name = s.Name,
-                            Code = s.Code,
-                            Description = s.Description,
-                            BillingType = s.BillingType,
-                            IsActive = s.IsActive,
-                            IsPublic = s.IsPublic,
-                            CreatedAt = s.CreatedAt
+        var currentLangugage = L.CurrentLanguage;
 
-                        }).ToListAsync(cancellation);
-        return result;
+        var plan = await _dbContext.Plans
+            .FirstOrDefaultAsync(m => m.Id == planId, cancellation);
+
+        if (plan == null)
+            throw new NotFoundException("Plan not found.");
+
+        List<PlanTranslationDto> translations = await _dbContext.Languages
+            .GroupJoin(_dbContext.PlanTranslations.Where(w => w.PlanId == planId),
+              lang => lang.Culture,
+              translation => translation.Culture,
+              (lang, trans) => new { lang, trans }
+            )
+            .SelectMany(
+            x => x.trans.DefaultIfEmpty(),
+            (x, trans) => new PlanTranslationDto()
+            {
+                Culture = x.lang.Culture,
+                PlanId = plan.Id,
+                Title = trans != null ? trans.Title : "",
+                Description = trans != null ? trans.Description : "",
+
+            }
+            ).ToListAsync(cancellation);
+
+
+        return new PlanDto
+        {
+            Id = plan.Id,
+            BillingType = plan.BillingType,
+            Code = plan.Code,
+            IsActive = plan.IsActive,
+            IsPublic = plan.IsPublic,
+            CreatedAt = plan.CreatedAt,
+            Title = "",
+            Description = "",
+            Translations = translations
+        };
+    }
+
+
+    public async Task<List<PlanDto>> GetAllPlans(bool onlyIsActive, CancellationToken cancellation)
+    {
+        var currentCulture = L.CurrentLanguage;
+
+
+        var query = _dbContext.Plans
+            .AsNoTracking()
+            .Where(p => !onlyIsActive || p.IsActive)
+            .Select(p => new PlanDto
+            {
+                Id = p.Id,
+                Code = p.Code,
+                BillingType = p.BillingType,
+                IsActive = p.IsActive,
+                IsPublic = p.IsPublic,
+                CreatedAt = p.CreatedAt,
+                Title = p.Translations
+                    .Where(t => !string.IsNullOrWhiteSpace(t.Title))
+                    .OrderByDescending(t => t.Culture == currentCulture)
+                    .Select(t => t.Title)
+                    .FirstOrDefault() ?? "",
+                Description = p.Translations
+                    .Where(t => !string.IsNullOrWhiteSpace(t.Title))
+                    .OrderByDescending(t => t.Culture == currentCulture)
+                    .Select(t => t.Description)
+                    .FirstOrDefault() ?? ""
+            })
+            .OrderBy(x => x.CreatedAt);
+
+        return await query.ToListAsync(cancellation);
+
     }
 
 
@@ -151,4 +247,7 @@ public class SubscriptionService : ISubscriptionService
         var result = await _dbContext.SaveChangesAsync(cancellation);
         return result > 0;
     }
+
+
+
 }

@@ -42,6 +42,17 @@ public class SubscriptionController : ApiBaseController
         return ApiOk(result);
     }
 
+
+    [HttpGet("GetPlanForEdit")]
+    [Permission(AppPermissions.SubscriptionManagement.Plans.Edit)]
+    [ProducesResponseType(typeof(ApiResponse<PlanDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetPlanForEdit(Guid id)
+    {
+        PlanDto result = await _mediator.Send(new GetForEditPlanQuery(id));
+        return ApiOk(result);
+    }
+
+
     [HttpPost("DeletePlan")]
     [Permission(AppPermissions.SubscriptionManagement.Plans.Create)]
     [Permission(AppPermissions.SubscriptionManagement.Plans.Edit)]

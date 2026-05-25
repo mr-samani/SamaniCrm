@@ -237,7 +237,7 @@ public class ProductController : ApiBaseController
     [ProducesResponseType(typeof(ApiResponse<ProductDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetProductForEdit(Guid id, CancellationToken cancellationToken)
     {
-        return ApiOk(await _mediator.Send(new GetProductForEditQuery(id), cancellationToken));
+        return ApiOk(await _mediator.Send(new GetForEditPlanQuery(id), cancellationToken));
     }
 
     [HttpPost("CreateOrEditProduct")]

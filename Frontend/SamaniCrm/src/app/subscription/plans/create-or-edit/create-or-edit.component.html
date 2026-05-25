@@ -1,0 +1,85 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  @if (!isUpdate) {
+    <span cdkDragHandle class="title">{{ 'CreatePlan' | translate }}</span>
+  }
+  @if (isUpdate) {
+    <span cdkDragHandle class="title">{{ 'EditPlan' | translate }}</span>
+  }
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+  @if (loading) {
+    <div class="d-flex align-items-center justify-content-center py-5">
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    </div>
+  }
+  @if (!loading) {
+    <form [formGroup]="form">
+      <div class="row">
+        <mat-form-field class="col-md-6">
+          <mat-label>{{ 'Code' | translate }}</mat-label>
+          <input matInput formControlName="code" />
+          @if (form.get('code')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('Code' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field class="col-md-6">
+          <mat-label>{{ 'BillingType' | translate }}</mat-label>
+          <mat-select formControlName="billingType">
+            @for (item of BillingType | enumToArray;track $index) {
+              <mat-option [value]="+item">{{ 'BillingType_' + item | translate }}</mat-option>
+            }
+          </mat-select>
+          @if (form.get('billingType')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('BillingType' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <p>
+        <mat-checkbox formControlName="isActive" color="primary">
+          {{ 'IsActive' | translate }}
+        </mat-checkbox>
+      </p>
+      <p>
+        <mat-checkbox formControlName="isPublic" color="primary">
+          {{ 'IsPublic' | translate }}
+        </mat-checkbox>
+      </p>
+      <m-tab-group>
+        @for (translation of translationsArray.controls; track translation; let i = $index) {
+          <m-tab-item [title]="translation.get('culture')?.value" formArrayName="translations">
+            <div [formGroupName]="i" class="row">
+              <mat-form-field class="col-sm-12">
+                <mat-label>{{ 'Title' | translate }}</mat-label>
+                <input matInput formControlName="title" />
+              </mat-form-field>
+              <mat-form-field class="col-sm-12">
+                <mat-label>{{ 'Description' | translate }}</mat-label>
+                <textarea matInput formControlName="description" rows="3"></textarea>
+              </mat-form-field>
+            </div>
+          </m-tab-item>
+        }
+      </m-tab-group>
+    </form>
+  }
+
+  <!-- <pre dir="ltr" style="text-align: left;">{{form.value|json}}</pre> -->
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="btn btn-default" mat-dialog-close>{{ 'Cancel' | translate }}</button>
+  <button class="btn btn-primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
+    @if (saving) {
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    }
+    <span>{{ 'Save' | translate }}</span>
+  </button>
+</mat-dialog-actions>

@@ -1,10 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
 import { SubscriptionServiceProxy } from '@shared/service-proxies/api/subscription.service';
 import { DeletePlanCommand } from '@shared/service-proxies/model/delete-plan-command';
 import { PlanDto } from '@shared/service-proxies/model/plan-dto';
 import { finalize } from 'rxjs/operators';
+import { CreateOrEditPlanComponent } from './create-or-edit/create-or-edit.component';
 
 @Component({
   standalone: false,
@@ -15,10 +17,10 @@ import { finalize } from 'rxjs/operators';
 export class PlansComponent extends AppComponentBase implements OnInit {
   plans: PlanDto[] = [];
   fields: FieldsType[] = [
-    { column: 'name', title: this.l('Name'), type: 'text' },
+    { column: 'title', title: this.l('Title'), type: 'text' },
     { column: 'code', title: this.l('Code') },
     { column: 'description', title: this.l('Description') },
-    { column: 'billingType', title: this.l('BillingType'), type: 'enum', localizeKey: 'BillingType_', width: 150  },
+    { column: 'billingType', title: this.l('BillingType'), type: 'enum', localizeKey: 'BillingType_', width: 150 },
     { column: 'isActive', title: this.l('IsActive'), type: 'yesNo', width: 100 },
     { column: 'isPublic', title: this.l('IsPublic'), type: 'yesNo', width: 100 },
     { column: 'createdAt', title: this.l('CreatedAt'), type: 'dateTime', width: 150 },
@@ -28,6 +30,7 @@ export class PlansComponent extends AppComponentBase implements OnInit {
   loading = true;
 
   subscriptionService = inject(SubscriptionServiceProxy);
+  matDialog = inject(MatDialog);
   constructor() {
     super();
     this.breadcrumb.list = [
@@ -56,7 +59,7 @@ export class PlansComponent extends AppComponentBase implements OnInit {
   }
 
   remove(item: PlanDto) {
-    this.confirmMessage(`${this.l('Delete')}:${item.name}`, this.l('AreYouSureForDelete')).then((result) => {
+    this.confirmMessage(`${this.l('Delete')}:${item.title}`, this.l('AreYouSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
         this.subscriptionService
@@ -75,5 +78,9 @@ export class PlansComponent extends AppComponentBase implements OnInit {
     });
   }
 
-  openCreateOrEditPlanDialog(item?: PlanDto) {}
+  openCreateOrEditPlanDialog(item?: PlanDto) {
+    this.matDialog.open(CreateOrEditPlanComponent, {
+      data: item,
+    });
+  }
 }

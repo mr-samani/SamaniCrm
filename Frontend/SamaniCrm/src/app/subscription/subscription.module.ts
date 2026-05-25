@@ -13,9 +13,10 @@ import { SubscriptionServiceProxy } from '@shared/service-proxies/api/subscripti
 import { PlansComponent } from './plans/plans.component';
 import { SubscriptionComponent } from './subscription.component';
 import { SubscriptionRoutingModule } from './subscription-routing.module';
+import { CreateOrEditPlanComponent } from './plans/create-or-edit/create-or-edit.component';
 
 @NgModule({
-  declarations: [SubscriptionComponent, PlansComponent],
+  declarations: [SubscriptionComponent, PlansComponent,CreateOrEditPlanComponent],
   imports: [
     CommonModule,
     SubscriptionRoutingModule,
@@ -29,6 +30,7 @@ import { SubscriptionRoutingModule } from './subscription-routing.module';
     MaterialCommonModule,
     TabGroupModule,
     SharedModule,
+    
   ],
   providers: [SubscriptionServiceProxy],
 })

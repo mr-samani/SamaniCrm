@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Entities.Subscription;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,23 @@ public class PlanConfigurations : IEntityTypeConfiguration<Plan>
     public void Configure(EntityTypeBuilder<Plan> builder)
     {
         builder.ToTable("Plans", "subscription");
+        builder.HasMany(x => x.Translations).WithOne().HasForeignKey(x => x.PlanId).OnDelete(DeleteBehavior.Cascade);
+    }
+}
+public class PlanTranslationConfiguration : IEntityTypeConfiguration<PlanTranslation>
+{
+    public void Configure(EntityTypeBuilder<PlanTranslation> builder)
+    {
+        builder.ToTable("PlanTranslations", "subscription");
+        builder.HasKey(pc => pc.Id);
+        builder.HasOne(p => p.Plan)
+            .WithMany(c => c.Translations)
+            .HasForeignKey(p => p.PlanId)
+            .OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(x => x.Language)
+                 .WithMany().HasForeignKey(x => x.Culture)
+                 .OnDelete(DeleteBehavior.Cascade);
+
     }
 }
 public class PlanFeatureConfigurations : IEntityTypeConfiguration<PlanFeature>

@@ -36,7 +36,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Commands
                      .OrderBy(x => x.CreatedAt)
                      .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
                 if (cat == null)
-                    throw new NotFoundException("Menu not found.");
+                    throw new NotFoundException("Category not found.");
             }
             else
             {

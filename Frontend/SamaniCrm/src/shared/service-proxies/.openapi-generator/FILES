@@ -74,6 +74,7 @@ model/api-response-of-paginated-result-of-product-type-dto.ts
 model/api-response-of-paginated-result-of-tenant-list-dto.ts
 model/api-response-of-paginated-result-of-user-dto.ts
 model/api-response-of-password-complexity-dto.ts
+model/api-response-of-plan-dto.ts
 model/api-response-of-product-attribute-dto.ts
 model/api-response-of-product-category-dto.ts
 model/api-response-of-product-dto.ts
@@ -201,6 +202,7 @@ model/paginated-result-of-tenant-list-dto.ts
 model/paginated-result-of-user-dto.ts
 model/password-complexity-dto.ts
 model/plan-dto.ts
+model/plan-translation-dto.ts
 model/plugin-dto.ts
 model/price-type-enum.ts
 model/problem-details.ts

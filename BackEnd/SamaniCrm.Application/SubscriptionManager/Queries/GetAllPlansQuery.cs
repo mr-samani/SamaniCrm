@@ -20,7 +20,7 @@ public class GetAllPlansQueryHandler : IRequestHandler<GetAllPlansQuery, List<Pl
     }
     public async Task<List<PlanDto>> Handle(GetAllPlansQuery request, CancellationToken cancellationToken)
     {
-        var result = await _subscriptionService.GetAllPlans(cancellationToken);
+        var result = await _subscriptionService.GetAllPlans(false, cancellationToken);
         return result;
     }
 }
