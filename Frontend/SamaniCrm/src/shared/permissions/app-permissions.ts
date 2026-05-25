@@ -1,7 +1,7 @@
 /**
  * Auto-generated file - Do not edit manually
  * Generated from: AppPermissions.cs
- * Generated at: 2026-05-23T11:34:23.183Z
+ * Generated at: 2026-05-25T10:30:50.142Z
  */
 
 export class AppPermissions {
@@ -129,6 +129,15 @@ export class AppPermissions {
     static SecuritySetting_ExternalProviders_Create = "Administrator.ExternalProviders.Create";
     static SecuritySetting_ExternalProviders_Update = "Administrator.ExternalProviders.Update";
     static SecuritySetting_ExternalProviders_Delete = "Administrator.ExternalProviders.Delete";
+
+    // SubscriptionManagement
+    static SubscriptionManagement_Page = "SubscriptionManagement.Page";
+
+    // SubscriptionManagement > Plans
+    static SubscriptionManagement_Plans_List = "SubscriptionManagement.Plans.List";
+    static SubscriptionManagement_Plans_Create = "SubscriptionManagement.Plans.Create";
+    static SubscriptionManagement_Plans_Edit = "SubscriptionManagement.Plans.Edit";
+    static SubscriptionManagement_Plans_Delete = "SubscriptionManagement.Plans.Delete";
 
     // TenantManagement
     static TenantManagement_List = "Administrator.TenantManagement.List";

@@ -21,14 +21,14 @@
             [attr.aria-labelledby]="'heading' + i"
             data-bs-parent="#accordionExample">
             <div class="accordion-body">
-              <div class="menu-container">
+              <div class="card-menu-container">
                 @for (menu of item.children; track $index) {
                   @if (menu.permission | permission) {
-                    <div class="menu-item" [routerLink]="[menu.route]" routerLinkActive="active">
+                    <div class="card-menu-item" [routerLink]="[menu.route]" routerLinkActive="active">
                       <div class="icon">
                         <i [class]="menu.icon"></i>
                       </div>
-                      <div class="menu-block">
+                      <div class="card-menu-block">
                         <div class="title">{{ menu.title }}</div>
                         <small>{{ menu.description }}</small>
                       </div>

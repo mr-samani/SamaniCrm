@@ -21,6 +21,7 @@ api/product.service.ts
 api/public.service.ts
 api/role.service.ts
 api/security-settings.service.ts
+api/subscription.service.ts
 api/tenants.service.ts
 api/user.service.ts
 configuration.ts
@@ -49,6 +50,7 @@ model/api-response-of-list-of-file-node-dto.ts
 model/api-response-of-list-of-language-dto.ts
 model/api-response-of-list-of-localization-key-dto.ts
 model/api-response-of-list-of-menu-dto.ts
+model/api-response-of-list-of-plan-dto.ts
 model/api-response-of-list-of-product-category-dto.ts
 model/api-response-of-list-of-provisioning-status-dto.ts
 model/api-response-of-list-of-role-dto.ts
@@ -94,6 +96,7 @@ model/api-response-oflong.ts
 model/api-response-ofstring.ts
 model/auto-complete-dto-of-guid.ts
 model/auto-complete-dto-ofstring.ts
+model/billing-type.ts
 model/breadcrumb-result.ts
 model/broad-cast-notifications-command.ts
 model/cache-entry-dto.ts
@@ -107,6 +110,7 @@ model/create-or-edit-language-command.ts
 model/create-or-edit-localize-key-command.ts
 model/create-or-edit-menu-command.ts
 model/create-or-edit-page-meta-data-command.ts
+model/create-or-edit-plan-command.ts
 model/create-or-update-currency-command.ts
 model/create-or-update-dashboard-command.ts
 model/create-or-update-dashboard-item-command.ts
@@ -132,6 +136,7 @@ model/delete-localize-key-command.ts
 model/delete-menu-command.ts
 model/delete-notification-command.ts
 model/delete-page-command.ts
+model/delete-plan-command.ts
 model/delete-product-attribute-command.ts
 model/delete-product-category-command.ts
 model/delete-product-command.ts
@@ -195,6 +200,7 @@ model/paginated-result-of-product-type-dto.ts
 model/paginated-result-of-tenant-list-dto.ts
 model/paginated-result-of-user-dto.ts
 model/password-complexity-dto.ts
+model/plan-dto.ts
 model/plugin-dto.ts
 model/price-type-enum.ts
 model/problem-details.ts
