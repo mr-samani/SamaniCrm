@@ -9,11 +9,11 @@ using SamaniCrm.Infrastructure;
 
 #nullable disable
 
-namespace SamaniCrm.Infrastructure.Identity.Migrations
+namespace SamaniCrm.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260522044140_AddTenantIdToTables")]
-    partial class AddTenantIdToTables
+    [Migration("20260527054545_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,7 +46,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("RoleClaims", "auth");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -70,7 +70,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("UserClaims", "auth");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
@@ -91,7 +91,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("UserLogins", "auth");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
@@ -106,7 +106,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("UserRoles", "auth");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -125,7 +125,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("UserTokens", "auth");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Cart", b =>
@@ -649,8 +649,8 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Language", b =>
                 {
                     b.Property<string>("Culture")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -723,8 +723,8 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Property<string>("Culture")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -921,8 +921,8 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Culture")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -1097,8 +1097,8 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Culture")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -1188,7 +1188,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.HasIndex("LocalizeKey")
                         .IsUnique();
 
-                    b.ToTable("Permissions", "identity");
+                    b.ToTable("Permissions", "auth");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Plugin", b =>
@@ -1381,8 +1381,8 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Property<string>("Culture")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -1542,8 +1542,8 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Property<string>("Culture")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -1776,8 +1776,8 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Property<string>("Culture")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -1873,8 +1873,8 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Property<string>("Culture")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -1946,7 +1946,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasKey("RefreshTokenId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", "auth");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.RolePermission", b =>
@@ -1969,7 +1969,10 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("PermissionId");
 
-                    b.ToTable("RolePermissions", "identity");
+                    b.HasIndex("RoleId", "PermissionId")
+                        .IsUnique();
+
+                    b.ToTable("RolePermissions", "auth");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.SecuritySetting", b =>
@@ -2008,6 +2011,594 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SecuritySettings");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.AddOn", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("BillingType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AddOns", "subscription");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.AddOnTranslation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AddOnId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Culture")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<string>("CurrencyCode")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddOnId");
+
+                    b.HasIndex("Culture");
+
+                    b.ToTable("AddOnTranslations", "subscription");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.Plan", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("BillingType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Plans", "subscription");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.PlanFeature", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FeatureKey")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("PlanFeatureType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("PlanId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlanId");
+
+                    b.ToTable("PlanFeatures", "subscription");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.PlanFeatureTranslation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Culture")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PlanFeatureId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PlanId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Culture");
+
+                    b.HasIndex("PlanFeatureId");
+
+                    b.HasIndex("PlanId");
+
+                    b.ToTable("PlanFeatureTranslations", "subscription");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.PlanPrice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("BillingPeriod")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BillingPeriodCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Culture")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<string>("CurrencyCode")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PlanId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("TrialDays")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Culture");
+
+                    b.HasIndex("PlanId");
+
+                    b.ToTable("PlanPrices", "subscription");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.PlanTranslation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Culture")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PlanId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Culture");
+
+                    b.HasIndex("PlanId");
+
+                    b.ToTable("PlanTranslations", "subscription");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.Subscription", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("AutoRenew")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CurrencyCode")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<DateTime>("CurrentPeriodEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CurrentPeriodStartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MetaData")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("NextBillingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("PausedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PlanId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PriceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ResumeDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("SubscriptionStatus")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("TrialEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("TrialStartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlanId");
+
+                    b.HasIndex("PriceId");
+
+                    b.ToTable("Subscriptions", "subscription");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.SubscriptionAddOn", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AddOnId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CurrencyCode")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("SubscriptionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddOnId");
+
+                    b.HasIndex("SubscriptionId");
+
+                    b.ToTable("SubscriptionAddOns", "subscription");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Tenant", b =>
@@ -2174,7 +2765,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tenants");
+                    b.ToTable("Tenants", "Tenant");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.TenantCategory", b =>
@@ -2232,7 +2823,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("TenantCategories");
+                    b.ToTable("TenantCategories", "Tenant");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.TenantDatabaseConnection", b =>
@@ -2311,7 +2902,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("TenantDatabaseConnections");
+                    b.ToTable("TenantDatabaseConnections", "Tenant");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.TenantLogSetting", b =>
@@ -2395,7 +2986,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("TenantProvisioningSteps");
+                    b.ToTable("TenantProvisioningSteps", "Tenant");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.TenantSetting", b =>
@@ -2454,7 +3045,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("TenantSettings");
+                    b.ToTable("TenantSettings", "Tenant");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.UserSetting", b =>
@@ -2490,7 +3081,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserSetting");
+                    b.ToTable("UserSettings", "auth");
                 });
 
             modelBuilder.Entity("SamaniCrm.Infrastructure.Identity.ApplicationRole", b =>
@@ -2551,9 +3142,11 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.HasIndex("Id", "Name", "TenantId");
+                    b.HasIndex("Id", "Name", "TenantId")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL AND [TenantId] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("Roles", "auth");
                 });
 
             modelBuilder.Entity("SamaniCrm.Infrastructure.Identity.ApplicationUser", b =>
@@ -2671,7 +3264,7 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("Users", "auth");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -3089,6 +3682,137 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
                     b.Navigation("Permission");
                 });
 
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.AddOnTranslation", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.Subscription.AddOn", "AddOn")
+                        .WithMany("Translations")
+                        .HasForeignKey("AddOnId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("Culture")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AddOn");
+
+                    b.Navigation("Language");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.PlanFeature", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.Subscription.Plan", "Plan")
+                        .WithMany()
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Plan");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.PlanFeatureTranslation", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("Culture")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SamaniCrm.Domain.Entities.Subscription.PlanFeature", "PlanFeature")
+                        .WithMany("Translations")
+                        .HasForeignKey("PlanFeatureId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SamaniCrm.Domain.Entities.Subscription.Plan", "Plan")
+                        .WithMany()
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("Plan");
+
+                    b.Navigation("PlanFeature");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.PlanPrice", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("Culture")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SamaniCrm.Domain.Entities.Subscription.Plan", "Plan")
+                        .WithMany()
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("Plan");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.PlanTranslation", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("Culture")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SamaniCrm.Domain.Entities.Subscription.Plan", "Plan")
+                        .WithMany("Translations")
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("Plan");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.Subscription", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.Subscription.Plan", "Plan")
+                        .WithMany()
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("SamaniCrm.Domain.Entities.Subscription.PlanPrice", "PlanPrice")
+                        .WithMany()
+                        .HasForeignKey("PriceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Plan");
+
+                    b.Navigation("PlanPrice");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.SubscriptionAddOn", b =>
+                {
+                    b.HasOne("SamaniCrm.Domain.Entities.Subscription.AddOn", "AddOn")
+                        .WithMany()
+                        .HasForeignKey("AddOnId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SamaniCrm.Domain.Entities.Subscription.Subscription", "Subscription")
+                        .WithMany()
+                        .HasForeignKey("SubscriptionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("AddOn");
+
+                    b.Navigation("Subscription");
+                });
+
             modelBuilder.Entity("SamaniCrm.Domain.Entities.TenantCategory", b =>
                 {
                     b.HasOne("SamaniCrm.Domain.Entities.Tenant", "Tenant")
@@ -3210,6 +3934,21 @@ namespace SamaniCrm.Infrastructure.Identity.Migrations
 
                     b.Navigation("Products");
 
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.AddOn", b =>
+                {
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.Plan", b =>
+                {
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.PlanFeature", b =>
+                {
                     b.Navigation("Translations");
                 });
 

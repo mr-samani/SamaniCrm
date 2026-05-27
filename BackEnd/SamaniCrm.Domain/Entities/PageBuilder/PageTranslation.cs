@@ -4,13 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SamaniCrm.Domain.Entities;
 
-public class PageTranslation : BaseEntity,IMayHaveTenant
+public class PageTranslation : BaseTranslation,IMayHaveTenant
 {
     public Guid? TenantId { get; set; }
-    public Guid PageId { get; set; }
-
-    [MaxLength(10)]
-    public required string Culture { get; set; }
+    public Guid PageId { get; set; } 
 
     [MaxLength(1000)]
     public string? Title { get; set; }
@@ -30,8 +27,7 @@ public class PageTranslation : BaseEntity,IMayHaveTenant
     public string? Scripts { get; set; }
     public string? Html { get; set; }
 
-
-    public virtual Language Language { get; set; } = default!;
+     
     public virtual Page Page { get; set; } = default!;
 
 

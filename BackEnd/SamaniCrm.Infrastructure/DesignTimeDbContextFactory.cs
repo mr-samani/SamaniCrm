@@ -45,7 +45,9 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<Applicatio
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
         // از connection string پیش‌فرض استفاده کنید
-        optionsBuilder.UseSqlServer(connectionString);
+        optionsBuilder.UseSqlServer(connectionString,
+            o => o.MigrationsAssembly("SamaniCrm.Infrastructure")
+            );
 
         return new ApplicationDbContext(optionsBuilder.Options, null, null);
     }

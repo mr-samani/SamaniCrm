@@ -12,7 +12,6 @@ using SamaniCrm.Core.Shared.Subscriptions;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Entities.Subscription;
 using SamaniCrm.Domain.Interfaces;
-using SamaniCrm.Infrastructure.Identity.Migrations;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
