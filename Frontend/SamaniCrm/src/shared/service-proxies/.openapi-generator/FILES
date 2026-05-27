@@ -51,6 +51,7 @@ model/api-response-of-list-of-language-dto.ts
 model/api-response-of-list-of-localization-key-dto.ts
 model/api-response-of-list-of-menu-dto.ts
 model/api-response-of-list-of-plan-dto.ts
+model/api-response-of-list-of-plan-feature-dto.ts
 model/api-response-of-list-of-product-category-dto.ts
 model/api-response-of-list-of-provisioning-status-dto.ts
 model/api-response-of-list-of-role-dto.ts
@@ -151,6 +152,7 @@ model/external-provider-type-enum.ts
 model/file-node-dto.ts
 model/generate-two-factor-code-dto.ts
 model/get-all-notification-query.ts
+model/get-all-plan-feature-for-edit-query.ts
 model/get-categories-for-admin-query.ts
 model/get-filtered-pages-query.ts
 model/get-log-states-query.ts
@@ -202,6 +204,9 @@ model/paginated-result-of-tenant-list-dto.ts
 model/paginated-result-of-user-dto.ts
 model/password-complexity-dto.ts
 model/plan-dto.ts
+model/plan-feature-dto.ts
+model/plan-feature-translation-dto.ts
+model/plan-feature-type.ts
 model/plan-translation-dto.ts
 model/plugin-dto.ts
 model/price-type-enum.ts

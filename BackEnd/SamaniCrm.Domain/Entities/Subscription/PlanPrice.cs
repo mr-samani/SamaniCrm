@@ -11,6 +11,8 @@ public class PlanPrice : BaseEntity, IMayHaveTenant
     public Guid PlanId { get; set; }
 
     [MaxLength(5)]
+    public required string Culture { get; set; }
+    [MaxLength(5)]
     public string CurrencyCode { get; set; } = default!;  // مثلا "USD", "IRR"
 
     public decimal Amount { get; set; }
@@ -23,5 +25,6 @@ public class PlanPrice : BaseEntity, IMayHaveTenant
     public bool IsActive { get; set; } = true;
 
 
+    public virtual Language Language { get; set; } = default!;
     public virtual Plan Plan { get; set; } = default!;
 }

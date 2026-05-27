@@ -14,9 +14,13 @@ import { PlansComponent } from './plans/plans.component';
 import { SubscriptionComponent } from './subscription.component';
 import { SubscriptionRoutingModule } from './subscription-routing.module';
 import { CreateOrEditPlanComponent } from './plans/create-or-edit/create-or-edit.component';
+import { AddEditPlanFeaturesComponent } from './plans/add-edit-plan-features/add-edit-plan-features.component';
+import{MatTableModule} from '@angular/material/table';
+import{MatTabsModule} from '@angular/material/tabs';
+
 
 @NgModule({
-  declarations: [SubscriptionComponent, PlansComponent,CreateOrEditPlanComponent],
+  declarations: [SubscriptionComponent, PlansComponent, CreateOrEditPlanComponent, AddEditPlanFeaturesComponent],
   imports: [
     CommonModule,
     SubscriptionRoutingModule,
@@ -30,7 +34,8 @@ import { CreateOrEditPlanComponent } from './plans/create-or-edit/create-or-edit
     MaterialCommonModule,
     TabGroupModule,
     SharedModule,
-    
+    MatTableModule,
+    MatTabsModule
   ],
   providers: [SubscriptionServiceProxy],
 })

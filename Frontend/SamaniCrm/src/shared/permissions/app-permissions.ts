@@ -1,7 +1,7 @@
 /**
  * Auto-generated file - Do not edit manually
  * Generated from: AppPermissions.cs
- * Generated at: 2026-05-25T10:30:50.142Z
+ * Generated at: 2026-05-26T11:40:48.435Z
  */
 
 export class AppPermissions {
@@ -132,6 +132,12 @@ export class AppPermissions {
 
     // SubscriptionManagement
     static SubscriptionManagement_Page = "SubscriptionManagement.Page";
+
+    // SubscriptionManagement > PlanFeatures
+    static SubscriptionManagement_PlanFeatures_List = "SubscriptionManagement.PlanFeatures.List";
+    static SubscriptionManagement_PlanFeatures_Create = "SubscriptionManagement.PlanFeatures.Create";
+    static SubscriptionManagement_PlanFeatures_Edit = "SubscriptionManagement.PlanFeatures.Edit";
+    static SubscriptionManagement_PlanFeatures_Delete = "SubscriptionManagement.PlanFeatures.Delete";
 
     // SubscriptionManagement > Plans
     static SubscriptionManagement_Plans_List = "SubscriptionManagement.Plans.List";

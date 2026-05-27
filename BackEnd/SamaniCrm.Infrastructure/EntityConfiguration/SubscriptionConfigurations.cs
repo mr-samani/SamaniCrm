@@ -41,6 +41,22 @@ public class PlanFeatureConfigurations : IEntityTypeConfiguration<PlanFeature>
         builder.HasOne(x => x.Plan).WithMany().HasForeignKey(x => x.PlanId).OnDelete(DeleteBehavior.Cascade);
     }
 }
+public class PlanFeatureTranslationConfiguration : IEntityTypeConfiguration<PlanFeatureTranslation>
+{
+    public void Configure(EntityTypeBuilder<PlanFeatureTranslation> builder)
+    {
+        builder.ToTable("PlanFeatureTranslations", "subscription");
+        builder.HasKey(pc => pc.Id);
+        builder.HasOne(p => p.PlanFeature)
+            .WithMany(c => c.Translations)
+            .HasForeignKey(p => p.PlanFeatureId)
+            .OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(x => x.Language)
+                 .WithMany().HasForeignKey(x => x.Culture)
+                 .OnDelete(DeleteBehavior.Cascade);
+
+    }
+}
 public class PlanPriceConfigurations : IEntityTypeConfiguration<PlanPrice>
 {
     public void Configure(EntityTypeBuilder<PlanPrice> builder)
@@ -49,6 +65,9 @@ public class PlanPriceConfigurations : IEntityTypeConfiguration<PlanPrice>
         builder.Property(t => t.Amount)
               .HasColumnType("decimal(18,2)");
         builder.HasOne(x => x.Plan).WithMany().HasForeignKey(x => x.PlanId).OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(x => x.Language)
+                 .WithMany().HasForeignKey(x => x.Culture)
+                 .OnDelete(DeleteBehavior.Cascade);
     }
 }
 public class AddOnConfigurations : IEntityTypeConfiguration<AddOn>
@@ -56,13 +75,28 @@ public class AddOnConfigurations : IEntityTypeConfiguration<AddOn>
     public void Configure(EntityTypeBuilder<AddOn> builder)
     {
         builder.ToTable("AddOns", "subscription");
-        builder.Property(t => t.UnitPrice)
-              .HasColumnType("decimal(18,2)");
         builder.Property(t => t.Quantity)
               .HasColumnType("decimal(18,2)");
     }
 }
+public class AddOnTranslationFeatureTranslationConfiguration : IEntityTypeConfiguration<AddOnTranslation>
+{
+    public void Configure(EntityTypeBuilder<AddOnTranslation> builder)
+    {
+        builder.ToTable("AddOnTranslations", "subscription");
+        builder.Property(t => t.UnitPrice)
+              .HasColumnType("decimal(18,2)");
+        builder.HasKey(pc => pc.Id);
+        builder.HasOne(p => p.AddOn)
+            .WithMany(c => c.Translations)
+            .HasForeignKey(p => p.AddOnId)
+            .OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(x => x.Language)
+                 .WithMany().HasForeignKey(x => x.Culture)
+                 .OnDelete(DeleteBehavior.Cascade);
 
+    }
+}
 
 public class SubscriptionConfigurations : IEntityTypeConfiguration<Subscription>
 {

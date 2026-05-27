@@ -104,9 +104,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<Plan> Plans { get; set; }
     public DbSet<PlanTranslation> PlanTranslations { get; set; }
     public DbSet<PlanFeature> PlanFeatures { get; set; }
+    public DbSet<PlanFeatureTranslation> PlanFeatureTranslations { get; set; }
     public DbSet<PlanPrice> PlanPrices { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
     public DbSet<AddOn> AddOns { get; set; }
+    public DbSet<AddOnTranslation> AddOnTranslations { get; set; }
     public DbSet<SubscriptionAddOn> SubscriptionAddOns { get; set; }
 
     #endregion

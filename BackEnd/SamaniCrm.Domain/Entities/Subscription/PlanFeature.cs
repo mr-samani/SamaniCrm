@@ -4,15 +4,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SamaniCrm.Domain.Entities.Subscription;
 
-public class PlanFeature:BaseEntity,IMayHaveTenant
+public class PlanFeature : BaseEntity, IMayHaveTenant
 {
     public Guid? TenantId { get; set; }
     public Guid PlanId { get; set; }
     [MaxLength(100)]
     public required string FeatureKey { get; set; } // مثلاً: "api_calls", "storage"
-    [MaxLength(200)]
-    public required string DisplayName { get; set; }
-    public PlanFeatureType PlanFeatureType { get; set; }
+    public PlanFeatureType PlanFeatureType { get; set; } = PlanFeatureType.Boolean;
     [MaxLength(250)]
     public required string Value { get; set; } // -- مقدار: عدد، متن، یا "unlimited"
     [MaxLength(50)]
@@ -21,4 +19,5 @@ public class PlanFeature:BaseEntity,IMayHaveTenant
 
 
     public virtual Plan Plan { get; set; } = default!;
+    public virtual ICollection<PlanFeatureTranslation> Translations { get; set; } = new List<PlanFeatureTranslation>();
 }

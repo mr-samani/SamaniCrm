@@ -18,16 +18,22 @@
     </button>
   }
   <mat-menu #menu="matMenu">
-    @if (AppPermissions.SubscriptionManagement_Plans_Delete | permission) {
-      <a mat-menu-item (click)="remove(item)">
-        <i class="fa fa-trash mx-1"></i>
-        <span>{{ 'Remove' | translate }}</span>
-      </a>
-    }
     @if (AppPermissions.SubscriptionManagement_Plans_Edit | permission) {
       <a mat-menu-item (click)="openCreateOrEditPlanDialog(item)">
         <i class="fa fa-edit mx-1"></i>
         <span>{{ 'Edit' | translate }}</span>
+      </a>
+    }
+    @if (AppPermissions.SubscriptionManagement_Plans_Edit | permission) {
+      <a mat-menu-item (click)="openFeaturesDialog(item)">
+        <i class="fa fa-list-check mx-1"></i>
+        <span>{{ 'Features' | translate }}</span>
+      </a>
+    }
+    @if (AppPermissions.SubscriptionManagement_Plans_Delete | permission) {
+      <a mat-menu-item (click)="remove(item)">
+        <i class="fa fa-trash mx-1"></i>
+        <span>{{ 'Remove' | translate }}</span>
       </a>
     }
   </mat-menu>

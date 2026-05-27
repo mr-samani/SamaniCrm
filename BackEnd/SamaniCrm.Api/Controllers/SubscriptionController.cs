@@ -63,4 +63,29 @@ public class SubscriptionController : ApiBaseController
         return ApiOk(result);
     }
 
+
+    #region PlanFeature
+
+    [HttpGet("GetAllPlanFeatureForEdit")]
+    [Permission(AppPermissions.SubscriptionManagement.PlanFeatures.Edit)]
+    [ProducesResponseType(typeof(ApiResponse<List<PlanFeatureDto>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllPlanFeatureForEdit(Guid planId)
+    {
+        var result = await _mediator.Send(new GetAllPlanFeatureForEditQuery() { PlanId = planId });
+        return ApiOk(result);
+    }
+
+    [HttpPost("CreateOrEditPlanFeature")]
+    [Permission(AppPermissions.SubscriptionManagement.PlanFeatures.Create)]
+    [Permission(AppPermissions.SubscriptionManagement.PlanFeatures.Edit)]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> CreateOrEditPlanFeature(GetAllPlanFeatureForEditQuery input)
+    {
+        var result = await _mediator.Send(input);
+        return ApiOk(result);
+    }
+
+
+    #endregion
+
 }

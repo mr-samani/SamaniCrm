@@ -7,6 +7,7 @@ import { DeletePlanCommand } from '@shared/service-proxies/model/delete-plan-com
 import { PlanDto } from '@shared/service-proxies/model/plan-dto';
 import { finalize } from 'rxjs/operators';
 import { CreateOrEditPlanComponent } from './create-or-edit/create-or-edit.component';
+import { AddEditPlanFeaturesComponent } from './add-edit-plan-features/add-edit-plan-features.component';
 
 @Component({
   standalone: false,
@@ -79,8 +80,30 @@ export class PlansComponent extends AppComponentBase implements OnInit {
   }
 
   openCreateOrEditPlanDialog(item?: PlanDto) {
-    this.matDialog.open(CreateOrEditPlanComponent, {
-      data: item,
-    });
+    this.matDialog
+      .open(CreateOrEditPlanComponent, {
+        data: item,
+        width: '768px',
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.getData();
+        }
+      });
+  }
+
+  openFeaturesDialog(item?: PlanDto) {
+    this.matDialog
+      .open(AddEditPlanFeaturesComponent, {
+        data: item,
+        width: '768px',
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.getData();
+        }
+      });
   }
 }

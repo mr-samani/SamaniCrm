@@ -261,6 +261,14 @@ public static class AppPermissions
             public const string Edit = "SubscriptionManagement.Plans.Edit";
             public const string Delete = "SubscriptionManagement.Plans.Delete";
         }
+        public static class PlanFeatures
+        {
+
+            public const string List = "SubscriptionManagement.PlanFeatures.List";
+            public const string Create = "SubscriptionManagement.PlanFeatures.Create";
+            public const string Edit = "SubscriptionManagement.PlanFeatures.Edit";
+            public const string Delete = "SubscriptionManagement.PlanFeatures.Delete";
+        }
     }
 
 

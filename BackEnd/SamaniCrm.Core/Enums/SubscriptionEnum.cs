@@ -52,6 +52,7 @@ public enum SubscriptionStatus
 
 public enum PlanFeatureType
 {
+    Boolean,
     Integer,
     Decimal,
     String,

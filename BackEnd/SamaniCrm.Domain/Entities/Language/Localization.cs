@@ -12,7 +12,7 @@ namespace SamaniCrm.Domain.Entities;
 
 public class Localization : BaseEntity
 {
-    [MaxLength(10)]
+    [MaxLength(5)]
     public required string Culture { get; set; }
     [MaxLength(250)]
     public required string Key { get; set; }
