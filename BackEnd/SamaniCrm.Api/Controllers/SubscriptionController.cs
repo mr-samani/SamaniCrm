@@ -79,7 +79,7 @@ public class SubscriptionController : ApiBaseController
     [Permission(AppPermissions.SubscriptionManagement.PlanFeatures.Create)]
     [Permission(AppPermissions.SubscriptionManagement.PlanFeatures.Edit)]
     [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> CreateOrEditPlanFeature(GetAllPlanFeatureForEditQuery input)
+    public async Task<IActionResult> CreateOrEditPlanFeature(CreateOrEditPlanFeatureCommand input)
     {
         var result = await _mediator.Send(input);
         return ApiOk(result);

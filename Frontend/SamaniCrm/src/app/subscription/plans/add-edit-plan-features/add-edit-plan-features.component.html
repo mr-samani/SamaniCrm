@@ -12,67 +12,74 @@
     </div>
   }
   @if (!loading) {
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          @for (lang of allLanguages; track $index) {
-            <th>
-              {{ lang.culture }}
-            </th>
-          }
-          <th>{{ 'FeatureKey' | translate }}</th>
-          <th>{{ 'PlanFeatureType' | translate }}</th>
-          <th>{{ 'Value' | translate }}</th>
-          <th>{{ 'Unit' | translate }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (item of features; track $index; let fi = $index) {
+    <form #frm="ngForm">
+      <table>
+        <thead>
           <tr>
-            <td>
-              <i class="fa fa-drag"></i>
-            </td>
-            @for (lang of item.translations; track $index) {
-              <td>
+            <th></th>
+            @for (lang of allLanguages; track $index) {
+              <th>
                 {{ lang.culture }}
+              </th>
+            }
+            <th>{{ 'FeatureKey' | translate }}</th>
+            <th>{{ 'PlanFeatureType' | translate }}</th>
+            <th>{{ 'Value' | translate }}</th>
+            <th>{{ 'Unit' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody cdkDropList (cdkDropListDropped)="onDrop($event)">
+          @for (item of features; track $index; let fi = $index) {
+            <tr cdkDrag>
+              <td>
+                <i class="fa fa-grip-dots-vertical" cdkDragHandle></i>
+              </td>
+              @for (lang of item.translations; track $index) {
+                <td>
+                  <div class="input-group">
+                    <input
+                      class="form-control"
+                      [(ngModel)]="lang.title"
+                      [name]="'title_' + fi + '_' + $index"
+                      [placeholder]="lang.culture"
+                      required />
+                  </div>
+                </td>
+              }
+
+              <td>
                 <div class="input-group">
-                  <input class="input-control" [(ngModel)]="lang.title" [name]="'title_' + fi + '_' + $index" />
+                  <input class="form-control" [(ngModel)]="item.featureKey" [name]="'featureKey_' + $index" required />
                 </div>
               </td>
-            }
-
-            <td>
-              <div class="input-group">
-                <input class="input-control" [(ngModel)]="item.featureKey" [name]="'featureKey_' + $index" />
-              </div>
-            </td>
-            <td>
-              <div class="input-group">
-                <mat-select
-                  class="input-control"
-                  [(ngModel)]="item.planFeatureType"
-                  [name]="'planFeatureType_' + $index">
-                  @for (opt of PlanFeatureType | enumToArray; track $index) {
-                    <mat-option [value]="+item">{{ 'PlanFeatureType_' + opt | translate }}</mat-option>
-                  }
-                </mat-select>
-              </div>
-            </td>
-            <td>
-              <div class="input-group">
-                <input class="input-control" [(ngModel)]="item.value" [name]="'value_' + $index" />
-              </div>
-            </td>
-            <td>
-              <div class="input-group">
-                <input class="input-control" [(ngModel)]="item.unit" [name]="'unit_' + $index" />
-              </div>
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
+              <td>
+                <div class="input-group">
+                  <mat-select
+                    class="form-control"
+                    [(ngModel)]="item.planFeatureType"
+                    [name]="'planFeatureType_' + $index"
+                    required>
+                    @for (opt of PlanFeatureType | enumToArray; track $index) {
+                      <mat-option [value]="+opt">{{ 'PlanFeatureType_' + opt | translate }}</mat-option>
+                    }
+                  </mat-select>
+                </div>
+              </td>
+              <td>
+                <div class="input-group">
+                  <input class="form-control" [(ngModel)]="item.value" [name]="'value_' + $index" required />
+                </div>
+              </td>
+              <td>
+                <div class="input-group">
+                  <input class="form-control" [(ngModel)]="item.unit" [name]="'unit_' + $index" />
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </form>
   }
 </mat-dialog-content>
 <mat-dialog-actions>
@@ -83,7 +90,7 @@
     <span>{{ 'AddNewFeature' | translate }}</span>
   </button>
 
-  <button class="btn btn-primary" (click)="saveSortOrder()" cdkFocusInitial [disabled]="loading || saving">
+  <button class="btn btn-primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
     @if (saving) {
       <mat-spinner color="primary" diameter="25"></mat-spinner>
     }

@@ -27,9 +27,9 @@ import { ApiResponseOfboolean } from '../model/api-response-ofboolean';
 // @ts-ignore
 import { CreateOrEditPlanCommand } from '../model/create-or-edit-plan-command';
 // @ts-ignore
-import { DeletePlanCommand } from '../model/delete-plan-command';
+import { CreateOrEditPlanFeatureCommand } from '../model/create-or-edit-plan-feature-command';
 // @ts-ignore
-import { GetAllPlanFeatureForEditQuery } from '../model/get-all-plan-feature-for-edit-query';
+import { DeletePlanCommand } from '../model/delete-plan-command';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -112,16 +112,16 @@ export class SubscriptionServiceProxy extends BaseService {
     }
 
     /**
-     * @param getAllPlanFeatureForEditQuery 
+     * @param createOrEditPlanFeatureCommand 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createOrEditPlanFeature(getAllPlanFeatureForEditQuery: GetAllPlanFeatureForEditQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfboolean>;
-    public createOrEditPlanFeature(getAllPlanFeatureForEditQuery: GetAllPlanFeatureForEditQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfboolean>>;
-    public createOrEditPlanFeature(getAllPlanFeatureForEditQuery: GetAllPlanFeatureForEditQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfboolean>>;
-    public createOrEditPlanFeature(getAllPlanFeatureForEditQuery: GetAllPlanFeatureForEditQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (getAllPlanFeatureForEditQuery === null || getAllPlanFeatureForEditQuery === undefined) {
-            throw new Error('Required parameter getAllPlanFeatureForEditQuery was null or undefined when calling createOrEditPlanFeature.');
+    public createOrEditPlanFeature(createOrEditPlanFeatureCommand: CreateOrEditPlanFeatureCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfboolean>;
+    public createOrEditPlanFeature(createOrEditPlanFeatureCommand: CreateOrEditPlanFeatureCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfboolean>>;
+    public createOrEditPlanFeature(createOrEditPlanFeatureCommand: CreateOrEditPlanFeatureCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfboolean>>;
+    public createOrEditPlanFeature(createOrEditPlanFeatureCommand: CreateOrEditPlanFeatureCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (createOrEditPlanFeatureCommand === null || createOrEditPlanFeatureCommand === undefined) {
+            throw new Error('Required parameter createOrEditPlanFeatureCommand was null or undefined when calling createOrEditPlanFeature.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -166,7 +166,7 @@ export class SubscriptionServiceProxy extends BaseService {
         return this.httpClient.request<ApiResponseOfboolean>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: getAllPlanFeatureForEditQuery,
+                body: createOrEditPlanFeatureCommand,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

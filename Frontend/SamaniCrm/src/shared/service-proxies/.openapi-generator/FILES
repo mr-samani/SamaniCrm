@@ -113,6 +113,7 @@ model/create-or-edit-localize-key-command.ts
 model/create-or-edit-menu-command.ts
 model/create-or-edit-page-meta-data-command.ts
 model/create-or-edit-plan-command.ts
+model/create-or-edit-plan-feature-command.ts
 model/create-or-update-currency-command.ts
 model/create-or-update-dashboard-command.ts
 model/create-or-update-dashboard-item-command.ts
@@ -152,7 +153,6 @@ model/external-provider-type-enum.ts
 model/file-node-dto.ts
 model/generate-two-factor-code-dto.ts
 model/get-all-notification-query.ts
-model/get-all-plan-feature-for-edit-query.ts
 model/get-categories-for-admin-query.ts
 model/get-filtered-pages-query.ts
 model/get-log-states-query.ts

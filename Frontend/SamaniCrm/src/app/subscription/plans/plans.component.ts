@@ -97,7 +97,7 @@ export class PlansComponent extends AppComponentBase implements OnInit {
     this.matDialog
       .open(AddEditPlanFeaturesComponent, {
         data: item,
-        width: '768px',
+        width: '80%',
       })
       .afterClosed()
       .subscribe((result) => {

@@ -1,10 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, viewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 
 import { CreateOrEditPlanComponent } from '../create-or-edit/create-or-edit.component';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { moveItemInArray } from 'ngx-drag-drop-kit';
+import { IDropEvent, moveItemInArray } from 'ngx-drag-drop-kit';
 import { finalize } from 'rxjs';
 import { PlanFeatureDto } from '@shared/service-proxies/model/plan-feature-dto';
 import { SubscriptionServiceProxy } from '@shared/service-proxies/api/subscription.service';
@@ -13,6 +13,8 @@ import { GetAllPlanFeatureForEditQuery } from '@shared/service-proxies/model/get
 import { PlanDto } from '@shared/service-proxies/model/plan-dto';
 import { AppConst } from '@shared/app-const';
 import { PlanFeatureTranslationDto } from '@shared/service-proxies/model/plan-feature-translation-dto';
+import { CreateOrEditPlanFeatureCommand } from '@shared/service-proxies/model/create-or-edit-plan-feature-command';
+import { NgForm } from '@angular/forms';
 
 @Component({
   standalone: false,
@@ -28,6 +30,8 @@ export class AddEditPlanFeaturesComponent extends AppComponentBase implements On
   allLanguages = AppConst.languageList;
   // تب‌های زبان
   _data = inject<PlanDto | undefined>(MAT_DIALOG_DATA);
+
+  form = viewChild<NgForm>('frm');
   constructor(
     private dialogRef: MatDialogRef<CreateOrEditPlanComponent>,
     private subscriptionService: SubscriptionServiceProxy,
@@ -42,13 +46,14 @@ export class AddEditPlanFeaturesComponent extends AppComponentBase implements On
   public get PlanFeatureType(): typeof PlanFeatureType {
     return PlanFeatureType;
   }
-  loadFeatures() { 
+  loadFeatures() {
     this.loading = true;
     this.subscriptionService
       .getAllPlanFeatureForEdit(this._data?.id)
       .pipe(
         finalize(() => {
           this.loading = false;
+          this.chdr.detectChanges();
         }),
       )
       .subscribe((result) => {
@@ -56,7 +61,8 @@ export class AddEditPlanFeaturesComponent extends AppComponentBase implements On
       });
   }
 
-  drop(event: CdkDragDrop<PlanFeatureDto[]>) {
+  onDrop(event: CdkDragDrop<PlanFeatureDto[]>) {
+    console.log(event);
     moveItemInArray(this.features, event.previousIndex, event.currentIndex);
   }
 
@@ -66,7 +72,7 @@ export class AddEditPlanFeaturesComponent extends AppComponentBase implements On
       unit: '',
       value: '',
       planFeatureType: PlanFeatureType.Boolean,
-
+      planId: this._data?.id,
       translations: [],
     });
 
@@ -83,13 +89,28 @@ export class AddEditPlanFeaturesComponent extends AppComponentBase implements On
     this.features.push(newFeature);
   }
 
-  saveSortOrder() {
+  save() {
+    debugger;
+    if (this.form()?.invalid) {
+      this.notify.warning(this.l('CompleteFormFields'));
+      return;
+    }
+
     this.features.forEach((feature, index) => {
       feature.sortOrder = index + 1;
     });
-    console.log(
-      'Saving order:',
-      this.features.map((f) => ({ id: f.id, sortOrder: f.sortOrder })),
-    );
+
+    this.saving = true;
+    const input = new CreateOrEditPlanFeatureCommand();
+    input.items = this.features;
+    this.subscriptionService
+      .createOrEditPlanFeature(input)
+      .pipe(finalize(() => (this.saving = false)))
+      .subscribe((result) => {
+        if (result.data) {
+          this.notify.success(this.l('SavedSuccessfully'));
+          this.dialogRef.close(true);
+        }
+      });
   }
 }

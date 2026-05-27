@@ -268,7 +268,8 @@ public class SubscriptionService : ISubscriptionService
                         Title = ""
                     };
                 }
-            }).ToList();
+            })
+            .ToList();
 
             return new PlanFeatureDto
             {
@@ -281,7 +282,9 @@ public class SubscriptionService : ISubscriptionService
                 Value = pf.Value,
                 Translations = translationsList
             };
-        }).ToList();
+        })
+            .OrderBy(x => x.SortOrder)
+            .ToList();
 
         return result;
     }
@@ -349,10 +352,7 @@ public class SubscriptionService : ISubscriptionService
                     Unit = item.Unit,
                     SortOrder = item.SortOrder,
                     Value = item.Value,
-                    // PlanId باید از somewhere دیگر تنظیم شود. فرض بر این است که در DTO یا کانتکست موجود است.
-                    // اگر PlanId در input نیست، باید از کانتکست یا پارامتر دیگری گرفته شود.
-                    // در اینجا فرض می‌کنیم PlanId باید تنظیم شود. اگر در DTO نیست، این خط خطا می‌دهد.
-                    // PlanId = ... 
+                    PlanId = item.PlanId
                 };
 
                 _dbContext.PlanFeatures.Add(planFeature);
@@ -395,6 +395,7 @@ public class SubscriptionService : ISubscriptionService
                         var newTrans = new PlanFeatureTranslation
                         {
                             PlanFeatureId = featureId,
+                            PlanId = item.PlanId,
                             Culture = translationDto.Culture,
                             Title = translationDto.Title
                         };

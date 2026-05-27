@@ -17,6 +17,7 @@ import { CreateOrEditPlanComponent } from './plans/create-or-edit/create-or-edit
 import { AddEditPlanFeaturesComponent } from './plans/add-edit-plan-features/add-edit-plan-features.component';
 import{MatTableModule} from '@angular/material/table';
 import{MatTabsModule} from '@angular/material/tabs';
+import { NgxDragDropKitModule } from "ngx-drag-drop-kit";
 
 
 @NgModule({
@@ -35,8 +36,9 @@ import{MatTabsModule} from '@angular/material/tabs';
     TabGroupModule,
     SharedModule,
     MatTableModule,
-    MatTabsModule
-  ],
+    MatTabsModule,
+    NgxDragDropKitModule
+],
   providers: [SubscriptionServiceProxy],
 })
 export class SubscriptionModule {}
