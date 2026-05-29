@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamaniCrm.Application;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,4 +33,16 @@ namespace SamaniCrm.Application.DTOs
         public List<string>? Permissions { get; set; }
         public string? GivenName { get; set; }
     }
+}
+public class TenantUserDTO
+{
+    public required Guid Id { get; set; }
+    [Sortable]
+    public required string UserName { get; set; } 
+    [Sortable]
+    public string FullName { get; set; } = string.Empty;
+    [Sortable]
+    public string Email { get; set; } = string.Empty;
+
+    public List<string?>? Roles { get; set; }
 }

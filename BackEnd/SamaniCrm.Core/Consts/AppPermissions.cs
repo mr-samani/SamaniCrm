@@ -47,6 +47,7 @@ public static class AppPermissions
     public static class TenantManagement
     {
         public const string List = "Administrator.TenantManagement.List";
+        public const string TenantUsers = "Administrator.TenantManagement.TenantUsers";
         public const string AutoComplete = "Administrator.TenantManagement.AutoComplete";
         public const string Create = "Administrator.TenantManagement.Create";
         public const string Edit = "Administrator.TenantManagement.Edit";

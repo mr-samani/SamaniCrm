@@ -21,9 +21,19 @@ import { TenantsServiceProxy } from '@shared/service-proxies/api/tenants.service
 import { UserServiceProxy } from '@shared/service-proxies/api/user.service';
 import { TenantsRoutingModule } from './Tenants-routing.module';
 import { NgxInputColorModule } from 'ngx-input-color';
+import { TenantUsersComponent } from './tenant-users/tenant-users.component';
 
 @NgModule({
-  declarations: [TenantsComponent, CreateTenantComponent, TenantInfoComponent, TenantAddressComponent, TenantSettingsComponent, TenantAdminUserComponent, ProvisioningTenantComponent],
+  declarations: [
+    TenantsComponent,
+    CreateTenantComponent,
+    TenantInfoComponent,
+    TenantAddressComponent,
+    TenantSettingsComponent,
+    TenantAdminUserComponent,
+    ProvisioningTenantComponent,
+    TenantUsersComponent,
+  ],
   imports: [
     CommonModule,
     TenantsRoutingModule,

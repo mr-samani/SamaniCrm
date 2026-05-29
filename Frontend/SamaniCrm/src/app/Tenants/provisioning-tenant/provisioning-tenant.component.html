@@ -1,9 +1,10 @@
-@if (signalRService.isConnecting) {
+@if (loading) {
   <div class="d-flex align-items-center justify-content-center">
     <mat-spinner color="primary" diameter="30"></mat-spinner>
   </div>
 }
 
+<p>SignalR State= {{ hubConnection?.state }}</p>
 <div class="list-container">
   @for (item of steps; track $index) {
     <div class="list-item">
@@ -27,7 +28,7 @@
     </div>
   }
 
-  <div class="actions">
+  <div class="actions mt-5 pt-5">
     <button class="btn btn-default" [disabled]="retring" (click)="retryProvisioningData()">
       @if (retring) {
         <mat-spinner color="primary" diameter="20"></mat-spinner>

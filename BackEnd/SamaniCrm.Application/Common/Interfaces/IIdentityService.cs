@@ -29,6 +29,7 @@ namespace SamaniCrm.Application.Common.Interfaces
         Task<bool> DeleteUserAsync(Guid userId);
         Task<bool> IsUniqueUserName(string userName);
         Task<PaginatedResult<UserDTO>> GetAllUsersAsync(GetUserQuery request, CancellationToken cancellationToken);
+        Task<PaginatedResult<TenantUserDTO>> GetTenantUsersAsync(GetTenantUsersQuery request, CancellationToken cancellationToken);
         Task<bool> UpdateUser(EditUserCommand input);
 
         // Role Section

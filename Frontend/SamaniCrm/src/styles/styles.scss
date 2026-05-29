@@ -29,9 +29,9 @@
 
 :root {
   // font awosome weigth
-  --fa-style: 200;
+  --fa-weight: 300;
   // font awosome size
-  --fa-size: 16px;
+  --fa-size: 18px;
   /* for table view responsive */
   --available-content-height: calc(100vh - 220px);
 }
@@ -94,6 +94,7 @@ pre {
 }
 .fa {
   font-size: var(--fa-size);
+  font-weight: var(--fa-weight);
 }
 .text-start {
   text-align: start !important;

@@ -245,6 +245,56 @@ public class IdentityService : IIdentityService
         };
     }
 
+    public async Task<PaginatedResult<TenantUserDTO>> GetTenantUsersAsync(GetTenantUsersQuery request, CancellationToken cancellationToken)
+    {
+        IQueryable<ApplicationUser> query = _applicationDbContext.Users
+            .Include(c => c.Roles)
+            .Where(x => x.IsDeleted == false && x.TenantId == request.TenantId)
+            .IgnoreQueryFilters()
+            .AsQueryable();
+        if (!string.IsNullOrEmpty(request.Filter))
+        {
+            query = query.Where(x =>
+            x.UserName!.Contains(request.Filter) ||
+            x.FirstName!.Contains(request.Filter) ||
+            x.LastName.Contains(request.Filter) ||
+            x.Email!.Contains(request.Filter) ||
+            x.PhoneNumber!.Contains(request.Filter)
+            );
+        }
+
+        // Sorting
+        if (!string.IsNullOrEmpty(request.SortBy))
+        {
+            var sortString = $"{request.SortBy} {request.SortDirection}";
+            query = query.OrderBy(sortString);
+        }
+
+        int total = await query.CountAsync(cancellationToken);
+
+        var users = await query.OrderBy(x => x.CreatedAt)
+            .Skip(request.PageSize * (request.PageNumber - 1))
+            .Take(request.PageSize)
+            .Select(u => new TenantUserDTO
+            {
+                Id = u.Id,
+                UserName = u.UserName ?? "",
+                FullName = u.FullName ?? "",
+                Email = u.Email ?? "",
+                Roles = u.Roles.Select(s => s.Name).ToList()
+            })
+            .ToListAsync(cancellationToken);
+
+
+        return new PaginatedResult<TenantUserDTO>
+        {
+            Items = users,
+            TotalCount = total,
+            PageNumber = request.PageNumber,
+            PageSize = request.PageSize
+        };
+    }
+
 
     public async Task<List<(Guid id, string roleName)>> GetRolesAsync()
     {
@@ -850,10 +900,10 @@ public class IdentityService : IIdentityService
             .Skip(0)
             .Take(50)
             .Select(s => new AutoCompleteDto<Guid>
-                    {
-                        Id = s.Id,
-                        Title = s.FirstName + " " + s.LastName + " (" + s.UserName + ")",
-                    })
+            {
+                Id = s.Id,
+                Title = s.FirstName + " " + s.LastName + " (" + s.UserName + ")",
+            })
             .ToListAsync(cancellationToken);
         return items;
     }

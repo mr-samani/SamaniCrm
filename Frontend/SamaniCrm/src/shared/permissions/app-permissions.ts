@@ -1,7 +1,7 @@
 /**
  * Auto-generated file - Do not edit manually
  * Generated from: AppPermissions.cs
- * Generated at: 2026-05-27T05:47:24.802Z
+ * Generated at: 2026-05-29T09:38:24.503Z
  */
 
 export class AppPermissions {
@@ -147,6 +147,7 @@ export class AppPermissions {
 
     // TenantManagement
     static TenantManagement_List = "Administrator.TenantManagement.List";
+    static TenantManagement_TenantUsers = "Administrator.TenantManagement.TenantUsers";
     static TenantManagement_AutoComplete = "Administrator.TenantManagement.AutoComplete";
     static TenantManagement_Create = "Administrator.TenantManagement.Create";
     static TenantManagement_Edit = "Administrator.TenantManagement.Edit";

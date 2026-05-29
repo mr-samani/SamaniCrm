@@ -73,6 +73,7 @@ model/api-response-of-paginated-result-of-product-attribute-dto.ts
 model/api-response-of-paginated-result-of-product-list-dto.ts
 model/api-response-of-paginated-result-of-product-type-dto.ts
 model/api-response-of-paginated-result-of-tenant-list-dto.ts
+model/api-response-of-paginated-result-of-tenant-user-dto.ts
 model/api-response-of-paginated-result-of-user-dto.ts
 model/api-response-of-password-complexity-dto.ts
 model/api-response-of-plan-dto.ts
@@ -162,6 +163,7 @@ model/get-product-attributes-query.ts
 model/get-product-categories-query.ts
 model/get-product-types-query.ts
 model/get-products-query.ts
+model/get-tenant-users-query.ts
 model/get-tenants-auto-complete-query.ts
 model/get-user-query.ts
 model/initial-app-dto.ts
@@ -201,6 +203,7 @@ model/paginated-result-of-product-attribute-dto.ts
 model/paginated-result-of-product-list-dto.ts
 model/paginated-result-of-product-type-dto.ts
 model/paginated-result-of-tenant-list-dto.ts
+model/paginated-result-of-tenant-user-dto.ts
 model/paginated-result-of-user-dto.ts
 model/password-complexity-dto.ts
 model/plan-dto.ts
@@ -248,6 +251,7 @@ model/tenant-provision-steps-enum.ts
 model/tenant-settings-dto.ts
 model/tenant-status.ts
 model/tenant-usage-dto.ts
+model/tenant-user-dto.ts
 model/token-response-dto.ts
 model/two-factor-login-command.ts
 model/two-factor-type-enum.ts

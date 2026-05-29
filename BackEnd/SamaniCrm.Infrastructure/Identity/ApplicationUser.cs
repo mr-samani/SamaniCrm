@@ -37,4 +37,7 @@ public class ApplicationUser : IdentityUser<Guid>, IMayHaveTenant, IAuditedEntit
     public bool IsDeleted { get; set; } = false;
     public byte[]? RowVersion { get; set; }
 
+
+    public virtual ICollection<ApplicationRole> Roles { get; set; } = [];
+
 }

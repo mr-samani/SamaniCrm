@@ -10,6 +10,7 @@ import { TenantListDto } from '@shared/service-proxies/model/tenant-list-dto';
 import { TenantListQuery } from '@shared/service-proxies/model/tenant-list-query';
 import { TenantStatus } from '@shared/service-proxies/model/tenant-status';
 import { Subscription, finalize } from 'rxjs';
+import { TenantUsersComponent } from './tenant-users/tenant-users.component';
 
 @Component({
   standalone: false,
@@ -146,6 +147,12 @@ export class TenantsComponent extends AppComponentBase implements OnInit, OnDest
             }
           });
       }
+    });
+  }
+  openTenantUsersDialog(item: TenantListDto) {
+    this.matDialog.open(TenantUsersComponent, {
+      data: item,
+      width: '80%',
     });
   }
 }
