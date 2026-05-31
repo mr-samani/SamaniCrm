@@ -27,6 +27,8 @@ export interface IUserDTO {
   roles?: Array<string>;
   permissions?: Array<string>;
   givenName?: string;
+  isDelegated?: boolean;
+  delegatorId?: string;
 }
 
 /** Class for UserDTO */
@@ -45,6 +47,8 @@ export class UserDTO implements IUserDTO {
   roles?: Array<string>;
   permissions?: Array<string>;
   givenName?: string;
+  isDelegated?: boolean;
+  delegatorId?: string;
 
   constructor(data?: IUserDTO) {
     if (data) {
@@ -79,6 +83,8 @@ init(data?: any) {
         (this.permissions as any).push(item);
     }
     this.givenName = data["givenName"];
+    this.isDelegated = data["isDelegated"];
+    this.delegatorId = data["delegatorId"];
   }
 }
 

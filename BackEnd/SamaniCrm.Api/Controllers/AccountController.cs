@@ -51,6 +51,18 @@ public class AccountController : ApiBaseController
         return ApiOk<LoginResult>(result);
     }
 
+
+    [HttpPost("ExitDelegation")]
+    [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status200OK)]
+    // [Permission(AppPermissions.TenantManagement.DelegateUser)]
+    public async Task<IActionResult> ExitDelegation()
+    {
+        await _mediator.Send(new ExitDelegationCommand());
+        return ApiOk("");
+    }
+
+
+
     [HttpPost("loginTwoFactor")]
     [ProducesResponseType(typeof(ApiResponse<LoginResult>), StatusCodes.Status200OK)]
     public async Task<IActionResult> LoginTwoFactor(TwoFactorLoginCommand command)

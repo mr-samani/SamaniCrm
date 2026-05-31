@@ -166,6 +166,12 @@
         </div>
       </div>
       <mat-menu #userMenu="matMenu">
+        @if (user?.isDelegated) {
+          <button mat-menu-item (click)="exitDelegation()">
+            <i class="fa fa-arrow-up-left-from-circle mx-1"></i>
+            {{ 'BackToSelfAccount' | translate }}
+          </button>
+        }
         <button mat-menu-item (click)="closeNavbar()" routerLink="/panel/user-profile">
           <i class="fa fa-user mx-1"></i>
           {{ 'UserProfile' | translate }}

@@ -47,33 +47,38 @@ namespace SamaniCrm.Infrastructure.Persistence
                 .Select(l => l.Culture)
                 .ToListAsync();
             var allMenus = await dbContext.Menus.Select(s => new { s.Id, s.Url }).ToListAsync();
-            var existingTranslations = await dbContext.MenuTranslations
-              .Select(l => new { l.Id, l.MenuId, l.Culture })
-              .ToListAsync();
+            var existingTranslationKeys = await dbContext.MenuTranslations
+                  .Select(x => $"{x.MenuId}_{x.Culture}")
+                  .ToHashSetAsync();
             foreach (var mnu in allMenus)
             {
                 foreach (var culture in allLanguages)
                 {
-                    bool translationExists = existingTranslations.Any(et =>
-                                                        et.MenuId == mnu.Id && et.Culture == culture);
-                    if (!translationExists)
+                    var key = $"{mnu.Id}_{culture}";
+
+                    if (existingTranslationKeys.Contains(key))
+                        continue;
+
+
+                    newTranslations.Add(new MenuTranslation
                     {
-                        newTranslations.Add(new MenuTranslation
-                        {
-                            MenuId = mnu.Id,
-                            Culture = culture,
-                            Title = mnu.Url ?? "",
-                        });
-                    }
+                        MenuId = mnu.Id,
+                        Culture = culture,
+                        Title = mnu.Url ?? "",
+                    });
+
                 }
             }
             if (newTranslations.Any())
             {
                 await dbContext.MenuTranslations.AddRangeAsync(newTranslations);
+
+            }
+            if (dbContext.ChangeTracker.HasChanges())
+            {
+                await dbContext.SaveChangesAsync();
             }
 
-
-            await dbContext.SaveChangesAsync();
         }
 
         private static List<Menu> GetStaticMenus()

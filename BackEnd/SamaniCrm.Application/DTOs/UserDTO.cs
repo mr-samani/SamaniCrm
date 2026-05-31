@@ -32,6 +32,11 @@ namespace SamaniCrm.Application.DTOs
         public List<string> Roles { get; set; } = [];
         public List<string>? Permissions { get; set; }
         public string? GivenName { get; set; }
+
+
+        public bool IsDelegated { get; set; } = false;
+        public  Guid? DelegatorId { get; set; }
+
     }
 }
 public class TenantUserDTO

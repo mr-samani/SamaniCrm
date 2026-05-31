@@ -20,5 +20,11 @@ public class UserDelegation
 
     public DateTime? EndTime { get; set; }
 
+
+    [MaxLength(100)]
+    public string? StartedFromIp { get; set; }
+    [MaxLength(100)]
+    public string? EndedFromIp { get; set; }
+
     public bool IsActive { get; set; }
 }

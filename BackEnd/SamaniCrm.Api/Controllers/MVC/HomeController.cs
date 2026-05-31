@@ -71,14 +71,14 @@ public class ErrorViewModel
         Error = new Duende.IdentityServer.Models.ErrorMessage { Error = error };
     }
 
-    public Duende.IdentityServer.Models.ErrorMessage Error { get; set; }
+    public Duende.IdentityServer.Models.ErrorMessage? Error { get; set; }
 }
 
 // کلاس کمکی برای نمایش اطلاعات خطا
 public class ErrorInfo
 {
-    public string Error { get; set; }
-    public string ErrorDescription { get; set; }
-    public string ClientId { get; set; }
-    public string RedirectUri { get; set; }
+    public string? Error { get; set; }
+    public string? ErrorDescription { get; set; }
+    public string? ClientId { get; set; }
+    public string? RedirectUri { get; set; }
 }

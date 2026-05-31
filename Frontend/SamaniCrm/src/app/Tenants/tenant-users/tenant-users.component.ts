@@ -112,8 +112,10 @@ export class TenantUsersComponent extends AppComponentBase implements OnInit, On
       )
       .pipe(finalize(() => this.hideMainLoading()))
       .subscribe((result) => {
-        this.router.navigate(['/']);
-        location.reload();
+        this.router.navigate(['/panel']);
+        setTimeout(() => {
+          location.reload();
+        }, 100);
       });
   }
 }

@@ -15,12 +15,14 @@
 export interface IDelegateUserCommand {
   tenantId?: string;
   userId?: string;
+  reason?: string;
 }
 
 /** Class for DelegateUserCommand */
 export class DelegateUserCommand implements IDelegateUserCommand {
   tenantId?: string;
   userId?: string;
+  reason?: string;
 
   constructor(data?: IDelegateUserCommand) {
     if (data) {
@@ -35,6 +37,7 @@ init(data?: any) {
   if (data) {
     this.tenantId = data["tenantId"];
     this.userId = data["userId"];
+    this.reason = data["reason"];
   }
 }
 

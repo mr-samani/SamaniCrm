@@ -10,6 +10,7 @@ public class DelegateUserCommand : IRequest<LoginResult>
 {
     public Guid TenantId { get; set; }
     public Guid UserId { get; set; }
+    public string? Reason { get; set; }
 }
 
 
