@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Duende.IdentityModel;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -269,12 +270,20 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             .Entries()
             .Where(e =>
                 e.Entity is not AuditLog &&
+                e.Entity is not LogEntry &&
                 e.State != EntityState.Detached &&
                 e.State != EntityState.Unchanged)
             .ToList();
 
         foreach (var entry in entries)
         {
+            var entityType = entry.Metadata.ClrType;
+
+            if (Attribute.IsDefined(entityType, typeof(AuditIgnoreAttribute)))
+            {
+                continue;
+            }
+
             var auditLog = new AuditLog
             {
                 UserId = _currentUser?.UserId,
@@ -282,7 +291,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
                 IsDelegated = _currentUser?.IsDelegated ?? false,
                 TenantId = CurrentTenantId,
 
-                EntityName = entry.Metadata.ClrType.Name,
+                EntityName = entityType.Name,
 
                 CreationTime = DateTime.UtcNow
             };

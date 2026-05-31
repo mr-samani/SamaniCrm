@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SamaniCrm.Domain.Attributes;
 
-[AttributeUsage(AttributeTargets.Property)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
 public sealed class AuditIgnoreAttribute : Attribute
 {
 }
@@ -12,8 +12,8 @@ public sealed class AuditIgnoreAttribute : Attribute
 
 
 
-    //[AuditIgnore]
-    //public string HtmlContent { get; set; }
+//[AuditIgnore]
+//public string HtmlContent { get; set; }
 
-    //[AuditIgnore]
-    //public byte[] FileContent { get; set; }
+//[AuditIgnore]
+//public byte[] FileContent { get; set; }

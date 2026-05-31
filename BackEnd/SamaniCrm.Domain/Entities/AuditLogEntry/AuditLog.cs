@@ -1,9 +1,11 @@
-﻿using System;
+﻿using SamaniCrm.Domain.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace SamaniCrm.Domain.Entities;
 
+[AuditIgnore]
 public class AuditLog
 {
     public Guid Id { get; set; }
