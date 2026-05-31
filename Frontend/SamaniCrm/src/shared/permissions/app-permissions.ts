@@ -1,7 +1,7 @@
 /**
  * Auto-generated file - Do not edit manually
  * Generated from: AppPermissions.cs
- * Generated at: 2026-05-29T09:38:24.503Z
+ * Generated at: 2026-05-31T14:44:57.763Z
  */
 
 export class AppPermissions {
@@ -154,7 +154,7 @@ export class AppPermissions {
     static TenantManagement_Delete = "Administrator.TenantManagement.Delete";
     static TenantManagement_ActiveDeActive = "Administrator.TenantManagement.ActiveDeActive";
     static TenantManagement_Users = "Administrator.TenantManagement.Users";
-    static TenantManagement_Impersonate = "Administrator.TenantManagement.Impersonate";
+    static TenantManagement_DelegateUser = "Administrator.TenantManagement.DelegateUser";
     static TenantManagement_GetTenantSetting = "Administrator.TenantManagement.GetTenantSetting";
     static TenantManagement_UpdateTenantSetting = "Administrator.TenantManagement.UpdateTenantSetting";
     static TenantManagement_GetProvisioningData = "Administrator.TenantManagement.GetProvisioningData";

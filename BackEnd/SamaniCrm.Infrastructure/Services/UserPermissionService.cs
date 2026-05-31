@@ -19,13 +19,15 @@ public class UserPermissionService : IUserPermissionService
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly ICacheService _cache;
+    private readonly ICurrentUserService _currentUser;
 
 
 
-    public UserPermissionService(ApplicationDbContext dbContext, ICacheService memoryCache)
+    public UserPermissionService(ApplicationDbContext dbContext, ICacheService memoryCache, ICurrentUserService currentUserService)
     {
         _dbContext = dbContext;
         _cache = memoryCache;
+        _currentUser = currentUserService;
     }
 
     public async Task<bool> HasPermissionAsync(ClaimsPrincipal user, string permission)
@@ -33,10 +35,12 @@ public class UserPermissionService : IUserPermissionService
         if (string.IsNullOrWhiteSpace(permission))
             return false;
 
-        var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (string.IsNullOrWhiteSpace(userId))
+        Guid? userId = _currentUser.UserId;
+        if (userId.HasValue == false)
+        {
             return false;
-        List<string> permissions = await GetUserPermissionsAsync(Guid.Parse(userId), CancellationToken.None);
+        }
+        List<string> permissions = await GetUserPermissionsAsync(userId.Value, CancellationToken.None);
         return permissions == null ? false : permissions.Contains(permission);
     }
 

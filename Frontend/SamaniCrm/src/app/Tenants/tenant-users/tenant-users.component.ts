@@ -5,7 +5,13 @@ import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
-import { GetTenantUsersQuery, TenantUserDTO, UserServiceProxy } from '@shared/service-proxies';
+import {
+  AccountServiceProxy,
+  DelegateUserCommand,
+  GetTenantUsersQuery,
+  TenantUserDTO,
+  UserServiceProxy,
+} from '@shared/service-proxies';
 import { TenantListDto } from '@shared/service-proxies/model/tenant-list-dto';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { finalize } from 'rxjs/operators';
@@ -36,6 +42,7 @@ export class TenantUsersComponent extends AppComponentBase implements OnInit, On
   showFilter = false;
   listSubscription$?: Subscription;
   userService = inject(UserServiceProxy);
+  accountService = inject(AccountServiceProxy);
   constructor() {
     super();
     this.form = this.fb.group({
@@ -94,5 +101,19 @@ export class TenantUsersComponent extends AppComponentBase implements OnInit, On
     this.getList();
   }
 
-  impersonate(item: TenantUserDTO) {}
+  delegateUser(item: TenantUserDTO) {
+    this.showMainLoading();
+    this.accountService
+      .delegateUser(
+        new DelegateUserCommand({
+          tenantId: this.tenant.id,
+          userId: item.id,
+        }),
+      )
+      .pipe(finalize(() => this.hideMainLoading()))
+      .subscribe((result) => {
+        this.router.navigate(['/']);
+        location.reload();
+      });
+  }
 }

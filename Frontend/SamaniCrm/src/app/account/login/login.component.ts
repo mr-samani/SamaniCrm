@@ -9,6 +9,7 @@ import { AccountServiceProxy, ExternalProviderDto, ExternalProviderTypeEnum } fr
 import { InputCaptchaDTO } from '@shared/service-proxies/model/input-captcha-dto';
 import { LoginCommand } from '@shared/service-proxies/model/login-command';
 import { TwoFactorLoginCommand } from '@shared/service-proxies/model/two-factor-login-command';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -37,6 +38,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
   constructor(
     private matDialog: MatDialog,
     private accountService: AccountServiceProxy,
+    private oidcSecurityService: OidcSecurityService,
   ) {
     super();
     this.loginForm = this.fb.group({
@@ -68,7 +70,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
     }
     this.loading = true;
     let formValue: LoginCommand = this.loginForm.value;
-    formValue.tenancyName = AppConst.tenancyName ?? null;
+    formValue.tenant = AppConst.tenancyName ?? null;
     formValue.captcha = new InputCaptchaDTO(this.loginForm.get('captcha')?.value);
 
     this.authService
@@ -81,7 +83,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
       )
       .subscribe({
         next: (result) => {
-          if (result.success && result.data?.accessToken) {
+          if (result.success && result.data) {
             this.notify.success(this.l('Message.LoginSuccess'));
             if (this.returnUrl) {
               window.location.href = this.returnUrl;
@@ -122,7 +124,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
       )
       .subscribe({
         next: (result) => {
-          if (result.success && result.data?.accessToken) {
+          if (result.success && result.data) {
             this.notify.success(this.l('Message.LoginSuccess'));
             if (this.returnUrl) {
               window.location.href = this.returnUrl;

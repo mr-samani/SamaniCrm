@@ -157,7 +157,7 @@ public class ExternalAuthController : ApiBaseController
 
 
             // Redirect to frontend with tokens
-            var redirectUrl = $"{frontendUrl}account/callback?token={loginResult.AccessToken}&refreshToken={loginResult.RefreshToken}";
+            var redirectUrl = $"{frontendUrl}account/callback?token=&refreshToken=";
             return Redirect(redirectUrl);
         }
         catch (Exception ex)

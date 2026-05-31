@@ -54,7 +54,7 @@ public static class AppPermissions
         public const string Delete = "Administrator.TenantManagement.Delete";
         public const string ActiveDeActive = "Administrator.TenantManagement.ActiveDeActive";
         public const string Users = "Administrator.TenantManagement.Users";
-        public const string Impersonate = "Administrator.TenantManagement.Impersonate";
+        public const string DelegateUser = "Administrator.TenantManagement.DelegateUser";
         public const string GetTenantSetting = "Administrator.TenantManagement.GetTenantSetting";
         public const string UpdateTenantSetting = "Administrator.TenantManagement.UpdateTenantSetting";
         public const string GetProvisioningData = "Administrator.TenantManagement.GetProvisioningData";

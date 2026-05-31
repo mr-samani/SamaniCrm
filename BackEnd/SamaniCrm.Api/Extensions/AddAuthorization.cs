@@ -1,4 +1,6 @@
-﻿namespace SamaniCrm.Api.Extensions;
+﻿using SamaniCrm.Core.Shared.Consts;
+
+namespace SamaniCrm.Api.Extensions;
 
 public static partial class ServiceCollectionExtensions
 {
@@ -21,6 +23,13 @@ public static partial class ServiceCollectionExtensions
 
         services.AddAuthorization(options =>
         {
+            options.AddPolicy(
+            "CanImpersonate",
+            policy =>
+            {
+                policy.RequireRole(AppRoles.SysAdmin);
+            });
+
             options.AddPolicy("TenantOwner", policy =>
                 policy.RequireClaim("tenant_role", "Owner"));
             options.AddPolicy("TenantAdmin", policy =>

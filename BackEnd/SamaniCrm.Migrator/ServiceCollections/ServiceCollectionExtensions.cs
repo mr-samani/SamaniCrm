@@ -50,11 +50,14 @@ public static class ServiceCollectionExtensions
         public Guid? UserId => null;//"MigrationUser"; // یا null هم میتونی بدی
         public string? UserName => "MigrationUser"; // یا null هم میتونی بدی
 
-        public string lang => "fa-IR";
+        public string Lang => "fa-IR";
 
-        public bool IsAuthenticated => throw new NotImplementedException();
+        public bool IsAuthenticated => false;
 
-        string ICurrentUserService.lang { get => lang; set => throw new NotImplementedException(); }
+        public bool IsDelegated => false;
+
+        public Guid? DelegatorId => null;
+
     }
 
 

@@ -18,6 +18,7 @@ namespace SamaniCrm.Application.Common.Interfaces
     public interface IIdentityService
     {
         Task<SimpleTenantData?> GetTenantByTenancyName(string tenancyName, CancellationToken cancellation);
+        Task<SimpleTenantData?> GetTenantById(Guid tenantId, CancellationToken cancellation);
 
 
         // User section
@@ -47,13 +48,16 @@ namespace SamaniCrm.Application.Common.Interfaces
 
 
         // refresh token
-        Task<Guid> GetUserIdFromRefreshToken(string refreshToken);
-        Task<bool> RevokeRefreshToken(string refreshToken, CancellationToken cancellationToken);
         Task<bool> UpdateRolePermissionsAsync(EditRolePermissionsCommand request, CancellationToken cancellationToken);
 
         Task<bool> updateUserLanguage(string culture, Guid userId, CancellationToken cancellationToken);
         Task<(bool EnableTwoFactor, string Secret, int AttemptCount, TwoFactorTypeEnum TwoFactorType)> getUserTwoFactorData(Guid userId, CancellationToken cancellationToken);
-        Task<LoginResult> SignInAsync(LoginCommand request, CancellationToken cancellationToken);
+        Task<LoginResult> LoginInAsync(LoginCommand request, CancellationToken cancellationToken);
+        Task LogoutAsync(CancellationToken cancellationToken);
+
+        Task<LoginResult> DelegateUser(DelegateUserCommand request, CancellationToken cancellationToken);
+        Task ExitDelegation(CancellationToken cancellation);
+
         Task<LoginResult> TwofactorSignInAsync(TwoFactorLoginCommand request, CancellationToken cancellationToken);
         Task<LoginResult> ExternalSignInAsync(ExternalLoginCallbackCommand request, CancellationToken cancellationToken);
 

@@ -23,7 +23,10 @@ public class LoginCommand : IRequest<LoginResult>
 
     public InputCaptchaDTO? captcha { get; set; }
 
-    public string? TenancyName { get; set; } = null;
+    public string? Tenant { get; set; } = null;
+
+    public bool RememberMe { get; set; }
+
 }
 
 
@@ -58,7 +61,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult>
                 throw new InvalidCaptchaException();
             }
         }
-        var output = await _identityService.SignInAsync(request, cancellationToken);
+        var output = await _identityService.LoginInAsync(request, cancellationToken);
         return output;
 
 

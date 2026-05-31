@@ -11,6 +11,7 @@ public interface IApplicationDbContext
 
     public DbSet<TenantLogSetting> TenantLogSettings { get; set; }
     public DbSet<LogEntry> LogEntries { get; set; }
+    public DbSet<AuditLog> AuditLogs { get; set; }
 
 
     public DbSet<Tenant> Tenants { get; set; }
@@ -21,7 +22,6 @@ public interface IApplicationDbContext
 
 
 
-    public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Permission> Permissions { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<Language> Languages { get; set; }
@@ -30,6 +30,7 @@ public interface IApplicationDbContext
     public DbSet<MenuTranslation> MenuTranslations { get; set; }
     public DbSet<SecuritySettingEntity> SecuritySettings { get; set; }
     public DbSet<UserSetting> UserSetting { get; set; }
+    public DbSet<UserDelegation> UserDelegations { get; set; }
     public DbSet<Page> Pages { get; set; }
     public DbSet<PageTranslation> PageTranslations { get; set; }
 

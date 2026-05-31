@@ -71,14 +71,7 @@ public class IdentityUserTokenConfiguration : IEntityTypeConfiguration<IdentityU
 
     }
 }
-public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
-{
-    public void Configure(EntityTypeBuilder<RefreshToken> builder)
-    {
-        builder.ToTable("RefreshTokens", "auth");
 
-    }
-}
 public class UserSettingConfiguration : IEntityTypeConfiguration<UserSetting>
 {
     public void Configure(EntityTypeBuilder<UserSetting> builder)
@@ -93,7 +86,14 @@ public class UserSettingConfiguration : IEntityTypeConfiguration<UserSetting>
 
     }
 }
-
+public class UserDelegationConfiguration : IEntityTypeConfiguration<UserDelegation>
+{
+    public void Configure(EntityTypeBuilder<UserDelegation> builder)
+    {
+        builder.ToTable("UserDelegations", "auth"); 
+        builder.HasKey(pc => pc.Id);
+    }
+}
 
 public class IdentityRolePermissionConfiguration : IEntityTypeConfiguration<RolePermission>
 {

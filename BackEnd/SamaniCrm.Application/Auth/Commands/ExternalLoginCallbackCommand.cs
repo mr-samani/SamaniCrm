@@ -8,15 +8,12 @@ public record ExternalLoginCallbackCommand(string code,string provider,string te
 public class ExternalLoginCallbackHandler : IRequestHandler<ExternalLoginCallbackCommand, LoginResult>
 {
     private readonly IIdentityService _identityService;
-    private readonly ITokenGenerator _tokenGenerator;
     private readonly IUserPermissionService _userPermissionService;
 
     public ExternalLoginCallbackHandler(IIdentityService identityService,
-        ITokenGenerator tokenGenerator,
         IUserPermissionService userPermissionService)
     {
         _identityService = identityService;
-        _tokenGenerator = tokenGenerator;
         _userPermissionService = userPermissionService;
     }
 

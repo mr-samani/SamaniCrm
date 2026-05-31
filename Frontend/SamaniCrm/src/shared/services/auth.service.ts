@@ -1,24 +1,19 @@
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, catchError, map, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { Buffer } from 'buffer';
-import { TokenService } from './token.service';
-import { NgxAlertModalService } from 'ngx-alert-modal';
 import { LanguageService } from './language.service';
-import {
-  AccountServiceProxy,
-  ExternalLoginCallbackCommand,
-  LoginCommand,
-  RefreshTokenCommand,
-  RevokeRefreshTokenCommand,
-  TwoFactorLoginCommand,
-  UserDTO,
-  UserServiceProxy,
-} from '@shared/service-proxies';
-import { TranslateService } from '@ngx-translate/core';
 import { AppConst } from '@shared/app-const';
-import { HttpErrorResponse } from '@angular/common/http';
 import { removePreviousFolderId } from '@app/file-manager/consts/PreviousFolderId';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { UserDTO } from '@shared/service-proxies/model/user-dto';
+import { AccountServiceProxy } from '@shared/service-proxies/api/account.service';
+import { UserServiceProxy } from '@shared/service-proxies/api/user.service';
+import { LoginCommand } from '@shared/service-proxies/model/login-command';
+import { ApiResponseOfLoginResult } from '@shared/service-proxies/model/api-response-of-login-result';
+import { LoginResult } from '@shared/service-proxies/model/login-result';
+import { TwoFactorLoginCommand } from '@shared/service-proxies/model/two-factor-login-command';
+import { ExternalLoginCallbackCommand } from '@shared/service-proxies/model/external-login-callback-command';
 @Injectable({
   providedIn: 'root',
 })
@@ -34,11 +29,8 @@ export class AuthService {
   userPermissions: string[] = [];
   constructor(
     private router: Router,
-    private tokenService: TokenService,
-
-    private alert: NgxAlertModalService,
-    private translateService: TranslateService,
     private languageService: LanguageService,
+    private oidcSecurityService: OidcSecurityService,
     injector: Injector,
   ) {
     this.accountService = injector.get(AccountServiceProxy);
@@ -53,10 +45,9 @@ export class AuthService {
   login(input: LoginCommand) {
     return this.accountService.login(input).pipe(
       map((response) => {
-        if (response.success && response.data && response.data.accessToken) {
+        if (response.success && response.data) {
           this.userRoles = response.data.roles ?? [];
           this.userPermissions = response.data.permissions ?? [];
-          this.tokenService.set(response.data);
           this.currentUserSubject.next(response.data.user);
         }
         return response;
@@ -67,12 +58,12 @@ export class AuthService {
   loginTwoFactor(input: TwoFactorLoginCommand) {
     return this.accountService.loginTwoFactor(input).pipe(
       map((response) => {
-        if (response.success && response.data && response.data.accessToken) {
-          this.userRoles = response.data.roles ?? [];
-          this.userPermissions = response.data.permissions ?? [];
-          this.tokenService.set(response.data);
-          this.currentUserSubject.next(response.data.user);
-        }
+        // if (response.success && response.data && response.data.accessToken) {
+        //   this.userRoles = response.data.roles ?? [];
+        //   this.userPermissions = response.data.permissions ?? [];
+        //   this.tokenService.set(response.data);
+        //   this.currentUserSubject.next(response.data.user);
+        // }
         return response;
       }),
     );
@@ -81,12 +72,12 @@ export class AuthService {
   externalLoginCallback(input: ExternalLoginCallbackCommand) {
     return this.accountService.externalLoginCallback(input).pipe(
       map((response) => {
-        if (response.success && response.data && response.data.accessToken) {
-          this.userRoles = response.data.roles ?? [];
-          this.userPermissions = response.data.permissions ?? [];
-          this.tokenService.set(response.data);
-          this.currentUserSubject.next(response.data.user);
-        }
+        // if (response.success && response.data && response.data.accessToken) {
+        //   this.userRoles = response.data.roles ?? [];
+        //   this.userPermissions = response.data.permissions ?? [];
+        //   this.tokenService.set(response.data);
+        //   this.currentUserSubject.next(response.data.user);
+        // }
         return response;
       }),
     );
@@ -104,46 +95,42 @@ export class AuthService {
   //   );
   // }
 
-  refreshToken(input: RefreshTokenCommand) {
-    return this.accountService.refresh(input).pipe(
-      map((response) => {
-        if (response.success && response.data && response.data.accessToken) {
-          this.tokenService.set(response.data);
-          return response.data.accessToken;
-        } else {
-          this.logout();
-          this.alert
-            .show({
-              title: this.translateService.instant('Message.AccessDenied'),
-              text: this.translateService.instant('Message.AccessDeniedMessage'),
-              showConfirmButton: true,
-              // showCancelButton: true,
-              confirmButtonText: this.translateService.instant('Ok'),
-              // cancelButtonText: 'انصراف'
-            })
-            .then((result) => {
-              // if (result.isConfirmed) {
-              this.router.navigate(['/account/login']);
-              // }
-            });
-        }
-        return '';
-      }),
-      catchError((err: HttpErrorResponse) => {
-        return throwError(() => err);
-      }),
-    );
+  refreshToken(input: any) {
+    this.oidcSecurityService.getRefreshToken();
+    // return this.accountService.refresh(input).pipe(
+    //   map((response) => {
+    //     if (response.success && response.data && response.data.accessToken) {
+    //       this.tokenService.set(response.data);
+    //       return response.data.accessToken;
+    //     } else {
+    //       this.logout();
+    //       this.alert
+    //         .show({
+    //           title: this.translateService.instant('Message.AccessDenied'),
+    //           text: this.translateService.instant('Message.AccessDeniedMessage'),
+    //           showConfirmButton: true,
+    //           // showCancelButton: true,
+    //           confirmButtonText: this.translateService.instant('Ok'),
+    //           // cancelButtonText: 'انصراف'
+    //         })
+    //         .then((result) => {
+    //           // if (result.isConfirmed) {
+    //           this.router.navigate(['/account/login']);
+    //           // }
+    //         });
+    //     }
+    //     return '';
+    //   }),
+    //   catchError((err: HttpErrorResponse) => {
+    //     return throwError(() => err);
+    //   }),
+    // );
   }
 
   logout() {
-    this.accountService
-      .revoke(
-        new RevokeRefreshTokenCommand({
-          token: this.tokenService.get().accessToken ?? '',
-        }),
-      )
-      .subscribe();
-    this.tokenService.remove();
+    // no need to this - logout handled by back end
+   // this.oidcSecurityService.logoff();
+   this.accountService.logout().subscribe();
     removePreviousFolderId();
     const returnUrl = window.location.href;
     this.router.navigate(['/account/login'], {

@@ -10,7 +10,10 @@ namespace SamaniCrm.Application.Common.Interfaces
     {
         Guid? UserId { get; }
         string? UserName { get; }
-        string lang { get; set; }
+        string Lang { get; }
+
+        bool IsDelegated { get; }
+        Guid? DelegatorId { get; }
         bool IsAuthenticated { get; }
     }
 }

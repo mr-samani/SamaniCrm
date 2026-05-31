@@ -1,13 +1,10 @@
 import { Injectable, Injector } from '@angular/core';
 import { DetailedError, Upload, UploadOptions } from 'tus-js-client';
-import { TokenService } from '../../shared/services/token.service';
 import { AppConst } from '../../shared/app-const';
 import { FileUsageEnum } from './image-cropper-dialog/image-cropper-dialog.component';
 import { NgxAlertModalService } from 'ngx-alert-modal';
 import { LanguageService } from '@shared/services/language.service';
 import { AuthService } from '@shared/services/auth.service';
-import { RefreshTokenCommand } from '@shared/service-proxies';
-import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class TusUploadService {
@@ -18,7 +15,6 @@ export class TusUploadService {
 
   upload?: Upload;
   constructor(
-    private _tokenService: TokenService,
     private alert: NgxAlertModalService,
     private language: LanguageService,
     private authService: AuthService,
@@ -59,7 +55,7 @@ export class TusUploadService {
       console.info('tus metadata', metadata);
 
       // تابع برای ساخت upload instance
-      const createUpload = (accessToken: string): Upload => {
+      const createUpload = (): Upload => {
         return new Upload(file, {
           endpoint: AppConst.apiUrl + '/api/tus',
           retryDelays: [0, 1000, 2000, 5000],
@@ -67,7 +63,6 @@ export class TusUploadService {
           overridePatchMethod: true,
           metadata,
           headers: {
-            Authorization: 'Bearer ' + accessToken,
             fileToken: token,
           },
           onShouldRetry: (err: DetailedError, retryAttempt: number, options: UploadOptions) => {
@@ -120,8 +115,7 @@ export class TusUploadService {
       };
 
       // شروع آپلود
-      const accessToken = this._tokenService.get().accessToken ?? '';
-      this.upload = createUpload(accessToken);
+      this.upload = createUpload();
 
       this.upload.findPreviousUploads().then((previousUploads) => {
         this.uploadedUrl = '';
@@ -143,21 +137,21 @@ export class TusUploadService {
     }
   }
   private handle401AndRetry(options: UploadOptions): boolean {
-    const refreshToken = this._tokenService.get().refreshToken ?? '';
+    // const refreshToken = this._tokenService.get().refreshToken ?? '';
 
-    this.authService.refreshToken(new RefreshTokenCommand({ refreshToken })).subscribe({
-      next: () => {
-        options.headers = {
-          ...options.headers,
-          Authorization: 'Bearer ' + this._tokenService.get().accessToken,
-        };
-        // دوباره تلاش کن
-        this.upload?.start();
-      },
-      error: () => {
-        this.authService.logout();
-      },
-    });
+    // this.authService.refreshToken(new RefreshTokenCommand({ refreshToken })).subscribe({
+    //   next: () => {
+    //     options.headers = {
+    //       ...options.headers,
+    //       Authorization: 'Bearer ' + this._tokenService.get().accessToken,
+    //     };
+    //     // دوباره تلاش کن
+    //     this.upload?.start();
+    //   },
+    //   error: () => {
+    //     this.authService.logout();
+    //   },
+    // });
 
     return true; // به tus بگو که retry می‌کنیم
   }

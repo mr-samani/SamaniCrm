@@ -43,15 +43,15 @@
   <pagination [total]="totalCount" [(page)]="page" (onChange)="onPageChange($event)"></pagination>
 
   <ng-template #operations let-item>
-    @if ([AppPermissions.UserManagement_ChangeAvatar] | permissionAny) {
+    @if ([AppPermissions.TenantManagement_DelegateUser] | permissionAny) {
       <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
         <i class="fa fa-ellipsis-v"></i>
       </button>
       <mat-menu #menu="matMenu">
-        @if (AppPermissions.UserManagement_ChangeAvatar | permission) {
-          <a mat-menu-item (click)="impersonate(item)">
+        @if (AppPermissions.TenantManagement_DelegateUser | permission) {
+          <a mat-menu-item (click)="delegateUser(item)">
             <i class="fa fa-person-through-window mx-1"></i>
-            <span>{{ 'Impersonate' | translate }}</span>
+            <span>{{ 'DelegateUser' | translate }}</span>
           </a>
         }
       </mat-menu>

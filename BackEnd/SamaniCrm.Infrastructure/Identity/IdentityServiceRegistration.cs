@@ -1,28 +1,33 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using Duende.IdentityServer;
+﻿using Duende.IdentityServer;
+using Duende.IdentityServer.AspNetIdentity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.Http;
-using System.Text.Json;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using SamaniCrm.Application.DTOs;
+using SamaniCrm.Core.Shared.Settings;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Text.Json;
 
 namespace SamaniCrm.Infrastructure.Identity
 {
     public static class IdentityServiceRegistration
     {
         public static IServiceCollection AddIdentityInfrastructure(this IServiceCollection services, IConfiguration configuration)
-        {  
+        {
+
+            OIDCSettings oidcSettings = configuration.GetSection("OIDC").Get<OIDCSettings>() ?? new OIDCSettings();
 
             using (var scope = services.BuildServiceProvider().CreateScope())
             {
 
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                var securitySetting = dbContext.SecuritySettings.OrderBy(s=>s.Id).FirstOrDefault(); // یا هر روش دیگه‌ای برای خوندن
+                var securitySetting = dbContext.SecuritySettings.OrderBy(s => s.Id).FirstOrDefault(); // یا هر روش دیگه‌ای برای خوندن
 
                 if (securitySetting == null)
                     throw new Exception("Security settings not found in the database.");
@@ -49,6 +54,9 @@ namespace SamaniCrm.Infrastructure.Identity
 
                     // 📧 Email confirmation
                     options.SignIn.RequireConfirmedEmail = false;
+
+
+
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -57,84 +65,86 @@ namespace SamaniCrm.Infrastructure.Identity
 
 
                 // ✅ IdentityServer تنظیمات
-                services.AddIdentityServer(options =>
-                {
-                    options.EmitStaticAudienceClaim = true;
-                })
-                .AddAspNetIdentity<ApplicationUser>()
-                .AddDeveloperSigningCredential();
+                services
+                        .AddIdentityServer(options =>
+                        {
+                            // این خط باعث می‌شود از UI پیش‌فرض Duende استفاده شود
+                            // اگر این خط را نگذارید، ممکن است خطای 404 بدهد
+                            //options.UserInteraction.LoginUrl = "/identity/account/login";
+                            // options.UserInteraction.LogoutUrl = "/identity/account/logout";
+
+                            //// این خط بسیار مهم است: مسیر صفحه لاگین را مشخص می‌کند
+                            //options.UserInteraction.LoginUrl = "/Account/Login";
+
+                            //// اگر صفحه خروج هم دارید:
+                            //options.UserInteraction.LogoutUrl = "/Account/Logout";
+
+                            //// اگر صفحه خطا هم دارید:
+                            //options.UserInteraction.ErrorUrl = "/home/error";
+
+
+                            options.EmitStaticAudienceClaim = true;
+                            //TODO: only development
+                            options.Events.RaiseErrorEvents = true;
+                            options.Events.RaiseFailureEvents = true;
+                            options.Events.RaiseInformationEvents = true;
+                            options.Events.RaiseSuccessEvents = true;
+                        })
+                        .AddAspNetIdentity<ApplicationUser>()
+                        .AddInMemoryClients(
+                            IdentityServerConfig.Clients)
+                        .AddInMemoryApiScopes(
+                            IdentityServerConfig.ApiScopes)
+                        .AddInMemoryApiResources(
+                            IdentityServerConfig.ApiResources)
+                        .AddInMemoryIdentityResources(
+                            IdentityServerConfig.IdentityResources)
+                        .AddProfileService<ProfileService>()
+                // TODO: ony use in developement AddDeveloperSigningCredential
+                        .AddDeveloperSigningCredential();
                 //.AddSigningCredential(new X509Certificate2(Path.Combine(Environment.CurrentDirectory, "path/to/your/cert.pfx"), "certPassword")); // در Production، باید از certificate استفاده کنی
 
+                services.ConfigureApplicationCookie(options =>
+                  {
+                      options.Cookie.Name = oidcSettings.Cookie.Name;
+
+                      options.Cookie.HttpOnly = oidcSettings.Cookie.HttpOnly;
+
+                      options.Cookie.SecurePolicy = oidcSettings.Cookie.SecurePolicy;
+
+                      options.Cookie.SameSite = oidcSettings.Cookie.SameSite;
+
+                      options.Cookie.Domain = oidcSettings.Cookie.Domain;
+
+                      options.ExpireTimeSpan = TimeSpan.FromDays(30);
+
+                      options.SlidingExpiration = oidcSettings.Cookie.SlidingExpiration;
+                  });
+
                 // ✅ JWT Authentication
-                services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                    .AddJwtBearer(options =>
-                    {
-                        options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuer = true,
-                            ValidateAudience = true,
-                            ValidateLifetime = true,
-                            ValidateIssuerSigningKey = true,
-                            ValidIssuer = configuration["Jwt:Issuer"],
-                            ValidAudience = configuration["Jwt:Audience"],
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
-                        };
-                        options.Events = new JwtBearerEvents
-                        {
-                            OnChallenge = async context =>
-                            {
-                                // بررسی اینکه آیا توکن معتبر است یا نه
-                                var request = context.Request;
-                                if (request.Headers.ContainsKey("Authorization"))
-                                {
-                                    var token = request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-                                    // بررسی توکن اشتباه یا منقضی
-                                    if (string.IsNullOrEmpty(token))
-                                    {
-                                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                                        context.Response.ContentType = "application/json";
-                                        var result = JsonSerializer.Serialize(new { error = "Unauthorized - Invalid Token" });
-                                        await context.Response.WriteAsync(result);
-                                    }
-                                }
-                                else
-                                {
-                                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                                    context.Response.ContentType = "application/json";
-                                    var result = JsonSerializer.Serialize(new { error = "Unauthorized - No Token" });
-                                    await context.Response.WriteAsync(result);
-                                }
-                            },
+                //services.AddAuthentication("Bearer")
+                //        .AddJwtBearer("Bearer", options =>
+                //        {
+                //            options.Authority =
+                //                "https://localhost:5001";
 
-                            // SignalR
-                             OnMessageReceived = context =>
-                             {
-                                 var accessToken = context.Request.Query["access_token"];
-                                 var path = context.HttpContext.Request.Path;
-                                 if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/notifications"))
-                                 {
-                                     context.Token = accessToken;
-                                 }
-                                 return Task.CompletedTask;
-                             }
-                        };
-                    });
+                //            options.TokenValidationParameters =
+                //                new TokenValidationParameters
+                //                {
+                //                    ValidateAudience = false
+                //                };
+                //        });
 
-                // ✅ اضافه کردن Identity API Endpoints برای minimal APIs در .NET 7+
-                // services.AddIdentityApiEndpoints<ApplicationUser>();
+                services.AddAuthentication(IdentityConstants.ApplicationScheme);
+
 
                 return services;
             }
         }
-   
-    
 
-        public static IServiceCollection AddIdentityForMigrator(this IServiceCollection services,IConfiguration configuration)
+
+
+        public static IServiceCollection AddIdentityForMigrator(this IServiceCollection services, IConfiguration configuration)
         {
 
             services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
@@ -162,6 +172,6 @@ namespace SamaniCrm.Infrastructure.Identity
                    .AddSignInManager();
             return services;
         }
-    
+
     }
 }

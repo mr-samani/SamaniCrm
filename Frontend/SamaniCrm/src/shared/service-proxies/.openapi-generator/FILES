@@ -88,7 +88,6 @@ model/api-response-of-tenant-dto.ts
 model/api-response-of-tenant-log-setting-dto.ts
 model/api-response-of-tenant-settings-dto.ts
 model/api-response-of-tenant-usage-dto.ts
-model/api-response-of-token-response-dto.ts
 model/api-response-of-un-read-notification-list-dto.ts
 model/api-response-of-unit.ts
 model/api-response-of-user-dto.ts
@@ -131,6 +130,7 @@ model/currency-dto.ts
 model/dashboard-dto.ts
 model/dashboard-item-dto.ts
 model/database-strategy.ts
+model/delegate-user-command.ts
 model/delete-currency-command.ts
 model/delete-dashboard-command.ts
 model/delete-dashboard-item-command.ts
@@ -231,11 +231,9 @@ model/product-type-translation-dto.ts
 model/provisioning-status-dto.ts
 model/provisioning-status.ts
 model/provisioning-step-status.ts
-model/refresh-token-command.ts
 model/rename-command.ts
 model/reorder-item.ts
 model/reorder-menu-command.ts
-model/revoke-refresh-token-command.ts
 model/role-create-command.ts
 model/role-dto.ts
 model/role-permissions-dto.ts
@@ -252,7 +250,6 @@ model/tenant-settings-dto.ts
 model/tenant-status.ts
 model/tenant-usage-dto.ts
 model/tenant-user-dto.ts
-model/token-response-dto.ts
 model/two-factor-login-command.ts
 model/two-factor-type-enum.ts
 model/un-read-notification-list-dto.ts

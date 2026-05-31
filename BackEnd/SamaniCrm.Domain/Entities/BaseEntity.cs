@@ -36,5 +36,6 @@ public abstract class AuditedEntity : IAuditedEntity
     public DateTime? DeletedAt { get; set; }
     public Guid? DeletedBy { get; set; }
     public bool IsDeleted { get; set; } = false;
+
     public byte[]? RowVersion { get; set; }
 }

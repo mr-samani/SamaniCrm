@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Duende.IdentityServer" Version="8.0.0-alpha.1" />
-    <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="8.0.0-alpha.1" />
+    <PackageReference Include="Duende.IdentityServer" Version="7.4.7" />
+    <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.4.7" />
     <PackageReference Include="Hangfire.Console" Version="1.4.3" />
     <PackageReference Include="Humanizer.Core" Version="3.0.10" />
     <PackageReference Include="IPAddressRange" Version="6.3.0" />

@@ -25,6 +25,13 @@ public class TenantLogSettingConfiguration : IEntityTypeConfiguration<TenantLogS
     }
 }
 
+public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
+{
+    public void Configure(EntityTypeBuilder<AuditLog> builder)
+    {
+        builder.ToTable("AuditLogs", "logs");
+    }
+}
 
 
 public class LogEntryConfiguration : IEntityTypeConfiguration<LogEntry>

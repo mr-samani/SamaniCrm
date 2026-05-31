@@ -38,7 +38,8 @@ namespace SamaniCrm.Application.User.Commands
             var result = await _identityService.updateUserLanguage(request.culture, userId, cancellationToken);
             if (result == true)
             {
-                _currentUser.lang = request.culture;
+                //TODO
+              //  _currentUser.Lang = request.culture;
             }
             return result;
 

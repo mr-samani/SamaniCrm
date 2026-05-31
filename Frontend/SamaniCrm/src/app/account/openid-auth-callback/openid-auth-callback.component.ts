@@ -1,6 +1,5 @@
 import { Component,  OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
-import { TokenService } from '@shared/services/token.service';
 
 @Component({
   selector: 'app-openid-auth-callback',
@@ -9,7 +8,7 @@ import { TokenService } from '@shared/services/token.service';
   standalone: false,
 })
 export class OpenidAuthCallbackComponent extends AppComponentBase implements OnInit {
-  constructor(tokenService: TokenService) {
+  constructor() {
     super();
     this.route.queryParams.subscribe((params) => {
       const token = params['token'];
@@ -26,10 +25,10 @@ export class OpenidAuthCallbackComponent extends AppComponentBase implements OnI
 
       if (token && refreshToken) {
         // Save tokens
-        tokenService.set({
-          accessToken: token,
-          refreshToken: refreshToken,
-        });
+        // tokenService.set({
+        //   accessToken: token,
+        //   refreshToken: refreshToken,
+        // });
 
         // Navigate to dashboard or home
         this.router.navigate(['/panel/dashboard']);

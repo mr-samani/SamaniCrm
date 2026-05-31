@@ -34,7 +34,7 @@ export class ExternalLoginCalbackComponent extends AppComponentBase implements O
       )
       .subscribe({
         next: (result) => {
-          if (result.data?.accessToken) {
+          if (result.data) {
             this.notify.success(this.l('Message.LoginSuccess'));
             if (this.returnUrl) {
               window.location.href = this.returnUrl;
