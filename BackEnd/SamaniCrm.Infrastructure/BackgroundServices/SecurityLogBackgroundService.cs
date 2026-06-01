@@ -116,7 +116,7 @@ public sealed class SecurityLogBackgroundService : BackgroundService
         bulkCopy.ColumnMappings.Add(nameof(SecurityLogEntry.Resource), "Resource");
         bulkCopy.ColumnMappings.Add(nameof(SecurityLogEntry.StatusCode), "StatusCode");
         bulkCopy.ColumnMappings.Add(nameof(SecurityLogEntry.IsSuccessful), "IsSuccessful");
-        bulkCopy.ColumnMappings.Add(nameof(SecurityLogEntry.ErrorMessage), "ErrorMessage");
+        bulkCopy.ColumnMappings.Add(nameof(SecurityLogEntry.Message), "Message");
         bulkCopy.ColumnMappings.Add(nameof(SecurityLogEntry.CreatedAt), "CreatedAt");
         bulkCopy.ColumnMappings.Add(nameof(SecurityLogEntry.CreatedBy), "CreatedBy");
         bulkCopy.ColumnMappings.Add(nameof(SecurityLogEntry.IntegrityHash), "IntegrityHash");
@@ -142,7 +142,7 @@ public sealed class SecurityLogBackgroundService : BackgroundService
         table.Columns.Add("Resource", typeof(string));
         table.Columns.Add("StatusCode", typeof(int));
         table.Columns.Add("IsSuccessful", typeof(bool));
-        table.Columns.Add("ErrorMessage", typeof(string));
+        table.Columns.Add("Message", typeof(string));
         table.Columns.Add("CorrelationId", typeof(string));
         table.Columns.Add("CreatedAt", typeof(DateTime));
         table.Columns.Add("CreatedBy", typeof(string));
@@ -166,7 +166,7 @@ public sealed class SecurityLogBackgroundService : BackgroundService
                 Resource = item.Resource,
                 StatusCode = item.StatusCode,
                 IsSuccessful = item.IsSuccessful,
-                ErrorMessage = item.ErrorMessage,
+                Message = item.Message,
                 CreatedAt = item.CreatedAt,
                 CreatedBy = item.CreatedBy ?? "System",
                 IntegrityHash = string.Empty
@@ -188,7 +188,7 @@ public sealed class SecurityLogBackgroundService : BackgroundService
             row["Resource"] = string.IsNullOrEmpty(entity.Resource) ? DBNull.Value : entity.Resource;
             row["StatusCode"] = entity.StatusCode.HasValue ? entity.StatusCode.Value : DBNull.Value;
             row["IsSuccessful"] = entity.IsSuccessful;
-            row["ErrorMessage"] = string.IsNullOrEmpty(entity.ErrorMessage) ? DBNull.Value : entity.ErrorMessage;
+            row["Message"] = string.IsNullOrEmpty(entity.Message) ? DBNull.Value : entity.Message;
             row["CreatedAt"] = entity.CreatedAt;
             row["CreatedBy"] = entity.CreatedBy;
             row["IntegrityHash"] = entity.IntegrityHash;

@@ -50,7 +50,7 @@ public class SecurityLogFactory : ISecurityLogFactory
             IpAddress = ip,
             Action = action,
             CreatedAt = DateTime.UtcNow,
-            ErrorMessage = error,
+            Message = error,
             EventType = eventType,
             IsSuccessful = IsSuccessful,
             Resource = resource,

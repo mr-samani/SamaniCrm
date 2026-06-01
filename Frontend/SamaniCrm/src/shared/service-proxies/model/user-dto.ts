@@ -14,6 +14,7 @@
 /** Interface for UserDTO */
 export interface IUserDTO {
   id: string;
+  tenantId?: string;
   userName: string;
   firstName: string;
   lastName?: string;
@@ -34,6 +35,7 @@ export interface IUserDTO {
 /** Class for UserDTO */
 export class UserDTO implements IUserDTO {
   id!: string;
+  tenantId?: string;
   userName!: string;
   firstName!: string;
   lastName?: string;
@@ -62,6 +64,7 @@ export class UserDTO implements IUserDTO {
 init(data?: any) {
   if (data) {
     this.id = data["id"];
+    this.tenantId = data["tenantId"];
     this.userName = data["userName"];
     this.firstName = data["firstName"];
     this.lastName = data["lastName"];

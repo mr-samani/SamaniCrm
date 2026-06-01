@@ -72,7 +72,7 @@ public class SecurityLogDto
     /// پیام خطا (در صورت وجود)
     /// </summary>
     [StringLength(2048)]
-    public string? ErrorMessage { get; set; }
+    public string? Message { get; set; }
 
 
 
