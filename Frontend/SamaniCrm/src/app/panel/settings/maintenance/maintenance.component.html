@@ -5,10 +5,20 @@
       <m-tab-item [title]="'CacheManagement' | translate">
         <app-cache></app-cache>
       </m-tab-item>
-    }  
-    
+    }
+
     @if (AppPermissions.LoggingSystem_AppLogs_List | permission) {
-      <m-tab-item [title]="'DatabaseLogs' | translate">
+      <m-tab-item [title]="'AppLogs' | translate">
+        <app-database-logs></app-database-logs>
+      </m-tab-item>
+    }
+    @if (AppPermissions.LoggingSystem_AppLogs_List | permission) {
+      <m-tab-item [title]="'AuditLogs' | translate">
+        <app-database-logs></app-database-logs>
+      </m-tab-item>
+    }
+    @if (AppPermissions.LoggingSystem_AppLogs_List | permission) {
+      <m-tab-item [title]="'SecurityLogs' | translate">
         <app-database-logs></app-database-logs>
       </m-tab-item>
     }

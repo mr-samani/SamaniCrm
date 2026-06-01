@@ -16,6 +16,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { TabItemComponent } from './tab-item/tab-item.component';
+import { AppConst } from '@shared/app-const';
 
 @Component({
   selector: 'm-tab-group',
@@ -38,8 +39,8 @@ export class TabGroupComponent implements OnDestroy, AfterViewInit {
   @ContentChildren(TabItemComponent) tabs = new QueryList<TabItemComponent>();
   tabGroupContainer = viewChild<ElementRef<HTMLElement>>('tabGroupContainer');
   rndId = Math.round(Math.random() * 5000);
-  private index = -1;
-
+  activeIndex = -1;
+  isRtl = AppConst.isRtl;
   protected doc = inject(DOCUMENT);
   protected chdr = inject(ChangeDetectorRef);
   constructor() {}
@@ -47,7 +48,7 @@ export class TabGroupComponent implements OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
     setTimeout(() => {
       let activeTabs = this.tabs?.filter((tab) => tab.active);
-      if (this.index < 0 && activeTabs?.length === 0 && this.tabs) {
+      if (this.activeIndex < 0 && activeTabs?.length === 0 && this.tabs) {
         this.selectTab(this.tabs.first, 0);
       }
     });
@@ -64,6 +65,7 @@ export class TabGroupComponent implements OnDestroy, AfterViewInit {
     this.tabs?.toArray().forEach((tab) => (tab.active = false));
     // activate the tab the user has clicked on.
     tab.setActive(true);
+    this.activeIndex = index;
     this.selectedIndexChange.emit(index);
     this.chdr.detectChanges();
   }

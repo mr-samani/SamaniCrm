@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, input, Input, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, TemplateRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'm-tab-item',
@@ -6,15 +6,20 @@ import { ChangeDetectorRef, Component, input, Input, OnInit } from '@angular/cor
   styleUrls: ['./tab-item.component.scss'],
   standalone: false,
 })
-export class TabItemComponent implements OnInit {
+export class TabItemComponent implements AfterViewInit {
   @Input() title = '';
 
+  @ViewChild('tabContentContainer', { static: true })
+  template!: TemplateRef<any>;
+
   active = false;
-  public  setActive(val: boolean) {
+  public setActive(val: boolean) {
     this.active = val;
     this.chdr.detectChanges();
   }
   constructor(private chdr: ChangeDetectorRef) {}
 
-  ngOnInit(): void {}
+  ngAfterViewInit(): void {
+    console.log(this.template);
+  }
 }
