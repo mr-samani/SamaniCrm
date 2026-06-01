@@ -9,6 +9,7 @@ namespace SamaniCrm.Domain.Entities;
 public class AuditLog
 {
     public Guid Id { get; set; }
+    public Guid CorrelationId { get; set; }
     public Guid? UserId { get; set; }
 
     public Guid? DelegatorId { get; set; }

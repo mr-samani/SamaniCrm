@@ -13,8 +13,8 @@ import { CacheComponent } from './tabs/cache/cahce.component';
 import { SharedModule } from '@shared/shared.module';
 import { DatabaseLogsComponent } from './tabs/database-logs/database-logs.component';
 import { MaintenanceServiceProxy } from '@shared/service-proxies/api/maintenance.service';
-import { AdminLogServiceProxy } from '@shared/service-proxies/api/admin-log.service';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
+import { AppLogsServiceProxy } from '@shared/service-proxies/api/app-logs.service';
 
 @NgModule({
   declarations: [MaintenanceComponent, CacheComponent, DatabaseLogsComponent],
@@ -33,6 +33,6 @@ import { PaginationComponent } from '@shared/components/pagination/pagination.co
     SwitchModule,
     SharedModule,
   ],
-  providers: [MaintenanceServiceProxy, AdminLogServiceProxy],
+  providers: [MaintenanceServiceProxy, AppLogsServiceProxy],
 })
 export class MaintenanceModule {}

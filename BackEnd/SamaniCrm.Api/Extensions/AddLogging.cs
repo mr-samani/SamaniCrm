@@ -2,10 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Features.Logging.Interfaces;
 using SamaniCrm.Infrastructure.BackgroundServices;
-using SamaniCrm.Infrastructure.Loging;
-using SamaniCrm.Infrastructure.Loging.Sinks;
 using Scalar.AspNetCore;
-using SamaniCrm.Infrastructure.Loging.Filters;
+using SamaniCrm.Infrastructure.Loging.AppLogs;
+using SamaniCrm.Infrastructure.Loging.AppLogs.Sinks;
+using SamaniCrm.Infrastructure.Loging.AppLogs.Filters;
 
 
 
@@ -35,8 +35,8 @@ public static partial class ServiceCollectionExtensions
         });
 
         // Core Services
-        services.AddScoped<ILogConfigurationService, LogConfigurationService>();
-        services.AddScoped<ILogService, LogService>();
+        services.AddScoped<IAppLogConfigurationService, AppLogConfigurationService>();
+        services.AddScoped<IAppLogService, AppLogService>();
         // services.AddScoped<ILogRetentionService, LogRetentionService>();
 
 
@@ -47,7 +47,7 @@ public static partial class ServiceCollectionExtensions
         services.AddLoggingInterceptors();
 
         // Decorator برای Service ها
-        services.AddLoggedServices();
+        services.AddAppLoggedServices();
 
         return services;
     }

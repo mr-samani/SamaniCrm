@@ -29,17 +29,22 @@ public static class AppPermissions
 
     public static class LoggingSystem
     {
-        public const string List = "Administrator.LoggingSystem.List";
-        public const string Details = "Administrator.LoggingSystem.Details";
-        public const string GetStats = "Administrator.LoggingSystem.GetStats";
-        public const string ManualCleanUpLog = "Administrator.LoggingSystem.ManualCleanUpLog";
-
-        public static class TenantLogSetting
+        public static class AppLogs
         {
-            public const string List = "Administrator.LoggingSystem.Settings.List";
-            public const string Update = "Administrator.LoggingSystem.Settings.Update";
+            public const string List = "Administrator.LoggingSystem.AppLogs.List";
+            public const string Details = "Administrator.LoggingSystem.AppLogs.Details";
+            public const string GetStats = "Administrator.LoggingSystem.AppLogs.GetStats";
+            public const string ManualCleanUpLog = "Administrator.LoggingSystem.AppLogs.ManualCleanUpLog";
+            public static class TenantAppLogSetting
+            {
+                public const string List = "Administrator.LoggingSystem.AppLogs.Settings.List";
+                public const string Update = "Administrator.LoggingSystem.AppLogs.Settings.Update";
 
+            }
         }
+
+
+
     }
 
 

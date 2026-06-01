@@ -11,11 +11,11 @@ using System.Text.Json;
 
 namespace SamaniCrm.Infrastructure.EntityConfiguration;
 
-public class TenantLogSettingConfiguration : IEntityTypeConfiguration<TenantLogSetting>
+public class TenantAppLogSettingConfiguration : IEntityTypeConfiguration<TenantAppLogSetting>
 {
-    public void Configure(EntityTypeBuilder<TenantLogSetting> builder)
+    public void Configure(EntityTypeBuilder<TenantAppLogSetting> builder)
     {
-        builder.ToTable("LogSettings", "logs");
+        builder.ToTable("TenantAppLogSettings", "logs");
         builder.HasIndex(e => e.TenantId).IsUnique();
 
         builder.Property(e => e.EnabledLevels)
@@ -34,7 +34,7 @@ public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
 }
 
 
-public class LogEntryConfiguration : IEntityTypeConfiguration<LogEntry>
+public class AppLogEntryConfiguration : IEntityTypeConfiguration<AppLogEntry>
 {  // ۱. تنظیمات JsonSerializerOptions با ترتیب کلیدهای قطعی
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -43,9 +43,9 @@ public class LogEntryConfiguration : IEntityTypeConfiguration<LogEntry>
         // ✅ این مهم‌ترین بخش است - ترتیب کلیدها را تضمین می‌کند
         PropertyNameCaseInsensitive = true
     };
-    public void Configure(EntityTypeBuilder<LogEntry> builder)
+    public void Configure(EntityTypeBuilder<AppLogEntry> builder)
     {
-        builder.ToTable("LogEntries", "logs");
+        builder.ToTable("AppLogEntries", "logs");
 
         builder.HasIndex(e => e.TenantId);
         builder.HasIndex(e => e.Timestamp);

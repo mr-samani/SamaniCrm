@@ -85,8 +85,12 @@ public class IdentityService : IIdentityService
 
 
 
-    public async Task<SimpleTenantData?> GetTenantByTenancyName(string tenancyName, CancellationToken cancellation)
+    public async Task<SimpleTenantData?> GetTenantByTenancyName(string? tenancyName, CancellationToken cancellation)
     {
+        if (string.IsNullOrEmpty(tenancyName))
+        {
+            return null;
+        }
         var tenant = await _dbContext.Tenants
             .IgnoreQueryFilters()
             .Where(x => x.Slug == tenancyName && x.Status == TenantStatus.Active)
@@ -860,11 +864,7 @@ public class IdentityService : IIdentityService
     public async Task<LoginResult> ExternalSignInAsync(ExternalLoginCallbackCommand request, CancellationToken cancellation)
     {
         var tenant = await GetTenantByTenancyName(request.tenancyName, cancellation);
-        if (tenant == null)
-        {
-            throw new InvalidLoginException();
-        }
-        Guid tenantId = tenant.Id;
+      
 
         //var info = await _signInManager.GetExternalLoginInfoAsync();
         //if (info == null) throw new UnauthorizedAccessException("External login info not found");
@@ -917,7 +917,7 @@ public class IdentityService : IIdentityService
             throw new UnauthorizedAccessException("External login provider result not found");
         }
         ApplicationUser? user = await FindOrCreateExternalUser(
-            externalLoginResult.Email!, externalLoginResult.UserName!, externalLoginResult.Name!, provider.Name, tenantId);
+            externalLoginResult.Email!, externalLoginResult.UserName!, externalLoginResult.Name!, provider.Name, tenant?.Id);
         await _signInManager.SignInAsync(user, false);
 
         var roles = await _userManager.GetRolesAsync(user);
@@ -985,7 +985,7 @@ public class IdentityService : IIdentityService
         return items;
     }
 
-    private async Task<ApplicationUser> FindOrCreateExternalUser(string email, string userName, string name, string providerName, Guid tenantId)
+    private async Task<ApplicationUser> FindOrCreateExternalUser(string email, string userName, string name, string providerName, Guid? tenantId)
     {
         var user = await _userManager.FindByEmailAsync(email);
         if (user == null)
@@ -997,7 +997,8 @@ public class IdentityService : IIdentityService
                 FullName = name,
                 Email = email,
                 Lang = AppConsts.DefaultLanguage,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                TenantId = tenantId
             };
             var createResult = await _userManager.CreateAsync(user);
             if (!createResult.Succeeded)

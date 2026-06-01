@@ -30,7 +30,7 @@
 
     <!-- log setting -->
     @if (
-      [AppPermissions.LoggingSystem_TenantLogSetting_List, AppPermissions.LoggingSystem_TenantLogSetting_Update] | permissionAll
+      [AppPermissions.LoggingSystem_AppLogs_TenantAppLogSetting_List, AppPermissions.LoggingSystem_AppLogs_TenantAppLogSetting_Update] | permissionAll
     ) {
       <m-tab-item [title]="'AppLogSettings' | translate">
         <app-log-setting></app-log-setting>

@@ -1,9 +1,5 @@
-import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
-import { AdminLogServiceProxy } from '@shared/service-proxies/api/admin-log.service';
-import { GetLogSettingQuery } from '@shared/service-proxies/model/get-log-setting-query';
-import { TenantLogSettingDto } from '@shared/service-proxies/model/tenant-log-setting-dto';
-import { UpdateLogSettingCommand } from '@shared/service-proxies/model/update-log-setting-command';
 import { finalize } from 'rxjs/operators';
 import { LOG_LEVELS } from './models/LOG_LEVELS';
 import { LOG_SINKS } from './models/LOG_SINKS';
@@ -12,6 +8,8 @@ import { LogSinkFlag } from './models/LogSinkFlag';
 import { RETENTION_OPTIONS } from './models/RETENTION_OPTIONS';
 import { Bitmask } from '@shared/helper/bit-mask.utils';
 import { AutoCompleteDtoOfGuid } from '@shared/service-proxies/model/auto-complete-dto-of-guid';
+import { AppLogsServiceProxy } from '@shared/service-proxies/api/app-logs.service';
+import { UpdateAppLogSettingCommand } from '@shared/service-proxies/model/update-app-log-setting-command';
 
 @Component({
   standalone: false,
@@ -33,7 +31,7 @@ export class LogSettingComponent extends AppComponentBase implements OnInit {
 
   tenant?: AutoCompleteDtoOfGuid;
 
-  constructor(private logService: AdminLogServiceProxy) {
+  constructor(private logService: AppLogsServiceProxy) {
     super();
   }
 
@@ -100,7 +98,7 @@ export class LogSettingComponent extends AppComponentBase implements OnInit {
 
   save() {
     this.loading = true;
-    const input = new UpdateLogSettingCommand();
+    const input = new UpdateAppLogSettingCommand();
     input.enabledLevels = Bitmask.enumArrayToFlag(this.enabledLevels);
     input.enabledSinks = Bitmask.enumArrayToFlag(this.enabledSinks);
     input.isEnabled = this.isEnabled;

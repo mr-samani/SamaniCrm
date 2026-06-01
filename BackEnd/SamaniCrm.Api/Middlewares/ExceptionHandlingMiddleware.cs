@@ -124,7 +124,7 @@ public class ExceptionHandlingMiddleware
     private void LogError(HttpContext context, Exception? ex, string message, params object[] args)
     {
         using var scope = context.RequestServices.CreateScope();
-        var logService = scope.ServiceProvider.GetRequiredService<ILogService>();
+        var logService = scope.ServiceProvider.GetRequiredService<IAppLogService>();
 
         logService.LogError(ex, message, args);
     }

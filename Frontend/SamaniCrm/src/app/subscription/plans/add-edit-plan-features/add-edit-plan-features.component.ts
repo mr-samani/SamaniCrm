@@ -9,7 +9,6 @@ import { finalize } from 'rxjs';
 import { PlanFeatureDto } from '@shared/service-proxies/model/plan-feature-dto';
 import { SubscriptionServiceProxy } from '@shared/service-proxies/api/subscription.service';
 import { PlanFeatureType } from '@shared/service-proxies/model/plan-feature-type';
-import { GetAllPlanFeatureForEditQuery } from '@shared/service-proxies/model/get-all-plan-feature-for-edit-query';
 import { PlanDto } from '@shared/service-proxies/model/plan-dto';
 import { AppConst } from '@shared/app-const';
 import { PlanFeatureTranslationDto } from '@shared/service-proxies/model/plan-feature-translation-dto';

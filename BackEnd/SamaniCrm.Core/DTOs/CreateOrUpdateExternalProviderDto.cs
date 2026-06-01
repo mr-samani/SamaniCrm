@@ -14,11 +14,12 @@ public class CreateOrUpdateExternalProviderDto
     public string AuthorizationEndpoint { get; set; } = default!;
     public string TokenEndpoint { get; set; } = default!;
     public string UserInfoEndpoint { get; set; } = default!;
-    public string CallbackPath { get; set; } = default!;
-    public string LogoutEndpoint { get; set; } = default!;
-    public string MetadataJson { get; set; } = default!;
+    public string? CallbackPath { get; set; }
+    public string? LogoutEndpoint { get; set; } 
+    public string? MetadataJson { get; set; }
     public string Scopes { get; set; } = default!;
     public string ResponseType { get; set; } = default!;
     public string ResponseMode { get; set; } = default!;
     public bool UsePkce { get; set; }
+    public bool IsActive { get; set; }
 }

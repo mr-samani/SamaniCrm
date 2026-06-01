@@ -1,4 +1,4 @@
-import { Component, Inject,  OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
@@ -87,6 +87,7 @@ export class CreateOrEditExternalProviderComponent extends AppComponentBase impl
       responseMode: ['query', Validators.required],
       usePkce: [true],
       metadataJson: [''],
+      isActive: [false],
     });
   }
 
@@ -121,6 +122,7 @@ export class CreateOrEditExternalProviderComponent extends AppComponentBase impl
               responseMode: provider.responseMode,
               usePkce: provider.usePkce,
               metadataJson: provider.metadataJson,
+              isActive: provider.isActive,
             });
           } else {
             console.error('Error updating provider:', result);
@@ -155,11 +157,11 @@ export class CreateOrEditExternalProviderComponent extends AppComponentBase impl
       this.service
         .update(input)
         .pipe(
-        finalize(() => {
-          this.saving  = false;
-          this.chdr.detectChanges();
-        }),
-      )
+          finalize(() => {
+            this.saving = false;
+            this.chdr.detectChanges();
+          }),
+        )
         .subscribe({
           next: () => {
             this.dialogRef.close(true);
@@ -175,11 +177,11 @@ export class CreateOrEditExternalProviderComponent extends AppComponentBase impl
       this.service
         .create(input)
         .pipe(
-        finalize(() => {
-          this.saving  = false;
-          this.chdr.detectChanges();
-        }),
-      )
+          finalize(() => {
+            this.saving = false;
+            this.chdr.detectChanges();
+          }),
+        )
         .subscribe({
           next: () => {
             this.dialogRef.close(true);

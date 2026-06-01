@@ -7,7 +7,7 @@
       </m-tab-item>
     }  
     
-    @if (AppPermissions.LoggingSystem_List | permission) {
+    @if (AppPermissions.LoggingSystem_AppLogs_List | permission) {
       <m-tab-item [title]="'DatabaseLogs' | translate">
         <app-database-logs></app-database-logs>
       </m-tab-item>

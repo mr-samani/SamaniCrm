@@ -1,7 +1,7 @@
 /**
  * Auto-generated file - Do not edit manually
  * Generated from: AppPermissions.cs
- * Generated at: 2026-05-31T14:44:57.763Z
+ * Generated at: 2026-06-01T06:03:04.443Z
  */
 
 export class AppPermissions {
@@ -31,15 +31,15 @@ export class AppPermissions {
     static LanguageManagement_Edit = "LanguageManagement.Edit";
     static LanguageManagement_Delete = "LanguageManagement.Delete";
 
-    // LoggingSystem
-    static LoggingSystem_List = "Administrator.LoggingSystem.List";
-    static LoggingSystem_Details = "Administrator.LoggingSystem.Details";
-    static LoggingSystem_GetStats = "Administrator.LoggingSystem.GetStats";
-    static LoggingSystem_ManualCleanUpLog = "Administrator.LoggingSystem.ManualCleanUpLog";
+    // LoggingSystem > AppLogs
+    static LoggingSystem_AppLogs_List = "Administrator.LoggingSystem.AppLogs.List";
+    static LoggingSystem_AppLogs_Details = "Administrator.LoggingSystem.AppLogs.Details";
+    static LoggingSystem_AppLogs_GetStats = "Administrator.LoggingSystem.AppLogs.GetStats";
+    static LoggingSystem_AppLogs_ManualCleanUpLog = "Administrator.LoggingSystem.AppLogs.ManualCleanUpLog";
 
-    // LoggingSystem > TenantLogSetting
-    static LoggingSystem_TenantLogSetting_List = "Administrator.LoggingSystem.Settings.List";
-    static LoggingSystem_TenantLogSetting_Update = "Administrator.LoggingSystem.Settings.Update";
+    // LoggingSystem > AppLogs > TenantAppLogSetting
+    static LoggingSystem_AppLogs_TenantAppLogSetting_List = "Administrator.LoggingSystem.AppLogs.Settings.List";
+    static LoggingSystem_AppLogs_TenantAppLogSetting_Update = "Administrator.LoggingSystem.AppLogs.Settings.Update";
 
     // Maintenance > Cache
     static Maintenance_Cache_List = "Administrator.Maintenance.Cache.List";

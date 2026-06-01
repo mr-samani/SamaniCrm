@@ -31,6 +31,7 @@ export interface ICreateExternalProviderCommand {
   responseType?: string;
   responseMode?: string;
   usePkce?: boolean;
+  isActive?: boolean;
 }
 
 /** Class for CreateExternalProviderCommand */
@@ -52,6 +53,7 @@ export class CreateExternalProviderCommand implements ICreateExternalProviderCom
   responseType?: string;
   responseMode?: string;
   usePkce?: boolean;
+  isActive?: boolean;
 
   constructor(data?: ICreateExternalProviderCommand) {
     if (data) {
@@ -81,6 +83,7 @@ init(data?: any) {
     this.responseType = data["responseType"];
     this.responseMode = data["responseMode"];
     this.usePkce = data["usePkce"];
+    this.isActive = data["isActive"];
   }
 }
 

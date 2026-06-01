@@ -9,8 +9,8 @@ namespace SamaniCrm.Application.Common.Interfaces;
 public interface IApplicationDbContext
 {
 
-    public DbSet<TenantLogSetting> TenantLogSettings { get; set; }
-    public DbSet<LogEntry> LogEntries { get; set; }
+    public DbSet<TenantAppLogSetting> TenantLogSettings { get; set; }
+    public DbSet<AppLogEntry> LogEntries { get; set; }
     public DbSet<AuditLog> AuditLogs { get; set; }
 
 

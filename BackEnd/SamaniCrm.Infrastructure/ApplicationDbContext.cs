@@ -24,6 +24,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     private readonly ICurrentTenant? _currentTenant;
 
     private Guid? _tenantId;
+    public bool IsSeeding { get; set; } = false; // Property to indicate seeding process
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
         ICurrentUserService? currentUserService,
@@ -42,8 +43,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     }
 
 
-    public DbSet<TenantLogSetting> TenantLogSettings { get; set; }
-    public DbSet<LogEntry> LogEntries { get; set; }
+    public DbSet<TenantAppLogSetting> TenantLogSettings { get; set; }
+    public DbSet<AppLogEntry> LogEntries { get; set; }
     public DbSet<AuditLog> AuditLogs { get; set; }
 
     public DbSet<Tenant> Tenants { get; set; }
@@ -200,6 +201,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 
     private void ApplyAuditInformation()
     {
+        if (IsSeeding)
+        {
+            return;
+        }
         var currentUserId = _currentUser?.UserId;
 
         // فقط یک پیمایش روی هم entity ها
@@ -259,9 +264,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     }
 
 
-    private async Task CreateAuditLogs(
-       CancellationToken cancellationToken = default)
+    private async Task CreateAuditLogs(CancellationToken cancellationToken = default)
     {
+        if (IsSeeding)
+        {
+            return;
+        }
         ChangeTracker.DetectChanges();
 
         var auditLogs = new List<AuditLog>();
@@ -270,7 +278,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             .Entries()
             .Where(e =>
                 e.Entity is not AuditLog &&
-                e.Entity is not LogEntry &&
+                e.Entity is not AppLogEntry &&
                 e.State != EntityState.Detached &&
                 e.State != EntityState.Unchanged)
             .ToList();

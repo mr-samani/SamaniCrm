@@ -30,7 +30,7 @@ public class Menu : BaseEntity,IMayHaveTenant
 
     public virtual ICollection<Menu> Children { get; set; } = new List<Menu>();
 
-    public virtual ICollection<MenuTranslation>? Translations { get; set; }
+    public virtual ICollection<MenuTranslation> Translations { get; set; } = [];
 
 
 

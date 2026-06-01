@@ -6,7 +6,7 @@
     </button>
   </div>
 
-  @if (AppPermissions.LoggingSystem_ManualCleanUpLog | permission) {
+  @if (AppPermissions.LoggingSystem_AppLogs_ManualCleanUpLog | permission) {
     <button mat-stroked-button color="primary" (click)="manulaCleanup()">
       <i class="fa fa-trash mx-1"></i>
       <span>{{ 'ManualCleanupLogs' | translate }}</span>
@@ -63,7 +63,7 @@
     </button>
   }
   <mat-menu #menu="matMenu">
-    @if (AppPermissions.LoggingSystem_Details | permission) {
+    @if (AppPermissions.LoggingSystem_AppLogs_Details | permission) {
       <a mat-menu-item (click)="openLogDetails(item)">
         <i class="fa fa-eye mx-1"></i>
         <span>{{ 'Details' | translate }}</span>

@@ -325,7 +325,7 @@ public class SubscriptionService : ISubscriptionService
         foreach (var item in input)
         {
             Guid featureId;
-            PlanFeature planFeature;
+            PlanFeature? planFeature;
 
             if (item.Id.HasValue)
             {

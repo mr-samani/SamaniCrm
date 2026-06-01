@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { inject, isDevMode } from '@angular/core';
 import { AppConst } from './app-const';
 import { LanguageService } from './services/language.service';
-import { InitialAppDTOApiResponse } from './service-proxies/model/initial-app-dto-api-response';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ColorSchemaService } from './services/color-schema.service';
+import { ApiResponseOfInitialAppDTO } from './service-proxies/model/api-response-of-initial-app-dto';
 
 export function AppInitializer(): Promise<boolean> {
   const platformLocation = inject(PlatformLocation);
@@ -34,7 +34,7 @@ export function AppInitializer(): Promise<boolean> {
         AppConst.publicSiteUrl = config.publicSiteUrl;
         AppConst.fileServerUrl = config.fileServerUrl;
         // api initialize
-        httpClient.get<InitialAppDTOApiResponse>(AppConst.apiUrl + '/api/Common/InitialApp').subscribe({
+        httpClient.get<ApiResponseOfInitialAppDTO>(AppConst.apiUrl + '/api/Common/InitialApp').subscribe({
           next: (resp) => {
             if (resp.success && resp.data) {
               AppConst.languageList = resp.data.languages ?? [];

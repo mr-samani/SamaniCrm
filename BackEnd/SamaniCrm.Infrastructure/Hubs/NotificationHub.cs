@@ -11,11 +11,11 @@ namespace SamaniCrm.Infrastructure.Hubs;
 public class NotificationHub : Hub<INotificationHubService>
 {
     private readonly IConnectionManager _connectionManager;
-    private readonly ILogService _logger;
+    private readonly IAppLogService _logger;
 
     public NotificationHub(
         IConnectionManager connectionManager,
-        ILogService logger)
+        IAppLogService logger)
     {
         _connectionManager = connectionManager;
         _logger = logger;

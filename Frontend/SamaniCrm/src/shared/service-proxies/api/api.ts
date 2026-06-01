@@ -1,7 +1,7 @@
 export * from './account.service';
 import { AccountServiceProxy } from './account.service';
-export * from './admin-log.service';
-import { AdminLogServiceProxy } from './admin-log.service';
+export * from './app-logs.service';
+import { AppLogsServiceProxy } from './app-logs.service';
 export * from './captcha.service';
 import { CaptchaServiceProxy } from './captcha.service';
 export * from './common.service';
@@ -40,4 +40,4 @@ export * from './tenants.service';
 import { TenantsServiceProxy } from './tenants.service';
 export * from './user.service';
 import { UserServiceProxy } from './user.service';
-export const APIS = [AccountServiceProxy, AdminLogServiceProxy, CaptchaServiceProxy, CommonServiceProxy, DasboardServiceProxy, ExternalAuthServiceProxy, ExternalProvidersServiceProxy, FileManagerServiceProxy, LanguageServiceProxy, MaintenanceServiceProxy, MenuServiceProxy, NotificationServiceProxy, PageBuilderServiceProxy, PagesServiceProxy, ProductServiceProxy, PublicServiceProxy, RoleServiceProxy, SecuritySettingsServiceProxy, SubscriptionServiceProxy, TenantsServiceProxy, UserServiceProxy];
+export const APIS = [AccountServiceProxy, AppLogsServiceProxy, CaptchaServiceProxy, CommonServiceProxy, DasboardServiceProxy, ExternalAuthServiceProxy, ExternalProvidersServiceProxy, FileManagerServiceProxy, LanguageServiceProxy, MaintenanceServiceProxy, MenuServiceProxy, NotificationServiceProxy, PageBuilderServiceProxy, PagesServiceProxy, ProductServiceProxy, PublicServiceProxy, RoleServiceProxy, SecuritySettingsServiceProxy, SubscriptionServiceProxy, TenantsServiceProxy, UserServiceProxy];
