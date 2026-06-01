@@ -3,8 +3,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Exceptions;
+using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Logging.Interfaces;
+using SamaniCrm.Application.Features.Tenants.Interfaces;
+using SamaniCrm.Core.Shared.Enums;
+using SamaniCrm.Core.Shared.Interfaces;
+using SamaniCrm.Core.Shared.Logging.Dtos;
+using SamaniCrm.Domain.Entities;
 using SamaniCrm.Host.Models;
+using SamaniCrm.Infrastructure.Loging.SecurityLogs;
 using System.Net;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -24,10 +31,13 @@ public class ExceptionHandlingMiddleware
     {
         _next = next;
         _env = env;
-
     }
 
-    public async Task Invoke(HttpContext context)
+    public async Task Invoke(
+        HttpContext context,
+        ISecurityLogFactory securityLogFactory,
+        ISecurityLogQueue securityLogQueue
+        )
     {
         try
         {
@@ -43,8 +53,17 @@ public class ExceptionHandlingMiddleware
         }
         catch (BaseAppException appEx)
         {
+            if (appEx is UnAuthenticateException or
+                SamaniCrm.Application.Common.Exceptions.UnauthorizedAccessException or
+                AccessDeniedException or
+                InvalidLoginException)
+            {
+                SecurityLogDto data = securityLogFactory.Create(SecurityEventType.AccessDenied, LogLevel.Warning, false, appEx.StatusCode, appEx.Message);
+                await securityLogQueue.EnqueueAsync(data);
+            }
             await HandleKnownExceptionAsync(context, appEx.StatusCode, appEx.Message);
         }
+
         catch (Exception ex)
         {
             await HandleUnknownExceptionAsync(context, ex);
@@ -104,6 +123,10 @@ public class ExceptionHandlingMiddleware
 
         await WriteResponseAsync(context, HttpStatusCode.InternalServerError, ApiResponse<object>.Fail(new List<ApiError> { error }));
     }
+
+
+
+
 
     private async Task WriteResponseAsync<T>(HttpContext context, HttpStatusCode statusCode, ApiResponse<T> response)
     {

@@ -1,4 +1,5 @@
 ﻿using Duende.IdentityModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -22,16 +23,19 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 {
     private readonly ICurrentUserService? _currentUser;
     private readonly ICurrentTenant? _currentTenant;
+    private readonly IHttpContextAccessor? _httpContextAccessor;
 
     private Guid? _tenantId;
     public bool IsSeeding { get; set; } = false; // Property to indicate seeding process
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
         ICurrentUserService? currentUserService,
-        ICurrentTenant? currentTenant) : base(options)
+        ICurrentTenant? currentTenant,
+        IHttpContextAccessor? httpContextAccessor) : base(options)
     {
         _currentUser = currentUserService;
         _currentTenant = currentTenant;
+        _httpContextAccessor = httpContextAccessor;
     }
 
 
@@ -46,6 +50,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<TenantAppLogSetting> TenantLogSettings { get; set; }
     public DbSet<AppLogEntry> LogEntries { get; set; }
     public DbSet<AuditLog> AuditLogs { get; set; }
+    public DbSet<SecurityLogEntry> SecurityLogEntries { get; set; }
+
+
 
     public DbSet<Tenant> Tenants { get; set; }
     public DbSet<TenantSetting> TenantSettings { get; set; }
@@ -291,9 +298,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
             {
                 continue;
             }
-
+            var correlationId = _httpContextAccessor?.HttpContext?.TraceIdentifier ?? "Unknown";
             var auditLog = new AuditLog
             {
+                CorrelationId = correlationId,
                 UserId = _currentUser?.UserId,
                 DelegatorId = _currentUser?.DelegatorId,
                 IsDelegated = _currentUser?.IsDelegated ?? false,

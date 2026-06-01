@@ -24,7 +24,6 @@ using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.ExternalLogin;
 using SamaniCrm.Infrastructure.Identity;
-using SamaniCrm.Infrastructure.Notifications;
 using StackExchange.Redis;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
@@ -248,6 +247,7 @@ public class IdentityService : IIdentityService
             .Select(u => new UserDTO
             {
                 Id = u.Id,
+                TenantId = u.TenantId,
                 UserName = u.UserName ?? "",
                 FirstName = u.FirstName ?? "",
                 LastName = u.LastName,
@@ -347,6 +347,7 @@ public class IdentityService : IIdentityService
         return (new UserDTO()
         {
             Id = user.Id,
+            TenantId = user.TenantId,
             UserName = user.UserName ?? "",
             FirstName = user.FirstName ?? "",
             LastName = user.LastName ?? "",
@@ -377,6 +378,7 @@ public class IdentityService : IIdentityService
         return (new UserDTO()
         {
             Id = user.Id,
+            TenantId = user.TenantId,
             UserName = user.UserName ?? "",
             FirstName = user.FirstName ?? "",
             LastName = user.LastName ?? "",
@@ -667,7 +669,6 @@ public class IdentityService : IIdentityService
 
         if (!result)
         {
-            BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification(request.UserName, request.Tenant));
             throw new InvalidLoginException();
         }
         UserDTO userData = await GetUserDetailsByUserNameAsync(request.UserName, tenantId);
@@ -687,7 +688,6 @@ public class IdentityService : IIdentityService
         else
         {
             var permissions = await _userPermissionService.GetUserPermissionsAsync(userData.Id, cancellation);
-            BackgroundJob.Enqueue(() => LoginNotification.SendLoginNotification(request.UserName, request.Tenant));
             LoginResult output = new LoginResult()
             {
                 User = userData,
@@ -820,7 +820,6 @@ public class IdentityService : IIdentityService
 
         if (!result)
         {
-            BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification(request.UserName, request.TenancyName));
             throw new InvalidLoginException();
         }
         UserDTO userData = await GetUserDetailsByUserNameAsync(request.UserName, tenantId);
@@ -840,7 +839,6 @@ public class IdentityService : IIdentityService
 
             var permissions = await _userPermissionService.GetUserPermissionsAsync(userData.Id, cancellation);
 
-            BackgroundJob.Enqueue(() => LoginNotification.SendLoginNotification(request.UserName, request.TenancyName));
             LoginResult output = new LoginResult()
             {
                 User = userData,
@@ -923,12 +921,12 @@ public class IdentityService : IIdentityService
         var roles = await _userManager.GetRolesAsync(user);
 
         var permissions = await _userPermissionService.GetUserPermissionsAsync(user.Id, cancellation);
-        BackgroundJob.Enqueue(() => LoginNotification.SendLoginNotification(user.UserName!, request.tenancyName));
         LoginResult output = new LoginResult()
         {
             User = new UserDTO
             {
                 Id = user.Id,
+                TenantId = user.TenantId,
                 UserName = user.UserName ?? "",
                 FirstName = user.FirstName ?? "",
                 LastName = user.LastName ?? "",
@@ -1003,7 +1001,6 @@ public class IdentityService : IIdentityService
             var createResult = await _userManager.CreateAsync(user);
             if (!createResult.Succeeded)
             {
-                BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification("provider: " + providerName, tenantId.ToString()));
                 throw new ValidationException(createResult.Errors.Select(e => e.Description).FirstOrDefault());
             }
         }

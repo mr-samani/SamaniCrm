@@ -34,6 +34,7 @@ namespace SamaniCrm.Application.Queries.User
             {
                 Id = result.Id,
                 UserName = result.UserName,
+                TenantId = result.TenantId,
                 FirstName = result.FirstName,
                 LastName = result.LastName,
                 ProfilePicture = result.ProfilePicture,

@@ -295,7 +295,7 @@ public class SubscriptionService : ISubscriptionService
             return false;
 
         // 1. استخراج IDهای ویژگی‌ها برای بارگذاری بهینه
-        var featureIds = input.Select(i => i.Id).Where(id => id.HasValue).Select(id => id.Value).ToList();
+        var featureIds = input.Select(i => i.Id).Where(id => id.HasValue).Select(id => id!.Value).ToList();
 
         // 2. بارگذاری تمام ویژگی‌های موجود در یک کوئری
         var existingFeatures = await _dbContext.PlanFeatures

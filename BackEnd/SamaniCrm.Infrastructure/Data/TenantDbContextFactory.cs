@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
@@ -24,6 +25,7 @@ public class TenantDbContextFactory : ITenantDbContextFactory
     private readonly ILogger<TenantDbContextFactory> _logger;
     private readonly ConcurrentDictionary<Guid, string> _connectionStringCache;
     private readonly ICurrentTenant _currentTenant;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public TenantDbContextFactory(
         ITenantDatabaseService databaseService,
@@ -31,7 +33,8 @@ public class TenantDbContextFactory : ITenantDbContextFactory
         ILogger<TenantDbContextFactory> logger,
         IApplicationDbContext dbContext,
         ICurrentUserService currentUser,
-        ICurrentTenant currentTenant)
+        ICurrentTenant currentTenant,
+        IHttpContextAccessor httpContextAccessor)
     {
         _databaseService = databaseService;
         _tenantResolver = tenantResolver;
@@ -40,6 +43,7 @@ public class TenantDbContextFactory : ITenantDbContextFactory
         _dbContext = dbContext;
         _currentUser = currentUser;
         _currentTenant = currentTenant;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public ApplicationDbContext CreateDbContext(Guid tenantId)
@@ -67,7 +71,7 @@ public class TenantDbContextFactory : ITenantDbContextFactory
             // , new TenantCommandInterceptor()
             );
 
-        return new ApplicationDbContext(optionsBuilder.Options, _currentUser, _currentTenant);
+        return new ApplicationDbContext(optionsBuilder.Options, _currentUser, _currentTenant, _httpContextAccessor);
     }
 
     public async Task<ApplicationDbContext> CreateDbContextAsync(Guid tenantId, CancellationToken cancellation)

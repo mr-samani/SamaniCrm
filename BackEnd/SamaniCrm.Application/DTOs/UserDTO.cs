@@ -10,6 +10,9 @@ namespace SamaniCrm.Application.DTOs
     public class UserDTO
     {
         public required Guid Id { get; set; }
+        public Guid? TenantId { get; set; }
+
+
         [Sortable]
         public required string UserName { get; set; }
         [Sortable]
@@ -36,7 +39,6 @@ namespace SamaniCrm.Application.DTOs
 
         public bool IsDelegated { get; set; } = false;
         public  Guid? DelegatorId { get; set; }
-
     }
 }
 public class TenantUserDTO

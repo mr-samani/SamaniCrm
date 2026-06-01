@@ -1,6 +1,7 @@
 ﻿using Hangfire;
 using MediatR;
 using SamaniCrm.Application.Auth.Commands;
+using SamaniCrm.Application.Auth.Events;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
@@ -35,14 +36,17 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult>
     private readonly IIdentityService _identityService;
     private readonly ISecuritySettingService _securitySettingService;
     private readonly ICaptchaStore _captcha;
+    private readonly IMediator _mediator;
     public LoginCommandHandler(
             IIdentityService identityService,
             ICaptchaStore captcha,
-            ISecuritySettingService securitySettingService)
+            ISecuritySettingService securitySettingService,
+            IMediator mediator)
     {
         _identityService = identityService;
         _captcha = captcha;
         _securitySettingService = securitySettingService;
+        _mediator = mediator;
     }
 
 
@@ -62,6 +66,10 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult>
             }
         }
         var output = await _identityService.LoginInAsync(request, cancellationToken);
+        await _mediator.Publish(
+            new UserLogedInEvent(output.User.Id, output.User.UserName, output.User.TenantId,
+            $"User: {output.User.FullName} loged in successfully."),
+            cancellationToken);
         return output;
 
 

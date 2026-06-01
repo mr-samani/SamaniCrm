@@ -28,6 +28,7 @@ namespace SamaniCrm.Application.Queries.User
             return new UserDTO()
             {
                 Id = result.Id,
+                TenantId = result.TenantId,
                 UserName = result.UserName,
                 FirstName = result.FirstName,
                 LastName = result.LastName,

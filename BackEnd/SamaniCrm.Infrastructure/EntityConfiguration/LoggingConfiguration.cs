@@ -25,13 +25,6 @@ public class TenantAppLogSettingConfiguration : IEntityTypeConfiguration<TenantA
     }
 }
 
-public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
-{
-    public void Configure(EntityTypeBuilder<AuditLog> builder)
-    {
-        builder.ToTable("AuditLogs", "logs");
-    }
-}
 
 
 public class AppLogEntryConfiguration : IEntityTypeConfiguration<AppLogEntry>
@@ -82,3 +75,23 @@ public class AppLogEntryConfiguration : IEntityTypeConfiguration<AppLogEntry>
 
     }
 }
+
+
+public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
+{
+    public void Configure(EntityTypeBuilder<AuditLog> builder)
+    {
+        builder.ToTable("AuditLogs", "logs");
+    }
+}
+
+
+public class SecurityLogEntryConfiguration : IEntityTypeConfiguration<SecurityLogEntry>
+{
+    public void Configure(EntityTypeBuilder<SecurityLogEntry> builder)
+    {
+        builder.ToTable("SecurityLogEntries", "logs");
+    }
+}
+
+

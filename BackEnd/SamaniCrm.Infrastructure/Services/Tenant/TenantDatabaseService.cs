@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Interfaces;
@@ -14,13 +15,15 @@ public class TenantDatabaseService : ITenantDatabaseService
     private readonly string _encryptionKey;
     private readonly ICurrentUserService _currentUser;
     private readonly ICurrentTenant _currentTenant;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
 
     public TenantDatabaseService(
         ILogger<TenantDatabaseService> logger,
         IEncryptionService encryption,
         ICurrentUserService currentUser,
-        ICurrentTenant currentTenant)
+        ICurrentTenant currentTenant,
+        IHttpContextAccessor httpContextAccessor)
     {
         _logger = logger;
         _encryption = encryption;
@@ -28,6 +31,7 @@ public class TenantDatabaseService : ITenantDatabaseService
             ?? throw new InvalidOperationException("Encryption key not configured");
         _currentUser = currentUser;
         _currentTenant = currentTenant;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task CreateDatabaseAsync(string server, string databaseName,
@@ -95,7 +99,7 @@ public class TenantDatabaseService : ITenantDatabaseService
     {
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
         optionsBuilder.UseSqlServer(connectionString);
-        using var context = new ApplicationDbContext(optionsBuilder.Options, _currentUser, _currentTenant);
+        using var context = new ApplicationDbContext(optionsBuilder.Options, _currentUser, _currentTenant, _httpContextAccessor);
         await context.Database.MigrateAsync(cancellation);
     }
 

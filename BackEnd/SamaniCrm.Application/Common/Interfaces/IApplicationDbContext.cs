@@ -12,6 +12,7 @@ public interface IApplicationDbContext
     public DbSet<TenantAppLogSetting> TenantLogSettings { get; set; }
     public DbSet<AppLogEntry> LogEntries { get; set; }
     public DbSet<AuditLog> AuditLogs { get; set; }
+    public DbSet<SecurityLogEntry> SecurityLogEntries { get; set; }
 
 
     public DbSet<Tenant> Tenants { get; set; }

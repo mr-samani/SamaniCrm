@@ -6,13 +6,16 @@ using Scalar.AspNetCore;
 using SamaniCrm.Infrastructure.Loging.AppLogs;
 using SamaniCrm.Infrastructure.Loging.AppLogs.Sinks;
 using SamaniCrm.Infrastructure.Loging.AppLogs.Filters;
+using SamaniCrm.Infrastructure.Loging.SecurityLogs;
+using SamaniCrm.Infrastructure.Jobs;
+using SamaniCrm.Core.Shared.Interfaces;
 
 
 
 namespace SamaniCrm.Api.Extensions;
 
 public static partial class ServiceCollectionExtensions
-{    
+{
 
 
     public static IServiceCollection AddLogging(this IServiceCollection services, IConfiguration config)
@@ -48,6 +51,16 @@ public static partial class ServiceCollectionExtensions
 
         // Decorator برای Service ها
         services.AddAppLoggedServices();
+
+
+
+
+
+        // security log
+        services.AddSingleton<SecurityLogQueue>();
+        services.AddScoped<ISecurityLogFactory, SecurityLogFactory>();
+        services.AddSingleton<ISecurityLogQueue>(sp => sp.GetRequiredService<SecurityLogQueue>());
+        services.AddHostedService<SecurityLogBackgroundService>();
 
         return services;
     }

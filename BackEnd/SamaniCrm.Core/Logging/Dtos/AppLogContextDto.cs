@@ -18,3 +18,4 @@ public class AppLogContextDto
     public string? RequestPath { get; set; }
     public Dictionary<string, object>? ExtraData { get; set; }
 }
+
