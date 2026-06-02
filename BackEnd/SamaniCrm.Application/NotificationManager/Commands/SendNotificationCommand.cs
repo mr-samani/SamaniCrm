@@ -1,16 +1,10 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.SignalR;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.NotificationManager.Interfaces;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.NotificationManager.Commands
 {

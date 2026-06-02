@@ -1,19 +1,8 @@
-﻿using Hangfire;
-using MediatR;
-using SamaniCrm.Application.Auth.Commands;
+﻿using MediatR;
 using SamaniCrm.Application.Auth.Events;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
-using SamaniCrm.Application.DTOs;
-using SamaniCrm.Application.Queries.User;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.Auth.Commands;
 

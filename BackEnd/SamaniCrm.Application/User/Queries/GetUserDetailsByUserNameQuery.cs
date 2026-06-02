@@ -13,7 +13,7 @@ namespace SamaniCrm.Application.Queries.User
 {
     public class GetUserDetailsByUserNameQuery : IRequest<UserDTO>
     {
-        public string UserName { get; set; }
+        public required string UserName { get; set; }
     }
 
     public class GetUserDetailsByUserNameQueryHandler : IRequestHandler<GetUserDetailsByUserNameQuery, UserDTO>
