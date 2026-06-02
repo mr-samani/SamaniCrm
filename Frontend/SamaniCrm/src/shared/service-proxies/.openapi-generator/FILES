@@ -51,6 +51,7 @@ model/api-response-of-list-of-export-all-localization-value-dto.ts
 model/api-response-of-list-of-external-provider-dto.ts
 model/api-response-of-list-of-file-node-dto.ts
 model/api-response-of-list-of-language-dto.ts
+model/api-response-of-list-of-last-login-dto.ts
 model/api-response-of-list-of-localization-key-dto.ts
 model/api-response-of-list-of-menu-dto.ts
 model/api-response-of-list-of-plan-dto.ts
@@ -174,6 +175,7 @@ model/get-user-query.ts
 model/initial-app-dto.ts
 model/input-captcha-dto.ts
 model/language-dto.ts
+model/last-login-dto.ts
 model/localization-category-enum.ts
 model/localization-key-dto.ts
 model/log-level-mask.ts

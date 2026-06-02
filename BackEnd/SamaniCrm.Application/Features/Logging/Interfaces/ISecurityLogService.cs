@@ -8,4 +8,5 @@ namespace SamaniCrm.Application.Features.Logging.Interfaces;
 public interface ISecurityLogService
 {
     Task<PaginatedResult<SecurityLogDto>> GetSecurityLogs(GetSecurityLogsQuery filter, CancellationToken cancellation);
+    Task<List<LastLoginDto>> GetLastLoginInfo(GetLastLoginInfoQuery request, CancellationToken cancellation);
 }

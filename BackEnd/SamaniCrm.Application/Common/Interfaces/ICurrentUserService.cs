@@ -17,5 +17,8 @@ namespace SamaniCrm.Application.Common.Interfaces
         Guid? DelegatorId { get; }
         bool IsAuthenticated { get; }
         bool IsHost { get; }
+
+        bool IsTenantAdmin {  get; }
+
     }
 }

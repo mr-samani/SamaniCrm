@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq.Dynamic.Core;
 using SamaniCrm.Application.Features.Logging.Interfaces;
+using SamaniCrm.Core.Shared.Enums;
+using SamaniCrm.Core.Shared.Interfaces;
 
 namespace SamaniCrm.Infrastructure.Loging.SecurityLogs;
 
@@ -15,12 +17,45 @@ public class SecurityLogService : ISecurityLogService
 {
     private readonly IApplicationDbContext _dbContext;
     private readonly ICurrentUserService _currentUser;
+    private ILocalizer L;
+
+    private static readonly SecurityEventType[] LastLoginEvents =
+{
+    SecurityEventType.LoginSuccess,
+    SecurityEventType.LoginFailed,
+    SecurityEventType.Logout,
+    SecurityEventType.AccountLocked
+};
 
     public SecurityLogService(IApplicationDbContext dbContext,
-        ICurrentUserService currentUser)
+        ICurrentUserService currentUser,
+        ILocalizer l)
     {
         _dbContext = dbContext;
         _currentUser = currentUser;
+        L = l;
+    }
+
+    public async Task<List<LastLoginDto>> GetLastLoginInfo(GetLastLoginInfoQuery request, CancellationToken cancellation)
+    {
+        var items = await _dbContext.SecurityLogEntries
+         .AsNoTracking()
+         .Where(x => x.UserId == _currentUser.UserId &&
+                  LastLoginEvents.Contains(x.EventType)
+         )
+         .OrderByDescending(x => x.CreatedAt)
+         .Select(s => new LastLoginDto()
+         {
+             EventType = s.EventType,
+             UserAgent = s.UserAgent,
+             IpAddress = s.IpAddress,
+             CreatedAt = s.CreatedAt
+         })
+         .Take(request.Take)
+         .ToListAsync(cancellation);
+
+
+        return items;
     }
 
     public async Task<PaginatedResult<SecurityLogDto>> GetSecurityLogs(GetSecurityLogsQuery filter, CancellationToken cancellation)

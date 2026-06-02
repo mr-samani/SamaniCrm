@@ -38,5 +38,14 @@ namespace SamaniCrm.Api.Controllers
             return ApiOk(result);
         }
 
+
+        [HttpGet("GetLastLoginList")]
+        [Permission(AppPermissions.LoggingSystem.SecurityLogs.LastLoginInfo)]
+        [ProducesResponseType(typeof(ApiResponse<List<LastLoginDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetLastLoginList()
+        {
+            var result = await _mediator.Send(new GetLastLoginInfoQuery());
+            return ApiOk(result);
+        }
     }
 }

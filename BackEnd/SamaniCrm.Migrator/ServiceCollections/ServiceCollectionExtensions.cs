@@ -60,6 +60,7 @@ public static class ServiceCollectionExtensions
         public Guid? DelegatorId => null;
         public bool IsAuthenticated => false;
         public bool IsHost => TenantId == null;
+        public bool IsTenantAdmin => TenantId != null;
 
 
     }

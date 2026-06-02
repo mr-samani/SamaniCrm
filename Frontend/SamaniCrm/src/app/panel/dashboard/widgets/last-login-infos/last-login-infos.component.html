@@ -1,0 +1,16 @@
+@if (loading) {
+  <div class="d-flex align-items-center align-items-center">
+    <mat-spinner color="primary" diameter="25"></mat-spinner>
+  </div>
+}
+
+<table>
+  @for (item of list; track $index) {
+    <tr>
+      <td>{{ 'SecurityEventType_' + item.eventType }}</td>
+      <td>{{ item.userAgent | userAgent }}</td>
+      <td>{{ item.ipAddress }}</td>
+      <td>{{ item.createdAt | luxonFormat: 'u' }}</td>
+    </tr>
+  }
+</table>

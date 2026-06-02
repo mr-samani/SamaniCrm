@@ -1,7 +1,7 @@
 /**
  * Auto-generated file - Do not edit manually
  * Generated from: AppPermissions.cs
- * Generated at: 2026-06-02T05:41:15.612Z
+ * Generated at: 2026-06-02T11:47:06.941Z
  */
 
 export class AppPermissions {
@@ -43,6 +43,7 @@ export class AppPermissions {
 
     // LoggingSystem > SecurityLogs
     static LoggingSystem_SecurityLogs_List = "Administrator.LoggingSystem.SecurityLogs.List";
+    static LoggingSystem_SecurityLogs_LastLoginInfo = "Administrator.LoggingSystem.SecurityLogs.LastLoginInfo";
 
     // Maintenance > Cache
     static Maintenance_Cache_List = "Administrator.Maintenance.Cache.List";

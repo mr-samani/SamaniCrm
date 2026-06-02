@@ -16,4 +16,10 @@ export const WIDGET_DEFINITIONS: IWidgetDefinition[] = [
     component: () => import('./log-stats/log-stats.component').then((c) => c.LogStatsComponent),
     permission: AppPermissions.LoggingSystem_AppLogs_GetStats,
   },
+  {
+    title: 'LastLoginInfos',
+    name: 'LastLoginInfosWidget',
+    component: () => import('./last-login-infos/last-login-infos.component').then((c) => c.LastLoginInfosComponent),
+    permission: AppPermissions.LoggingSystem_SecurityLogs_LastLoginInfo,
+  },
 ];

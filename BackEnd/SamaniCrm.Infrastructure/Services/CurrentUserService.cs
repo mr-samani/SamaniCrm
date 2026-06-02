@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.JsonWebTokens;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Core.Shared.Consts;
 
 namespace SamaniCrm.Infrastructure.Services;
 
@@ -97,5 +98,23 @@ public class CurrentUserService : ICurrentUserService
             .Identity?
             .IsAuthenticated
         ?? false;
-   public bool IsHost => TenantId == null;
+    public bool IsHost => TenantId == null;
+
+    public bool IsTenantAdmin
+    {
+        get
+        {
+            string? roles =
+                _httpContextAccessor.HttpContext?
+                    .User
+                    .FindFirstValue("roles");
+
+            if (string.IsNullOrEmpty(roles))
+            {
+                return false;
+            }
+
+            return roles.Contains(AppRoles.TenantAdministrator);
+        }
+    }
 }
