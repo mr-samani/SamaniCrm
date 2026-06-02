@@ -1,66 +1,69 @@
 <sub-header [title]="'Notifications' | translate">
   @if (AppPermissions.Notification_SendMessageToUser | permission) {
-    <button  class="btn btn-primary"  (click)="sendMessageToUser()">
+    <button class="btn btn-default" (click)="sendMessageToUser()">
       <i class="fa fa-bell mx-1"></i>
       <span>{{ 'SendMessage' | translate }}</span>
     </button>
   }
   @if (AppPermissions.Notification_BroadCastMessageToAll | permission) {
-    <button  class="btn btn-primary"  (click)="broadCastMessage()">
+    <button class="btn btn-default" (click)="broadCastMessage()">
       <i class="fa fa-broadcast mx-1"></i>
       <span>{{ 'BroadcastMessage' | translate }}</span>
     </button>
   }
 </sub-header>
+
 <div class="panel-content">
-  <div class="tools d-flex justify-content-between align-items-center flex-wrap gap-2">
-    <div class="d-flex gap-2">
-      <button  class="btn btn-primary"  (click)="showFilter = !showFilter">
-        <i class="fa fa-filter mx-1"></i>
+  <form [formGroup]="form">
+    <div class="input-group my-2">
+      <input
+        class="form-control"
+        type="text"
+        maxlength="500"
+        formControlName="filter"
+        [placeholder]="'SearchWithThreeDot' | translate" />
+      <button class="input-group-text btn btn-primary" (click)="reload()" type="submit">
+        <i class="fa fa-search mx-1"></i>
+      </button>
+      <button class="btn btn-primary" (click)="showFilter = !showFilter">
+        <i class="fa fa-filter-list mx-1"></i>
         <span>{{ 'Filter' | translate }}</span>
       </button>
     </div>
-    <div class="d-flex gap-2"></div>
-  </div>
+    <div *filterForm="showFilter" class="filter-form">
+      <div class="row">
+        <mat-form-field class="col-sm-6 col-md-4">
+          <mat-label>{{ 'Type' | translate }}</mat-label>
+          <mat-select formControlName="type" multiple>
+            @for (item of NotificationTypeEnum | enumToArray; track $index) {
+              <mat-option [value]="+item">
+                {{ 'NotificationTypeEnum_' + item | translate }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
-  <form [formGroup]="form" *filterForm="showFilter" class="filter-form">
-    <div class="row">
-      <mat-form-field class="col-sm-6 col-md-4">
-        <mat-label>{{ 'Filter' | translate }}</mat-label>
-        <input matInput type="text" maxlength="500" formControlName="filter" />
-      </mat-form-field>
-
-      <mat-form-field class="col-sm-6 col-md-4">
-        <mat-label>{{ 'Type' | translate }}</mat-label>
-        <mat-select formControlName="type" multiple>
-          @for (item of NotificationTypeEnum | enumToArray; track $index) {
-            <mat-option [value]="+item">
-              {{ 'NotificationTypeEnum_' + item | translate }}
-            </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field class="col-sm-6 col-md-4">
-        <mat-label>{{ 'Periority' | translate }}</mat-label>
-        <mat-select formControlName="periority" multiple>
-          @for (item of NotificationPeriorityEnum | enumToArray; track $index) {
-            <mat-option [value]="+item">
-              {{ 'NotificationPeriorityEnum_' + item | translate }}
-            </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="d-flex align-items-center justify-content-end gap-2">
-      <button class="btn btn-primary" (click)="resetFilter()" type="reset">
-        <i class="fa fa-times mx-1"></i>
-        <span>{{ 'Reset' | translate }}</span>
-      </button>
-      <button class="btn btn-primary" (click)="reload()" type="submit">
-        <i class="fa fa-refresh mx-1"></i>
-        <span>{{ 'Reload' | translate }}</span>
-      </button>
+        <mat-form-field class="col-sm-6 col-md-4">
+          <mat-label>{{ 'Periority' | translate }}</mat-label>
+          <mat-select formControlName="periority" multiple>
+            @for (item of NotificationPeriorityEnum | enumToArray; track $index) {
+              <mat-option [value]="+item">
+                {{ 'NotificationPeriorityEnum_' + item | translate }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="d-flex align-items-center justify-content-end gap-2">
+        <button class="btn btn-primary" (click)="resetFilter()" type="reset">
+          <i class="fa fa-times mx-1"></i>
+          <span>{{ 'Reset' | translate }}</span>
+        </button>
+        <button class="btn btn-primary" (click)="reload()" type="submit">
+          <i class="fa fa-refresh mx-1"></i>
+          <span>{{ 'Reload' | translate }}</span>
+        </button>
+      </div>
     </div>
   </form>
 

@@ -1,11 +1,4 @@
 <div class="tools d-flex justify-content-between align-items-center flex-wrap gap-2">
-  <div class="d-flex gap-2">
-    <button class="btn btn-primary" (click)="showFilter = !showFilter">
-      <i class="fa fa-filter mx-1"></i>
-      <span>{{ 'Filter' | translate }}</span>
-    </button>
-  </div>
-
   @if (AppPermissions.LoggingSystem_AppLogs_ManualCleanUpLog | permission) {
     <button mat-stroked-button color="primary" (click)="manulaCleanup()">
       <i class="fa fa-trash mx-1"></i>
@@ -15,33 +8,50 @@
   }
 </div>
 
-<form [formGroup]="form" *filterForm="showFilter" class="filter-form">
-  <div class="row">
-    <mat-form-field class="col-sm-6 col-md-4">
-      <mat-label>{{ 'Filter' | translate }}</mat-label>
-      <input matInput type="text" maxlength="500" formControlName="filter" />
-    </mat-form-field>
-    @if (isHost) {
-      <auto-complete-tenant class="col-sm-6 col-md-4" formControlName="tenant"></auto-complete-tenant>
-    }
-    <mat-form-field class="col-sm-6 col-md-4">
-      <mat-label>{{ 'LogLevel' | translate }}</mat-label>
-      <mat-select formControlName="filterLevels" multiple>
-        @for (item of LogLevel | enumToArray; track $index) {
-          <mat-option [value]="+item">{{ 'LogLevel_' + item | translate }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+<form [formGroup]="form">
+  <div class="input-group my-2">
+    <input
+      class="form-control"
+      type="text"
+      maxlength="500"
+      formControlName="filter"
+      [placeholder]="'SearchWithThreeDot' | translate" />
+    <button class="input-group-text btn btn-primary" (click)="reload()" type="submit">
+      <i class="fa fa-search mx-1"></i>
+    </button>
+    <button class="btn btn-primary" (click)="showFilter = !showFilter">
+      <i class="fa fa-filter-list mx-1"></i>
+      <span>{{ 'Filter' | translate }}</span>
+    </button>
   </div>
-  <div class="d-flex align-items-center justify-content-end gap-2">
-    <button class="btn btn-primary" (click)="resetFilter()" type="reset">
-      <i class="fa fa-times mx-1"></i>
-      <span>{{ 'Reset' | translate }}</span>
-    </button>
-    <button class="btn btn-primary" (click)="reload()" type="submit">
-      <i class="fa fa-refresh mx-1"></i>
-      <span>{{ 'Reload' | translate }}</span>
-    </button>
+  <div *filterForm="showFilter" class="filter-form">
+    <div class="row">
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>{{ 'Filter' | translate }}</mat-label>
+        <input matInput type="text" maxlength="500" formControlName="filter" />
+      </mat-form-field>
+      @if (isHost) {
+        <auto-complete-tenant class="col-sm-6 col-md-4" formControlName="tenant"></auto-complete-tenant>
+      }
+      <mat-form-field class="col-sm-6 col-md-4">
+        <mat-label>{{ 'LogLevel' | translate }}</mat-label>
+        <mat-select formControlName="filterLevels" multiple>
+          @for (item of LogLevel | enumToArray; track $index) {
+            <mat-option [value]="+item">{{ 'LogLevel_' + item | translate }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="d-flex align-items-center justify-content-end gap-2">
+      <button class="btn btn-primary" (click)="resetFilter()" type="reset">
+        <i class="fa fa-times mx-1"></i>
+        <span>{{ 'Reset' | translate }}</span>
+      </button>
+      <button class="btn btn-primary" (click)="reload()" type="submit">
+        <i class="fa fa-refresh mx-1"></i>
+        <span>{{ 'Reload' | translate }}</span>
+      </button>
+    </div>
   </div>
 </form>
 
