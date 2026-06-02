@@ -27,7 +27,7 @@ export class LanguageListComponent extends AppComponentBase implements OnInit {
   loading = true;
   list: LanguageDTOExtended[] = [];
   fields: FieldsType[] = [
-    { column: 'flag', title: this.l('Image'), width: 100, type: 'image' },
+    { column: 'flag', title: this.l('Image'), width: 50, type: 'image' },
     { column: 'cultur', title: this.l('Cultur'), width: 100 },
     { column: 'name', title: this.l('Name') },
     { column: 'direction', title: this.l('Direction'), width: 100 },

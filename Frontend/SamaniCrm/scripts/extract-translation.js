@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 /**
- * extract-translations.js
+ * extract-translation.js
  *
  * Usage:
- *   node extract-translations.js [sourceDir] [outputJson]
+ *   node extract-translation.js [sourceDir] [outputJson]
  *
  * رفتار جدید:
  *   - اگر فایل خروجی قبلاً وجود داشته باشه، محتوای اون (ترجمه‌های دستی) رو می‌خونه
