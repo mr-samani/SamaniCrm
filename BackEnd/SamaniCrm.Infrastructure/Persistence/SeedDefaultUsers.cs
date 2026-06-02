@@ -56,6 +56,8 @@ public static class SeedDefaultUsers
         }
 
         await dbContext.SaveChangesAsync();
+
+
     }
 }
 

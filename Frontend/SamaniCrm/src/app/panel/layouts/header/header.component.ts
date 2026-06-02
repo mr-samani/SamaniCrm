@@ -1,9 +1,11 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { AppConst } from '@shared/app-const';
+import { AccountServiceProxy } from '@shared/service-proxies/api/account.service';
 import { UserDTO } from '@shared/service-proxies/model/user-dto';
 import { ColorSchemaService } from '@shared/services/color-schema.service';
+import { finalize } from 'rxjs/operators';
 declare var bootstrap: any;
 
 @Component({
@@ -21,6 +23,8 @@ export class HeaderComponent extends AppComponentBase {
 
   tenancyName = AppConst.tenancyName;
   @ViewChild('navbarCollapse') navbarCollapse!: ElementRef;
+
+  accountService = inject(AccountServiceProxy);
   constructor(
     public colorSchemaService: ColorSchemaService,
     private fileManager: FileManagerService,
@@ -49,5 +53,19 @@ export class HeaderComponent extends AppComponentBase {
       toggle: false,
     });
     collapse.hide();
+  }
+
+  exitDelegation() {
+    this.showMainLoading();
+    this.showMainLoading();
+    this.accountService
+      .exitDelegation()
+      .pipe(finalize(() => this.hideMainLoading()))
+      .subscribe((result) => {
+        this.router.navigate(['/panel']);
+        setTimeout(() => {
+          location.reload();
+        }, 100);
+      });
   }
 }

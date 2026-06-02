@@ -1,11 +1,7 @@
 <div class="tab-group-container" #tabGroupContainer>
   <div class="tabs">
     @for (tab of tabs; track tab; let tabIndex = $index) {
-      <div
-        class="tab-item"
-        #tabEl
-        (click)="selectTab(tab, tabIndex)"
-        [class.active]="tab.active">
+      <div class="tab-item" #tabEl (click)="selectTab(tab, tabIndex)" [class.active]="tab.active">
         <span class="title">
           <span class="top-line"></span>
           <span class="tab-name">{{ tab.title }}</span>
@@ -17,5 +13,11 @@
     }
   </div>
 
-  <ng-content></ng-content>
+  <div class="pane-track" [style.transform]="'translateX(' + activeIndex * (!isRtl ? -1 : 1) * 100 + '%)'">
+    @for (tab of tabs; track tab) {
+      <div class="pane">
+        <ng-container *ngTemplateOutlet="tab.template"></ng-container>
+      </div>
+    }
+  </div>
 </div>

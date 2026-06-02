@@ -71,6 +71,7 @@ const routes: Routes = [
         loadChildren: () => import('./page-builder/page-builder.module').then((m) => m.PageBuilderModule),
       },
       { path: 'builder', loadChildren: () => import('../builder/builder.module').then((m) => m.BuilderModule) },
+      { path: 'subscription', loadChildren: () => import('../subscription/subscription.module').then((m) => m.SubscriptionModule) },
     ],
   },
 ];

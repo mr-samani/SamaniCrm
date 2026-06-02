@@ -19,6 +19,7 @@ public static partial class ServiceCollectionExtensions
                 policy.WithOrigins("http://localhost:5753", "https://localhost:5753", "https://localhost:5754")
                       .AllowAnyHeader()
                       .AllowAnyMethod()
+                      .AllowCredentials()
                       .WithExposedHeaders("Location", "Upload-Offset", "Tus-Resumable", "Upload-Length", "Fileid");
             });
         });

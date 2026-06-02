@@ -1,7 +1,7 @@
 /**
  * Auto-generated file - Do not edit manually
  * Generated from: AppPermissions.cs
- * Generated at: 2026-05-23T11:34:23.183Z
+ * Generated at: 2026-06-01T06:03:04.443Z
  */
 
 export class AppPermissions {
@@ -31,15 +31,15 @@ export class AppPermissions {
     static LanguageManagement_Edit = "LanguageManagement.Edit";
     static LanguageManagement_Delete = "LanguageManagement.Delete";
 
-    // LoggingSystem
-    static LoggingSystem_List = "Administrator.LoggingSystem.List";
-    static LoggingSystem_Details = "Administrator.LoggingSystem.Details";
-    static LoggingSystem_GetStats = "Administrator.LoggingSystem.GetStats";
-    static LoggingSystem_ManualCleanUpLog = "Administrator.LoggingSystem.ManualCleanUpLog";
+    // LoggingSystem > AppLogs
+    static LoggingSystem_AppLogs_List = "Administrator.LoggingSystem.AppLogs.List";
+    static LoggingSystem_AppLogs_Details = "Administrator.LoggingSystem.AppLogs.Details";
+    static LoggingSystem_AppLogs_GetStats = "Administrator.LoggingSystem.AppLogs.GetStats";
+    static LoggingSystem_AppLogs_ManualCleanUpLog = "Administrator.LoggingSystem.AppLogs.ManualCleanUpLog";
 
-    // LoggingSystem > TenantLogSetting
-    static LoggingSystem_TenantLogSetting_List = "Administrator.LoggingSystem.Settings.List";
-    static LoggingSystem_TenantLogSetting_Update = "Administrator.LoggingSystem.Settings.Update";
+    // LoggingSystem > AppLogs > TenantAppLogSetting
+    static LoggingSystem_AppLogs_TenantAppLogSetting_List = "Administrator.LoggingSystem.AppLogs.Settings.List";
+    static LoggingSystem_AppLogs_TenantAppLogSetting_Update = "Administrator.LoggingSystem.AppLogs.Settings.Update";
 
     // Maintenance > Cache
     static Maintenance_Cache_List = "Administrator.Maintenance.Cache.List";
@@ -130,15 +130,31 @@ export class AppPermissions {
     static SecuritySetting_ExternalProviders_Update = "Administrator.ExternalProviders.Update";
     static SecuritySetting_ExternalProviders_Delete = "Administrator.ExternalProviders.Delete";
 
+    // SubscriptionManagement
+    static SubscriptionManagement_Page = "SubscriptionManagement.Page";
+
+    // SubscriptionManagement > PlanFeatures
+    static SubscriptionManagement_PlanFeatures_List = "SubscriptionManagement.PlanFeatures.List";
+    static SubscriptionManagement_PlanFeatures_Create = "SubscriptionManagement.PlanFeatures.Create";
+    static SubscriptionManagement_PlanFeatures_Edit = "SubscriptionManagement.PlanFeatures.Edit";
+    static SubscriptionManagement_PlanFeatures_Delete = "SubscriptionManagement.PlanFeatures.Delete";
+
+    // SubscriptionManagement > Plans
+    static SubscriptionManagement_Plans_List = "SubscriptionManagement.Plans.List";
+    static SubscriptionManagement_Plans_Create = "SubscriptionManagement.Plans.Create";
+    static SubscriptionManagement_Plans_Edit = "SubscriptionManagement.Plans.Edit";
+    static SubscriptionManagement_Plans_Delete = "SubscriptionManagement.Plans.Delete";
+
     // TenantManagement
     static TenantManagement_List = "Administrator.TenantManagement.List";
+    static TenantManagement_TenantUsers = "Administrator.TenantManagement.TenantUsers";
     static TenantManagement_AutoComplete = "Administrator.TenantManagement.AutoComplete";
     static TenantManagement_Create = "Administrator.TenantManagement.Create";
     static TenantManagement_Edit = "Administrator.TenantManagement.Edit";
     static TenantManagement_Delete = "Administrator.TenantManagement.Delete";
     static TenantManagement_ActiveDeActive = "Administrator.TenantManagement.ActiveDeActive";
     static TenantManagement_Users = "Administrator.TenantManagement.Users";
-    static TenantManagement_Impersonate = "Administrator.TenantManagement.Impersonate";
+    static TenantManagement_DelegateUser = "Administrator.TenantManagement.DelegateUser";
     static TenantManagement_GetTenantSetting = "Administrator.TenantManagement.GetTenantSetting";
     static TenantManagement_UpdateTenantSetting = "Administrator.TenantManagement.UpdateTenantSetting";
     static TenantManagement_GetProvisioningData = "Administrator.TenantManagement.GetProvisioningData";

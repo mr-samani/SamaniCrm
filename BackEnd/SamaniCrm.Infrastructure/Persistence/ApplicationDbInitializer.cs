@@ -82,6 +82,7 @@ namespace SamaniCrm.Infrastructure.Persistence
         public async Task TrySeedAsync()
         {
             Console.WriteLine("Start Seeding DataBase...");
+            _context.IsSeeding = true;
 
             await SeedPermissions.TrySeedAsync(_context);
             await SeedRoles.TrySeedAsync(_context, _logger, _roleManager);
@@ -95,6 +96,8 @@ namespace SamaniCrm.Infrastructure.Persistence
             await SeedEnums.TrySeedAsync(_context);
             await SeedExternalProviders.TrySeedAsync(_context);
             await SeedPages.TrySeedAsync(_context);
+
+            _context.IsSeeding = false;
 
         }
     }

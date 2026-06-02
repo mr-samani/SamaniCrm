@@ -198,11 +198,17 @@
         <mat-hint>JSON settings for mapping or other things</mat-hint>
       </mat-form-field>
     </div>
+
+    <p>
+      <mat-checkbox formControlName="isActive">
+        {{ 'IsActive' | translate }}
+      </mat-checkbox>
+    </p>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button  class="btn btn-default" mat-dialog-close >{{ 'Cancel' | translate }}</button>
-  <button  class="btn btn-primary"  (click)="onSubmit()" cdkFocusInitial [disabled]="loading || saving">
+  <button class="btn btn-default" mat-dialog-close>{{ 'Cancel' | translate }}</button>
+  <button class="btn btn-primary" (click)="onSubmit()" cdkFocusInitial [disabled]="loading || saving">
     @if (saving) {
       <mat-spinner color="primary" diameter="25"></mat-spinner>
     }

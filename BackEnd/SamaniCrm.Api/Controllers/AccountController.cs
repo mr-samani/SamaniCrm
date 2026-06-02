@@ -9,6 +9,7 @@ using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Host.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SamaniCrm.Host.Controllers;
 
@@ -19,7 +20,7 @@ public class AccountController : ApiBaseController
     private readonly IMediator _mediator;
     private readonly ITwoFactorService _twoFactorService;
 
-    public AccountController( IMediator mediator, ITwoFactorService twoFactorService)
+    public AccountController(IMediator mediator, ITwoFactorService twoFactorService)
     {
         _mediator = mediator;
         _twoFactorService = twoFactorService;
@@ -33,6 +34,34 @@ public class AccountController : ApiBaseController
         LoginResult result = await _mediator.Send(command);
         return ApiOk<LoginResult>(result);
     }
+    [HttpPost("Logout")]
+    [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> Logout()
+    {
+        await _mediator.Send(new LogoutCommand());
+        return ApiOk(true);
+    }
+
+    [HttpPost("DelegateUser")]
+    [ProducesResponseType(typeof(ApiResponse<LoginResult>), StatusCodes.Status200OK)]
+    [Permission(AppPermissions.TenantManagement.DelegateUser)]
+    public async Task<IActionResult> DelegateUser(DelegateUserCommand command)
+    {
+        LoginResult result = await _mediator.Send(command);
+        return ApiOk<LoginResult>(result);
+    }
+
+
+    [HttpPost("ExitDelegation")]
+    [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status200OK)]
+    // [Permission(AppPermissions.TenantManagement.DelegateUser)]
+    public async Task<IActionResult> ExitDelegation()
+    {
+        await _mediator.Send(new ExitDelegationCommand());
+        return ApiOk("");
+    }
+
+
 
     [HttpPost("loginTwoFactor")]
     [ProducesResponseType(typeof(ApiResponse<LoginResult>), StatusCodes.Status200OK)]
@@ -41,28 +70,6 @@ public class AccountController : ApiBaseController
         LoginResult result = await _mediator.Send(command);
         return ApiOk<LoginResult>(result);
     }
-
-
-    [HttpPost("refresh")]
-    [ProducesResponseType(typeof(ApiResponse<TokenResponseDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> Refresh([FromBody] RefreshTokenCommand command)
-    {
-        var result = await _mediator.Send(command);
-        return ApiOk<TokenResponseDto>(result);
-    }
-
-    [HttpPost("revoke")]
-    [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> Revoke([FromBody] RevokeRefreshTokenCommand command)
-    {
-        var success = await _mediator.Send(command);
-        //if (!success)
-        //    return BadRequest(ApiResponse<string>.Fail(new List<ApiError> { new() { Message = "Token invalid or already revoked" } }));
-
-        return ApiOk<string>("");
-    }
-
-
 
 
     [HttpPost("generate2FaRequest")]
@@ -92,14 +99,6 @@ public class AccountController : ApiBaseController
         return ApiOk(result);
     }
 
-
-
-    //[HttpGet("external-login")]
-    //public async Task<IActionResult> ExternalLogin([FromQuery] string provider, [FromQuery] string returnUrl = "/")
-    //{
-    //    var redirectUrl = await _mediator.Send(new ExternalLoginCommand(provider, returnUrl));
-    //    return Challenge(new AuthenticationProperties { RedirectUri = redirectUrl }, provider);
-    //}
 
     [HttpPost("ExternalLoginCallback")]
     [ProducesResponseType(typeof(ApiResponse<LoginResult>), StatusCodes.Status200OK)]

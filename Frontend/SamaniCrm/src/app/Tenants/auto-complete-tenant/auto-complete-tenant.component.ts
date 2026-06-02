@@ -16,8 +16,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { RequireMatch } from '@shared/custom-validator/requireMatch';
 import { isNullOrEmpty } from '@shared/helper/null-or-empty';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
-import { GetTenantsAutoCompleteQuery, TenantsServiceProxy } from '@shared/service-proxies';
-import { AutoCompleteDtoOfGuid } from '@shared/service-proxies/model/guid-auto-complete-dto';
+import { TenantsServiceProxy } from '@shared/service-proxies/api/tenants.service';
+import { AutoCompleteDtoOfGuid } from '@shared/service-proxies/model/auto-complete-dto-of-guid';
+import { GetTenantsAutoCompleteQuery } from '@shared/service-proxies/model/get-tenants-auto-complete-query';
 import { Observable, startWith, debounceTime, distinctUntilChanged, switchMap, of, finalize, map } from 'rxjs';
 
 @Component({

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Duende.IdentityModel;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -7,10 +9,13 @@ using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Helpers;
+using SamaniCrm.Domain.Attributes;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Domain.Entities.Subscription;
 using SamaniCrm.Domain.Interfaces;
 using SamaniCrm.Infrastructure.Identity;
 using System.Linq.Expressions;
+using System.Text.Json;
 
 namespace SamaniCrm.Infrastructure;
 
@@ -18,15 +23,19 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 {
     private readonly ICurrentUserService? _currentUser;
     private readonly ICurrentTenant? _currentTenant;
+    private readonly IHttpContextAccessor? _httpContextAccessor;
 
     private Guid? _tenantId;
+    public bool IsSeeding { get; set; } = false; // Property to indicate seeding process
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
         ICurrentUserService? currentUserService,
-        ICurrentTenant? currentTenant) : base(options)
+        ICurrentTenant? currentTenant,
+        IHttpContextAccessor? httpContextAccessor) : base(options)
     {
         _currentUser = currentUserService;
         _currentTenant = currentTenant;
+        _httpContextAccessor = httpContextAccessor;
     }
 
 
@@ -38,8 +47,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     }
 
 
-    public DbSet<TenantLogSetting> TenantLogSettings { get; set; }
-    public DbSet<LogEntry> LogEntries { get; set; }
+    public DbSet<TenantAppLogSetting> TenantLogSettings { get; set; }
+    public DbSet<AppLogEntry> LogEntries { get; set; }
+    public DbSet<AuditLog> AuditLogs { get; set; }
+    public DbSet<SecurityLogEntry> SecurityLogEntries { get; set; }
+
 
 
     public DbSet<Tenant> Tenants { get; set; }
@@ -50,7 +62,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 
 
 
-    public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Permission> Permissions { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<Language> Languages { get; set; }
@@ -59,6 +70,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<MenuTranslation> MenuTranslations { get; set; }
     public DbSet<SecuritySetting> SecuritySettings { get; set; }
     public DbSet<UserSetting> UserSetting { get; set; }
+    public DbSet<UserDelegation> UserDelegations { get; set; }
 
     public DbSet<Page> Pages { get; set; }
     public DbSet<PageTranslation> PageTranslations { get; set; }
@@ -98,6 +110,19 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     #endregion
 
 
+    #region Subscription
+
+    public DbSet<Plan> Plans { get; set; }
+    public DbSet<PlanTranslation> PlanTranslations { get; set; }
+    public DbSet<PlanFeature> PlanFeatures { get; set; }
+    public DbSet<PlanFeatureTranslation> PlanFeatureTranslations { get; set; }
+    public DbSet<PlanPrice> PlanPrices { get; set; }
+    public DbSet<Subscription> Subscriptions { get; set; }
+    public DbSet<AddOn> AddOns { get; set; }
+    public DbSet<AddOnTranslation> AddOnTranslations { get; set; }
+    public DbSet<SubscriptionAddOn> SubscriptionAddOns { get; set; }
+
+    #endregion
 
     public override int SaveChanges()
     {
@@ -107,6 +132,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+        await CreateAuditLogs();
         ApplyAuditInformation();
         return await base.SaveChangesAsync(cancellationToken);
     }
@@ -182,6 +208,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 
     private void ApplyAuditInformation()
     {
+        if (IsSeeding)
+        {
+            return;
+        }
         var currentUserId = _currentUser?.UserId;
 
         // فقط یک پیمایش روی هم entity ها
@@ -234,7 +264,155 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
                         entry.State = EntityState.Modified;
                         break;
                 }
+
+
             }
         }
     }
+
+
+    private async Task CreateAuditLogs(CancellationToken cancellationToken = default)
+    {
+        if (IsSeeding)
+        {
+            return;
+        }
+        ChangeTracker.DetectChanges();
+
+        var auditLogs = new List<AuditLog>();
+
+        var entries = ChangeTracker
+            .Entries()
+            .Where(e =>
+                e.Entity is not AuditLog &&
+                e.Entity is not AppLogEntry &&
+                e.State != EntityState.Detached &&
+                e.State != EntityState.Unchanged)
+            .ToList();
+
+        foreach (var entry in entries)
+        {
+            var entityType = entry.Metadata.ClrType;
+
+            if (Attribute.IsDefined(entityType, typeof(AuditIgnoreAttribute)))
+            {
+                continue;
+            }
+            var correlationId = _httpContextAccessor?.HttpContext?.TraceIdentifier ?? "Unknown";
+            var auditLog = new AuditLog
+            {
+                CorrelationId = correlationId,
+                UserId = _currentUser?.UserId,
+                DelegatorId = _currentUser?.DelegatorId,
+                IsDelegated = _currentUser?.IsDelegated ?? false,
+                TenantId = CurrentTenantId,
+
+                EntityName = entityType.Name,
+
+                CreationTime = DateTime.UtcNow
+            };
+
+            var key = entry.Metadata.FindPrimaryKey();
+
+            if (key != null)
+            {
+                auditLog.EntityId = string.Join(
+                    ",",
+                    key.Properties.Select(
+                        p => entry.Property(p.Name).CurrentValue?.ToString()));
+            }
+
+            switch (entry.State)
+            {
+                case EntityState.Added:
+
+                    auditLog.Action = "Create";
+
+                    var createdValues = entry.Properties
+                        .Where(p =>
+                            !p.Metadata.IsPrimaryKey())
+                        .ToDictionary(
+                            p => p.Metadata.Name,
+                            p => new
+                            {
+                                New = p.CurrentValue
+                            });
+
+                    auditLog.Changes =
+                        JsonSerializer.Serialize(createdValues);
+
+                    break;
+
+                case EntityState.Modified:
+
+                    auditLog.Action = "Update";
+
+                    var modifiedValues =
+                        new Dictionary<string, object>();
+
+                    foreach (var property in entry.Properties)
+                    {
+
+                        if (!property.IsModified)
+                            continue;
+
+                        if (property.Metadata.PropertyInfo?
+                          .IsDefined(typeof(AuditIgnoreAttribute), true) == true)
+                        {
+                            continue;
+                        }
+
+                        if (Equals(
+                            property.OriginalValue,
+                            property.CurrentValue))
+                            continue;
+
+                        modifiedValues[property.Metadata.Name] =
+                            new
+                            {
+                                Old = property.OriginalValue,
+                                New = property.CurrentValue
+                            };
+                    }
+
+                    if (modifiedValues.Count == 0)
+                        continue;
+
+                    auditLog.Changes =
+                        JsonSerializer.Serialize(modifiedValues);
+
+                    break;
+
+                case EntityState.Deleted:
+
+                    auditLog.Action = "Delete";
+
+                    var deletedValues = entry.Properties
+                        .Where(p =>
+                            !p.Metadata.IsPrimaryKey())
+                        .ToDictionary(
+                            p => p.Metadata.Name,
+                            p => new
+                            {
+                                Old = p.OriginalValue
+                            });
+
+                    auditLog.Changes =
+                        JsonSerializer.Serialize(deletedValues);
+
+                    break;
+            }
+
+            auditLogs.Add(auditLog);
+        }
+
+        if (auditLogs.Count > 0)
+        {
+            await AuditLogs.AddRangeAsync(
+                auditLogs,
+                cancellationToken);
+        }
+    }
+
+
 }

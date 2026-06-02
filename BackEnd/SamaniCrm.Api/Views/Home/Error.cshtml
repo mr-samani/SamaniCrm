@@ -1,0 +1,169 @@
+﻿@using SamaniCrm.Api.Controllers.MVC
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "خطا";
+    // بررسی محیط برای نمایش جزئیات فنی
+    var isDevelopment = Context.RequestServices.GetRequiredService<IHostEnvironment>().IsDevelopment();
+}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - سامانه مدیریت</title>
+    
+    <!-- Bootstrap 5 RTL -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" integrity="sha384-nU14brUcp6StFntEOOEBvcJm4huWjB0OcIeQ3fltAfSmuZFrkAif0T+UtNGlKKQv" crossorigin="anonymous">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+            body {
+                background-color: #f8f9fa;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .error-card {
+                border: none;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                overflow: hidden;
+                max-width: 600px;
+                width: 100%;
+                background: #fff;
+            }
+            .error-header {
+                background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+                color: white;
+                padding: 30px;
+                text-align: center;
+            }
+            .error-icon {
+                font-size: 4rem;
+                margin-bottom: 15px;
+                animation: shake 0.5s ease-in-out;
+            }
+            .error-body {
+                padding: 30px;
+            }
+            .error-code {
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: #dc3545;
+                margin-bottom: 10px;
+            }
+            .error-message {
+                font-size: 1.1rem;
+                color: #6c757d;
+                margin-bottom: 20px;
+            }
+            .dev-details {
+                background-color: #f1f3f5;
+                border-left: 4px solid #dc3545;
+                padding: 15px;
+                margin-top: 20px;
+                border-radius: 5px;
+                font-size: 0.9rem;
+                text-align: left; /* کدها بهتر است چپ‌چین باشند */
+                direction: ltr;
+            }
+            .btn-home {
+                background-color: #0d6efd;
+                border-color: #0d6efd;
+                padding: 10px 25px;
+                border-radius: 25px;
+                transition: all 0.3s;
+            }
+            .btn-home:hover {
+                background-color: #0b5ed7;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+            }
+            @@keyframes shake {
+                0% { transform: translate(1px, 1px) rotate(0deg); }
+                10% { transform: translate(-1px, -2px) rotate(-1deg); }
+                20% { transform: translate(-3px, 0px) rotate(1deg); }
+                30% { transform: translate(3px, 2px) rotate(0deg); }
+                40% { transform: translate(1px, -1px) rotate(1deg); }
+                50% { transform: translate(-1px, 2px) rotate(-1deg); }
+                60% { transform: translate(-3px, 1px) rotate(0deg); }
+                70% { transform: translate(3px, 1px) rotate(-1deg); }
+                80% { transform: translate(-1px, -1px) rotate(1deg); }
+                90% { transform: translate(1px, 2px) rotate(0deg); }
+                100% { transform: translate(1px, -2px) rotate(-1deg); }
+            }
+    </style>
+</head>
+<body>
+
+    <div class="container d-flex justify-content-center">
+        <div class="error-card">
+            <div class="error-header">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2 class="mb-0">خطایی رخ داده است</h2>
+                <p class="mb-0 opacity-75">متاسفانه نمی‌توانیم درخواست شما را پردازش کنیم</p>
+            </div>
+            
+            <div class="error-body">
+                <div class="text-center">
+                    @if (Model != null && !string.IsNullOrEmpty(Model.Error?.Error))
+                    {
+                        <div class="error-code">
+                            <i class="fas fa-bug me-2"></i> @Model.Error.Error
+                        </div>
+                        <div class="error-message">
+                            @if (!string.IsNullOrEmpty(Model.Error.ErrorDescription))
+                            {
+                                @Model.Error.ErrorDescription
+                            }
+                            else
+                            {
+                                <span>لطفاً با پشتیبانی تماس بگیرید یا دوباره تلاش کنید.</span>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="error-message">
+                            <i class="fas fa-info-circle text-primary me-2"></i>
+                            خطای نامشخصی رخ داده است. لطفاً صفحه را رفرش کنید.
+                        </div>
+                    }
+                </div>
+
+                <!-- نمایش جزئیات فقط در محیط توسعه -->
+                @if (isDevelopment && Model?.Error != null)
+                {
+                    <div class="dev-details">
+                        <strong><i class="fas fa-code me-2"></i> جزئیات فنی (فقط توسعه):</strong>
+                        <ul class="mt-2 mb-0 ps-3">
+                            <li><strong>Error:</strong> @Model.Error.Error</li>
+                            <li><strong>Client Id:</strong> @Model.Error.ClientId</li>
+                            <li><strong>Redirect Uri:</strong> @Model.Error.RedirectUri</li>
+                            @if (!string.IsNullOrEmpty(Model.Error.ErrorDescription))
+                            {
+                                <li><strong>Description:</strong> @Model.Error.ErrorDescription</li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+                <div class="text-center mt-4">
+                    <a href="/" class="btn btn-home text-white">
+                        <i class="fas fa-home me-2"></i> بازگشت به صفحه اصلی
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

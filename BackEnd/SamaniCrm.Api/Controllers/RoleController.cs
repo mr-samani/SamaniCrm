@@ -1,7 +1,6 @@
 ﻿using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Queries.Role;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SamaniCrm.Application.Role.Commands;

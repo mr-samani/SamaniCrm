@@ -2,18 +2,15 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
-import { LogLevelFlag } from '@app/panel/settings/app-setting/tabs/log-setting/models/log-level-flag';
-import { LOG_LEVELS } from '@app/panel/settings/app-setting/tabs/log-setting/models/LOG_LEVELS';
 import { AppConst } from '@shared/app-const';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
-import { Bitmask } from '@shared/helper/bit-mask.utils';
 import { LuxonFormatPipe } from '@shared/pipes/luxon-format.pipe';
-import { AdminLogServiceProxy } from '@shared/service-proxies/api/admin-log.service';
-import { GetLogsQuery } from '@shared/service-proxies/model/get-logs-query';
-import { LogEntryDto } from '@shared/service-proxies/model/log-entry-dto';
+import { AppLogsServiceProxy } from '@shared/service-proxies/api/app-logs.service';
+import { AppLogEntryDto } from '@shared/service-proxies/model/app-log-entry-dto';
+import { GetAppLogsQuery } from '@shared/service-proxies/model/get-app-logs-query';
 import { LogLevel } from '@shared/service-proxies/model/log-level';
-import { ManulaCleanupLogCommand } from '@shared/service-proxies/model/manula-cleanup-log-command';
+import { ManulaCleanupAppLogCommand } from '@shared/service-proxies/model/manula-cleanup-app-log-command';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { finalize } from 'rxjs/operators';
 
@@ -25,7 +22,7 @@ import { finalize } from 'rxjs/operators';
 })
 export class DatabaseLogsComponent extends AppComponentBase implements OnInit {
   tenantId = null;
-  items: LogEntryDto[] = [];
+  items: AppLogEntryDto[] = [];
   totalCount = 0;
   fields: FieldsType[] = [
     { column: 'level', title: this.l('Level'), type: 'localize', localizeKey: 'LogLevel_', width: 100 },
@@ -47,7 +44,7 @@ export class DatabaseLogsComponent extends AppComponentBase implements OnInit {
   listSubscription$?: Subscription;
   showFilter = false; 
   matDialog = inject(MatDialog);
-  constructor(private logService: AdminLogServiceProxy) {
+  constructor(private logService: AppLogsServiceProxy) {
     super();
     this.breadcrumb.list = [
       { name: this.l('Settings'), url: '/panel/setting' },
@@ -79,7 +76,7 @@ return LogLevel;
       this.listSubscription$.unsubscribe();
     }
     this.loading = true;
-    const input = new GetLogsQuery();
+    const input = new GetAppLogsQuery();
 
     input.levels = this.form.get('filterLevels')?.value;
     input.search = this.form.get('filter')?.value;
@@ -126,7 +123,7 @@ return LogLevel;
     this.confirmMessage(this.l('Delete'), this.l('AreYouSureForDelete')).then((result) => {
       if (result.isConfirmed) {
         this.showMainLoading();
-        const input = new ManulaCleanupLogCommand();
+        const input = new ManulaCleanupAppLogCommand();
         input.daysOld = 30;
         input.tenantId = this.tenantId ?? undefined;
         this.logService
@@ -150,7 +147,7 @@ return LogLevel;
     });
   }
 
-  async openLogDetails(item: LogEntryDto) {
+  async openLogDetails(item: AppLogEntryDto) {
     const { LogDetailsComponent } = await import('./log-details/log-details.component');
     this.matDialog.open(LogDetailsComponent, {
       data: item,

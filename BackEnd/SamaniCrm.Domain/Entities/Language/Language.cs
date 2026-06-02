@@ -9,7 +9,7 @@ namespace SamaniCrm.Domain.Entities;
 
 public class Language : BaseEntity
 {
-    [MaxLength(10)]
+    [MaxLength(5)]
     public string Culture { get; set; } = default!;
     [MaxLength(100)]
     public string Name { get; set; } = default!;

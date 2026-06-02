@@ -1,5 +1,4 @@
 import { Injectable, Injector } from '@angular/core';
-import { TokenService } from './token.service';
 import { HttpClient } from '@angular/common/http';
 import { AppComponentBase } from '@app/app-component-base';
 import { NgxAlertModalService } from 'ngx-alert-modal';
@@ -15,7 +14,6 @@ export enum DownloadFileType {
 })
 export class DownloadService {
   constructor(
-    private tokenService: TokenService,
     private http: HttpClient,
 
     private notify: NotifyService,
@@ -29,13 +27,10 @@ export class DownloadService {
   downloadUrlWithToken(url: string, fileType: DownloadFileType, fileName: string) {
     let pw = this.notify.info(this.l('PleaseWait'));
 
-    const headers = {
-      Authorization: 'Bearer ' + this.tokenService.get().accessToken,
-    };
     this.http
       .get(url, {
         responseType: 'arraybuffer',
-        headers: headers,
+        withCredentials: true,
       })
       .subscribe((result) => {
         this.downLoadFile(result, fileType, fileName).finally(() => pw.dismiss());

@@ -13,8 +13,8 @@ public class CreateTenantResponse
 
 public class SimpleTenantData
 {
+    public required Guid Id { get; set; }
     public required string TenancyName { get; set; }
-    public required Guid TenantId { get; set; }
     public required string TenantName { get; set; }
     public required TenantStatus Status { get; set; }
 

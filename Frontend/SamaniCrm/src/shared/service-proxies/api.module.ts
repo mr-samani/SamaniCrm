@@ -3,7 +3,7 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 import { AccountServiceProxy } from './api/account.service';
-import { AdminLogServiceProxy } from './api/admin-log.service';
+import { AppLogsServiceProxy } from './api/app-logs.service';
 import { CaptchaServiceProxy } from './api/captcha.service';
 import { CommonServiceProxy } from './api/common.service';
 import { DasboardServiceProxy } from './api/dasboard.service';
@@ -20,6 +20,7 @@ import { ProductServiceProxy } from './api/product.service';
 import { PublicServiceProxy } from './api/public.service';
 import { RoleServiceProxy } from './api/role.service';
 import { SecuritySettingsServiceProxy } from './api/security-settings.service';
+import { SubscriptionServiceProxy } from './api/subscription.service';
 import { TenantsServiceProxy } from './api/tenants.service';
 import { UserServiceProxy } from './api/user.service';
 
@@ -29,7 +30,7 @@ import { UserServiceProxy } from './api/user.service';
   exports:      [],
   providers: [
     AccountServiceProxy,
-    AdminLogServiceProxy,
+    AppLogsServiceProxy,
     CaptchaServiceProxy,
     CommonServiceProxy,
     DasboardServiceProxy,
@@ -46,6 +47,7 @@ import { UserServiceProxy } from './api/user.service';
     PublicServiceProxy,
     RoleServiceProxy,
     SecuritySettingsServiceProxy,
+    SubscriptionServiceProxy,
     TenantsServiceProxy,
     UserServiceProxy ]
 })

@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SignalR;
 using SamaniCrm.Api.Middlewares;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Application.NotificationManager.Interfaces;
 using SamaniCrm.Application.ProductManagerManager.Interfaces;
+using SamaniCrm.Application.SubscriptionManager.Interfaces;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Core.Shared.Interfaces.Tenant;
 using SamaniCrm.Infrastructure;
-using SamaniCrm.Infrastructure.AuditLog;
 using SamaniCrm.Infrastructure.BackgroundServices;
 using SamaniCrm.Infrastructure.Captcha;
 using SamaniCrm.Infrastructure.Connections;
@@ -17,7 +16,6 @@ using SamaniCrm.Infrastructure.Data;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.ExternalLogin;
 using SamaniCrm.Infrastructure.FileManager;
-using SamaniCrm.Infrastructure.Hubs;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Jobs;
 using SamaniCrm.Infrastructure.Localizer;
@@ -27,6 +25,7 @@ using SamaniCrm.Infrastructure.Services;
 using SamaniCrm.Infrastructure.Services.Product;
 using SamaniCrm.Infrastructure.Services.TenantService;
 using SamaniCrm.Infrastructure.Storage;
+using SamaniCrm.Infrastructure.SubscriptionManager;
 
 namespace SamaniCrm.Api.Extensions;
 
@@ -53,7 +52,6 @@ public static partial class ServiceCollectionExtensions
         services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
-        services.AddScoped<ITokenGenerator, TokenGenerator>();
         services.AddScoped<ITwoFactorService, TwoFactorService>();
         services.AddScoped<IExternalLoginService, ExternalLoginService>();
 
@@ -106,7 +104,6 @@ public static partial class ServiceCollectionExtensions
         services.AddScoped<ITenantUniquenessChecker, TenantUniquenessChecker>();
         services.AddScoped<ITenantNotificationService, TenantNotificationService>();
         services.AddScoped<IEncryptionService, EncryptionService>();
-        services.AddScoped<IAuditLogService, AuditLogService>();
 
 
 
@@ -139,6 +136,10 @@ public static partial class ServiceCollectionExtensions
         //services.AddScoped<ITenantDataSeeder, SettingsSeeder>();
         //services.AddScoped<ITenantDataSeeder, WorkflowSeeder>();
 
+
+
+
+        services.AddScoped<ISubscriptionService, SubscriptionService>();
 
 
 

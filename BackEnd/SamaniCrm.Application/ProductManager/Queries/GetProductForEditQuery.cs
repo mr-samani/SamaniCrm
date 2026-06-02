@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.ProductManagerManager.Queries
 {
-    public record GetProductForEditQuery(Guid Id) : IRequest<ProductDto>;
+    public record GetForEditPlanQuery(Guid Id) : IRequest<ProductDto>;
 
-    public class GetProductForEditQueryHandler : IRequestHandler<GetProductForEditQuery, ProductDto>
+    public class GetProductForEditQueryHandler : IRequestHandler<GetForEditPlanQuery, ProductDto>
     {
         private readonly IApplicationDbContext _dbContext;
         private readonly ILocalizer L;
@@ -21,7 +21,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
             _dbContext = dbContext;
             L = l;
         }
-        public async Task<ProductDto> Handle(GetProductForEditQuery request, CancellationToken cancellationToken)
+        public async Task<ProductDto> Handle(GetForEditPlanQuery request, CancellationToken cancellationToken)
         {
             var currentLangugage = L.CurrentLanguage;
             var entity = await _dbContext.Products

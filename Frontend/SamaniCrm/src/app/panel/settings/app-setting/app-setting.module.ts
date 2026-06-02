@@ -13,12 +13,14 @@ import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 import { GeneralSettingComponent } from './tabs/general-setting/general-setting.component';
 import { SecuritySettingComponent } from './tabs/security-setting/security-setting.component';
 import { SwitchModule } from '@shared/components/switch/switch.module';
-import { AdminLogServiceProxy, ExternalProvidersServiceProxy, SecuritySettingsServiceProxy } from '@shared/service-proxies';
 import { SharedModule } from '@shared/shared.module';
 import { UserSecuritySettingComponent } from './tabs/user-security-setting/user-security-setting.component';
 import { OtpInputComponent } from '@shared/components/otp-input/otp-input.component';
 import { LogSettingComponent } from './tabs/log-setting/log-setting.component';
 import { AutoCompleteTenantComponent } from "@app/Tenants/auto-complete-tenant/auto-complete-tenant.component";
+import { SecuritySettingsServiceProxy } from '@shared/service-proxies/api/security-settings.service';
+import { ExternalProvidersServiceProxy } from '@shared/service-proxies/api/external-providers.service';
+import { AppLogsServiceProxy } from '@shared/service-proxies/api/app-logs.service';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,6 @@ import { AutoCompleteTenantComponent } from "@app/Tenants/auto-complete-tenant/a
     OtpInputComponent,
     AutoCompleteTenantComponent
 ],
-  providers: [SecuritySettingsServiceProxy, ExternalProvidersServiceProxy,AdminLogServiceProxy],
+  providers: [SecuritySettingsServiceProxy, ExternalProvidersServiceProxy,AppLogsServiceProxy],
 })
 export class AppSettingModule {}

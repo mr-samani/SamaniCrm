@@ -1,15 +1,19 @@
-﻿using Hangfire;
+﻿using AutoMapper.Internal;
+using Azure.Core;
+using Hangfire;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.JsonWebTokens;
 using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.Features.Tenants;
-using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Application.Queries.User;
 using SamaniCrm.Application.Role.Commands;
 using SamaniCrm.Application.User.Commands;
@@ -20,11 +24,13 @@ using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.ExternalLogin;
 using SamaniCrm.Infrastructure.Identity;
-using SamaniCrm.Infrastructure.Notifications;
 using StackExchange.Redis;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq.Dynamic.Core;
+using System.Runtime.Intrinsics.Arm;
+using System.Security.Claims;
+using static QRCoder.PayloadGenerator;
 using UnauthorizedAccessException = SamaniCrm.Application.Common.Exceptions.UnauthorizedAccessException;
 
 
@@ -35,9 +41,8 @@ public class IdentityService : IIdentityService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
-    private readonly ApplicationDbContext _applicationDbContext;
+    private readonly ApplicationDbContext _dbContext;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly ITokenGenerator _tokenGenerator;
     private readonly IUserPermissionService _userPermissionService;
     private readonly ISecuritySettingService _securitySettingService;
     private readonly ITwoFactorService _twoFactorService;
@@ -45,6 +50,7 @@ public class IdentityService : IIdentityService
     private readonly ISecretStore _secretStore;
     private readonly IConfiguration _config;
     private readonly IExternalLoginService _externalLoginService;
+    private readonly ICurrentUserService _currentUser;
 
     public IdentityService(
         UserManager<ApplicationUser> userManager,
@@ -52,21 +58,20 @@ public class IdentityService : IIdentityService
         RoleManager<ApplicationRole> roleManager,
         ApplicationDbContext applicationDbContext,
         IHttpContextAccessor httpContextAccessor,
-        ITokenGenerator tokenGenerator,
         IUserPermissionService userPermissionService,
         ISecuritySettingService securitySettingService,
         ITwoFactorService twoFactorService,
         HttpClient httpClient,
         ISecretStore secretStore,
         IConfiguration config,
-        IExternalLoginService externalLoginService)
+        IExternalLoginService externalLoginService,
+        ICurrentUserService currentUser)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
-        _applicationDbContext = applicationDbContext;
+        _dbContext = applicationDbContext;
         _httpContextAccessor = httpContextAccessor;
-        _tokenGenerator = tokenGenerator;
         _userPermissionService = userPermissionService;
         _securitySettingService = securitySettingService;
         _twoFactorService = twoFactorService;
@@ -74,26 +79,47 @@ public class IdentityService : IIdentityService
         _secretStore = secretStore;
         _config = config;
         _externalLoginService = externalLoginService;
+        _currentUser = currentUser;
     }
 
 
 
-    public async Task<SimpleTenantData?> GetTenantByTenancyName(string tenancyName, CancellationToken cancellation)
+    public async Task<SimpleTenantData?> GetTenantByTenancyName(string? tenancyName, CancellationToken cancellation)
     {
-        var tenant = await _applicationDbContext.Tenants
+        if (string.IsNullOrEmpty(tenancyName))
+        {
+            return null;
+        }
+        var tenant = await _dbContext.Tenants
+            .IgnoreQueryFilters()
+            .Where(x => x.Slug == tenancyName && x.Status == TenantStatus.Active)
             .Select(s => new SimpleTenantData()
             {
-                TenantId = s.Id,
+                Id = s.Id,
                 TenancyName = s.Slug,
                 TenantName = s.Name,
                 Status = s.Status
             })
             .AsNoTracking()
-            .Where(x => x.TenancyName == tenancyName && x.Status == TenantStatus.Active)
             .FirstOrDefaultAsync(cancellation);
         return tenant;
     }
-
+    public async Task<SimpleTenantData?> GetTenantById(Guid tenantId, CancellationToken cancellation)
+    {
+        var tenant = await _dbContext.Tenants
+             .IgnoreQueryFilters()
+             .Where(x => x.Id == tenantId && x.Status == TenantStatus.Active)
+             .Select(s => new SimpleTenantData()
+             {
+                 Id = s.Id,
+                 TenancyName = s.Slug,
+                 TenantName = s.Name,
+                 Status = s.Status
+             })
+            .AsNoTracking()
+            .FirstOrDefaultAsync(cancellation);
+        return tenant;
+    }
 
 
     public async Task<bool> AssignUserToRole(string userName, IList<string> roles)
@@ -190,11 +216,11 @@ public class IdentityService : IIdentityService
 
     public async Task<PaginatedResult<UserDTO>> GetAllUsersAsync(GetUserQuery request, CancellationToken cancellationToken)
     {
-        var rolesQuery = from ur in _applicationDbContext.UserRoles
-                         join r in _applicationDbContext.Roles on ur.RoleId equals r.Id
+        var rolesQuery = from ur in _dbContext.UserRoles
+                         join r in _dbContext.Roles on ur.RoleId equals r.Id
                          select new { ur.UserId, RoleName = r.Name };
 
-        IQueryable<ApplicationUser> query = _applicationDbContext.Users.AsQueryable();
+        IQueryable<ApplicationUser> query = _dbContext.Users.AsQueryable();
         if (!string.IsNullOrEmpty(request.Filter))
         {
             query = query.Where(x =>
@@ -221,6 +247,7 @@ public class IdentityService : IIdentityService
             .Select(u => new UserDTO
             {
                 Id = u.Id,
+                TenantId = u.TenantId,
                 UserName = u.UserName ?? "",
                 FirstName = u.FirstName ?? "",
                 LastName = u.LastName,
@@ -237,6 +264,56 @@ public class IdentityService : IIdentityService
 
 
         return new PaginatedResult<UserDTO>
+        {
+            Items = users,
+            TotalCount = total,
+            PageNumber = request.PageNumber,
+            PageSize = request.PageSize
+        };
+    }
+
+    public async Task<PaginatedResult<TenantUserDTO>> GetTenantUsersAsync(GetTenantUsersQuery request, CancellationToken cancellationToken)
+    {
+        IQueryable<ApplicationUser> query = _dbContext.Users
+            .Include(c => c.Roles)
+            .Where(x => x.IsDeleted == false && x.TenantId == request.TenantId)
+            .IgnoreQueryFilters()
+            .AsQueryable();
+        if (!string.IsNullOrEmpty(request.Filter))
+        {
+            query = query.Where(x =>
+            x.UserName!.Contains(request.Filter) ||
+            x.FirstName!.Contains(request.Filter) ||
+            x.LastName.Contains(request.Filter) ||
+            x.Email!.Contains(request.Filter) ||
+            x.PhoneNumber!.Contains(request.Filter)
+            );
+        }
+
+        // Sorting
+        if (!string.IsNullOrEmpty(request.SortBy))
+        {
+            var sortString = $"{request.SortBy} {request.SortDirection}";
+            query = query.OrderBy(sortString);
+        }
+
+        int total = await query.CountAsync(cancellationToken);
+
+        var users = await query.OrderBy(x => x.CreatedAt)
+            .Skip(request.PageSize * (request.PageNumber - 1))
+            .Take(request.PageSize)
+            .Select(u => new TenantUserDTO
+            {
+                Id = u.Id,
+                UserName = u.UserName ?? "",
+                FullName = u.FullName ?? "",
+                Email = u.Email ?? "",
+                Roles = u.Roles.Select(s => s.Name).ToList()
+            })
+            .ToListAsync(cancellationToken);
+
+
+        return new PaginatedResult<TenantUserDTO>
         {
             Items = users,
             TotalCount = total,
@@ -270,6 +347,7 @@ public class IdentityService : IIdentityService
         return (new UserDTO()
         {
             Id = user.Id,
+            TenantId = user.TenantId,
             UserName = user.UserName ?? "",
             FirstName = user.FirstName ?? "",
             LastName = user.LastName ?? "",
@@ -281,6 +359,9 @@ public class IdentityService : IIdentityService
             PhoneNumber = user.PhoneNumber ?? "",
             CreationTime = user.CreatedAt,
             Roles = roles.ToList(),
+
+            IsDelegated = _currentUser.IsDelegated,
+            DelegatorId = _currentUser.DelegatorId
         });
     }
 
@@ -297,6 +378,7 @@ public class IdentityService : IIdentityService
         return (new UserDTO()
         {
             Id = user.Id,
+            TenantId = user.TenantId,
             UserName = user.UserName ?? "",
             FirstName = user.FirstName ?? "",
             LastName = user.LastName ?? "",
@@ -375,9 +457,27 @@ public class IdentityService : IIdentityService
         if (!result.Succeeded)
             return false;
 
-        await _signInManager.SignInAsync(user, isPersistent: true);
+        // await _signInManager.SignInAsync(user, isPersistent: true);
+        // وقتی از کوکی استفااده می کنیم باید دستی کلیم ها ای اضافی را ست کنیم - فقط idenity claim های پیش فرض را دارد 
+        // وقتی از توکن استفاده میکنیم کلیم ها در profileService ست می شوند
+        // default claims:
+        // sub,  email,  AspNet.Identity.SecurityStamp,role,preferred_username,name,email_verified,phone_number,phone_number_verified,idp,amr,auth_time,
 
+        var claims = new List<Claim>
+        {
+            new("lang", user.Lang),
+        };
+        if (user.TenantId.HasValue)
+        {
+            claims.Add(new Claim("tenant_id", user.TenantId.Value.ToString()));
+        }
+        var roles = await _userManager.GetRolesAsync(user);
 
+        claims.AddRange(roles.Select(x => new Claim(ClaimTypes.Role, x)));
+
+        await _signInManager.SignInWithClaimsAsync(user, true, claims);
+
+        // چون بهره بردار دارم نمیتونم از روش زیر استفاده کنم به خاطر گلوبال فیلتر
         //  var result = await _signInManager.PasswordSignInAsync(userName, password, true, false);
         return true;
 
@@ -453,60 +553,7 @@ public class IdentityService : IIdentityService
         return result.Succeeded;
     }
 
-    public async Task<Guid> GetUserIdFromRefreshToken(string refreshToken)
-    {
-        var refreshTokenResult = await _applicationDbContext.RefreshTokens.FirstOrDefaultAsync(q => q.RefreshTokenValue == refreshToken);
-        if (refreshTokenResult is null ||
-                       refreshTokenResult.Active == false ||
-                       refreshTokenResult.Expiration <= DateTime.UtcNow)
-        {
-            return Guid.Empty;
-        }
 
-        if (refreshTokenResult.Used)
-        {
-            // _logger.LogWarning("El refresh token del {UserId} ya fue usado. RT={RefreshToken}", refreshToken.UserId, refreshToken.RefreshTokenValue);
-            var refreshTokens = await _applicationDbContext.RefreshTokens
-                .Where(q => q.Active && q.Used == false && q.UserId == refreshTokenResult.UserId)
-                .ToListAsync();
-
-            foreach (var rt in refreshTokens)
-            {
-                rt.Used = true;
-                rt.Active = false;
-            }
-
-            await _applicationDbContext.SaveChangesAsync();
-
-            return Guid.Empty;
-        }
-
-
-        refreshTokenResult.Used = true;
-
-        var user = await _applicationDbContext.Users.FindAsync(refreshTokenResult.UserId);
-
-        if (user is null)
-        {
-            return Guid.Empty;
-        }
-
-        return user.Id;
-    }
-
-    public async Task<bool> RevokeRefreshToken(string refreshToken, CancellationToken cancellationToken)
-    {
-        var token = await _applicationDbContext.RefreshTokens
-        .FirstOrDefaultAsync(rt => rt.RefreshTokenValue == refreshToken, cancellationToken);
-
-        if (token == null || token.Active == false)
-            return false;
-
-        token.Active = false;
-        _applicationDbContext.RefreshTokens.Update(token);
-        await _applicationDbContext.SaveChangesAsync();
-        return true;
-    }
 
     public async Task<bool> UpdateRolePermissionsAsync(EditRolePermissionsCommand request, CancellationToken cancellationToken)
     {
@@ -514,7 +561,7 @@ public class IdentityService : IIdentityService
         if (role == null)
             throw new NotFoundException($"Role '{request.RoleName}' not found.");
         // لیست پرمیژن هایی که از قبل به این نقش اختصاص داده شده اند
-        var currentPermissions = await _applicationDbContext.RolePermissions
+        var currentPermissions = await _dbContext.RolePermissions
             .Where(rp => rp.RoleId == role.Id)
             .Select(rp => rp.Permission.Name)
             .ToListAsync(cancellationToken);
@@ -526,12 +573,12 @@ public class IdentityService : IIdentityService
         var permissionsToRemove = currentPermissions.Except(newPermissions, StringComparer.OrdinalIgnoreCase).ToList();
         if (permissionsToRemove.Any())
         {
-            var entitiesToRemove = await _applicationDbContext.RolePermissions
+            var entitiesToRemove = await _dbContext.RolePermissions
                 .Include(i => i.Permission)
                 .Where(rp => rp.RoleId == role.Id && permissionsToRemove.Contains(rp.Permission.Name))
                 .ToListAsync(cancellationToken);
 
-            _applicationDbContext.RolePermissions.RemoveRange(entitiesToRemove);
+            _dbContext.RolePermissions.RemoveRange(entitiesToRemove);
         }
 
 
@@ -541,7 +588,7 @@ public class IdentityService : IIdentityService
         if (permissionsToAdd.Any())
         {
             // نکته: با اضافه کردن پرمیژن به کد باید حتما update-database زده شود
-            var permissionsMustBeAdded = await _applicationDbContext.Permissions
+            var permissionsMustBeAdded = await _dbContext.Permissions
                   .Select(s => new { s.Id, s.Name })
                   .Where(w => permissionsToAdd.Contains(w.Name)).ToListAsync();
 
@@ -551,10 +598,10 @@ public class IdentityService : IIdentityService
                 PermissionId = p.Id
             });
 
-            await _applicationDbContext.RolePermissions.AddRangeAsync(entitiesToAdd, cancellationToken);
+            await _dbContext.RolePermissions.AddRangeAsync(entitiesToAdd, cancellationToken);
         }
 
-        await _applicationDbContext.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
         // _logger.LogInformation("Removed permissions: {Permissions}", string.Join(", ", permissionsToRemove));
         // _logger.LogInformation("Added permissions: {Permissions}", string.Join(", ", permissionsToAdd));
         // TODO:update role cache for users where has this roles
@@ -563,11 +610,11 @@ public class IdentityService : IIdentityService
 
     public async Task<bool> updateUserLanguage(string culture, Guid userId, CancellationToken cancellationToken)
     {
-        var found = await _applicationDbContext.Users.Where(x => x.Id == userId).FirstOrDefaultAsync(cancellationToken);
+        var found = await _dbContext.Users.Where(x => x.Id == userId).FirstOrDefaultAsync(cancellationToken);
         if (found != null)
         {
             found.Lang = culture;
-            var result = await _applicationDbContext.SaveChangesAsync(cancellationToken);
+            var result = await _dbContext.SaveChangesAsync(cancellationToken);
             return result > 0;
         }
         return false;
@@ -576,7 +623,7 @@ public class IdentityService : IIdentityService
 
     public async Task<(bool EnableTwoFactor, string Secret, int AttemptCount, TwoFactorTypeEnum TwoFactorType)> getUserTwoFactorData(Guid userId, CancellationToken cancellationToken)
     {
-        var found = await _applicationDbContext.UserSetting.Where(x => x.UserId == userId).FirstOrDefaultAsync(cancellationToken);
+        var found = await _dbContext.UserSetting.Where(x => x.UserId == userId).FirstOrDefaultAsync(cancellationToken);
         if (found == null)
         {
             return new()
@@ -601,17 +648,17 @@ public class IdentityService : IIdentityService
         };
     }
 
-    public async Task<LoginResult> SignInAsync(LoginCommand request, CancellationToken cancellation)
+    public async Task<LoginResult> LoginInAsync(LoginCommand request, CancellationToken cancellation)
     {
         Guid? tenantId = null;
-        if (string.IsNullOrEmpty(request.TenancyName) == false)
+        if (string.IsNullOrEmpty(request.Tenant) == false)
         {
-            var tenant = await GetTenantByTenancyName(request.TenancyName, cancellation);
+            var tenant = await GetTenantByTenancyName(request.Tenant, cancellation);
             if (tenant == null)
             {
                 throw new InvalidLoginException("Invalid tenant!");
             }
-            tenantId = tenant?.TenantId;
+            tenantId = tenant?.Id;
         }
 
 
@@ -619,9 +666,9 @@ public class IdentityService : IIdentityService
 
         var result = await SigninUserAsync(request.UserName, request.Password, tenantId);
 
+
         if (!result)
         {
-            BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification(request.UserName, request.TenancyName));
             throw new InvalidLoginException();
         }
         UserDTO userData = await GetUserDetailsByUserNameAsync(request.UserName, tenantId);
@@ -631,8 +678,6 @@ public class IdentityService : IIdentityService
         {
             LoginResult output = new LoginResult()
             {
-                AccessToken = "",
-                RefreshToken = "",
                 User = userData,
                 Roles = [],
                 EnableTwoFactor = twoFactor.EnableTwoFactor,
@@ -642,24 +687,124 @@ public class IdentityService : IIdentityService
         }
         else
         {
-            var accessToken = _tokenGenerator.GenerateAccessToken(userData.Id,
-                               userData.UserName,
-                               userData.Lang,
-                               userData.Roles,
-                               tenantId);
-            var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.Id, accessToken, tenantId);
             var permissions = await _userPermissionService.GetUserPermissionsAsync(userData.Id, cancellation);
-            BackgroundJob.Enqueue(() => LoginNotification.SendLoginNotification(request.UserName, request.TenancyName));
             LoginResult output = new LoginResult()
             {
-                AccessToken = accessToken,
-                RefreshToken = refreshToken,
                 User = userData,
                 Roles = userData.Roles,
                 Permissions = permissions
             };
             return output;
         }
+    }
+
+
+    public async Task LogoutAsync(CancellationToken cancellation)
+    {
+        await _signInManager.SignOutAsync();
+    }
+
+    public async Task<LoginResult> DelegateUser(DelegateUserCommand request, CancellationToken cancellation)
+    {
+        ApplicationUser? delegator =
+       await _userManager.FindByIdAsync(_currentUser.UserId!.Value.ToString());
+
+        if (delegator == null)
+            throw new UnauthorizedAccessException();
+
+
+        var user = await _userManager.Users
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(
+                    x => x.Id == request.UserId &&
+                         x.TenantId == request.TenantId &&
+                         !x.IsDeleted,
+                    cancellation);
+
+        if (user == null)
+            throw new NotFoundException("User not found");
+
+        var claims = new List<Claim>
+                {
+                    new("sub", user.Id.ToString()),
+                    new("tenant_id", user.TenantId!.Value.ToString()),
+                    new("lang", user.Lang),
+
+                    new("is_delegated", "true"),
+                    new("delegator_id", delegator.Id.ToString()),
+                    new("delegator_username", delegator.UserName!)
+                };
+        var roles = await _userManager.GetRolesAsync(user);
+
+        claims.AddRange(roles.Select(x => new Claim(ClaimTypes.Role, x)));
+
+        var identity = new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme);
+
+        var principal = new ClaimsPrincipal(identity);
+
+        await _httpContextAccessor.HttpContext!.SignInAsync(IdentityConstants.ApplicationScheme, principal);
+        var permissions = await _userPermissionService.GetUserPermissionsAsync(user.Id, cancellation);
+
+        await _dbContext.UserDelegations.AddAsync(new UserDelegation()
+        {
+            AdminId = delegator.Id,
+            TargetUserId = user.Id,
+            IsActive = true,
+            Reason = request.Reason ?? "Delegation",
+            StartTime = DateTime.UtcNow,
+            StartedFromIp = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+        });
+        await _dbContext.SaveChangesAsync(cancellation);
+
+        return new LoginResult
+        {
+            User = await GetUserDetailsByUserNameAsync(
+                user.UserName!,
+                user.TenantId),
+
+            Roles =
+                (await _userManager.GetRolesAsync(user))
+                .ToList(),
+
+            Permissions = permissions
+        };
+    }
+
+    public async Task ExitDelegation(CancellationToken cancellation)
+    {
+        var delegatorId = _currentUser.DelegatorId;
+        var delegatedUserId = _currentUser.UserId;
+
+        if (delegatorId == null)
+            return;
+
+        var admin = await _userManager.Users
+                    .IgnoreQueryFilters()
+                    .FirstOrDefaultAsync(x => x.Id == delegatorId && !x.IsDeleted, cancellation);
+
+        if (admin == null)
+            throw new UnauthorizedAccessException();
+
+
+        var d = await _dbContext.UserDelegations
+            .Where(x =>
+                    x.AdminId == delegatorId &&
+                    x.TargetUserId == delegatedUserId &&
+                    x.IsActive == true
+                 )
+            .OrderByDescending(x => x.StartTime)
+            .FirstOrDefaultAsync(cancellation);
+        if (d != null)
+        {
+            d.EndTime = DateTime.UtcNow;
+            d.IsActive = false;
+            d.EndedFromIp = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+
+            await _dbContext.SaveChangesAsync(cancellation);
+        }
+        await _signInManager.SignInAsync(
+            admin,
+            false);
     }
 
     public async Task<LoginResult> TwofactorSignInAsync(TwoFactorLoginCommand request, CancellationToken cancellation)
@@ -669,13 +814,12 @@ public class IdentityService : IIdentityService
         {
             throw new InvalidLoginException();
         }
-        Guid tenantId = tenant.TenantId;
+        Guid tenantId = tenant.Id;
 
         var result = await SigninUserAsync(request.UserName, request.Password, tenantId);
 
         if (!result)
         {
-            BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification(request.UserName, request.TenancyName));
             throw new InvalidLoginException();
         }
         UserDTO userData = await GetUserDetailsByUserNameAsync(request.UserName, tenantId);
@@ -692,19 +836,11 @@ public class IdentityService : IIdentityService
         var verify = _twoFactorService.VerifyCodeAsync(twoFactor.Secret, request.Code);
         if (verify == true)
         {
-            var accessToken = _tokenGenerator.GenerateAccessToken(userData.Id,
-                               userData.UserName,
-                               userData.Lang,
-                               userData.Roles,
-                               tenantId);
-            var refreshToken = await _tokenGenerator.GenerateRefreshToken(userData.Id, accessToken, tenantId);
+
             var permissions = await _userPermissionService.GetUserPermissionsAsync(userData.Id, cancellation);
 
-            BackgroundJob.Enqueue(() => LoginNotification.SendLoginNotification(request.UserName, request.TenancyName));
             LoginResult output = new LoginResult()
             {
-                AccessToken = accessToken,
-                RefreshToken = refreshToken,
                 User = userData,
                 Roles = userData.Roles,
                 Permissions = permissions
@@ -726,11 +862,7 @@ public class IdentityService : IIdentityService
     public async Task<LoginResult> ExternalSignInAsync(ExternalLoginCallbackCommand request, CancellationToken cancellation)
     {
         var tenant = await GetTenantByTenancyName(request.tenancyName, cancellation);
-        if (tenant == null)
-        {
-            throw new InvalidLoginException();
-        }
-        Guid tenantId = tenant.TenantId;
+      
 
         //var info = await _signInManager.GetExternalLoginInfoAsync();
         //if (info == null) throw new UnauthorizedAccessException("External login info not found");
@@ -742,7 +874,7 @@ public class IdentityService : IIdentityService
             backendUrl += "/";
         }
 
-        var provider = await _applicationDbContext.ExternalProviders
+        var provider = await _dbContext.ExternalProviders
             .Where(x => x.Name.ToLower() == request.provider.ToLower() && x.IsActive)
             .Select(s => new
             {
@@ -783,25 +915,18 @@ public class IdentityService : IIdentityService
             throw new UnauthorizedAccessException("External login provider result not found");
         }
         ApplicationUser? user = await FindOrCreateExternalUser(
-            externalLoginResult.Email!, externalLoginResult.UserName!, externalLoginResult.Name!, provider.Name, tenantId);
+            externalLoginResult.Email!, externalLoginResult.UserName!, externalLoginResult.Name!, provider.Name, tenant?.Id);
         await _signInManager.SignInAsync(user, false);
 
         var roles = await _userManager.GetRolesAsync(user);
-        var accessToken = _tokenGenerator.GenerateAccessToken(user.Id,
-                         user.UserName!,
-                         user.Lang,
-                         roles,
-                         tenantId);
-        var refreshToken = await _tokenGenerator.GenerateRefreshToken(user.Id, accessToken, tenantId);
+
         var permissions = await _userPermissionService.GetUserPermissionsAsync(user.Id, cancellation);
-        BackgroundJob.Enqueue(() => LoginNotification.SendLoginNotification(user.UserName!, request.tenancyName));
         LoginResult output = new LoginResult()
         {
-            AccessToken = accessToken,
-            RefreshToken = refreshToken,
             User = new UserDTO
             {
                 Id = user.Id,
+                TenantId = user.TenantId,
                 UserName = user.UserName ?? "",
                 FirstName = user.FirstName ?? "",
                 LastName = user.LastName ?? "",
@@ -824,7 +949,7 @@ public class IdentityService : IIdentityService
 
     public async Task<List<Guid>> GetAllActiveUsersIds(CancellationToken cancellationToken)
     {
-        List<Guid> list = await _applicationDbContext.Users
+        List<Guid> list = await _dbContext.Users
              // .Where(x => x.IsDeleted == false)
              .Select(u => u.Id)
              .ToListAsync();
@@ -834,7 +959,7 @@ public class IdentityService : IIdentityService
     public async Task<List<AutoCompleteDto<Guid>>> GetAutoCompleteUsers(string filter, CancellationToken cancellationToken)
     {
 
-        var query = _applicationDbContext.Users.AsQueryable();
+        var query = _dbContext.Users.AsQueryable();
 
 
         if (!string.IsNullOrEmpty(filter))
@@ -850,15 +975,15 @@ public class IdentityService : IIdentityService
             .Skip(0)
             .Take(50)
             .Select(s => new AutoCompleteDto<Guid>
-                    {
-                        Id = s.Id,
-                        Title = s.FirstName + " " + s.LastName + " (" + s.UserName + ")",
-                    })
+            {
+                Id = s.Id,
+                Title = s.FirstName + " " + s.LastName + " (" + s.UserName + ")",
+            })
             .ToListAsync(cancellationToken);
         return items;
     }
 
-    private async Task<ApplicationUser> FindOrCreateExternalUser(string email, string userName, string name, string providerName, Guid tenantId)
+    private async Task<ApplicationUser> FindOrCreateExternalUser(string email, string userName, string name, string providerName, Guid? tenantId)
     {
         var user = await _userManager.FindByEmailAsync(email);
         if (user == null)
@@ -870,12 +995,12 @@ public class IdentityService : IIdentityService
                 FullName = name,
                 Email = email,
                 Lang = AppConsts.DefaultLanguage,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                TenantId = tenantId
             };
             var createResult = await _userManager.CreateAsync(user);
             if (!createResult.Succeeded)
             {
-                BackgroundJob.Enqueue(() => LoginNotification.SendLoginFailureNotification("provider: " + providerName, tenantId.ToString()));
                 throw new ValidationException(createResult.Errors.Select(e => e.Description).FirstOrDefault());
             }
         }
@@ -884,15 +1009,15 @@ public class IdentityService : IIdentityService
 
     public async Task<UserDTO?> GetTenantAdmin(Guid tenantId, CancellationToken cancellation)
     {
-        var tenantAdminUser = await _applicationDbContext.Users
+        var tenantAdminUser = await _dbContext.Users
          .Join(
-             _applicationDbContext.UserRoles,
+             _dbContext.UserRoles,
              user => user.Id,
              userRole => userRole.UserId,
              (user, userRole) => new { user, userRole }
          )
          .Join(
-             _applicationDbContext.Roles,
+             _dbContext.Roles,
              combined => combined.userRole.RoleId,
              role => role.Id,
              (combined, role) => new { combined.user, role }
@@ -918,7 +1043,7 @@ public class IdentityService : IIdentityService
         return tenantAdminUser;
 
         // with Navigation property
-        //return await _applicationDbContext.Users
+        //return await _dbContext.Users
         //.Where(u => u.TenantId == tenantId)
         //.Where(u => u.UserRoles.Any(ur => ur.Role.Name == Roles.TenantAdministrator))
         //.Select(u => new UserDTO

@@ -9,6 +9,7 @@ public static partial class ServiceCollectionExtensions
     {
         service.Configure<FileManagerSettings>(configuration.GetSection("FileManager"));
         service.Configure<CaptchaSettings>(configuration.GetSection("Captcha"));
+        service.Configure<OIDCSettings>(configuration.GetSection("OIDC"));
         return service;
     }
 

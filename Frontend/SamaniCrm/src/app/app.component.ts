@@ -24,7 +24,14 @@ export class AppComponent implements OnInit {
   ) {
     router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
-        mainSpinnerService.showLoading = true;
+        const url = new URL(event.url, window.location.origin);
+
+        const currentPath = location.pathname;
+        const nextPath = url.pathname;
+
+        if (currentPath !== nextPath) {
+          mainSpinnerService.showLoading = true;
+        }
       }
       if (event instanceof NavigationCancel || event instanceof NavigationError) {
         mainSpinnerService.showLoading = false;

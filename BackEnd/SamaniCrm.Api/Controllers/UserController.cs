@@ -60,6 +60,13 @@ namespace SamaniCrm.Api.Controllers
         {
             return ApiOk<PaginatedResult<UserDTO>>(await _mediator.Send(request));
         }
+        [HttpPost("GetTenantUsers")]
+        [Permission(AppPermissions.TenantManagement.TenantUsers)]
+        [ProducesResponseType(typeof(ApiResponse<PaginatedResult<TenantUserDTO>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetTenantUsersAsync([FromBody] GetTenantUsersQuery request)
+        {
+            return ApiOk(await _mediator.Send(request));
+        }
 
         [HttpPost("Delete/{userId}")]
         [Permission(AppPermissions.UserManagement.Delete)]

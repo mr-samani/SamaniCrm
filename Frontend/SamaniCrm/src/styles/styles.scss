@@ -29,9 +29,9 @@
 
 :root {
   // font awosome weigth
-  --fa-style: 200;
+  --fa-weight: 300;
   // font awosome size
-  --fa-size: 16px;
+  --fa-size: 18px;
   /* for table view responsive */
   --available-content-height: calc(100vh - 220px);
 }
@@ -94,6 +94,7 @@ pre {
 }
 .fa {
   font-size: var(--fa-size);
+  font-weight: var(--fa-weight);
 }
 .text-start {
   text-align: start !important;
@@ -195,4 +196,34 @@ svg.icon {
   width: 25px;
   height: 25px;
   fill: var(--fg-color);
+}
+.card-menu-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+
+  .card-menu-item {
+    border: 1px #e8e8e82b solid;
+    padding: 20px 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    cursor: pointer;
+    width: 250px;
+    box-shadow: 0px 0px 10px #0000004d;
+    .icon {
+      i {
+        font-size: 40px;
+        margin: 0 10px;
+        font-weight: 100;
+      }
+    }
+    .card-menu-block {
+      .title {
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+    }
+  }
 }

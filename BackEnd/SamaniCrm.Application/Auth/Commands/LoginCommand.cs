@@ -1,18 +1,8 @@
-﻿using Hangfire;
-using MediatR;
-using SamaniCrm.Application.Auth.Commands;
+﻿using MediatR;
+using SamaniCrm.Application.Auth.Events;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
-using SamaniCrm.Application.DTOs;
-using SamaniCrm.Application.Queries.User;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SamaniCrm.Application.Auth.Commands;
 
@@ -23,7 +13,10 @@ public class LoginCommand : IRequest<LoginResult>
 
     public InputCaptchaDTO? captcha { get; set; }
 
-    public string? TenancyName { get; set; } = null;
+    public string? Tenant { get; set; } = null;
+
+    public bool RememberMe { get; set; }
+
 }
 
 
@@ -32,14 +25,17 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult>
     private readonly IIdentityService _identityService;
     private readonly ISecuritySettingService _securitySettingService;
     private readonly ICaptchaStore _captcha;
+    private readonly IMediator _mediator;
     public LoginCommandHandler(
             IIdentityService identityService,
             ICaptchaStore captcha,
-            ISecuritySettingService securitySettingService)
+            ISecuritySettingService securitySettingService,
+            IMediator mediator)
     {
         _identityService = identityService;
         _captcha = captcha;
         _securitySettingService = securitySettingService;
+        _mediator = mediator;
     }
 
 
@@ -58,7 +54,11 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult>
                 throw new InvalidCaptchaException();
             }
         }
-        var output = await _identityService.SignInAsync(request, cancellationToken);
+        var output = await _identityService.LoginInAsync(request, cancellationToken);
+        await _mediator.Publish(
+            new UserLogedInEvent(output.User.Id, output.User.UserName, output.User.TenantId,
+            $"User: {output.User.FullName} loged in successfully."),
+            cancellationToken);
         return output;
 
 

@@ -21,6 +21,8 @@ import { ApiResponseOfGuid } from '../model/api-response-of-guid';
 // @ts-ignore
 import { ApiResponseOfListOfAutoCompleteDtoOfGuid } from '../model/api-response-of-list-of-auto-complete-dto-of-guid';
 // @ts-ignore
+import { ApiResponseOfPaginatedResultOfTenantUserDTO } from '../model/api-response-of-paginated-result-of-tenant-user-dto';
+// @ts-ignore
 import { ApiResponseOfPaginatedResultOfUserDTO } from '../model/api-response-of-paginated-result-of-user-dto';
 // @ts-ignore
 import { ApiResponseOfUserDTO } from '../model/api-response-of-user-dto';
@@ -32,6 +34,8 @@ import { ApiResponseOfint } from '../model/api-response-ofint';
 import { CreateUserCommand } from '../model/create-user-command';
 // @ts-ignore
 import { EditUserCommand } from '../model/edit-user-command';
+// @ts-ignore
+import { GetTenantUsersQuery } from '../model/get-tenant-users-query';
 // @ts-ignore
 import { GetUserQuery } from '../model/get-user-query';
 
@@ -331,6 +335,72 @@ export class UserServiceProxy extends BaseService {
         return this.httpClient.request<ApiResponseOfUserDTO>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param getTenantUsersQuery 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getTenantUsers(getTenantUsersQuery: GetTenantUsersQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfPaginatedResultOfTenantUserDTO>;
+    public getTenantUsers(getTenantUsersQuery: GetTenantUsersQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfPaginatedResultOfTenantUserDTO>>;
+    public getTenantUsers(getTenantUsersQuery: GetTenantUsersQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfPaginatedResultOfTenantUserDTO>>;
+    public getTenantUsers(getTenantUsersQuery: GetTenantUsersQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (getTenantUsersQuery === null || getTenantUsersQuery === undefined) {
+            throw new Error('Required parameter getTenantUsersQuery was null or undefined when calling getTenantUsers.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/User/GetTenantUsers`;
+        return this.httpClient.request<ApiResponseOfPaginatedResultOfTenantUserDTO>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: getTenantUsersQuery,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

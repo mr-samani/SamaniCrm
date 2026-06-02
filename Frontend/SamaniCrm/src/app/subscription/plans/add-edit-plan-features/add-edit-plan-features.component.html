@@ -1,0 +1,99 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title">{{ 'PlanFeatures' | translate }}</span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+  @if (loading) {
+    <div class="d-flex align-items-center justify-content-center py-5">
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    </div>
+  }
+  @if (!loading) {
+    <form #frm="ngForm">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            @for (lang of allLanguages; track $index) {
+              <th>
+                {{ lang.culture }}
+              </th>
+            }
+            <th>{{ 'FeatureKey' | translate }}</th>
+            <th>{{ 'PlanFeatureType' | translate }}</th>
+            <th>{{ 'Value' | translate }}</th>
+            <th>{{ 'Unit' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody cdkDropList (cdkDropListDropped)="onDrop($event)">
+          @for (item of features; track $index; let fi = $index) {
+            <tr cdkDrag>
+              <td>
+                <i class="fa fa-grip-dots-vertical" cdkDragHandle></i>
+              </td>
+              @for (lang of item.translations; track $index) {
+                <td>
+                  <div class="input-group">
+                    <input
+                      class="form-control"
+                      [(ngModel)]="lang.title"
+                      [name]="'title_' + fi + '_' + $index"
+                      [placeholder]="lang.culture"
+                      required />
+                  </div>
+                </td>
+              }
+
+              <td>
+                <div class="input-group">
+                  <input class="form-control" [(ngModel)]="item.featureKey" [name]="'featureKey_' + $index" required />
+                </div>
+              </td>
+              <td>
+                <div class="input-group">
+                  <mat-select
+                    class="form-control"
+                    [(ngModel)]="item.planFeatureType"
+                    [name]="'planFeatureType_' + $index"
+                    required>
+                    @for (opt of PlanFeatureType | enumToArray; track $index) {
+                      <mat-option [value]="+opt">{{ 'PlanFeatureType_' + opt | translate }}</mat-option>
+                    }
+                  </mat-select>
+                </div>
+              </td>
+              <td>
+                <div class="input-group">
+                  <input class="form-control" [(ngModel)]="item.value" [name]="'value_' + $index" required />
+                </div>
+              </td>
+              <td>
+                <div class="input-group">
+                  <input class="form-control" [(ngModel)]="item.unit" [name]="'unit_' + $index" />
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </form>
+  }
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="btn btn-default" mat-dialog-close>{{ 'Cancel' | translate }}</button>
+
+  <button class="btn btn-accent" (click)="addFeature()">
+    <i class="fa fa-plus"></i>
+    <span>{{ 'AddNewFeature' | translate }}</span>
+  </button>
+
+  <button class="btn btn-primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
+    @if (saving) {
+      <mat-spinner color="primary" diameter="25"></mat-spinner>
+    }
+    <span>{{ 'Save' | translate }}</span>
+  </button>
+</mat-dialog-actions>

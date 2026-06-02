@@ -1,66 +1,101 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.JsonWebTokens;
 using SamaniCrm.Application.Common.Interfaces;
 
-namespace SamaniCrm.Infrastructure.Services
+namespace SamaniCrm.Infrastructure.Services;
+
+public class CurrentUserService : ICurrentUserService
 {
-    public class CurrentUserService : ICurrentUserService
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public CurrentUserService(
+        IHttpContextAccessor httpContextAccessor)
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public CurrentUserService(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
-        private string? _overrideLang;
-        public Guid? UserId
-        {
-            get
-            {
-                string? userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier)
-                ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue("sub")
-                ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue(JwtRegisteredClaimNames.Sub);
-                return String.IsNullOrEmpty(userId) ? null : Guid.Parse(userId);
-
-            }
-
-
-        }
-
-
-        public string? UserName =>
-        _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name)
-            ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue(JwtRegisteredClaimNames.UniqueName)
-            ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue("unique_name");
-
-        // public string lang => _httpContextAccessor.HttpContext?.User?.FindFirstValue("lang") ?? "fa-IR";
-
-        public string lang
-        {
-            get
-            {
-                if (_overrideLang == null)
-                {
-                    _overrideLang =
-                        _httpContextAccessor.HttpContext?.Request.Cookies["lang"]
-                        ?? _httpContextAccessor.HttpContext?.User?.FindFirstValue("lang")
-                        ?? "fa-IR";
-                }
-                return _overrideLang!;
-            }
-            set
-            {
-                _overrideLang = value;
-            }
-        }
-
-
-        public bool IsAuthenticated { get => UserId != null; }
+        _httpContextAccessor = httpContextAccessor;
     }
+
+    public Guid? UserId
+    {
+        get
+        {
+            var sub = _httpContextAccessor
+                .HttpContext?
+                .User?
+                .FindFirst("sub")
+                ?.Value;
+
+            return Guid.TryParse(sub, out var id)
+                ? id
+                : null;
+        }
+    }
+
+    public string? UserName =>
+        _httpContextAccessor
+            .HttpContext?
+            .User?
+            .FindFirst("preferred_username")
+            ?.Value;
+
+    public string Lang =>
+        _httpContextAccessor
+            .HttpContext?
+            .User?
+            .FindFirst("lang")
+            ?.Value
+        ?? "fa-IR";
+
+
+    public Guid? TenantId
+    {
+        get
+        {
+            var tenantId = _httpContextAccessor
+                .HttpContext?
+                .User?
+                .FindFirst("tenant_id")
+                ?.Value;
+
+            return Guid.TryParse(tenantId, out var id)
+                ? id
+                : null;
+        }
+    }
+
+
+    public bool IsDelegated =>
+    _httpContextAccessor.HttpContext?
+        .User
+        .HasClaim("is_delegated", "true")
+    ?? false;
+
+    public Guid? DelegatorId
+    {
+        get
+        {
+            var value =
+                _httpContextAccessor.HttpContext?
+                    .User
+                    .FindFirstValue("delegator_id");
+
+            return string.IsNullOrEmpty(value)
+                ? null
+                : Guid.Parse(value);
+        }
+    }
+
+    public bool IsAuthenticated =>
+        _httpContextAccessor
+            .HttpContext?
+            .User?
+            .Identity?
+            .IsAuthenticated
+        ?? false;
+
 }

@@ -1,7 +1,6 @@
 import { Injectable, Injector, OnDestroy } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { HubConnection, HubConnectionState, LogLevel } from '@microsoft/signalr';
-import { TokenService } from './token.service';
 import { BehaviorSubject } from 'rxjs';
 
 export enum ConnectionStatus {
@@ -18,7 +17,7 @@ export class SignalRService implements OnDestroy {
   connectionStatus = ConnectionStatus.Stoped;
   hubConnection?: HubConnection;
   onConnectionChange = new BehaviorSubject<ConnectionStatus>(this.connectionStatus);
-  constructor(private tokenService: TokenService) {}
+  constructor() {}
 
   public get isConnecting() {
     return (
@@ -35,14 +34,13 @@ export class SignalRService implements OnDestroy {
 
   init(signalRUri: string) {
     this.connectionStatus = ConnectionStatus.Connecting;
-    const token = this.tokenService.get();
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(signalRUri, {
         transport: signalR.HttpTransportType.WebSockets,
         withCredentials: true,
         skipNegotiation: true,
         // logger: LogLevel.Information,
-        accessTokenFactory: () => token.accessToken ?? '',
+       // accessTokenFactory: () => token.accessToken ?? '',
       })
       .configureLogging(LogLevel.Critical)
       .withAutomaticReconnect()

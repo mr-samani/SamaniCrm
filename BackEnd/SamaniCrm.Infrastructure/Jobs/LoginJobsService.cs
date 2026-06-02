@@ -13,7 +13,12 @@ using Hangfire.Console;
 
 namespace SamaniCrm.Infrastructure.Jobs;
 
+public interface ILoginJobsService
+{
+    Task ReleaseExpiredLocksAsync(PerformContext context, CancellationToken cancellationToken);
+    Task ReleaseExpiredLocksAsync(PerformContext context);
 
+}
 
 public class LoginJobsService : ILoginJobsService
 {

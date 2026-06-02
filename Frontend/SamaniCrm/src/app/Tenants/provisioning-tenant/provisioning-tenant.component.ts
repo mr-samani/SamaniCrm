@@ -47,7 +47,7 @@ export class ProvisioningTenantComponent extends AppComponentBase implements OnI
         setTimeout(() => {
           this.registerEvents();
           this.joinTenantGroup();
-        }, 10);
+        }, 100);
       }
       this.chdr.detectChanges();
     });

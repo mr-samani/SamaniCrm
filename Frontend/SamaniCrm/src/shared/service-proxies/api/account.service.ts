@@ -23,19 +23,15 @@ import { ApiResponseOfListOfExternalProviderDto } from '../model/api-response-of
 // @ts-ignore
 import { ApiResponseOfLoginResult } from '../model/api-response-of-login-result';
 // @ts-ignore
-import { ApiResponseOfTokenResponseDto } from '../model/api-response-of-token-response-dto';
-// @ts-ignore
 import { ApiResponseOfboolean } from '../model/api-response-ofboolean';
 // @ts-ignore
 import { ApiResponseOfstring } from '../model/api-response-ofstring';
 // @ts-ignore
+import { DelegateUserCommand } from '../model/delegate-user-command';
+// @ts-ignore
 import { ExternalLoginCallbackCommand } from '../model/external-login-callback-command';
 // @ts-ignore
 import { LoginCommand } from '../model/login-command';
-// @ts-ignore
-import { RefreshTokenCommand } from '../model/refresh-token-command';
-// @ts-ignore
-import { RevokeRefreshTokenCommand } from '../model/revoke-refresh-token-command';
 // @ts-ignore
 import { TwoFactorLoginCommand } from '../model/two-factor-login-command';
 // @ts-ignore
@@ -53,6 +49,122 @@ export class AccountServiceProxy extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * @param delegateUserCommand 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public delegateUser(delegateUserCommand: DelegateUserCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfLoginResult>;
+    public delegateUser(delegateUserCommand: DelegateUserCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfLoginResult>>;
+    public delegateUser(delegateUserCommand: DelegateUserCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfLoginResult>>;
+    public delegateUser(delegateUserCommand: DelegateUserCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (delegateUserCommand === null || delegateUserCommand === undefined) {
+            throw new Error('Required parameter delegateUserCommand was null or undefined when calling delegateUser.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/Account/DelegateUser`;
+        return this.httpClient.request<ApiResponseOfLoginResult>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: delegateUserCommand,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public exitDelegation(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfstring>;
+    public exitDelegation(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfstring>>;
+    public exitDelegation(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfstring>>;
+    public exitDelegation(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarHeaders = this.defaultHeaders;
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'text/plain',
+            'application/json',
+            'text/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/Account/ExitDelegation`;
+        return this.httpClient.request<ApiResponseOfstring>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
@@ -354,17 +466,13 @@ export class AccountServiceProxy extends BaseService {
     }
 
     /**
-     * @param refreshTokenCommand 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public refresh(refreshTokenCommand: RefreshTokenCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfTokenResponseDto>;
-    public refresh(refreshTokenCommand: RefreshTokenCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfTokenResponseDto>>;
-    public refresh(refreshTokenCommand: RefreshTokenCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfTokenResponseDto>>;
-    public refresh(refreshTokenCommand: RefreshTokenCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (refreshTokenCommand === null || refreshTokenCommand === undefined) {
-            throw new Error('Required parameter refreshTokenCommand was null or undefined when calling refresh.');
-        }
+    public logout(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfboolean>;
+    public logout(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfboolean>>;
+    public logout(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfboolean>>;
+    public logout(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -382,17 +490,6 @@ export class AccountServiceProxy extends BaseService {
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/*+json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -404,77 +501,10 @@ export class AccountServiceProxy extends BaseService {
             }
         }
 
-        let localVarPath = `/api/Account/refresh`;
-        return this.httpClient.request<ApiResponseOfTokenResponseDto>('post', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/Account/Logout`;
+        return this.httpClient.request<ApiResponseOfboolean>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: refreshTokenCommand,
-                responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
-                headers: localVarHeaders,
-                observe: observe,
-                transferCache: localVarTransferCache,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * @param revokeRefreshTokenCommand 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public revoke(revokeRefreshTokenCommand: RevokeRefreshTokenCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfstring>;
-    public revoke(revokeRefreshTokenCommand: RevokeRefreshTokenCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfstring>>;
-    public revoke(revokeRefreshTokenCommand: RevokeRefreshTokenCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfstring>>;
-    public revoke(revokeRefreshTokenCommand: RevokeRefreshTokenCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
-        if (revokeRefreshTokenCommand === null || revokeRefreshTokenCommand === undefined) {
-            throw new Error('Required parameter revokeRefreshTokenCommand was null or undefined when calling revoke.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'text/plain',
-            'application/json',
-            'text/json'
-        ]);
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
-        const localVarTransferCache: boolean = options?.transferCache ?? true;
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/*+json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/api/Account/revoke`;
-        return this.httpClient.request<ApiResponseOfstring>('post', `${this.configuration.basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: revokeRefreshTokenCommand,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

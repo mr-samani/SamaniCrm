@@ -1,4 +1,5 @@
 ﻿using Hangfire;
+using Microsoft.AspNetCore.Identity;
 using SamaniCrm.Api.Extensions;
 using SamaniCrm.Api.TUS;
 using SamaniCrm.Application;
@@ -23,6 +24,8 @@ services
     .AddConfigurations(config)
     .AddDbContext(config)
     .AddCustomServices(config);
+
+
 services
     .AddCorsPolicy()
     .AddControllersWithDefaults()
@@ -39,6 +42,8 @@ services
     .AddLogging(config)
     .AddHelthChecks(config)
     .AddSignalR();
+
+services.AddControllersWithViews();
 
 // 1. اضافه کردن Cache (اجباری برای Session)
 builder.Services.AddDistributedMemoryCache();
@@ -91,10 +96,11 @@ app.UseSession();
 
 
 
-// آگر این خط کامنت نباشد احراز هویت بر اساس کوکی خواهد بود
-// app.UseIdentityServer();
+app.UseRouting();
+//https://localhost:44343/.well-known/openid-configuration
+app.UseIdentityServer();
 app.UseAuthentication();
-app.UseAuthorization();
+app.UseAuthorization(); 
 
 
 // Multi-Tenant Middleware Pipeline
@@ -104,7 +110,7 @@ app.UseMiddleware<TenantSecurityMiddleware>();
 
 
 
-app.MapControllers();
+app.MapControllers(); 
 //app.MapGroup("/auth2").MapCustomIdentityApi<ApplicationUser>().WithTags(["Auth2"]);
 // Hangfire Dashboard
 app.UseHangfireDashboard("/hangfire");
@@ -125,6 +131,11 @@ using (var scope = app.Services.CreateScope())
     await initializer.EnsureBaseDirectoriesAsync();
 }
 app.InitializeTUS(config);
+
+
+
+
+
 
 app.Run();
 

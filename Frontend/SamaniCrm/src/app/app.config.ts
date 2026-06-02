@@ -1,9 +1,4 @@
-import {
-  ApplicationConfig,
-  ErrorHandler,
-  importProvidersFrom,
-  provideAppInitializer,
-} from '@angular/core';
+import { ApplicationConfig, ErrorHandler, importProvidersFrom, provideAppInitializer } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -18,11 +13,32 @@ import { AccountServiceProxy } from '@shared/service-proxies/api/account.service
 import { Configuration } from '@shared/service-proxies/configuration';
 import { GlobalErrorHandler } from '@shared/handlers/global-error-handler';
 import { UserServiceProxy } from '@shared/service-proxies';
+import { provideAuth } from 'angular-auth-oidc-client';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAppInitializer(() => AppInitializer()),
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
+    provideAuth({
+      config: {
+        authority: 'https://localhost:44343',
+
+        clientId: 'angular',
+
+        redirectUrl: window.location.origin + '/auth-callback',
+
+        postLogoutRedirectUri: window.location.origin,
+
+        scope: 'openid profile api roles tenant lang offline_access',
+
+        responseType: 'code',
+
+        silentRenew: true,
+
+        useRefreshToken: true,
+      },
+    }),
     importProvidersFrom(
       // ServiceWorkerModule.register('ngsw-worker.js', {
       //   enabled: !isDevMode(),

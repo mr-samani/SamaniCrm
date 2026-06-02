@@ -258,6 +258,7 @@ public class TenantProvisioningService : ITenantProvisioningService
                 RetryCount = s.RetryCount,
             })
                .Where(x => x.TenantId == tenantId)
+               .OrderBy(x => x.Step)
                .ToListAsync(cancellation);
         if (result.Count == 0 && ChackInit == true)
         {

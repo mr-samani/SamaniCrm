@@ -31,6 +31,7 @@ export interface ICreateOrUpdateExternalProviderDto {
   responseType?: string;
   responseMode?: string;
   usePkce?: boolean;
+  isActive?: boolean;
 }
 
 /** Class for CreateOrUpdateExternalProviderDto */
@@ -52,6 +53,7 @@ export class CreateOrUpdateExternalProviderDto implements ICreateOrUpdateExterna
   responseType?: string;
   responseMode?: string;
   usePkce?: boolean;
+  isActive?: boolean;
 
   constructor(data?: ICreateOrUpdateExternalProviderDto) {
     if (data) {
@@ -81,6 +83,7 @@ init(data?: any) {
     this.responseType = data["responseType"];
     this.responseMode = data["responseMode"];
     this.usePkce = data["usePkce"];
+    this.isActive = data["isActive"];
   }
 }
 

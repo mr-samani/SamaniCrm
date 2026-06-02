@@ -11,11 +11,11 @@ namespace SamaniCrm.Infrastructure.Hubs;
 public class NotificationHub : Hub<INotificationHubService>
 {
     private readonly IConnectionManager _connectionManager;
-    private readonly ILogService _logger;
+    private readonly IAppLogService _logger;
 
     public NotificationHub(
         IConnectionManager connectionManager,
-        ILogService logger)
+        IAppLogService logger)
     {
         _connectionManager = connectionManager;
         _logger = logger;
@@ -165,9 +165,7 @@ public class NotificationHub : Hub<INotificationHubService>
 
     private string? GetUserId()
     {
-        return Context?.User?.FindFirstValue(ClaimTypes.NameIdentifier)
-            ?? Context?.User?.FindFirstValue("sub")
-            ?? Context?.User?.FindFirstValue(JwtRegisteredClaimNames.Sub);
+        return Context?.User?.FindFirstValue(ClaimTypes.Sid);
     }
 
     private (string DeviceId, string DeviceType, string DeviceName, string Browser, string OperatingSystem) ExtractDeviceInfo()

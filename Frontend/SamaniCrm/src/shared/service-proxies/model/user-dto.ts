@@ -14,6 +14,7 @@
 /** Interface for UserDTO */
 export interface IUserDTO {
   id: string;
+  tenantId?: string;
   userName: string;
   firstName: string;
   lastName?: string;
@@ -27,11 +28,14 @@ export interface IUserDTO {
   roles?: Array<string>;
   permissions?: Array<string>;
   givenName?: string;
+  isDelegated?: boolean;
+  delegatorId?: string;
 }
 
 /** Class for UserDTO */
 export class UserDTO implements IUserDTO {
   id!: string;
+  tenantId?: string;
   userName!: string;
   firstName!: string;
   lastName?: string;
@@ -45,6 +49,8 @@ export class UserDTO implements IUserDTO {
   roles?: Array<string>;
   permissions?: Array<string>;
   givenName?: string;
+  isDelegated?: boolean;
+  delegatorId?: string;
 
   constructor(data?: IUserDTO) {
     if (data) {
@@ -58,6 +64,7 @@ export class UserDTO implements IUserDTO {
 init(data?: any) {
   if (data) {
     this.id = data["id"];
+    this.tenantId = data["tenantId"];
     this.userName = data["userName"];
     this.firstName = data["firstName"];
     this.lastName = data["lastName"];
@@ -79,6 +86,8 @@ init(data?: any) {
         (this.permissions as any).push(item);
     }
     this.givenName = data["givenName"];
+    this.isDelegated = data["isDelegated"];
+    this.delegatorId = data["delegatorId"];
   }
 }
 

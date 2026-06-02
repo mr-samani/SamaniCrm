@@ -2,17 +2,20 @@
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Features.Logging.Interfaces;
 using SamaniCrm.Infrastructure.BackgroundServices;
-using SamaniCrm.Infrastructure.Loging;
-using SamaniCrm.Infrastructure.Loging.Sinks;
 using Scalar.AspNetCore;
-using SamaniCrm.Infrastructure.Loging.Filters;
+using SamaniCrm.Infrastructure.Loging.AppLogs;
+using SamaniCrm.Infrastructure.Loging.AppLogs.Sinks;
+using SamaniCrm.Infrastructure.Loging.AppLogs.Filters;
+using SamaniCrm.Infrastructure.Loging.SecurityLogs;
+using SamaniCrm.Infrastructure.Jobs;
+using SamaniCrm.Core.Shared.Interfaces;
 
 
 
 namespace SamaniCrm.Api.Extensions;
 
 public static partial class ServiceCollectionExtensions
-{    
+{
 
 
     public static IServiceCollection AddLogging(this IServiceCollection services, IConfiguration config)
@@ -35,8 +38,8 @@ public static partial class ServiceCollectionExtensions
         });
 
         // Core Services
-        services.AddScoped<ILogConfigurationService, LogConfigurationService>();
-        services.AddScoped<ILogService, LogService>();
+        services.AddScoped<IAppLogConfigurationService, AppLogConfigurationService>();
+        services.AddScoped<IAppLogService, AppLogService>();
         // services.AddScoped<ILogRetentionService, LogRetentionService>();
 
 
@@ -47,7 +50,17 @@ public static partial class ServiceCollectionExtensions
         services.AddLoggingInterceptors();
 
         // Decorator برای Service ها
-        services.AddLoggedServices();
+        services.AddAppLoggedServices();
+
+
+
+
+
+        // security log
+        services.AddSingleton<SecurityLogQueue>();
+        services.AddScoped<ISecurityLogFactory, SecurityLogFactory>();
+        services.AddSingleton<ISecurityLogQueue>(sp => sp.GetRequiredService<SecurityLogQueue>());
+        services.AddHostedService<SecurityLogBackgroundService>();
 
         return services;
     }

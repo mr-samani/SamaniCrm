@@ -16,8 +16,6 @@ import { UserDTO } from './user-dto';
 /** Interface for LoginResult */
 export interface ILoginResult {
   user?: UserDTO;
-  accessToken?: string;
-  refreshToken?: string;
   roles?: Array<string>;
   permissions?: Array<string>;
   enableTwoFactor?: boolean;
@@ -27,8 +25,6 @@ export interface ILoginResult {
 /** Class for LoginResult */
 export class LoginResult implements ILoginResult {
   user?: UserDTO;
-  accessToken?: string;
-  refreshToken?: string;
   roles?: Array<string>;
   permissions?: Array<string>;
   enableTwoFactor?: boolean;
@@ -46,8 +42,6 @@ export class LoginResult implements ILoginResult {
 init(data?: any) {
   if (data) {
     this.user = data["user"];
-    this.accessToken = data["accessToken"];
-    this.refreshToken = data["refreshToken"];
     if (Array.isArray(data["roles"])) {
       this.roles = [] as any;
       for (let item of data["roles"])

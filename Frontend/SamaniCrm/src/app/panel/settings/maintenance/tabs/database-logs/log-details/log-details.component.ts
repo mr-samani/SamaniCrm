@@ -3,7 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
-import { LogEntryDto } from '@shared/service-proxies/model/log-entry-dto';
+import { AppLogEntryDto } from '@shared/service-proxies/model/app-log-entry-dto';
 import { SharedModule } from '@shared/shared.module';
 
 @Component({
@@ -13,7 +13,7 @@ import { SharedModule } from '@shared/shared.module';
   imports: [CommonModule, MaterialCommonModule, TranslateModule, SharedModule],
 })
 export class LogDetailsComponent implements OnInit {
-  data = inject<LogEntryDto>(MAT_DIALOG_DATA);
+  data = inject<AppLogEntryDto>(MAT_DIALOG_DATA);
   constructor() {}
 
   ngOnInit() {}

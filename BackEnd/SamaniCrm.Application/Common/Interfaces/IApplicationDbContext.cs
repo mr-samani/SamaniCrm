@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Domain.Entities.Subscription;
 using SecuritySettingEntity = SamaniCrm.Domain.Entities.SecuritySetting;
 
 
@@ -8,8 +9,10 @@ namespace SamaniCrm.Application.Common.Interfaces;
 public interface IApplicationDbContext
 {
 
-    public DbSet<TenantLogSetting> TenantLogSettings { get; set; }
-    public DbSet<LogEntry> LogEntries { get; set; }
+    public DbSet<TenantAppLogSetting> TenantLogSettings { get; set; }
+    public DbSet<AppLogEntry> LogEntries { get; set; }
+    public DbSet<AuditLog> AuditLogs { get; set; }
+    public DbSet<SecurityLogEntry> SecurityLogEntries { get; set; }
 
 
     public DbSet<Tenant> Tenants { get; set; }
@@ -20,7 +23,6 @@ public interface IApplicationDbContext
 
 
 
-    public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Permission> Permissions { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<Language> Languages { get; set; }
@@ -29,6 +31,7 @@ public interface IApplicationDbContext
     public DbSet<MenuTranslation> MenuTranslations { get; set; }
     public DbSet<SecuritySettingEntity> SecuritySettings { get; set; }
     public DbSet<UserSetting> UserSetting { get; set; }
+    public DbSet<UserDelegation> UserDelegations { get; set; }
     public DbSet<Page> Pages { get; set; }
     public DbSet<PageTranslation> PageTranslations { get; set; }
 
@@ -65,6 +68,21 @@ public interface IApplicationDbContext
     public DbSet<DashboardItem> DashboardItems { get; set; }
     #endregion
 
+
+
+    #region Subscription
+
+    public DbSet<Plan> Plans { get; set; }
+    public DbSet<PlanTranslation> PlanTranslations { get; set; }
+    public DbSet<PlanFeature> PlanFeatures { get; set; }
+    public DbSet<PlanFeatureTranslation> PlanFeatureTranslations { get; set; }
+    public DbSet<PlanPrice> PlanPrices { get; set; }
+    public DbSet<Subscription> Subscriptions { get; set; }
+    public DbSet<AddOn> AddOns { get; set; }
+    public DbSet<AddOnTranslation> AddOnTranslations { get; set; }
+    public DbSet<SubscriptionAddOn> SubscriptionAddOns { get; set; }
+
+    #endregion
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     int SaveChanges();

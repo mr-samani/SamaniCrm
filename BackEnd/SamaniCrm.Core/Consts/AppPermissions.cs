@@ -29,17 +29,22 @@ public static class AppPermissions
 
     public static class LoggingSystem
     {
-        public const string List = "Administrator.LoggingSystem.List";
-        public const string Details = "Administrator.LoggingSystem.Details";
-        public const string GetStats = "Administrator.LoggingSystem.GetStats";
-        public const string ManualCleanUpLog = "Administrator.LoggingSystem.ManualCleanUpLog";
-
-        public static class TenantLogSetting
+        public static class AppLogs
         {
-            public const string List = "Administrator.LoggingSystem.Settings.List";
-            public const string Update = "Administrator.LoggingSystem.Settings.Update";
+            public const string List = "Administrator.LoggingSystem.AppLogs.List";
+            public const string Details = "Administrator.LoggingSystem.AppLogs.Details";
+            public const string GetStats = "Administrator.LoggingSystem.AppLogs.GetStats";
+            public const string ManualCleanUpLog = "Administrator.LoggingSystem.AppLogs.ManualCleanUpLog";
+            public static class TenantAppLogSetting
+            {
+                public const string List = "Administrator.LoggingSystem.AppLogs.Settings.List";
+                public const string Update = "Administrator.LoggingSystem.AppLogs.Settings.Update";
 
+            }
         }
+
+
+
     }
 
 
@@ -47,13 +52,14 @@ public static class AppPermissions
     public static class TenantManagement
     {
         public const string List = "Administrator.TenantManagement.List";
+        public const string TenantUsers = "Administrator.TenantManagement.TenantUsers";
         public const string AutoComplete = "Administrator.TenantManagement.AutoComplete";
         public const string Create = "Administrator.TenantManagement.Create";
         public const string Edit = "Administrator.TenantManagement.Edit";
         public const string Delete = "Administrator.TenantManagement.Delete";
         public const string ActiveDeActive = "Administrator.TenantManagement.ActiveDeActive";
         public const string Users = "Administrator.TenantManagement.Users";
-        public const string Impersonate = "Administrator.TenantManagement.Impersonate";
+        public const string DelegateUser = "Administrator.TenantManagement.DelegateUser";
         public const string GetTenantSetting = "Administrator.TenantManagement.GetTenantSetting";
         public const string UpdateTenantSetting = "Administrator.TenantManagement.UpdateTenantSetting";
         public const string GetProvisioningData = "Administrator.TenantManagement.GetProvisioningData";
@@ -246,4 +252,30 @@ public static class AppPermissions
             public const string Delete = "DashboardManagement.Item.Delete";
         }
     }
+
+    /// <summary>
+    /// Subscription
+    /// </summary>
+    public static class SubscriptionManagement
+    {
+        public const string Page = "SubscriptionManagement.Page";
+        public static class Plans
+        {
+
+            public const string List = "SubscriptionManagement.Plans.List";
+            public const string Create = "SubscriptionManagement.Plans.Create";
+            public const string Edit = "SubscriptionManagement.Plans.Edit";
+            public const string Delete = "SubscriptionManagement.Plans.Delete";
+        }
+        public static class PlanFeatures
+        {
+
+            public const string List = "SubscriptionManagement.PlanFeatures.List";
+            public const string Create = "SubscriptionManagement.PlanFeatures.Create";
+            public const string Edit = "SubscriptionManagement.PlanFeatures.Edit";
+            public const string Delete = "SubscriptionManagement.PlanFeatures.Delete";
+        }
+    }
+
+
 }

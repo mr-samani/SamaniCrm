@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Infrastructure.Jobs;
 
 namespace SamaniCrm.Api.Extensions;
 

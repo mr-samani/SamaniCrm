@@ -1,0 +1,37 @@
+<!-- <sub-header [title]="'Subscriptions' | translate"></sub-header> -->
+<div class="panel-content">
+  <div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+      <div class="accordion-header" id="'mnu-1">
+        <button
+          class="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapse1"
+          aria-expanded="true"
+          aria-controls="#collapse1">
+          {{ 'Plans' | translate }}
+        </button>
+      </div>
+      <div
+        id="collapse1"
+        class="accordion-collapse collapse show"
+        aria-labelledby="heading1"
+        data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          <div class="card-menu-container">
+            <div class="card-menu-item" [routerLink]="['/panel/subscription/plans']" routerLinkActive="active">
+              <div class="icon">
+                <i class="fa fa-boxes-stacked"></i>
+              </div>
+              <div class="card-menu-block">
+                <div class="title">{{ 'Plans' | translate }}</div>
+                <small>{{ 'PlansDescription' | translate }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
