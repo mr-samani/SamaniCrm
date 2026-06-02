@@ -67,11 +67,9 @@ const routes: Routes = [
         loadChildren: () => import('./notifications/notification.module').then((m) => m.NotificationModule),
       },
       {
-        path: 'page-builder',
-        loadChildren: () => import('./page-builder/page-builder.module').then((m) => m.PageBuilderModule),
+        path: 'subscription',
+        loadChildren: () => import('../subscription/subscription.module').then((m) => m.SubscriptionModule),
       },
-      { path: 'builder', loadChildren: () => import('../builder/builder.module').then((m) => m.BuilderModule) },
-      { path: 'subscription', loadChildren: () => import('../subscription/subscription.module').then((m) => m.SubscriptionModule) },
     ],
   },
 ];

@@ -1,8 +1,0 @@
-@if (loading) {
-  <mat-spinner></mat-spinner>
-}
-@if (block.itemTemplate && !loading) {
-  @for (item of list; track $index) {
-    <dynamic-renderer [block]="block.itemTemplate" [loopIndex]="$index" [canDrag]="false" />
-  }
-}

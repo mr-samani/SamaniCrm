@@ -95,14 +95,6 @@
           <li><a class="dropdown-item" href="#">Something else here</a></li>
         </ul>
       </li> -->
-        @if (AppPermissions.Pages_Builder | permission) {
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/panel/builder" routerLinkActive="active" (click)="closeNavbar()">
-              <i class="fa fa-page"></i>
-              {{ 'PageBuilder' | translate }}
-            </a>
-          </li>
-        }
         @if (AppPermissions.SubscriptionManagement_Plans_Create | permission) {
           <li class="nav-item">
             <a class="nav-link" routerLink="/panel/subscription" routerLinkActive="active" (click)="closeNavbar()">

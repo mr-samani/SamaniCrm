@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 import { TestyComponent } from './testy/testy.component';
 import { GridGeneratorComponent } from './grid-generator/grid-generator.component';
-import { SpacingControlComponent } from './builder/_libs/spacing-control/spacing-control.component';
-import { CComponent } from './c/c.component';
 import { editPageResolver } from './page-builder/edit-page/edit-page.resolver';
 
 export const routes: Routes = [
@@ -19,8 +17,6 @@ export const routes: Routes = [
 
   { path: 'testy', component: TestyComponent },
   { path: 'g', component: GridGeneratorComponent },
-  { path: 's', component: SpacingControlComponent },
-  { path: 'c', component: CComponent },
 
   //   {
   //     path: 'pagebuilder',

@@ -142,12 +142,8 @@ export class PagesComponent extends AppComponentBase implements OnInit {
       });
   }
 
-  updatePageOld(item: PageDtoExtended) {
-    this.router.navigate(['/panel/builder/' + item.id]);
-  }
-  updatePage2(item: PageDtoExtended) {
-    this.router.navigate(['/panel/page-builder/' + item.id]);
-  }
+ 
+
 
   openPageBuilder(item: PageDtoExtended) {
     const messageListener = (event: MessageEvent) => {
