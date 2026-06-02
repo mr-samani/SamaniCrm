@@ -116,9 +116,9 @@
 
 body.color-scheme-dark {
   .tab-group-container {
-    --oc-tab-bg: rgb(37, 37, 37) !important;
-    --oc-tab-border: #414141;
-    --oc-tab-hover-bg: #294e6fb3;
+    --oc-tab-bg: var(--body-bg) !important;
+    --oc-tab-border: #52547b;
+    --oc-tab-hover-bg: var(--surface-bg);
   }
 }
 .pane {
