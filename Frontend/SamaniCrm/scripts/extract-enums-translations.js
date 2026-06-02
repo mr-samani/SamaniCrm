@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
 /**
- * extract-enums.js
+ * extract-enums-translations.js
  *
  * Usage:
- * node extract-enums.js [sourceDir] [outputJson]
+ * node extract-enums-translations.js [sourceDir] [outputJson]
  *
  * Example:
- * node extract-enums.js ../src translations/extracted-enums.json
+ * node extract-enums-translations.js ../src translations/extracted-enums.json
  */
 
 const fs = require('fs').promises;
