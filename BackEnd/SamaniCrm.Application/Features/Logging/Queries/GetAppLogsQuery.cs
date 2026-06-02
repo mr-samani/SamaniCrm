@@ -13,6 +13,7 @@ namespace SamaniCrm.Application.Features.Logging.Queries;
 
 public class GetAppLogsQuery : PaginationRequest, IRequest<PaginatedResult<AppLogEntryDto>>
 {
+    public string? CorrelationId { get; set; }
     public Guid? TenantId { get; set; }
     public List<LogLevel>? Levels { get; set; }
     public DateTime? FromDate { get; set; }
@@ -32,7 +33,7 @@ public class GetAppLogsQueryHandler : IRequestHandler<GetAppLogsQuery, Paginated
 
     public async Task<PaginatedResult<AppLogEntryDto>> Handle(GetAppLogsQuery request, CancellationToken cancellationToken)
     {
-       var result= await _logService.GetLogs(request, cancellationToken);
+        var result = await _logService.GetLogs(request, cancellationToken);
         return result;
     }
 }

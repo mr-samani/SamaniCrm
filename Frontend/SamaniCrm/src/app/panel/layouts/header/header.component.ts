@@ -19,8 +19,6 @@ export class HeaderComponent extends AppComponentBase {
   currentLang = AppConst.currentLanguage;
   languages = AppConst.languageList;
   baseUrl = AppConst.apiUrl;
-  AppConst = AppConst;
-
   tenancyName = AppConst.tenancyName;
   @ViewChild('navbarCollapse') navbarCollapse!: ElementRef;
 

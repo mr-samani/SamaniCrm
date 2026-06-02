@@ -25,4 +25,5 @@ export class AppConst {
   /** must be set with tenant resolver */
   static tenantId: string;
   static tenancyName: string;
+  static isHost: boolean;
 }

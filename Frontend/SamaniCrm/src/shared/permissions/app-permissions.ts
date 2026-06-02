@@ -1,7 +1,7 @@
 /**
  * Auto-generated file - Do not edit manually
  * Generated from: AppPermissions.cs
- * Generated at: 2026-06-01T06:03:04.443Z
+ * Generated at: 2026-06-02T05:41:15.612Z
  */
 
 export class AppPermissions {
@@ -40,6 +40,9 @@ export class AppPermissions {
     // LoggingSystem > AppLogs > TenantAppLogSetting
     static LoggingSystem_AppLogs_TenantAppLogSetting_List = "Administrator.LoggingSystem.AppLogs.Settings.List";
     static LoggingSystem_AppLogs_TenantAppLogSetting_Update = "Administrator.LoggingSystem.AppLogs.Settings.Update";
+
+    // LoggingSystem > SecurityLogs
+    static LoggingSystem_SecurityLogs_List = "Administrator.LoggingSystem.SecurityLogs.List";
 
     // Maintenance > Cache
     static Maintenance_Cache_List = "Administrator.Maintenance.Cache.List";

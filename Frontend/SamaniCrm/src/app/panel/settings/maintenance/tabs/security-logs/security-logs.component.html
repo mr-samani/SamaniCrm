@@ -5,14 +5,6 @@
       <span>{{ 'Filter' | translate }}</span>
     </button>
   </div>
-
-  @if (AppPermissions.LoggingSystem_AppLogs_ManualCleanUpLog | permission) {
-    <button mat-stroked-button color="primary" (click)="manulaCleanup()">
-      <i class="fa fa-trash mx-1"></i>
-      <span>{{ 'ManualCleanupLogs' | translate }}</span>
-      <span>{{ 'OldDays{day}' | translate: { day: 30 } }}</span>
-    </button>
-  }
 </div>
 
 <form [formGroup]="form" *filterForm="showFilter" class="filter-form">
@@ -21,14 +13,25 @@
       <mat-label>{{ 'Filter' | translate }}</mat-label>
       <input matInput type="text" maxlength="500" formControlName="filter" />
     </mat-form-field>
+
     @if (isHost) {
       <auto-complete-tenant class="col-sm-6 col-md-4" formControlName="tenant"></auto-complete-tenant>
     }
+
     <mat-form-field class="col-sm-6 col-md-4">
-      <mat-label>{{ 'LogLevel' | translate }}</mat-label>
-      <mat-select formControlName="filterLevels" multiple>
+      <mat-label>{{ 'Severity' | translate }}</mat-label>
+      <mat-select formControlName="severity">
         @for (item of LogLevel | enumToArray; track $index) {
           <mat-option [value]="+item">{{ 'LogLevel_' + item | translate }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="col-sm-6 col-md-4">
+      <mat-label>{{ 'EventType' | translate }}</mat-label>
+      <mat-select formControlName="eventType">
+        @for (item of SecurityEventType | enumToArray; track $index) {
+          <mat-option [value]="+item">{{ 'SecurityEventType_' + item | translate }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
@@ -48,27 +51,8 @@
 <table-view
   [list]="items"
   [fields]="fields"
-  [operations]="operations"
   [loading]="loading"
   (sortChange)="getList($event)"></table-view>
 
 <pagination [total]="totalCount" [(page)]="page" (onChange)="onPageChange($event)"></pagination>
 
-<ng-template #operations let-item>
-  @if (item.loading) {
-    <mat-spinner [diameter]="20"></mat-spinner>
-  }
-  @if (!item.loading) {
-    <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
-      <i class="fa fa-ellipsis-v"></i>
-    </button>
-  }
-  <mat-menu #menu="matMenu">
-    @if (AppPermissions.LoggingSystem_AppLogs_Details | permission) {
-      <a mat-menu-item (click)="openLogDetails(item)">
-        <i class="fa fa-eye mx-1"></i>
-        <span>{{ 'Details' | translate }}</span>
-      </a>
-    }
-  </mat-menu>
-</ng-template>

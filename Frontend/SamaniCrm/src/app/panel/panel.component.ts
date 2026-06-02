@@ -10,7 +10,6 @@ import { AppConst } from '@shared/app-const';
   standalone: false,
 })
 export class PanelComponent extends AppComponentBase {
-  AppConst = AppConst;
   constructor() {
     super();
   }

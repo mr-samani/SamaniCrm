@@ -42,7 +42,10 @@ public static class AppPermissions
 
             }
         }
-
+        public static class SecurityLogs
+        {
+            public const string List = "Administrator.LoggingSystem.SecurityLogs.List";
+        }
 
 
     }

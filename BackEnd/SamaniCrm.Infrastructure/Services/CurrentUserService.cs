@@ -97,5 +97,5 @@ public class CurrentUserService : ICurrentUserService
             .Identity?
             .IsAuthenticated
         ?? false;
-
+   public bool IsHost => TenantId == null;
 }

@@ -7,16 +7,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { SecurityEventType } from './security-event-type';
 import { LogLevel } from './log-level';
 
 
 /* Created with custom template by mohammadreza SAMANI*/
 
-/** Interface for GetAppLogsQuery */
-export interface IGetAppLogsQuery {
+/** Interface for GetSecurityLogsQuery */
+export interface IGetSecurityLogsQuery {
   correlationId?: string;
   tenantId?: string;
-  levels?: Array<LogLevel>;
+  eventType?: SecurityEventType;
+  severity?: LogLevel;
   fromDate?: string;
   toDate?: string;
   userId?: string;
@@ -27,11 +29,12 @@ export interface IGetAppLogsQuery {
   sortDirection?: string;
 }
 
-/** Class for GetAppLogsQuery */
-export class GetAppLogsQuery implements IGetAppLogsQuery {
+/** Class for GetSecurityLogsQuery */
+export class GetSecurityLogsQuery implements IGetSecurityLogsQuery {
   correlationId?: string;
   tenantId?: string;
-  levels?: Array<LogLevel>;
+  eventType?: SecurityEventType;
+  severity?: LogLevel;
   fromDate?: string;
   toDate?: string;
   userId?: string;
@@ -41,7 +44,7 @@ export class GetAppLogsQuery implements IGetAppLogsQuery {
   sortBy?: string;
   sortDirection?: string;
 
-  constructor(data?: IGetAppLogsQuery) {
+  constructor(data?: IGetSecurityLogsQuery) {
     if (data) {
       for (let property in data) {
         if (data.hasOwnProperty(property))
@@ -54,11 +57,8 @@ init(data?: any) {
   if (data) {
     this.correlationId = data["correlationId"];
     this.tenantId = data["tenantId"];
-    if (Array.isArray(data["levels"])) {
-      this.levels = [] as any;
-      for (let item of data["levels"])
-        (this.levels as any).push(item);
-    }
+    this.eventType = data["eventType"];
+    this.severity = data["severity"];
     this.fromDate = data["fromDate"];
     this.toDate = data["toDate"];
     this.userId = data["userId"];
@@ -70,8 +70,8 @@ init(data?: any) {
   }
 }
 
-  static fromJS(data: any): GetAppLogsQuery {
-    const instance = new GetAppLogsQuery();
+  static fromJS(data: any): GetSecurityLogsQuery {
+    const instance = new GetSecurityLogsQuery();
     instance.init(data);
     return instance;
   }

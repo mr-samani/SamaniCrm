@@ -11,6 +11,7 @@ import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { PanelService } from './panel/panel.service';
 
 import { AppPermissions } from '@shared/permissions/app-permissions';
+import { AppConst } from '@shared/app-const';
 export abstract class AppComponentBase {
   fb = inject(FormBuilder);
   authService = inject(AuthService);
@@ -26,6 +27,7 @@ export abstract class AppComponentBase {
 
   panelService = inject(PanelService);
   AppPermissions = AppPermissions;
+  AppConst = AppConst;
   doc = inject(DOCUMENT);
   chdr = inject(ChangeDetectorRef);
   constructor() {

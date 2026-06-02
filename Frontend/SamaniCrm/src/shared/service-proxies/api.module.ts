@@ -19,6 +19,7 @@ import { PagesServiceProxy } from './api/pages.service';
 import { ProductServiceProxy } from './api/product.service';
 import { PublicServiceProxy } from './api/public.service';
 import { RoleServiceProxy } from './api/role.service';
+import { SecurityLogServiceProxy } from './api/security-log.service';
 import { SecuritySettingsServiceProxy } from './api/security-settings.service';
 import { SubscriptionServiceProxy } from './api/subscription.service';
 import { TenantsServiceProxy } from './api/tenants.service';
@@ -46,6 +47,7 @@ import { UserServiceProxy } from './api/user.service';
     ProductServiceProxy,
     PublicServiceProxy,
     RoleServiceProxy,
+    SecurityLogServiceProxy,
     SecuritySettingsServiceProxy,
     SubscriptionServiceProxy,
     TenantsServiceProxy,

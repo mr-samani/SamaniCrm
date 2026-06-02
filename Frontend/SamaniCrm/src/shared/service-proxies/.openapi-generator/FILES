@@ -20,6 +20,7 @@ api/pages.service.ts
 api/product.service.ts
 api/public.service.ts
 api/role.service.ts
+api/security-log.service.ts
 api/security-settings.service.ts
 api/subscription.service.ts
 api/tenants.service.ts
@@ -72,6 +73,7 @@ model/api-response-of-paginated-result-of-plugin-dto.ts
 model/api-response-of-paginated-result-of-product-attribute-dto.ts
 model/api-response-of-paginated-result-of-product-list-dto.ts
 model/api-response-of-paginated-result-of-product-type-dto.ts
+model/api-response-of-paginated-result-of-security-log-dto.ts
 model/api-response-of-paginated-result-of-tenant-list-dto.ts
 model/api-response-of-paginated-result-of-tenant-user-dto.ts
 model/api-response-of-paginated-result-of-user-dto.ts
@@ -165,6 +167,7 @@ model/get-product-attributes-query.ts
 model/get-product-categories-query.ts
 model/get-product-types-query.ts
 model/get-products-query.ts
+model/get-security-logs-query.ts
 model/get-tenant-users-query.ts
 model/get-tenants-auto-complete-query.ts
 model/get-user-query.ts
@@ -202,6 +205,7 @@ model/paginated-result-of-plugin-dto.ts
 model/paginated-result-of-product-attribute-dto.ts
 model/paginated-result-of-product-list-dto.ts
 model/paginated-result-of-product-type-dto.ts
+model/paginated-result-of-security-log-dto.ts
 model/paginated-result-of-tenant-list-dto.ts
 model/paginated-result-of-tenant-user-dto.ts
 model/paginated-result-of-user-dto.ts
@@ -237,6 +241,8 @@ model/reorder-menu-command.ts
 model/role-create-command.ts
 model/role-dto.ts
 model/role-permissions-dto.ts
+model/security-event-type.ts
+model/security-log-dto.ts
 model/security-setting-dto.ts
 model/send-notification-command.ts
 model/set-folder-icon-command.ts

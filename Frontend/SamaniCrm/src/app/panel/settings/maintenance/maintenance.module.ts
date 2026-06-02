@@ -15,9 +15,12 @@ import { DatabaseLogsComponent } from './tabs/database-logs/database-logs.compon
 import { MaintenanceServiceProxy } from '@shared/service-proxies/api/maintenance.service';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { AppLogsServiceProxy } from '@shared/service-proxies/api/app-logs.service';
+import { SecurityLogsComponent } from './tabs/security-logs/security-logs.component';
+import { AutoCompleteTenantComponent } from '@app/Tenants/auto-complete-tenant/auto-complete-tenant.component';
+import { SecurityLogServiceProxy } from '@shared/service-proxies/api/security-log.service';
 
 @NgModule({
-  declarations: [MaintenanceComponent, CacheComponent, DatabaseLogsComponent],
+  declarations: [MaintenanceComponent, CacheComponent, DatabaseLogsComponent, SecurityLogsComponent],
   imports: [
     CommonModule,
     MaintenanceRoutingModule,
@@ -29,10 +32,10 @@ import { AppLogsServiceProxy } from '@shared/service-proxies/api/app-logs.servic
     FileManagerModule,
     MaterialCommonModule,
     TabGroupModule,
-
     SwitchModule,
     SharedModule,
+    AutoCompleteTenantComponent,
   ],
-  providers: [MaintenanceServiceProxy, AppLogsServiceProxy],
+  providers: [MaintenanceServiceProxy, AppLogsServiceProxy, SecurityLogServiceProxy],
 })
 export class MaintenanceModule {}

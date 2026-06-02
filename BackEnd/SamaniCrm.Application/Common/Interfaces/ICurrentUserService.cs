@@ -9,11 +9,13 @@ namespace SamaniCrm.Application.Common.Interfaces
     public interface ICurrentUserService
     {
         Guid? UserId { get; }
+        Guid? TenantId { get; }
         string? UserName { get; }
         string Lang { get; }
 
         bool IsDelegated { get; }
         Guid? DelegatorId { get; }
         bool IsAuthenticated { get; }
+        bool IsHost { get; }
     }
 }

@@ -174,13 +174,19 @@ public class AppLogService : IAppLogService
     {
         // ابتدا فیلترها را اعمال می‌کنیم
         var baseQuery = _dbContext.LogEntries
-            .AsNoTracking()
-            .Where(l => l.TenantId == filter.TenantId);
+            .AsNoTracking();
 
+        if (filter.TenantId.HasValue && _currentUser.IsHost)
+        {
+            baseQuery = baseQuery
+                .IgnoreQueryFilters()
+                .Where(l => l.TenantId == filter.TenantId);
+        }
         // فیلتر سطح با Flags
         if (filter.Levels != null && filter.Levels.Any())
             baseQuery = baseQuery.Where(l => filter.Levels.Contains(l.Level));
-
+        if (string.IsNullOrEmpty(filter.CorrelationId) == false)
+            baseQuery = baseQuery.Where(l => l.CorrelationId == filter.CorrelationId);
         if (filter.FromDate.HasValue)
             baseQuery = baseQuery.Where(l => l.Timestamp >= filter.FromDate.Value);
         if (filter.ToDate.HasValue)

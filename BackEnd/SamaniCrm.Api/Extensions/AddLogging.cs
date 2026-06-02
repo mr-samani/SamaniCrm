@@ -61,6 +61,7 @@ public static partial class ServiceCollectionExtensions
         services.AddScoped<ISecurityLogFactory, SecurityLogFactory>();
         services.AddSingleton<ISecurityLogQueue>(sp => sp.GetRequiredService<SecurityLogQueue>());
         services.AddHostedService<SecurityLogBackgroundService>();
+        services.AddScoped<ISecurityLogService, SecurityLogService>();
 
         return services;
     }

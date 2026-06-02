@@ -84,6 +84,9 @@
                   @case ('localize') {
                     <span class="text-wrap">{{ f.localizeKey + item[f.column] | translate }}</span>
                   }
+                  @case ('userAgent') {
+                    <span class="text-wrap">{{ f.localizeKey + item[f.column] | userAgent }}</span>
+                  }
                   @case ('template') {
                     @if (templateMap.has(f.column)) {
                       <ng-container

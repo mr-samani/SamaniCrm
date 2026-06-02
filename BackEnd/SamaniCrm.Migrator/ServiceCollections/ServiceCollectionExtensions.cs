@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
+using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.Persistence;
 using SamaniCrm.Infrastructure.Services.TenantService;
@@ -47,16 +48,19 @@ public static class ServiceCollectionExtensions
 
     public class DummyCurrentUserService : ICurrentUserService
     {
-        public Guid? UserId => null;//"MigrationUser"; // یا null هم میتونی بدی
-        public string? UserName => "MigrationUser"; // یا null هم میتونی بدی
+        public Guid? UserId => null;//"MigrationUser";  
+        public Guid? TenantId => null;
+        public string? UserName => "MigrationUser";  
 
         public string Lang => "fa-IR";
 
-        public bool IsAuthenticated => false;
 
         public bool IsDelegated => false;
 
         public Guid? DelegatorId => null;
+        public bool IsAuthenticated => false;
+        public bool IsHost => TenantId == null;
+
 
     }
 

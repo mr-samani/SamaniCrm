@@ -14,6 +14,7 @@ import { ApiResponseOfLoginResult } from '@shared/service-proxies/model/api-resp
 import { LoginResult } from '@shared/service-proxies/model/login-result';
 import { TwoFactorLoginCommand } from '@shared/service-proxies/model/two-factor-login-command';
 import { ExternalLoginCallbackCommand } from '@shared/service-proxies/model/external-login-callback-command';
+import { isNullOrEmpty } from '@shared/helper/null-or-empty';
 @Injectable({
   providedIn: 'root',
 })
@@ -129,8 +130,8 @@ export class AuthService {
 
   logout() {
     // no need to this - logout handled by back end
-   // this.oidcSecurityService.logoff();
-   this.accountService.logout().subscribe();
+    // this.oidcSecurityService.logoff();
+    this.accountService.logout().subscribe();
     removePreviousFolderId();
     const returnUrl = window.location.href;
     this.router.navigate(['/account/login'], {
@@ -146,6 +147,7 @@ export class AuthService {
             this.userRoles = response.data.roles ?? [];
             this.userPermissions = response.data.permissions ?? [];
             this.currentUserSubject.next(response.data);
+            AppConst.isHost = isNullOrEmpty(response.data.tenantId);
             if (
               AppConst.currentLanguage !== response.data.lang &&
               AppConst.languageList.findIndex((x) => x.culture == response.data?.lang) > -1

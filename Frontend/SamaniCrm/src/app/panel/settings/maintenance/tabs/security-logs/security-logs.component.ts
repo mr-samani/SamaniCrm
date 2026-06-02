@@ -5,38 +5,45 @@ import { AppComponentBase } from '@app/app-component-base';
 import { AppConst } from '@shared/app-const';
 import { PageEvent } from '@shared/components/pagination/pagination.component';
 import { FieldsType, SortEvent } from '@shared/components/table-view/fields-type.model';
-import { LuxonFormatPipe } from '@shared/pipes/luxon-format.pipe';
-import { AppLogsServiceProxy } from '@shared/service-proxies/api/app-logs.service';
-import { AppLogEntryDto } from '@shared/service-proxies/model/app-log-entry-dto';
+import { SecurityLogServiceProxy } from '@shared/service-proxies/api/security-log.service';
 import { AutoCompleteDtoOfGuid } from '@shared/service-proxies/model/auto-complete-dto-of-guid';
-import { GetAppLogsQuery } from '@shared/service-proxies/model/get-app-logs-query';
+import { GetSecurityLogsQuery } from '@shared/service-proxies/model/get-security-logs-query';
 import { LogLevel } from '@shared/service-proxies/model/log-level';
-import { ManulaCleanupAppLogCommand } from '@shared/service-proxies/model/manula-cleanup-app-log-command';
-import { Subscription } from 'rxjs/internal/Subscription';
-import { finalize } from 'rxjs/operators';
+import { SecurityEventType } from '@shared/service-proxies/model/security-event-type';
+import { SecurityLogDto } from '@shared/service-proxies/model/security-log-dto';
+import { Subscription, finalize } from 'rxjs';
 
 @Component({
   standalone: false,
-  selector: 'app-database-logs',
-  templateUrl: './database-logs.component.html',
-  styleUrls: ['./database-logs.component.scss'],
+  selector: 'app-security-logs',
+  templateUrl: './security-logs.component.html',
+  styleUrls: ['./security-logs.component.scss'],
 })
-export class DatabaseLogsComponent extends AppComponentBase implements OnInit {
+export class SecurityLogsComponent extends AppComponentBase implements OnInit {
   tenantId = null;
-  items: AppLogEntryDto[] = [];
+  items: SecurityLogDto[] = [];
   totalCount = 0;
   fields: FieldsType[] = [
-    { column: 'level', title: this.l('Level'), type: 'localize', localizeKey: 'LogLevel_', width: 100 },
+    { column: 'message', title: this.l('Message'), width: 300, wrap: true },
+    { column: 'severity', title: this.l('Severity'), type: 'localize', localizeKey: 'LogLevel_', width: 100 },
     { column: 'correlationId', title: this.l('Correlation'), width: 150 },
-    { column: 'duration', title: this.l('Duration'), width: 100, prefix: 'ms' },
-    { column: 'controllerName', title: this.l('Controlle'), width: 150 },
-    { column: 'actionName', title: this.l('Action'), width: 150 },
-    { column: 'httpMethod', title: this.l('Method'), width: 80 },
-    { column: 'requestPath', title: this.l('Request'), width: 300 },
+    {
+      column: 'eventType',
+      title: this.l('EventType'),
+      type: 'localize',
+      localizeKey: 'SecurityEventType_',
+      width: 100,
+    },
+    { column: 'username', title: this.l('Username'), width: 100 },
+  //  { column: 'createdBy', title: this.l('CreatedBy'), width: 100 },
+    { column: 'action', title: this.l('Action'), width: 150 },
+   // { column: 'resource', title: this.l('Resource'), width: 80 },
+    { column: 'statusCode', title: this.l('StatusCode'), width: 80 },
+    { column: 'isSuccessful', title: this.l('Success'), width: 80, type: 'yesNo' },
     { column: 'userName', title: this.l('UserName'), width: 200 },
+    { column: 'userAgent', title: this.l('UserAgent'), width: 100, type: 'userAgent' },
     { column: 'ipAddress', title: this.l('Ip'), width: 100 },
-    { column: 'message', title: this.l('Message'), width: 600, wrap: true },
-    { column: 'timestamp', title: this.l('StartTime'), type: 'dateTime', width: 150 },
+    { column: 'createdAt', title: this.l('CreatedAt'), type: 'dateTime', width: 150 },
   ];
 
   loading = true;
@@ -46,8 +53,9 @@ export class DatabaseLogsComponent extends AppComponentBase implements OnInit {
   listSubscription$?: Subscription;
   showFilter = false;
   matDialog = inject(MatDialog);
+
   isHost = AppConst.isHost;
-  constructor(private logService: AppLogsServiceProxy) {
+  constructor(private logService: SecurityLogServiceProxy) {
     super();
     this.breadcrumb.list = [
       { name: this.l('Settings'), url: '/panel/setting' },
@@ -56,7 +64,8 @@ export class DatabaseLogsComponent extends AppComponentBase implements OnInit {
     this.form = this.fb.group({
       tenant: [null],
       filter: [null],
-      filterLevels: [[]],
+      severity: [null],
+      eventType: [null],
     });
     this.page = this.route.snapshot.queryParams['page'] ?? 1;
     this.perPage = this.route.snapshot.queryParams['perPage'] ?? 10;
@@ -74,15 +83,18 @@ export class DatabaseLogsComponent extends AppComponentBase implements OnInit {
   public get LogLevel(): typeof LogLevel {
     return LogLevel;
   }
+  public get SecurityEventType(): typeof SecurityEventType {
+    return SecurityEventType;
+  }
 
   getList(ev?: SortEvent) {
     if (this.listSubscription$) {
       this.listSubscription$.unsubscribe();
     }
     this.loading = true;
-    const input = new GetAppLogsQuery();
+    const input = new GetSecurityLogsQuery();
 
-    input.levels = this.form.get('filterLevels')?.value;
+    input.severity = this.form.get('severity')?.value;
     input.search = this.form.get('filter')?.value;
     input.pageNumber = this.page;
     input.pageSize = this.perPage;
@@ -120,40 +132,5 @@ export class DatabaseLogsComponent extends AppComponentBase implements OnInit {
   onPageChange(ev?: PageEvent) {
     if (ev) this.perPage = ev.perPage;
     this.getList();
-  }
-
-  manulaCleanup() {
-    this.confirmMessage(this.l('Delete'), this.l('AreYouSureForDelete')).then((result) => {
-      if (result.isConfirmed) {
-        this.showMainLoading();
-        const input = new ManulaCleanupAppLogCommand();
-        input.daysOld = 30;
-        input.tenantId = this.tenantId ?? undefined;
-        this.logService
-          .manualCleanup(input)
-          .pipe(
-            finalize(() => {
-              this.hideMainLoading();
-              this.chdr.detectChanges();
-            }),
-          )
-          .subscribe((response) => {
-            this.notify.success(this.l('DoneSuccessFully'));
-            this.alert.show({
-              html: `<p>${this.l('CutOfDate')}: ${new LuxonFormatPipe().transform(response.data?.cutoffDate)}</p>
-              <p>${this.l('DeletedCount')}: ${response.data?.deletedCount}</p>
-              `,
-            });
-            this.getList();
-          });
-      }
-    });
-  }
-
-  async openLogDetails(item: AppLogEntryDto) {
-    const { LogDetailsComponent } = await import('./log-details/log-details.component');
-    this.matDialog.open(LogDetailsComponent, {
-      data: item,
-    });
   }
 }

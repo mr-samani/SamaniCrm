@@ -14,6 +14,7 @@ export class FieldsType {
     | 'template'
     | 'enum'
     | 'html'
+    | 'userAgent'
     | undefined;
   width?: number;
   wrap?: boolean;

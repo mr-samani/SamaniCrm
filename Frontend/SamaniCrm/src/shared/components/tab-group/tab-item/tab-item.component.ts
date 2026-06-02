@@ -20,6 +20,5 @@ export class TabItemComponent implements AfterViewInit {
   constructor(private chdr: ChangeDetectorRef) {}
 
   ngAfterViewInit(): void {
-    console.log(this.template);
   }
 }
