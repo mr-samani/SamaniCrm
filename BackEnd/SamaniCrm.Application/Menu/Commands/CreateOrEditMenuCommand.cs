@@ -40,7 +40,7 @@ namespace SamaniCrm.Application.MenuCommands
             }
             else
             {
-                menu = new Menu();
+                menu = new Menu() { Name = request.Name };
                 _dbContext.Menus.Add(menu);
             }
 

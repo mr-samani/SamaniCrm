@@ -11,6 +11,6 @@ namespace SamaniCrm.Domain.Entities
     {
         [MaxLength(5)]
         public required string Culture { get; set; }
-        public virtual Language Language { get; set; } = default!;
+
     }
 }

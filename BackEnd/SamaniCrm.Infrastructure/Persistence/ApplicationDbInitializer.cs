@@ -96,5 +96,6 @@ public class ApplicationDbInitializer
     private void setSedding(bool seeding)
     {
         _tenantDbcontext.IsSeeding = seeding;
+        _masterDbcontext.IsSeeding = seeding;
     }
 }

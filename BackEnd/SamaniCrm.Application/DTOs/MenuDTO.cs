@@ -12,6 +12,9 @@ namespace SamaniCrm.Application.DTOs
     public class MenuDTO
     {
         public Guid? Id { get; set; }
+
+        [MaxLength(256)]
+        public required string Name { get; set; }
         public string? Title { get; set; }
         [MaxLength(300)]
         public string? Icon { get; set; }

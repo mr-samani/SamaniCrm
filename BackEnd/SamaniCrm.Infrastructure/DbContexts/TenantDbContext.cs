@@ -156,7 +156,7 @@ public class TenantDbContext : IdentityDbContext<ApplicationUser, ApplicationRol
 
     private async Task CreateAuditLogs(CancellationToken cancellationToken)
     {
-        if (_auditFactory == null)
+        if (_auditFactory == null || IsSeeding == true)
         {
             return;
         }

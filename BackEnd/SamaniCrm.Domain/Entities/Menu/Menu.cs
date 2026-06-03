@@ -13,6 +13,13 @@ namespace SamaniCrm.Domain.Entities;
 public class Menu : BaseEntity,IMayHaveTenant
 {
     public Guid? TenantId { get; set; }
+
+
+    [Description("Unique Menu Name")]
+    [MaxLength(256)]
+    public required string Name { get; set; }
+
+
     [MaxLength(300)]
     public string? Icon { get; set; }
     [MaxLength(2000)]

@@ -12,7 +12,7 @@ using SamaniCrm.Infrastructure.DbContexts;
 namespace SamaniCrm.Infrastructure.Migrations.TenantDb
 {
     [DbContext(typeof(TenantDbContext))]
-    [Migration("20260603144550_InitTenantDb")]
+    [Migration("20260603151343_InitTenantDb")]
     partial class InitTenantDb
     {
         /// <inheritdoc />
@@ -821,6 +821,11 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
                     b.Property<int>("OrderIndex")
                         .HasColumnType("int");
 
@@ -843,6 +848,9 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                         .HasColumnType("nvarchar(2000)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.HasIndex("ParentId");
 
@@ -876,9 +884,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -896,8 +901,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MenuId", "Culture");
-
-                    b.HasIndex("LanguageId");
 
                     b.ToTable("MenuTranslations");
                 });
@@ -1069,9 +1072,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("MetaDescription")
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
@@ -1103,8 +1103,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                         .HasColumnType("nvarchar(1000)");
 
                     b.HasKey("PageId", "Culture");
-
-                    b.HasIndex("LanguageId");
 
                     b.ToTable("PageTranslations");
                 });
@@ -1271,9 +1269,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -1294,8 +1289,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
 
                     b.HasIndex("ProductAttributeId");
 
@@ -1439,9 +1432,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -1462,8 +1452,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("LanguageId");
 
                     b.ToTable("ProductCategoryTranslations", "product");
                 });
@@ -1676,9 +1664,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -1700,8 +1685,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                         .HasColumnType("nvarchar(250)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
 
                     b.HasIndex("ProductId");
 
@@ -1775,9 +1758,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -1798,8 +1778,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
 
                     b.HasIndex("ProductTypeId");
 
@@ -2032,9 +2010,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -2057,8 +2032,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     b.HasKey("Id");
 
                     b.HasIndex("AddOnId");
-
-                    b.HasIndex("LanguageId");
 
                     b.ToTable("AddOnTranslations", "subscription");
                 });
@@ -2205,9 +2178,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -2231,8 +2201,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
 
                     b.HasIndex("PlanFeatureId");
 
@@ -2350,9 +2318,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -2373,8 +2338,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
 
                     b.HasIndex("PlanId");
 
@@ -2959,19 +2922,11 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.MenuTranslation", b =>
                 {
-                    b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SamaniCrm.Domain.Entities.Menu", "Menu")
                         .WithMany("Translations")
                         .HasForeignKey("MenuId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Language");
 
                     b.Navigation("Menu");
                 });
@@ -2986,19 +2941,11 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.PageTranslation", b =>
                 {
-                    b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SamaniCrm.Domain.Entities.Page", "Page")
                         .WithMany("Translations")
                         .HasForeignKey("PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Language");
 
                     b.Navigation("Page");
                 });
@@ -3057,19 +3004,11 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductAttributeTranslation", b =>
                 {
-                    b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SamaniCrm.Domain.Entities.ProductAttribute", "ProductAttribute")
                         .WithMany("Translations")
                         .HasForeignKey("ProductAttributeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Language");
 
                     b.Navigation("ProductAttribute");
                 });
@@ -3132,14 +3071,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
 
                     b.Navigation("ProductCategory");
                 });
@@ -3204,38 +3135,22 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductTranslation", b =>
                 {
-                    b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SamaniCrm.Domain.Entities.Product", "Product")
                         .WithMany("Translations")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Language");
-
                     b.Navigation("Product");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.ProductTypeTranslation", b =>
                 {
-                    b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SamaniCrm.Domain.Entities.ProductType", "ProductType")
                         .WithMany("Translations")
                         .HasForeignKey("ProductTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Language");
 
                     b.Navigation("ProductType");
                 });
@@ -3269,15 +3184,7 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("AddOn");
-
-                    b.Navigation("Language");
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.PlanFeature", b =>
@@ -3293,12 +3200,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.PlanFeatureTranslation", b =>
                 {
-                    b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SamaniCrm.Domain.Entities.Subscription.PlanFeature", "PlanFeature")
                         .WithMany("Translations")
                         .HasForeignKey("PlanFeatureId")
@@ -3310,8 +3211,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                         .HasForeignKey("PlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Language");
 
                     b.Navigation("Plan");
 
@@ -3339,19 +3238,11 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Subscription.PlanTranslation", b =>
                 {
-                    b.HasOne("SamaniCrm.Domain.Entities.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SamaniCrm.Domain.Entities.Subscription.Plan", "Plan")
                         .WithMany("Translations")
                         .HasForeignKey("PlanId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Language");
 
                     b.Navigation("Plan");
                 });

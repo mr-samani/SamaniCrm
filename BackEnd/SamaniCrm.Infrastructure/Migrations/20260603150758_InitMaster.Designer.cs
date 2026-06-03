@@ -12,7 +12,7 @@ using SamaniCrm.Infrastructure.DbContexts;
 namespace SamaniCrm.Infrastructure.Migrations
 {
     [DbContext(typeof(MasterDbContext))]
-    [Migration("20260603144540_InitMaster")]
+    [Migration("20260603150758_InitMaster")]
     partial class InitMaster
     {
         /// <inheritdoc />

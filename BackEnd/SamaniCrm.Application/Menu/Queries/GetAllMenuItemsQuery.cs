@@ -50,6 +50,7 @@ namespace SamaniCrm.Application.MenuQueries
             return new MenuDTO
             {
                 Id = menu.Id,
+                Name = menu.Name,
                 Icon = menu.Icon,
                 OrderIndex = menu.OrderIndex,
                 ParentId = menu.ParentId,

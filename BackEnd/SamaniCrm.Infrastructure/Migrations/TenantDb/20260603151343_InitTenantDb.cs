@@ -252,6 +252,7 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Icon = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     Url = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
                     OrderIndex = table.Column<int>(type: "int", nullable: false),
@@ -531,6 +532,40 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                 });
 
             migrationBuilder.CreateTable(
+                name: "AddOnTranslations",
+                schema: "subscription",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    AddOnId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CurrencyCode = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    Culture = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AddOnTranslations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AddOnTranslations_AddOns_AddOnId",
+                        column: x => x.AddOnId,
+                        principalSchema: "subscription",
+                        principalTable: "AddOns",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CartItems",
                 schema: "product",
                 columns: table => new
@@ -596,47 +631,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "AddOnTranslations",
-                schema: "subscription",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    AddOnId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CurrencyCode = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
-                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    Culture = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
-                    LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AddOnTranslations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AddOnTranslations_AddOns_AddOnId",
-                        column: x => x.AddOnId,
-                        principalSchema: "subscription",
-                        principalTable: "AddOns",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AddOnTranslations_Language_LanguageId",
-                        column: x => x.LanguageId,
-                        principalTable: "Language",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Localization",
                 columns: table => new
                 {
@@ -681,18 +675,11 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MenuTranslations", x => new { x.MenuId, x.Culture });
-                    table.ForeignKey(
-                        name: "FK_MenuTranslations_Language_LanguageId",
-                        column: x => x.LanguageId,
-                        principalTable: "Language",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MenuTranslations_Menus_MenuId",
                         column: x => x.MenuId,
@@ -798,18 +785,11 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    Culture = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
-                    LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Culture = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PlanTranslations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PlanTranslations_Language_LanguageId",
-                        column: x => x.LanguageId,
-                        principalTable: "Language",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PlanTranslations_Plans_PlanId",
                         column: x => x.PlanId,
@@ -837,18 +817,11 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    Culture = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
-                    LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Culture = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductCategoryTranslations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductCategoryTranslations_Language_LanguageId",
-                        column: x => x.LanguageId,
-                        principalTable: "Language",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProductCategoryTranslations_ProductCategories_CategoryId",
                         column: x => x.CategoryId,
@@ -950,18 +923,11 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    Culture = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
-                    LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Culture = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductTypeTranslations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductTypeTranslations_Language_LanguageId",
-                        column: x => x.LanguageId,
-                        principalTable: "Language",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProductTypeTranslations_ProductTypes_ProductTypeId",
                         column: x => x.ProductTypeId,
@@ -1184,18 +1150,11 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    Culture = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
-                    LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Culture = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PlanFeatureTranslations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PlanFeatureTranslations_Language_LanguageId",
-                        column: x => x.LanguageId,
-                        principalTable: "Language",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PlanFeatureTranslations_PlanFeatures_PlanFeatureId",
                         column: x => x.PlanFeatureId,
@@ -1278,18 +1237,11 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    Culture = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
-                    LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Culture = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductAttributeTranslations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductAttributeTranslations_Language_LanguageId",
-                        column: x => x.LanguageId,
-                        principalTable: "Language",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProductAttributeTranslations_ProductAttributes_ProductAttributeId",
                         column: x => x.ProductAttributeId,
@@ -1476,18 +1428,11 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    Culture = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
-                    LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Culture = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductTranslations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductTranslations_Language_LanguageId",
-                        column: x => x.LanguageId,
-                        principalTable: "Language",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProductTranslations_Products_ProductId",
                         column: x => x.ProductId,
@@ -1521,18 +1466,11 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                     DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LanguageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PageTranslations", x => new { x.PageId, x.Culture });
-                    table.ForeignKey(
-                        name: "FK_PageTranslations_Language_LanguageId",
-                        column: x => x.LanguageId,
-                        principalTable: "Language",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PageTranslations_Pages_PageId",
                         column: x => x.PageId,
@@ -1677,12 +1615,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                 column: "AddOnId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AddOnTranslations_LanguageId",
-                schema: "subscription",
-                table: "AddOnTranslations",
-                column: "LanguageId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AppLogEntries_CorrelationId",
                 schema: "logs",
                 table: "AppLogEntries",
@@ -1755,24 +1687,20 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                 column: "LanguageId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Menus_Name",
+                table: "Menus",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Menus_ParentId",
                 table: "Menus",
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MenuTranslations_LanguageId",
-                table: "MenuTranslations",
-                column: "LanguageId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Pages_AuthorId",
                 table: "Pages",
                 column: "AuthorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PageTranslations_LanguageId",
-                table: "PageTranslations",
-                column: "LanguageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Permissions_LocalizeKey",
@@ -1786,12 +1714,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                 schema: "subscription",
                 table: "PlanFeatures",
                 column: "PlanId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PlanFeatureTranslations_LanguageId",
-                schema: "subscription",
-                table: "PlanFeatureTranslations",
-                column: "LanguageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlanFeatureTranslations_PlanFeatureId",
@@ -1818,12 +1740,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                 column: "PlanId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PlanTranslations_LanguageId",
-                schema: "subscription",
-                table: "PlanTranslations",
-                column: "LanguageId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PlanTranslations_PlanId",
                 schema: "subscription",
                 table: "PlanTranslations",
@@ -1834,12 +1750,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                 schema: "product",
                 table: "ProductAttributes",
                 column: "ProductTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductAttributeTranslations_LanguageId",
-                schema: "product",
-                table: "ProductAttributeTranslations",
-                column: "LanguageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductAttributeTranslations_ProductAttributeId",
@@ -1870,12 +1780,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                 schema: "product",
                 table: "ProductCategoryTranslations",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductCategoryTranslations_LanguageId",
-                schema: "product",
-                table: "ProductCategoryTranslations",
-                column: "LanguageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductFiles_FileId",
@@ -1928,22 +1832,10 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                 column: "ProductTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductTranslations_LanguageId",
-                schema: "product",
-                table: "ProductTranslations",
-                column: "LanguageId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProductTranslations_ProductId",
                 schema: "product",
                 table: "ProductTranslations",
                 column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductTypeTranslations_LanguageId",
-                schema: "product",
-                table: "ProductTypeTranslations",
-                column: "LanguageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductTypeTranslations_ProductTypeId",

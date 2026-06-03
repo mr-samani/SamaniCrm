@@ -14,26 +14,23 @@ namespace SamaniCrm.Infrastructure.Persistence
         {
             Console.WriteLine("Seeding static menu data...");
 
-            // 1. دریافت زبان‌های فعال
-            var activeLanguages = await masterDbContext.Languages
+            List<string> activeLanguages = await masterDbContext.Languages
                 .Where(l => l.IsActive)
                 .Select(l => l.Culture)
                 .ToListAsync();
 
-            // 2. دریافت تمام منوهای موجود در دیتابیس (شامل ترجمه‌ها)
-            // نکته: برای عملکرد بهتر، فقط Url و Id را می‌توانیم بگیریم، اما برای سادگی اینجا همه را می‌گیریم
-            var existingMenus = await dbContext.Menus
+            List<Menu> existingMenus = await dbContext.Menus
+                .AsSplitQuery()
                 .Include(m => m.Translations)
-                .Include(m => m.Children) // فرزندان را هم می‌گیریم تا بتوانیم رابطه را مدیریت کنیم
+                .Include(m => m.Children)
                 .ToListAsync();
 
-            // ساخت دیکشنری برای دسترسی سریع به منوهای موجود بر اساس Url
-            // نکته: Url باید منحصربفرد باشد. اگر نیست، باید از ترکیب ParentId و Url استفاده کنید.
-            var existingMenusByUrl = existingMenus.ToDictionary(m => m.Url, m => m);
+
+            Dictionary<string, Menu> existingMenusByName = existingMenus.ToDictionary(m => m.Name, m => m);
 
             // 3. پردازش منوهای استاتیک
             var staticMenus = GetStaticMenus();
-            await ProcessMenusAsync(staticMenus, null, dbContext, activeLanguages, existingMenusByUrl);
+            await ProcessMenusAsync(staticMenus, null, dbContext, activeLanguages, existingMenusByName);
 
             // 4. ذخیره نهایی
             if (dbContext.ChangeTracker.HasChanges())
@@ -52,7 +49,7 @@ namespace SamaniCrm.Infrastructure.Persistence
             Menu? parentMenu,
             TenantDbContext dbContext,
             List<string> activeLanguages,
-            Dictionary<string, Menu?> existingMenusByUrl)
+            Dictionary<string, Menu> existingMenusByName)
         {
             foreach (var staticMenu in staticMenus)
             {
@@ -60,7 +57,7 @@ namespace SamaniCrm.Infrastructure.Persistence
                 staticMenu.ParentId = parentMenu?.Id;
 
                 // بررسی وجود منو
-                if (existingMenusByUrl.TryGetValue(staticMenu.Url, out var existingMenu))
+                if (existingMenusByName.TryGetValue(staticMenu.Name, out var existingMenu))
                 {
                     // منو وجود دارد -> Update
                     UpdateExistingMenu(existingMenu, staticMenu, activeLanguages);
@@ -94,7 +91,7 @@ namespace SamaniCrm.Infrastructure.Persistence
                         existingMenu ?? staticMenu, // اگر منوی جدید است، خود staticMenu را به عنوان پدر بدهیم
                         dbContext,
                         activeLanguages,
-                        existingMenusByUrl);
+                        existingMenusByName);
                 }
             }
         }
@@ -105,7 +102,7 @@ namespace SamaniCrm.Infrastructure.Persistence
             existingMenu.Icon = staticMenu.Icon ?? existingMenu.Icon;
             existingMenu.OrderIndex = staticMenu.OrderIndex;
             existingMenu.IsSystem = staticMenu.IsSystem;
-            existingMenu.Url = staticMenu.Url; // در صورت نیاز
+            existingMenu.Name = staticMenu.Name;
 
             // آپدیت ترجمه‌ها
             foreach (var lang in activeLanguages)
@@ -138,10 +135,10 @@ namespace SamaniCrm.Infrastructure.Persistence
             {
                 // حذف فرزندان قدیمی که در لیست جدید نیستند (اختیاری، بسته به نیاز)
                 // اضافه کردن فرزندان جدید
-                var existingChildUrls = existingMenu.Children.Select(c => c.Url).ToHashSet();
+                var existingChildNames = existingMenu.Children.Select(c => c.Name).ToHashSet();
                 foreach (var staticChild in staticMenu.Children)
                 {
-                    if (!existingChildUrls.Contains(staticChild.Url))
+                    if (!existingChildNames.Contains(staticChild.Name))
                     {
                         // فرزند جدید است
                         staticChild.ParentId = existingMenu.Id;
@@ -151,7 +148,7 @@ namespace SamaniCrm.Infrastructure.Persistence
                     else
                     {
                         // فرزند موجود است، باید آن را آپدیت کنیم
-                        var existingChild = existingMenu.Children.First(c => c.Url == staticChild.Url);
+                        var existingChild = existingMenu.Children.First(c => c.Name == staticChild.Name);
                         UpdateExistingMenu(existingChild, staticChild, activeLanguages);
                     }
                 }
@@ -173,7 +170,7 @@ namespace SamaniCrm.Infrastructure.Persistence
                     menu.Translations.Add(new MenuTranslation
                     {
                         Culture = lang,
-                        Title = menu.Url ?? $"Menu-{menu.OrderIndex}",
+                        Title = menu.Name,
                         MenuId = Guid.NewGuid()
                     });
                 }
@@ -186,6 +183,7 @@ namespace SamaniCrm.Infrastructure.Persistence
             {
                 new Menu
                 {
+                    Name="Home",
                     Icon = "fa fa-home",
                     Url = "/",
                     OrderIndex = 0,
@@ -198,6 +196,7 @@ namespace SamaniCrm.Infrastructure.Persistence
                 },
                 new Menu
                 {
+                    Name="Products",
                     Icon = "fa fa-package",
                     Url = "/products",
                     OrderIndex = 1,
@@ -210,6 +209,7 @@ namespace SamaniCrm.Infrastructure.Persistence
                 },
                 new Menu
                 {
+                    Name="Blogs",
                     Icon = "fa fa-book",
                     Url = "/blogs",
                     OrderIndex = 2,
@@ -223,6 +223,7 @@ namespace SamaniCrm.Infrastructure.Persistence
                     {
                         new Menu
                         {
+                            Name="Blogs-1",
                             Url = "/blogs/1",
                             Translations = new List<MenuTranslation>
                             {
@@ -232,6 +233,7 @@ namespace SamaniCrm.Infrastructure.Persistence
                         },
                         new Menu
                         {
+                            Name="Blocgs-2",
                             Url = "/blogs/2",
                             Translations = new List<MenuTranslation>
                             {

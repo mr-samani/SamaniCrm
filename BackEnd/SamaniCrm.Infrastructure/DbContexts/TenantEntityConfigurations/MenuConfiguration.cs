@@ -12,6 +12,8 @@ public class MenuConfiguration : IEntityTypeConfiguration<Menu>
     public void Configure(EntityTypeBuilder<Menu> builder)
     {
         builder.HasKey(k => k.Id);
+        builder.HasIndex(x => x.Name).IsUnique();
+
         builder.HasMany(c => c.Children)
             .WithOne()
             .HasForeignKey(m => m.ParentId)
