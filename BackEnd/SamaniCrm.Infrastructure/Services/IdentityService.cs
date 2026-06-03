@@ -862,7 +862,7 @@ public class IdentityService : IIdentityService
     public async Task<LoginResult> ExternalSignInAsync(ExternalLoginCallbackCommand request, CancellationToken cancellation)
     {
         var tenant = await GetTenantByTenancyName(request.tenancyName, cancellation);
-      
+
 
         //var info = await _signInManager.GetExternalLoginInfoAsync();
         //if (info == null) throw new UnauthorizedAccessException("External login info not found");
@@ -1010,35 +1010,36 @@ public class IdentityService : IIdentityService
     public async Task<UserDTO?> GetTenantAdmin(Guid tenantId, CancellationToken cancellation)
     {
         var tenantAdminUser = await _dbContext.Users
-         .Join(
-             _dbContext.UserRoles,
-             user => user.Id,
-             userRole => userRole.UserId,
-             (user, userRole) => new { user, userRole }
-         )
-         .Join(
-             _dbContext.Roles,
-             combined => combined.userRole.RoleId,
-             role => role.Id,
-             (combined, role) => new { combined.user, role }
-         )
-         .Where(x => x.user.TenantId == tenantId
-                  && x.role.Name == AppRoles.TenantAdministrator)
-         .Select(x => new UserDTO
-         {
-             Id = x.user.Id,
-             UserName = x.user.UserName ?? "",
-             FirstName = x.user.FirstName ?? "",
-             LastName = x.user.LastName ?? "",
-             FullName = x.user.FullName ?? "",
-             Lang = x.user.Lang ?? "",
-             Email = x.user.Email ?? "",
-             ProfilePicture = x.user.ProfilePicture ?? "",
-             Address = x.user.Address ?? "",
-             PhoneNumber = x.user.PhoneNumber ?? "",
-             Roles = new List<string> { x.role.Name! }
-         })
-         .FirstOrDefaultAsync(cancellation);
+            .IgnoreQueryFilters()
+             .Join(
+                 _dbContext.UserRoles,
+                 user => user.Id,
+                 userRole => userRole.UserId,
+                 (user, userRole) => new { user, userRole }
+             )
+             .Join(
+                 _dbContext.Roles,
+                 combined => combined.userRole.RoleId,
+                 role => role.Id,
+                 (combined, role) => new { combined.user, role }
+             )
+             .Where(x => x.user.TenantId == tenantId
+                      && x.role.Name == AppRoles.TenantAdministrator)
+             .Select(x => new UserDTO
+             {
+                 Id = x.user.Id,
+                 UserName = x.user.UserName ?? "",
+                 FirstName = x.user.FirstName ?? "",
+                 LastName = x.user.LastName ?? "",
+                 FullName = x.user.FullName ?? "",
+                 Lang = x.user.Lang ?? "",
+                 Email = x.user.Email ?? "",
+                 ProfilePicture = x.user.ProfilePicture ?? "",
+                 Address = x.user.Address ?? "",
+                 PhoneNumber = x.user.PhoneNumber ?? "",
+                 Roles = new List<string> { x.role.Name! }
+             })
+             .FirstOrDefaultAsync(cancellation);
 
         return tenantAdminUser;
 

@@ -14,12 +14,10 @@ public record DeleteTenantCommand(Guid Id) : IRequest<bool>;
 public class DeleteTenantCommandHandler : IRequestHandler<DeleteTenantCommand, bool>
 {
     private readonly ITenantRepository _repository;
-    private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteTenantCommandHandler(ITenantRepository repository, IUnitOfWork unitOfWork)
+    public DeleteTenantCommandHandler(ITenantRepository repository)
     {
         _repository = repository;
-        _unitOfWork = unitOfWork;
     }
 
     public async Task<bool> Handle(DeleteTenantCommand request, CancellationToken cancellation)

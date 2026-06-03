@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Core.Shared.Settings;
 using System.Security.Cryptography.X509Certificates;
@@ -26,23 +27,15 @@ namespace SamaniCrm.Infrastructure.Identity
             using (var scope = services.BuildServiceProvider().CreateScope())
             {
 
-                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                var securitySetting = dbContext.SecuritySettings.OrderBy(s => s.Id).FirstOrDefault(); // یا هر روش دیگه‌ای برای خوندن
-
-                if (securitySetting == null)
-                    throw new Exception("Security settings not found in the database.");
-
-
-
                 // ✅ تنظیمات پیشرفته Identity
                 services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
                 {
                     // 🔐 Password Rules
-                    options.Password.RequiredLength = securitySetting.RequiredLength;
-                    options.Password.RequireDigit = securitySetting.RequireDigit;
-                    options.Password.RequireLowercase = securitySetting.RequireLowercase;
-                    options.Password.RequireUppercase = securitySetting.RequireUppercase;
-                    options.Password.RequireNonAlphanumeric = securitySetting.RequireNonAlphanumeric;
+                    //options.Password.RequiredLength = securitySetting.RequiredLength;
+                    //options.Password.RequireDigit = securitySetting.RequireDigit;
+                    //options.Password.RequireLowercase = securitySetting.RequireLowercase;
+                    //options.Password.RequireUppercase = securitySetting.RequireUppercase;
+                    //options.Password.RequireNonAlphanumeric = securitySetting.RequireNonAlphanumeric;
 
                     // 👤 User Rules
                     options.User.RequireUniqueEmail = true;

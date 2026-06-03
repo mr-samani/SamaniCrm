@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SamaniCrm.Application.Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -43,7 +44,7 @@ public class LogRetentionService : BackgroundService
     private async Task CleanupLogsAsync(CancellationToken ct)
     {
         using var scope = _scopeFactory.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var context = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
 
         var settings = await context.TenantLogSettings
             .Where(s => s.IsEnabled && s.RetentionDays.HasValue)

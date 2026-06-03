@@ -16,6 +16,7 @@ public class TenantDatabaseService : ITenantDatabaseService
     private readonly ICurrentUserService _currentUser;
     private readonly ICurrentTenant _currentTenant;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ApplicationDbContext _masterDbContext;
 
 
     public TenantDatabaseService(
@@ -23,7 +24,8 @@ public class TenantDatabaseService : ITenantDatabaseService
         IEncryptionService encryption,
         ICurrentUserService currentUser,
         ICurrentTenant currentTenant,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        ApplicationDbContext masterDbContext)
     {
         _logger = logger;
         _encryption = encryption;
@@ -32,7 +34,24 @@ public class TenantDatabaseService : ITenantDatabaseService
         _currentUser = currentUser;
         _currentTenant = currentTenant;
         _httpContextAccessor = httpContextAccessor;
+        _masterDbContext = masterDbContext;
     }
+
+    public string? GetEncryptedConnectionString(Guid? tenantId)
+    {
+        // TODO : cache 
+        var tenant = _masterDbContext.TenantDatabaseConnections
+            .FirstOrDefault(c => c.TenantId == tenantId && c.IsActive);
+
+        if (tenant == null)
+        {
+            throw new InvalidOperationException($"Tenant {tenantId} not found!");
+
+        }
+        return tenant.ConnectionString;
+    }
+
+
 
     public async Task CreateDatabaseAsync(string server, string databaseName,
         string username, string password, CancellationToken cancellation)
@@ -60,13 +79,19 @@ public class TenantDatabaseService : ITenantDatabaseService
         {
             await using var connection = new SqlConnection(connectionString);
             await connection.OpenAsync(cancellation);
+
+            await using var command = connection.CreateCommand();
+            command.CommandText = "SELECT 1";
+            await command.ExecuteScalarAsync(cancellation);
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "Failed to test connection for tenant");
             return false;
         }
     }
+
 
     public string GenerateConnectionString(string server, string database, string username, string password)
     {
@@ -112,4 +137,6 @@ public class TenantDatabaseService : ITenantDatabaseService
     {
         return _encryption.Decrypt(cipherText, _encryptionKey);
     }
+
+
 }

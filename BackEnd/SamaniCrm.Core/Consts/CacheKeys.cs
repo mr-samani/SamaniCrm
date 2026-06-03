@@ -27,6 +27,12 @@ namespace SamaniCrm.Core.Shared.Consts
         public static string UserSetting_ = "UserSetting_";
 
 
+
+        [Description("Tenant base data: slug,name,connectionstring,...")]
+        public static string Tenant_ = "Tenant_";
+        [Description("Tenant base data: slug,name,connectionstring,...")]
+        public static string TenantConnectionString_ = "TenantConnectionString_";
+
         public static string GetLocalizationCacheKey(string culture) => $"localization:{culture}";
 
     }

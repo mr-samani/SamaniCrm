@@ -1,22 +1,54 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using SamaniCrm.Application.Common.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Core;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.FileManager;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Runtime;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace SamaniCrm.Infrastructure.FileManager
+namespace SamaniCrm.Infrastructure.Persistence;
+
+public static class SeedDefaultFolders
 {
-    public static class DefaultFolders
+    public static async Task TrySeedAsync(ApplicationDbContext dbContext, FileManagerSettings settings)
     {
-        public static readonly List<FileFolder> BaseFolders =
-                [ new FileFolder()
+        Console.WriteLine("Seeding default folders...");
+
+        // var wwwrootPath = Path.Combine(_env.WebRootPath, "uploads");
+        var rootPath = settings.PublicFolderPath;
+
+        if (Directory.Exists(rootPath) == false)
+        {
+            Directory.CreateDirectory(rootPath);
+        }
+
+        foreach (var folder in DefaultFolders.BaseFolders)
+        {
+            var fullPath = Path.Combine(rootPath, folder.Name);
+            if (!Directory.Exists(fullPath))
+            {
+                Directory.CreateDirectory(fullPath);
+            }
+
+            var existsInDb = await dbContext.FileFolders.AnyAsync(f => f.Name == folder.Name && f.ParentId == null);
+            if (!existsInDb)
+            {
+                dbContext.FileFolders.Add(folder);
+            }
+        }
+
+        await dbContext.SaveChangesAsync();
+
+        Console.WriteLine("seed folders ended");
+    }
+}
+
+
+public static class DefaultFolders
+{
+    public static readonly List<FileFolder> BaseFolders =
+            [ new FileFolder()
                    {
                        Name ="Publics",
                        IsFolder = true,
@@ -74,48 +106,6 @@ namespace SamaniCrm.Infrastructure.FileManager
                        IsStatic = true,
                        RelativePath = "Plugins"
                    }
-                ];
-    }
-
-    public class FileDirectoryInitializer
-    {
-        private readonly IApplicationDbContext _dbContext;
-        private readonly FileManagerSettings _settings;
-
-        public FileDirectoryInitializer(IApplicationDbContext dbContext, IOptions<FileManagerSettings> settings)
-        {
-            _settings = settings.Value;
-            _dbContext = dbContext;
-        }
-
-
-        public async Task EnsureBaseDirectoriesAsync()
-        {
-            // var wwwrootPath = Path.Combine(_env.WebRootPath, "uploads");
-            var rootPath = _settings.PublicFolderPath;
-
-            if (Directory.Exists(rootPath) == false)
-            {
-                Directory.CreateDirectory(rootPath);
-            }
-
-            foreach (var folder in DefaultFolders.BaseFolders)
-            {
-                var fullPath = Path.Combine(rootPath, folder.Name);
-                if (!Directory.Exists(fullPath))
-                {
-                    Directory.CreateDirectory(fullPath);
-                }
-
-                var existsInDb = await _dbContext.FileFolders.AnyAsync(f => f.Name == folder.Name && f.ParentId == null);
-                if (!existsInDb)
-                {
-                    _dbContext.FileFolders.Add(folder);
-                }
-            }
-
-            await _dbContext.SaveChangesAsync();
-        }
-    }
-
+            ];
 }
+

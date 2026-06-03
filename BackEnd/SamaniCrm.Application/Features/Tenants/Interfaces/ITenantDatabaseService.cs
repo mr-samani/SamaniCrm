@@ -11,4 +11,5 @@ public interface ITenantDatabaseService
     Task RunMigrationsAsync(string connectionString,Guid tenantId, CancellationToken cancellation);
     string Encrypt(string plainText);
     string Decrypt(string cipherText);
+    string? GetEncryptedConnectionString(Guid? tenantId);
 }

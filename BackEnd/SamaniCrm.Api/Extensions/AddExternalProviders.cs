@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Identity;
+using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Infrastructure;
@@ -17,7 +18,7 @@ public static partial class ServiceCollectionExtensions
         // load external provider configs (sync for bootstrap; or async with factory)
         using (var sp = services.BuildServiceProvider())
         {
-            var db = sp.GetRequiredService<ApplicationDbContext>();
+            var db = sp.GetRequiredService<IApplicationDbContext>();
             var secretStore = sp.GetRequiredService<ISecretStore>(); // wrapper for KeyVault / DPAPI
             var providers = db.ExternalProviders.Where(p => p.IsActive).ToList();
 

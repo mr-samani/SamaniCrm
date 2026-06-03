@@ -47,7 +47,7 @@ public static class MigratorManager
         using var scope = serviceProvider.CreateScope();
         var seeder = scope.ServiceProvider.GetRequiredService<ApplicationDbInitializer>();
 
-        await seeder.SeedAsync();
+        await seeder.SeedAsync(null);
 
         Log.Success("Data seeding completed successfully!");
     }

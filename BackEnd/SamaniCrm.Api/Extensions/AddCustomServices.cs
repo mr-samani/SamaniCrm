@@ -8,14 +8,11 @@ using SamaniCrm.Application.ProductManagerManager.Interfaces;
 using SamaniCrm.Application.SubscriptionManager.Interfaces;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Core.Shared.Interfaces.Tenant;
-using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.BackgroundServices;
 using SamaniCrm.Infrastructure.Captcha;
 using SamaniCrm.Infrastructure.Connections;
-using SamaniCrm.Infrastructure.Data;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.ExternalLogin;
-using SamaniCrm.Infrastructure.FileManager;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Jobs;
 using SamaniCrm.Infrastructure.Localizer;
@@ -49,8 +46,6 @@ public static partial class ServiceCollectionExtensions
 
 
 
-        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
         services.AddScoped<ITwoFactorService, TwoFactorService>();
         services.AddScoped<IExternalLoginService, ExternalLoginService>();
@@ -87,13 +82,11 @@ public static partial class ServiceCollectionExtensions
         });
 
         services.AddScoped<INotificationService, NotificationService>();
-        services.AddScoped<FileDirectoryInitializer>();
-
 
         // Multi-Tenancy
         services.AddScoped<ICurrentTenant, CurrentTenant>();
         services.AddScoped<ITenantResolver, TenantResolver>();
-       // services.AddSingleton<IUserIdProvider, TenantUserIdProvider>();
+        // services.AddSingleton<IUserIdProvider, TenantUserIdProvider>();
         services.AddScoped<ITenantRepository, TenantRepository>();
         services.AddScoped<ITenantService, TenantService>();
 
@@ -126,23 +119,8 @@ public static partial class ServiceCollectionExtensions
 
         services.AddSingleton<ITenantDataProtector, TenantDataProtector>();
 
-        // Tenant DbContext Factory
-        services.AddScoped<ITenantDbContextFactory, TenantDbContextFactory>();
-
-
-        // Seeders
-        // TODO
-        //services.AddScoped<ITenantDataSeeder, CategorySeeder>();
-        //services.AddScoped<ITenantDataSeeder, SettingsSeeder>();
-        //services.AddScoped<ITenantDataSeeder, WorkflowSeeder>();
-
-
-
 
         services.AddScoped<ISubscriptionService, SubscriptionService>();
-
-
-
 
         return services;
     }

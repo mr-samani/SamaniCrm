@@ -124,17 +124,7 @@ await LanguageService.PreloadAllLocalizationsAsync(app.Services);
 
 app.MapHub<NotificationHub>("/hubs/notifications");
 
-
-using (var scope = app.Services.CreateScope())
-{
-    var initializer = scope.ServiceProvider.GetRequiredService<FileDirectoryInitializer>();
-    await initializer.EnsureBaseDirectoriesAsync();
-}
 app.InitializeTUS(config);
-
-
-
-
 
 
 app.Run();

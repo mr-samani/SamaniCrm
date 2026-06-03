@@ -1,29 +1,18 @@
-﻿using Azure.Core;
-using Hangfire;
-using Hangfire.Storage;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Exceptions;
 using SamaniCrm.Application.Common.Interfaces;
-using SamaniCrm.Application.Features.Tenants;
+using SamaniCrm.Application.Features.Tenants.Dtos;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Application.User.Commands;
 using SamaniCrm.Core;
+using SamaniCrm.Core.Shared.Consts;
+using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
-using SamaniCrm.Infrastructure.Data.Seeder;
-using SamaniCrm.Infrastructure.Jobs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SamaniCrm.Infrastructure.Persistence;
 using HealthStatus = SamaniCrm.Domain.Entities.HealthStatus;
-using SamaniCrm.Application.Features.Tenants.Dtos;
-using SamaniCrm.Core.Shared.DTOs;
-using SamaniCrm.Core.Shared.Consts;
 
 
 namespace SamaniCrm.Infrastructure.Services.TenantService;
@@ -33,25 +22,22 @@ public class TenantProvisioningService : ITenantProvisioningService
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly ITenantDatabaseService _databaseService;
-    private readonly ITenantNotificationService _notificationService;
     private readonly ILogger<TenantProvisioningService> _logger;
-    private readonly IEnumerable<ITenantDataSeeder> _seeders;
     private readonly IIdentityService _identityService;
+    private readonly ApplicationDbInitializer _dbInitializer;
 
     public TenantProvisioningService(
         ITenantDatabaseService databaseService,
-        ITenantNotificationService notificationService,
         ILogger<TenantProvisioningService> logger,
-        IEnumerable<ITenantDataSeeder> seeders,
         ApplicationDbContext dbContext,
-        IIdentityService identityService)
+        IIdentityService identityService,
+        ApplicationDbInitializer dbInitializer)
     {
         _databaseService = databaseService;
-        _notificationService = notificationService;
         _logger = logger;
-        _seeders = seeders;
         _dbContext = dbContext;
         _identityService = identityService;
+        _dbInitializer = dbInitializer;
     }
 
 
@@ -204,10 +190,7 @@ public class TenantProvisioningService : ITenantProvisioningService
 
     public async Task SeedInitialDataAsync(Tenant tenant, CancellationToken cancellation)
     {
-        foreach (var seeder in _seeders)
-        {
-            await seeder.SeedAsync(tenant, cancellation);
-        }
+        await _dbInitializer.SeedAsync(tenant);
     }
 
 

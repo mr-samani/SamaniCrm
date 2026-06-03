@@ -22,12 +22,10 @@ public record UpdateTenantCommand(
 public class UpdateTenantCommandHandler : IRequestHandler<UpdateTenantCommand, TenantDto>
 {
     private readonly ITenantRepository _repository;
-    private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateTenantCommandHandler(ITenantRepository repository, IUnitOfWork unitOfWork)
+    public UpdateTenantCommandHandler(ITenantRepository repository)
     {
         _repository = repository;
-        _unitOfWork = unitOfWork;
     }
 
     public async Task<TenantDto> Handle(UpdateTenantCommand request, CancellationToken cancellation)

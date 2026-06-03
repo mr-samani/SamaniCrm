@@ -11,14 +11,12 @@ public class CreateTenantCommandHandler : IRequestHandler<CreateTenantCommand, C
 {
     private readonly ITenantService createTenantService;
 
-    private readonly IMediator _mediator;
 
     public CreateTenantCommandHandler(
-        ITenantService createTenantService,
-        IMediator mediator)
+        ITenantService createTenantService
+        )
     {
         this.createTenantService = createTenantService;
-        _mediator = mediator;
     }
 
     public async Task<CreateTenantResponse> Handle(CreateTenantCommand request, CancellationToken cancellation)

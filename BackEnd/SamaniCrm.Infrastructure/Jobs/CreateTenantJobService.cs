@@ -21,7 +21,7 @@ public class CreateTenantJobService : ICreateTenantJobService
 
     private readonly ITenantNotificationService _notificationService;
     private readonly ITenantProvisioningService _provisioningService;
-    private readonly IApplicationDbContext _dbContext;
+    private readonly ApplicationDbContext _masterDbContext;
     private readonly ILogger<CreateTenantJobService> _logger;
 
 
@@ -32,13 +32,13 @@ public class CreateTenantJobService : ICreateTenantJobService
     public CreateTenantJobService(IIdentityService identityService,
         ITenantNotificationService notificationService,
         ITenantProvisioningService provisioningService,
-        IApplicationDbContext dbContext,
-        ILogger<CreateTenantJobService> logger)
+        ILogger<CreateTenantJobService> logger,
+        ApplicationDbContext masterDbContext)
     {
         _notificationService = notificationService;
         _provisioningService = provisioningService;
-        _dbContext = dbContext;
         _logger = logger;
+        _masterDbContext = masterDbContext;
     }
     public async Task ProvisioningTenantDependenciesAsync(string serializedJobData, CancellationToken cancellation)
     {
@@ -46,7 +46,7 @@ public class CreateTenantJobService : ICreateTenantJobService
         _jobData = JsonSerializer.Deserialize<TenantJobProvisioningData>(serializedJobData)!;
 
         // بررسی آیا این tenant در حال پردازش هست
-        var tenant = await _dbContext.Tenants
+        var tenant = await _masterDbContext.Tenants
             .Where(x => x.Id == _jobData.TenantId)
             .FirstOrDefaultAsync(cancellation);
 
@@ -63,7 +63,7 @@ public class CreateTenantJobService : ICreateTenantJobService
 
         // قفل کردن
         tenant.ProvisioningStatus = ProvisioningStatus.InProgress;
-        await _dbContext.SaveChangesAsync(cancellation);
+        await _masterDbContext.SaveChangesAsync(cancellation);
 
         try
         {
@@ -174,7 +174,7 @@ public class CreateTenantJobService : ICreateTenantJobService
         var tenantSlug = _jobData.Slug;
         var tenantId = _jobData.TenantId;
 
-        var stepEntity = await _dbContext.TenantProvisioningSteps
+        var stepEntity = await _masterDbContext.TenantProvisioningSteps
                .Where(x => x.TenantId == tenantId && x.Step == _currentStep)
                .FirstOrDefaultAsync();
 
@@ -189,7 +189,7 @@ public class CreateTenantJobService : ICreateTenantJobService
                     stepEntity.StepStatus = ProvisioningStepStatus.InProgress;
                     stepEntity.StartedAt = DateTime.UtcNow;
                     stepEntity.CompletedAt = null;
-                    await _dbContext.SaveChangesAsync();
+                    await _masterDbContext.SaveChangesAsync();
                 }
                 break;
 
@@ -201,12 +201,12 @@ public class CreateTenantJobService : ICreateTenantJobService
                     stepEntity.StepStatus = ProvisioningStepStatus.Failed;
                     stepEntity.CompletedAt = null;
 
-                    Tenant? tenant = await _dbContext.Tenants.Where(x => x.Id == tenantId).FirstOrDefaultAsync();
+                    Tenant? tenant = await _masterDbContext.Tenants.Where(x => x.Id == tenantId).FirstOrDefaultAsync();
                     if (tenant != null)
                     {
                         tenant.ProvisioningStatus = ProvisioningStatus.Failed;
                     }
-                    await _dbContext.SaveChangesAsync();
+                    await _masterDbContext.SaveChangesAsync();
 
                 }
                 break;
@@ -218,7 +218,7 @@ public class CreateTenantJobService : ICreateTenantJobService
                 {
                     stepEntity.StepStatus = ProvisioningStepStatus.Completed;
                     stepEntity.CompletedAt = DateTime.UtcNow;
-                    await _dbContext.SaveChangesAsync();
+                    await _masterDbContext.SaveChangesAsync();
                 }
                 break;
 
