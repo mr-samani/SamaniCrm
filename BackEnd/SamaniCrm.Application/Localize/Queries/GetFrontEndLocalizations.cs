@@ -33,7 +33,7 @@ namespace SamaniCrm.Application.Localize.Queries
             var result = await _cacheService.GetAsync<Dictionary<string, string>>(cacheKey);
             if (result == null)
             {
-                result = await _dbContext.Localizations
+                var query = _dbContext.Localizations
                    .Select(s => new LocalizationKeyDTO()
                    {
                        Key = s.Key,
@@ -49,8 +49,11 @@ namespace SamaniCrm.Application.Localize.Queries
                    x.Category == LocalizationCategoryEnum.Permission)
                    )
                     .GroupBy(x => x.Key) // گروه‌بندی بر اساس کلید
-                    .Select(g => g.First()) // فقط اولین رکورد هر کلید
-                   .ToDictionaryAsync(x => x.Key, v => v.Value ?? "");
+                    .Select(g => g.First()); // فقط اولین رکورد هر کلید
+
+                var sql = query.ToQueryString();
+
+                result = await query.ToDictionaryAsync(x => x.Key, v => v.Value ?? "");
                 await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromDays(30));
             }
             return result;

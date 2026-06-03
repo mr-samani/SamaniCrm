@@ -29,7 +29,8 @@ public class TenantResolverMiddleware
     public async Task InvokeAsync(
         HttpContext context,
         ITenantResolver tenantResolver,
-        ICurrentTenant currentTenant)
+        ICurrentTenant currentTenant,
+        ITenantDatabaseService tenantDatabaseService)
     {
         // Skip tenant resolution for public endpoints
         var endpoint = context.GetEndpoint();
@@ -89,8 +90,12 @@ public class TenantResolverMiddleware
 
         if (tenant != null)
         {
+
+            var connectionStr = tenantDatabaseService.GetConnectionString(tenant.Id);
+
+
             // Set current tenant
-            currentTenant.SetTenant(tenant.Id, tenant.Slug, tenant.Name);
+            currentTenant.SetTenant(tenant.Id, tenant.Slug, tenant.Name, connectionStr ?? "");
 
             // Add tenant info to response headers (for debugging)
             context.Response.OnStarting(() =>

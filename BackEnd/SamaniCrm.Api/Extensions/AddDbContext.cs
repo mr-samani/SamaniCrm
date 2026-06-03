@@ -31,23 +31,27 @@ public static partial class ServiceCollectionExtensions
                 sql.EnableRetryOnFailure(3);
                 sql.CommandTimeout(30);
             });
+        },
+         ServiceLifetime.Scoped);
+
+        services.AddScoped<IMasterDbContext>(sp =>
+        {
+            var factory =
+                sp.GetRequiredService<IDbContextFactory<MasterDbContext>>();
+
+            return factory.CreateDbContext();
         });
-        services.AddScoped<IMasterDbContext>(sp => sp.GetRequiredService<MasterDbContext>());
 
 
 
-
+        // Set Tenant 
         services.AddDbContext<TenantDbContext>((sp, options) =>
         {
             var currentTenant = sp.GetRequiredService<ICurrentTenant>();
             var tenantId = currentTenant.TenantId;
+            var defaultConnectionString = config.GetConnectionString("DefaultConnection");
 
-            var tenantDatabaseService = sp.GetRequiredService<ITenantDatabaseService>();
-            var cache = sp.GetRequiredService<ICacheService>();
-
-
-            // 3. دریافت کانکشن استرینگ پویا
-            var connectionString = GetConnectionStringForTenant(tenantId, tenantDatabaseService, cache, config);
+            var connectionString = tenantId == null ? defaultConnectionString : currentTenant.ConnectionString;
 
             if (string.IsNullOrEmpty(connectionString))
             {
@@ -69,49 +73,6 @@ public static partial class ServiceCollectionExtensions
 
         services.AddScoped<ApplicationDbInitializer>();
         return services;
-    }
-
-    private static string? GetConnectionStringForTenant(Guid? tenantId,
-        ITenantDatabaseService tenantDbService,
-        ICacheService cache, IConfiguration config)
-    {
-        if (tenantId.HasValue == false)
-        {
-            return config.GetConnectionString("DefaultConnection");
-        }
-
-
-        var cacheKey = CacheKeys.TenantConnectionString_ + tenantId.ToString();
-
-
-        var connectionString = cache.GetAsync<string?>(cacheKey).Result;
-
-
-        // Check cache first
-        if (string.IsNullOrEmpty(connectionString) == false)
-        {
-            return connectionString;
-        }
-
-        var encryptedConn = tenantDbService.GetEncryptedConnectionString(tenantId);
-
-        if (string.IsNullOrEmpty(encryptedConn))
-        {
-            return config.GetConnectionString("DefaultConnection");
-        }
-
-        // 3. رمزگشایی
-        connectionString = tenantDbService.DecryptConnectionString(encryptedConn);
-
-        if (string.IsNullOrEmpty(connectionString))
-        {
-            throw new InvalidOperationException($"No database connection found for tenant {tenantId}");
-        }
-
-
-        cache.SetAsync(cacheKey, connectionString);
-
-        return connectionString;
     }
 
 

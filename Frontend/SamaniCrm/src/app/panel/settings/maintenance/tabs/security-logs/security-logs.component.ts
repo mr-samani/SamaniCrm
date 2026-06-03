@@ -34,7 +34,7 @@ export class SecurityLogsComponent extends AppComponentBase implements OnInit {
       localizeKey: 'SecurityEventType_',
       width: 100,
     },
-    { column: 'username', title: this.l('Username'), width: 100 },
+    { column: 'username', title: this.l('UserName'), width: 100 },
   //  { column: 'createdBy', title: this.l('CreatedBy'), width: 100 },
     { column: 'action', title: this.l('Action'), width: 150 },
    // { column: 'resource', title: this.l('Resource'), width: 80 },

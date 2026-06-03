@@ -12,4 +12,5 @@ public interface ITenantDatabaseService
     string Encrypt(string plainText);
     string Decrypt(string cipherText);
     string? GetEncryptedConnectionString(Guid? tenantId);
+    string? GetConnectionString(Guid? tenantId);
 }

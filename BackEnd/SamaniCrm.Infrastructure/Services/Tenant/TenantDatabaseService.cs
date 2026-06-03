@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
+using SamaniCrm.Core.Shared.Consts;
+using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Infrastructure.Security;
 
@@ -19,7 +22,8 @@ public class TenantDatabaseService : ITenantDatabaseService
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly MasterDbContext _masterDbContext;
     private readonly IAuditLogFactory _auditFactory;
-
+    private readonly ICacheService _cacheService;
+    private readonly IConfiguration _config;
 
     public TenantDatabaseService(
         ILogger<TenantDatabaseService> logger,
@@ -28,7 +32,9 @@ public class TenantDatabaseService : ITenantDatabaseService
         ICurrentTenant currentTenant,
         IHttpContextAccessor httpContextAccessor,
         MasterDbContext masterDbContext,
-        IAuditLogFactory auditFactory)
+        IAuditLogFactory auditFactory,
+        ICacheService cacheService,
+        IConfiguration config)
     {
         _logger = logger;
         _encryption = encryption;
@@ -39,6 +45,8 @@ public class TenantDatabaseService : ITenantDatabaseService
         _httpContextAccessor = httpContextAccessor;
         _masterDbContext = masterDbContext;
         _auditFactory = auditFactory;
+        _cacheService = cacheService;
+        _config = config;
     }
 
     public string? GetEncryptedConnectionString(Guid? tenantId)
@@ -141,6 +149,51 @@ public class TenantDatabaseService : ITenantDatabaseService
     {
         return _encryption.Decrypt(cipherText, _encryptionKey);
     }
+
+
+
+
+    public string? GetConnectionString(Guid? tenantId)
+    {
+        if (tenantId.HasValue == false)
+        {
+            return _config.GetConnectionString("DefaultConnection");
+        }
+
+
+        var cacheKey = CacheKeys.TenantConnectionString_ + tenantId.ToString();
+
+
+        var connectionString = _cacheService.GetAsync<string?>(cacheKey).Result;
+
+
+        // Check cache first
+        if (string.IsNullOrEmpty(connectionString) == false)
+        {
+            return connectionString;
+        }
+
+        var encryptedConn = GetEncryptedConnectionString(tenantId);
+
+        if (string.IsNullOrEmpty(encryptedConn))
+        {
+            return _config.GetConnectionString("DefaultConnection");
+        }
+
+        // 3. رمزگشایی
+        connectionString = DecryptConnectionString(encryptedConn);
+
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            throw new InvalidOperationException($"No database connection found for tenant {tenantId}");
+        }
+
+
+        _cacheService.SetAsync(cacheKey, connectionString);
+
+        return connectionString;
+    }
+
 
 
 }

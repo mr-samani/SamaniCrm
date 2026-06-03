@@ -6,6 +6,7 @@ using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Infrastructure.Identity;
 using StackExchange.Redis;
 using System;
@@ -19,7 +20,7 @@ namespace SamaniCrm.Infrastructure.Services;
 
 public class UserPermissionService : IUserPermissionService
 {
-    private readonly IApplicationDbContext _dbContext;
+    private readonly TenantDbContext _dbContext;
     private readonly ICacheService _cache;
     private readonly ICurrentUserService _currentUser;
     private readonly UserManager<ApplicationUser> _userManager;
@@ -27,7 +28,7 @@ public class UserPermissionService : IUserPermissionService
 
 
 
-    public UserPermissionService(IApplicationDbContext dbContext, 
+    public UserPermissionService(TenantDbContext dbContext, 
         ICacheService memoryCache,
         ICurrentUserService currentUserService, 
         UserManager<ApplicationUser> userManager, 
@@ -62,16 +63,10 @@ public class UserPermissionService : IUserPermissionService
         List<string>? permissions = await _cache.GetAsync<List<string>>(cacheKey);
         if (permissions == null)
         {
-
-            List<Guid> roleIds = await _userManager.Users
-                .Where(x => x.Id == userId)
-                .SelectMany(x => x.Roles.Select(r => r.Id))
-                .ToListAsync(cancellationToken);
-
-            //var roleIds = await _dbContext.UserRoles
-            //    .Where(ur => ur.UserId == userId)
-            //    .Select(ur => ur.RoleId)
-            //    .ToListAsync();
+            var roleIds = await _dbContext.UserRoles
+                .Where(ur => ur.UserId == userId)
+                .Select(ur => ur.RoleId)
+                .ToListAsync();
 
             if (!roleIds.Any())
                 return [];
