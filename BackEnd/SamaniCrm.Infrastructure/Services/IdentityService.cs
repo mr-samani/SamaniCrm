@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -22,6 +23,7 @@ using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Infrastructure.ExternalLogin;
 using SamaniCrm.Infrastructure.Identity;
 using StackExchange.Redis;
@@ -41,7 +43,8 @@ public class IdentityService : IIdentityService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
-    private readonly ApplicationDbContext _dbContext;
+    private readonly IApplicationDbContext _dbContext;
+    private readonly MasterDbContext _masterDbContext;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IUserPermissionService _userPermissionService;
     private readonly ISecuritySettingService _securitySettingService;
@@ -56,7 +59,7 @@ public class IdentityService : IIdentityService
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         RoleManager<ApplicationRole> roleManager,
-        ApplicationDbContext applicationDbContext,
+        IApplicationDbContext applicationDbContext,
         IHttpContextAccessor httpContextAccessor,
         IUserPermissionService userPermissionService,
         ISecuritySettingService securitySettingService,
@@ -65,7 +68,8 @@ public class IdentityService : IIdentityService
         ISecretStore secretStore,
         IConfiguration config,
         IExternalLoginService externalLoginService,
-        ICurrentUserService currentUser)
+        ICurrentUserService currentUser,
+        MasterDbContext masterDbContext)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -80,6 +84,7 @@ public class IdentityService : IIdentityService
         _config = config;
         _externalLoginService = externalLoginService;
         _currentUser = currentUser;
+        _masterDbContext = masterDbContext;
     }
 
 
@@ -90,7 +95,7 @@ public class IdentityService : IIdentityService
         {
             return null;
         }
-        var tenant = await _dbContext.Tenants
+        var tenant = await _masterDbContext.Tenants
             .IgnoreQueryFilters()
             .Where(x => x.Slug == tenancyName && x.Status == TenantStatus.Active)
             .Select(s => new SimpleTenantData()
@@ -106,7 +111,7 @@ public class IdentityService : IIdentityService
     }
     public async Task<SimpleTenantData?> GetTenantById(Guid tenantId, CancellationToken cancellation)
     {
-        var tenant = await _dbContext.Tenants
+        var tenant = await _masterDbContext.Tenants
              .IgnoreQueryFilters()
              .Where(x => x.Id == tenantId && x.Status == TenantStatus.Active)
              .Select(s => new SimpleTenantData()
@@ -216,11 +221,21 @@ public class IdentityService : IIdentityService
 
     public async Task<PaginatedResult<UserDTO>> GetAllUsersAsync(GetUserQuery request, CancellationToken cancellationToken)
     {
-        var rolesQuery = from ur in _dbContext.UserRoles
-                         join r in _dbContext.Roles on ur.RoleId equals r.Id
-                         select new { ur.UserId, RoleName = r.Name };
+        //var rolesQuery = from ur in _dbContext.UserRoles
+        //                 join r in _roleManager.Roles on ur.RoleId equals r.Id
+        //                 select new { ur.UserId, RoleName = r.Name };
 
-        IQueryable<ApplicationUser> query = _dbContext.Users.AsQueryable();
+        var rolesQuery = await _dbContext.Database
+                 .SqlQueryRaw<UserRoleDto>(@"
+                    SELECT 
+                        ur.UserId,
+                        r.Name AS RoleName
+                    FROM AspNetUserRoles ur
+                    INNER JOIN AspNetRoles r ON r.Id = ur.RoleId
+                ")
+                .ToListAsync();
+
+        IQueryable<ApplicationUser> query = _userManager.Users.AsQueryable();
         if (!string.IsNullOrEmpty(request.Filter))
         {
             query = query.Where(x =>
@@ -274,7 +289,7 @@ public class IdentityService : IIdentityService
 
     public async Task<PaginatedResult<TenantUserDTO>> GetTenantUsersAsync(GetTenantUsersQuery request, CancellationToken cancellationToken)
     {
-        IQueryable<ApplicationUser> query = _dbContext.Users
+        IQueryable<ApplicationUser> query = _userManager.Users
             .Include(c => c.Roles)
             .Where(x => x.IsDeleted == false && x.TenantId == request.TenantId)
             .IgnoreQueryFilters()
@@ -610,7 +625,7 @@ public class IdentityService : IIdentityService
 
     public async Task<bool> updateUserLanguage(string culture, Guid userId, CancellationToken cancellationToken)
     {
-        var found = await _dbContext.Users.Where(x => x.Id == userId).FirstOrDefaultAsync(cancellationToken);
+        var found = await _userManager.Users.Where(x => x.Id == userId).FirstOrDefaultAsync(cancellationToken);
         if (found != null)
         {
             found.Lang = culture;
@@ -874,7 +889,7 @@ public class IdentityService : IIdentityService
             backendUrl += "/";
         }
 
-        var provider = await _dbContext.ExternalProviders
+        var provider = await _masterDbContext.ExternalProviders
             .Where(x => x.Name.ToLower() == request.provider.ToLower() && x.IsActive)
             .Select(s => new
             {
@@ -949,17 +964,17 @@ public class IdentityService : IIdentityService
 
     public async Task<List<Guid>> GetAllActiveUsersIds(CancellationToken cancellationToken)
     {
-        List<Guid> list = await _dbContext.Users
+        List<Guid> list = await _userManager.Users
              // .Where(x => x.IsDeleted == false)
              .Select(u => u.Id)
              .ToListAsync();
         return list;
     }
 
-    public async Task<List<AutoCompleteDto<Guid>>> GetAutoCompleteUsers(string filter, CancellationToken cancellationToken)
+    public async Task<List<AutoCompleteDto<Guid>>> GetAutoCompleteUsers(string? filter, CancellationToken cancellationToken)
     {
 
-        var query = _dbContext.Users.AsQueryable();
+        var query = _userManager.Users.AsQueryable();
 
 
         if (!string.IsNullOrEmpty(filter))
@@ -1009,37 +1024,67 @@ public class IdentityService : IIdentityService
 
     public async Task<UserDTO?> GetTenantAdmin(Guid tenantId, CancellationToken cancellation)
     {
-        var tenantAdminUser = await _dbContext.Users
-            .IgnoreQueryFilters()
-             .Join(
-                 _dbContext.UserRoles,
-                 user => user.Id,
-                 userRole => userRole.UserId,
-                 (user, userRole) => new { user, userRole }
-             )
-             .Join(
-                 _dbContext.Roles,
-                 combined => combined.userRole.RoleId,
-                 role => role.Id,
-                 (combined, role) => new { combined.user, role }
-             )
-             .Where(x => x.user.TenantId == tenantId
-                      && x.role.Name == AppRoles.TenantAdministrator)
-             .Select(x => new UserDTO
-             {
-                 Id = x.user.Id,
-                 UserName = x.user.UserName ?? "",
-                 FirstName = x.user.FirstName ?? "",
-                 LastName = x.user.LastName ?? "",
-                 FullName = x.user.FullName ?? "",
-                 Lang = x.user.Lang ?? "",
-                 Email = x.user.Email ?? "",
-                 ProfilePicture = x.user.ProfilePicture ?? "",
-                 Address = x.user.Address ?? "",
-                 PhoneNumber = x.user.PhoneNumber ?? "",
-                 Roles = new List<string> { x.role.Name! }
-             })
-             .FirstOrDefaultAsync(cancellation);
+        //var tenantAdminUser = await _dbContext.Users
+        //    .IgnoreQueryFilters()
+        //     .Join(
+        //         _dbContext.UserRoles,
+        //         user => user.Id,
+        //         userRole => userRole.UserId,
+        //         (user, userRole) => new { user, userRole }
+        //     )
+        //     .Join(
+        //         _dbContext.Roles,
+        //         combined => combined.userRole.RoleId,
+        //         role => role.Id,
+        //         (combined, role) => new { combined.user, role }
+        //     )
+        //     .Where(x => x.user.TenantId == tenantId
+        //              && x.role.Name == AppRoles.TenantAdministrator)
+        //     .Select(x => new UserDTO
+        //     {
+        //         Id = x.user.Id,
+        //         UserName = x.user.UserName ?? "",
+        //         FirstName = x.user.FirstName ?? "",
+        //         LastName = x.user.LastName ?? "",
+        //         FullName = x.user.FullName ?? "",
+        //         Lang = x.user.Lang ?? "",
+        //         Email = x.user.Email ?? "",
+        //         ProfilePicture = x.user.ProfilePicture ?? "",
+        //         Address = x.user.Address ?? "",
+        //         PhoneNumber = x.user.PhoneNumber ?? "",
+        //         Roles = new List<string> { x.role.Name! }
+        //     })
+        //     .FirstOrDefaultAsync(cancellation);
+
+
+        var sqlQuery = $@"
+            SELECT TOP 1 -- فقط یک کاربر را برمی‌گردانیم
+                u.Id,
+                u.UserName,
+                u.FirstName,
+                u.LastName,
+                u.FullName,
+                u.Lang,
+                u.Email,
+                u.ProfilePicture,
+                u.Address,
+                u.PhoneNumber
+            FROM AspNetUsers u
+            INNER JOIN AspNetUserRoles ur ON u.Id = ur.UserId
+            INNER JOIN AspNetRoles r ON ur.RoleId = r.Id
+            WHERE u.TenantId = @TenantId 
+              AND r.Name = @RoleName
+            -- اگر نیاز به IgnoreQueryFilters دارید، باید SQL را پیچیده‌تر کنید یا از Dapper استفاده کنید.
+            -- مثلاً برای TenantId: AND (u.TenantId = @TenantId OR u.TenantId IS NULL)
+            -- یا اگر Soft Delete دارید: AND u.IsDeleted = 0 
+        ";
+
+        // استفاده از SqlQueryRaw برای اجرای کوئری و نگاشت به DTO
+        var tenantAdminUser = await _dbContext.Database
+            .SqlQueryRaw<UserDTO>(sqlQuery,
+                new SqlParameter("@TenantId", tenantId),
+                new SqlParameter("@RoleName", AppRoles.TenantAdministrator))
+            .FirstOrDefaultAsync(cancellation);
 
         return tenantAdminUser;
 
@@ -1065,4 +1110,11 @@ public class IdentityService : IIdentityService
 
 
     }
+}
+
+public class UserRoleDto
+{
+    public Guid UserId { get; set; }
+    public required string RoleName { get; set; }
+
 }

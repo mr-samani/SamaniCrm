@@ -18,7 +18,7 @@ public static partial class ServiceCollectionExtensions
         // load external provider configs (sync for bootstrap; or async with factory)
         using (var sp = services.BuildServiceProvider())
         {
-            var db = sp.GetRequiredService<IApplicationDbContext>();
+            var db = sp.GetRequiredService<IMasterDbContext>();
             var secretStore = sp.GetRequiredService<ISecretStore>(); // wrapper for KeyVault / DPAPI
             var providers = db.ExternalProviders.Where(p => p.IsActive).ToList();
 

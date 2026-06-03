@@ -1,9 +1,12 @@
 ﻿using Duende.IdentityServer.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
+using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Core.Shared.Interfaces;
+using SamaniCrm.Infrastructure.DbContexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,13 +18,22 @@ namespace SamaniCrm.Infrastructure.Localizer
     public class LanguageService : ILanguageService
     {
         private readonly ICacheService _cacheService;
-        private readonly ApplicationDbContext _dbContext;
+        private readonly MasterDbContext _dbContext;
+
+        private readonly IDbContextFactory<MasterDbContext> _dbFactory;
+        private readonly LocalizationMemoryCache _cache;
 
 
-        public LanguageService(ICacheService cacheService, ApplicationDbContext dbContext)
+        public LanguageService(
+            ICacheService cacheService,
+            MasterDbContext dbContext,
+            IDbContextFactory<MasterDbContext> dbFactory,
+            LocalizationMemoryCache cache)
         {
             _cacheService = cacheService;
             _dbContext = dbContext;
+            _dbFactory = dbFactory;
+            _cache = cache;
         }
 
 
@@ -70,12 +82,12 @@ namespace SamaniCrm.Infrastructure.Localizer
 
         public async Task<string> GetAsync(string key, string culture)
         {
-            var all = await GetAllLocalizatonsAsync(culture);
-            return all.TryGetValue(key, out var value) ? value : key;
+            Dictionary<string, string?> all = await GetAllLocalizatonsAsync(culture);
+            return all != null && all.TryGetValue(key, out var value) ? (value ?? key) : key;
         }
 
 
-        public async Task<Dictionary<string, string>> GetAllLocalizatonsAsync(string culture)
+        public async Task<Dictionary<string, string?>> GetAllLocalizatonsAsync(string culture)
         {
             //var result = await _dbContext.Languages
             //    .Where(x => x.Culture == culture)
@@ -84,11 +96,11 @@ namespace SamaniCrm.Infrastructure.Localizer
 
 
             var cacheKey = CacheKeys.GetLocalizationCacheKey(culture);
-            var cached = await _cacheService.GetAsync<Dictionary<string, string>>(cacheKey);
+            var cached = await _cacheService.GetAsync<Dictionary<string, string?>>(cacheKey);
             if (cached is not null)
                 return cached;
 
-            var items = await _dbContext.Localizations
+            Dictionary<string, string?> items = await _dbContext.Localizations
                 .Where(x => x.Culture == culture)
                 .ToDictionaryAsync(x => x.Key, x => x.Value);
 
@@ -100,11 +112,9 @@ namespace SamaniCrm.Infrastructure.Localizer
 
 
 
-        public static async Task PreloadAllLocalizationsAsync(IServiceProvider provider)
+        public async Task PreloadAllLocalizationsAsync()
         {
-            using var scope = provider.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            var cache = scope.ServiceProvider.GetRequiredService<LocalizationMemoryCache>();
+            var db = _dbFactory.CreateDbContext();
 
             var data = await db.Localizations
                 .GroupBy(x => x.Culture)
@@ -116,7 +126,7 @@ namespace SamaniCrm.Infrastructure.Localizer
                     .GroupBy(x => x.Key) // گروه‌بندی بر اساس کلید
                     .Select(g => g.First()) // فقط اولین رکورد هر کلید
                     .ToDictionary(x => x.Key, x => x.Value);
-                cache.SetCulture(group.Key, dict!);
+                _cache.SetCulture(group.Key, dict!);
             }
         }
 

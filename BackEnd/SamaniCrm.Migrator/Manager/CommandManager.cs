@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SamaniCrm.Infrastructure;
+using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Migrator;
 
 namespace SamaniCrm.Migrator.Manager;
@@ -67,7 +68,7 @@ public static class CommandManager
             // ۲. اجرای دستور
             try
             {
-                var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+                var dbContext = serviceProvider.GetRequiredService<BaseDbContext>();
 
                 switch (command)
                 {

@@ -11,6 +11,7 @@ using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Infrastructure.Persistence;
 using HealthStatus = SamaniCrm.Domain.Entities.HealthStatus;
 
@@ -20,7 +21,7 @@ namespace SamaniCrm.Infrastructure.Services.TenantService;
 
 public class TenantProvisioningService : ITenantProvisioningService
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly MasterDbContext _dbContext;
     private readonly ITenantDatabaseService _databaseService;
     private readonly ILogger<TenantProvisioningService> _logger;
     private readonly IIdentityService _identityService;
@@ -29,7 +30,7 @@ public class TenantProvisioningService : ITenantProvisioningService
     public TenantProvisioningService(
         ITenantDatabaseService databaseService,
         ILogger<TenantProvisioningService> logger,
-        ApplicationDbContext dbContext,
+        MasterDbContext dbContext,
         IIdentityService identityService,
         ApplicationDbInitializer dbInitializer)
     {

@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.DbContexts;
 
 namespace SamaniCrm.Infrastructure.Persistence
 {
     public static class SeedStaticMenus
     {
 
-            public static async Task TrySeedAsync(ApplicationDbContext dbContext)
+            public static async Task TrySeedAsync(MasterDbContext masterDbContext, TenantDbContext dbContext)
             {
                 Console.WriteLine("Seeding static menu data...");
                 var staticMenus = GetStaticMenus();
@@ -23,7 +24,7 @@ namespace SamaniCrm.Infrastructure.Persistence
                 var translationsToAdd = new List<MenuTranslation>();
 
                 // دریافت تمام زبان‌های فعال
-                var activeLanguages = await dbContext.Languages
+                var activeLanguages = await masterDbContext.Languages
                     .Where(l => l.IsActive)
                     .Select(l => l.Culture)
                     .ToListAsync();
@@ -114,7 +115,7 @@ namespace SamaniCrm.Infrastructure.Persistence
 
             // تابع کمکی برای پردازش منوهای موجود و فرزندان آنها
             private static async Task UpdateMenuAndChildren(
-                ApplicationDbContext dbContext,
+                TenantDbContext dbContext,
                 Menu existingMenu,
                 Menu staticMenu,
                 List<string> activeLanguages,
@@ -172,7 +173,7 @@ namespace SamaniCrm.Infrastructure.Persistence
                 ICollection<Menu> children,
                 List<string> activeLanguages,
                 List<MenuTranslation> translationsToAdd,
-                ApplicationDbContext dbContext)
+                TenantDbContext dbContext)
             {
                 var processedChildren = new List<Menu>();
                 var existingChildren = await dbContext.Menus

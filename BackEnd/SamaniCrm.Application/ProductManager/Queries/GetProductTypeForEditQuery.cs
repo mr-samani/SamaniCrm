@@ -16,10 +16,12 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
 
     public class GetProductTypeForEditQueryHandler : IRequestHandler<GetProductTypeForEditQuery, ProductTypeDto>
     {
+        private readonly IMasterDbContext _masterDbContext;
         private readonly IApplicationDbContext _dbContext;
-        public GetProductTypeForEditQueryHandler(IApplicationDbContext dbContext)
+        public GetProductTypeForEditQueryHandler(IApplicationDbContext dbContext, IMasterDbContext masterDbContext)
         {
             _dbContext = dbContext;
+            _masterDbContext = masterDbContext;
         }
         public async Task<ProductTypeDto> Handle(GetProductTypeForEditQuery request, CancellationToken cancellationToken)
         {
@@ -43,7 +45,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
             if (result == null)
                 throw new NotFoundException("ProductType not found.");
 
-            List<ProductTypeTranslationDto> translations = await _dbContext.Languages
+            List<ProductTypeTranslationDto> translations = await _masterDbContext.Languages
                 .GroupJoin(_dbContext.ProductTypeTranslations.Where(w => w.ProductTypeId == request.Id),
                   lang => lang.Culture,
                   translation => translation.Culture,

@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Core.Shared.Settings;
+using SamaniCrm.Infrastructure.DbContexts;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
@@ -51,7 +52,7 @@ namespace SamaniCrm.Infrastructure.Identity
 
 
                 })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<TenantDbContext>()
                 .AddDefaultTokenProviders();
 
                 services.AddTransient<IPasswordValidator<ApplicationUser>, DynamicPasswordValidator>();
@@ -160,7 +161,7 @@ namespace SamaniCrm.Infrastructure.Identity
                 // 📧 Email confirmation
                 options.SignIn.RequireConfirmedEmail = false;
             })
-                   .AddEntityFrameworkStores<ApplicationDbContext>()
+                   .AddEntityFrameworkStores<TenantDbContext>()
                    .AddDefaultTokenProviders()
                    .AddSignInManager();
             return services;

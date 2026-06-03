@@ -20,8 +20,9 @@ public class GetAutoCompleteUserQueryHandler : IRequestHandler<GetAutoCompleteUs
     private readonly ILocalizer L;
     private readonly IIdentityService _identityService;
 
-    public GetAutoCompleteUserQueryHandler(ILocalizer l,
-IIdentityService identityService)
+    public GetAutoCompleteUserQueryHandler(
+        ILocalizer l,
+        IIdentityService identityService)
     {
         L = l;
         _identityService = identityService;

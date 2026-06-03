@@ -27,12 +27,14 @@ namespace SamaniCrm.Infrastructure.SubscriptionManager;
 public class SubscriptionService : ISubscriptionService
 {
     private readonly IApplicationDbContext _dbContext;
+    private readonly IMasterDbContext _masterDbContext;
     private readonly ILocalizer L;
 
-    public SubscriptionService(IApplicationDbContext dbContext, ILocalizer l)
+    public SubscriptionService(IApplicationDbContext dbContext, ILocalizer l, IMasterDbContext masterDbContext)
     {
         _dbContext = dbContext;
         L = l;
+        _masterDbContext = masterDbContext;
     }
 
     public async Task<bool> CreateOrEditPlan(PlanDto input, CancellationToken cancellation)
@@ -113,7 +115,7 @@ public class SubscriptionService : ISubscriptionService
         if (plan == null)
             throw new NotFoundException("Plan not found.");
 
-        List<PlanTranslationDto> translations = await _dbContext.Languages
+        List<PlanTranslationDto> translations = await _masterDbContext.Languages
             .GroupJoin(_dbContext.PlanTranslations.Where(w => w.PlanId == planId),
               lang => lang.Culture,
               translation => translation.Culture,
@@ -200,7 +202,7 @@ public class SubscriptionService : ISubscriptionService
         var currentLangugage = L.CurrentLanguage;
         // 1. لود کردن تمام زبان‌های سیستم (فقط یک بار اجرا می‌شود)
         // فرض بر این است که _dbContext.Languages شامل تمام زبان‌های فعال سیستم است.
-        var allLanguages = await _dbContext.Languages
+        var allLanguages = await _masterDbContext.Languages
             .Select(l => new { l.Culture, l.Name }) // فقط فیلدهای مورد نیاز را لود کنید
             .ToListAsync(cancellation);
 

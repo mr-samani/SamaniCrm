@@ -19,9 +19,9 @@ namespace SamaniCrm.Application.Localize.Commands
 
     public class CreateOrEditLocalizeKeyCommandHandler : IRequestHandler<CreateOrEditLocalizeKeyCommand, bool>
     {
-        private readonly IApplicationDbContext _dbContext;
+        private readonly IMasterDbContext _dbContext;
 
-        public CreateOrEditLocalizeKeyCommandHandler(IApplicationDbContext dbContext)
+        public CreateOrEditLocalizeKeyCommandHandler(IMasterDbContext dbContext)
         {
             _dbContext = dbContext;
         }

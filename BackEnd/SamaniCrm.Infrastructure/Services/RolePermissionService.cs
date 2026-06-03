@@ -12,13 +12,13 @@ namespace SamaniCrm.Infrastructure.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IApplicationDbContext _dbContext;
         private readonly ILocalizer L;
 
         public RolePermissionService(
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager,
-            ApplicationDbContext dbContext,
+            IApplicationDbContext dbContext,
             ILocalizer l)
         {
             _userManager = userManager;

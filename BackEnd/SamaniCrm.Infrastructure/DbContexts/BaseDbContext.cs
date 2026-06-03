@@ -1,25 +1,23 @@
-﻿using Duende.IdentityModel;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
-using SamaniCrm.Core.Shared.Enums;
-using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Domain.Attributes;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Entities.Subscription;
 using SamaniCrm.Domain.Interfaces;
 using SamaniCrm.Infrastructure.Identity;
+using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Text;
 using System.Text.Json;
 
-namespace SamaniCrm.Infrastructure;
+namespace SamaniCrm.Infrastructure.DbContexts;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>, IApplicationDbContext
+public abstract class BaseDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
 {
     private readonly ICurrentUserService? _currentUser;
     private readonly ICurrentTenant? _currentTenant;
@@ -28,7 +26,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     private Guid? _tenantId;
     public bool IsSeeding { get; set; } = false; // Property to indicate seeding process
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
+    public BaseDbContext(DbContextOptions options,
         ICurrentUserService? currentUserService,
         ICurrentTenant? currentTenant,
         IHttpContextAccessor? httpContextAccessor) : base(options)
@@ -54,18 +52,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 
 
 
-    public DbSet<Tenant> Tenants { get; set; }
-    public DbSet<TenantSetting> TenantSettings { get; set; }
-    public DbSet<TenantDatabaseConnection> TenantDatabaseConnections { get; set; }
-    public DbSet<TenantCategory> TenantCategories { get; set; }
-    public DbSet<TenantProvisioningStep> TenantProvisioningSteps { get; set; }
-
-
 
     public DbSet<Permission> Permissions { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
-    public DbSet<Language> Languages { get; set; }
-    public DbSet<Localization> Localizations { get; set; }
+
+
     public DbSet<Menu> Menus { get; set; }
     public DbSet<MenuTranslation> MenuTranslations { get; set; }
     public DbSet<SecuritySetting> SecuritySettings { get; set; }
@@ -101,8 +92,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
 
     public DbSet<FileFolder> FileFolders { get; set; }
 
-    public DbSet<Plugin> Plugins { get; set; }
-    public DbSet<ExternalProvider> ExternalProviders { get; set; }
 
     #region Dashboard
     public DbSet<Dashboard> Dashboards { get; set; }
@@ -121,7 +110,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<AddOn> AddOns { get; set; }
     public DbSet<AddOnTranslation> AddOnTranslations { get; set; }
     public DbSet<SubscriptionAddOn> SubscriptionAddOns { get; set; }
-
+ 
     #endregion
 
     public override int SaveChanges()
@@ -144,7 +133,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(BaseDbContext).Assembly);
 
         SetGLobalFilter(builder);
     }
@@ -413,6 +402,5 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
                 cancellationToken);
         }
     }
-
 
 }

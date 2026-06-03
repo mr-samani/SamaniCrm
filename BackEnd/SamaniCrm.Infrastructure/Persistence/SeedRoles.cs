@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Infrastructure.Identity;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace SamaniCrm.Infrastructure.Persistence;
 public class SeedRoles
 {
     public static async Task TrySeedAsync(
-      ApplicationDbContext dbContext,
+      TenantDbContext dbContext,
       ILogger<ApplicationDbInitializer> logger,
       RoleManager<ApplicationRole> roleManager)
     {

@@ -16,13 +16,13 @@ namespace SamaniCrm.Api.Controllers;
 
 public class ExternalAuthController : ApiBaseController
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IMasterDbContext _context;
     private readonly IConfiguration _configuration;
     private readonly ILogger<ExternalAuthController> _logger;
     private readonly IIdentityService _identityService;
 
     public ExternalAuthController(
-        IApplicationDbContext context,
+        IMasterDbContext context,
         IConfiguration configuration,
         ILogger<ExternalAuthController> logger,
         IIdentityService identityService)

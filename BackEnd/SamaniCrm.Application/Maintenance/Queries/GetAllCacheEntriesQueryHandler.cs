@@ -24,7 +24,7 @@ namespace SamaniCrm.Application.Maintenance.Queries
 
             foreach (var key in keys)
             {
-                var meta = await _cache.GetMetaAsync(key);
+                var meta = await _cache.GetMetaAsync(key!);
                 if (meta != null)
                     result.Add(meta);
             }

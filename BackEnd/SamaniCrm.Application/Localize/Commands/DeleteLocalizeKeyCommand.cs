@@ -15,9 +15,9 @@ namespace SamaniCrm.Application.Localize.Commands
 
     public class DeleteLocalizeKeyCommandLandler : IRequestHandler<DeleteLocalizeKeyCommand, bool>
     {
-        private readonly IApplicationDbContext _dbContext;
+        private readonly IMasterDbContext _dbContext;
 
-        public DeleteLocalizeKeyCommandLandler(IApplicationDbContext dbContext)
+        public DeleteLocalizeKeyCommandLandler(IMasterDbContext dbContext)
         {
             _dbContext = dbContext;
         }

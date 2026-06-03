@@ -20,6 +20,7 @@ namespace SamaniCrm.Infrastructure.Services.TenantService;
 
 public class TenantService : ITenantService
 {
+    private readonly IMasterDbContext _masterDbContext;
     private readonly IApplicationDbContext _dbContext;
     private readonly ICurrentUserService _currentUser;
     private readonly ILogger<CreateTenantCommandHandler> _logger;
@@ -33,13 +34,15 @@ public class TenantService : ITenantService
         ITenantNotificationService notificationService,
         ILogger<CreateTenantCommandHandler> logger,
         IRecurringJobManagerV2 recurringJobManagerV2,
-        IIdentityService identityService)
+        IIdentityService identityService,
+        IMasterDbContext masterDbContext)
     {
         _dbContext = dbContext;
         _currentUser = currentUser;
         _logger = logger;
         _JobManagerV2 = recurringJobManagerV2;
         _identityService = identityService;
+        _masterDbContext = masterDbContext;
     }
 
 
@@ -92,8 +95,8 @@ public class TenantService : ITenantService
                 CreatedBy = _currentUser.UserId
             };
 
-            await _dbContext.Tenants.AddAsync(tenant, cancellation);
-            await _dbContext.SaveChangesAsync(cancellation);
+            await _masterDbContext.Tenants.AddAsync(tenant, cancellation);
+            await _masterDbContext.SaveChangesAsync(cancellation);
 
             // TODO:Pasword must be hash for security save job
             TenantJobProvisioningData jobData = new TenantJobProvisioningData()
@@ -164,14 +167,14 @@ public class TenantService : ITenantService
     public async Task<bool> ActiveOrDeactiveTenant(Guid id, bool isSusspend, string? reason, CancellationToken cancellation)
     {
 
-        var tenant = await _dbContext.Tenants.FindAsync(id, cancellation)
+        var tenant = await _masterDbContext.Tenants.FindAsync(id, cancellation)
             ?? throw new NotFoundException("Tenant not found");
 
         tenant.Status = isSusspend ? TenantStatus.Suspended : TenantStatus.Active;
         tenant.SuspendedAt = isSusspend ? DateTime.UtcNow : null;
         tenant.SuspensionReason = reason;
 
-        var result = await _dbContext.SaveChangesAsync(cancellation);
+        var result = await _masterDbContext.SaveChangesAsync(cancellation);
         return result > 0;
     }
 
@@ -182,7 +185,7 @@ public class TenantService : ITenantService
     public async Task<bool> RetryProvisioning(Guid id, CancellationToken cancellation)
     {
 
-        var tenant = await _dbContext.Tenants
+        var tenant = await _masterDbContext.Tenants
             .Select(s => new
             {
                 tenantId = s.Id,
@@ -227,7 +230,7 @@ public class TenantService : ITenantService
 
     public async Task<List<AutoCompleteDto<Guid>>> GetTenantsAutoComplete(string? filter, CancellationToken cancellationToken)
     {
-        var query = _dbContext.Tenants
+        var query = _masterDbContext.Tenants
              .AsNoTracking()
              .Where(x => x.Status == TenantStatus.Active);
         if (filter != null)

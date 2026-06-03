@@ -62,7 +62,7 @@ namespace SamaniCrm.Application.Common.Interfaces
         Task<LoginResult> ExternalSignInAsync(ExternalLoginCallbackCommand request, CancellationToken cancellationToken);
 
         Task<List<Guid>> GetAllActiveUsersIds(CancellationToken cancellationToken);
-        Task<List<AutoCompleteDto<Guid>>> GetAutoCompleteUsers(string filter, CancellationToken cancellationToken);
+        Task<List<AutoCompleteDto<Guid>>> GetAutoCompleteUsers(string? filter, CancellationToken cancellationToken);
         Task<UserDTO?> GetTenantAdmin(Guid tenantId, CancellationToken cancellation);
     }
 }

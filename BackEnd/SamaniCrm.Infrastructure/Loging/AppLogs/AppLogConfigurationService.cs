@@ -8,6 +8,7 @@ using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Core.Shared.Logging;
 using SamaniCrm.Core.Shared.Logging.Dtos;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.DbContexts;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -37,7 +38,7 @@ public class AppLogConfigurationService : IAppLogConfigurationService
 
             using (var scope = _scopeFactory.CreateScope())
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                var dbContext = scope.ServiceProvider.GetRequiredService<TenantDbContext>();
                 setting = await dbContext.TenantLogSettings
                       .Select(s => new TenantAppLogSettingDto()
                       {
@@ -79,7 +80,7 @@ public class AppLogConfigurationService : IAppLogConfigurationService
     {
         using (var scope = _scopeFactory.CreateScope())
         {
-            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<TenantDbContext>();
             var existing = await dbContext.TenantLogSettings
             .FirstOrDefaultAsync(s => s.TenantId == setting.TenantId, cancellation);
 

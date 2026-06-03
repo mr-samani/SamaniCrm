@@ -20,10 +20,10 @@ public class GetExternalProviderByIdQuery : IRequest<CreateOrUpdateExternalProvi
 
 public class GetExternalProviderByIdQueryHandler : IRequestHandler<GetExternalProviderByIdQuery, CreateOrUpdateExternalProviderDto>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IMasterDbContext _context;
     private readonly IMapper _mapper;
 
-    public GetExternalProviderByIdQueryHandler(IApplicationDbContext context, IMapper mapper)
+    public GetExternalProviderByIdQueryHandler(IMasterDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;

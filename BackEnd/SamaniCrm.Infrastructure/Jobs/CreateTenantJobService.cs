@@ -21,7 +21,7 @@ public class CreateTenantJobService : ICreateTenantJobService
 
     private readonly ITenantNotificationService _notificationService;
     private readonly ITenantProvisioningService _provisioningService;
-    private readonly ApplicationDbContext _masterDbContext;
+    private readonly IMasterDbContext _masterDbContext;
     private readonly ILogger<CreateTenantJobService> _logger;
 
 
@@ -33,7 +33,7 @@ public class CreateTenantJobService : ICreateTenantJobService
         ITenantNotificationService notificationService,
         ITenantProvisioningService provisioningService,
         ILogger<CreateTenantJobService> logger,
-        ApplicationDbContext masterDbContext)
+        IMasterDbContext masterDbContext)
     {
         _notificationService = notificationService;
         _provisioningService = provisioningService;
@@ -58,6 +58,8 @@ public class CreateTenantJobService : ICreateTenantJobService
         if (tenant.ProvisioningStatus == ProvisioningStatus.InProgress)
         {
             _logger.LogWarning("Tenant {TenantId} is already being provisioned", _jobData.TenantId);
+            await _notificationService.SendErrorAsync(tenant.Slug, _currentStep, "Tenant already being provisioned");
+
             return;
         }
 

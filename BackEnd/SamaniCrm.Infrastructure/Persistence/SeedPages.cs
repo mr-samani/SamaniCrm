@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.DbContexts;
 
 namespace SamaniCrm.Infrastructure.Persistence;
 
 public static class SeedPages
 {
-    public static async Task TrySeedAsync(ApplicationDbContext dbContext)
+    public static async Task TrySeedAsync(TenantDbContext dbContext)
     {
 
 

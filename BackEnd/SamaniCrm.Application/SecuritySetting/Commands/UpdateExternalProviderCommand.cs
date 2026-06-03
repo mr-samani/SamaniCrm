@@ -20,9 +20,9 @@ public class UpdateExternalProviderCommand : CreateOrUpdateExternalProviderDto, 
 
 public class UpdateExternalProviderCommandHandler : IRequestHandler<UpdateExternalProviderCommand, bool>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IMasterDbContext _context;
 
-    public UpdateExternalProviderCommandHandler(IApplicationDbContext context)
+    public UpdateExternalProviderCommandHandler(IMasterDbContext context)
     {
         _context = context;
     }

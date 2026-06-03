@@ -1,11 +1,11 @@
-import {  Component,  OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { HubConnection } from '@microsoft/signalr';
 import { AppConst } from '@shared/app-const';
 import { ConnectionStatus, SignalRService } from '@shared/services/signalr.service';
 import { ProvisioningNotification } from './provisioning-notification';
 import { TenantsServiceProxy } from '@shared/service-proxies/api/tenants.service';
-import { finalize } from 'rxjs'; 
+import { finalize } from 'rxjs';
 import { ProvisioningStatusDto } from '@shared/service-proxies/model/provisioning-status-dto';
 import { ProvisioningStepStatus } from '@shared/service-proxies/model/provisioning-step-status';
 
@@ -130,6 +130,7 @@ export class ProvisioningTenantComponent extends AppComponentBase implements OnI
   private handleNotification(notification: ProvisioningNotification): void {
     console.log('recived', notification);
     if (notification.tenantSlug == this.tenantSlug) {
+      this.notify.error(notification.message);
       const f = this.steps.findIndex((x) => x.step == notification.currentStep);
       if (f > -1) {
         this.steps[f].errorMessage = notification.message;

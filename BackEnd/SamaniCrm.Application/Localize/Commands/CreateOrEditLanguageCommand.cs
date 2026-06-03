@@ -13,9 +13,9 @@ namespace SamaniCrm.Application.Localize.Commands
 
     public class CreateOrEditLanguageCommandHandler : IRequestHandler<CreateOrEditLanguageCommand, bool>
     {
-        private readonly IApplicationDbContext _dbContext;
+        private readonly IMasterDbContext _dbContext;
 
-        public CreateOrEditLanguageCommandHandler(IApplicationDbContext dbContext)
+        public CreateOrEditLanguageCommandHandler(IMasterDbContext dbContext)
         {
             this._dbContext = dbContext;
         }

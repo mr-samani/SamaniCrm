@@ -4,7 +4,9 @@ using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Core.Shared.Interfaces;
+using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure;
+using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Infrastructure.Persistence;
 using SamaniCrm.Infrastructure.Services.TenantService;
 using System.Collections.Concurrent;
@@ -16,20 +18,26 @@ public static partial class ServiceCollectionExtensions
 
     public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration config)
     {
-        // set master db context
-        services.AddSingleton<ApplicationDbContext>(sp =>
+        // set master db context 
+        services.AddDbContextFactory<MasterDbContext>(options =>
         {
-            var env = sp.GetRequiredService<IWebHostEnvironment>();
-            var centralConnectionString = config.GetConnectionString("DefaultConnection");
-
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseSqlServer(centralConnectionString)
-                .Options;
-
-            return new ApplicationDbContext(options, null, null, null);
+            var connectionString = config.GetConnectionString("DefaultConnection");
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException($"Master Connection string not found!");
+            }
+            options.UseSqlServer(connectionString, sql =>
+            {
+                sql.EnableRetryOnFailure(3);
+                sql.CommandTimeout(30);
+            });
         });
+        services.AddScoped<IMasterDbContext>(sp => sp.GetRequiredService<MasterDbContext>());
 
-        services.AddDbContext<ApplicationDbContext>((sp, options) =>
+
+
+
+        services.AddDbContext<TenantDbContext>((sp, options) =>
         {
             var currentTenant = sp.GetRequiredService<ICurrentTenant>();
             var tenantId = currentTenant.TenantId;
@@ -56,7 +64,9 @@ public static partial class ServiceCollectionExtensions
 
         // 4. ثبت اینترفیس به صورت Scoped
         // این باعث می‌شود DI بتواند ApplicationDbContext را تزریق کند
-        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+        // services.AddScoped<IApplicationDbContext, TenantDbContext>();
+        services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<TenantDbContext>());
+
         services.AddScoped<ApplicationDbInitializer>();
         return services;
     }

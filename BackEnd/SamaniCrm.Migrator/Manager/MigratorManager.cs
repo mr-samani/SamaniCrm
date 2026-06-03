@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SamaniCrm.Infrastructure;
+using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Infrastructure.Persistence;
 
 namespace SamaniCrm.Migrator.Manager;
@@ -15,7 +16,7 @@ public static class MigratorManager
         return response == "y" || response == "yes";
     }
 
-    public static async Task RunMigrationsAsync(ApplicationDbContext context)
+    public static async Task RunMigrationsAsync(BaseDbContext context)
     {
         Log.Info("Starting migrations...");
 
@@ -52,7 +53,7 @@ public static class MigratorManager
         Log.Success("Data seeding completed successfully!");
     }
 
-    public static async Task DropDatabaseAsync(ApplicationDbContext context)
+    public static async Task DropDatabaseAsync(BaseDbContext context)
     {
         Log.Warning("Dropping database...");
 
@@ -67,7 +68,7 @@ public static class MigratorManager
         Log.Success("Database dropped successfully!");
     }
 
-    public static async Task ResetDatabaseAsync(ApplicationDbContext context, IServiceProvider serviceProvider)
+    public static async Task ResetDatabaseAsync(BaseDbContext context, IServiceProvider serviceProvider)
     {
         Log.Warning("Resetting database (drop -> create -> migrate -> seed)...");
 
@@ -88,7 +89,7 @@ public static class MigratorManager
 
 
 
-    public static async Task ShowDatabaseInfoAsync(ApplicationDbContext context)
+    public static async Task ShowDatabaseInfoAsync(BaseDbContext context)
     {
         Log.Info("Gathering database information...");
         Console.WriteLine();
@@ -144,7 +145,7 @@ public static class MigratorManager
         }
     }
 
-    public static async Task GenerateScriptAsync(ApplicationDbContext context)
+    public static async Task GenerateScriptAsync(BaseDbContext context)
     {
         Log.Info("Generating SQL migration script...");
 

@@ -18,10 +18,10 @@ namespace SamaniCrm.Application.Localize.Queries
 
     public class GetFrontEndLocalizationsCommandHandler : IRequestHandler<GetFrontEndLocalizationsCommand, Dictionary<string, string>>
     {
-        private readonly IApplicationDbContext _dbContext;
+        private readonly IMasterDbContext _dbContext;
         private readonly ICacheService _cacheService;
 
-        public GetFrontEndLocalizationsCommandHandler(IApplicationDbContext dbContext, ICacheService cacheService)
+        public GetFrontEndLocalizationsCommandHandler(IMasterDbContext dbContext, ICacheService cacheService)
         {
             _dbContext = dbContext;
             _cacheService = cacheService;

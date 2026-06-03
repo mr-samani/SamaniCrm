@@ -23,12 +23,12 @@ namespace SamaniCrm.Infrastructure.Services.Product;
 
 public class ProductCategoryService : IProductCategoryService
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IApplicationDbContext _context;
 
     private readonly ICurrentUserService _currentUser;
     private readonly ILocalizer L;
 
-    public ProductCategoryService(ApplicationDbContext context, ICurrentUserService currentUser, ILocalizer l)
+    public ProductCategoryService(IApplicationDbContext context, ICurrentUserService currentUser, ILocalizer l)
     {
         _context = context;
         _currentUser = currentUser;

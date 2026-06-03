@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure;
+using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Persistence;
 using System.Linq.Dynamic.Core;
@@ -11,7 +12,7 @@ using System.Linq.Dynamic.Core;
 public static class SeedDefaultUsers
 {
     public static async Task TrySeedAsync(
-        ApplicationDbContext dbContext,
+        TenantDbContext dbContext,
         ILogger<ApplicationDbInitializer> logger,
         UserManager<ApplicationUser> userManager,
         RoleManager<ApplicationRole> roleManager)

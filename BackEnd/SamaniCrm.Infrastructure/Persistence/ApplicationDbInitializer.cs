@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Infrastructure.FileManager;
 using SamaniCrm.Infrastructure.Identity;
 
@@ -13,7 +14,8 @@ namespace SamaniCrm.Infrastructure.Persistence;
 public class ApplicationDbInitializer
 {
     private readonly ILogger<ApplicationDbInitializer> _logger;
-    private readonly ApplicationDbContext _context;
+    private readonly MasterDbContext _masterDbcontext;
+    private readonly TenantDbContext _tenantDbcontext;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly FileManagerSettings _fileManagerSettings;
@@ -21,24 +23,26 @@ public class ApplicationDbInitializer
 
     public ApplicationDbInitializer(
         ILogger<ApplicationDbInitializer> logger,
-        ApplicationDbContext context,
         UserManager<ApplicationUser> userManager,
         RoleManager<ApplicationRole> roleManager,
-        IOptions<FileManagerSettings> fs
-        )
+        IOptions<FileManagerSettings> fs,
+        MasterDbContext masterDbcontext,
+        TenantDbContext tenantDbcontext)
     {
         _logger = logger;
-        _context = context;
         _userManager = userManager;
         _roleManager = roleManager;
         _fileManagerSettings = fs.Value;
+        _masterDbcontext = masterDbcontext;
+        _tenantDbcontext = tenantDbcontext;
     }
 
     public async Task InitialiseAsync()
     {
         try
         {
-            await _context.Database.MigrateAsync();
+            await _masterDbcontext.Database.MigrateAsync();
+            await _tenantDbcontext.Database.MigrateAsync();
         }
         catch (Exception ex)
         {
@@ -68,23 +72,30 @@ public class ApplicationDbInitializer
 
         }
         Console.WriteLine("Start Seeding DataBase...");
-        _context.IsSeeding = true;
+        setSedding(true);
 
-        await SeedPermissions.TrySeedAsync(_context);
-        await SeedRoles.TrySeedAsync(_context, _logger, _roleManager);
+        await SeedPermissions.TrySeedAsync(_tenantDbcontext);
+        await SeedRoles.TrySeedAsync(_tenantDbcontext, _logger, _roleManager);
         // seeld localization must be after seed permissions
-        await SeedLocalization.TrySeedAsync(_context);
-        await SeedStaticMenus.TrySeedAsync(_context);
-        await SeedDefaultUsers.TrySeedAsync(_context, _logger, _userManager, _roleManager);
-        await SeedSecuritySettings.TrySeedAsync(_context);
-        await SeedProductCategoriesFromFile.TrySeedAsync(_context);
-        await SeedCurrencies.TrySeedAsync(_context);
-        await SeedEnums.TrySeedAsync(_context);
-        await SeedExternalProviders.TrySeedAsync(_context);
-        await SeedPages.TrySeedAsync(_context);
-        await SeedDefaultFolders.TrySeedAsync(_context, _fileManagerSettings);
+        await SeedLocalization.TrySeedAsync(_masterDbcontext);
+        await SeedStaticMenus.TrySeedAsync(_masterDbcontext,_tenantDbcontext);
+        await SeedDefaultUsers.TrySeedAsync(_tenantDbcontext, _logger, _userManager, _roleManager);
+        await SeedSecuritySettings.TrySeedAsync(_tenantDbcontext);
+        await SeedProductCategoriesFromFile.TrySeedAsync(_tenantDbcontext);
+        await SeedCurrencies.TrySeedAsync(_tenantDbcontext);
+        await SeedEnums.TrySeedAsync(_masterDbcontext);
+        await SeedExternalProviders.TrySeedAsync(_masterDbcontext);
+        await SeedPages.TrySeedAsync(_tenantDbcontext);
+        await SeedDefaultFolders.TrySeedAsync(_tenantDbcontext, _fileManagerSettings);
 
-        _context.IsSeeding = false;
+        setSedding(false);
 
+    }
+
+
+    private void setSedding(bool seeding)
+    {
+        _masterDbcontext.IsSeeding = seeding;
+        _tenantDbcontext.IsSeeding = seeding;
     }
 }

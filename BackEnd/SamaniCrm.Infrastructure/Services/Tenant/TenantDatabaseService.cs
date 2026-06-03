@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
+using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Infrastructure.Security;
 
 namespace SamaniCrm.Infrastructure.Services.TenantService;
@@ -16,7 +17,7 @@ public class TenantDatabaseService : ITenantDatabaseService
     private readonly ICurrentUserService _currentUser;
     private readonly ICurrentTenant _currentTenant;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly ApplicationDbContext _masterDbContext;
+    private readonly MasterDbContext _masterDbContext;
 
 
     public TenantDatabaseService(
@@ -25,7 +26,7 @@ public class TenantDatabaseService : ITenantDatabaseService
         ICurrentUserService currentUser,
         ICurrentTenant currentTenant,
         IHttpContextAccessor httpContextAccessor,
-        ApplicationDbContext masterDbContext)
+        MasterDbContext masterDbContext)
     {
         _logger = logger;
         _encryption = encryption;
@@ -122,9 +123,9 @@ public class TenantDatabaseService : ITenantDatabaseService
 
     public async Task RunMigrationsAsync(string connectionString, Guid tenantId, CancellationToken cancellation)
     {
-        var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+        var optionsBuilder = new DbContextOptionsBuilder<TenantDbContext>();
         optionsBuilder.UseSqlServer(connectionString);
-        using var context = new ApplicationDbContext(optionsBuilder.Options, _currentUser, _currentTenant, _httpContextAccessor);
+        using var context = new TenantDbContext(optionsBuilder.Options, _currentUser, _currentTenant, _httpContextAccessor);
         await context.Database.MigrateAsync(cancellation);
     }
 

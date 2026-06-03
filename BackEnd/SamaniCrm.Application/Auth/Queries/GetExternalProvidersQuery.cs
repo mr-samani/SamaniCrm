@@ -16,9 +16,9 @@ public record GetExternalProvidersQuery(bool isActive = true) : IRequest<List<Ex
 
 public class GetExternalProvidersHandler : IRequestHandler<GetExternalProvidersQuery, List<ExternalProviderDto>>
 {
-    private readonly IApplicationDbContext _db;
+    private readonly IMasterDbContext _db;
     private readonly ISecretStore _secretStore;
-    public GetExternalProvidersHandler(IApplicationDbContext db, ISecretStore secretStore)
+    public GetExternalProvidersHandler(IMasterDbContext db, ISecretStore secretStore)
     {
         _db = db;
         _secretStore = secretStore;

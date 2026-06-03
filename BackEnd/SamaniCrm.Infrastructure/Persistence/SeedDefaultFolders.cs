@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Core;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Infrastructure.FileManager;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace SamaniCrm.Infrastructure.Persistence;
 
 public static class SeedDefaultFolders
 {
-    public static async Task TrySeedAsync(ApplicationDbContext dbContext, FileManagerSettings settings)
+    public static async Task TrySeedAsync(TenantDbContext dbContext, FileManagerSettings settings)
     {
         Console.WriteLine("Seeding default folders...");
 

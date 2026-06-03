@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Entities.Subscription;
 using SecuritySettingEntity = SamaniCrm.Domain.Entities.SecuritySetting;
@@ -6,8 +7,10 @@ using SecuritySettingEntity = SamaniCrm.Domain.Entities.SecuritySetting;
 
 namespace SamaniCrm.Application.Common.Interfaces;
 
+
 public interface IApplicationDbContext
 {
+    public DatabaseFacade Database { get; }
 
     public DbSet<TenantAppLogSetting> TenantLogSettings { get; set; }
     public DbSet<AppLogEntry> LogEntries { get; set; }
@@ -15,18 +18,13 @@ public interface IApplicationDbContext
     public DbSet<SecurityLogEntry> SecurityLogEntries { get; set; }
 
 
-    public DbSet<Tenant> Tenants { get; set; }
     public DbSet<TenantSetting> TenantSettings { get; set; }
-    public DbSet<TenantDatabaseConnection> TenantDatabaseConnections { get; set; }
-    public DbSet<TenantCategory> TenantCategories { get; set; }
-    public DbSet<TenantProvisioningStep> TenantProvisioningSteps { get; set; }
 
 
 
     public DbSet<Permission> Permissions { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
-    public DbSet<Language> Languages { get; set; }
-    public DbSet<Localization> Localizations { get; set; }
+
     public DbSet<Menu> Menus { get; set; }
     public DbSet<MenuTranslation> MenuTranslations { get; set; }
     public DbSet<SecuritySettingEntity> SecuritySettings { get; set; }
@@ -59,9 +57,6 @@ public interface IApplicationDbContext
     public DbSet<FileFolder> FileFolders { get; set; }
 
 
-
-    public DbSet<Plugin> Plugins { get; set; }
-    public DbSet<ExternalProvider> ExternalProviders { get; set; }
 
     #region Dashboard
     public DbSet<Dashboard> Dashboards { get; set; }

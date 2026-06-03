@@ -1,10 +1,12 @@
 ﻿using Duende.IdentityServer.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.Identity;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -17,17 +19,25 @@ namespace SamaniCrm.Infrastructure.Services;
 
 public class UserPermissionService : IUserPermissionService
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly IApplicationDbContext _dbContext;
     private readonly ICacheService _cache;
     private readonly ICurrentUserService _currentUser;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
 
 
 
-    public UserPermissionService(ApplicationDbContext dbContext, ICacheService memoryCache, ICurrentUserService currentUserService)
+    public UserPermissionService(IApplicationDbContext dbContext, 
+        ICacheService memoryCache,
+        ICurrentUserService currentUserService, 
+        UserManager<ApplicationUser> userManager, 
+        RoleManager<ApplicationRole> roleManager)
     {
         _dbContext = dbContext;
         _cache = memoryCache;
         _currentUser = currentUserService;
+        _userManager = userManager;
+        _roleManager = roleManager;
     }
 
     public async Task<bool> HasPermissionAsync(ClaimsPrincipal user, string permission)
@@ -52,10 +62,16 @@ public class UserPermissionService : IUserPermissionService
         List<string>? permissions = await _cache.GetAsync<List<string>>(cacheKey);
         if (permissions == null)
         {
-            var roleIds = await _dbContext.UserRoles
-                .Where(ur => ur.UserId == userId)
-                .Select(ur => ur.RoleId)
-                .ToListAsync();
+
+            List<Guid> roleIds = await _userManager.Users
+                .Where(x => x.Id == userId)
+                .SelectMany(x => x.Roles.Select(r => r.Id))
+                .ToListAsync(cancellationToken);
+
+            //var roleIds = await _dbContext.UserRoles
+            //    .Where(ur => ur.UserId == userId)
+            //    .Select(ur => ur.RoleId)
+            //    .ToListAsync();
 
             if (!roleIds.Any())
                 return [];

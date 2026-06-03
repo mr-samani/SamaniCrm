@@ -17,9 +17,9 @@ public class DeleteExternalProviderCommand : IRequest<bool>
 
 public class DeleteExternalProviderCommandHandler : IRequestHandler<DeleteExternalProviderCommand, bool>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IMasterDbContext _context;
 
-    public DeleteExternalProviderCommandHandler(IApplicationDbContext context)
+    public DeleteExternalProviderCommandHandler(IMasterDbContext context)
     {
         _context = context;
     }

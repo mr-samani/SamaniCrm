@@ -19,12 +19,15 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
     public class GetProductCategoryForEditQueryHandler : IRequestHandler<GetProductCategoryForEditQuery, ProductCategoryDto>
     {
         private readonly IApplicationDbContext _dbContext;
+        private readonly IMasterDbContext _masterDbContext;
+
         private readonly ILocalizer L;
 
-        public GetProductCategoryForEditQueryHandler(IApplicationDbContext dbContext, ILocalizer l)
+        public GetProductCategoryForEditQueryHandler(IApplicationDbContext dbContext, ILocalizer l, IMasterDbContext masterDbContext)
         {
             _dbContext = dbContext;
             L = l;
+            _masterDbContext = masterDbContext;
         }
 
         public async Task<ProductCategoryDto> Handle(GetProductCategoryForEditQuery request, CancellationToken cancellationToken)
@@ -37,7 +40,7 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
             if (cat == null)
                 throw new NotFoundException("Category not found.");
 
-            List<ProductCategoryTranslationDto> translations = await _dbContext.Languages
+            List<ProductCategoryTranslationDto> translations = await _masterDbContext.Languages
                 .GroupJoin(_dbContext.ProductCategoryTranslations.Where(w => w.CategoryId == request.Id),
                   lang => lang.Culture,
                   translation => translation.Culture,

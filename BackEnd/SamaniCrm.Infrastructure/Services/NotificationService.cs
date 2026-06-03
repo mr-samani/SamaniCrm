@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
@@ -6,6 +7,7 @@ using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.NotificationManager.Queries;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +20,14 @@ namespace SamaniCrm.Infrastructure.Services
 {
     public class NotificationService : INotificationService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
 
-        public NotificationService(ApplicationDbContext context)
+        public NotificationService(IApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<PaginatedResult<NotificationDto>> GetAllNotifications(GetAllNotificationQuery request, Guid currentUserId, CancellationToken cancellationToken)
@@ -84,7 +88,7 @@ namespace SamaniCrm.Infrastructure.Services
                 .Distinct()
                 .ToList();
 
-            var userMap = await _context.Users
+            var userMap = await _userManager.Users
                 .AsNoTracking()
                 .Where(u => userIds.Contains(u.Id))
                 .ToDictionaryAsync(u => u.Id, u => u.FullName, cancellationToken);
@@ -126,7 +130,7 @@ namespace SamaniCrm.Infrastructure.Services
 
 
 
-            var userMap = await _context.Users
+            var userMap = await _userManager.Users
                 .Where(u => u.Id == notification.RecieverUserId || u.Id == notification.SenderUserId)
                 .ToDictionaryAsync(u => u.Id, u => u.FullName, cancellationToken);
 

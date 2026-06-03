@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.DbContexts;
 using System.ComponentModel.DataAnnotations;
 
 namespace SamaniCrm.Infrastructure.Persistence
 {
     public static class SeedEnums
     {
-        public static async Task TrySeedAsync(ApplicationDbContext dbContext)
+        public static async Task TrySeedAsync(MasterDbContext dbContext)
         {
             Console.WriteLine("Seeding enums...");
 

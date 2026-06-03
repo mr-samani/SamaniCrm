@@ -15,9 +15,9 @@ namespace SamaniCrm.Application.Localize.Commands
 
     public class ActiveOrDeactiveLanguageCommandLandler : IRequestHandler<ActiveOrDeactiveLanguageCommand, bool>
     {
-        private readonly IApplicationDbContext _dbContext;
+        private readonly IMasterDbContext _dbContext;
 
-        public ActiveOrDeactiveLanguageCommandLandler(IApplicationDbContext dbContext)
+        public ActiveOrDeactiveLanguageCommandLandler(IMasterDbContext dbContext)
         {
             _dbContext = dbContext;
         }

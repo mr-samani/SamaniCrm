@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.DbContexts;
 
 namespace SamaniCrm.Infrastructure.Persistence
 {
@@ -8,7 +9,7 @@ namespace SamaniCrm.Infrastructure.Persistence
     {
 
 
-        public static async Task TrySeedAsync(ApplicationDbContext dbContext)
+        public static async Task TrySeedAsync(TenantDbContext dbContext)
         {
             Console.WriteLine("Try seed permission data");
 

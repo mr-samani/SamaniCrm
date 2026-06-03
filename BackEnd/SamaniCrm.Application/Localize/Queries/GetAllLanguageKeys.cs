@@ -14,9 +14,9 @@ namespace SamaniCrm.Application.Localize.Queries
 
     public class GetAllLanguageKeysHandler : IRequestHandler<GetAllLanguageKeys, List<LocalizationKeyDTO>>
     {
-        private readonly IApplicationDbContext _dbContext;
+        private readonly IMasterDbContext _dbContext;
 
-        public GetAllLanguageKeysHandler(IApplicationDbContext dbContext)
+        public GetAllLanguageKeysHandler(IMasterDbContext dbContext)
         {
             _dbContext = dbContext;
         }

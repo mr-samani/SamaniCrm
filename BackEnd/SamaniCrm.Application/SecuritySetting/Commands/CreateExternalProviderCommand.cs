@@ -20,9 +20,9 @@ public class CreateExternalProviderCommand : CreateOrUpdateExternalProviderDto, 
 
 public class CreateExternalProviderCommandHandler : IRequestHandler<CreateExternalProviderCommand, Guid>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IMasterDbContext _context;
 
-    public CreateExternalProviderCommandHandler(IApplicationDbContext context)
+    public CreateExternalProviderCommandHandler(IMasterDbContext context)
     {
         _context = context;
     }

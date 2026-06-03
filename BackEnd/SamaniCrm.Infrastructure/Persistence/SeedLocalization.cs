@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.DbContexts;
 
 namespace SamaniCrm.Infrastructure.Persistence
 {
     public static class SeedLocalization
     {
-        public static async Task TrySeedAsync(ApplicationDbContext dbContext)
+        public static async Task TrySeedAsync(MasterDbContext dbContext)
         {
             Console.WriteLine("Try seed localization data");
             var languages = new List<Language>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.DTOs;
+using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Dtos;
 using SamaniCrm.Application.Features.Tenants.Queries;
 using SamaniCrm.Core.Shared.Enums;
@@ -10,9 +11,9 @@ namespace SamaniCrm.Infrastructure.Repositories;
 
 public class TenantRepository : ITenantRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IMasterDbContext _context;
 
-    public TenantRepository(ApplicationDbContext context) => _context = context;
+    public TenantRepository(IMasterDbContext context) => _context = context;
 
     public async Task<TenantDto?> GetByIdAsync(Guid id, CancellationToken cancellation) =>
         await _context.Tenants.Select(s => new TenantDto()

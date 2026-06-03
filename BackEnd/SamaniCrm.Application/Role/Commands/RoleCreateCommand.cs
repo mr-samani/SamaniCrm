@@ -6,7 +6,7 @@ namespace SamaniCrm.Application.Role.Commands
 {
     public class RoleCreateCommand : IRequest<int>
     {
-        public string RoleName { get; set; }
+        public required string RoleName { get; set; }
     }
 
     public class RoleCreateCommandHandler : IRequestHandler<RoleCreateCommand, int>

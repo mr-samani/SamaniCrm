@@ -14,9 +14,9 @@ namespace SamaniCrm.Application.Localize.Commands
 
     public class DeleteLanguageCommandLandler : IRequestHandler<DeleteLanguageCommand, bool>
     {
-        private readonly IApplicationDbContext _dbContext;
+        private readonly IMasterDbContext _dbContext;
 
-        public DeleteLanguageCommandLandler(IApplicationDbContext dbContext)
+        public DeleteLanguageCommandLandler(IMasterDbContext dbContext)
         {
             _dbContext = dbContext;
         }

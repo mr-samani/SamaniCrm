@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
+using SamaniCrm.Infrastructure.DbContexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +13,9 @@ namespace SamaniCrm.Infrastructure.Services.TenantService;
 
 public class TenantUniquenessChecker : ITenantUniquenessChecker
 {
-    private readonly ApplicationDbContext _context;
+    private readonly MasterDbContext _context;
 
-    public TenantUniquenessChecker(ApplicationDbContext context)
+    public TenantUniquenessChecker(MasterDbContext context)
     {
         _context = context;
     }

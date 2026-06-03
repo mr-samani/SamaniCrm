@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.DbContexts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Infrastructure.Persistence;
 public static class SeedProductCategoriesFromFile
 {
     private const string FilePath = "seed-data/taxonomy-with-ids.en-US.txt";
 
-    public static async Task TrySeedAsync(ApplicationDbContext dbContext)
+    public static async Task TrySeedAsync(TenantDbContext dbContext)
     {
         Console.WriteLine("Seeding product categories from taxonomy file...");
 

@@ -17,9 +17,9 @@ namespace SamaniCrm.Application.Localize.Commands
 
     public class UpdateBatchLocalizeKeyCommandHandler : IRequestHandler<UpdateBatchLocalizeKeyCommand, bool>
     {
-        private readonly IApplicationDbContext _dbContext;
+        private readonly IMasterDbContext _dbContext;
 
-        public UpdateBatchLocalizeKeyCommandHandler(IApplicationDbContext dbContext)
+        public UpdateBatchLocalizeKeyCommandHandler(IMasterDbContext dbContext)
         {
             _dbContext = dbContext;
         }

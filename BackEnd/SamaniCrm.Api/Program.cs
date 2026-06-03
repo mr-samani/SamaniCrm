@@ -4,6 +4,7 @@ using SamaniCrm.Api.Extensions;
 using SamaniCrm.Api.TUS;
 using SamaniCrm.Application;
 using SamaniCrm.Application.Common.Interfaces;
+using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Host.Middlewares;
 using SamaniCrm.Infrastructure.Cache;
 using SamaniCrm.Infrastructure.FileManager;
@@ -61,7 +62,7 @@ var app = builder.Build();
 var captchaStore = app.Services.GetRequiredService<ICaptchaStore>();
 VerifyCaptchaExtensions.Configure(captchaStore, config);
 
- 
+
 app.UseMiddleware<AddCorrelationIdToRequests>();
 
 app.UseMiddleware<LanguageMiddleware>();
@@ -100,7 +101,7 @@ app.UseRouting();
 //https://localhost:44343/.well-known/openid-configuration
 app.UseIdentityServer();
 app.UseAuthentication();
-app.UseAuthorization(); 
+app.UseAuthorization();
 
 
 // Multi-Tenant Middleware Pipeline
@@ -110,7 +111,7 @@ app.UseMiddleware<TenantSecurityMiddleware>();
 
 
 
-app.MapControllers(); 
+app.MapControllers();
 //app.MapGroup("/auth2").MapCustomIdentityApi<ApplicationUser>().WithTags(["Auth2"]);
 // Hangfire Dashboard
 app.UseHangfireDashboard("/hangfire");
@@ -120,7 +121,12 @@ app.MapHub<ProvisioningHub>("/hubs/provisioning");
 
 
 
-await LanguageService.PreloadAllLocalizationsAsync(app.Services);
+
+//using (var scope = app.Services.CreateScope()) 
+//{
+//    var languageService = scope.ServiceProvider.GetRequiredService<ILanguageService>();
+//    await languageService.PreloadAllLocalizationsAsync(); 
+//}
 
 app.MapHub<NotificationHub>("/hubs/notifications");
 

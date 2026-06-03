@@ -7,13 +7,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SamaniCrm.Infrastructure;
+namespace SamaniCrm.Infrastructure.DbContexts;
 
 
-public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+public class TenantDesignTimeDbContextFactory : IDesignTimeDbContextFactory<TenantDbContext>
 {
 
-    public ApplicationDbContext CreateDbContext(string[] args)
+    public TenantDbContext CreateDbContext(string[] args)
     {
         // مسیر پروژه API نسبت به پروژه Infrastructure
         var basePath = Path.GetFullPath(
@@ -42,13 +42,13 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<Applicatio
 
 
 
-        var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+        var optionsBuilder = new DbContextOptionsBuilder<TenantDbContext>();
 
         // از connection string پیش‌فرض استفاده کنید
         optionsBuilder.UseSqlServer(connectionString,
             o => o.MigrationsAssembly("SamaniCrm.Infrastructure")
             );
 
-        return new ApplicationDbContext(optionsBuilder.Options, null, null,null);
+        return new TenantDbContext(optionsBuilder.Options, null, null, null);
     }
 }

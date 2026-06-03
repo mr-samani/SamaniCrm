@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces.Tenant;
@@ -28,11 +29,11 @@ public interface ITenantResolver
 
 public class TenantResolver : ITenantResolver
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IMasterDbContext _context;
     private readonly IHttpContextAccessor _httpContextAccessor;
     public Guid? TenantId { get; set; }
     public TenantResolver(
-        ApplicationDbContext context,
+        IMasterDbContext context,
         IHttpContextAccessor httpContextAccessor)
     {
         _context = context;

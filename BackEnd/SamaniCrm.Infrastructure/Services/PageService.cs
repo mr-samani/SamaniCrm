@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using SamaniCrm.Application.Common.DTOs;
@@ -25,17 +26,26 @@ namespace SamaniCrm.Infrastructure.Services
 {
     public class PageService : IPageService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
+        private readonly IMasterDbContext _masterDbContext;
         private readonly ICurrentUserService _currentUser;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILocalizer L;
 
 
 
-        public PageService(ApplicationDbContext context, ICurrentUserService currentUser, ILocalizer l)
+        public PageService(
+            IApplicationDbContext context,
+            ICurrentUserService currentUser,
+            ILocalizer l,
+            IMasterDbContext masterDbContext, 
+            UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _currentUser = currentUser;
             L = l;
+            _masterDbContext = masterDbContext;
+            _userManager = userManager;
         }
 
 
@@ -143,7 +153,7 @@ namespace SamaniCrm.Infrastructure.Services
             var currentLanguage = L.CurrentLanguage;
             var query = from page in _context.Pages
                         where page.Type == request.Type
-                        join user in _context.Users
+                        join user in _userManager.Users
                             on page.AuthorId equals user.Id into userGroup
                         from author in userGroup.DefaultIfEmpty()
                         select new
@@ -336,7 +346,7 @@ namespace SamaniCrm.Infrastructure.Services
                 Data = request.Data,
             };
 
-            await _context.Plugins.AddAsync(block);
+            await _masterDbContext.Plugins.AddAsync(block);
 
             await _context.SaveChangesAsync(cancellationToken);
             return block.Id;
@@ -344,7 +354,7 @@ namespace SamaniCrm.Infrastructure.Services
 
         public async Task<Unit> DeletePluginPage(DeletePluginCommand request, CancellationToken cancellationToken)
         {
-            var page = await _context.Plugins
+            var page = await _masterDbContext.Plugins
                .FirstOrDefaultAsync(p => p.Id == request.Id, cancellationToken);
 
             if (page is null)
@@ -353,7 +363,7 @@ namespace SamaniCrm.Infrastructure.Services
             {
                 throw new AccessDeniedException("AccessDenied!\nCan not delete this block!");
             }
-            await _context.Plugins.Where(x => x.Id == request.Id).ExecuteDeleteAsync();
+            await _masterDbContext.Plugins.Where(x => x.Id == request.Id).ExecuteDeleteAsync();
 
 
             await _context.SaveChangesAsync(cancellationToken);
@@ -363,8 +373,8 @@ namespace SamaniCrm.Infrastructure.Services
         public async Task<PaginatedResult<PluginDto>> GetPlugins(GetPluginQuery request, CancellationToken cancellationToken)
         {
             var query =
-                from plugin in _context.Plugins
-                join user in _context.Users
+                from plugin in _masterDbContext.Plugins
+                join user in _userManager.Users
                     on plugin.CreatedBy equals user.Id into users
                 from author in users.DefaultIfEmpty()
                 select new { plugin, author };

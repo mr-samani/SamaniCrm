@@ -6,6 +6,7 @@ using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure;
+using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Infrastructure.Persistence;
 using SamaniCrm.Infrastructure.Services.TenantService;
 
@@ -20,7 +21,11 @@ public static class ServiceCollectionExtensions
            ?? throw new InvalidOperationException("Connection string not found.");
 
         // ✅ DbContext
-        services.AddDbContext<ApplicationDbContext>(options =>
+        services.AddDbContext<MasterDbContext>(options =>
+            options.UseSqlServer(connectionString),
+            ServiceLifetime.Scoped);
+
+        services.AddDbContext<TenantDbContext>(options =>
             options.UseSqlServer(connectionString),
             ServiceLifetime.Scoped);
         return services;
@@ -50,7 +55,7 @@ public static class ServiceCollectionExtensions
     {
         public Guid? UserId => null;//"MigrationUser";  
         public Guid? TenantId => null;
-        public string? UserName => "MigrationUser";  
+        public string? UserName => "MigrationUser";
 
         public string Lang => "fa-IR";
 

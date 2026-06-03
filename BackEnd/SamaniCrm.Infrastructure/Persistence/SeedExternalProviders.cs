@@ -3,13 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using MimeDetective.Diagnostics;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.DbContexts;
 using static Duende.IdentityModel.OidcConstants;
 
 namespace SamaniCrm.Infrastructure.Persistence;
 
 public static class SeedExternalProviders
 {
-    public static async Task TrySeedAsync(ApplicationDbContext dbContext)
+    public static async Task TrySeedAsync(MasterDbContext dbContext)
     {
         Console.WriteLine("Seeding external providers...");
 

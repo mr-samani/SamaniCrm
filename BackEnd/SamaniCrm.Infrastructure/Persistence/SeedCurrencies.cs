@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Domain.Entities;
+using SamaniCrm.Infrastructure.DbContexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace SamaniCrm.Infrastructure.Persistence
 {
     public static class SeedCurrencies
     {
-        public static async Task TrySeedAsync(ApplicationDbContext dbContext)
+        public static async Task TrySeedAsync(TenantDbContext dbContext)
         {
             Console.WriteLine("Seeding static curerncies data...");
 

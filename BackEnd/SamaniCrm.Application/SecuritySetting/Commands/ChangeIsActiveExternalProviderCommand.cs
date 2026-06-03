@@ -18,9 +18,9 @@ public record ChangeIsActiveExternalProviderCommand(Guid id, bool isActive) : IR
 
 public class ChangeIsActiveExternalProviderCommandHandler : IRequestHandler<ChangeIsActiveExternalProviderCommand, bool>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IMasterDbContext _context;
 
-    public ChangeIsActiveExternalProviderCommandHandler(IApplicationDbContext context)
+    public ChangeIsActiveExternalProviderCommandHandler(IMasterDbContext context)
     {
         _context = context;
     }

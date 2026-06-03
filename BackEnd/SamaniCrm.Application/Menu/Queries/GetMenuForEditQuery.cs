@@ -16,10 +16,12 @@ namespace SamaniCrm.Application.MenuQueries
     public class GetMenuForEditQueryHandler : IRequestHandler<GetMenuForEditQuery, MenuDTO>
     {
         private readonly IApplicationDbContext _dbContext;
+        private readonly IMasterDbContext _masterDbContext;
 
-        public GetMenuForEditQueryHandler(IApplicationDbContext dbContext)
+        public GetMenuForEditQueryHandler(IApplicationDbContext dbContext, IMasterDbContext masterDbContext)
         {
             _dbContext = dbContext;
+            _masterDbContext = masterDbContext;
         }
 
         public async Task<MenuDTO> Handle(GetMenuForEditQuery request, CancellationToken cancellationToken)
@@ -32,7 +34,7 @@ namespace SamaniCrm.Application.MenuQueries
                 throw new NotFoundException("Menu not found.");
 
 
-            List<MenuTranslationsDTO> translations = await _dbContext.Languages
+            List<MenuTranslationsDTO> translations = await _masterDbContext.Languages
               .GroupJoin(_dbContext.MenuTranslations.Where(w => w.MenuId == request.Id),
                 lang => lang.Culture,
                 translation => translation.Culture,
