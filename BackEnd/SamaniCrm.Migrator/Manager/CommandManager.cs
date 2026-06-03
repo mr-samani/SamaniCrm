@@ -68,27 +68,29 @@ public static class CommandManager
             // ۲. اجرای دستور
             try
             {
-                var dbContext = serviceProvider.GetRequiredService<BaseDbContext>();
+                var masterDbContext = serviceProvider.GetRequiredService<MasterDbContext>();
+                var dbContext = serviceProvider.GetRequiredService<TenantDbContext>();
 
                 switch (command)
                 {
                     case "migrate":
-                        await MigratorManager.RunMigrationsAsync(dbContext);
+                        await MigratorManager.RunAllMigrationsAsync(serviceProvider);
                         break;
                     case "seed":
                         await MigratorManager.RunSeedingAsync(serviceProvider);
                         break;
                     case "drop":
-                        await MigratorManager.DropDatabaseAsync(dbContext);
+                        await MigratorManager.DropAllDatabasesAsync(serviceProvider);
                         break;
                     case "reset":
-                        await MigratorManager.ResetDatabaseAsync(dbContext, serviceProvider);
+                        await MigratorManager.ResetAllDatabasesAsync(serviceProvider);
                         break;
                     case "info":
-                        await MigratorManager.ShowDatabaseInfoAsync(dbContext);
+                        await MigratorManager.ShowAllDatabaseInfoAsync(serviceProvider);
                         break;
                     case "script":
-                        await MigratorManager.GenerateScriptAsync(dbContext);
+                        await MigratorManager.GenerateMasterDBCreateScriptAsync(serviceProvider);
+                        await MigratorManager.GenerateTenantDBCreateScriptAsync(serviceProvider);
                         break;
                     case "help":
                         CommandManager.PrintHelp();
