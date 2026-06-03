@@ -9,6 +9,7 @@ using SamaniCrm.Infrastructure.Loging.AppLogs.Filters;
 using SamaniCrm.Infrastructure.Loging.SecurityLogs;
 using SamaniCrm.Infrastructure.Jobs;
 using SamaniCrm.Core.Shared.Interfaces;
+using SamaniCrm.Infrastructure.DbContexts;
 
 
 
@@ -53,7 +54,7 @@ public static partial class ServiceCollectionExtensions
         services.AddAppLoggedServices();
 
 
-
+        services.AddScoped<IAuditLogFactory, AuditLogFactory>();
 
 
         // security log

@@ -150,7 +150,7 @@ namespace SamaniCrm.Infrastructure.FileManager
             }
 
             _dbContext.FileFolders.Add(folder);
-            var result = _dbContext.SaveChanges();
+            var result = await _dbContext.SaveChangesAsync(cancellationToken);
 
             return result > 0;
         }

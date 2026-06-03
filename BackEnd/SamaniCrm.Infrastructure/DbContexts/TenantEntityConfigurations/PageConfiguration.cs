@@ -6,7 +6,7 @@ using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.Identity;
 
-namespace SamaniCrm.Infrastructure.EntityConfiguration;
+namespace SamaniCrm.Infrastructure.DbContexts.TenantEntityConfigurations;
 public class PageConfiguration : IEntityTypeConfiguration<Page>
 {
     public void Configure(EntityTypeBuilder<Page> builder)
@@ -38,11 +38,6 @@ public class PageTranslationConfiguration : IEntityTypeConfiguration<PageTransla
         builder.HasOne(p => p.Page)
             .WithMany(p => p.Translations)
             .HasForeignKey(p => p.PageId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.HasOne(p => p.Language)
-            .WithMany()
-            .HasForeignKey(p => p.Culture)
             .OnDelete(DeleteBehavior.Cascade);
 
 

@@ -59,7 +59,7 @@ public class ImportProductCategoryLocalizationCommandHandler : IRequestHandler<I
         {
             _context.ProductCategoryTranslations.UpdateRange(updateList);
         }
-        var r = _context.SaveChanges();
+        var r =await _context.SaveChangesAsync(cancellationToken);
         return r > 0;
 
     }

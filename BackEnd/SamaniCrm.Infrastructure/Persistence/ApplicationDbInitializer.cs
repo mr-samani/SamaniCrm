@@ -77,7 +77,7 @@ public class ApplicationDbInitializer
         await SeedPermissions.TrySeedAsync(_tenantDbcontext);
         await SeedRoles.TrySeedAsync(_tenantDbcontext, _logger, _roleManager);
         // seeld localization must be after seed permissions
-        await SeedLocalization.TrySeedAsync(_masterDbcontext);
+        await SeedLocalization.TrySeedAsync(_masterDbcontext,_tenantDbcontext);
         await SeedStaticMenus.TrySeedAsync(_masterDbcontext,_tenantDbcontext);
         await SeedDefaultUsers.TrySeedAsync(_tenantDbcontext, _logger, _userManager, _roleManager);
         await SeedSecuritySettings.TrySeedAsync(_tenantDbcontext);
@@ -95,7 +95,6 @@ public class ApplicationDbInitializer
 
     private void setSedding(bool seeding)
     {
-        _masterDbcontext.IsSeeding = seeding;
         _tenantDbcontext.IsSeeding = seeding;
     }
 }

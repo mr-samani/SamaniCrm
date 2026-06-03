@@ -49,6 +49,6 @@ public class TenantDesignTimeDbContextFactory : IDesignTimeDbContextFactory<Tena
             o => o.MigrationsAssembly("SamaniCrm.Infrastructure")
             );
 
-        return new TenantDbContext(optionsBuilder.Options, null, null, null);
+        return new TenantDbContext(optionsBuilder.Options, null, null, null, null);
     }
 }

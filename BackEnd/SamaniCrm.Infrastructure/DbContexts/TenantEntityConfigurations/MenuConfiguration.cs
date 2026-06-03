@@ -5,7 +5,7 @@ using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Domain.Entities;
 
-namespace SamaniCrm.Infrastructure.EntityConfiguration;
+namespace SamaniCrm.Infrastructure.DbContexts.TenantEntityConfigurations;
 
 public class MenuConfiguration : IEntityTypeConfiguration<Menu>
 {
@@ -32,9 +32,6 @@ public class MenuTranslationConfiguration : IEntityTypeConfiguration<MenuTransla
     {
 
         builder.HasKey(t => new { t.MenuId, t.Culture });
-        builder.HasOne(x => x.Language)
-            .WithMany().HasForeignKey(x => x.Culture)
-            .OnDelete(DeleteBehavior.Cascade);
         builder.HasOne(x => x.Menu)
             .WithMany(x => x.Translations)
             .HasForeignKey(x => x.MenuId)

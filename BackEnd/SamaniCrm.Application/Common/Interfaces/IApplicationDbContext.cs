@@ -18,7 +18,6 @@ public interface IApplicationDbContext
     public DbSet<SecurityLogEntry> SecurityLogEntries { get; set; }
 
 
-    public DbSet<TenantSetting> TenantSettings { get; set; }
 
 
 
@@ -77,8 +76,10 @@ public interface IApplicationDbContext
     public DbSet<AddOnTranslation> AddOnTranslations { get; set; }
     public DbSet<SubscriptionAddOn> SubscriptionAddOns { get; set; }
 
+
     #endregion
 
+
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-    int SaveChanges();
 }

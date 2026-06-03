@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamaniCrm.Infrastructure.EntityConfiguration.PageBuilder;
+namespace SamaniCrm.Infrastructure.DbContexts.MasterEntityConfigurations;
 
 public class PluginConfiguration : IEntityTypeConfiguration<Plugin>
 {

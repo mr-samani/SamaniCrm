@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamaniCrm.Infrastructure.EntityConfiguration;
+namespace SamaniCrm.Infrastructure.DbContexts.TenantEntityConfigurations;
 
 public class CartConfiguration : IEntityTypeConfiguration<Cart>
 {

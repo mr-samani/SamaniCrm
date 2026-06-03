@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SamaniCrm.Domain.Entities;
 
-namespace SamaniCrm.Infrastructure.EntityConfiguration;
+namespace SamaniCrm.Infrastructure.DbContexts.TenantEntityConfigurations;
 
 //___________________________________ تخفیف ها -----------------------------------------------
 public class DiscountConfiguration : IEntityTypeConfiguration<Discount>

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SamaniCrm.Infrastructure.EntityConfiguration;
+namespace SamaniCrm.Infrastructure.DbContexts.MasterEntityConfigurations;
 
 public class TenantConfiguration : IEntityTypeConfiguration<Tenant>
 {
@@ -42,14 +42,6 @@ public class TenantProvisioningStepConfiguration : IEntityTypeConfiguration<Tena
     public void Configure(EntityTypeBuilder<TenantProvisioningStep> builder)
     {
         builder.ToTable("TenantProvisioningSteps", "Tenant");
-
-    }
-}
-public class TenantSettingConfiguration : IEntityTypeConfiguration<TenantSetting>
-{
-    public void Configure(EntityTypeBuilder<TenantSetting> builder)
-    {
-        builder.ToTable("TenantSettings", "Tenant");
 
     }
 }

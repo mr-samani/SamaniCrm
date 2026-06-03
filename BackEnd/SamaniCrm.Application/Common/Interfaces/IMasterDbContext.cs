@@ -10,6 +10,7 @@ public interface IMasterDbContext
     public DbSet<TenantDatabaseConnection> TenantDatabaseConnections { get; set; }
     public DbSet<TenantCategory> TenantCategories { get; set; }
     public DbSet<TenantProvisioningStep> TenantProvisioningSteps { get; set; }
+    public DbSet<TenantSetting> TenantSettings { get; set; }
 
     public DbSet<Language> Languages { get; set; }
     public DbSet<Localization> Localizations { get; set; }

@@ -42,6 +42,7 @@ public static class ServiceCollectionExtensions
         //var serviceProvider = services.BuildServiceProvider();
         //var logger = serviceProvider.GetService<ILogger<ApplicationDbInitializer>>();
         //services.AddSingleton(typeof(ILogger), logger!);
+        services.AddScoped<IAuditLogFactory, AuditLogFactory>();
 
         services.AddLogging(logging => logging.AddConsole());
         services.AddScoped<ICurrentUserService, DummyCurrentUserService>();

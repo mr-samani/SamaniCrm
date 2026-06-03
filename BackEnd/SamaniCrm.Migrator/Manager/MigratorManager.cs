@@ -281,26 +281,32 @@ public static class MigratorManager
             // اگر نام جداول متفاوت است، باید این بخش را برای هر DbContext جداگانه پیاده‌سازی کنید.
             // مثال: اگر Users در MasterDbContext است و Tenants در TenantDbContext
 
-            if (context is MasterDbContext masterCtx) // بررسی نوع DbContext برای دسترسی به DbSetهای خاص
+            if (context is TenantDbContext Ctx) // بررسی نوع DbContext برای دسترسی به DbSetهای خاص
             {
-                if (masterCtx.Users != null)
+                if (Ctx.Users != null)
                 {
-                    var userCount = await masterCtx.Users.CountAsync();
-                    Log.Info($"  Users (Master): {userCount}");
+                    var userCount = await Ctx.Users.CountAsync();
+                    Log.Info($"  Users: {userCount}");
                 }
-                if (masterCtx.ProductCategories != null)
+                if (Ctx.ProductCategories != null)
                 {
-                    var pcatCount = await masterCtx.ProductCategories.CountAsync();
-                    Log.Info($"  Product Categories (Master): {pcatCount}");
+                    var pcatCount = await Ctx.ProductCategories.CountAsync();
+                    Log.Info($"  Product Categories: {pcatCount}");
                 }
-                if (masterCtx.Products != null)
+                if (Ctx.Products != null)
                 {
-                    var pCount = await masterCtx.Products.CountAsync();
-                    Log.Info($"  Products (Master): {pCount}");
+                    var pCount = await Ctx.Products.CountAsync();
+                    Log.Info($"  Products: {pCount}");
                 }
             }
-            else if (context is TenantDbContext tenantCtx)
+            else if (context is MasterDbContext MCtx)
             {
+                if (MCtx.Tenants != null)
+                {
+                    var tCount = await MCtx.Tenants.CountAsync();
+                    Log.Info($"  Tenants: {tCount}");
+                }
+
                 // اینجا باید DbSetهای مربوط به TenantDbContext را اضافه کنید
                 // مثال:
                 // if (tenantCtx.TenantData != null)

@@ -13,28 +13,33 @@ namespace SamaniCrm.Infrastructure.Services.TenantService;
 
 public class TenantUniquenessChecker : ITenantUniquenessChecker
 {
-    private readonly MasterDbContext _context;
+    private readonly TenantDbContext _tenantDbContext;
+    private readonly MasterDbContext _masterDbContext;
 
-    public TenantUniquenessChecker(MasterDbContext context)
+    public TenantUniquenessChecker(TenantDbContext tenantDbContext, MasterDbContext masterDbContext)
     {
-        _context = context;
+        _tenantDbContext = tenantDbContext;
+        _masterDbContext = masterDbContext;
     }
+
+
+ 
 
     public async Task<bool> ExistsBySlugAsync(string slug, CancellationToken cancellation)
     {
-        return await _context.Tenants
+        return await _masterDbContext.Tenants
             .AnyAsync(t => t.Slug.ToLower() == slug.ToLower(), cancellation);
     }
 
     public async Task<bool> ExistsByEmailAsync(string email, CancellationToken cancellation)
     {
-        return await _context.Tenants
+        return await _masterDbContext.Tenants
             .AnyAsync(t => t.Email.ToLower() == email.ToLower(), cancellation);
     }
 
     public async Task<bool> ExistsByUserEmailAsync(string email, CancellationToken cancellation)
     {
-        return await _context.Users
+        return await _tenantDbContext.Users
             .AnyAsync(u => u.Email != null && u.Email.ToLower() == email.ToLower(), cancellation);
     }
 }

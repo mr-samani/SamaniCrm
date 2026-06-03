@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SamaniCrm.Infrastructure.EntityConfiguration;
+namespace SamaniCrm.Infrastructure.DbContexts.TenantEntityConfigurations;
 
 public class IdentityUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
@@ -35,7 +35,7 @@ public class IdentityRoleClaimConfiguration : IEntityTypeConfiguration<IdentityR
 {
     public void Configure(EntityTypeBuilder<IdentityRoleClaim<Guid>> builder)
     {
-        builder.ToTable("RoleClaims", "auth"); 
+        builder.ToTable("RoleClaims", "auth");
 
     }
 }
@@ -52,6 +52,11 @@ public class IdentityUserLoginConfiguration : IEntityTypeConfiguration<IdentityU
     public void Configure(EntityTypeBuilder<IdentityUserLogin<Guid>> builder)
     {
         builder.ToTable("UserLogins", "auth");
+        builder.HasKey(l => new
+        {
+            l.LoginProvider,
+            l.ProviderKey
+        });
 
     }
 }
@@ -76,7 +81,7 @@ public class UserSettingConfiguration : IEntityTypeConfiguration<UserSetting>
 {
     public void Configure(EntityTypeBuilder<UserSetting> builder)
     {
-        builder.ToTable("UserSettings", "auth"); 
+        builder.ToTable("UserSettings", "auth");
         builder.HasKey(pc => pc.Id);
         builder.HasOne<ApplicationUser>()               // navigation property in UserSetting
                .WithOne(x => x.UserSetting)       // navigation property in ApplicationUser
@@ -90,7 +95,7 @@ public class UserDelegationConfiguration : IEntityTypeConfiguration<UserDelegati
 {
     public void Configure(EntityTypeBuilder<UserDelegation> builder)
     {
-        builder.ToTable("UserDelegations", "auth"); 
+        builder.ToTable("UserDelegations", "auth");
         builder.HasKey(pc => pc.Id);
     }
 }

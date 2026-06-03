@@ -5,7 +5,7 @@ using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Helpers;
 using SamaniCrm.Domain.Entities;
 
-namespace SamaniCrm.Infrastructure.EntityConfiguration;
+namespace SamaniCrm.Infrastructure.DbContexts.MasterEntityConfigurations;
 
 public class LanguageConfiguration : IEntityTypeConfiguration<Language>
 {

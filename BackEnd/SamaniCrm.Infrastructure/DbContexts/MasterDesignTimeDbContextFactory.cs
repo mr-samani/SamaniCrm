@@ -42,6 +42,6 @@ public class MasterDesignTimeDbContextFactory : IDesignTimeDbContextFactory<Mast
             sqlOptions => sqlOptions.MigrationsAssembly("SamaniCrm.Infrastructure")
         );
 
-        return new MasterDbContext(optionsBuilder.Options, null, null, null);
+        return new MasterDbContext(optionsBuilder.Options, null, null);
     }
 }

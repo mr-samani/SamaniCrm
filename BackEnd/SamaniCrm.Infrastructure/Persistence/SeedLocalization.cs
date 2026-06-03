@@ -12,7 +12,7 @@ namespace SamaniCrm.Infrastructure.Persistence
 {
     public static class SeedLocalization
     {
-        public static async Task TrySeedAsync(MasterDbContext dbContext)
+        public static async Task TrySeedAsync(MasterDbContext masterDbContext,TenantDbContext tenantDbContext)
         {
             Console.WriteLine("Try seed localization data");
             var languages = new List<Language>
@@ -34,25 +34,25 @@ namespace SamaniCrm.Infrastructure.Persistence
                     IsRtl = false
                 }
             };
-            var existingLanguages = await dbContext.Languages.ToListAsync();
+            var existingLanguages = await masterDbContext.Languages.ToListAsync();
             if (!existingLanguages.Any())
             {
-                await dbContext.Languages.AddRangeAsync(languages);
-                await dbContext.SaveChangesAsync();
+                await masterDbContext.Languages.AddRangeAsync(languages);
+                await masterDbContext.SaveChangesAsync();
             }
 
 
             //-----------------------------------------------------
             var newLocalizations = new List<Localization>();
-            var allLanguages = dbContext.Languages
+            var allLanguages = masterDbContext.Languages
                 .Where(l => l.IsActive)
                 .Select(l => l.Culture)
                 .ToList();
 
 
             // seed roles
-            var roles = dbContext.Roles.Select(s => "Role:" + s.Name).Distinct().ToList();
-            var existingRoleLocalizations = dbContext.Localizations
+            var roles = tenantDbContext.Roles.Select(s => "Role:" + s.Name).Distinct().ToList();
+            var existingRoleLocalizations = masterDbContext.Localizations
                 .Where(l => roles.Contains(l.Key))
                 .Select(l => new { l.Key, l.Culture })
                 .IgnoreQueryFilters()
@@ -77,13 +77,13 @@ namespace SamaniCrm.Infrastructure.Persistence
 
 
             // seed permission to localization 
-            var allPermissions = dbContext.Permissions
+            var allPermissions = tenantDbContext.Permissions
                 .Select(p => p.LocalizeKey)
                 .Distinct()
                 .ToList();
 
 
-            var existingPermissionLocalizations = dbContext.Localizations
+            var existingPermissionLocalizations = masterDbContext.Localizations
                 .Where(l => allPermissions.Contains(l.Key))
                 .Select(l => new { l.Key, l.Culture })
                 .ToHashSet();
@@ -116,8 +116,8 @@ namespace SamaniCrm.Infrastructure.Persistence
             Console.WriteLine("new localize count:" + newLocalizations.Count);
             if (newLocalizations.Any())
             {
-                dbContext.Localizations.AddRange(newLocalizations);
-                dbContext.SaveChanges();
+                masterDbContext.Localizations.AddRange(newLocalizations);
+                masterDbContext.SaveChanges();
             }
 
         }

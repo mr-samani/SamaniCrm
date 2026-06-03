@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SamaniCrm.Infrastructure.EntityConfiguration;
+namespace SamaniCrm.Infrastructure.DbContexts.TenantEntityConfigurations;
 
 
 public class PlanConfigurations : IEntityTypeConfiguration<Plan>
@@ -27,9 +27,6 @@ public class PlanTranslationConfiguration : IEntityTypeConfiguration<PlanTransla
             .WithMany(c => c.Translations)
             .HasForeignKey(p => p.PlanId)
             .OnDelete(DeleteBehavior.Restrict);
-        builder.HasOne(x => x.Language)
-                 .WithMany().HasForeignKey(x => x.Culture)
-                 .OnDelete(DeleteBehavior.Cascade);
 
     }
 }
@@ -51,9 +48,6 @@ public class PlanFeatureTranslationConfiguration : IEntityTypeConfiguration<Plan
             .WithMany(c => c.Translations)
             .HasForeignKey(p => p.PlanFeatureId)
             .OnDelete(DeleteBehavior.Restrict);
-        builder.HasOne(x => x.Language)
-                 .WithMany().HasForeignKey(x => x.Culture)
-                 .OnDelete(DeleteBehavior.Cascade);
 
     }
 }
@@ -65,9 +59,7 @@ public class PlanPriceConfigurations : IEntityTypeConfiguration<PlanPrice>
         builder.Property(t => t.Amount)
               .HasColumnType("decimal(18,2)");
         builder.HasOne(x => x.Plan).WithMany().HasForeignKey(x => x.PlanId).OnDelete(DeleteBehavior.Cascade);
-        builder.HasOne(x => x.Language)
-                 .WithMany().HasForeignKey(x => x.Culture)
-                 .OnDelete(DeleteBehavior.Cascade);
+ 
     }
 }
 public class AddOnConfigurations : IEntityTypeConfiguration<AddOn>
@@ -91,9 +83,6 @@ public class AddOnTranslationFeatureTranslationConfiguration : IEntityTypeConfig
             .WithMany(c => c.Translations)
             .HasForeignKey(p => p.AddOnId)
             .OnDelete(DeleteBehavior.Restrict);
-        builder.HasOne(x => x.Language)
-                 .WithMany().HasForeignKey(x => x.Culture)
-                 .OnDelete(DeleteBehavior.Cascade);
 
     }
 }

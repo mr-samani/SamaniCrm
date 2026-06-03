@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SamaniCrm.Domain.Entities;
 
-namespace SamaniCrm.Infrastructure.EntityConfiguration.PageBuilder;
+namespace SamaniCrm.Infrastructure.DbContexts.TenantEntityConfigurations;
 
 public class DashboardConfiguration : IEntityTypeConfiguration<Dashboard>
 {

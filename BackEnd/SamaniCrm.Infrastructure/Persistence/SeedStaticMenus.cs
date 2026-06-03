@@ -10,227 +10,179 @@ namespace SamaniCrm.Infrastructure.Persistence
 {
     public static class SeedStaticMenus
     {
+        public static async Task TrySeedAsync(MasterDbContext masterDbContext, TenantDbContext dbContext)
+        {
+            Console.WriteLine("Seeding static menu data...");
 
-            public static async Task TrySeedAsync(MasterDbContext masterDbContext, TenantDbContext dbContext)
+            // 1. دریافت زبان‌های فعال
+            var activeLanguages = await masterDbContext.Languages
+                .Where(l => l.IsActive)
+                .Select(l => l.Culture)
+                .ToListAsync();
+
+            // 2. دریافت تمام منوهای موجود در دیتابیس (شامل ترجمه‌ها)
+            // نکته: برای عملکرد بهتر، فقط Url و Id را می‌توانیم بگیریم، اما برای سادگی اینجا همه را می‌گیریم
+            var existingMenus = await dbContext.Menus
+                .Include(m => m.Translations)
+                .Include(m => m.Children) // فرزندان را هم می‌گیریم تا بتوانیم رابطه را مدیریت کنیم
+                .ToListAsync();
+
+            // ساخت دیکشنری برای دسترسی سریع به منوهای موجود بر اساس Url
+            // نکته: Url باید منحصربفرد باشد. اگر نیست، باید از ترکیب ParentId و Url استفاده کنید.
+            var existingMenusByUrl = existingMenus.ToDictionary(m => m.Url, m => m);
+
+            // 3. پردازش منوهای استاتیک
+            var staticMenus = GetStaticMenus();
+            await ProcessMenusAsync(staticMenus, null, dbContext, activeLanguages, existingMenusByUrl);
+
+            // 4. ذخیره نهایی
+            if (dbContext.ChangeTracker.HasChanges())
             {
-                Console.WriteLine("Seeding static menu data...");
-                var staticMenus = GetStaticMenus();
-                var existingMenus = await dbContext.Menus
-                    .Include(m => m.Children) // برای اینکه بتوانیم Children ها را هم بررسی کنیم
-                    .Include(m => m.Translations) // برای اینکه بتوانیم Translations ها را هم بررسی کنیم
-                    .ToListAsync();
-
-                var menusToAdd = new List<Menu>();
-                var translationsToAdd = new List<MenuTranslation>();
-
-                // دریافت تمام زبان‌های فعال
-                var activeLanguages = await masterDbContext.Languages
-                    .Where(l => l.IsActive)
-                    .Select(l => l.Culture)
-                    .ToListAsync();
-
-            // ساخت یک دیکشنری برای دسترسی سریع به منوهای موجود بر اساس URL (یا یک شناسه منحصربفرد دیگر)
-            // اگر URL ها در دیتابیس منحصربفرد نیستند، باید از ترکیب ParentId و URL یا چیز دیگری استفاده کرد.
-            Dictionary<string, Menu>? existingMenusByURL = existingMenus?.ToDictionary(m => m.Url??"x", m => m);
-
-                // پردازش منوهای استاتیک و ساخت لیست منوهایی که باید اضافه شوند
-                foreach (var staticMenu in staticMenus)
-                {
-                    Menu? existingMenu = null;
-                    if (existingMenusByURL!= null &&  existingMenusByURL.TryGetValue(staticMenu.Url??"x", out existingMenu))
-                    {
-                        // منو وجود دارد، حالا ترجمه‌ها و فرزندان آن را بررسی می‌کنیم
-                        await UpdateMenuAndChildren(dbContext, existingMenu, staticMenu, activeLanguages, translationsToAdd);
-                    }
-                    else
-                    {
-                        // منو وجود ندارد، آن را برای اضافه کردن علامت‌گذاری می‌کنیم
-                        // ابتدا ترجمه‌های آن را اضافه می‌کنیم
-                        foreach (var lang in activeLanguages)
-                        {
-                            var staticMenuTranslation = staticMenu.Translations.FirstOrDefault(t => t.Culture == lang);
-                            if (staticMenuTranslation != null)
-                            {
-                                translationsToAdd.Add(new MenuTranslation
-                                {
-                                    Culture = lang,
-                                    Title = staticMenuTranslation.Title,
-                                });
-                            }
-                            else
-                            {
-                                // اگر برای زبان فعال ترجمه ای در منوی استاتیک نبود، یک ترجمه پیش فرض اضافه کنید
-                                translationsToAdd.Add(new MenuTranslation
-                                {
-                                    Culture = lang,
-                                    Title = staticMenu.Url ?? $"Menu {staticMenu.OrderIndex}", // یک عنوان پیش فرض
-                                });
-                            }
-                        }
-
-                        // اگر منو فرزند دارد، آن‌ها را نیز به صورت بازگشتی پردازش می‌کنیم
-                        if (staticMenu.Children != null && staticMenu.Children.Any())
-                        {
-                            staticMenu.Children = await ProcessChildren(staticMenu.Children, activeLanguages, translationsToAdd, dbContext);
-                        }
-
-                        menusToAdd.Add(staticMenu);
-                    }
-                }
-
-                // اضافه کردن منوهای جدید
-                if (menusToAdd.Any())
-                {
-                    await dbContext.Menus.AddRangeAsync(menusToAdd);
-                    // SaveChangesAsync را در انتها صدا می‌زنیم
-                }
-
-                // اضافه کردن ترجمه‌های جدید (که قبلا جمع‌آوری شدند)
-                if (translationsToAdd.Any())
-                {
-                    // فیلتر کردن ترجمه‌های تکراری که ممکن است در پردازش منوهای موجود ایجاد شده باشند
-                    var existingTranslationKeys = await dbContext.MenuTranslations
-                        .Select(x => $"{x.MenuId}_{x.Culture}")
-                        .ToHashSetAsync();
-
-                    var uniqueTranslationsToAdd = translationsToAdd
-                        .Where(t => !existingTranslationKeys.Contains($"{t.MenuId}_{t.Culture}"))
-                        .ToList();
-
-                    if (uniqueTranslationsToAdd.Any())
-                    {
-                        await dbContext.MenuTranslations.AddRangeAsync(uniqueTranslationsToAdd);
-                        // SaveChangesAsync را در انتها صدا می‌زنیم
-                    }
-                }
-
-                // تنها یک بار SaveChangesAsync را در انتها فراخوانی کنید
-                if (dbContext.ChangeTracker.HasChanges())
-                {
-                    await dbContext.SaveChangesAsync(); // ارسال فلگ برای نادیده گرفتن AuditLog
-                }
-
-                Console.WriteLine("Static menu data seeding completed.");
+                await dbContext.SaveChangesAsync();
             }
 
-            // تابع کمکی برای پردازش منوهای موجود و فرزندان آنها
-            private static async Task UpdateMenuAndChildren(
-                TenantDbContext dbContext,
-                Menu existingMenu,
-                Menu staticMenu,
-                List<string> activeLanguages,
-                List<MenuTranslation> translationsToAdd
-           )
+            Console.WriteLine("Static menu data seeding completed.");
+        }
+
+        /// <summary>
+        /// پردازش بازگشتی منوها
+        /// </summary>
+        private static async Task ProcessMenusAsync(
+            IEnumerable<Menu> staticMenus,
+            Menu? parentMenu,
+            TenantDbContext dbContext,
+            List<string> activeLanguages,
+            Dictionary<string, Menu?> existingMenusByUrl)
+        {
+            foreach (var staticMenu in staticMenus)
             {
-                // به‌روزرسانی ویژگی‌های منوی موجود (Icon, OrderIndex, IsSystem)
-                existingMenu.Icon = staticMenu.Icon ?? existingMenu.Icon;
-                existingMenu.OrderIndex = staticMenu.OrderIndex;
-                existingMenu.IsSystem = staticMenu.IsSystem;
-                // اگر URL تغییر کرده بود، اینجا هم آپدیت کنید
-                // existingMenu.Url = staticMenu.Url ?? existingMenu.Url;
+                // تنظیم ParentId
+                staticMenu.ParentId = parentMenu?.Id;
 
-                // پردازش ترجمه‌های منوی موجود
-                foreach (var lang in activeLanguages)
+                // بررسی وجود منو
+                if (existingMenusByUrl.TryGetValue(staticMenu.Url, out var existingMenu))
                 {
-                    var existingTranslation = existingMenu.Translations.FirstOrDefault(t => t.Culture == lang);
-                    var staticMenuTranslation = staticMenu.Translations.FirstOrDefault(t => t.Culture == lang);
+                    // منو وجود دارد -> Update
+                    UpdateExistingMenu(existingMenu, staticMenu, activeLanguages);
+                }
+                else
+                {
+                    // منو وجود ندارد -> Insert
+                    // ترجمه‌های پیش‌فرض را برای زبان‌هایی که ترجمه ندارند اضافه کن
+                    EnsureDefaultTranslations(staticMenu, activeLanguages);
 
-                    if (staticMenuTranslation != null)
-                    {
-                        if (existingTranslation == null)
-                        {
-                            // ترجمه جدید برای این زبان اضافه کن
-                            translationsToAdd.Add(new MenuTranslation
-                            {
-                                MenuId = existingMenu.Id,
-                                Culture = lang,
-                                Title = staticMenuTranslation.Title,
-                            });
-                        }
-                        else
-                        {
-                            // ترجمه موجود را به‌روزرسانی کن
-                            existingTranslation.Title = staticMenuTranslation.Title;
-                        }
-                    }
-                    // اگر ترجمه ای در منوی استاتیک برای این زبان نبود، کاری انجام نده یا ترجمه موجود را نگه دار
+                    await dbContext.Menus.AddAsync(staticMenu);
+
+                    // این منوی جدید را در دیکشنری اضافه کن تا فرزندان بتوانند به آن ارجاع دهند
+                    // نکته: این کار فقط برای مدیریت رابطه در حافظه است، در دیتابیس هنوز Save نشده
+                    // اما چون در همان تراکنش SaveChanges انجام می‌شود، EF Core مدیریت می‌کند
                 }
 
-                // پردازش فرزندان (به صورت بازگشتی)
+                // پردازش فرزندان
                 if (staticMenu.Children != null && staticMenu.Children.Any())
                 {
-                    staticMenu.Children = await ProcessChildren(staticMenu.Children, activeLanguages, translationsToAdd, dbContext);
-                    // اضافه کردن فرزندان جدید به منوی موجود
-                    foreach (var newChild in staticMenu.Children.Where(c => !existingMenu.Children.Any(ec => ec.Url == c.Url)))
-                    {
-                        existingMenu.Children.Add(newChild);
-                    }
+                    // برای فرزندان، باید دیکشنری را آپدیت کنیم تا منوی فعلی (چه جدید چه موجود) را پیدا کنند
+                    // اما چون EF Core رابطه را بر اساس Navigation Property مدیریت می‌کند، 
+                    // کافیست parentMenu را به فرزند بدهیم.
+
+                    // نکته مهم: اگر منوی جدید است، Id آن هنوز ندارد. 
+                    // اما وقتی آن را به dbContext.AddAsync می‌دهیم، EF Core آن را در ChangeTracker نگه می‌دارد.
+                    // وقتی فرزندان را هم اضافه کنیم، EF Core به ترتیب صحیح (پدر قبل از فرزند) Save می‌کند.
+
+                    await ProcessMenusAsync(
+                        staticMenu.Children,
+                        existingMenu ?? staticMenu, // اگر منوی جدید است، خود staticMenu را به عنوان پدر بدهیم
+                        dbContext,
+                        activeLanguages,
+                        existingMenusByUrl);
                 }
             }
+        }
 
-            // تابع کمکی برای پردازش لیست فرزندان
-            private static async Task<List<Menu>> ProcessChildren(
-                ICollection<Menu> children,
-                List<string> activeLanguages,
-                List<MenuTranslation> translationsToAdd,
-                TenantDbContext dbContext)
+        private static void UpdateExistingMenu(Menu existingMenu, Menu staticMenu, List<string> activeLanguages)
+        {
+            // آپدیت فیلدهای ساده
+            existingMenu.Icon = staticMenu.Icon ?? existingMenu.Icon;
+            existingMenu.OrderIndex = staticMenu.OrderIndex;
+            existingMenu.IsSystem = staticMenu.IsSystem;
+            existingMenu.Url = staticMenu.Url; // در صورت نیاز
+
+            // آپدیت ترجمه‌ها
+            foreach (var lang in activeLanguages)
             {
-                var processedChildren = new List<Menu>();
-                var existingChildren = await dbContext.Menus
-                    .Where(m => m.ParentId != null && children.Select(c => c.Url).Contains(m.Url))
-                    .Include(m => m.Translations)
-                    .ToListAsync();
+                var existingTranslation = existingMenu.Translations.FirstOrDefault(t => t.Culture == lang);
+                var staticTranslation = staticMenu.Translations.FirstOrDefault(t => t.Culture == lang);
 
-                var existingChildrenByURL = existingChildren.ToDictionary(m => m.Url??"x", m => m);
-
-                foreach (var child in children)
+                if (staticTranslation != null)
                 {
-                    Menu? existingChild = null;
-                    if (existingChildrenByURL.TryGetValue(child.Url??"x", out existingChild))
+                    if (existingTranslation == null)
                     {
-                        // فرزند موجود است، آن را به‌روزرسانی کن
-                        await UpdateMenuAndChildren(dbContext, existingChild, child, activeLanguages, translationsToAdd);
-                        processedChildren.Add(existingChild);
+                        // ترجمه جدید اضافه کن
+                        existingMenu.Translations.Add(new MenuTranslation
+                        {
+                            MenuId = existingMenu.Id, // Id از دیتابیس خوانده شده است
+                            Culture = lang,
+                            Title = staticTranslation.Title
+                        });
                     }
                     else
                     {
-                        // فرزند جدید است، آن را برای اضافه کردن آماده کن
-                        // اضافه کردن ترجمه‌ها برای فرزند جدید
-                        foreach (var lang in activeLanguages)
-                        {
-                            var staticMenuTranslation = child.Translations.FirstOrDefault(t => t.Culture == lang);
-                            if (staticMenuTranslation != null)
-                            {
-                                translationsToAdd.Add(new MenuTranslation
-                                {
-                                    Culture = lang,
-                                    Title = staticMenuTranslation.Title,
-                                });
-                            }
-                            else
-                            {
-                                translationsToAdd.Add(new MenuTranslation
-                                {
-                                    Culture = lang,
-                                    Title = child.Url ?? $"Sub Menu {child.OrderIndex}",
-                                });
-                            }
-                        }
-                        // اگر فرزندان بیشتری دارد، اینجا به صورت بازگشتی پردازش کن
-                        if (child.Children != null && child.Children.Any())
-                        {
-                            child.Children = await ProcessChildren(child.Children, activeLanguages, translationsToAdd, dbContext);
-                        }
-                        processedChildren.Add(child);
+                        // ترجمه موجود را آپدیت کن
+                        existingTranslation.Title = staticTranslation.Title;
                     }
                 }
-                return processedChildren;
             }
 
-
-            private static List<Menu> GetStaticMenus()
+            // آپدیت فرزندان
+            if (staticMenu.Children != null && staticMenu.Children.Any())
             {
-                return new List<Menu>
+                // حذف فرزندان قدیمی که در لیست جدید نیستند (اختیاری، بسته به نیاز)
+                // اضافه کردن فرزندان جدید
+                var existingChildUrls = existingMenu.Children.Select(c => c.Url).ToHashSet();
+                foreach (var staticChild in staticMenu.Children)
+                {
+                    if (!existingChildUrls.Contains(staticChild.Url))
+                    {
+                        // فرزند جدید است
+                        staticChild.ParentId = existingMenu.Id;
+                        EnsureDefaultTranslations(staticChild, activeLanguages);
+                        existingMenu.Children.Add(staticChild);
+                    }
+                    else
+                    {
+                        // فرزند موجود است، باید آن را آپدیت کنیم
+                        var existingChild = existingMenu.Children.First(c => c.Url == staticChild.Url);
+                        UpdateExistingMenu(existingChild, staticChild, activeLanguages);
+                    }
+                }
+            }
+        }
+
+        private static void EnsureDefaultTranslations(Menu menu, List<string> activeLanguages)
+        {
+            if (menu.Translations == null)
+            {
+                menu.Translations = new List<MenuTranslation>();
+            }
+
+            foreach (var lang in activeLanguages)
+            {
+                if (!menu.Translations.Any(t => t.Culture == lang))
+                {
+                    // اگر ترجمه‌ای برای این زبان وجود ندارد، یک ترجمه پیش‌فرض اضافه کن
+                    menu.Translations.Add(new MenuTranslation
+                    {
+                        Culture = lang,
+                        Title = menu.Url ?? $"Menu-{menu.OrderIndex}",
+                        MenuId = Guid.NewGuid()
+                    });
+                }
+            }
+        }
+
+        private static List<Menu> GetStaticMenus()
+        {
+            return new List<Menu>
             {
                 new Menu
                 {
@@ -238,91 +190,58 @@ namespace SamaniCrm.Infrastructure.Persistence
                     Url = "/",
                     OrderIndex = 0,
                     IsSystem = true,
-                    Translations=[
-                            new MenuTranslation(){
-                                Culture = "en-US",
-                                Title = "Home",
-                            },
-                              new MenuTranslation(){
-                                Culture = "fa-IR",
-                                Title = "صفحه اصلی",
-                            },
-                        ]
+                    Translations = new List<MenuTranslation>
+                    {
+                        new MenuTranslation { Culture = "en-US", Title = "Home" },
+                        new MenuTranslation { Culture = "fa-IR", Title = "صفحه اصلی" }
+                    }
                 },
                 new Menu
                 {
                     Icon = "fa fa-package",
                     Url = "/products",
-                    OrderIndex = 0,
-                    IsSystem = true,
-                    Translations=[
-                            new MenuTranslation(){
-                                Culture = "en-US",
-                                Title = "Products",
-                            },
-                              new MenuTranslation(){
-                                Culture = "fa-IR",
-                                Title = "محصولات",
-                            },
-                        ]
-                },
-                new Menu
-                {
-                    Icon = "fa fa-company",
-                    Url = "/about-us",
-                    OrderIndex = 2,
-                    IsSystem = true,
-                    Translations=[
-                            new MenuTranslation(){
-                                Culture = "en-US",
-                                Title = "About us",
-                            },
-                              new MenuTranslation(){
-                                Culture = "fa-IR",
-                                Title = "درباره ما",
-                            },
-                        ]
-                },
-                new Menu
-                {
-                    Icon = "fa fa-envelope",
-                    Url = "/contact-us",
                     OrderIndex = 1,
                     IsSystem = true,
-                    Translations=[
-                            new MenuTranslation(){
-                                Culture = "en-US",
-                                Title = "Contact us",
-                            },
-                              new MenuTranslation(){
-                                Culture = "fa-IR",
-                                Title = "تماس با ما",
-                            },
-                        ]
+                    Translations = new List<MenuTranslation>
+                    {
+                        new MenuTranslation { Culture = "en-US", Title = "Products" },
+                        new MenuTranslation { Culture = "fa-IR", Title = "محصولات" }
+                    }
                 },
                 new Menu
                 {
                     Icon = "fa fa-book",
                     Url = "/blogs",
-                    OrderIndex = 3,
-                    Translations=[
-                            new MenuTranslation(){
-                                Culture = "en-US",
-                                Title = "Blog",
-                            },
-                              new MenuTranslation(){
-                                Culture = "fa-IR",
-                                Title = "بلاگ",
-                            },
-                        ],
+                    OrderIndex = 2,
+                    IsSystem = true,
+                    Translations = new List<MenuTranslation>
+                    {
+                        new MenuTranslation { Culture = "en-US", Title = "Blog" },
+                        new MenuTranslation { Culture = "fa-IR", Title = "بلاگ" }
+                    },
                     Children = new List<Menu>
                     {
-                        new Menu { Url = "/blogs/1" },
-                        new Menu { Url = "/blogs/2" },
-                        new Menu { Url = "/blogs/3" }
+                        new Menu
+                        {
+                            Url = "/blogs/1",
+                            Translations = new List<MenuTranslation>
+                            {
+                                new MenuTranslation { Culture = "en-US", Title = "Blog Post 1" },
+                                new MenuTranslation { Culture = "fa-IR", Title = "نوشته بلاگ ۱" }
+                            }
+                        },
+                        new Menu
+                        {
+                            Url = "/blogs/2",
+                            Translations = new List<MenuTranslation>
+                            {
+                                new MenuTranslation { Culture = "en-US", Title = "Blog Post 2" },
+                                new MenuTranslation { Culture = "fa-IR", Title = "نوشته بلاگ ۲" }
+                            }
+                        }
                     }
                 }
             };
-            }
         }
     }
+}

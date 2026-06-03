@@ -18,6 +18,7 @@ public class TenantDatabaseService : ITenantDatabaseService
     private readonly ICurrentTenant _currentTenant;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly MasterDbContext _masterDbContext;
+    private readonly IAuditLogFactory _auditFactory;
 
 
     public TenantDatabaseService(
@@ -26,7 +27,8 @@ public class TenantDatabaseService : ITenantDatabaseService
         ICurrentUserService currentUser,
         ICurrentTenant currentTenant,
         IHttpContextAccessor httpContextAccessor,
-        MasterDbContext masterDbContext)
+        MasterDbContext masterDbContext,
+        IAuditLogFactory auditFactory)
     {
         _logger = logger;
         _encryption = encryption;
@@ -36,6 +38,7 @@ public class TenantDatabaseService : ITenantDatabaseService
         _currentTenant = currentTenant;
         _httpContextAccessor = httpContextAccessor;
         _masterDbContext = masterDbContext;
+        _auditFactory = auditFactory;
     }
 
     public string? GetEncryptedConnectionString(Guid? tenantId)
@@ -125,7 +128,7 @@ public class TenantDatabaseService : ITenantDatabaseService
     {
         var optionsBuilder = new DbContextOptionsBuilder<TenantDbContext>();
         optionsBuilder.UseSqlServer(connectionString);
-        using var context = new TenantDbContext(optionsBuilder.Options, _currentUser, _currentTenant, _httpContextAccessor);
+        using var context = new TenantDbContext(optionsBuilder.Options, _auditFactory, _currentUser, _currentTenant, _httpContextAccessor);
         await context.Database.MigrateAsync(cancellation);
     }
 

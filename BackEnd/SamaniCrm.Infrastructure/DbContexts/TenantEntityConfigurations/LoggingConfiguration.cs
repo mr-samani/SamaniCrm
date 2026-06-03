@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 
-namespace SamaniCrm.Infrastructure.EntityConfiguration;
+namespace SamaniCrm.Infrastructure.DbContexts.TenantEntityConfigurations;
 
 public class TenantAppLogSettingConfiguration : IEntityTypeConfiguration<TenantAppLogSetting>
 {
