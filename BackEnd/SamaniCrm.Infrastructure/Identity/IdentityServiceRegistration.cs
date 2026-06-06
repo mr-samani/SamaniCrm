@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SamaniCrm.Application.Common.Interfaces;
@@ -132,6 +133,9 @@ namespace SamaniCrm.Infrastructure.Identity
                 services.AddAuthentication(IdentityConstants.ApplicationScheme);
 
 
+                services.RemoveAll<IRoleValidator<ApplicationRole>>();
+                services.AddScoped<IRoleValidator<ApplicationRole>, TenantRoleValidator>();
+
                 return services;
             }
         }
@@ -164,6 +168,9 @@ namespace SamaniCrm.Infrastructure.Identity
                    .AddEntityFrameworkStores<TenantDbContext>()
                    .AddDefaultTokenProviders()
                    .AddSignInManager();
+
+            services.AddScoped<IRoleValidator<ApplicationRole>, TenantRoleValidator>();
+
             return services;
         }
 

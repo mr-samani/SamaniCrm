@@ -9,7 +9,8 @@ namespace SamaniCrm.Domain.Entities;
 
 public class RolePermission : IMayHaveTenant
 {
-    public Guid? TenantId { get; set; }
+    public Guid Id { get; set; }
+    public Guid? TenantId { get; set; } 
 
     public Guid RoleId { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Exceptions;
@@ -12,6 +13,7 @@ using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.DbContexts;
+using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Persistence;
 using HealthStatus = SamaniCrm.Domain.Entities.HealthStatus;
 
@@ -24,26 +26,32 @@ public class TenantProvisioningService : ITenantProvisioningService
     private readonly MasterDbContext _dbContext;
     private readonly ITenantDatabaseService _databaseService;
     private readonly ILogger<TenantProvisioningService> _logger;
-    private readonly IIdentityService _identityService;
     private readonly ApplicationDbInitializer _dbInitializer;
-
+    private readonly ITenantDbContextFactory _tenantDbContextFactory;
     public TenantProvisioningService(
         ITenantDatabaseService databaseService,
         ILogger<TenantProvisioningService> logger,
         MasterDbContext dbContext,
         IIdentityService identityService,
-        ApplicationDbInitializer dbInitializer)
+        ApplicationDbInitializer dbInitializer,
+        ITenantDbContextFactory tenantDbContextFactory)
     {
         _databaseService = databaseService;
         _logger = logger;
         _dbContext = dbContext;
-        _identityService = identityService;
         _dbInitializer = dbInitializer;
+        _tenantDbContextFactory = tenantDbContextFactory;
     }
 
 
 
-
+    /// <summary>
+    /// ایجاد مراحل آماده سازی بهره بردار
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="cancellation"></param>
+    /// <returns></returns>
+    /// <exception cref="NotFoundException"></exception>
     public async Task InitializeTenantProvisionSteps(Guid tenantId, CancellationToken cancellation)
     {
         var tenant = await _dbContext.Tenants
@@ -77,6 +85,13 @@ public class TenantProvisioningService : ITenantProvisioningService
 
     }
 
+    /// <summary>
+    /// دریافت آخرین مرحله اجرا نشده
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="cancellation"></param>
+    /// <returns></returns>
+    /// <exception cref="NotFoundException"></exception>
     public async Task<List<TenantProvisionStepsEnum>> GetPendingProvisionSteps(Guid tenantId, CancellationToken cancellation)
     {
         var tenant = await _dbContext.Tenants
@@ -98,38 +113,90 @@ public class TenantProvisioningService : ITenantProvisioningService
 
 
 
-
-    public async Task ProvisionCreateAdminUser(TenantJobProvisioningData request, Guid tenantId, CancellationToken cancellation)
+    /// <summary>
+    /// ایجاد مدیر بهره بردار
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="connectionString"></param>
+    /// <param name="tenantId"></param>
+    /// <param name="cancellation"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    public async Task ProvisionCreateAdminUser(TenantJobProvisioningData request, string connectionString, Guid tenantId, CancellationToken cancellation)
     {
-        var admin = await _identityService.GetTenantAdmin(tenantId, cancellation);
-        if (admin != null && request.AdminUserName == admin.UserName)
-        {
-            return;
-        }
+        await using var dbContext = _tenantDbContextFactory.Create(connectionString);
 
-        var adminUser = new CreateUserCommand()
+        var exists = await dbContext.Users
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(
+                x => x.TenantId == tenantId &&
+                     x.UserName == request.AdminUserName,
+                cancellation);
+
+        if (exists != null)
+            return;
+
+        var user = new ApplicationUser
         {
+            Id = Guid.NewGuid(),
             TenantId = tenantId,
+
+            UserName = request.AdminUserName,
+            NormalizedUserName = request.AdminUserName.ToUpperInvariant(),
+
             Email = request.AdminEmail.ToLowerInvariant(),
+            NormalizedEmail = request.AdminEmail.ToUpperInvariant(),
+
             FirstName = request.AdminFirstName,
             LastName = request.AdminLastName,
-            Password = request.AdminPassword,
-            UserName = request.AdminUserName,
             PhoneNumber = request.AdminMobile,
             Address = request.Address,
+
+            EmailConfirmed = true,
+            PhoneNumberConfirmed = true,
+            LockoutEnabled = true,
+
             Lang = AppConsts.DefaultLanguage,
-            Roles = [AppRoles.TenantAdministrator],
+            SecurityStamp = Guid.NewGuid().ToString(),
+            ConcurrencyStamp = Guid.NewGuid().ToString()
         };
-        var createUserResult = await _identityService.CreateUserAsync(adminUser);
-        if (createUserResult.isSucceed == false)
+
+        var passwordHasher = new PasswordHasher<ApplicationUser>();
+
+        user.PasswordHash = passwordHasher.HashPassword(user, request.AdminPassword);
+
+        dbContext.Users.Add(user);
+
+        await dbContext.SaveChangesAsync(cancellation);
+
+        var tenantAdminRole = await dbContext.Roles
+            .IgnoreQueryFilters()
+            .Where(x => x.Name == AppRoles.TenantAdministrator && x.TenantId == tenantId)
+            .FirstOrDefaultAsync(cancellation);
+
+        if (tenantAdminRole == null)
         {
-            throw new Exception("Can not create Admin User!");
+            throw new Exception($"Role '{AppRoles.TenantAdministrator}' not found.");
         }
+
+        dbContext.UserRoles.Add(new()
+        {
+            UserId = user.Id,
+            RoleId = tenantAdminRole.Id
+        });
+
+        await dbContext.SaveChangesAsync(cancellation);
+
     }
 
 
 
-
+    /// <summary>
+    /// ایجاد دیتابیس مجزا برای بهره  بردار
+    /// </summary>
+    /// <param name="tenant"></param>
+    /// <param name="cancellation"></param>
+    /// <returns></returns>
     public async Task ProvisionIsolatedDatabaseAsync(Tenant tenant, CancellationToken cancellation)
     {
         var databaseName = $"Tenant_{tenant.Slug}_{tenant.Id:N}";
@@ -175,6 +242,13 @@ public class TenantProvisioningService : ITenantProvisioningService
 
     }
 
+
+    /// <summary>
+    /// اجرای مایگریشن ها روی دیتابیس
+    /// </summary>
+    /// <param name="tenant"></param>
+    /// <param name="cancellation"></param>
+    /// <returns></returns>
     public async Task RunMigrationsAsync(Tenant tenant, CancellationToken cancellation)
     {
         if (tenant.DatabaseStrategy == DatabaseStrategy.Isolated && !string.IsNullOrEmpty(tenant.ConnectionString))
@@ -184,17 +258,30 @@ public class TenantProvisioningService : ITenantProvisioningService
         }
         else
         {
-            // For shared database, migrations are handled by EF Core automatically
+            // TODO: No nedd run migrations for shared db
             await _dbContext.Database.MigrateAsync(cancellation);
         }
     }
 
+
+    /// <summary>
+    /// پر کردن داده های لازم در دریتابیس بهره بردار
+    /// </summary>
+    /// <param name="tenant"></param>
+    /// <param name="cancellation"></param>
+    /// <returns></returns>
     public async Task SeedInitialDataAsync(Tenant tenant, CancellationToken cancellation)
     {
         await _dbInitializer.SeedAsync(tenant);
     }
 
 
+    /// <summary>
+    /// مرحله نهایی آماده سازی بهره بردار
+    /// </summary>
+    /// <param name="tenant"></param>
+    /// <param name="cancellation"></param>
+    /// <returns></returns>
     public async Task FinalizeAsync(Tenant tenant, CancellationToken cancellation)
     {
         var tenantEntity = await _dbContext.Tenants
@@ -216,7 +303,12 @@ public class TenantProvisioningService : ITenantProvisioningService
 
 
 
-
+    /// <summary>
+    /// بررسی وضعیت اتضال به دیتابیس بهره بردار
+    /// </summary>
+    /// <param name="connectionString"></param>
+    /// <param name="cancellation"></param>
+    /// <returns></returns>
     public async Task<bool> TestDatabaseConnectionAsync(string connectionString, CancellationToken cancellation)
     {
         return await _databaseService.TestConnectionAsync(connectionString, cancellation);
@@ -226,7 +318,13 @@ public class TenantProvisioningService : ITenantProvisioningService
 
 
 
-
+    /// <summary>
+    /// دریافت آخرین مرحله انجام شده برای اماده سازی بهره بردار
+    /// </summary>
+    /// <param name="tenantId"></param>
+    /// <param name="cancellation"></param>
+    /// <param name="ChackInit"></param>
+    /// <returns></returns>
     public async Task<List<ProvisioningStatusDto>> GetTenantProvisionSteps(Guid tenantId, CancellationToken cancellation, bool? ChackInit = true)
     {
         var result = await _dbContext.TenantProvisioningSteps

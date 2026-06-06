@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SamaniCrm.Migrator": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "CONNECTION_STRING_ENCRYPTION_KEY": "xo/C0eW3qcDEDeb2+hGzxdfh8aO3wJfE9aG7vB1cQ="
+      }
+    }
+  }
+}

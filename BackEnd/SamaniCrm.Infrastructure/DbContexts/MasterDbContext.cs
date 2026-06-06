@@ -17,6 +17,8 @@ public class MasterDbContext : DbContext, IMasterDbContext
     private readonly ICurrentUserService? _currentUser;
     private readonly ICurrentTenant? _currentTenant;
     private Guid? _tenantId;
+
+    // for dont create audit log
     public bool IsSeeding { get; set; } = false; // Property to indicate seeding process
 
 

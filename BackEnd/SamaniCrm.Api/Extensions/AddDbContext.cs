@@ -1,15 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
-using SamaniCrm.Core.Shared.Consts;
-using SamaniCrm.Core.Shared.DTOs;
-using SamaniCrm.Core.Shared.Interfaces;
-using SamaniCrm.Domain.Entities;
-using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Infrastructure.Persistence;
-using SamaniCrm.Infrastructure.Services.TenantService;
-using System.Collections.Concurrent;
 
 namespace SamaniCrm.Api.Extensions;
 
@@ -49,6 +42,7 @@ public static partial class ServiceCollectionExtensions
         {
             var currentTenant = sp.GetRequiredService<ICurrentTenant>();
             var tenantId = currentTenant.TenantId;
+            Console.WriteLine($"Tenant in DBContext={tenantId}");
             var defaultConnectionString = config.GetConnectionString("DefaultConnection");
 
             var connectionString = tenantId == null ? defaultConnectionString : currentTenant.ConnectionString;
@@ -70,6 +64,7 @@ public static partial class ServiceCollectionExtensions
         // این باعث می‌شود DI بتواند ApplicationDbContext را تزریق کند
         // services.AddScoped<IApplicationDbContext, TenantDbContext>();
         services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<TenantDbContext>());
+        services.AddScoped<ITenantDbContextFactory, TenantDbContextFactory>();
 
         services.AddScoped<ApplicationDbInitializer>();
         return services;
@@ -78,3 +73,5 @@ public static partial class ServiceCollectionExtensions
 
 
 }
+
+

@@ -13,14 +13,20 @@ public static class SeedDefaultUsers
 {
     public static async Task TrySeedAsync(
         TenantDbContext dbContext,
+        Guid? tenantId,
         ILogger<ApplicationDbInitializer> logger,
         UserManager<ApplicationUser> userManager,
         RoleManager<ApplicationRole> roleManager)
     {
-
+        if (tenantId.HasValue)
+        {
+            return;
+        }
 
         Console.WriteLine("Try seed Admin user");
-        var administratorRole = await roleManager.FindByNameAsync(AppRoles.SysAdmin);
+        var administratorRole = await roleManager.Roles
+            .IgnoreQueryFilters()
+            .Where(x => x.Name == AppRoles.SysAdmin).FirstOrDefaultAsync();
         if (administratorRole == null)
         {
             throw new Exception("Administrator role not found on DB!");
@@ -53,10 +59,23 @@ public static class SeedDefaultUsers
                 throw new Exception("Failed to create administrator user.");
             }
 
-            await userManager.AddToRoleAsync(adminUser, administratorRole.Name!);
         }
 
-        await dbContext.SaveChangesAsync();
+        var isAddedSysAdminRoleToUser = await dbContext.UserRoles
+            .IgnoreQueryFilters()
+            .Where(x => x.UserId == adminUser.Id && x.RoleId == administratorRole.Id)
+            .FirstOrDefaultAsync();
+        if (isAddedSysAdminRoleToUser == null)
+        {
+            await dbContext.UserRoles.AddAsync(new IdentityUserRole<Guid>
+            {
+                RoleId = administratorRole.Id,
+                UserId = adminUser.Id
+            });
+            await dbContext.SaveChangesAsync();
+        }
+
+
 
 
     }

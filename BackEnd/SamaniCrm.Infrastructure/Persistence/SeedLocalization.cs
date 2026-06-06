@@ -12,7 +12,7 @@ namespace SamaniCrm.Infrastructure.Persistence
 {
     public static class SeedLocalization
     {
-        public static async Task TrySeedAsync(MasterDbContext masterDbContext,TenantDbContext tenantDbContext)
+        public static async Task TrySeedAsync(MasterDbContext masterDbContext,TenantDbContext tenantDbContext,Guid? tenantId)
         {
             Console.WriteLine("Try seed localization data");
             var languages = new List<Language>
@@ -51,7 +51,11 @@ namespace SamaniCrm.Infrastructure.Persistence
 
 
             // seed roles
-            var roles = tenantDbContext.Roles.Select(s => "Role:" + s.Name).Distinct().ToList();
+            var roles = tenantDbContext.Roles
+                .Where(x=>x.TenantId == tenantId)
+                .Select(s => "Role:" + s.Name)
+                .Distinct()
+                .ToList();
             var existingRoleLocalizations = masterDbContext.Localizations
                 .Where(l => roles.Contains(l.Key))
                 .Select(l => new { l.Key, l.Culture })

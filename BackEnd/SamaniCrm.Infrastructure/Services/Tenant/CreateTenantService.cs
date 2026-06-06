@@ -130,10 +130,10 @@ public class TenantService : ITenantService
                Cron.Never,
                new RecurringJobOptions { MisfireHandling = MisfireHandlingMode.Relaxed });
 
-            // ─── اجرا بعد از ۳۰ ثانیه ───
+            // ─── اجرا بعد از 10 ثانیه ───
             _ = Task.Run(async () =>
             {
-                await Task.Delay(TimeSpan.FromSeconds(30), cancellation);
+                await Task.Delay(TimeSpan.FromSeconds(10), cancellation);
                 RecurringJob.TriggerJob(jobId);
             }, cancellation);
             // RecurringJob.TriggerJob(jobId);

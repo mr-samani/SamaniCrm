@@ -14,11 +14,16 @@ public class IdentityUserConfiguration : IEntityTypeConfiguration<ApplicationUse
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
         builder.ToTable("Users", "auth");
+        builder.HasIndex(x => new { x.TenantId, x.UserName }).IsUnique();
+
         builder.Property(e => e.FirstName).HasMaxLength(50);
         builder.Property(e => e.LastName).HasMaxLength(50);
         builder.Property(e => e.Address).HasMaxLength(200);
         builder.Property(e => e.PhoneNumber).HasMaxLength(15);
         builder.Property(e => e.ProfilePicture).HasMaxLength(200);
+
+        // 2. ایندکس روی TenantId برای جستجوی سریع‌تر
+        builder.HasIndex(x => x.TenantId);
 
     }
 }
@@ -28,7 +33,10 @@ public class IdentityRoleConfiguration : IEntityTypeConfiguration<ApplicationRol
     public void Configure(EntityTypeBuilder<ApplicationRole> builder)
     {
         builder.ToTable("Roles", "auth");
-        builder.HasIndex(x => new { x.Id, x.Name, x.TenantId }).IsUnique();
+        builder.HasIndex(x => new { x.Name, x.TenantId }).IsUnique();
+
+        // 2. ایندکس روی TenantId برای جستجوی سریع‌تر
+        builder.HasIndex(x => x.TenantId);
     }
 }
 public class IdentityRoleClaimConfiguration : IEntityTypeConfiguration<IdentityRoleClaim<Guid>>
@@ -106,8 +114,8 @@ public class IdentityRolePermissionConfiguration : IEntityTypeConfiguration<Role
     {
 
         builder.ToTable("RolePermissions", "auth");
-        builder.HasKey(rp => new { rp.RoleId, rp.PermissionId });
-        builder.HasIndex(rp => new { rp.RoleId, rp.PermissionId }).IsUnique();
+        builder.HasKey(pc => pc.Id);
+        builder.HasIndex(rp => new { rp.RoleId, rp.PermissionId, rp.TenantId}).IsUnique();
 
         builder.HasOne<ApplicationRole>()
                 .WithMany()
@@ -121,6 +129,11 @@ public class IdentityRolePermissionConfiguration : IEntityTypeConfiguration<Role
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
 
+
+
+        // ایندکس روی TenantId برای جستجوی سریع‌تر
+        builder.HasIndex(x => x.TenantId);
+
     }
 }
 
@@ -129,8 +142,11 @@ public class IdentityPermissionConfiguration : IEntityTypeConfiguration<Permissi
     public void Configure(EntityTypeBuilder<Permission> builder)
     {
         builder.ToTable("Permissions", "auth");
+
+
         builder.HasIndex(p => p.LocalizeKey)
                 .IsUnique();
+
     }
 }
 

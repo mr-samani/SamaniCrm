@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SamaniCrm.Infrastructure.DbContexts;
 
@@ -11,9 +12,11 @@ using SamaniCrm.Infrastructure.DbContexts;
 namespace SamaniCrm.Infrastructure.Migrations.TenantDb
 {
     [DbContext(typeof(TenantDbContext))]
-    partial class TenantDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260606092035_RoleChange")]
+    partial class RoleChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -846,11 +849,10 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ParentId");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
-                    b.HasIndex("Name", "TenantId")
-                        .IsUnique()
-                        .HasFilter("[TenantId] IS NOT NULL");
+                    b.HasIndex("ParentId");
 
                     b.ToTable("Menus");
                 });
@@ -1784,33 +1786,26 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.RolePermission", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ApplicationRoleId")
+                    b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("PermissionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("RoleId")
+                    b.Property<Guid?>("ApplicationRoleId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("RoleId", "PermissionId");
 
                     b.HasIndex("ApplicationRoleId");
 
                     b.HasIndex("PermissionId");
 
-                    b.HasIndex("TenantId");
-
-                    b.HasIndex("RoleId", "PermissionId", "TenantId")
-                        .IsUnique()
-                        .HasFilter("[TenantId] IS NOT NULL");
+                    b.HasIndex("RoleId", "PermissionId")
+                        .IsUnique();
 
                     b.ToTable("RolePermissions", "auth");
                 });
@@ -2814,12 +2809,6 @@ namespace SamaniCrm.Infrastructure.Migrations.TenantDb
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("TenantId");
-
-                    b.HasIndex("TenantId", "UserName")
-                        .IsUnique()
-                        .HasFilter("[TenantId] IS NOT NULL AND [UserName] IS NOT NULL");
 
                     b.ToTable("Users", "auth");
                 });

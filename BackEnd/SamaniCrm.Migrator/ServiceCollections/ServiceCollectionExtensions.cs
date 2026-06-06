@@ -8,6 +8,7 @@ using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Infrastructure.Persistence;
+using SamaniCrm.Infrastructure.Security;
 using SamaniCrm.Infrastructure.Services.TenantService;
 
 namespace SamaniCrm.DbMigrator;
@@ -38,6 +39,22 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICurrentUserService, DummyCurrentUserService>();
         services.AddScoped<ICurrentTenant, CurrentTenant>();
         services.AddScoped<ApplicationDbInitializer>();
+
+        services.AddScoped<ITenantDbContextFactory, TenantDbContextFactory>();
+        services.AddScoped<ITenantDatabaseService, TenantDatabaseService>();
+
+
+        services.Configure<EncryptionSettings>(options =>
+        {
+            options.EncryptionKey = configuration["Encryption:Key"]
+                ?? throw new InvalidOperationException("Encryption key not configured");
+            options.HashSalt = configuration["Encryption:Salt"] ?? string.Empty;
+        });
+
+        services.AddSingleton<IEncryptionService, EncryptionService>();
+        services.AddSingleton<IConnectionStringEncryptor, ConnectionStringEncryptor>();
+        services.AddSingleton<ISecureRandomGenerator, SecureRandomGenerator>();
+
 
         //var serviceProvider = services.BuildServiceProvider();
         //var logger = serviceProvider.GetService<ILogger<ApplicationDbInitializer>>();

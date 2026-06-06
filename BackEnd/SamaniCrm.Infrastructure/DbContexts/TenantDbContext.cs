@@ -25,6 +25,7 @@ public class TenantDbContext : IdentityDbContext<ApplicationUser, ApplicationRol
     private readonly IAuditLogFactory? _auditFactory;
 
     private Guid? _tenantId;
+    // for dont create audit log
     public bool IsSeeding { get; set; } = false; // Property to indicate seeding process
 
     public TenantDbContext(DbContextOptions options,

@@ -12,12 +12,16 @@ namespace SamaniCrm.Infrastructure.Persistence;
 
 public static class SeedDefaultFolders
 {
-    public static async Task TrySeedAsync(TenantDbContext dbContext, FileManagerSettings settings)
+    public static async Task TrySeedAsync(TenantDbContext dbContext, Guid? tenantId, FileManagerSettings settings)
     {
         Console.WriteLine("Seeding default folders...");
 
         // var wwwrootPath = Path.Combine(_env.WebRootPath, "uploads");
         var rootPath = settings.PublicFolderPath;
+        if (tenantId.HasValue)
+        {
+            rootPath = Path.Combine(rootPath, tenantId.Value.ToString());
+        }
 
         if (Directory.Exists(rootPath) == false)
         {
@@ -32,9 +36,14 @@ public static class SeedDefaultFolders
                 Directory.CreateDirectory(fullPath);
             }
 
-            var existsInDb = await dbContext.FileFolders.AnyAsync(f => f.Name == folder.Name && f.ParentId == null);
-            if (!existsInDb)
+            var existsInDb = await dbContext.FileFolders
+                .IgnoreQueryFilters()
+                .Where(f => f.TenantId == tenantId && f.Name == folder.Name && f.ParentId == null)
+                .FirstOrDefaultAsync();
+            if (existsInDb == null)
             {
+                folder.TenantId = tenantId;
+                folder.Id = Guid.NewGuid();
                 dbContext.FileFolders.Add(folder);
             }
         }

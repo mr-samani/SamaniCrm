@@ -7,8 +7,6 @@ namespace SamaniCrm.Infrastructure.Persistence
 {
     public static class SeedPermissions
     {
-
-
         public static async Task TrySeedAsync(TenantDbContext dbContext)
         {
             Console.WriteLine("Try seed permission data");
@@ -16,9 +14,9 @@ namespace SamaniCrm.Infrastructure.Persistence
             var permissions = PermissionsHelper.GetAllPermissions();
 
             var existingPermissions = dbContext.Permissions
-                .Select(p => p.Name)
-                .IgnoreQueryFilters()
-                .ToHashSet();
+                  .IgnoreQueryFilters()
+                  .Select(p => p.Name)
+                  .ToHashSet();
 
             var newPermissions = permissions
                 .Where(p => !existingPermissions.Contains(p.Value!))
@@ -30,10 +28,6 @@ namespace SamaniCrm.Infrastructure.Persistence
                 await dbContext.Permissions.AddRangeAsync(newPermissions);
                 await dbContext.SaveChangesAsync();
             }
-
-
-
-
         }
     }
 }

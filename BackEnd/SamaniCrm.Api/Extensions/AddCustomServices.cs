@@ -96,7 +96,6 @@ public static partial class ServiceCollectionExtensions
         services.AddScoped<ITenantDatabaseService, TenantDatabaseService>();
         services.AddScoped<ITenantUniquenessChecker, TenantUniquenessChecker>();
         services.AddScoped<ITenantNotificationService, TenantNotificationService>();
-        services.AddScoped<IEncryptionService, EncryptionService>();
 
 
 

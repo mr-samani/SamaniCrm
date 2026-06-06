@@ -130,7 +130,9 @@ export class ProvisioningTenantComponent extends AppComponentBase implements OnI
   private handleNotification(notification: ProvisioningNotification): void {
     console.log('recived', notification);
     if (notification.tenantSlug == this.tenantSlug) {
-      this.notify.error(notification.message);
+      if (notification.message) {
+        this.notify.error(notification.message);
+      }
       const f = this.steps.findIndex((x) => x.step == notification.currentStep);
       if (f > -1) {
         this.steps[f].errorMessage = notification.message;

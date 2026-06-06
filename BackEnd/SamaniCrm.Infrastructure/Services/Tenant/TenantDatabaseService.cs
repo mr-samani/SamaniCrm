@@ -53,11 +53,12 @@ public class TenantDatabaseService : ITenantDatabaseService
     {
         // TODO : cache 
         var tenant = _masterDbContext.TenantDatabaseConnections
-            .FirstOrDefault(c => c.TenantId == tenantId && c.IsActive);
+            .FirstOrDefault(c => c.TenantId == tenantId);
 
         if (tenant == null)
         {
-            throw new InvalidOperationException($"Tenant {tenantId} not found!");
+            return null;
+           // throw new InvalidOperationException($"Tenant {tenantId} not found!");
 
         }
         return tenant.ConnectionString;

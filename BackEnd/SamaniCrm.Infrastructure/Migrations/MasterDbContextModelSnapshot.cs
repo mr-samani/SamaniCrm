@@ -128,7 +128,7 @@ namespace SamaniCrm.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ExternalProviders");
+                    b.ToTable("ExternalProviders", (string)null);
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Language", b =>
@@ -186,7 +186,7 @@ namespace SamaniCrm.Infrastructure.Migrations
                     b.HasIndex("Culture")
                         .IsUnique();
 
-                    b.ToTable("Languages");
+                    b.ToTable("Languages", (string)null);
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Localization", b =>
@@ -245,7 +245,7 @@ namespace SamaniCrm.Infrastructure.Migrations
                     b.HasIndex("Key", "Culture", "Category")
                         .IsUnique();
 
-                    b.ToTable("Localizations");
+                    b.ToTable("Localizations", (string)null);
                 });
 
             modelBuilder.Entity("SamaniCrm.Domain.Entities.Plugin", b =>

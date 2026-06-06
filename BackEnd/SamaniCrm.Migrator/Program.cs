@@ -6,6 +6,7 @@ using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Migrator.Manager;
 
 using SamaniCrm.DbMigrator;
+using SamaniCrm.Infrastructure.Cache;
 
 var basePath = Path.Combine(Directory.GetCurrentDirectory(), "");
 // لود کردن تنظیمات از فایل
@@ -32,6 +33,7 @@ builder.ConfigureLogging(logging =>
 var services = builder.ConfigureServices(services =>
 {
     services.AddDbContext(configuration)
+       .AddCacheService(configuration)
        .AddCustomService(configuration)
        .AddIdentityForMigrator(configuration);
 

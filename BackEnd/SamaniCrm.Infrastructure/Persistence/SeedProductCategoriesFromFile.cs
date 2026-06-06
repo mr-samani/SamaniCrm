@@ -12,7 +12,7 @@ public static class SeedProductCategoriesFromFile
 {
     private const string FilePath = "seed-data/taxonomy-with-ids.en-US.txt";
 
-    public static async Task TrySeedAsync(TenantDbContext dbContext)
+    public static async Task TrySeedAsync(TenantDbContext dbContext, Guid? tenantId)
     {
         Console.WriteLine("Seeding product categories from taxonomy file...");
 
@@ -47,6 +47,7 @@ public static class SeedProductCategoriesFromFile
                 {
                     var category = new ProductCategory
                     {
+                        TenantId = tenantId,
                         Id = Guid.NewGuid(),
                         ParentId = parentPath != null && categories.ContainsKey(parentPath)
                             ? categories[parentPath].Id
@@ -56,7 +57,7 @@ public static class SeedProductCategoriesFromFile
                         IsActive = true,
                         Translations = new List<ProductCategoryTranslation>
                         {
-                            new ProductCategoryTranslation() { Culture = "en-US", Title = currentName }
+                            new ProductCategoryTranslation() {TenantId=tenantId, Culture = "en-US", Title = currentName }
                         }
                     };
                     categories[currentPath] = category;
@@ -68,8 +69,9 @@ public static class SeedProductCategoriesFromFile
 
         // جلوگیری از درج دوباره:
         var existingSlugs = dbContext.ProductCategories
-            .Select(c => c.Slug)
             .IgnoreQueryFilters()
+            .Where(x=>x.TenantId == tenantId)
+            .Select(c => c.Slug)
             .ToHashSet();
         var newCategories = categories.Values
             .Where(c => !existingSlugs.Contains(c.Slug))

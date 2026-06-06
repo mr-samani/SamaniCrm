@@ -11,12 +11,13 @@ namespace SamaniCrm.Infrastructure.Persistence
 {
     public static class SeedCurrencies
     {
-        public static async Task TrySeedAsync(TenantDbContext dbContext)
+        public static async Task TrySeedAsync(TenantDbContext dbContext, Guid? tenantId)
         {
             Console.WriteLine("Seeding static curerncies data...");
 
             var IRR = new Currency()
             {
+                TenantId = tenantId,
                 CurrencyCode = "IRR",
                 Name = "Iranian Rial",
                 ExchangeRateToBase = 1,
@@ -26,6 +27,7 @@ namespace SamaniCrm.Infrastructure.Persistence
             };
             var TMN = new Currency()
             {
+                TenantId = tenantId,
                 CurrencyCode = "TMN",
                 Name = "Iranian Toman",
                 ExchangeRateToBase = (decimal)0.10,
@@ -35,6 +37,7 @@ namespace SamaniCrm.Infrastructure.Persistence
             };
             var USD = new Currency()
             {
+                TenantId = tenantId,
                 CurrencyCode = "USD",
                 Name = "US dolar",
                 ExchangeRateToBase = 800000,

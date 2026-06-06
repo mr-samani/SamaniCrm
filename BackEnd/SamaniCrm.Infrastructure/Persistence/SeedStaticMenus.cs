@@ -10,7 +10,7 @@ namespace SamaniCrm.Infrastructure.Persistence
 {
     public static class SeedStaticMenus
     {
-        public static async Task TrySeedAsync(MasterDbContext masterDbContext, TenantDbContext dbContext)
+        public static async Task TrySeedAsync(MasterDbContext masterDbContext, TenantDbContext dbContext, Guid? tenantId)
         {
             Console.WriteLine("Seeding static menu data...");
 
@@ -20,9 +20,11 @@ namespace SamaniCrm.Infrastructure.Persistence
                 .ToListAsync();
 
             List<Menu> existingMenus = await dbContext.Menus
+                .IgnoreQueryFilters()
                 .AsSplitQuery()
                 .Include(m => m.Translations)
                 .Include(m => m.Children)
+                .Where(x=>x.TenantId == tenantId)
                 .ToListAsync();
 
 
@@ -30,7 +32,7 @@ namespace SamaniCrm.Infrastructure.Persistence
 
             // 3. پردازش منوهای استاتیک
             var staticMenus = GetStaticMenus();
-            await ProcessMenusAsync(staticMenus, null, dbContext, activeLanguages, existingMenusByName);
+            await ProcessMenusAsync(staticMenus, null, dbContext, activeLanguages, existingMenusByName,tenantId);
 
             // 4. ذخیره نهایی
             if (dbContext.ChangeTracker.HasChanges())
@@ -49,7 +51,8 @@ namespace SamaniCrm.Infrastructure.Persistence
             Menu? parentMenu,
             TenantDbContext dbContext,
             List<string> activeLanguages,
-            Dictionary<string, Menu> existingMenusByName)
+            Dictionary<string, Menu> existingMenusByName,
+            Guid? tenantId)
         {
             foreach (var staticMenu in staticMenus)
             {
@@ -60,13 +63,13 @@ namespace SamaniCrm.Infrastructure.Persistence
                 if (existingMenusByName.TryGetValue(staticMenu.Name, out var existingMenu))
                 {
                     // منو وجود دارد -> Update
-                    UpdateExistingMenu(existingMenu, staticMenu, activeLanguages);
+                    UpdateExistingMenu(existingMenu, staticMenu, activeLanguages,tenantId);
                 }
                 else
                 {
                     // منو وجود ندارد -> Insert
                     // ترجمه‌های پیش‌فرض را برای زبان‌هایی که ترجمه ندارند اضافه کن
-                    EnsureDefaultTranslations(staticMenu, activeLanguages);
+                    EnsureDefaultTranslations(staticMenu, activeLanguages,tenantId);
 
                     await dbContext.Menus.AddAsync(staticMenu);
 
@@ -91,18 +94,20 @@ namespace SamaniCrm.Infrastructure.Persistence
                         existingMenu ?? staticMenu, // اگر منوی جدید است، خود staticMenu را به عنوان پدر بدهیم
                         dbContext,
                         activeLanguages,
-                        existingMenusByName);
+                        existingMenusByName,
+                        tenantId);
                 }
             }
         }
 
-        private static void UpdateExistingMenu(Menu existingMenu, Menu staticMenu, List<string> activeLanguages)
+        private static void UpdateExistingMenu(Menu existingMenu, Menu staticMenu, List<string> activeLanguages, Guid? tenantId)
         {
             // آپدیت فیلدهای ساده
             existingMenu.Icon = staticMenu.Icon ?? existingMenu.Icon;
             existingMenu.OrderIndex = staticMenu.OrderIndex;
             existingMenu.IsSystem = staticMenu.IsSystem;
             existingMenu.Name = staticMenu.Name;
+            existingMenu.TenantId = tenantId;
 
             // آپدیت ترجمه‌ها
             foreach (var lang in activeLanguages)
@@ -119,7 +124,8 @@ namespace SamaniCrm.Infrastructure.Persistence
                         {
                             MenuId = existingMenu.Id, // Id از دیتابیس خوانده شده است
                             Culture = lang,
-                            Title = staticTranslation.Title
+                            Title = staticTranslation.Title,
+                            TenantId = tenantId
                         });
                     }
                     else
@@ -142,20 +148,21 @@ namespace SamaniCrm.Infrastructure.Persistence
                     {
                         // فرزند جدید است
                         staticChild.ParentId = existingMenu.Id;
-                        EnsureDefaultTranslations(staticChild, activeLanguages);
+                        staticChild.TenantId = tenantId;
+                        EnsureDefaultTranslations(staticChild, activeLanguages,tenantId);
                         existingMenu.Children.Add(staticChild);
                     }
                     else
                     {
                         // فرزند موجود است، باید آن را آپدیت کنیم
                         var existingChild = existingMenu.Children.First(c => c.Name == staticChild.Name);
-                        UpdateExistingMenu(existingChild, staticChild, activeLanguages);
+                        UpdateExistingMenu(existingChild, staticChild, activeLanguages,tenantId);
                     }
                 }
             }
         }
 
-        private static void EnsureDefaultTranslations(Menu menu, List<string> activeLanguages)
+        private static void EnsureDefaultTranslations(Menu menu, List<string> activeLanguages, Guid? tenantId)
         {
             if (menu.Translations == null)
             {
@@ -171,7 +178,8 @@ namespace SamaniCrm.Infrastructure.Persistence
                     {
                         Culture = lang,
                         Title = menu.Name,
-                        MenuId = Guid.NewGuid()
+                        MenuId = Guid.NewGuid(),
+                        TenantId = tenantId
                     });
                 }
             }

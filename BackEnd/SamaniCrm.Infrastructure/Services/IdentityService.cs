@@ -1,6 +1,7 @@
 ﻿using AutoMapper.Internal;
 using Azure.Core;
 using Hangfire;
+using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -454,7 +455,7 @@ public class IdentityService : IIdentityService
 
     public async Task<bool> IsUniqueUserName(string userName)
     {
-        return await _userManager.FindByNameAsync(userName) == null;
+        return await _userManager.Users.Where(x => x.UserName == userName).FirstOrDefaultAsync() == null;
     }
 
     private async Task<bool> SigninUserAsync(string userName, string password, Guid? tenantId)
@@ -556,7 +557,7 @@ public class IdentityService : IIdentityService
 
     public async Task<bool> UpdateUsersRole(string userName, IList<string> usersRole)
     {
-        var user = await _userManager.FindByNameAsync(userName);
+        var user = await _userManager.Users.Where(x => x.UserName == userName).FirstOrDefaultAsync();
         if (user == null)
         {
             return false;
@@ -572,7 +573,7 @@ public class IdentityService : IIdentityService
 
     public async Task<bool> UpdateRolePermissionsAsync(EditRolePermissionsCommand request, CancellationToken cancellationToken)
     {
-        var role = await _roleManager.FindByNameAsync(request.RoleName);
+        var role = await _roleManager.Roles.Where(x => x.Name == request.RoleName).FirstOrDefaultAsync();
         if (role == null)
             throw new NotFoundException($"Role '{request.RoleName}' not found.");
         // لیست پرمیژن هایی که از قبل به این نقش اختصاص داده شده اند
@@ -1024,89 +1025,29 @@ public class IdentityService : IIdentityService
 
     public async Task<UserDTO?> GetTenantAdmin(Guid tenantId, CancellationToken cancellation)
     {
-        //var tenantAdminUser = await _dbContext.Users
-        //    .IgnoreQueryFilters()
-        //     .Join(
-        //         _dbContext.UserRoles,
-        //         user => user.Id,
-        //         userRole => userRole.UserId,
-        //         (user, userRole) => new { user, userRole }
-        //     )
-        //     .Join(
-        //         _dbContext.Roles,
-        //         combined => combined.userRole.RoleId,
-        //         role => role.Id,
-        //         (combined, role) => new { combined.user, role }
-        //     )
-        //     .Where(x => x.user.TenantId == tenantId
-        //              && x.role.Name == AppRoles.TenantAdministrator)
-        //     .Select(x => new UserDTO
-        //     {
-        //         Id = x.user.Id,
-        //         UserName = x.user.UserName ?? "",
-        //         FirstName = x.user.FirstName ?? "",
-        //         LastName = x.user.LastName ?? "",
-        //         FullName = x.user.FullName ?? "",
-        //         Lang = x.user.Lang ?? "",
-        //         Email = x.user.Email ?? "",
-        //         ProfilePicture = x.user.ProfilePicture ?? "",
-        //         Address = x.user.Address ?? "",
-        //         PhoneNumber = x.user.PhoneNumber ?? "",
-        //         Roles = new List<string> { x.role.Name! }
-        //     })
-        //     .FirstOrDefaultAsync(cancellation);
-
-
-        var sqlQuery = $@"
-            SELECT TOP 1 -- فقط یک کاربر را برمی‌گردانیم
-                u.Id,
-                u.UserName,
-                u.FirstName,
-                u.LastName,
-                u.FullName,
-                u.Lang,
-                u.Email,
-                u.ProfilePicture,
-                u.Address,
-                u.PhoneNumber
-            FROM AspNetUsers u
-            INNER JOIN AspNetUserRoles ur ON u.Id = ur.UserId
-            INNER JOIN AspNetRoles r ON ur.RoleId = r.Id
-            WHERE u.TenantId = @TenantId 
-              AND r.Name = @RoleName
-            -- اگر نیاز به IgnoreQueryFilters دارید، باید SQL را پیچیده‌تر کنید یا از Dapper استفاده کنید.
-            -- مثلاً برای TenantId: AND (u.TenantId = @TenantId OR u.TenantId IS NULL)
-            -- یا اگر Soft Delete دارید: AND u.IsDeleted = 0 
-        ";
-
-        // استفاده از SqlQueryRaw برای اجرای کوئری و نگاشت به DTO
-        var tenantAdminUser = await _dbContext.Database
-            .SqlQueryRaw<UserDTO>(sqlQuery,
-                new SqlParameter("@TenantId", tenantId),
-                new SqlParameter("@RoleName", AppRoles.TenantAdministrator))
-            .FirstOrDefaultAsync(cancellation);
+        var tenantAdminUser = await _userManager.Users
+                                .IgnoreQueryFilters()
+                                .Where(u => u.TenantId == tenantId &&
+                                            u.Roles.Any(ur => _roleManager.Roles
+                                                .Any(r => r.Id == ur.Id && r.Name == AppRoles.TenantAdministrator)))
+                                .Select(u => new UserDTO
+                                {
+                                    Id = u.Id,
+                                    UserName = u.UserName ?? "",
+                                    FirstName = u.FirstName ?? "",
+                                    LastName = u.LastName ?? "",
+                                    FullName = u.FullName ?? "",
+                                    Lang = u.Lang ?? "",
+                                    Email = u.Email ?? "",
+                                    ProfilePicture = u.ProfilePicture ?? "",
+                                    Address = u.Address ?? "",
+                                    PhoneNumber = u.PhoneNumber ?? "",
+                                    // چون فیلتر کردیم، می‌دانیم نقش TenantAdministrator است
+                                    Roles = new List<string> { AppRoles.TenantAdministrator }
+                                })
+                                .FirstOrDefaultAsync(cancellation);
 
         return tenantAdminUser;
-
-        // with Navigation property
-        //return await _dbContext.Users
-        //.Where(u => u.TenantId == tenantId)
-        //.Where(u => u.UserRoles.Any(ur => ur.Role.Name == Roles.TenantAdministrator))
-        //.Select(u => new UserDTO
-        //{
-        //    Id = u.Id,
-        //    UserName = u.UserName ?? "",
-        //    FirstName = u.FirstName ?? "",
-        //    LastName = u.LastName ?? "",
-        //    FullName = u.FullName ?? "",
-        //    Lang = u.Lang ?? "",
-        //    Email = u.Email ?? "",
-        //    ProfilePicture = u.ProfilePicture ?? "",
-        //    Address = u.Address ?? "",
-        //    PhoneNumber = u.PhoneNumber ?? "",
-        //    Roles = u.UserRoles.Select(ur => ur.Role.Name).ToList()
-        //})
-        //.FirstOrDefaultAsync(cancellation);
 
 
     }

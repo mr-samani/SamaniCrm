@@ -7,13 +7,12 @@ namespace SamaniCrm.Infrastructure.Persistence;
 
 public static class SeedPages
 {
-    public static async Task TrySeedAsync(TenantDbContext dbContext)
+    public static async Task TrySeedAsync(TenantDbContext dbContext, Guid? tenantId)
     {
-
-
-
         var productPages = await dbContext.Pages
-                       .Where(p => p.Type == PageTypeEnum.Product).ToListAsync();
+            .IgnoreQueryFilters()
+            .Where(p => p.TenantId == tenantId && p.Type == PageTypeEnum.Product)
+            .ToListAsync();
 
 
         Console.WriteLine("product page count:" + productPages.Count);
@@ -24,6 +23,7 @@ public static class SeedPages
             var list = new List<Page>();
             list.Add(new Page()
             {
+                TenantId = tenantId,
                 Type = PageTypeEnum.Product,
                 IsActive = true,
                 IsSystem = true,
@@ -31,11 +31,13 @@ public static class SeedPages
                 PublishedAt = DateTime.Now,
                 Translations = [
                     new PageTranslation(){
+                        TenantId = tenantId,
                         Culture = "fa-IR",
                         Title = "دسته بندی محصولات",
                         Description = "",
                     },
                     new PageTranslation(){
+                        TenantId = tenantId,
                         Culture = "en-US",
                         Title = "Category of products",
                         Description = "",
@@ -45,6 +47,7 @@ public static class SeedPages
 
             list.Add(new Page()
             {
+                TenantId = tenantId,
                 Type = PageTypeEnum.Product,
                 IsActive = true,
                 IsSystem = true,
@@ -52,11 +55,13 @@ public static class SeedPages
                 PublishedAt = DateTime.Now,
                 Translations = [
                 new PageTranslation(){
+                        TenantId = tenantId,
                         Culture = "fa-IR",
                         Title = "محصولات",
                         Description = "",
                     },
                     new PageTranslation(){
+                        TenantId = tenantId,
                         Culture = "en-US",
                         Title = "Products",
                         Description = "",
@@ -67,6 +72,7 @@ public static class SeedPages
 
             list.Add(new Page()
             {
+                TenantId = tenantId,
                 Type = PageTypeEnum.Product,
                 IsActive = true,
                 IsSystem = true,
@@ -74,11 +80,13 @@ public static class SeedPages
                 PublishedAt = DateTime.Now,
                 Translations = [
                 new PageTranslation(){
+                        TenantId = tenantId,
                         Culture = "fa-IR",
                         Title = "سبد خرید",
                         Description = "",
                     },
                     new PageTranslation(){
+                        TenantId = tenantId,
                         Culture = "en-US",
                         Title = "Cart",
                         Description = "",

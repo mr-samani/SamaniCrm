@@ -122,11 +122,11 @@ app.MapHub<ProvisioningHub>("/hubs/provisioning");
 
 
 
-//using (var scope = app.Services.CreateScope()) 
-//{
-//    var languageService = scope.ServiceProvider.GetRequiredService<ILanguageService>();
-//    await languageService.PreloadAllLocalizationsAsync(); 
-//}
+using (var scope = app.Services.CreateScope())
+{
+    var languageService = scope.ServiceProvider.GetRequiredService<ILanguageService>();
+    await languageService.PreloadAllLocalizationsAsync();
+}
 
 app.MapHub<NotificationHub>("/hubs/notifications");
 
