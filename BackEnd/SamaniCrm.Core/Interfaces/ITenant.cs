@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace SamaniCrm.Core.Shared.Interfaces.Tenant;
+namespace SamaniCrm.Core.Shared.Interfaces;
 
 public interface ITenant
 {

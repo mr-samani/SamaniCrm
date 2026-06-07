@@ -11,6 +11,7 @@ using SamaniCrm.Application.Features.Logging.Queries;
 using SamaniCrm.Application.Features.Tenants.Dtos;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Core.Shared.DTOs;
+using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Core.Shared.Logging;
 using SamaniCrm.Core.Shared.Logging.Dtos;
 using SamaniCrm.Domain.Entities;

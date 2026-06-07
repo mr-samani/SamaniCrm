@@ -37,9 +37,10 @@ public class GetExternalProvidersHandler : IRequestHandler<GetExternalProvidersQ
            {
                Id = p.Id,
                Name = p.Name,
+               ClientSecret = p.ClientSecret,
                DisplayName = p.DisplayName,
                ProviderType = p.ProviderType,
-               AuthorizationEndpoint = p.AuthorizationEndpoint,
+               TokenEndpoint = p.AuthorizationEndpoint,
                ClientId = p.ClientId != null ? p.ClientId : _secretStore.GetSecret(p.Name + ":ClientId"),
                Scopes = p.Scopes,
                ResponseType = p.ResponseType,

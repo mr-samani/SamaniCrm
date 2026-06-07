@@ -32,6 +32,7 @@ public class LoggingServiceDecorator<TInterface, TImplementation> : DispatchProx
         if (innerField == null || logServiceField == null)
             throw new InvalidOperationException("Proxy fields not found");
 
+
         innerField.SetValue(proxy, inner);
         logServiceField.SetValue(proxy, logService);
 

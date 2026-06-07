@@ -4,8 +4,11 @@ using Microsoft.Extensions.Logging;
 using NetTools;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Core.Shared.Enums;
+using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Core.Shared.Interfaces.Tenant;
+using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.Services.TenantService;
+using SamaniCrm.Infrastructure.TenantManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,11 +95,6 @@ public class TenantResolverMiddleware
         {
 
             var connectionStr = tenantDatabaseService.GetConnectionString(tenant.Id);
-
-
-            // Set current tenant
-            currentTenant.SetTenant(tenant.Id, tenant.Slug, tenant.Name, connectionStr ?? "");
-
             // Add tenant info to response headers (for debugging)
             context.Response.OnStarting(() =>
             {
@@ -104,11 +102,16 @@ public class TenantResolverMiddleware
                 context.Response.Headers["X-Tenant-Slug"] = tenant.Slug;
                 return Task.CompletedTask;
             });
+
+            using (currentTenant.Change(tenant.Id, tenant.Slug, tenant.Name, connectionStr ?? ""))
+            {
+                await _next(context);
+            }
         }
-
-
-
-        await _next(context);
+        else
+        {
+            await _next(context);
+        }
     }
 
     private async Task<TenantRsolverDto?> ResolveFromSubdomainAsync(

@@ -4,21 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamaniCrm.Application.Common.Interfaces
+namespace SamaniCrm.Application.Common.Interfaces;
+
+public interface ICurrentUserService
 {
-    public interface ICurrentUserService
-    {
-        Guid? UserId { get; }
-        Guid? TenantId { get; }
-        string? UserName { get; }
-        string Lang { get; }
+    Guid? UserId { get; }
+    Guid? TenantId { get; }
+    string? UserName { get; }
+    string Lang { get; }
 
-        bool IsDelegated { get; }
-        Guid? DelegatorId { get; }
-        bool IsAuthenticated { get; }
-        bool IsHost { get; }
+    bool IsDelegated { get; }
+    Guid? DelegatorId { get; }
+    bool IsAuthenticated { get; }
+    bool IsHost { get; }
 
-        bool IsTenantAdmin {  get; }
+    bool IsTenantAdmin {  get; }
 
-    }
 }

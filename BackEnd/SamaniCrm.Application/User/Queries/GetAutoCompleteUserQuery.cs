@@ -31,7 +31,7 @@ public class GetAutoCompleteUserQueryHandler : IRequestHandler<GetAutoCompleteUs
     public async Task<List<AutoCompleteDto<Guid>>> Handle(GetAutoCompleteUserQuery request, CancellationToken cancellationToken)
     {
 
-        return await _identityService.GetAutoCompleteUsers(request.Filter, cancellationToken);
+        return await _identityService.GetAutoCompleteUsersAsync(request.Filter, cancellationToken);
 
     }
 }

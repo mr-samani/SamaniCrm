@@ -6,6 +6,7 @@ using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Core.Shared.DTOs;
 using SamaniCrm.Core.Shared.Enums;
+using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Entities;
 using System.Security.Cryptography;
 using System.Text.Json;
@@ -64,7 +65,6 @@ public class CreateTenantJobService : ICreateTenantJobService
         }
 
         string tenantConnectionString = _tenantDatabaseService.GetConnectionString(tenant.Id)!;
-        _currentTenant.SetTenant(tenant.Id, tenant.Slug, tenant.Name, tenantConnectionString);
 
         if (tenant.ProvisioningStatus == ProvisioningStatus.InProgress)
         {

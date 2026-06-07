@@ -37,7 +37,7 @@ namespace SamaniCrm.Application.User.Queries
             }
             var currentUserId = (Guid)_currentUser.UserId;
 
-            var result = await _identityService.GetUserDetailsAsync(currentUserId);
+            var result = await _identityService.GetUserDetailsAsync(currentUserId, cancellationToken);
 
             if (result == null)
             {

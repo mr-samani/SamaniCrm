@@ -16,6 +16,6 @@ public class ExitDelegationCommandHandler : IRequestHandler<ExitDelegationComman
 
     public async Task Handle(ExitDelegationCommand request, CancellationToken cancellationToken)
     {
-        await _identityService.ExitDelegation(cancellationToken);
+        await _identityService.ExitDelegationAsync(cancellationToken);
     }
 }

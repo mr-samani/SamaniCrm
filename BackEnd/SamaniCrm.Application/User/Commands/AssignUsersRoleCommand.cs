@@ -24,7 +24,7 @@ namespace SamaniCrm.Application.User.Commands
         }
         public async Task<int> Handle(AssignUsersRoleCommand request, CancellationToken cancellationToken)
         {
-            var result = await _identityService.AssignUserToRole(request.UserName, request.Roles);
+            var result = await _identityService.AssigRolesToUser(request.UserName, request.Roles);
             return result ? 1 : 0;
         }
     }

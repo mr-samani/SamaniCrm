@@ -194,9 +194,4 @@ public class ExternalLoginService : IExternalLoginService
         return Convert.FromBase64String(output);
     }
 
-    private void getGitHubUserData()
-    {
-
-    }
-
 }

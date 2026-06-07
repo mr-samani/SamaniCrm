@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, map, Observable, of } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Buffer } from 'buffer';
 import { LanguageService } from './language.service';
 import { AppConst } from '@shared/app-const';
@@ -10,8 +10,6 @@ import { UserDTO } from '@shared/service-proxies/model/user-dto';
 import { AccountServiceProxy } from '@shared/service-proxies/api/account.service';
 import { UserServiceProxy } from '@shared/service-proxies/api/user.service';
 import { LoginCommand } from '@shared/service-proxies/model/login-command';
-import { ApiResponseOfLoginResult } from '@shared/service-proxies/model/api-response-of-login-result';
-import { LoginResult } from '@shared/service-proxies/model/login-result';
 import { TwoFactorLoginCommand } from '@shared/service-proxies/model/two-factor-login-command';
 import { ExternalLoginCallbackCommand } from '@shared/service-proxies/model/external-login-callback-command';
 import { isNullOrEmpty } from '@shared/helper/null-or-empty';
@@ -46,11 +44,6 @@ export class AuthService {
   login(input: LoginCommand) {
     return this.accountService.login(input).pipe(
       map((response) => {
-        if (response.success && response.data) {
-          this.userRoles = response.data.roles ?? [];
-          this.userPermissions = response.data.permissions ?? [];
-          this.currentUserSubject.next(response.data.user);
-        }
         return response;
       }),
     );

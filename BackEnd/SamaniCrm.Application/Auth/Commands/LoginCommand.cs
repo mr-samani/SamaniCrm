@@ -13,7 +13,7 @@ public class LoginCommand : IRequest<LoginResult>
 
     public InputCaptchaDTO? captcha { get; set; }
 
-    public string? Tenant { get; set; } = null;
+    public string? TenancyName { get; set; } = null;
 
     public bool RememberMe { get; set; }
 
@@ -42,7 +42,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult>
     public async Task<LoginResult> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         var securitySettings = await _securitySettingService.GetSettingsAsync(cancellationToken);
-        if (securitySettings.RequireCaptchaOnLogin)
+        if (securitySettings != null && securitySettings.RequireCaptchaOnLogin)
         {
             if (request.captcha == null || string.IsNullOrEmpty(request.captcha.CaptchaKey) || string.IsNullOrEmpty(request.captcha.CaptchaText))
             {
@@ -54,7 +54,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResult>
                 throw new InvalidCaptchaException();
             }
         }
-        var output = await _identityService.LoginInAsync(request, cancellationToken);
+        var output = await _identityService.LoginAsync(request, cancellationToken);
         await _mediator.Publish(
             new UserLogedInEvent(output.User.Id, output.User.UserName, output.User.TenantId,
             $"User: {output.User.FullName} loged in successfully."),

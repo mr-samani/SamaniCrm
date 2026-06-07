@@ -1,7 +1,7 @@
 /**
  * Auto-generated file - Do not edit manually
  * Generated from: AppPermissions.cs
- * Generated at: 2026-06-02T11:47:06.941Z
+ * Generated at: 2026-06-07T06:54:58.444Z
  */
 
 export class AppPermissions {

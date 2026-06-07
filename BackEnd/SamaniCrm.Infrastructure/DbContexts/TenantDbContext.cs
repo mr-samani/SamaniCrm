@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
+using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Attributes;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Domain.Entities.Subscription;

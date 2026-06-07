@@ -26,7 +26,7 @@ public class DelegateUserCommandHandler : IRequestHandler<DelegateUserCommand, L
 
     public async Task<LoginResult> Handle(DelegateUserCommand request, CancellationToken cancellationToken)
     {
-        var result= await _identityService.DelegateUser(request, cancellationToken);
+        var result= await _identityService.DelegateUserAsync(request, cancellationToken);
         return result;
     }
 }

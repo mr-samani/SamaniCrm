@@ -18,7 +18,7 @@ namespace SamaniCrm.Application.Role.Commands
     {
         private readonly IIdentityService _identityService;
 
-        public EditRolePermissionsCommandHandler(IIdentityService identityService)
+        public EditRolePermissionsCommandHandler( IIdentityService   identityService)
         {
             _identityService = identityService;
         }

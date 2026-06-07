@@ -30,7 +30,7 @@ namespace SamaniCrm.Application.User.Commands
         }
         public async Task<bool> Handle(EditUserCommand request, CancellationToken cancellationToken)
         {
-            var result = await _identityService.UpdateUser(request);
+            var result = await _identityService.UpdateUserAsync(request, cancellationToken);
             return result;
         }
     }

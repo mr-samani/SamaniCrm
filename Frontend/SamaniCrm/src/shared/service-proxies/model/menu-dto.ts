@@ -16,6 +16,7 @@ import { MenuTargetEnum } from './menu-target-enum';
 /** Interface for MenuDTO */
 export interface IMenuDTO {
   id?: string;
+  name: string;
   title?: string;
   icon?: string;
   url?: string;
@@ -31,6 +32,7 @@ export interface IMenuDTO {
 /** Class for MenuDTO */
 export class MenuDTO implements IMenuDTO {
   id?: string;
+  name!: string;
   title?: string;
   icon?: string;
   url?: string;
@@ -54,6 +56,7 @@ export class MenuDTO implements IMenuDTO {
 init(data?: any) {
   if (data) {
     this.id = data["id"];
+    this.name = data["name"];
     this.title = data["title"];
     this.icon = data["icon"];
     this.url = data["url"];

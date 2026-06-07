@@ -23,7 +23,7 @@ public class TwoFactorLoginCommandHandler : IRequestHandler<TwoFactorLoginComman
 
     public async Task<LoginResult> Handle(TwoFactorLoginCommand request, CancellationToken cancellationToken)
     {
-        var output = await _identityService.TwofactorSignInAsync(request, cancellationToken);
+        var output = await _identityService.TwoFactorLoginAsync(request, cancellationToken);
         return output;
 
     }

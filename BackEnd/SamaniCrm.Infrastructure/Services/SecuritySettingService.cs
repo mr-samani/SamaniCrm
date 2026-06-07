@@ -26,7 +26,7 @@ namespace SamaniCrm.Infrastructure.Services
             _currentUser = currentUser;
         }
 
-        public async Task<SecuritySettingDto> GetSettingsAsync(CancellationToken cancellationToken)
+        public async Task<SecuritySettingDto?> GetSettingsAsync(CancellationToken cancellationToken)
         {
             SecuritySettingDto? data = await _cacheService.GetAsync<SecuritySettingDto>(CacheKeys.SecuritySettings);
             if (data == null)

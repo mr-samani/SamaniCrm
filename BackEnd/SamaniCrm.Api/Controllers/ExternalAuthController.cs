@@ -139,7 +139,7 @@ public class ExternalAuthController : ApiBaseController
             var codeVerifier = HttpContext.Session.GetString("pkce_code_verifier");
 
             var req = new ExternalLoginCallbackCommand(code, providerName, tenancyName, codeVerifier);
-            var loginResult = await _identityService.ExternalSignInAsync(req, cancellationToken);
+            var loginResult = await _identityService.ExternalLoginAsync(req, cancellationToken);
 
             if (loginResult == null)
             {

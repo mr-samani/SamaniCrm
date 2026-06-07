@@ -11,6 +11,7 @@ using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Queries;
 using SamaniCrm.Application.User.Commands;
 using SamaniCrm.Core.Shared.Consts;
+using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Interfaces;
 using SamaniCrm.Host.Models;
 

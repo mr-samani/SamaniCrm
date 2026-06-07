@@ -6,10 +6,14 @@ public class ExternalProviderDto
 {
     public Guid Id { get; set; }
     public required string Name { get; set; } // "Google", "MyCorpOIDC"
+    public required string TokenEndpoint { get; set; }
+    public required string ClientSecret { get; set; }
+
+
+
     public string DisplayName { get; set; } = default!; // "Google Login"
     public required ExternalProviderTypeEnum ProviderType { get; set; } // "OpenIdConnect" | "OAuth2"
 
-    public required string AuthorizationEndpoint { get; set; }
     public required string ClientId { get; set; }
     public required string Scopes { get; set; }
 

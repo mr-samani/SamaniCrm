@@ -27,7 +27,7 @@ namespace SamaniCrm.Application.Queries.Role
         }
         public async Task<IList<RoleDTO>> Handle(GetRoleQuery request, CancellationToken cancellationToken)
         {
-            var roles = await _identityService.GetRolesAsync();
+            var roles = await _identityService.GetAllRolesAsync(cancellationToken);
             var query= roles.Select(role => new RoleDTO()
             {
                 Id = role.id,

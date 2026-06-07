@@ -11,6 +11,7 @@ using SamaniCrm.Core.Shared.Interfaces.Tenant;
 using SamaniCrm.Infrastructure.BackgroundServices;
 using SamaniCrm.Infrastructure.Captcha;
 using SamaniCrm.Infrastructure.Connections;
+using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Infrastructure.Email;
 using SamaniCrm.Infrastructure.ExternalLogin;
 using SamaniCrm.Infrastructure.Identity;
@@ -23,6 +24,7 @@ using SamaniCrm.Infrastructure.Services.Product;
 using SamaniCrm.Infrastructure.Services.TenantService;
 using SamaniCrm.Infrastructure.Storage;
 using SamaniCrm.Infrastructure.SubscriptionManager;
+using SamaniCrm.Infrastructure.TenantManager;
 
 namespace SamaniCrm.Api.Extensions;
 
@@ -46,12 +48,16 @@ public static partial class ServiceCollectionExtensions
 
 
 
+        services.AddScoped<IHostIdentityService, HostIdentityService>();
+        services.AddScoped<IIdentityService, IdentityService>();
+
+
+
         services.AddTransient<IEmailSender<ApplicationUser>, MyEmailSender>();
         services.AddScoped<ITwoFactorService, TwoFactorService>();
         services.AddScoped<IExternalLoginService, ExternalLoginService>();
 
 
-        services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IRolePermissionService, RolePermissionService>();
 
         services.AddScoped<ILanguageService, LanguageService>();
@@ -84,13 +90,12 @@ public static partial class ServiceCollectionExtensions
         services.AddScoped<INotificationService, NotificationService>();
 
         // Multi-Tenancy
-        services.AddScoped<ICurrentTenant, CurrentTenant>();
         services.AddScoped<ITenantResolver, TenantResolver>();
-        // services.AddSingleton<IUserIdProvider, TenantUserIdProvider>();
         services.AddScoped<ITenantRepository, TenantRepository>();
         services.AddScoped<ITenantService, TenantService>();
 
 
+        services.AddScoped<TenantConnectionInterceptor>();
 
         services.AddScoped<ITenantProvisioningService, TenantProvisioningService>();
         services.AddScoped<ITenantDatabaseService, TenantDatabaseService>();

@@ -186,7 +186,7 @@ public static class CommandManager
 
         Console.WriteLine();
     }
-    private static string GetCommand(string[] args)
+    private static string? GetCommand(string[] args)
     {
         // اگه آرگومان خط فرمان داده شده، استفاده کن
         if (args.Length > 0)

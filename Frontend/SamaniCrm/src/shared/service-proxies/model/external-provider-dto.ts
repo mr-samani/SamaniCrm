@@ -16,9 +16,10 @@ import { ExternalProviderTypeEnum } from './external-provider-type-enum';
 export interface IExternalProviderDto {
   id?: string;
   name: string;
+  tokenEndpoint: string;
+  clientSecret: string;
   displayName?: string;
   providerType: ExternalProviderTypeEnum;
-  authorizationEndpoint: string;
   clientId: string;
   scopes: string;
   isActive?: boolean;
@@ -31,9 +32,10 @@ export interface IExternalProviderDto {
 export class ExternalProviderDto implements IExternalProviderDto {
   id?: string;
   name!: string;
+  tokenEndpoint!: string;
+  clientSecret!: string;
   displayName?: string;
   providerType!: ExternalProviderTypeEnum;
-  authorizationEndpoint!: string;
   clientId!: string;
   scopes!: string;
   isActive?: boolean;
@@ -54,9 +56,10 @@ init(data?: any) {
   if (data) {
     this.id = data["id"];
     this.name = data["name"];
+    this.tokenEndpoint = data["tokenEndpoint"];
+    this.clientSecret = data["clientSecret"];
     this.displayName = data["displayName"];
     this.providerType = data["providerType"];
-    this.authorizationEndpoint = data["authorizationEndpoint"];
     this.clientId = data["clientId"];
     this.scopes = data["scopes"];
     this.isActive = data["isActive"];

@@ -24,7 +24,7 @@ namespace SamaniCrm.Application.Queries.User
         }
         public async Task<UserDTO> Handle(GetUserDetailsQuery request, CancellationToken cancellationToken)
         {
-            var result = await _identityService.GetUserDetailsAsync(request.UserId);
+            var result = await _identityService.GetUserDetailsAsync(request.UserId, cancellationToken);
             return new UserDTO()
             {
                 Id = result.Id,

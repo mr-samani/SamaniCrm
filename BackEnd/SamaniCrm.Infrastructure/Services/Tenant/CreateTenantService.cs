@@ -21,29 +21,22 @@ namespace SamaniCrm.Infrastructure.Services.TenantService;
 public class TenantService : ITenantService
 {
     private readonly IMasterDbContext _masterDbContext;
-    private readonly IApplicationDbContext _dbContext;
     private readonly ICurrentUserService _currentUser;
     private readonly ILogger<CreateTenantCommandHandler> _logger;
-    private readonly IRecurringJobManagerV2 _JobManagerV2;
-    private readonly IIdentityService _identityService;
 
-
-    public TenantService(IApplicationDbContext dbContext,
-        ITenantProvisioningService provisioningService,
+    public TenantService(
+        IMasterDbContext masterDbContext,
         ICurrentUserService currentUser,
-        ITenantNotificationService notificationService,
-        ILogger<CreateTenantCommandHandler> logger,
-        IRecurringJobManagerV2 recurringJobManagerV2,
-        IIdentityService identityService,
-        IMasterDbContext masterDbContext)
+        ILogger<CreateTenantCommandHandler> logger)
     {
-        _dbContext = dbContext;
+        _masterDbContext = masterDbContext;
         _currentUser = currentUser;
         _logger = logger;
-        _JobManagerV2 = recurringJobManagerV2;
-        _identityService = identityService;
-        _masterDbContext = masterDbContext;
     }
+
+
+
+
 
 
 

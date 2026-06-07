@@ -1,15 +1,9 @@
-﻿using AutoMapper.Internal;
-using Azure.Core;
-using Hangfire;
-using MediatR;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.Extensions.DependencyInjection;
 using SamaniCrm.Application.Auth.Commands;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.Common.Exceptions;
@@ -20,205 +14,142 @@ using SamaniCrm.Application.Queries.User;
 using SamaniCrm.Application.Role.Commands;
 using SamaniCrm.Application.User.Commands;
 using SamaniCrm.Core;
-using SamaniCrm.Core.Shared.Consts;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Infrastructure.ExternalLogin;
 using SamaniCrm.Infrastructure.Identity;
-using StackExchange.Redis;
+using SamaniCrm.Infrastructure.TenantManager;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq.Dynamic.Core;
-using System.Runtime.Intrinsics.Arm;
 using System.Security.Claims;
-using static QRCoder.PayloadGenerator;
 using UnauthorizedAccessException = SamaniCrm.Application.Common.Exceptions.UnauthorizedAccessException;
 
 
 namespace SamaniCrm.Infrastructure.Services;
 
-public class IdentityService : IIdentityService
+public sealed class IdentityService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
-    private readonly IApplicationDbContext _dbContext;
+    private readonly TenantDbContext _dbContext;
     private readonly MasterDbContext _masterDbContext;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IUserPermissionService _userPermissionService;
     private readonly ISecuritySettingService _securitySettingService;
     private readonly ITwoFactorService _twoFactorService;
-    private readonly HttpClient _httpClient;
+    private readonly IExternalLoginService _externalLoginService;
     private readonly ISecretStore _secretStore;
     private readonly IConfiguration _config;
-    private readonly IExternalLoginService _externalLoginService;
     private readonly ICurrentUserService _currentUser;
+    private readonly ICurrentTenant _currentTenant;
+    private readonly IHostIdentityService _hostIdentityService;
+    private readonly ITenantDbContextFactory _tenantDbContextFactory;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
 
     public IdentityService(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         RoleManager<ApplicationRole> roleManager,
-        IApplicationDbContext applicationDbContext,
+        TenantDbContext dbContext,
+        MasterDbContext masterDbContext,
         IHttpContextAccessor httpContextAccessor,
         IUserPermissionService userPermissionService,
         ISecuritySettingService securitySettingService,
         ITwoFactorService twoFactorService,
-        HttpClient httpClient,
+        IExternalLoginService externalLoginService,
         ISecretStore secretStore,
         IConfiguration config,
-        IExternalLoginService externalLoginService,
         ICurrentUserService currentUser,
-        MasterDbContext masterDbContext)
+        IHostIdentityService hostIdentityService,
+        ITenantDbContextFactory tenantDbContextFactory,
+        IServiceScopeFactory serviceScopeFactory,
+        ICurrentTenant currentTenant)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
-        _dbContext = applicationDbContext;
+        _dbContext = dbContext;
+        _masterDbContext = masterDbContext;
         _httpContextAccessor = httpContextAccessor;
         _userPermissionService = userPermissionService;
         _securitySettingService = securitySettingService;
         _twoFactorService = twoFactorService;
-        _httpClient = httpClient;
+        _externalLoginService = externalLoginService;
         _secretStore = secretStore;
         _config = config;
-        _externalLoginService = externalLoginService;
         _currentUser = currentUser;
-        _masterDbContext = masterDbContext;
+        _hostIdentityService = hostIdentityService;
+        _tenantDbContextFactory = tenantDbContextFactory;
+        _serviceScopeFactory = serviceScopeFactory;
+        _currentTenant = currentTenant;
     }
 
 
 
-    public async Task<SimpleTenantData?> GetTenantByTenancyName(string? tenancyName, CancellationToken cancellation)
+    public async Task<List<(Guid id, string roleName)>> GetAllRolesAsync(CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(tenancyName))
+        var roles = await _roleManager.Roles.Select(x => new
         {
-            return null;
-        }
-        var tenant = await _masterDbContext.Tenants
+            x.Id,
+            x.Name
+        }).ToListAsync();
+
+        return roles.Select(role => (role.Id, role.Name!)).ToList();
+    }
+
+    public async Task<List<string>> GetUserRolesByUserNameAsync(string userName, Guid? tenantId, CancellationToken cancellationToken)
+    {
+        var user = await FindUserByUserNameAsync(userName, tenantId, cancellationToken);
+        if (user is null)
+            return [];
+
+        return (await _userManager.GetRolesAsync(user)).ToList();
+    }
+
+    public async Task<UserDTO> GetUserDetailsAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        var user = await FindUserByIdAsync(userId, cancellationToken);
+        if (user is null)
+            throw new NotFoundException("User not found");
+
+        var roles = await _userManager.GetRolesAsync(user);
+
+        return MapUser(user, roles.ToList());
+    }
+
+    public async Task<UserDTO> GetUserDetailsByUserNameAsync(string userName, Guid? tenantId, CancellationToken cancellationToken)
+    {
+        var user = await FindUserByUserNameAsync(userName, tenantId, cancellationToken);
+        if (user is null)
+            throw new NotFoundException("User not found");
+
+        var roles = await _userManager.GetRolesAsync(user);
+
+        return MapUser(user, roles.ToList());
+    }
+
+    public async Task<bool> IsUniqueUserNameAsync(string userName, CancellationToken cancellationToken)
+    {
+        return await _userManager.Users
             .IgnoreQueryFilters()
-            .Where(x => x.Slug == tenancyName && x.Status == TenantStatus.Active)
-            .Select(s => new SimpleTenantData()
-            {
-                Id = s.Id,
-                TenancyName = s.Slug,
-                TenantName = s.Name,
-                Status = s.Status
-            })
-            .AsNoTracking()
-            .FirstOrDefaultAsync(cancellation);
-        return tenant;
-    }
-    public async Task<SimpleTenantData?> GetTenantById(Guid tenantId, CancellationToken cancellation)
-    {
-        var tenant = await _masterDbContext.Tenants
-             .IgnoreQueryFilters()
-             .Where(x => x.Id == tenantId && x.Status == TenantStatus.Active)
-             .Select(s => new SimpleTenantData()
-             {
-                 Id = s.Id,
-                 TenancyName = s.Slug,
-                 TenantName = s.Name,
-                 Status = s.Status
-             })
-            .AsNoTracking()
-            .FirstOrDefaultAsync(cancellation);
-        return tenant;
+            .AllAsync(x => x.UserName != userName, cancellationToken);
     }
 
-
-    public async Task<bool> AssignUserToRole(string userName, IList<string> roles)
+    public async Task<bool> IsInRoleAsync(Guid userId, string role, CancellationToken cancellationToken)
     {
-        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == userName);
-        if (user == null)
-        {
+        var user = await FindUserByIdAsync(userId, cancellationToken);
+        if (user is null)
             throw new NotFoundException("User not found");
-        }
 
-        var result = await _userManager.AddToRolesAsync(user, roles);
-        return result.Succeeded;
-    }
-
-    public async Task<bool> CreateRoleAsync(string roleName)
-    {
-        var result = await _roleManager.CreateAsync(new ApplicationRole(roleName));
-        if (!result.Succeeded)
-        {
-            throw new CustomValidationException(result.Errors);
-        }
-        return result.Succeeded;
+        return await _userManager.IsInRoleAsync(user, role);
     }
 
 
-    // Return multiple value
-    public async Task<(bool isSucceed, Guid userId)> CreateUserAsync(CreateUserCommand input)
-    {
-        var user = new ApplicationUser()
-        {
-            TenantId = input.TenantId,
-            FirstName = input.FirstName,
-            LastName = input.LastName,
-            FullName = input.FirstName + " " + input.LastName,
-            UserName = input.UserName,
-            Email = input.Email,
-            PhoneNumber = input.PhoneNumber,
-            Lang = input.Lang,
-            Address = input.Address,
-        };
 
-        var result = await _userManager.CreateAsync(user, input.Password);
-
-        if (!result.Succeeded)
-        {
-            throw new CustomValidationException(result.Errors);
-        }
-
-        var addUserRole = await _userManager.AddToRolesAsync(user, input.Roles);
-        if (!addUserRole.Succeeded)
-        {
-            throw new CustomValidationException(addUserRole.Errors);
-        }
-        return (result.Succeeded, user.Id);
-    }
-
-    public async Task<bool> DeleteRoleAsync(Guid roleId)
-    {
-        var roleDetails = await _roleManager.FindByIdAsync(roleId.ToString());
-        if (roleDetails == null)
-        {
-            throw new NotFoundException("Role not found");
-        }
-
-        if (roleDetails.Name == "Administrator")
-        {
-            throw new BadRequestException("You can not delete Administrator Role");
-        }
-        var result = await _roleManager.DeleteAsync(roleDetails);
-        if (!result.Succeeded)
-        {
-            throw new CustomValidationException(result.Errors);
-        }
-        return result.Succeeded;
-    }
-
-    public async Task<bool> DeleteUserAsync(Guid userId)
-    {
-        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
-        if (user == null)
-        {
-            throw new NotFoundException("User not found");
-            //throw new Exception("User not found");
-        }
-
-        if (user.UserName == "system" || user.UserName == "admin")
-        {
-            throw new Exception("You can not delete system or admin user");
-            //throw new BadRequestException("You can not delete system or admin user");
-        }
-        var result = await _userManager.DeleteAsync(user);
-        return result.Succeeded;
-    }
 
     public async Task<PaginatedResult<UserDTO>> GetAllUsersAsync(GetUserQuery request, CancellationToken cancellationToken)
     {
@@ -288,223 +219,43 @@ public class IdentityService : IIdentityService
         };
     }
 
-    public async Task<PaginatedResult<TenantUserDTO>> GetTenantUsersAsync(GetTenantUsersQuery request, CancellationToken cancellationToken)
+    public async Task<(bool isSucceed, Guid userId)> CreateUserAsync(CreateUserCommand input, CancellationToken cancellationToken)
     {
-        IQueryable<ApplicationUser> query = _userManager.Users
-            .Include(c => c.Roles)
-            .Where(x => x.IsDeleted == false && x.TenantId == request.TenantId)
-            .IgnoreQueryFilters()
-            .AsQueryable();
-        if (!string.IsNullOrEmpty(request.Filter))
+        var user = new ApplicationUser()
         {
-            query = query.Where(x =>
-            x.UserName!.Contains(request.Filter) ||
-            x.FirstName!.Contains(request.Filter) ||
-            x.LastName.Contains(request.Filter) ||
-            x.Email!.Contains(request.Filter) ||
-            x.PhoneNumber!.Contains(request.Filter)
-            );
-        }
-
-        // Sorting
-        if (!string.IsNullOrEmpty(request.SortBy))
-        {
-            var sortString = $"{request.SortBy} {request.SortDirection}";
-            query = query.OrderBy(sortString);
-        }
-
-        int total = await query.CountAsync(cancellationToken);
-
-        var users = await query.OrderBy(x => x.CreatedAt)
-            .Skip(request.PageSize * (request.PageNumber - 1))
-            .Take(request.PageSize)
-            .Select(u => new TenantUserDTO
-            {
-                Id = u.Id,
-                UserName = u.UserName ?? "",
-                FullName = u.FullName ?? "",
-                Email = u.Email ?? "",
-                Roles = u.Roles.Select(s => s.Name).ToList()
-            })
-            .ToListAsync(cancellationToken);
-
-
-        return new PaginatedResult<TenantUserDTO>
-        {
-            Items = users,
-            TotalCount = total,
-            PageNumber = request.PageNumber,
-            PageSize = request.PageSize
+            TenantId = input.TenantId,
+            FirstName = input.FirstName,
+            LastName = input.LastName,
+            FullName = input.FirstName + " " + input.LastName,
+            UserName = input.UserName,
+            Email = input.Email,
+            PhoneNumber = input.PhoneNumber,
+            Lang = input.Lang,
+            Address = input.Address,
         };
-    }
 
-
-    public async Task<List<(Guid id, string roleName)>> GetRolesAsync()
-    {
-        var roles = await _roleManager.Roles.Select(x => new
-        {
-            x.Id,
-            x.Name
-        }).ToListAsync();
-
-        return roles.Select(role => (role.Id, role.Name!)).ToList();
-    }
-
-    public async Task<UserDTO> GetUserDetailsAsync(Guid userId)
-    {
-        var query = _userManager.Users.Where(x => x.Id == userId);
-        // var sql = query.ToQueryString();
-        var user = await query.FirstOrDefaultAsync();
-        if (user == null)
-        {
-            throw new NotFoundException("User not found");
-        }
-        var roles = await _userManager.GetRolesAsync(user);
-        return (new UserDTO()
-        {
-            Id = user.Id,
-            TenantId = user.TenantId,
-            UserName = user.UserName ?? "",
-            FirstName = user.FirstName ?? "",
-            LastName = user.LastName ?? "",
-            FullName = user.FullName ?? "",
-            Lang = user.Lang,
-            Email = user.Email ?? "",
-            ProfilePicture = user.ProfilePicture ?? "",
-            Address = user.Address ?? "",
-            PhoneNumber = user.PhoneNumber ?? "",
-            CreationTime = user.CreatedAt,
-            Roles = roles.ToList(),
-
-            IsDelegated = _currentUser.IsDelegated,
-            DelegatorId = _currentUser.DelegatorId
-        });
-    }
-
-    public async Task<UserDTO> GetUserDetailsByUserNameAsync(string userName, Guid? tenantId)
-    {
-        var user = await _userManager.Users
-            .IgnoreQueryFilters()
-            .FirstOrDefaultAsync(x => x.UserName == userName && x.TenantId == tenantId && !x.IsDeleted);
-        if (user == null)
-        {
-            throw new NotFoundException("User not found");
-        }
-        var roles = await _userManager.GetRolesAsync(user);
-        return (new UserDTO()
-        {
-            Id = user.Id,
-            TenantId = user.TenantId,
-            UserName = user.UserName ?? "",
-            FirstName = user.FirstName ?? "",
-            LastName = user.LastName ?? "",
-            FullName = user.FullName ?? "",
-            Lang = user.Lang,
-            Email = user.Email ?? "",
-            ProfilePicture = user.ProfilePicture ?? "",
-            Address = user.Address ?? "",
-            PhoneNumber = user.PhoneNumber ?? "",
-            CreationTime = user.CreatedAt,
-            Roles = roles.ToList()
-        });
-    }
-
-    public async Task<string> GetUserIdAsync(string userName)
-    {
-        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == userName);
-        if (user == null)
-        {
-            throw new NotFoundException("User not found");
-            //throw new Exception("User not found");
-        }
-        return await _userManager.GetUserIdAsync(user);
-    }
-
-    public async Task<string> GetUserNameAsync(Guid userId)
-    {
-        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
-        if (user == null)
-        {
-            throw new NotFoundException("User not found");
-            //throw new Exception("User not found");
-        }
-        return await _userManager.GetUserNameAsync(user) ?? "";
-    }
-
-    public async Task<List<string>> GetUserRolesAsync(Guid userId)
-    {
-        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
-        if (user == null)
-        {
-            throw new NotFoundException("User not found");
-        }
-        var roles = await _userManager.GetRolesAsync(user);
-        return roles.ToList();
-    }
-
-    public async Task<bool> IsInRoleAsync(Guid userId, string role)
-    {
-        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
-
-        if (user == null)
-        {
-            throw new NotFoundException("User not found");
-        }
-        return await _userManager.IsInRoleAsync(user, role);
-    }
-
-    public async Task<bool> IsUniqueUserName(string userName)
-    {
-        return await _userManager.Users.Where(x => x.UserName == userName).FirstOrDefaultAsync() == null;
-    }
-
-    private async Task<bool> SigninUserAsync(string userName, string password, Guid? tenantId)
-    {
-        var user = await _userManager.Users
-            .IgnoreQueryFilters()
-            .FirstOrDefaultAsync(x => x.UserName == userName && x.TenantId == tenantId && !x.IsDeleted);
-        if (user == null)
-        {
-            return false;
-        }
-
-        var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
+        var result = await _userManager.CreateAsync(user, input.Password);
 
         if (!result.Succeeded)
-            return false;
-
-        // await _signInManager.SignInAsync(user, isPersistent: true);
-        // وقتی از کوکی استفااده می کنیم باید دستی کلیم ها ای اضافی را ست کنیم - فقط idenity claim های پیش فرض را دارد 
-        // وقتی از توکن استفاده میکنیم کلیم ها در profileService ست می شوند
-        // default claims:
-        // sub,  email,  AspNet.Identity.SecurityStamp,role,preferred_username,name,email_verified,phone_number,phone_number_verified,idp,amr,auth_time,
-
-        var claims = new List<Claim>
         {
-            new("lang", user.Lang),
-        };
-        if (user.TenantId.HasValue)
-        {
-            claims.Add(new Claim("tenant_id", user.TenantId.Value.ToString()));
+            throw new CustomValidationException(result.Errors);
         }
-        var roles = await _userManager.GetRolesAsync(user);
 
-        claims.AddRange(roles.Select(x => new Claim(ClaimTypes.Role, x)));
-
-        await _signInManager.SignInWithClaimsAsync(user, true, claims);
-
-        // چون بهره بردار دارم نمیتونم از روش زیر استفاده کنم به خاطر گلوبال فیلتر
-        //  var result = await _signInManager.PasswordSignInAsync(userName, password, true, false);
-        return true;
-
-
+        var addUserRole = await _userManager.AddToRolesAsync(user, input.Roles);
+        if (!addUserRole.Succeeded)
+        {
+            throw new CustomValidationException(addUserRole.Errors);
+        }
+        return (result.Succeeded, user.Id);
     }
-
-    public async Task<bool> UpdateUser(EditUserCommand input)
+    public async Task<bool> UpdateUserAsync(EditUserCommand input, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByIdAsync(input.Id.ToString());
-        if (user == null)
-            return false;
+        var user = await _userManager.Users
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x => x.Id == input.Id && !x.IsDeleted, cancellationToken);
+
+        if (user is null)
+            throw new NotFoundException("User not found");
 
         user.FirstName = input.FirstName;
         user.LastName = input.LastName;
@@ -518,46 +269,20 @@ public class IdentityService : IIdentityService
         if (!updateResult.Succeeded)
             throw new CustomValidationException(updateResult.Errors);
 
-        // دریافت رول های فعلی
         var currentRoles = await _userManager.GetRolesAsync(user);
-
-        // حذف رول های قبلی
         var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
         if (!removeResult.Succeeded)
             throw new CustomValidationException(removeResult.Errors);
 
-        // اضافه کردن رول های جدید
         var addResult = await _userManager.AddToRolesAsync(user, input.Roles);
         if (!addResult.Succeeded)
             throw new CustomValidationException(addResult.Errors);
 
         return true;
     }
-
-    public async Task<(Guid id, string roleName)> GetRoleByIdAsync(Guid id)
+    public async Task<bool> UpdateUserRoles(string userName, IList<string> usersRole, CancellationToken cancellationToken)
     {
-        var role = await _roleManager.FindByIdAsync(id.ToString());
-        return (role!.Id, role.Name ?? "");
-    }
-
-    public async Task<bool> UpdateRole(Guid id, string roleName)
-    {
-        if (roleName != null)
-        {
-            var role = await _roleManager.FindByIdAsync(id.ToString());
-            if (role != null)
-            {
-                role.Name = roleName;
-                var result = await _roleManager.UpdateAsync(role);
-                return result.Succeeded;
-            }
-        }
-        return false;
-    }
-
-    public async Task<bool> UpdateUsersRole(string userName, IList<string> usersRole)
-    {
-        var user = await _userManager.Users.Where(x => x.UserName == userName).FirstOrDefaultAsync();
+        var user = await _userManager.Users.Where(x => x.UserName == userName).FirstOrDefaultAsync(cancellationToken);
         if (user == null)
         {
             return false;
@@ -569,6 +294,97 @@ public class IdentityService : IIdentityService
         return result.Succeeded;
     }
 
+    public async Task<bool> updateUserLanguage(string culture, Guid userId, CancellationToken cancellationToken)
+    {
+        var found = await _userManager.Users.Where(x => x.Id == userId).FirstOrDefaultAsync(cancellationToken);
+        if (found != null)
+        {
+            found.Lang = culture;
+            var result = await _dbContext.SaveChangesAsync(cancellationToken);
+            return result > 0;
+        }
+        return false;
+    }
+
+
+
+    public async Task<bool> DeleteUserAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        var user = await _userManager.Users
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+
+        if (user is null)
+            throw new NotFoundException("User not found");
+
+        if (user.UserName is "system" or "admin")
+            throw new BadRequestException("You can not delete system or admin user");
+
+        var result = await _userManager.DeleteAsync(user);
+        return result.Succeeded;
+    }
+
+    public async Task<(Guid id, string roleName)> GetRoleByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var role = await _roleManager.FindByIdAsync(id.ToString());
+        if (role is null)
+            throw new NotFoundException("Role not found");
+
+        return (role.Id, role.Name ?? string.Empty);
+    }
+
+    public async Task<bool> CreateRoleAsync(string roleName)
+    {
+        var result = await _roleManager.CreateAsync(new ApplicationRole(roleName));
+        if (!result.Succeeded)
+        {
+            throw new CustomValidationException(result.Errors);
+        }
+        return result.Succeeded;
+    }
+
+    public async Task<bool> AssigRolesToUser(string userName, IList<string> roles)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == userName);
+        if (user == null)
+        {
+            throw new NotFoundException("User not found");
+        }
+
+        var result = await _userManager.AddToRolesAsync(user, roles);
+        return result.Succeeded;
+    }
+
+
+    public async Task<bool> UpdateRoleAsync(Guid id, string roleName, CancellationToken cancellationToken)
+    {
+        var role = await _roleManager.FindByIdAsync(id.ToString());
+        if (role is null)
+            return false;
+
+        role.Name = roleName;
+        var result = await _roleManager.UpdateAsync(role);
+        return result.Succeeded;
+    }
+    public async Task<bool> DeleteRoleAsync(Guid roleId)
+    {
+        var roleDetails = await _roleManager.FindByIdAsync(roleId.ToString());
+        if (roleDetails == null)
+        {
+            throw new NotFoundException("Role not found");
+        }
+
+        if (roleDetails.Name == "Administrator")
+        {
+            throw new BadRequestException("You can not delete Administrator Role");
+        }
+        var result = await _roleManager.DeleteAsync(roleDetails);
+        if (!result.Succeeded)
+        {
+            throw new CustomValidationException(result.Errors);
+        }
+        return result.Succeeded;
+    }
 
 
     public async Task<bool> UpdateRolePermissionsAsync(EditRolePermissionsCommand request, CancellationToken cancellationToken)
@@ -624,266 +440,114 @@ public class IdentityService : IIdentityService
         return true;
     }
 
-    public async Task<bool> updateUserLanguage(string culture, Guid userId, CancellationToken cancellationToken)
+
+    public async Task<LoginResult> LoginAsync(LoginCommand request, CancellationToken cancellationToken)
     {
-        var found = await _userManager.Users.Where(x => x.Id == userId).FirstOrDefaultAsync(cancellationToken);
-        if (found != null)
-        {
-            found.Lang = culture;
-            var result = await _dbContext.SaveChangesAsync(cancellationToken);
-            return result > 0;
-        }
-        return false;
-    }
+        var tenant = await _hostIdentityService.GetTenantByTenancyName(request.TenancyName, cancellationToken);
+        if (tenant is null)
+            throw new NotFoundException("Tenant not found");
 
 
-    public async Task<(bool EnableTwoFactor, string Secret, int AttemptCount, TwoFactorTypeEnum TwoFactorType)> getUserTwoFactorData(Guid userId, CancellationToken cancellationToken)
-    {
-        var found = await _dbContext.UserSetting.Where(x => x.UserId == userId).FirstOrDefaultAsync(cancellationToken);
-        if (found == null)
+        using (_currentTenant.Change(
+            tenant.Id,
+            tenant.TenancyName,
+            tenant.TenantName,
+            tenant.ConnectionString))
         {
-            return new()
+
+            var user = await FindUserByUserNameAsync(request.UserName, tenant?.Id, cancellationToken);
+            if (user is null)
+                throw new InvalidLoginException();
+
+            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
+            if (!signInResult.Succeeded)
+                throw new InvalidLoginException();
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var dto = MapUser(user, roles.ToList());
+
+            var twoFactor = await GetTwoFactorDataAsync(user.Id, cancellationToken);
+            if (twoFactor.EnableTwoFactor)
             {
-                EnableTwoFactor = false,
-                TwoFactorType = default,
-                Secret = "",
-                AttemptCount = 0,
-            };
-        }
-        var isEnable = found.EnableTwoFactor;
-        if (found.IsVerified == false || (isEnable && string.IsNullOrEmpty(found.Secret) && found.TwoFactorType == TwoFactorTypeEnum.AuthenticatorApp))
-        {
-            isEnable = false;
-        }
-        return new()
-        {
-            EnableTwoFactor = isEnable,
-            TwoFactorType = found.TwoFactorType,
-            Secret = found.Secret,
-            AttemptCount = found.AttemptCount
-        };
-    }
-
-    public async Task<LoginResult> LoginInAsync(LoginCommand request, CancellationToken cancellation)
-    {
-        Guid? tenantId = null;
-        if (string.IsNullOrEmpty(request.Tenant) == false)
-        {
-            var tenant = await GetTenantByTenancyName(request.Tenant, cancellation);
-            if (tenant == null)
-            {
-                throw new InvalidLoginException("Invalid tenant!");
-            }
-            tenantId = tenant?.Id;
-        }
-
-
-
-
-        var result = await SigninUserAsync(request.UserName, request.Password, tenantId);
-
-
-        if (!result)
-        {
-            throw new InvalidLoginException();
-        }
-        UserDTO userData = await GetUserDetailsByUserNameAsync(request.UserName, tenantId);
-        // check two factor
-        var twoFactor = await getUserTwoFactorData(userData.Id, cancellation);
-        if (twoFactor.EnableTwoFactor)
-        {
-            LoginResult output = new LoginResult()
-            {
-                User = userData,
-                Roles = [],
-                EnableTwoFactor = twoFactor.EnableTwoFactor,
-                TwoFactorType = twoFactor.TwoFactorType
-            };
-            return output;
-        }
-        else
-        {
-            var permissions = await _userPermissionService.GetUserPermissionsAsync(userData.Id, cancellation);
-            LoginResult output = new LoginResult()
-            {
-                User = userData,
-                Roles = userData.Roles,
-                Permissions = permissions
-            };
-            return output;
-        }
-    }
-
-
-    public async Task LogoutAsync(CancellationToken cancellation)
-    {
-        await _signInManager.SignOutAsync();
-    }
-
-    public async Task<LoginResult> DelegateUser(DelegateUserCommand request, CancellationToken cancellation)
-    {
-        ApplicationUser? delegator =
-       await _userManager.FindByIdAsync(_currentUser.UserId!.Value.ToString());
-
-        if (delegator == null)
-            throw new UnauthorizedAccessException();
-
-
-        var user = await _userManager.Users
-                .IgnoreQueryFilters()
-                .FirstOrDefaultAsync(
-                    x => x.Id == request.UserId &&
-                         x.TenantId == request.TenantId &&
-                         !x.IsDeleted,
-                    cancellation);
-
-        if (user == null)
-            throw new NotFoundException("User not found");
-
-        var claims = new List<Claim>
+                return new LoginResult
                 {
-                    new("sub", user.Id.ToString()),
-                    new("tenant_id", user.TenantId!.Value.ToString()),
-                    new("lang", user.Lang),
-
-                    new("is_delegated", "true"),
-                    new("delegator_id", delegator.Id.ToString()),
-                    new("delegator_username", delegator.UserName!)
+                    User = dto,
+                    Roles = [],
+                    EnableTwoFactor = true,
+                    TwoFactorType = twoFactor.TwoFactorType
                 };
-        var roles = await _userManager.GetRolesAsync(user);
+            }
 
-        claims.AddRange(roles.Select(x => new Claim(ClaimTypes.Role, x)));
+            var permissions = await _userPermissionService.GetUserPermissionsAsync(user.Id, cancellationToken);
 
-        var identity = new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme);
+            await SignInWithClaimsAsync(user, roles.ToList(), cancellationToken);
 
-        var principal = new ClaimsPrincipal(identity);
-
-        await _httpContextAccessor.HttpContext!.SignInAsync(IdentityConstants.ApplicationScheme, principal);
-        var permissions = await _userPermissionService.GetUserPermissionsAsync(user.Id, cancellation);
-
-        await _dbContext.UserDelegations.AddAsync(new UserDelegation()
-        {
-            AdminId = delegator.Id,
-            TargetUserId = user.Id,
-            IsActive = true,
-            Reason = request.Reason ?? "Delegation",
-            StartTime = DateTime.UtcNow,
-            StartedFromIp = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
-        });
-        await _dbContext.SaveChangesAsync(cancellation);
-
-        return new LoginResult
-        {
-            User = await GetUserDetailsByUserNameAsync(
-                user.UserName!,
-                user.TenantId),
-
-            Roles =
-                (await _userManager.GetRolesAsync(user))
-                .ToList(),
-
-            Permissions = permissions
-        };
-    }
-
-    public async Task ExitDelegation(CancellationToken cancellation)
-    {
-        var delegatorId = _currentUser.DelegatorId;
-        var delegatedUserId = _currentUser.UserId;
-
-        if (delegatorId == null)
-            return;
-
-        var admin = await _userManager.Users
-                    .IgnoreQueryFilters()
-                    .FirstOrDefaultAsync(x => x.Id == delegatorId && !x.IsDeleted, cancellation);
-
-        if (admin == null)
-            throw new UnauthorizedAccessException();
-
-
-        var d = await _dbContext.UserDelegations
-            .Where(x =>
-                    x.AdminId == delegatorId &&
-                    x.TargetUserId == delegatedUserId &&
-                    x.IsActive == true
-                 )
-            .OrderByDescending(x => x.StartTime)
-            .FirstOrDefaultAsync(cancellation);
-        if (d != null)
-        {
-            d.EndTime = DateTime.UtcNow;
-            d.IsActive = false;
-            d.EndedFromIp = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
-
-            await _dbContext.SaveChangesAsync(cancellation);
-        }
-        await _signInManager.SignInAsync(
-            admin,
-            false);
-    }
-
-    public async Task<LoginResult> TwofactorSignInAsync(TwoFactorLoginCommand request, CancellationToken cancellation)
-    {
-        var tenant = await GetTenantByTenancyName(request.TenancyName, cancellation);
-        if (tenant == null)
-        {
-            throw new InvalidLoginException();
-        }
-        Guid tenantId = tenant.Id;
-
-        var result = await SigninUserAsync(request.UserName, request.Password, tenantId);
-
-        if (!result)
-        {
-            throw new InvalidLoginException();
-        }
-        UserDTO userData = await GetUserDetailsByUserNameAsync(request.UserName, tenantId);
-        // verify two factor
-        var hostSettings = await _securitySettingService.GetSettingsAsync(cancellation);
-        var settings = await _securitySettingService.GetUserSettingsAsync(userData.Id, cancellation);
-        var twoFactor = await getUserTwoFactorData(userData.Id, cancellation);
-
-        if (twoFactor.AttemptCount >= hostSettings.LogginAttemptCountLimit)
-        {
-            throw new LoginAttempCountException();
-        }
-
-        var verify = _twoFactorService.VerifyCodeAsync(twoFactor.Secret, request.Code);
-        if (verify == true)
-        {
-
-            var permissions = await _userPermissionService.GetUserPermissionsAsync(userData.Id, cancellation);
-
-            LoginResult output = new LoginResult()
+            return new LoginResult
             {
-                User = userData,
-                Roles = userData.Roles,
+                User = dto,
+                Roles = roles.ToList(),
                 Permissions = permissions
             };
-            await _twoFactorService.ResetAttemptCount(userData.Id);
-
-            return output;
         }
-        else
+    }
+
+    public async Task<LoginResult> TwoFactorLoginAsync(TwoFactorLoginCommand request, CancellationToken cancellationToken)
+    {
+        var tenant = await _hostIdentityService.GetTenantByTenancyName(request.TenancyName, cancellationToken);
+        if (tenant is null)
+            throw new NotFoundException("Tenant not found");
+
+
+        using (_currentTenant.Change(
+            tenant.Id,
+            tenant.TenancyName,
+            tenant.TenantName,
+            tenant.ConnectionString))
         {
-            await _twoFactorService.SetAttemptCount(userData.Id);
-            throw new InvalidTwoFactorCodeException();
+
+            var user = await FindUserByUserNameAsync(request.UserName, tenant.Id, cancellationToken);
+            if (user is null)
+                throw new InvalidLoginException();
+
+            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
+            if (!signInResult.Succeeded)
+                throw new InvalidLoginException();
+
+            var hostSettings = await _securitySettingService.GetSettingsAsync(cancellationToken);
+            var twoFactor = await GetTwoFactorDataAsync(user.Id, cancellationToken);
+
+            if (twoFactor.AttemptCount >= hostSettings?.LogginAttemptCountLimit)
+                throw new LoginAttempCountException();
+
+            if (!_twoFactorService.VerifyCodeAsync(twoFactor.Secret, request.Code))
+            {
+                await _twoFactorService.SetAttemptCount(user.Id);
+                throw new InvalidTwoFactorCodeException();
+            }
+
+            await _twoFactorService.ResetAttemptCount(user.Id);
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var permissions = await _userPermissionService.GetUserPermissionsAsync(user.Id, cancellationToken);
+
+            await SignInWithClaimsAsync(user, roles.ToList(), cancellationToken);
+
+            return new LoginResult
+            {
+                User = MapUser(user, roles.ToList()),
+                Roles = roles.ToList(),
+                Permissions = permissions
+            };
         }
     }
 
 
-
-
-    public async Task<LoginResult> ExternalSignInAsync(ExternalLoginCallbackCommand request, CancellationToken cancellation)
+    public async Task<LoginResult> ExternalLoginAsync(ExternalLoginCallbackCommand request, CancellationToken cancellationToken)
     {
-        var tenant = await GetTenantByTenancyName(request.tenancyName, cancellation);
+        var tenant = await ResolveTenantByTenancyNameAsync(request.tenancyName, cancellationToken);
+        if (tenant is null)
+            throw new InvalidLoginException();
 
-
-        //var info = await _signInManager.GetExternalLoginInfoAsync();
-        //if (info == null) throw new UnauthorizedAccessException("External login info not found");
-
-        //var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
         var backendUrl = _config["BackendUrl"] ?? "";
         if (backendUrl.EndsWith("/") == false)
         {
@@ -900,7 +564,7 @@ public class IdentityService : IIdentityService
                 s.ClientId,
                 s.ClientSecret,
             })
-            .FirstOrDefaultAsync(cancellation);
+            .FirstOrDefaultAsync(cancellationToken);
         if (provider == null)
         {
             throw new UnauthorizedAccessException("External login provider not found");
@@ -923,7 +587,7 @@ public class IdentityService : IIdentityService
             secret,
             request.codeVerifier ?? "",
             redirectUrl,
-            cancellation);
+            cancellationToken);
 
         ;
         if (externalLoginResult == null)
@@ -931,77 +595,306 @@ public class IdentityService : IIdentityService
             throw new UnauthorizedAccessException("External login provider result not found");
         }
         ApplicationUser? user = await FindOrCreateExternalUser(
-            externalLoginResult.Email!, externalLoginResult.UserName!, externalLoginResult.Name!, provider.Name, tenant?.Id);
+            externalLoginResult.Email!,
+            externalLoginResult.UserName!,
+            externalLoginResult.Name!,
+            provider.Name,
+            tenant?.Id,
+            cancellationToken);
         await _signInManager.SignInAsync(user, false);
 
-        var roles = await _userManager.GetRolesAsync(user);
-
-        var permissions = await _userPermissionService.GetUserPermissionsAsync(user.Id, cancellation);
         LoginResult output = new LoginResult()
         {
-            User = new UserDTO
-            {
-                Id = user.Id,
-                TenantId = user.TenantId,
-                UserName = user.UserName ?? "",
-                FirstName = user.FirstName ?? "",
-                LastName = user.LastName ?? "",
-                FullName = user.FullName ?? "",
-                Lang = user.Lang,
-                Email = user.Email ?? "",
-                ProfilePicture = user.ProfilePicture ?? "",
-                Address = user.Address ?? "",
-                PhoneNumber = user.PhoneNumber ?? "",
-                CreationTime = user.CreatedAt,
-                Roles = roles.ToList()
-            },
-            Roles = roles.ToList(),
-            Permissions = permissions
         };
         return output;
 
 
     }
 
-    public async Task<List<Guid>> GetAllActiveUsersIds(CancellationToken cancellationToken)
+
+
+    public async Task<LoginResult> DelegateUserAsync(DelegateUserCommand request, CancellationToken cancellationToken)
     {
-        List<Guid> list = await _userManager.Users
-             // .Where(x => x.IsDeleted == false)
-             .Select(u => u.Id)
-             .ToListAsync();
-        return list;
+        var delegator = await FindUserByIdAsync(_currentUser.UserId!.Value, cancellationToken);
+        if (delegator is null)
+            throw new UnauthorizedAccessException();
+
+        var tenant = await _hostIdentityService.GetTenantById(request.TenantId, cancellationToken);
+        if (tenant is null)
+            throw new NotFoundException("Tenant not found");
+
+
+        using (_currentTenant.Change(
+            tenant.Id,
+            tenant.TenancyName,
+            tenant.TenantName,
+            tenant.ConnectionString))
+        {
+
+            var user = await _userManager.Users
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x => x.Id == request.UserId && x.TenantId == request.TenantId && !x.IsDeleted, cancellationToken);
+
+            if (user is null)
+                throw new NotFoundException("User not found");
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var permissions = await _userPermissionService.GetUserPermissionsAsync(user.Id, cancellationToken);
+
+            var claims = new List<Claim>
+        {
+            new("sub", user.Id.ToString()),
+            new("tenant_id", user.TenantId!.Value.ToString()),
+            new("lang", user.Lang ?? string.Empty),
+
+            new("is_delegated", "true"),
+            new("delegator_id", delegator.Id.ToString()),
+            new("delegator_username", delegator.UserName!)
+        };
+
+            claims.AddRange(roles.Select(x => new Claim(ClaimTypes.Role, x)));
+
+            var identity = new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            await _httpContextAccessor.HttpContext!.SignInAsync(IdentityConstants.ApplicationScheme, principal);
+
+            await _dbContext.UserDelegations.AddAsync(new UserDelegation
+            {
+                AdminId = delegator.Id,
+                TargetUserId = user.Id,
+                IsActive = true,
+                Reason = request.Reason ?? "Delegation",
+                StartTime = DateTime.UtcNow,
+                StartedFromIp = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+            }, cancellationToken);
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            return new LoginResult
+            {
+                User = MapUser(user, roles.ToList()),
+                Roles = roles.ToList(),
+                Permissions = permissions
+            };
+        }
     }
 
-    public async Task<List<AutoCompleteDto<Guid>>> GetAutoCompleteUsers(string? filter, CancellationToken cancellationToken)
+    public async Task ExitDelegationAsync(CancellationToken cancellationToken)
     {
+        var delegatorId = _currentUser.DelegatorId;
+        var delegatedUserId = _currentUser.UserId;
 
-        var query = _userManager.Users.AsQueryable();
+        if (delegatorId is null || delegatedUserId is null)
+            return;
 
+        var admin = await _userManager.Users
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x => x.Id == delegatorId && !x.IsDeleted, cancellationToken);
 
-        if (!string.IsNullOrEmpty(filter))
+        if (admin is null)
+            throw new UnauthorizedAccessException();
+
+        var activeDelegation = await _dbContext.UserDelegations
+            .Where(x => x.AdminId == delegatorId &&
+                        x.TargetUserId == delegatedUserId &&
+                        x.IsActive)
+            .OrderByDescending(x => x.StartTime)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (activeDelegation is not null)
         {
-            query = query.Where(c =>
-               (c.UserName != null && c.UserName.Contains(filter)) ||
-                (c.FirstName != null && c.FirstName.Contains(filter)) ||
-                c.LastName.Contains(filter)
-            );
+            activeDelegation.EndTime = DateTime.UtcNow;
+            activeDelegation.IsActive = false;
+            activeDelegation.EndedFromIp = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        var items = await query.OrderBy(x => x.CreatedAt)
-            .Skip(0)
+        await _signInManager.SignInAsync(admin, false);
+    }
+
+    public async Task LogoutAsync(CancellationToken cancellationToken)
+    {
+        await _signInManager.SignOutAsync();
+    }
+
+    public async Task<PaginatedResult<TenantUserDTO>> GetTenantUsersAsync(GetTenantUsersQuery request, CancellationToken cancellationToken)
+    {
+        var tenant = await _hostIdentityService.GetTenantById(request.TenantId, cancellationToken);
+        if (tenant is null)
+            throw new NotFoundException("Tenant not found");
+
+
+        using (_currentTenant.Change(
+            tenant.Id,
+            tenant.TenancyName,
+            tenant.TenantName,
+            tenant.ConnectionString))
+        {
+            IQueryable<ApplicationUser> query = _userManager.Users
+                      .IgnoreQueryFilters()
+                      .Where(x => !x.IsDeleted && x.TenantId == request.TenantId);
+
+            if (!string.IsNullOrWhiteSpace(request.Filter))
+            {
+                query = query.Where(x =>
+                    x.UserName!.Contains(request.Filter) ||
+                    x.FirstName!.Contains(request.Filter) ||
+                    x.LastName!.Contains(request.Filter) ||
+                    x.Email!.Contains(request.Filter) ||
+                    x.PhoneNumber!.Contains(request.Filter));
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.SortBy))
+            {
+                var sortString = $"{request.SortBy} {request.SortDirection}";
+                query = query.OrderBy(sortString);
+            }
+            else
+            {
+                query = query.OrderBy(x => x.CreatedAt);
+            }
+
+            var total = await query.CountAsync(cancellationToken);
+
+            var users = await query
+                .Skip(request.PageSize * (request.PageNumber - 1))
+                .Take(request.PageSize)
+                .Select(u => new TenantUserDTO
+                {
+                    Id = u.Id,
+                    UserName = u.UserName ?? string.Empty,
+                    FullName = u.FullName ?? string.Empty,
+                    Email = u.Email ?? string.Empty,
+                    Roles = u.Roles.Select(r => r.Name!).ToList()
+                })
+                .ToListAsync(cancellationToken);
+
+            return new PaginatedResult<TenantUserDTO>
+            {
+                Items = users,
+                TotalCount = total,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize
+            };
+        }
+        ;
+
+    }
+
+    public async Task<List<AutoCompleteDto<Guid>>> GetAutoCompleteUsersAsync(string? filter, CancellationToken cancellationToken)
+    {
+        var query = _userManager.Users.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(filter))
+        {
+            query = query.Where(c =>
+                (c.UserName != null && c.UserName.Contains(filter)) ||
+                (c.FirstName != null && c.FirstName.Contains(filter)) ||
+                (c.LastName != null && c.LastName.Contains(filter)));
+        }
+
+        return await query
+            .OrderBy(x => x.CreatedAt)
             .Take(50)
             .Select(s => new AutoCompleteDto<Guid>
             {
                 Id = s.Id,
-                Title = s.FirstName + " " + s.LastName + " (" + s.UserName + ")",
+                Title = $"{s.FirstName} {s.LastName} ({s.UserName})"
             })
             .ToListAsync(cancellationToken);
-        return items;
     }
 
-    private async Task<ApplicationUser> FindOrCreateExternalUser(string email, string userName, string name, string providerName, Guid? tenantId)
+    public async Task<List<Guid>> GetAllActiveUsersIdsAsync(CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByEmailAsync(email);
+        return await _userManager.Users
+            .Select(u => u.Id)
+            .ToListAsync(cancellationToken);
+    }
+
+    private async Task<SimpleTenantData?> ResolveTenantAsync(string? tenancyName, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(tenancyName))
+            return null;
+
+        return await _hostIdentityService.GetTenantByTenancyName(tenancyName, cancellationToken);
+    }
+
+    private async Task<SimpleTenantData?> ResolveTenantByTenancyNameAsync(string tenancyName, CancellationToken cancellationToken)
+        => await _hostIdentityService.GetTenantByTenancyName(tenancyName, cancellationToken);
+
+    private async Task SignInWithClaimsAsync(ApplicationUser user, List<string> roles, CancellationToken cancellationToken)
+    {
+        var claims = new List<Claim>
+        {
+            new("lang", user.Lang ?? string.Empty)
+        };
+
+        if (user.TenantId.HasValue)
+            claims.Add(new Claim("tenant_id", user.TenantId.Value.ToString()));
+
+        claims.AddRange(roles.Select(x => new Claim(ClaimTypes.Role, x)));
+
+        await _signInManager.SignInWithClaimsAsync(user, true, claims);
+    }
+
+    private async Task<(bool EnableTwoFactor, string Secret, int AttemptCount, TwoFactorTypeEnum TwoFactorType)> GetTwoFactorDataAsync(
+        Guid userId,
+        CancellationToken cancellationToken)
+    {
+        var found = await _dbContext.UserSetting
+            .FirstOrDefaultAsync(x => x.UserId == userId, cancellationToken);
+
+        if (found is null)
+        {
+            return (false, string.Empty, 0, default);
+        }
+
+        var enabled = found.EnableTwoFactor;
+        if (found.IsVerified == false ||
+            (enabled && string.IsNullOrEmpty(found.Secret) && found.TwoFactorType == TwoFactorTypeEnum.AuthenticatorApp))
+        {
+            enabled = false;
+        }
+
+        return (enabled, found.Secret, found.AttemptCount, found.TwoFactorType);
+    }
+
+    private async Task<ApplicationUser?> FindUserByIdAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        return await _userManager.Users
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x => x.Id == userId && !x.IsDeleted, cancellationToken);
+    }
+
+    private async Task<ApplicationUser?> FindUserByUserNameAsync(string userName, Guid? tenantId, CancellationToken cancellationToken)
+    {
+        if (tenantId.HasValue)
+        {
+            var tenant = await _hostIdentityService.GetTenantById(tenantId.Value, cancellationToken);
+            if (tenant is null)
+                return null;
+            using (_currentTenant.Change(
+                      tenant.Id,
+                      tenant.TenancyName,
+                      tenant.TenantName,
+                      tenant.ConnectionString))
+            {
+                return await _userManager.Users
+                   .IgnoreQueryFilters()
+                   .FirstOrDefaultAsync(x => x.UserName == userName && x.TenantId == tenantId && !x.IsDeleted, cancellationToken);
+            }
+        }
+        return await _userManager.Users
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x => x.UserName == userName && x.TenantId == null && !x.IsDeleted, cancellationToken);
+    }
+
+
+    private async Task<ApplicationUser> FindOrCreateExternalUser(string email, string userName, string name, string providerName, Guid? tenantId, CancellationToken cancellationToken)
+    {
+        var user = await FindUserByUserNameAsync(userName, tenantId, cancellationToken);
         if (user == null)
         {
 
@@ -1023,39 +916,24 @@ public class IdentityService : IIdentityService
         return user;
     }
 
-    public async Task<UserDTO?> GetTenantAdmin(Guid tenantId, CancellationToken cancellation)
+
+    private static UserDTO MapUser(ApplicationUser user, List<string> roles)
     {
-        var tenantAdminUser = await _userManager.Users
-                                .IgnoreQueryFilters()
-                                .Where(u => u.TenantId == tenantId &&
-                                            u.Roles.Any(ur => _roleManager.Roles
-                                                .Any(r => r.Id == ur.Id && r.Name == AppRoles.TenantAdministrator)))
-                                .Select(u => new UserDTO
-                                {
-                                    Id = u.Id,
-                                    UserName = u.UserName ?? "",
-                                    FirstName = u.FirstName ?? "",
-                                    LastName = u.LastName ?? "",
-                                    FullName = u.FullName ?? "",
-                                    Lang = u.Lang ?? "",
-                                    Email = u.Email ?? "",
-                                    ProfilePicture = u.ProfilePicture ?? "",
-                                    Address = u.Address ?? "",
-                                    PhoneNumber = u.PhoneNumber ?? "",
-                                    // چون فیلتر کردیم، می‌دانیم نقش TenantAdministrator است
-                                    Roles = new List<string> { AppRoles.TenantAdministrator }
-                                })
-                                .FirstOrDefaultAsync(cancellation);
-
-        return tenantAdminUser;
-
-
+        return new UserDTO
+        {
+            Id = user.Id,
+            TenantId = user.TenantId,
+            UserName = user.UserName ?? string.Empty,
+            FirstName = user.FirstName ?? string.Empty,
+            LastName = user.LastName ?? string.Empty,
+            FullName = user.FullName ?? string.Empty,
+            Lang = user.Lang ?? string.Empty,
+            Email = user.Email ?? string.Empty,
+            ProfilePicture = user.ProfilePicture ?? string.Empty,
+            Address = user.Address ?? string.Empty,
+            PhoneNumber = user.PhoneNumber ?? string.Empty,
+            CreationTime = user.CreatedAt,
+            Roles = roles
+        };
     }
-}
-
-public class UserRoleDto
-{
-    public Guid UserId { get; set; }
-    public required string RoleName { get; set; }
-
 }

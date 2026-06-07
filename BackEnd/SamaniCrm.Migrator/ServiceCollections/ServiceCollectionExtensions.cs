@@ -4,12 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
+using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure;
 using SamaniCrm.Infrastructure.DbContexts;
 using SamaniCrm.Infrastructure.Persistence;
 using SamaniCrm.Infrastructure.Security;
 using SamaniCrm.Infrastructure.Services.TenantService;
+using SamaniCrm.Infrastructure.TenantManager;
 
 namespace SamaniCrm.DbMigrator;
 

@@ -3,7 +3,7 @@ using SamaniCrm.Application.Common.Interfaces;
 
 namespace SamaniCrm.Application.Auth.Commands;
 
-public record ExternalLoginCallbackCommand(string code,string provider,string? tenancyName,string? codeVerifier) : IRequest<LoginResult>;
+public record ExternalLoginCallbackCommand(string code,string provider,string tenancyName,string? codeVerifier) : IRequest<LoginResult>;
 
 public class ExternalLoginCallbackHandler : IRequestHandler<ExternalLoginCallbackCommand, LoginResult>
 {
@@ -21,7 +21,7 @@ public class ExternalLoginCallbackHandler : IRequestHandler<ExternalLoginCallbac
 
     public async Task<LoginResult> Handle(ExternalLoginCallbackCommand cmd, CancellationToken cancellationToken)
     {
-        var output = await _identityService.ExternalSignInAsync(cmd, cancellationToken);
+        var output = await _identityService.ExternalLoginAsync(cmd, cancellationToken);
         return output;
     }
 }

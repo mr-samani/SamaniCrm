@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Common.Interfaces;
-using SamaniCrm.Application.Features.Tenants.Interfaces;
 using SamaniCrm.Core.Shared.Enums;
 using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Core.Shared.Logging.Dtos;

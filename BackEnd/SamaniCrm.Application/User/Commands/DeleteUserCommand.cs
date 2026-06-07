@@ -23,7 +23,7 @@ namespace SamaniCrm.Application.User.Commands
         }
         public async Task<int> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            var result = await _identityService.DeleteUserAsync(request.Id);
+            var result = await _identityService.DeleteUserAsync(request.Id, cancellationToken);
 
             return result ? 1 : 0;
         }

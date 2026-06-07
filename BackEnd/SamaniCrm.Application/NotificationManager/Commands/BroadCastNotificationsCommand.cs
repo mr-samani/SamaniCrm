@@ -40,7 +40,7 @@ namespace SamaniCrm.Application.NotificationManager.Commands
             {
                 throw new AccessDeniedException();
             }
-            var users = await _identityService.GetAllActiveUsersIds(cancellationToken);
+            var users = await _identityService.GetAllActiveUsersIdsAsync(cancellationToken);
             var currentUserId = _currentUser.UserId;
             var count = 0;
             List<Notification> notifyList = [];

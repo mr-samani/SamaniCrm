@@ -13,12 +13,12 @@
 
 /** Interface for RoleCreateCommand */
 export interface IRoleCreateCommand {
-  roleName?: string;
+  roleName: string;
 }
 
 /** Class for RoleCreateCommand */
 export class RoleCreateCommand implements IRoleCreateCommand {
-  roleName?: string;
+  roleName!: string;
 
   constructor(data?: IRoleCreateCommand) {
     if (data) {

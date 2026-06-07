@@ -188,7 +188,7 @@ public class SeedRoles
             {
                 TenantId = tenantId,
                 RoleId = tenantAdminRole.Id,
-                PermissionId = x.Id.Value // حالا ID واقعیِ پرمیشنِ مربوط به این Tenant را استفاده می‌کنیم
+                PermissionId = x.Id!.Value // حالا ID واقعیِ پرمیشنِ مربوط به این Tenant را استفاده می‌کنیم
             })
             .ToList();
 

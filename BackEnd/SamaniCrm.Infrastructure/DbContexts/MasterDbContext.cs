@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
+using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Domain.Entities;
 using SamaniCrm.Infrastructure.Services.TenantService;
 using System;

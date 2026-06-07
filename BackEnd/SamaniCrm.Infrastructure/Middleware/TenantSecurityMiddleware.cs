@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using SamaniCrm.Application.Features.Tenants.Interfaces;
+using SamaniCrm.Core.Shared.Interfaces;
 using SamaniCrm.Core.Shared.Interfaces.Tenant;
 using System;
 using System.Collections.Generic;

@@ -24,7 +24,7 @@ namespace SamaniCrm.Application.Role.Commands
         }
         public async Task<int> Handle(UpdateRoleCommand request, CancellationToken cancellationToken)
         {
-            var result = await _identityService.UpdateRole(request.Id, request.RoleName);
+            var result = await _identityService.UpdateRoleAsync(request.Id, request.RoleName, cancellationToken);
             return result ? 1 : 0;
         }
     }

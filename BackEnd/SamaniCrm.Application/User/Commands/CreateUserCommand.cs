@@ -31,7 +31,7 @@ namespace SamaniCrm.Application.User.Commands
         }
         public async Task<Guid> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var result = await _identityService.CreateUserAsync(request);
+            var result = await _identityService.CreateUserAsync(request, cancellationToken);
             return result.userId;
         }
     }
