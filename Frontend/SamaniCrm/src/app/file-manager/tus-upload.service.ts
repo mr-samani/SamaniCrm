@@ -5,7 +5,7 @@ import { FileUsageEnum } from './image-cropper-dialog/image-cropper-dialog.compo
 import { NgxAlertModalService } from 'ngx-alert-modal';
 import { LanguageService } from '@shared/services/language.service';
 import { AuthService } from '@shared/services/auth.service';
-
+import * as tus from 'tus-js-client';
 @Injectable()
 export class TusUploadService {
   uploading = false;
@@ -65,11 +65,18 @@ export class TusUploadService {
           headers: {
             fileToken: token,
           },
+          onBeforeRequest: (req) => {
+            const xhr = req.getUnderlyingObject();
+            if (xhr instanceof XMLHttpRequest) {
+              xhr.withCredentials = true;
+            }
+          },
           onShouldRetry: (err: DetailedError, retryAttempt: number, options: UploadOptions) => {
             const status = err.originalResponse ? err.originalResponse.getStatus() : 0;
 
             if (status === 401) {
-              return this.handle401AndRetry(options);
+              //return this.handle401AndRetry(options);
+              return false;
             }
             if ([417, 403, 400].indexOf(status) > -1) {
               return false;
@@ -77,10 +84,18 @@ export class TusUploadService {
 
             return true;
           },
-          onError: (error) => {
+          onError: (error: DetailedError | any) => {
+            const status = error.originalResponse ? error.originalResponse.getStatus() : 0;
+            let responseBody = error.originalResponse ? error.originalResponse.getBody() : '';
+            try {
+              responseBody = JSON.parse(responseBody);
+            } catch (error) {
+              responseBody = {};
+            }
+
             this.alert.show({
-              title: this.l('FileUpload'),
-              text: this.translateTUSresponseError(error.message),
+              title: this.l('FileUpload') + ' ' + responseBody.error + ' (' + status + ')',
+              text: responseBody.message,
             });
             console.error('Failed because: ' + error);
             this.uploading = false;
@@ -154,24 +169,5 @@ export class TusUploadService {
     // });
 
     return true; // به tus بگو که retry می‌کنیم
-  }
-
-  /**
-   * Determines the translated error message based on the HTTP response content
-   * and status codes.
-   *
-   */
-  translateTUSresponseError(httpResponseMessageContent: string, httpStatusCode?: number | null): string {
-    // Initialize output
-    let errorTranslatedString = '';
-    // Prepare lowercase trimmed version of the message
-    const msg = (httpResponseMessageContent || '').toLowerCase().trim();
-    if (msg.includes('unsupported file type') || msg.includes('Could not determine file type')) {
-      return this.l('Message.UnSupportedFileType');
-    } else if (msg.includes('is not allowed')) {
-      return this.l('Message.NotAllowedFileType');
-    }
-    // todo check max size
-    return errorTranslatedString;
   }
 }

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using SamaniCrm.Application.FileManager.Commands;
 using SamaniCrm.Core;
@@ -32,9 +33,12 @@ namespace SamaniCrm.Api.TUS
                 {
                     OnAuthorizeAsync = async ctx =>
                     {
+                        var result = await ctx.HttpContext.AuthenticateAsync();  
                         ctx.HttpContext.Request.EnableBuffering();
                         if (!ctx.HttpContext.User.Identity?.IsAuthenticated ?? true)
                         {
+                            ctx.FailRequest(HttpStatusCode.Unauthorized);
+
                             ctx.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
                             ctx.HttpContext.Response.ContentType = "application/json";
                             await ctx.HttpContext.Response.WriteAsJsonAsync(new
