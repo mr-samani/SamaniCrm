@@ -38,6 +38,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCustomService(this IServiceCollection services, IConfiguration configuration)
     {
         // Application Services
+        services.AddSingleton<ITenantContextAccessor, TenantContextAccessor>();
         services.AddScoped<ICurrentUserService, DummyCurrentUserService>();
         services.AddScoped<ICurrentTenant, CurrentTenant>();
         services.AddScoped<ApplicationDbInitializer>();
