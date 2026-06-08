@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -44,9 +44,6 @@ export class CaptchaServiceProxy extends BaseService {
 
         let localVarHeaders = this.defaultHeaders;
 
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
-
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
             'application/json',
@@ -73,12 +70,11 @@ export class CaptchaServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Captcha/reload`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<CaptchaDTO>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<CaptchaDTO>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,

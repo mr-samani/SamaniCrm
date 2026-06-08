@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -15,7 +15,7 @@
 export interface IProductTypeTranslationDto {
   productTypeId?: string;
   culture: string;
-  name?: string;
+  name: string;
   description?: string;
 }
 
@@ -23,13 +23,13 @@ export interface IProductTypeTranslationDto {
 export class ProductTypeTranslationDto implements IProductTypeTranslationDto {
   productTypeId?: string;
   culture!: string;
-  name?: string;
+  name!: string;
   description?: string;
 
   constructor(data?: IProductTypeTranslationDto) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }

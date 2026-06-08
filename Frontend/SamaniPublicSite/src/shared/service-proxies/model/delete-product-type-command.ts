@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,17 +13,17 @@
 
 /** Interface for DeleteProductTypeCommand */
 export interface IDeleteProductTypeCommand {
-  id?: string;
+  id: string;
 }
 
 /** Class for DeleteProductTypeCommand */
 export class DeleteProductTypeCommand implements IDeleteProductTypeCommand {
-  id?: string;
+  id!: string;
 
   constructor(data?: IDeleteProductTypeCommand) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }

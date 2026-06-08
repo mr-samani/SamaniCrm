@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,25 +13,25 @@
 
 /** Interface for GetUserQuery */
 export interface IGetUserQuery {
+  filter?: string;
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;
   sortDirection?: string;
-  filter?: string;
 }
 
 /** Class for GetUserQuery */
 export class GetUserQuery implements IGetUserQuery {
+  filter?: string;
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;
   sortDirection?: string;
-  filter?: string;
 
   constructor(data?: IGetUserQuery) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }
@@ -39,11 +39,11 @@ export class GetUserQuery implements IGetUserQuery {
 
 init(data?: any) {
   if (data) {
+    this.filter = data["filter"];
     this.pageNumber = data["pageNumber"];
     this.pageSize = data["pageSize"];
     this.sortBy = data["sortBy"];
     this.sortDirection = data["sortDirection"];
-    this.filter = data["filter"];
   }
 }
 

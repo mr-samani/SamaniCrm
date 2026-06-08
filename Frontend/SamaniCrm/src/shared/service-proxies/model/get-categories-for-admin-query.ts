@@ -33,7 +33,7 @@ export class GetCategoriesForAdminQuery implements IGetCategoriesForAdminQuery {
   constructor(data?: IGetCategoriesForAdminQuery) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }

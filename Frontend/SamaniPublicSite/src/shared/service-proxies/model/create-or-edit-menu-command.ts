@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -17,6 +17,7 @@ import { MenuTargetEnum } from './menu-target-enum';
 /** Interface for CreateOrEditMenuCommand */
 export interface ICreateOrEditMenuCommand {
   id?: string;
+  name: string;
   title?: string;
   icon?: string;
   url?: string;
@@ -32,6 +33,7 @@ export interface ICreateOrEditMenuCommand {
 /** Class for CreateOrEditMenuCommand */
 export class CreateOrEditMenuCommand implements ICreateOrEditMenuCommand {
   id?: string;
+  name!: string;
   title?: string;
   icon?: string;
   url?: string;
@@ -46,7 +48,7 @@ export class CreateOrEditMenuCommand implements ICreateOrEditMenuCommand {
   constructor(data?: ICreateOrEditMenuCommand) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }
@@ -55,6 +57,7 @@ export class CreateOrEditMenuCommand implements ICreateOrEditMenuCommand {
 init(data?: any) {
   if (data) {
     this.id = data["id"];
+    this.name = data["name"];
     this.title = data["title"];
     this.icon = data["icon"];
     this.url = data["url"];

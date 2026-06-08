@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,17 +13,17 @@
 
 /** Interface for RoleCreateCommand */
 export interface IRoleCreateCommand {
-  roleName?: string;
+  roleName: string;
 }
 
 /** Class for RoleCreateCommand */
 export class RoleCreateCommand implements IRoleCreateCommand {
-  roleName?: string;
+  roleName!: string;
 
   constructor(data?: IRoleCreateCommand) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }

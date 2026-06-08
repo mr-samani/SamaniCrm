@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,29 +13,29 @@
 
 /** Interface for GetProductsQuery */
 export interface IGetProductsQuery {
+  filter?: string;
+  categoryId?: string;
+  productTypeId?: string;
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;
   sortDirection?: string;
-  filter?: string;
-  categoryId?: string;
-  productTypeId?: string;
 }
 
 /** Class for GetProductsQuery */
 export class GetProductsQuery implements IGetProductsQuery {
+  filter?: string;
+  categoryId?: string;
+  productTypeId?: string;
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;
   sortDirection?: string;
-  filter?: string;
-  categoryId?: string;
-  productTypeId?: string;
 
   constructor(data?: IGetProductsQuery) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }
@@ -43,13 +43,13 @@ export class GetProductsQuery implements IGetProductsQuery {
 
 init(data?: any) {
   if (data) {
+    this.filter = data["filter"];
+    this.categoryId = data["categoryId"];
+    this.productTypeId = data["productTypeId"];
     this.pageNumber = data["pageNumber"];
     this.pageSize = data["pageSize"];
     this.sortBy = data["sortBy"];
     this.sortDirection = data["sortDirection"];
-    this.filter = data["filter"];
-    this.categoryId = data["categoryId"];
-    this.productTypeId = data["productTypeId"];
   }
 }
 

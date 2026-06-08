@@ -74,7 +74,7 @@ GOTO End
 :RunOpenApiGenPublicSite
 ECHO *** Generate Services and model from swagger ***
 CD /D "%currentDirector%\Frontend\SamaniPublicSite"
-call npm run generate-api
+call npm run apiGen
 GOTO End
 ::---------------------------------------------------------
 :StartDashboardFrontEnd

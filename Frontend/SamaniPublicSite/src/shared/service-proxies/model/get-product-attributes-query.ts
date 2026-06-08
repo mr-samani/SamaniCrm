@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,27 +13,27 @@
 
 /** Interface for GetProductAttributesQuery */
 export interface IGetProductAttributesQuery {
+  filter?: string;
+  productTypeId?: string;
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;
   sortDirection?: string;
-  filter?: string;
-  productTypeId?: string;
 }
 
 /** Class for GetProductAttributesQuery */
 export class GetProductAttributesQuery implements IGetProductAttributesQuery {
+  filter?: string;
+  productTypeId?: string;
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;
   sortDirection?: string;
-  filter?: string;
-  productTypeId?: string;
 
   constructor(data?: IGetProductAttributesQuery) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }
@@ -41,12 +41,12 @@ export class GetProductAttributesQuery implements IGetProductAttributesQuery {
 
 init(data?: any) {
   if (data) {
+    this.filter = data["filter"];
+    this.productTypeId = data["productTypeId"];
     this.pageNumber = data["pageNumber"];
     this.pageSize = data["pageSize"];
     this.sortBy = data["sortBy"];
     this.sortDirection = data["sortDirection"];
-    this.filter = data["filter"];
-    this.productTypeId = data["productTypeId"];
   }
 }
 

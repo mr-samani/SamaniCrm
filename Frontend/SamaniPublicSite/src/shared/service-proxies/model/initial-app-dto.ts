@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -17,6 +17,7 @@ export interface IInitialAppDTO {
   languages?: Array<LanguageDTO>;
   defaultLang?: string;
   requireCaptcha?: boolean;
+  multiTenancy?: boolean;
 }
 
 /** Class for InitialAppDTO */
@@ -24,11 +25,12 @@ export class InitialAppDTO implements IInitialAppDTO {
   languages?: Array<LanguageDTO>;
   defaultLang?: string;
   requireCaptcha?: boolean;
+  multiTenancy?: boolean;
 
   constructor(data?: IInitialAppDTO) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }
@@ -43,6 +45,7 @@ init(data?: any) {
     }
     this.defaultLang = data["defaultLang"];
     this.requireCaptcha = data["requireCaptcha"];
+    this.multiTenancy = data["multiTenancy"];
   }
 }
 

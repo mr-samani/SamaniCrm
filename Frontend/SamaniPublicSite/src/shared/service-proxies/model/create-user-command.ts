@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,6 +13,7 @@
 
 /** Interface for CreateUserCommand */
 export interface ICreateUserCommand {
+  tenantId?: string;
   firstName: string;
   lastName: string;
   userName: string;
@@ -26,6 +27,7 @@ export interface ICreateUserCommand {
 
 /** Class for CreateUserCommand */
 export class CreateUserCommand implements ICreateUserCommand {
+  tenantId?: string;
   firstName!: string;
   lastName!: string;
   userName!: string;
@@ -39,7 +41,7 @@ export class CreateUserCommand implements ICreateUserCommand {
   constructor(data?: ICreateUserCommand) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }
@@ -47,6 +49,7 @@ export class CreateUserCommand implements ICreateUserCommand {
 
 init(data?: any) {
   if (data) {
+    this.tenantId = data["tenantId"];
     this.firstName = data["firstName"];
     this.lastName = data["lastName"];
     this.userName = data["userName"];

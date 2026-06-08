@@ -3,21 +3,27 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 import { AccountServiceProxy } from './api/account.service';
+import { AppLogsServiceProxy } from './api/app-logs.service';
 import { CaptchaServiceProxy } from './api/captcha.service';
 import { CommonServiceProxy } from './api/common.service';
+import { DasboardServiceProxy } from './api/dasboard.service';
+import { ExternalAuthServiceProxy } from './api/external-auth.service';
+import { ExternalProvidersServiceProxy } from './api/external-providers.service';
 import { FileManagerServiceProxy } from './api/file-manager.service';
-import { FileServeServiceProxy } from './api/file-serve.service';
 import { LanguageServiceProxy } from './api/language.service';
 import { MaintenanceServiceProxy } from './api/maintenance.service';
 import { MenuServiceProxy } from './api/menu.service';
 import { NotificationServiceProxy } from './api/notification.service';
+import { PageBuilderServiceProxy } from './api/page-builder.service';
 import { PagesServiceProxy } from './api/pages.service';
 import { ProductServiceProxy } from './api/product.service';
 import { PublicServiceProxy } from './api/public.service';
 import { RoleServiceProxy } from './api/role.service';
+import { SecurityLogServiceProxy } from './api/security-log.service';
 import { SecuritySettingsServiceProxy } from './api/security-settings.service';
+import { SubscriptionServiceProxy } from './api/subscription.service';
+import { TenantsServiceProxy } from './api/tenants.service';
 import { UserServiceProxy } from './api/user.service';
-import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
 
 @NgModule({
   imports:      [],
@@ -25,21 +31,27 @@ import { WeatherForecastServiceProxy } from './api/weather-forecast.service';
   exports:      [],
   providers: [
     AccountServiceProxy,
+    AppLogsServiceProxy,
     CaptchaServiceProxy,
     CommonServiceProxy,
+    DasboardServiceProxy,
+    ExternalAuthServiceProxy,
+    ExternalProvidersServiceProxy,
     FileManagerServiceProxy,
-    FileServeServiceProxy,
     LanguageServiceProxy,
     MaintenanceServiceProxy,
     MenuServiceProxy,
     NotificationServiceProxy,
+    PageBuilderServiceProxy,
     PagesServiceProxy,
     ProductServiceProxy,
     PublicServiceProxy,
     RoleServiceProxy,
+    SecurityLogServiceProxy,
     SecuritySettingsServiceProxy,
-    UserServiceProxy,
-    WeatherForecastServiceProxy ]
+    SubscriptionServiceProxy,
+    TenantsServiceProxy,
+    UserServiceProxy ]
 })
 export class SamaniApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<SamaniApiModule> {

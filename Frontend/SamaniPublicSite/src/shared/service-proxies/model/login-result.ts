@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { TwoFactorTypeEnum } from './two-factor-type-enum';
 import { UserDTO } from './user-dto';
 
 
@@ -15,22 +16,24 @@ import { UserDTO } from './user-dto';
 /** Interface for LoginResult */
 export interface ILoginResult {
   user?: UserDTO;
-  accessToken?: string;
-  refreshToken?: string;
   roles?: Array<string>;
+  permissions?: Array<string>;
+  enableTwoFactor?: boolean;
+  twoFactorType?: TwoFactorTypeEnum;
 }
 
 /** Class for LoginResult */
 export class LoginResult implements ILoginResult {
   user?: UserDTO;
-  accessToken?: string;
-  refreshToken?: string;
   roles?: Array<string>;
+  permissions?: Array<string>;
+  enableTwoFactor?: boolean;
+  twoFactorType?: TwoFactorTypeEnum;
 
   constructor(data?: ILoginResult) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }
@@ -39,13 +42,18 @@ export class LoginResult implements ILoginResult {
 init(data?: any) {
   if (data) {
     this.user = data["user"];
-    this.accessToken = data["accessToken"];
-    this.refreshToken = data["refreshToken"];
     if (Array.isArray(data["roles"])) {
       this.roles = [] as any;
       for (let item of data["roles"])
         (this.roles as any).push(item);
     }
+    if (Array.isArray(data["permissions"])) {
+      this.permissions = [] as any;
+      for (let item of data["permissions"])
+        (this.permissions as any).push(item);
+    }
+    this.enableTwoFactor = data["enableTwoFactor"];
+    this.twoFactorType = data["twoFactorType"];
   }
 }
 

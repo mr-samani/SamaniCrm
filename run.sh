@@ -37,7 +37,7 @@ runOpenApiGenDashboard() {
 runOpenApiGenPublicSite() {
     echo "*** Generate Services and Model from Swagger (PublicSite) ***"
     cd "$currentDirectory/Frontend/SamaniPublicSite"
-    npm run generate-api
+    npm run apiGen
 }
 
 updateDbWithSeed() {

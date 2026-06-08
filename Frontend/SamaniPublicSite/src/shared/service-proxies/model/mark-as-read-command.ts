@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,17 +13,17 @@
 
 /** Interface for MarkAsReadCommand */
 export interface IMarkAsReadCommand {
-  id?: string;
+  id: string;
 }
 
 /** Class for MarkAsReadCommand */
 export class MarkAsReadCommand implements IMarkAsReadCommand {
-  id?: string;
+  id!: string;
 
   constructor(data?: IMarkAsReadCommand) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }

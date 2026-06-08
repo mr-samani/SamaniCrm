@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -14,18 +14,18 @@
 /** Interface for UpdateRoleCommand */
 export interface IUpdateRoleCommand {
   id?: string;
-  roleName?: string;
+  roleName: string;
 }
 
 /** Class for UpdateRoleCommand */
 export class UpdateRoleCommand implements IUpdateRoleCommand {
   id?: string;
-  roleName?: string;
+  roleName!: string;
 
   constructor(data?: IUpdateRoleCommand) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }
