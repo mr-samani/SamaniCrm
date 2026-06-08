@@ -19,12 +19,12 @@ export class PageViewComponent extends BaseComponent implements OnInit, AfterVie
   pageInfo?: PageDto;
 
   data?: IPagebuilderOutput;
-  
+
   dynamicData: DynamicDataStructure[] = DYNAMIC_DATA;
   constructor(
     injector: Injector,
     private pageService: PagesServiceProxy,
-    @Inject(DOCUMENT) private _document: Document
+    @Inject(DOCUMENT) private _document: Document,
   ) {
     super(injector);
     this.culture = this.route.snapshot.params['culture'];
@@ -44,7 +44,7 @@ export class PageViewComponent extends BaseComponent implements OnInit, AfterVie
       .pipe(
         finalize(() => {
           this.loading.set(false);
-        })
+        }),
       )
       .subscribe((result) => {
         this.pageInfo = result.data ?? new PageDto();
@@ -61,6 +61,7 @@ export class PageViewComponent extends BaseComponent implements OnInit, AfterVie
           config: new PageBuilderConfig(),
           data: parsed,
           styles: styles,
+          cssVariables: [],
         };
         console.log(this.data);
 

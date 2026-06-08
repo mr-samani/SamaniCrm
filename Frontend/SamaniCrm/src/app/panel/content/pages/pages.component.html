@@ -51,31 +51,49 @@
   <pagination [total]="totalCount" [(page)]="page" (onChange)="onPageChange($event)"></pagination>
 
   <ng-template #operations let-item>
-    @if ([AppPermissions.Pages_Builder, AppPermissions.Pages_Delete] | permissionAny) {
-      <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
-        <i class="fa fa-ellipsis-v"></i>
-      </button>
-      <mat-menu #menu="matMenu">   
-        
-        @if (AppPermissions.Pages_Update | permission) {
-          <a mat-menu-item (click)="openCreateOrEditPageDialog(item)">
-            <i class="fa fa-edit mx-1"></i>
-            <span>{{ 'EditMetaData' | translate }}</span>
-          </a>
-        }
-        @if (AppPermissions.Pages_Builder | permission) {
-          <a mat-menu-item (click)="openPageBuilder(item)">
-            <i class="fa fa-edit mx-1"></i>
-            <span>{{ 'EditContent' | translate }}</span>
-          </a>
-        }
-        @if (AppPermissions.Pages_Delete | permission) {
-          <a mat-menu-item (click)="remove(item)">
-            <i class="fa fa-trash mx-1"></i>
-            <span>{{ 'Remove' | translate }}</span>
-          </a>
-        }
-      </mat-menu>
-    }
+    <button mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
+      <i class="fa fa-ellipsis-v"></i>
+    </button>
+    <mat-menu #menu="matMenu">
+      <a
+        mat-menu-item
+        [href]="AppConst.publicSiteUrl + '/' + (AppConst.currentLanguage | slice: 0 : 2) + '/page/' + item.slug">
+        <i class="fa fa-edit mx-1"></i>
+        <span>{{ 'OpenPage' | translate }}</span>
+      </a>
+
+      <a
+        mat-menu-item
+        [href]="
+          AppConst.publicSiteUrl +
+          '/' +
+          (AppConst.currentLanguage | slice: 0 : 2) +
+          '/page/preview/' +
+          AppConst.currentLanguage +
+          '/' +
+          item.id
+        ">
+        <i class="fa fa-edit mx-1"></i>
+        <span>{{ 'PreviewPage' | translate }}</span>
+      </a>
+      @if (AppPermissions.Pages_Update | permission) {
+        <a mat-menu-item (click)="openCreateOrEditPageDialog(item)">
+          <i class="fa fa-edit mx-1"></i>
+          <span>{{ 'EditMetaData' | translate }}</span>
+        </a>
+      }
+      @if (AppPermissions.Pages_Builder | permission) {
+        <a mat-menu-item (click)="openPageBuilder(item)">
+          <i class="fa fa-edit mx-1"></i>
+          <span>{{ 'EditContent' | translate }}</span>
+        </a>
+      }
+      @if (AppPermissions.Pages_Delete | permission) {
+        <a mat-menu-item (click)="remove(item)">
+          <i class="fa fa-trash mx-1"></i>
+          <span>{{ 'Remove' | translate }}</span>
+        </a>
+      }
+    </mat-menu>
   </ng-template>
 </div>

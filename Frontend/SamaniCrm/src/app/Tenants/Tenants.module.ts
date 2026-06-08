@@ -20,7 +20,7 @@ import { SharedModule } from '@shared/shared.module';
 import { TenantsServiceProxy } from '@shared/service-proxies/api/tenants.service';
 import { UserServiceProxy } from '@shared/service-proxies/api/user.service';
 import { TenantsRoutingModule } from './Tenants-routing.module';
-import { NgxInputColorModule } from 'ngx-input-color';
+import { NgxInputColor } from 'ngx-input-color/color-picker';
 import { TenantUsersComponent } from './tenant-users/tenant-users.component';
 
 @NgModule({
@@ -48,7 +48,7 @@ import { TenantUsersComponent } from './tenant-users/tenant-users.component';
     TabGroupModule,
     SharedModule,
     PasswordInputComponent,
-    NgxInputColorModule,
+    NgxInputColor,
   ],
   providers: [TenantsServiceProxy, UserServiceProxy],
 })

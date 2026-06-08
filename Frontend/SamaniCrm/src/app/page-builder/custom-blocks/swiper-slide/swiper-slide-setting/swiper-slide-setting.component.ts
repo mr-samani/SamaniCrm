@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { AppComponentBase } from '@app/app-component-base';
 import { FileManagerDto } from '@app/file-manager/models/file-manager-dto';
-import { IOptions } from 'grapesjs-tui-image-editor';
 import { COMPONENT_DATA, ComponentDataContext } from 'ngx-page-builder/core';
 import { SwiperSlideContext, SwiperSlideSetting, SwiperPresetType } from '../SwiperSlideSetting';
 import { FormsModule } from '@angular/forms';
@@ -9,6 +8,7 @@ import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { SwitchModule } from '@shared/components/switch/switch.module';
+import { IOptions } from '@app/file-manager/options.interface';
 
 interface PresetOption {
   value: SwiperPresetType;

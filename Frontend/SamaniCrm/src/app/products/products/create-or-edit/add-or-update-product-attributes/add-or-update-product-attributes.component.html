@@ -62,7 +62,7 @@
                   </mat-checkbox>
                 }
                 @case (ProductAttributeDataTypeEnum.Color) {
-                  <input type="color" class="form-control input-color" [(ngModel)]="item.value" (blur)="changed()" />
+                  <input type="color" class="form-control input-color" [(ngModel)]="item.value" (blur)="changed()" ngxInputColor />
                 }
                 @default {
                   <input type="text" class="form-control" [(ngModel)]="item.value" (blur)="changed()" />
