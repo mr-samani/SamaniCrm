@@ -153,19 +153,19 @@ public sealed class IdentityService : IIdentityService
 
     public async Task<PaginatedResult<UserDTO>> GetAllUsersAsync(GetUserQuery request, CancellationToken cancellationToken)
     {
-        //var rolesQuery = from ur in _dbContext.UserRoles
-        //                 join r in _roleManager.Roles on ur.RoleId equals r.Id
-        //                 select new { ur.UserId, RoleName = r.Name };
+        var rolesQuery = from ur in _dbContext.UserRoles
+                         join r in _roleManager.Roles on ur.RoleId equals r.Id
+                         select new { ur.UserId, RoleName = r.Name };
 
-        var rolesQuery = await _dbContext.Database
-                 .SqlQueryRaw<UserRoleDto>(@"
-                    SELECT 
-                        ur.UserId,
-                        r.Name AS RoleName
-                    FROM AspNetUserRoles ur
-                    INNER JOIN AspNetRoles r ON r.Id = ur.RoleId
-                ")
-                .ToListAsync();
+        //var rolesQuery = await _dbContext.Database
+        //         .SqlQueryRaw<UserRoleDto>(@"
+        //          SELECT 
+        //                ur.UserId,
+        //                r.Name AS RoleName
+        //            FROM [auth].[UserRoles]  ur
+        //            INNER JOIN [auth].[Roles] r ON r.Id = ur.RoleId
+        //        ")
+        //        .ToListAsync();
 
         IQueryable<ApplicationUser> query = _userManager.Users.AsQueryable();
         if (!string.IsNullOrEmpty(request.Filter))
@@ -444,15 +444,12 @@ public sealed class IdentityService : IIdentityService
     public async Task<LoginResult> LoginAsync(LoginCommand request, CancellationToken cancellationToken)
     {
         var tenant = await _hostIdentityService.GetTenantByTenancyName(request.TenancyName, cancellationToken);
-        if (tenant is null)
-            throw new NotFoundException("Tenant not found");
-
-
+      
         using (_currentTenant.Change(
-            tenant.Id,
-            tenant.TenancyName,
-            tenant.TenantName,
-            tenant.ConnectionString))
+            tenant?.Id,
+            tenant?.TenancyName,
+            tenant?.TenantName,
+            tenant?.ConnectionString))
         {
 
             var user = await FindUserByUserNameAsync(request.UserName, tenant?.Id, cancellationToken);
@@ -494,18 +491,15 @@ public sealed class IdentityService : IIdentityService
     public async Task<LoginResult> TwoFactorLoginAsync(TwoFactorLoginCommand request, CancellationToken cancellationToken)
     {
         var tenant = await _hostIdentityService.GetTenantByTenancyName(request.TenancyName, cancellationToken);
-        if (tenant is null)
-            throw new NotFoundException("Tenant not found");
-
-
+ 
         using (_currentTenant.Change(
-            tenant.Id,
-            tenant.TenancyName,
-            tenant.TenantName,
-            tenant.ConnectionString))
+            tenant?.Id,
+            tenant?.TenancyName,
+            tenant?.TenantName,
+            tenant?.ConnectionString))
         {
 
-            var user = await FindUserByUserNameAsync(request.UserName, tenant.Id, cancellationToken);
+            var user = await FindUserByUserNameAsync(request.UserName, tenant?.Id, cancellationToken);
             if (user is null)
                 throw new InvalidLoginException();
 
@@ -873,13 +867,12 @@ public sealed class IdentityService : IIdentityService
         if (tenantId.HasValue)
         {
             var tenant = await _hostIdentityService.GetTenantById(tenantId.Value, cancellationToken);
-            if (tenant is null)
-                return null;
+          
             using (_currentTenant.Change(
-                      tenant.Id,
-                      tenant.TenancyName,
-                      tenant.TenantName,
-                      tenant.ConnectionString))
+                      tenant?.Id,
+                      tenant?.TenancyName,
+                      tenant?.TenantName,
+                      tenant?.ConnectionString))
             {
                 return await _userManager.Users
                    .IgnoreQueryFilters()
