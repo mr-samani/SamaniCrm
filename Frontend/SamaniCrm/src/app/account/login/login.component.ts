@@ -72,7 +72,7 @@ export class LoginComponent extends AppComponentBase implements OnInit {
     }
     this.loading = true;
     let formValue: LoginCommand = this.loginForm.value;
-    formValue.tenant = AppConst.tenancyName ?? null;
+    formValue.tenancyName = AppConst.tenancyName ?? null;
     formValue.captcha = new InputCaptchaDTO(this.loginForm.get('captcha')?.value);
 
     this.authService
@@ -149,7 +149,12 @@ export class LoginComponent extends AppComponentBase implements OnInit {
     this.loadingExternalProviders = true;
     this.accountService
       .getExternalProviders()
-      .pipe(finalize(() => (this.loadingExternalProviders = false)))
+      .pipe(
+        finalize(() => {
+          this.loadingExternalProviders = false;
+          this.chdr.detectChanges();
+        }),
+      )
       .subscribe((response) => {
         this.externalProviderList = response.data ?? [];
       });

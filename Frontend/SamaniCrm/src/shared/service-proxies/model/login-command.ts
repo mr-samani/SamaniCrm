@@ -17,7 +17,7 @@ export interface ILoginCommand {
   userName: string;
   password: string;
   captcha?: InputCaptchaDTO;
-  tenant?: string;
+  tenancyName?: string;
   rememberMe?: boolean;
 }
 
@@ -26,7 +26,7 @@ export class LoginCommand implements ILoginCommand {
   userName!: string;
   password!: string;
   captcha?: InputCaptchaDTO;
-  tenant?: string;
+  tenancyName?: string;
   rememberMe?: boolean;
 
   constructor(data?: ILoginCommand) {
@@ -43,7 +43,7 @@ init(data?: any) {
     this.userName = data["userName"];
     this.password = data["password"];
     this.captcha = data["captcha"];
-    this.tenant = data["tenant"];
+    this.tenancyName = data["tenancyName"];
     this.rememberMe = data["rememberMe"];
   }
 }

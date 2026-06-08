@@ -3,7 +3,7 @@ using SamaniCrm.Application.Common.Interfaces;
 
 namespace SamaniCrm.Application.Auth.Commands;
 
-public record ExternalLoginCallbackCommand(string code,string provider,string tenancyName,string? codeVerifier) : IRequest<LoginResult>;
+public record ExternalLoginCallbackCommand(string code,string provider,string? tenancyName,string? codeVerifier) : IRequest<LoginResult>;
 
 public class ExternalLoginCallbackHandler : IRequestHandler<ExternalLoginCallbackCommand, LoginResult>
 {

@@ -118,7 +118,10 @@ public sealed class IdentityService : IIdentityService
 
         var roles = await _userManager.GetRolesAsync(user);
 
-        return MapUser(user, roles.ToList());
+        var result = MapUser(user, roles.ToList());
+        result.IsDelegated = _currentUser.IsDelegated;
+        result.DelegatorId = _currentUser.DelegatorId;
+        return result;
     }
 
     public async Task<UserDTO> GetUserDetailsByUserNameAsync(string userName, Guid? tenantId, CancellationToken cancellationToken)
@@ -444,7 +447,7 @@ public sealed class IdentityService : IIdentityService
     public async Task<LoginResult> LoginAsync(LoginCommand request, CancellationToken cancellationToken)
     {
         var tenant = await _hostIdentityService.GetTenantByTenancyName(request.TenancyName, cancellationToken);
-      
+
         using (_currentTenant.Change(
             tenant?.Id,
             tenant?.TenancyName,
@@ -491,7 +494,7 @@ public sealed class IdentityService : IIdentityService
     public async Task<LoginResult> TwoFactorLoginAsync(TwoFactorLoginCommand request, CancellationToken cancellationToken)
     {
         var tenant = await _hostIdentityService.GetTenantByTenancyName(request.TenancyName, cancellationToken);
- 
+
         using (_currentTenant.Change(
             tenant?.Id,
             tenant?.TenancyName,
@@ -538,9 +541,10 @@ public sealed class IdentityService : IIdentityService
 
     public async Task<LoginResult> ExternalLoginAsync(ExternalLoginCallbackCommand request, CancellationToken cancellationToken)
     {
+
         var tenant = await ResolveTenantByTenancyNameAsync(request.tenancyName, cancellationToken);
-        if (tenant is null)
-            throw new InvalidLoginException();
+
+
 
         var backendUrl = _config["BackendUrl"] ?? "";
         if (backendUrl.EndsWith("/") == false)
@@ -682,30 +686,34 @@ public sealed class IdentityService : IIdentityService
         if (delegatorId is null || delegatedUserId is null)
             return;
 
-        var admin = await _userManager.Users
+        using (_currentTenant.Change(null, null, null, null))
+        {
+            var admin = await _userManager.Users
             .IgnoreQueryFilters()
             .FirstOrDefaultAsync(x => x.Id == delegatorId && !x.IsDeleted, cancellationToken);
+            if (admin is null)
+                throw new UnauthorizedAccessException();
 
-        if (admin is null)
-            throw new UnauthorizedAccessException();
 
-        var activeDelegation = await _dbContext.UserDelegations
-            .Where(x => x.AdminId == delegatorId &&
-                        x.TargetUserId == delegatedUserId &&
-                        x.IsActive)
-            .OrderByDescending(x => x.StartTime)
-            .FirstOrDefaultAsync(cancellationToken);
 
-        if (activeDelegation is not null)
-        {
-            activeDelegation.EndTime = DateTime.UtcNow;
-            activeDelegation.IsActive = false;
-            activeDelegation.EndedFromIp = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+            var activeDelegation = await _dbContext.UserDelegations
+                .Where(x => x.AdminId == delegatorId &&
+                            x.TargetUserId == delegatedUserId &&
+                            x.IsActive)
+                .OrderByDescending(x => x.StartTime)
+                .FirstOrDefaultAsync(cancellationToken);
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            if (activeDelegation is not null)
+            {
+                activeDelegation.EndTime = DateTime.UtcNow;
+                activeDelegation.IsActive = false;
+                activeDelegation.EndedFromIp = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+
+            await _signInManager.SignInAsync(admin, false);
         }
-
-        await _signInManager.SignInAsync(admin, false);
     }
 
     public async Task LogoutAsync(CancellationToken cancellationToken)
@@ -815,8 +823,14 @@ public sealed class IdentityService : IIdentityService
         return await _hostIdentityService.GetTenantByTenancyName(tenancyName, cancellationToken);
     }
 
-    private async Task<SimpleTenantData?> ResolveTenantByTenancyNameAsync(string tenancyName, CancellationToken cancellationToken)
-        => await _hostIdentityService.GetTenantByTenancyName(tenancyName, cancellationToken);
+    private async Task<SimpleTenantData?> ResolveTenantByTenancyNameAsync(string? tenancyName, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrEmpty(tenancyName))
+            return null;
+
+        return await _hostIdentityService.GetTenantByTenancyName(tenancyName, cancellationToken);
+    }
+
 
     private async Task SignInWithClaimsAsync(ApplicationUser user, List<string> roles, CancellationToken cancellationToken)
     {
@@ -867,7 +881,7 @@ public sealed class IdentityService : IIdentityService
         if (tenantId.HasValue)
         {
             var tenant = await _hostIdentityService.GetTenantById(tenantId.Value, cancellationToken);
-          
+
             using (_currentTenant.Change(
                       tenant?.Id,
                       tenant?.TenancyName,
@@ -883,11 +897,31 @@ public sealed class IdentityService : IIdentityService
             .IgnoreQueryFilters()
             .FirstOrDefaultAsync(x => x.UserName == userName && x.TenantId == null && !x.IsDeleted, cancellationToken);
     }
+    private async Task<ApplicationUser?> FindUserByEmailAsync(string email, Guid? tenantId, CancellationToken cancellationToken)
+    {
+        if (tenantId.HasValue)
+        {
+            var tenant = await _hostIdentityService.GetTenantById(tenantId.Value, cancellationToken);
 
+            using (_currentTenant.Change(
+                      tenant?.Id,
+                      tenant?.TenancyName,
+                      tenant?.TenantName,
+                      tenant?.ConnectionString))
+            {
+                return await _userManager.Users
+                   .IgnoreQueryFilters()
+                   .FirstOrDefaultAsync(x => x.Email == email && x.TenantId == tenantId && !x.IsDeleted, cancellationToken);
+            }
+        }
+        return await _userManager.Users
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x => x.Email == email && x.TenantId == null && !x.IsDeleted, cancellationToken);
+    }
 
     private async Task<ApplicationUser> FindOrCreateExternalUser(string email, string userName, string name, string providerName, Guid? tenantId, CancellationToken cancellationToken)
     {
-        var user = await FindUserByUserNameAsync(userName, tenantId, cancellationToken);
+        var user = await FindUserByEmailAsync(email, tenantId, cancellationToken);
         if (user == null)
         {
 
