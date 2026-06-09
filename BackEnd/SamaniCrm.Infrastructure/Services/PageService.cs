@@ -38,7 +38,7 @@ namespace SamaniCrm.Infrastructure.Services
             IApplicationDbContext context,
             ICurrentUserService currentUser,
             ILocalizer l,
-            IMasterDbContext masterDbContext, 
+            IMasterDbContext masterDbContext,
             UserManager<ApplicationUser> userManager)
         {
             _context = context;
@@ -62,6 +62,15 @@ namespace SamaniCrm.Infrastructure.Services
 
                 if (page == null)
                     throw new NotFoundException("Page not found");
+
+
+                var duplicatedSlug = await _context.Pages.Where(x => x.Id != request.Id &&
+                                             x.Slug.ToLower().Trim() == request.Slug.ToLower().Trim())
+                                     .CountAsync(cancellationToken) > 0;
+                if (duplicatedSlug)
+                {
+                    throw new UserFriendlyException($"{request.Slug} is duplicated!");
+                }
 
                 // Update translations
                 foreach (var item in request.Translations ?? [])
@@ -98,12 +107,22 @@ namespace SamaniCrm.Infrastructure.Services
                 page.IsActive = request.IsActive;
                 page.Status = request.Status ?? page.Status;
                 page.Type = request.Type;
+                page.Slug = request.Slug;
             }
             else
             {
+                var duplicatedSlug = await _context.Pages.Where(x => 
+                                            x.Slug.ToLower().Trim() == request.Slug.ToLower().Trim())
+                                    .CountAsync(cancellationToken) > 0;
+                if (duplicatedSlug)
+                {
+                    throw new UserFriendlyException($"{request.Slug} is duplicated!");
+                }
+
                 // New page
                 page = new Page
                 {
+                    Slug = request.Slug,
                     AuthorId = _currentUser.UserId!,
                     CoverImage = request.CoverImage,
                     IsActive = request.IsActive,
@@ -195,6 +214,7 @@ namespace SamaniCrm.Infrastructure.Services
                 .Select(p => new PageDto
                 {
                     Id = p.Page.Id,
+                    Slug = p.Page.Slug,
                     Status = p.Page.Status,
                     Author = p.Author.FullName,
                     Created = p.Page.CreatedAt,
@@ -220,6 +240,7 @@ namespace SamaniCrm.Infrastructure.Services
                        .Select(s => new PageForEditDto
                        {
                            Id = s.Id,
+                           Slug = s.Slug,
                            CoverImage = s.CoverImage,
                            IsActive = s.IsActive,
                            IsSystem = s.IsSystem,
@@ -248,32 +269,46 @@ namespace SamaniCrm.Infrastructure.Services
 
         public async Task<PageDto> GetPageInfo(GetPageInfoQuery request, CancellationToken cancellationToken)
         {
-            var page = await _context.Pages
-                  .Where(w => w.Id == request.PageId)
-                 .Select(s => new
-                 {
-                     s.Id,
-                     s.CoverImage,
-                     s.IsActive,
-                     s.IsSystem,
-                     s.Status,
-                     s.Type,
-                     Translation = s.Translations
-                                 .Where(t => t.Culture == request.Culture)
-                                 .Select(t => new
-                                 {
-                                     t.Culture,
-                                     t.Title,
-                                     t.Description,
-                                     t.MetaDescription,
-                                     t.MetaKeywords,
-                                     t.Html,
-                                     t.Data,
-                                     t.Styles,
-                                     t.Scripts
-                                 }).FirstOrDefault()
-                 })
-                   .FirstOrDefaultAsync();
+            var query = _context.Pages.AsQueryable().AsNoTracking();
+            if (request.PageId.HasValue)
+            {
+                query = query.Where(w => w.Id == request.PageId);
+            }
+            else if (string.IsNullOrEmpty(request.slug) == false)
+            {
+                query = query.Where(w => w.Slug == request.slug);
+            }
+            else
+            {
+                throw new UserFriendlyException("Page id or page slug is required");
+            }
+
+            var page = await query
+             .Select(s => new
+             {
+                 s.Id,
+                 s.Slug,
+                 s.CoverImage,
+                 s.IsActive,
+                 s.IsSystem,
+                 s.Status,
+                 s.Type,
+                 Translation = s.Translations
+                             .Where(t => t.Culture == request.Culture)
+                             .Select(t => new
+                             {
+                                 t.Culture,
+                                 t.Title,
+                                 t.Description,
+                                 t.MetaDescription,
+                                 t.MetaKeywords,
+                                 t.Html,
+                                 t.Data,
+                                 t.Styles,
+                                 t.Scripts
+                             }).FirstOrDefault()
+             })
+               .FirstOrDefaultAsync();
             if (page == null)
             {
                 throw new NotFoundException("Page not found");
@@ -281,6 +316,7 @@ namespace SamaniCrm.Infrastructure.Services
             return new PageDto()
             {
                 Id = page.Id,
+                Slug = page.Slug,
                 Culture = page.Translation?.Culture ?? "",
                 CoverImage = page.CoverImage,
                 IsActive = page.IsActive,

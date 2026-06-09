@@ -17,6 +17,7 @@ import { PageMetaDataDto } from './page-meta-data-dto';
 /** Interface for CreateOrEditPageMetaDataCommand */
 export interface ICreateOrEditPageMetaDataCommand {
   id?: string;
+  slug: string;
   coverImage?: string;
   status?: PageStatusEnum;
   type?: PageTypeEnum;
@@ -28,6 +29,7 @@ export interface ICreateOrEditPageMetaDataCommand {
 /** Class for CreateOrEditPageMetaDataCommand */
 export class CreateOrEditPageMetaDataCommand implements ICreateOrEditPageMetaDataCommand {
   id?: string;
+  slug!: string;
   coverImage?: string;
   status?: PageStatusEnum;
   type?: PageTypeEnum;
@@ -47,6 +49,7 @@ export class CreateOrEditPageMetaDataCommand implements ICreateOrEditPageMetaDat
 init(data?: any) {
   if (data) {
     this.id = data["id"];
+    this.slug = data["slug"];
     this.coverImage = data["coverImage"];
     this.status = data["status"];
     this.type = data["type"];

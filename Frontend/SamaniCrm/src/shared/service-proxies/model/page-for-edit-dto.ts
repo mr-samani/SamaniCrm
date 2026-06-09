@@ -17,6 +17,7 @@ import { PageMetaDataDto } from './page-meta-data-dto';
 /** Interface for PageForEditDto */
 export interface IPageForEditDto {
   id?: string;
+  slug: string;
   coverImage?: string;
   status?: PageStatusEnum;
   type?: PageTypeEnum;
@@ -28,6 +29,7 @@ export interface IPageForEditDto {
 /** Class for PageForEditDto */
 export class PageForEditDto implements IPageForEditDto {
   id?: string;
+  slug!: string;
   coverImage?: string;
   status?: PageStatusEnum;
   type?: PageTypeEnum;
@@ -47,6 +49,7 @@ export class PageForEditDto implements IPageForEditDto {
 init(data?: any) {
   if (data) {
     this.id = data["id"];
+    this.slug = data["slug"];
     this.coverImage = data["coverImage"];
     this.status = data["status"];
     this.type = data["type"];

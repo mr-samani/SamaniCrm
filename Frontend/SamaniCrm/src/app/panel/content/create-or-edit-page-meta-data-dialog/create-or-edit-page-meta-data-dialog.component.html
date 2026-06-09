@@ -11,7 +11,6 @@
   </button>
 </h2>
 <mat-dialog-content>
-  
   @if (loading) {
     <div class="d-flex align-items-center justify-content-center py-5">
       <mat-spinner color="primary" diameter="25"></mat-spinner>
@@ -20,6 +19,20 @@
   @if (!loading) {
     <form [formGroup]="form">
       <div class="row">
+        <mat-form-field class="col-md-6">
+          <mat-label>{{ 'Slug' | translate }}</mat-label>
+          <input matInput formControlName="slug" />
+          @if (form.get('slug')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('Slug' | translate) } }}
+            </mat-error>
+          }
+          @if (form.get('slug')?.hasError('invalid')) {
+            <mat-error>
+              {{ 'SlugMustBeEnglishCharactersWithoutSpace' | translate }}
+            </mat-error>
+          }
+        </mat-form-field>
         @if (isUpdate) {
           <mat-form-field class="col-md-6">
             <mat-label>{{ 'Status' | translate }}</mat-label>
@@ -82,8 +95,8 @@
   <!-- <pre dir="ltr" style="text-align: left;">{{form.value|json}}</pre> -->
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button  class="btn btn-default" mat-dialog-close >{{ 'Cancel' | translate }}</button>
-  <button  class="btn btn-primary"  (click)="save()" cdkFocusInitial [disabled]="loading || saving">
+  <button class="btn btn-default" mat-dialog-close>{{ 'Cancel' | translate }}</button>
+  <button class="btn btn-primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
     @if (saving) {
       <mat-spinner color="primary" diameter="25"></mat-spinner>
     }

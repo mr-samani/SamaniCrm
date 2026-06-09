@@ -40,13 +40,14 @@ export class PageViewComponent extends BaseComponent implements OnInit, AfterVie
   getInfo() {
     this.loading.set(true);
     this.pageService
-      .getPageInfo(this.pageId, this.culture)
+      .getPageInfo(this.culture, this.pageId, this.slug)
       .pipe(
         finalize(() => {
           this.loading.set(false);
         }),
       )
       .subscribe((result) => {
+        console.log(result);
         this.pageInfo = result.data ?? new PageDto();
         const parsed = JSON.parse(this.pageInfo.data ?? '{}');
         let styles = [];
@@ -63,7 +64,7 @@ export class PageViewComponent extends BaseComponent implements OnInit, AfterVie
           styles: styles,
           cssVariables: [],
         };
-        console.log(this.data);
+        console.log('pagebuilderData', this.data);
 
         this.cd.detectChanges();
       });

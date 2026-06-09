@@ -13,6 +13,9 @@ namespace SamaniCrm.Domain.Entities;
 
 public class Page : BaseEntity,IMayHaveTenant
 {
+    [MaxLength(255)]
+    public required string Slug { get; set; }
+
     public Guid? TenantId { get; set; }
     public string? CoverImage { get; set; }
     public Guid? AuthorId { get; set; }

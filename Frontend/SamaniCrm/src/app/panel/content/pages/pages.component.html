@@ -56,18 +56,20 @@
     </button>
     <mat-menu #menu="matMenu">
       <a
+        target="_blank"
         mat-menu-item
-        [href]="AppConst.publicSiteUrl + '/' + (AppConst.currentLanguage | slice: 0 : 2) + '/page/' + item.slug">
+        [href]="AppConst.publicSiteUrl + '/' + AppConst.currentLanguage + '/page/' + item.slug">
         <i class="fa fa-edit mx-1"></i>
         <span>{{ 'OpenPage' | translate }}</span>
       </a>
 
       <a
         mat-menu-item
+        target="_blank"
         [href]="
           AppConst.publicSiteUrl +
           '/' +
-          (AppConst.currentLanguage | slice: 0 : 2) +
+          AppConst.currentLanguage +
           '/page/preview/' +
           AppConst.currentLanguage +
           '/' +

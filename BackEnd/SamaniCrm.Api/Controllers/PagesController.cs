@@ -45,9 +45,9 @@ public class PagesController : ApiBaseController
     //[Permission(AppPermissions.Pages.Update)]
     [AllowAnonymous]
     [ProducesResponseType(typeof(ApiResponse<PageDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetPageInfo(Guid pageId, string culture, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetPageInfo(string culture, Guid? pageId, string? slug, CancellationToken cancellationToken)
     {
-        PageDto result = await _mediator.Send(new GetPageInfoQuery(pageId, culture), cancellationToken);
+        PageDto result = await _mediator.Send(new GetPageInfoQuery(culture, pageId, slug), cancellationToken);
         return ApiOk(result);
     }
 

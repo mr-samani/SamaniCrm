@@ -16,7 +16,7 @@ import { PageStatusEnum } from './page-status-enum';
 /** Interface for PageDto */
 export interface IPageDto {
   id?: string;
-  slag?: string;
+  slug?: string;
   status?: PageStatusEnum;
   author?: string;
   created?: string;
@@ -39,7 +39,7 @@ export interface IPageDto {
 /** Class for PageDto */
 export class PageDto implements IPageDto {
   id?: string;
-  slag?: string;
+  slug?: string;
   status?: PageStatusEnum;
   author?: string;
   created?: string;
@@ -70,7 +70,7 @@ export class PageDto implements IPageDto {
 init(data?: any) {
   if (data) {
     this.id = data["id"];
-    this.slag = data["slag"];
+    this.slug = data["slug"];
     this.status = data["status"];
     this.author = data["author"];
     this.created = data["created"];

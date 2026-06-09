@@ -4,7 +4,7 @@ using SamaniCrm.Application.DTOs;
 
 namespace SamaniCrm.Application.Pages.Queries
 {
-    public record GetPageInfoQuery(Guid PageId, string Culture) : IRequest<PageDto>;
+    public record GetPageInfoQuery(string Culture, Guid? PageId, string? slug) : IRequest<PageDto>;
 
     public class GetPageInfoQueryHandler : IRequestHandler<GetPageInfoQuery, PageDto>
     {

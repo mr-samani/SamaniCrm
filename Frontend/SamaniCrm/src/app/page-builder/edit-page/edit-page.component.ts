@@ -21,17 +21,18 @@ import { PluginService } from '../services/plugin.service';
 import { CUSTOM_BLOCKS } from '../custom-blocks/CustomBlocks';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { CommonModule } from '@angular/common';
-import { PageBuilderServiceProxy } from '@shared/service-proxies';
+import { FileManagerServiceProxy, PageBuilderServiceProxy } from '@shared/service-proxies';
 import { DYNAMIC_DATA } from '../dynamic-data/dynamic-data';
+import { FileManagerModule } from '@app/file-manager/file-manager.module';
 @Component({
   selector: 'app-edit-page',
   templateUrl: './edit-page.component.html',
   styleUrls: ['./edit-page.component.scss'],
-  imports: [NgxPageBuilder, CommonModule],
+  imports: [NgxPageBuilder,FileManagerModule, CommonModule],
   providers: [
     PagesServiceProxy,
     PageBuilderServiceProxy,
-    FileManagerService,
+    
     PluginService,
     providePageBuilder({
       customSources: CUSTOM_BLOCKS,
@@ -101,7 +102,7 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
     if (!this.pageId) return;
     this.showMainLoading();
     this.pageService
-      .getPageInfo(this.pageId, this.lang)
+      .getPageInfo(this.lang, this.pageId)
       .pipe(
         finalize(() => {
           this.hideMainLoading();

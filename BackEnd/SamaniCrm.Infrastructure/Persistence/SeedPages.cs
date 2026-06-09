@@ -23,6 +23,7 @@ public static class SeedPages
             var list = new List<Page>();
             list.Add(new Page()
             {
+                Slug = "categories",
                 TenantId = tenantId,
                 Type = PageTypeEnum.Product,
                 IsActive = true,
@@ -47,6 +48,7 @@ public static class SeedPages
 
             list.Add(new Page()
             {
+                Slug = "products",
                 TenantId = tenantId,
                 Type = PageTypeEnum.Product,
                 IsActive = true,
@@ -72,6 +74,7 @@ public static class SeedPages
 
             list.Add(new Page()
             {
+                Slug = "cart",
                 TenantId = tenantId,
                 Type = PageTypeEnum.Product,
                 IsActive = true,
@@ -110,6 +113,7 @@ public static class SeedPages
         {
             dbContext.Pages.Add(new Page()
             {
+                Slug = "about-us",
                 TenantId = tenantId,
                 Type = PageTypeEnum.AboutUs,
                 IsActive = true,
@@ -142,12 +146,13 @@ public static class SeedPages
            .ToListAsync();
 
 
- 
+
 
         if (!contactUsPages.Any())
         {
             dbContext.Pages.Add(new Page()
             {
+                Slug = "contact-us",
                 TenantId = tenantId,
                 Type = PageTypeEnum.ContactUs,
                 IsActive = true,

@@ -10,7 +10,10 @@ using SamaniCrm.Application.DTOs;
 using SamaniCrm.Domain.Entities;
 
 namespace SamaniCrm.Application.Pages.Commands;
-public class CreateOrEditPageMetaDataCommand : PageForEditDto, IRequest<Guid>;
+
+public class CreateOrEditPageMetaDataCommand : PageForEditDto, IRequest<Guid>
+{
+}
 
 public class CreateOrEditPageMetaDataCommandHandler : IRequestHandler<CreateOrEditPageMetaDataCommand, Guid>
 {

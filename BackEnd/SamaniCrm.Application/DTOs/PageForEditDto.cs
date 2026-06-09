@@ -12,6 +12,8 @@ namespace SamaniCrm.Application.DTOs;
 public class PageForEditDto
 {
     public Guid? Id { get; set; }
+    public required string Slug { get; set; }
+
     public string? CoverImage { get; set; }
     public PageStatusEnum? Status { get; set; } = PageStatusEnum.Draft;
     public PageTypeEnum Type { get; set; } = PageTypeEnum.OtherPages;

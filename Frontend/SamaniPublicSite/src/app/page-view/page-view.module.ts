@@ -14,8 +14,8 @@ import { CUSTOM_BLOCKS } from './custom-blocks/CustomBlocks';
     PagesServiceProxy,
     providePagePreview({
       customSources: CUSTOM_BLOCKS,
-      publicCss: ['/bootstrap/bootstrap.min.css'],
-      publicJs: ['/bootstrap/bootstrap.min.js'],
+      //publicCss: ['/bootstrap/bootstrap.min.css'],
+     // publicJs: ['/bootstrap/bootstrap.min.js'],
     }),
   ],
 })

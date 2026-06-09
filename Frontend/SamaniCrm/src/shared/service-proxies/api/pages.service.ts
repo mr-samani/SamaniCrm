@@ -304,21 +304,24 @@ export class PagesServiceProxy extends BaseService {
     }
 
     /**
-     * @param pageId 
      * @param culture 
+     * @param pageId 
+     * @param slug 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getPageInfo(pageId?: string, culture?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfPageDto>;
-    public getPageInfo(pageId?: string, culture?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfPageDto>>;
-    public getPageInfo(pageId?: string, culture?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfPageDto>>;
-    public getPageInfo(pageId?: string, culture?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public getPageInfo(culture?: string, pageId?: string, slug?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfPageDto>;
+    public getPageInfo(culture?: string, pageId?: string, slug?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfPageDto>>;
+    public getPageInfo(culture?: string, pageId?: string, slug?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfPageDto>>;
+    public getPageInfo(culture?: string, pageId?: string, slug?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>culture, 'culture');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>pageId, 'pageId');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>culture, 'culture');
+          <any>slug, 'slug');
 
         let localVarHeaders = this.defaultHeaders;
 

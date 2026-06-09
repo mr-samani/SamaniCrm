@@ -1,10 +1,11 @@
-import { Component, Inject,  OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { TranslateModule } from '@ngx-translate/core';
 import { AppConst } from '@shared/app-const';
 import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
+import { CustomValidators } from '@shared/custom-validator/form-validation';
 import { MaterialCommonModule } from '@shared/material/material.common.module';
 import {
   PageStatusEnum,
@@ -38,6 +39,7 @@ export class CreateOrEditPageMetaDataDialogComponent extends AppComponentBase im
     super();
     this.type = _data.type;
     this.form = this.fb.group({
+      slug: ['', [Validators.required, CustomValidators.checkEnglishAndNumberCharacters]],
       translations: this.fb.array([]),
       isActive: [true],
       isSystem: [{ value: false, disabled: true }],
@@ -142,7 +144,7 @@ export class CreateOrEditPageMetaDataDialogComponent extends AppComponentBase im
       .createOrEditPageMetaData(input)
       .pipe(
         finalize(() => {
-          this.saving  = false;
+          this.saving = false;
           this.chdr.detectChanges();
         }),
       )
