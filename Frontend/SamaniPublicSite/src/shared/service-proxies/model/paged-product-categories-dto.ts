@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { PagedProductCategoryDto } from './paged-product-category-dto';
+import { ProductCategoryDto } from './product-category-dto';
 import { BreadcrumbResult } from './breadcrumb-result';
 
 
@@ -15,25 +15,31 @@ import { BreadcrumbResult } from './breadcrumb-result';
 
 /** Interface for PagedProductCategoriesDto */
 export interface IPagedProductCategoriesDto {
-  items?: Array<PagedProductCategoryDto>;
+  breadcrumbs?: Array<BreadcrumbResult>;
+  items?: Array<ProductCategoryDto>;
   totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
-  breadcrumbs?: Array<BreadcrumbResult>;
+  totalPages?: number;
+  hasPrevious?: boolean;
+  hasNext?: boolean;
 }
 
 /** Class for PagedProductCategoriesDto */
 export class PagedProductCategoriesDto implements IPagedProductCategoriesDto {
-  items?: Array<PagedProductCategoryDto>;
+  breadcrumbs?: Array<BreadcrumbResult>;
+  items?: Array<ProductCategoryDto>;
   totalCount?: number;
   pageNumber?: number;
   pageSize?: number;
-  breadcrumbs?: Array<BreadcrumbResult>;
+  totalPages?: number;
+  hasPrevious?: boolean;
+  hasNext?: boolean;
 
   constructor(data?: IPagedProductCategoriesDto) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }
@@ -41,19 +47,22 @@ export class PagedProductCategoriesDto implements IPagedProductCategoriesDto {
 
 init(data?: any) {
   if (data) {
-    if (Array.isArray(data["items"])) {
-      this.items = [] as any;
-      for (let item of data["items"])
-        (this.items as any).push(PagedProductCategoryDto.fromJS(item));
-    }
-    this.totalCount = data["totalCount"];
-    this.pageNumber = data["pageNumber"];
-    this.pageSize = data["pageSize"];
     if (Array.isArray(data["breadcrumbs"])) {
       this.breadcrumbs = [] as any;
       for (let item of data["breadcrumbs"])
         (this.breadcrumbs as any).push(BreadcrumbResult.fromJS(item));
     }
+    if (Array.isArray(data["items"])) {
+      this.items = [] as any;
+      for (let item of data["items"])
+        (this.items as any).push(ProductCategoryDto.fromJS(item));
+    }
+    this.totalCount = data["totalCount"];
+    this.pageNumber = data["pageNumber"];
+    this.pageSize = data["pageSize"];
+    this.totalPages = data["totalPages"];
+    this.hasPrevious = data["hasPrevious"];
+    this.hasNext = data["hasNext"];
   }
 }
 

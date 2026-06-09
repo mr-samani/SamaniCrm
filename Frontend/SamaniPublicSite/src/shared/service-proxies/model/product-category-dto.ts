@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -21,10 +21,13 @@ export interface IProductCategoryDto {
   slug?: string;
   orderIndex?: number;
   isActive?: boolean;
-  createdTime?: string;
+  creationTime?: string;
   parentId?: string;
+  parentTitle?: string;
   children?: Array<ProductCategoryDto>;
   translations?: Array<ProductCategoryTranslationDto>;
+  hasChild?: boolean;
+  childCount?: number;
 }
 
 /** Class for ProductCategoryDto */
@@ -36,15 +39,18 @@ export class ProductCategoryDto implements IProductCategoryDto {
   slug?: string;
   orderIndex?: number;
   isActive?: boolean;
-  createdTime?: string;
+  creationTime?: string;
   parentId?: string;
+  parentTitle?: string;
   children?: Array<ProductCategoryDto>;
   translations?: Array<ProductCategoryTranslationDto>;
+  hasChild?: boolean;
+  childCount?: number;
 
   constructor(data?: IProductCategoryDto) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }
@@ -59,8 +65,9 @@ init(data?: any) {
     this.slug = data["slug"];
     this.orderIndex = data["orderIndex"];
     this.isActive = data["isActive"];
-    this.createdTime = data["createdTime"];
+    this.creationTime = data["creationTime"];
     this.parentId = data["parentId"];
+    this.parentTitle = data["parentTitle"];
     if (Array.isArray(data["children"])) {
       this.children = [] as any;
       for (let item of data["children"])
@@ -71,6 +78,8 @@ init(data?: any) {
       for (let item of data["translations"])
         (this.translations as any).push(ProductCategoryTranslationDto.fromJS(item));
     }
+    this.hasChild = data["hasChild"];
+    this.childCount = data["childCount"];
   }
 }
 

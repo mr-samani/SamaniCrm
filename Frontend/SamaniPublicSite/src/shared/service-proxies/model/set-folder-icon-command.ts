@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -25,7 +25,7 @@ export class SetFolderIconCommand implements ISetFolderIconCommand {
   constructor(data?: ISetFolderIconCommand) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }

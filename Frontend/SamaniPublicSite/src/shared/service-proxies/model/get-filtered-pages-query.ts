@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -15,10 +15,6 @@ import { PageStatusEnum } from './page-status-enum';
 
 /** Interface for GetFilteredPagesQuery */
 export interface IGetFilteredPagesQuery {
-  pageNumber?: number;
-  pageSize?: number;
-  sortBy?: string;
-  sortDirection?: string;
   type: PageTypeEnum;
   title?: string;
   introduction?: string;
@@ -26,14 +22,14 @@ export interface IGetFilteredPagesQuery {
   fromDate?: string;
   toDate?: string;
   status?: PageStatusEnum;
-}
-
-/** Class for GetFilteredPagesQuery */
-export class GetFilteredPagesQuery implements IGetFilteredPagesQuery {
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;
   sortDirection?: string;
+}
+
+/** Class for GetFilteredPagesQuery */
+export class GetFilteredPagesQuery implements IGetFilteredPagesQuery {
   type!: PageTypeEnum;
   title?: string;
   introduction?: string;
@@ -41,11 +37,15 @@ export class GetFilteredPagesQuery implements IGetFilteredPagesQuery {
   fromDate?: string;
   toDate?: string;
   status?: PageStatusEnum;
+  pageNumber?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortDirection?: string;
 
   constructor(data?: IGetFilteredPagesQuery) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }
@@ -53,10 +53,6 @@ export class GetFilteredPagesQuery implements IGetFilteredPagesQuery {
 
 init(data?: any) {
   if (data) {
-    this.pageNumber = data["pageNumber"];
-    this.pageSize = data["pageSize"];
-    this.sortBy = data["sortBy"];
-    this.sortDirection = data["sortDirection"];
     this.type = data["type"];
     this.title = data["title"];
     this.introduction = data["introduction"];
@@ -64,6 +60,10 @@ init(data?: any) {
     this.fromDate = data["fromDate"];
     this.toDate = data["toDate"];
     this.status = data["status"];
+    this.pageNumber = data["pageNumber"];
+    this.pageSize = data["pageSize"];
+    this.sortBy = data["sortBy"];
+    this.sortDirection = data["sortDirection"];
   }
 }
 

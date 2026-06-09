@@ -97,7 +97,81 @@ public static class SeedPages
 
             Console.WriteLine("new page count:" + list.Count);
             dbContext.Pages.AddRange(list);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
+        }
+
+
+        var aboutUsPages = await dbContext.Pages
+           .IgnoreQueryFilters()
+           .Where(p => p.TenantId == tenantId && p.Type == PageTypeEnum.AboutUs)
+           .ToListAsync();
+
+        if (!aboutUsPages.Any())
+        {
+            dbContext.Pages.Add(new Page()
+            {
+                TenantId = tenantId,
+                Type = PageTypeEnum.AboutUs,
+                IsActive = true,
+                IsSystem = true,
+                Status = PageStatusEnum.Published,
+                PublishedAt = DateTime.Now,
+                Translations = [
+                 new PageTranslation(){
+                        TenantId = tenantId,
+                        Culture = "fa-IR",
+                        Title = "درباره ما",
+                        Description = "",
+                    },
+                    new PageTranslation(){
+                        TenantId = tenantId,
+                        Culture = "en-US",
+                        Title = "About Us",
+                        Description = "",
+                    },
+                    ]
+            });
+            await dbContext.SaveChangesAsync();
+            Console.WriteLine("About us page added.");
+
+        }
+
+        var contactUsPages = await dbContext.Pages
+           .IgnoreQueryFilters()
+           .Where(p => p.TenantId == tenantId && p.Type == PageTypeEnum.ContactUs)
+           .ToListAsync();
+
+
+ 
+
+        if (!contactUsPages.Any())
+        {
+            dbContext.Pages.Add(new Page()
+            {
+                TenantId = tenantId,
+                Type = PageTypeEnum.ContactUs,
+                IsActive = true,
+                IsSystem = true,
+                Status = PageStatusEnum.Published,
+                PublishedAt = DateTime.Now,
+                Translations = [
+                 new PageTranslation(){
+                        TenantId = tenantId,
+                        Culture = "fa-IR",
+                        Title = "تماس ما",
+                        Description = "",
+                    },
+                    new PageTranslation(){
+                        TenantId = tenantId,
+                        Culture = "en-US",
+                        Title = "Contact Us",
+                        Description = "",
+                    },
+                    ]
+            });
+            await dbContext.SaveChangesAsync();
+
+            Console.WriteLine("Contact us page added.");
         }
     }
 }

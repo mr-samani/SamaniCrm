@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -17,19 +17,19 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { BooleanApiResponse } from '../model/boolean-api-response';
+import { ApiResponseOfGuid } from '../model/api-response-of-guid';
+// @ts-ignore
+import { ApiResponseOfListOfMenuDTO } from '../model/api-response-of-list-of-menu-dto';
+// @ts-ignore
+import { ApiResponseOfMenuDTO } from '../model/api-response-of-menu-dto';
+// @ts-ignore
+import { ApiResponseOfboolean } from '../model/api-response-ofboolean';
 // @ts-ignore
 import { ChangeActiveMenuCommand } from '../model/change-active-menu-command';
 // @ts-ignore
 import { CreateOrEditMenuCommand } from '../model/create-or-edit-menu-command';
 // @ts-ignore
 import { DeleteMenuCommand } from '../model/delete-menu-command';
-// @ts-ignore
-import { GuidApiResponse } from '../model/guid-api-response';
-// @ts-ignore
-import { MenuDTOApiResponse } from '../model/menu-dto-api-response';
-// @ts-ignore
-import { MenuDTOListApiResponse } from '../model/menu-dto-list-api-response';
 // @ts-ignore
 import { ReorderMenuCommand } from '../model/reorder-menu-command';
 
@@ -52,15 +52,15 @@ export class MenuServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public activeOrDeactive(changeActiveMenuCommand?: ChangeActiveMenuCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<BooleanApiResponse>;
-    public activeOrDeactive(changeActiveMenuCommand?: ChangeActiveMenuCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BooleanApiResponse>>;
-    public activeOrDeactive(changeActiveMenuCommand?: ChangeActiveMenuCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BooleanApiResponse>>;
-    public activeOrDeactive(changeActiveMenuCommand?: ChangeActiveMenuCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public activeOrDeactive(changeActiveMenuCommand: ChangeActiveMenuCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfboolean>;
+    public activeOrDeactive(changeActiveMenuCommand: ChangeActiveMenuCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfboolean>>;
+    public activeOrDeactive(changeActiveMenuCommand: ChangeActiveMenuCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfboolean>>;
+    public activeOrDeactive(changeActiveMenuCommand: ChangeActiveMenuCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (changeActiveMenuCommand === null || changeActiveMenuCommand === undefined) {
+            throw new Error('Required parameter changeActiveMenuCommand was null or undefined when calling activeOrDeactive.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -99,13 +99,12 @@ export class MenuServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Menu/ActiveOrDeactive`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<BooleanApiResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfboolean>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: changeActiveMenuCommand,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -119,15 +118,15 @@ export class MenuServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createOrUpdate(createOrEditMenuCommand?: CreateOrEditMenuCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<GuidApiResponse>;
-    public createOrUpdate(createOrEditMenuCommand?: CreateOrEditMenuCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GuidApiResponse>>;
-    public createOrUpdate(createOrEditMenuCommand?: CreateOrEditMenuCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GuidApiResponse>>;
-    public createOrUpdate(createOrEditMenuCommand?: CreateOrEditMenuCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public createOrUpdate(createOrEditMenuCommand: CreateOrEditMenuCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfGuid>;
+    public createOrUpdate(createOrEditMenuCommand: CreateOrEditMenuCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfGuid>>;
+    public createOrUpdate(createOrEditMenuCommand: CreateOrEditMenuCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfGuid>>;
+    public createOrUpdate(createOrEditMenuCommand: CreateOrEditMenuCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (createOrEditMenuCommand === null || createOrEditMenuCommand === undefined) {
+            throw new Error('Required parameter createOrEditMenuCommand was null or undefined when calling createOrUpdate.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -166,13 +165,12 @@ export class MenuServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Menu/CreateOrUpdate`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<GuidApiResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfGuid>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: createOrEditMenuCommand,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -186,15 +184,15 @@ export class MenuServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteMenu(deleteMenuCommand?: DeleteMenuCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<BooleanApiResponse>;
-    public deleteMenu(deleteMenuCommand?: DeleteMenuCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BooleanApiResponse>>;
-    public deleteMenu(deleteMenuCommand?: DeleteMenuCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BooleanApiResponse>>;
-    public deleteMenu(deleteMenuCommand?: DeleteMenuCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public deleteMenu(deleteMenuCommand: DeleteMenuCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfboolean>;
+    public deleteMenu(deleteMenuCommand: DeleteMenuCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfboolean>>;
+    public deleteMenu(deleteMenuCommand: DeleteMenuCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfboolean>>;
+    public deleteMenu(deleteMenuCommand: DeleteMenuCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (deleteMenuCommand === null || deleteMenuCommand === undefined) {
+            throw new Error('Required parameter deleteMenuCommand was null or undefined when calling deleteMenu.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -233,13 +231,12 @@ export class MenuServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Menu/DeleteMenu`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<BooleanApiResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfboolean>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: deleteMenuCommand,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -252,15 +249,12 @@ export class MenuServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllMenus(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<MenuDTOListApiResponse>;
-    public getAllMenus(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MenuDTOListApiResponse>>;
-    public getAllMenus(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MenuDTOListApiResponse>>;
+    public getAllMenus(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfListOfMenuDTO>;
+    public getAllMenus(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfListOfMenuDTO>>;
+    public getAllMenus(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfListOfMenuDTO>>;
     public getAllMenus(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -288,12 +282,11 @@ export class MenuServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Menu/GetAllMenus`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<MenuDTOListApiResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfListOfMenuDTO>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -307,9 +300,9 @@ export class MenuServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getForEdit(id?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<MenuDTOApiResponse>;
-    public getForEdit(id?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<MenuDTOApiResponse>>;
-    public getForEdit(id?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<MenuDTOApiResponse>>;
+    public getForEdit(id?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfMenuDTO>;
+    public getForEdit(id?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfMenuDTO>>;
+    public getForEdit(id?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfMenuDTO>>;
     public getForEdit(id?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
@@ -317,9 +310,6 @@ export class MenuServiceProxy extends BaseService {
           <any>id, 'id');
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -347,13 +337,12 @@ export class MenuServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Menu/GetForEdit`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<MenuDTOApiResponse>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfMenuDTO>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,
@@ -367,15 +356,15 @@ export class MenuServiceProxy extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public reOrderMenu(reorderMenuCommand?: ReorderMenuCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<BooleanApiResponse>;
-    public reOrderMenu(reorderMenuCommand?: ReorderMenuCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BooleanApiResponse>>;
-    public reOrderMenu(reorderMenuCommand?: ReorderMenuCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BooleanApiResponse>>;
-    public reOrderMenu(reorderMenuCommand?: ReorderMenuCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public reOrderMenu(reorderMenuCommand: ReorderMenuCommand, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<ApiResponseOfboolean>;
+    public reOrderMenu(reorderMenuCommand: ReorderMenuCommand, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ApiResponseOfboolean>>;
+    public reOrderMenu(reorderMenuCommand: ReorderMenuCommand, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ApiResponseOfboolean>>;
+    public reOrderMenu(reorderMenuCommand: ReorderMenuCommand, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (reorderMenuCommand === null || reorderMenuCommand === undefined) {
+            throw new Error('Required parameter reorderMenuCommand was null or undefined when calling reOrderMenu.');
+        }
 
         let localVarHeaders = this.defaultHeaders;
-
-        // authentication (Bearer) required
-        localVarHeaders = this.configuration.addCredentialToHeaders('Bearer', 'Authorization', localVarHeaders);
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
             'text/plain',
@@ -414,13 +403,12 @@ export class MenuServiceProxy extends BaseService {
         }
 
         let localVarPath = `/api/Menu/ReOrderMenu`;
-        const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<BooleanApiResponse>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<ApiResponseOfboolean>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: reorderMenuCommand,
                 responseType: <any>responseType_,
-                ...(withCredentials ? { withCredentials } : {}),
+                withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
                 transferCache: localVarTransferCache,

@@ -29,7 +29,7 @@ export class ProductTypeTranslationDto implements IProductTypeTranslationDto {
   constructor(data?: IProductTypeTranslationDto) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }

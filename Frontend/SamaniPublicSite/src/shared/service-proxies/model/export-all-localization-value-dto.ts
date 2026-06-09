@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -14,20 +14,20 @@
 /** Interface for ExportAllLocalizationValueDto */
 export interface IExportAllLocalizationValueDto {
   id?: string;
-  title?: string;
+  title: string;
   description?: string;
 }
 
 /** Class for ExportAllLocalizationValueDto */
 export class ExportAllLocalizationValueDto implements IExportAllLocalizationValueDto {
   id?: string;
-  title?: string;
+  title!: string;
   description?: string;
 
   constructor(data?: IExportAllLocalizationValueDto) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }

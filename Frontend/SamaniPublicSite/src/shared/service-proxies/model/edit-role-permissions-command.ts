@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,19 +13,19 @@
 
 /** Interface for EditRolePermissionsCommand */
 export interface IEditRolePermissionsCommand {
-  grantedPermissions?: Array<string>;
-  roleName?: string;
+  grantedPermissions: Array<string>;
+  roleName: string;
 }
 
 /** Class for EditRolePermissionsCommand */
 export class EditRolePermissionsCommand implements IEditRolePermissionsCommand {
-  grantedPermissions?: Array<string>;
-  roleName?: string;
+  grantedPermissions!: Array<string>;
+  roleName!: string;
 
   constructor(data?: IEditRolePermissionsCommand) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }

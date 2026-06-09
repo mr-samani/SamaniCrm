@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,21 +13,21 @@
 
 /** Interface for CreateFolderCommand */
 export interface ICreateFolderCommand {
-  name?: string;
-  isPublic?: boolean;
-  parentId?: string;
+  name: string;
+  isPublic: boolean;
+  parentId: string;
 }
 
 /** Class for CreateFolderCommand */
 export class CreateFolderCommand implements ICreateFolderCommand {
-  name?: string;
-  isPublic?: boolean;
-  parentId?: string;
+  name!: string;
+  isPublic!: boolean;
+  parentId!: string;
 
   constructor(data?: ICreateFolderCommand) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }

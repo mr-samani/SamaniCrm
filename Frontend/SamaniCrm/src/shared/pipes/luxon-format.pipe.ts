@@ -6,6 +6,7 @@ import { Calendars } from './Calendars';
 @Pipe({ name: 'luxonFormat', standalone: false })
 export class LuxonFormatPipe implements PipeTransform {
      /**
+      * --https://moment.github.io/luxon/#/formatting?id=table-of-tokens
      * convert date time format to locale
      * @param value  date time
      * @param format 'yyyy-LL-dd HH:mm:ss'

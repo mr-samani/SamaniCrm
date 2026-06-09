@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -14,38 +14,48 @@
 /** Interface for UserDTO */
 export interface IUserDTO {
   id: string;
+  tenantId?: string;
   userName: string;
   firstName: string;
-  lastName: string;
-  fullName: string;
-  email: string;
-  profilePicture: string;
-  lang: string;
+  lastName?: string;
+  fullName?: string;
+  email?: string;
+  profilePicture?: string;
+  lang?: string;
   address?: string;
-  phoneNumber: string;
-  creationTime: string;
-  roles: Array<string>;
+  phoneNumber?: string;
+  creationTime?: string;
+  roles?: Array<string>;
+  permissions?: Array<string>;
+  givenName?: string;
+  isDelegated?: boolean;
+  delegatorId?: string;
 }
 
 /** Class for UserDTO */
 export class UserDTO implements IUserDTO {
   id!: string;
+  tenantId?: string;
   userName!: string;
   firstName!: string;
-  lastName!: string;
-  fullName!: string;
-  email!: string;
-  profilePicture!: string;
-  lang!: string;
+  lastName?: string;
+  fullName?: string;
+  email?: string;
+  profilePicture?: string;
+  lang?: string;
   address?: string;
-  phoneNumber!: string;
-  creationTime!: string;
-  roles!: Array<string>;
+  phoneNumber?: string;
+  creationTime?: string;
+  roles?: Array<string>;
+  permissions?: Array<string>;
+  givenName?: string;
+  isDelegated?: boolean;
+  delegatorId?: string;
 
   constructor(data?: IUserDTO) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }
@@ -54,6 +64,7 @@ export class UserDTO implements IUserDTO {
 init(data?: any) {
   if (data) {
     this.id = data["id"];
+    this.tenantId = data["tenantId"];
     this.userName = data["userName"];
     this.firstName = data["firstName"];
     this.lastName = data["lastName"];
@@ -69,6 +80,14 @@ init(data?: any) {
       for (let item of data["roles"])
         (this.roles as any).push(item);
     }
+    if (Array.isArray(data["permissions"])) {
+      this.permissions = [] as any;
+      for (let item of data["permissions"])
+        (this.permissions as any).push(item);
+    }
+    this.givenName = data["givenName"];
+    this.isDelegated = data["isDelegated"];
+    this.delegatorId = data["delegatorId"];
   }
 }
 

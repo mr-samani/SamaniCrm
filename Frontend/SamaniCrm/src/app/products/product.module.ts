@@ -30,6 +30,7 @@ import { HtmlEditorModule } from '@shared/components/html-editor/html-editor.mod
 import { CreateOrEditCurrencyComponent } from './currencies/create-or-edit/create-or-edit.component';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { ProductFilesComponent } from './products/create-or-edit/product-files/product-files.component';
+import { NgxInputColor } from 'ngx-input-color/color-picker';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { ProductFilesComponent } from './products/create-or-edit/product-files/p
     HtmlEditorModule,
     FormsModule,
     FileManagerModule,
+    NgxInputColor,
   ],
   providers: [ProductServiceProxy],
 })

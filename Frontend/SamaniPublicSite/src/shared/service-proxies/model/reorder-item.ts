@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,21 +13,21 @@
 
 /** Interface for ReorderItem */
 export interface IReorderItem {
-  menuId?: string;
-  parentId?: string;
-  orderIndex?: number;
+  menuId: string;
+  parentId: string;
+  orderIndex: number;
 }
 
 /** Class for ReorderItem */
 export class ReorderItem implements IReorderItem {
-  menuId?: string;
-  parentId?: string;
-  orderIndex?: number;
+  menuId!: string;
+  parentId!: string;
+  orderIndex!: number;
 
   constructor(data?: IReorderItem) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }

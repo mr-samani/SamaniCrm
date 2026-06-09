@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -27,7 +27,7 @@ export interface IPageDto {
   isActive?: boolean;
   isSystem?: boolean;
   coverImage?: string;
-  culture?: string;
+  culture: string;
   metaDescription?: string;
   metaKeywords?: string;
   data?: string;
@@ -50,7 +50,7 @@ export class PageDto implements IPageDto {
   isActive?: boolean;
   isSystem?: boolean;
   coverImage?: string;
-  culture?: string;
+  culture!: string;
   metaDescription?: string;
   metaKeywords?: string;
   data?: string;
@@ -61,7 +61,7 @@ export class PageDto implements IPageDto {
   constructor(data?: IPageDto) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }

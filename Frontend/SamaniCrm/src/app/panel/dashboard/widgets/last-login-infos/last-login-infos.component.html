@@ -10,7 +10,7 @@
       <td>{{ 'SecurityEventType_' + item.eventType }}</td>
       <td>{{ item.userAgent | userAgent }}</td>
       <td>{{ item.ipAddress }}</td>
-      <td>{{ item.createdAt | luxonFormat: 'u' }}</td>
+      <td>{{ item.createdAt | luxonFormat: 'cccc - DDD - T' }}</td>
     </tr>
   }
 </table>

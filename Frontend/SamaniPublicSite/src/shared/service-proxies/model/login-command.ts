@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -17,6 +17,8 @@ export interface ILoginCommand {
   userName: string;
   password: string;
   captcha?: InputCaptchaDTO;
+  tenancyName?: string;
+  rememberMe?: boolean;
 }
 
 /** Class for LoginCommand */
@@ -24,11 +26,13 @@ export class LoginCommand implements ILoginCommand {
   userName!: string;
   password!: string;
   captcha?: InputCaptchaDTO;
+  tenancyName?: string;
+  rememberMe?: boolean;
 
   constructor(data?: ILoginCommand) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }
@@ -39,6 +43,8 @@ init(data?: any) {
     this.userName = data["userName"];
     this.password = data["password"];
     this.captcha = data["captcha"];
+    this.tenancyName = data["tenancyName"];
+    this.rememberMe = data["rememberMe"];
   }
 }
 

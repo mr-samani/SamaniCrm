@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -7,25 +7,30 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { NotificationPeriorityEnum } from './notification-periority-enum';
 
 
 /* Created with custom template by mohammadreza SAMANI*/
 
 /** Interface for SendNotificationCommand */
 export interface ISendNotificationCommand {
-  userId?: string;
-  message?: string;
+  userId: string;
+  title: string;
+  content: string;
+  periority?: NotificationPeriorityEnum;
 }
 
 /** Class for SendNotificationCommand */
 export class SendNotificationCommand implements ISendNotificationCommand {
-  userId?: string;
-  message?: string;
+  userId!: string;
+  title!: string;
+  content!: string;
+  periority?: NotificationPeriorityEnum;
 
   constructor(data?: ISendNotificationCommand) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }
@@ -34,7 +39,9 @@ export class SendNotificationCommand implements ISendNotificationCommand {
 init(data?: any) {
   if (data) {
     this.userId = data["userId"];
-    this.message = data["message"];
+    this.title = data["title"];
+    this.content = data["content"];
+    this.periority = data["periority"];
   }
 }
 

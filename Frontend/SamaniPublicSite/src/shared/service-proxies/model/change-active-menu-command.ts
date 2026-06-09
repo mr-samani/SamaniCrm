@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -13,19 +13,19 @@
 
 /** Interface for ChangeActiveMenuCommand */
 export interface IChangeActiveMenuCommand {
-  id?: string;
-  isActive?: boolean;
+  id: string;
+  isActive: boolean;
 }
 
 /** Class for ChangeActiveMenuCommand */
 export class ChangeActiveMenuCommand implements IChangeActiveMenuCommand {
-  id?: string;
-  isActive?: boolean;
+  id!: string;
+  isActive!: boolean;
 
   constructor(data?: IChangeActiveMenuCommand) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }

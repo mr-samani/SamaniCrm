@@ -4,7 +4,7 @@ import { PageViewComponent } from './page-view/page-view.component';
 
 const routes: Routes = [
   { path: 'preview/:culture/:pageId', component: PageViewComponent },
-  { path: ':culture/:slug', component: PageViewComponent },
+  { path: ':slug', component: PageViewComponent },
 ];
 
 @NgModule({

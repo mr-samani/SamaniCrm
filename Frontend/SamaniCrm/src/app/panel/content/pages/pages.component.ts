@@ -126,11 +126,12 @@ export class PagesComponent extends AppComponentBase implements OnInit {
     });
   }
 
-  openCreatePageDialog() {
+  openCreateOrEditPageDialog(item?: PageDtoExtended) {
     this.matDialog
       .open(CreateOrEditPageMetaDataDialogComponent, {
         data: {
           type: this.type,
+          id: item?.id,
         },
         width: '768px',
       })
@@ -141,9 +142,6 @@ export class PagesComponent extends AppComponentBase implements OnInit {
         }
       });
   }
-
- 
-
 
   openPageBuilder(item: PageDtoExtended) {
     const messageListener = (event: MessageEvent) => {
@@ -174,11 +172,11 @@ export class PagesComponent extends AppComponentBase implements OnInit {
         this.pageService
           .deletePage(input)
           .pipe(
-        finalize(() => {
-          this.hideMainLoading();
-          this.chdr.detectChanges();
-        }),
-      )
+            finalize(() => {
+              this.hideMainLoading();
+              this.chdr.detectChanges();
+            }),
+          )
           .subscribe((response) => {
             if (response.success) {
               this.notify.success(this.l('DeletedSuccessfully'));

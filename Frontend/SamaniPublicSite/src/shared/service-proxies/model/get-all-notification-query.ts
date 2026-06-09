@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -15,33 +15,33 @@ import { NotificationTypeEnum } from './notification-type-enum';
 
 /** Interface for GetAllNotificationQuery */
 export interface IGetAllNotificationQuery {
-  pageNumber?: number;
-  pageSize?: number;
-  sortBy?: string;
-  sortDirection?: string;
   filter?: string;
   fromDate?: string;
   toDate?: string;
   type?: Array<NotificationTypeEnum>;
   periority?: Array<NotificationPeriorityEnum>;
+  pageNumber?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortDirection?: string;
 }
 
 /** Class for GetAllNotificationQuery */
 export class GetAllNotificationQuery implements IGetAllNotificationQuery {
-  pageNumber?: number;
-  pageSize?: number;
-  sortBy?: string;
-  sortDirection?: string;
   filter?: string;
   fromDate?: string;
   toDate?: string;
   type?: Array<NotificationTypeEnum>;
   periority?: Array<NotificationPeriorityEnum>;
+  pageNumber?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortDirection?: string;
 
   constructor(data?: IGetAllNotificationQuery) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }
@@ -49,10 +49,6 @@ export class GetAllNotificationQuery implements IGetAllNotificationQuery {
 
 init(data?: any) {
   if (data) {
-    this.pageNumber = data["pageNumber"];
-    this.pageSize = data["pageSize"];
-    this.sortBy = data["sortBy"];
-    this.sortDirection = data["sortDirection"];
     this.filter = data["filter"];
     this.fromDate = data["fromDate"];
     this.toDate = data["toDate"];
@@ -66,6 +62,10 @@ init(data?: any) {
       for (let item of data["periority"])
         (this.periority as any).push(item);
     }
+    this.pageNumber = data["pageNumber"];
+    this.pageSize = data["pageSize"];
+    this.sortBy = data["sortBy"];
+    this.sortDirection = data["sortDirection"];
   }
 }
 

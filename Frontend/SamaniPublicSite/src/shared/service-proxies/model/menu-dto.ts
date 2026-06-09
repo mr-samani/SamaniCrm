@@ -1,5 +1,5 @@
 /**
- * SamaniCrm API
+ * SamaniCrm.Api | v1
  *
  * 
  *
@@ -16,6 +16,7 @@ import { MenuTargetEnum } from './menu-target-enum';
 /** Interface for MenuDTO */
 export interface IMenuDTO {
   id?: string;
+  name: string;
   title?: string;
   icon?: string;
   url?: string;
@@ -31,6 +32,7 @@ export interface IMenuDTO {
 /** Class for MenuDTO */
 export class MenuDTO implements IMenuDTO {
   id?: string;
+  name!: string;
   title?: string;
   icon?: string;
   url?: string;
@@ -45,7 +47,7 @@ export class MenuDTO implements IMenuDTO {
   constructor(data?: IMenuDTO) {
     if (data) {
       for (let property in data) {
-        if (data.hasOwnProperty(property))
+        if (Object.hasOwn(data,property))
           (this as any)[property] = (data as any)[property];
       }
     }
@@ -54,6 +56,7 @@ export class MenuDTO implements IMenuDTO {
 init(data?: any) {
   if (data) {
     this.id = data["id"];
+    this.name = data["name"];
     this.title = data["title"];
     this.icon = data["icon"];
     this.url = data["url"];
