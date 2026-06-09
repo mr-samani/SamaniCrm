@@ -16,7 +16,7 @@ export class LanguageService {
   constructor(
     @Inject(DOCUMENT) private _document: Document,
     private mainSpinner: MainSpinnerService,
-    private storeService: StoreService
+    private storeService: StoreService,
   ) {
     // this.userService = inject(UserServiceProxy);
     // this.changeLanguage(AppConst.currentLanguage);
@@ -38,10 +38,9 @@ export class LanguageService {
     lang = this.validateLanguage(lang);
 
     this.storeService.setItem('lang', lang);
-
     AppConst.currentLanguage = lang;
     AppConst.isRtl = isRtl(lang);
-    this.direction = 'ltr'; // AppConst.isRtl ? 'rtl' : 'ltr';
+    this.direction = AppConst.isRtl ? 'rtl' : 'ltr';
     //this.translate.use(lang);
     this._document.body.dir = this.direction;
     this._document.documentElement.lang = lang.substring(0, 2);

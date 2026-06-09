@@ -23,7 +23,7 @@
       <div class="flex-fill"></div>
 
       <!-- darkmode -->
-      <label class="switch">
+      <label class="switch mx-2">
         <input
           class="switch__input"
           type="checkbox"
@@ -50,15 +50,19 @@
           <!-- {{ currentLanguage }} -->
           <img [src]="apiUrl + '/images/flags/' + currentLanguage + '.png'" class="lang-img" [alt]="currentLanguage" />
         </a>
-        <div class="dropdown-menu" aria-labelledby="langDropdown" [class.dropdown-menu-end]="!isRtl">
+        <div
+          class="dropdown-menu"
+          aria-labelledby="langDropdown"
+          [class.dropdown-menu-end]="!isRtl"
+          [class.dropdown-menu-start]="isRtl">
           @for (lang of languages; track $index) {
-          <div (click)="changeLanguage(lang)">
-            <div class="dropdown-item d-flex align-items-center g-5">
-              <!-- <i class="flag" [ngClass]="lang.code"></i> -->
-              <img [src]="apiUrl + '/images/flags/' + lang.flag + '.png'" class="lang-img" />
-              <span>{{ lang.name }}</span>
+            <div (click)="changeLanguage(lang)">
+              <div class="dropdown-item d-flex align-items-center gap-3">
+                <!-- <i class="flag" [ngClass]="lang.code"></i> -->
+                <img [src]="apiUrl + '/images/flags/' + lang.flag + '.png'" class="lang-img" />
+                <span>{{ lang.name }}</span>
+              </div>
             </div>
-          </div>
           }
         </div>
       </div>

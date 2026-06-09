@@ -298,7 +298,7 @@ export class CookieService {
     const cookies: any = this.getAll();
 
     for (const cookieName in cookies) {
-      if (cookies.hasOwnProperty(cookieName)) {
+      if (Object.hasOwn(cookies, cookieName)) {
         this.delete(cookieName, path, domain, secure, sameSite);
       }
     }

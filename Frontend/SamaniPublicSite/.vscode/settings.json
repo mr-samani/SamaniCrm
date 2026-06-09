@@ -1,4 +1,14 @@
 {
     "ngFileGenerator.baseComponentClassName": "BaseComponent",
-    "ngFileGenerator.baseComponentPath": "@app/base-components"
+    "ngFileGenerator.baseComponentPath": "@app/base-components",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/.angular":true,
+        "**/dist":true,
+        "**/node_modules":true,
+    }
 }

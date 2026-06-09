@@ -4,21 +4,20 @@ import {
   provideZonelessChangeDetection,
   isDevMode,
   provideAppInitializer,
+  importProvidersFrom,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import {
-  provideHttpClient,
-  withInterceptors,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { TranslocoHttpLoader } from './transloco-loader';
 import { provideTransloco } from '@jsverse/transloco';
 import { appInit } from '@shared/app-initializer';
 import { Configuration } from '@shared/service-proxies/configuration';
 import { AppConst } from '@shared/app-const';
 import { AppInterceptor } from '@shared/services/app.interceptor';
+import { NgxAlertModalModule } from 'ngx-alert-modal';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -38,7 +37,6 @@ export const appConfig: ApplicationConfig = {
       },
       loader: TranslocoHttpLoader,
     }),
-
     { provide: Configuration, useFactory: configurationFactory },
   ],
 };
