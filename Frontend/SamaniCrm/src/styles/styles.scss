@@ -7,6 +7,7 @@
 @use './custom-dialog.scss';
 @use './tree.scss';
 @use '../../node_modules/ngx-page-builder/assets/styles.css';
+@use './glassy.scss';
 
 @font-face {
   font-family: 'iranSans';
@@ -44,9 +45,13 @@ body {
 }
 
 body {
+  &.color-scheme-dark {
+    --body-bg: #0a0a0f;
+    --body-fg: #e8e8f0;
+  }
   margin: 0;
   background: var(--body-bg) !important;
-  color: var(--text-primary);
+  color: var(--body-fg);
 
   &.color-scheme-dark {
     .ngx-alert-container {
