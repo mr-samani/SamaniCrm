@@ -16,7 +16,6 @@
     <Folder Include="Common\Services\" />
     <Folder Include="Features\TenantUsers\Commands\" />
     <Folder Include="Features\TenantUsers\Queries\" />
-    <Folder Include="Maintenance\Commands\" />
   </ItemGroup>
 
   <ItemGroup>

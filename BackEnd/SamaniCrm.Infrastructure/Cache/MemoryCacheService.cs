@@ -21,8 +21,12 @@ namespace SamaniCrm.Infrastructure.Cache
             _cache = cache;
         }
 
+        public interface ICacheItemWrapper
+        {
+            object? Value { get; }
+        }
         // Wrapper class to store value + metadata
-        private class CacheItemWrapper<T>
+        private class CacheItemWrapper<T> : ICacheItemWrapper
         {
             public T Value { get; set; } = default!;
             public DateTime CreatedTime { get; set; }
@@ -38,13 +42,15 @@ namespace SamaniCrm.Infrastructure.Cache
                 var expiresAt = GetExpiresAt();
                 return expiresAt.HasValue ? expiresAt.Value - DateTime.UtcNow : null;
             }
+            object? ICacheItemWrapper.Value => Value;
+
         }
 
         public Task<T?> GetAsync<T>(string key)
         {
-            if (_cache.TryGetValue(key, out var wrapperObj) && wrapperObj is CacheItemWrapper<T> wrapper)
+            if (_cache.TryGetValue(key, out var wrapperObj) && wrapperObj is ICacheItemWrapper wrapper)
             {
-                return Task.FromResult<T?>(wrapper.Value);
+                return Task.FromResult((T?)wrapper.Value);
             }
 
             return Task.FromResult<T?>(default);

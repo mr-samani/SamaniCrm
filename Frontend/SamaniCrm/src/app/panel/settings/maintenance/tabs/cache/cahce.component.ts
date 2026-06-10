@@ -1,4 +1,4 @@
-import { Component,  Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { AppComponentBase } from '@app/app-component-base';
 import { finalize } from 'rxjs';
@@ -7,6 +7,8 @@ import { MaintenanceServiceProxy } from '@shared/service-proxies/api/maintenance
 import { CacheEntryDto } from '@shared/service-proxies';
 import { FieldsType } from '@shared/components/table-view/fields-type.model';
 import { humanFileSize } from '@shared/helper/file.helper';
+import { MatDialog } from '@angular/material/dialog';
+import { ViewCacheEntriesComponent } from './view-cache-entries/view-cache-entries.component';
 
 export class CacheEntryDtoExtended extends CacheEntryDto {
   loading?: boolean;
@@ -36,9 +38,10 @@ export class CacheComponent extends AppComponentBase implements OnInit {
   ];
   totalSize = 0;
   loading = true;
-  constructor(
-    private maintenanceService: MaintenanceServiceProxy,
-  ) {
+
+  private readonly matDialog = inject(MatDialog);
+  private readonly maintenanceService = inject(MaintenanceServiceProxy);
+  constructor() {
     super();
   }
 
@@ -73,11 +76,11 @@ export class CacheComponent extends AppComponentBase implements OnInit {
         this.maintenanceService
           .deleteCache(item.key)
           .pipe(
-        finalize(() => {
-          item.loading = false;
-          this.chdr.detectChanges();
-        }),
-      )
+            finalize(() => {
+              item.loading = false;
+              this.chdr.detectChanges();
+            }),
+          )
           .subscribe((response) => {
             this.notify.success(this.l('DoneSuccessFully') + '(' + response.data + ')');
             this.getData();
@@ -93,16 +96,23 @@ export class CacheComponent extends AppComponentBase implements OnInit {
         this.maintenanceService
           .clearAllCahces()
           .pipe(
-        finalize(() => {
-          this.hideMainLoading();
-          this.chdr.detectChanges();
-        }),
-      )
+            finalize(() => {
+              this.hideMainLoading();
+              this.chdr.detectChanges();
+            }),
+          )
           .subscribe((response) => {
             this.notify.success(this.l('DoneSuccessFully') + '(' + response.data + ')');
             this.getData();
           });
       }
+    });
+  }
+
+  viewData(item: CacheEntryDtoExtended) {
+    this.matDialog.open(ViewCacheEntriesComponent, {
+      data: item,
+      width: '80%',
     });
   }
 }

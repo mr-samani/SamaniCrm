@@ -1,0 +1,24 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title">{{ item.key }}</span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content style="min-height: 85vh;">
+  @if (loading) {
+    <mat-progress-bar class="my-5" [mode]="'indeterminate'"></mat-progress-bar>
+  }
+  @if (!loading && data) {
+    <div dir="ltr" style="text-align: left;">
+      <ngx-monaco-editor
+        style="height: 80vh"
+        [options]="editorOptions"
+        [ngModel]="data"
+        (onInit)="onEditorInit($event)"></ngx-monaco-editor>
+    </div>
+  }
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="btn btn-default" mat-dialog-close>{{ 'Close' | translate }}</button>
+</mat-dialog-actions>

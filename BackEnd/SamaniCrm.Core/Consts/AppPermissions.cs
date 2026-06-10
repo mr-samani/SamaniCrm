@@ -100,6 +100,7 @@ public static class AppPermissions
         public static class Cache
         {
             public const string List = "Administrator.Maintenance.Cache.List";
+            public const string ViewData = "Administrator.Maintenance.Cache.ViewData";
             public const string Delete = "Administrator.Maintenance.Cache.Delete";
             public const string ClearAll = "Administrator.Maintenance.Cache.ClearAll";
         }

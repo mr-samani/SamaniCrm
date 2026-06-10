@@ -64,6 +64,7 @@ model/api-response-of-list-ofstring.ts
 model/api-response-of-login-result.ts
 model/api-response-of-menu-dto.ts
 model/api-response-of-notification-dto.ts
+model/api-response-of-object.ts
 model/api-response-of-page-dto.ts
 model/api-response-of-page-for-edit-dto.ts
 model/api-response-of-paged-product-categories-dto.ts

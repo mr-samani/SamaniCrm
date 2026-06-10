@@ -33,6 +33,7 @@ export * from './api-response-of-list-ofstring';
 export * from './api-response-of-login-result';
 export * from './api-response-of-menu-dto';
 export * from './api-response-of-notification-dto';
+export * from './api-response-of-object';
 export * from './api-response-of-page-dto';
 export * from './api-response-of-page-for-edit-dto';
 export * from './api-response-of-paged-product-categories-dto';
