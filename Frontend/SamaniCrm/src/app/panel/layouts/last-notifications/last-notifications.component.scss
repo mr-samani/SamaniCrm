@@ -5,13 +5,14 @@
     font-size: 24px;
   }
   .badge {
-    background: #00ffa1;
-    padding: 6px;
+    background: #007be5;
+    padding: 6px 10px;
     position: absolute;
     bottom: -5px;
     transform: translateX(50%);
     color: #000;
-    border: 1px #b3b3b3 solid;
+    border: 1px #64647c8c solid;
+    border-radius: 15px;
   }
 }
 .notify-dropdown-menu {

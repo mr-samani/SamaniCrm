@@ -14,7 +14,7 @@
       aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo01" #navbarCollapse>
+    <div class="collapse navbar-collapse gap-3" id="navbarTogglerDemo01" #navbarCollapse>
       <ul class="navbar-nav mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/panel']" routerLinkActive="active" (click)="closeNavbar()">
@@ -48,14 +48,7 @@
             {{ 'Settings' | translate }}
           </a>
         </li>
-        @if (AppPermissions.FileManager_List | permission) {
-          <li class="nav-item">
-            <a class="nav-link" (click)="openFileManager(); closeNavbar()">
-              <i class="fa fa-folder-image"></i>
-              {{ 'Media' | translate }}
-            </a>
-          </li>
-        }
+       
         @if (AppPermissions.Pages_List | permission) {
           <li class="nav-item">
             <a class="nav-link" [routerLink]="['/panel/content']" routerLinkActive="active" (click)="closeNavbar()">
@@ -109,74 +102,7 @@
       @if (AppPermissions.Notification_List | permission) {
         <last-notifications></last-notifications>
       }
-      <!-- darkmode -->
-      <label class="switch">
-        <input
-          class="switch__input"
-          type="checkbox"
-          [ngModel]="AppConst.isDarkMode"
-          (change)="colorSchemaService.toggleMode()" />
-        <span class="switch__background">
-          <span class="switch__toggle">
-            <span class="switch__moon"></span>
-          </span>
-          <span class="switch__stars"></span>
-          <span class="switch__clouds"></span>
-        </span>
-      </label>
-      <!-- //darkmode -->
-      <!-- language -->
-      @if (languages.length > 1) {
-        <button mat-icon-button [matMenuTriggerFor]="langMnu" class="pt-2">
-          <!-- <i class="flag" [ngClass]="currentLang"></i> -->
-          <img [src]="baseUrl + '/images/flags/' + currentLang + '.png'" />
-        </button>
-        <mat-menu #langMnu="matMenu">
-          @for (lang of languages; track lang) {
-            <button mat-menu-item (click)="changeLanguage(lang.culture!)" class="language-menu">
-              <div class="d-flex align-items-center g-5">
-                <!-- <i class="flag" [ngClass]="lang.code"></i> -->
-                <img [src]="baseUrl + '/images/flags/' + lang.flag + '.png'" />
-                <span>{{ lang.name }}</span>
-              </div>
-            </button>
-          }
-        </mat-menu>
-      }
-      <!-- //language -->
-
-      <div class="user-block navbar-brand" [mat-menu-trigger-for]="userMenu">
-        @if (user?.profilePicture) {
-          <img [src]="user?.profilePicture" [alt]="user?.userName" />
-        }
-        @if (!user?.profilePicture) {
-          <img src="/images/profile-picture.jpg" [alt]="user?.userName" />
-        }
-        <div>
-          <span>{{ user?.userName }}</span>
-          <small>{{ tenancyName }}</small>
-        </div>
-      </div>
-      <mat-menu #userMenu="matMenu">
-        @if (user?.isDelegated) {
-          <button mat-menu-item (click)="exitDelegation()">
-            <i class="fa fa-arrow-up-left-from-circle mx-1"></i>
-            {{ 'BackToSelfAccount' | translate }}
-          </button>
-        }
-        <button mat-menu-item (click)="closeNavbar()" routerLink="/panel/user-profile">
-          <i class="fa fa-user mx-1"></i>
-          {{ 'UserProfile' | translate }}
-        </button>
-        <button mat-menu-item (click)="closeNavbar()" routerLink="/panel/user-profile" [fragment]="'password'">
-          <i class="fa fa-lock mx-1"></i>
-          {{ 'ChangePassword' | translate }}
-        </button>
-        <button mat-menu-item (click)="logout(); closeNavbar()">
-          <i class="fa fa-power-off mx-1"></i>
-          {{ 'Logout' | translate }}
-        </button>
-      </mat-menu>
+     
     </div>
   </div>
 </nav>

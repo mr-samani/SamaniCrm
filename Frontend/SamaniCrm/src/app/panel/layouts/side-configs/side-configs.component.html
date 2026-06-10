@@ -1,0 +1,92 @@
+<div class="side-configs glass-card">
+  <div class="side-button">
+    <div class="user-block" [mat-menu-trigger-for]="userMenu">
+      @if (user && user.profilePicture) {
+        <img [src]="user.profilePicture" [alt]="user ? user.userName : ''" />
+      } @else {
+        <img src="/images/profile-picture.jpg" [alt]="user?.userName" />
+      }
+    </div>
+  </div>
+
+  @if (AppPermissions.FileManager_List | permission) {
+    <div class="side-button" [title]="'Media' | translate" (click)="openFileManager()">
+      <i class="fa fa-folder-image"></i>
+    </div>
+  }
+
+  <!-- language -->
+  @if (languages.length > 1) {
+    <div class="side-button" [matMenuTriggerFor]="langMnu">
+      <i class="fa fa-language"></i>
+      <!-- <img [src]="baseUrl + '/images/flags/' + currentLang + '.png'" /> -->
+    </div>
+  }
+  <!-- //language -->
+
+  <div class="side-button" [routerLink]="['/panel/setting']" routerLinkActive="active" [title]="'Settings' | translate">
+    <i class="fa fa-gear"></i>
+  </div>
+</div>
+
+<!-- --------------------------------------------------------------------------------------------------- -->
+
+<mat-menu #langMnu="matMenu">
+  @for (lang of languages; track lang) {
+    <button mat-menu-item (click)="changeLanguage(lang.culture!)" class="language-menu">
+      <div class="d-flex align-items-center g-5">
+        <!-- <i class="flag" [ngClass]="lang.code"></i> -->
+        <img [src]="baseUrl + '/images/flags/' + lang.flag + '.png'" />
+        <span>{{ lang.name }}</span>
+      </div>
+    </button>
+  }
+</mat-menu>
+
+<mat-menu #userMenu="matMenu">
+  <div mat-menu-item>
+    <span>{{ user?.userName }}</span>
+    <small>{{ tenancyName }}</small>
+  </div>
+  @if (user?.isDelegated) {
+    <button mat-menu-item (click)="exitDelegation()">
+      <i class="fa fa-arrow-up-left-from-circle mx-1"></i>
+      {{ 'BackToSelfAccount' | translate }}
+    </button>
+  }
+
+  <!-- darkmode -->
+  <div mat-menu-item>
+    <div class="d-flex justify-content-between">
+      <span>{{ AppConst.isDarkMode ? ('LightMode' | translate) : ('DarkMode' | translate) }}</span>
+      <label class="switch">
+        <input
+          class="switch__input"
+          type="checkbox"
+          [ngModel]="AppConst.isDarkMode"
+          (change)="colorSchemaService.toggleMode()" />
+        <span class="switch__background">
+          <span class="switch__toggle">
+            <span class="switch__moon"></span>
+          </span>
+          <span class="switch__stars"></span>
+          <span class="switch__clouds"></span>
+        </span>
+      </label>
+    </div>
+  </div>
+  <!-- //darkmode -->
+
+  <button mat-menu-item routerLink="/panel/user-profile">
+    <i class="fa fa-user mx-1"></i>
+    {{ 'UserProfile' | translate }}
+  </button>
+  <button mat-menu-item routerLink="/panel/user-profile" [fragment]="'password'">
+    <i class="fa fa-lock mx-1"></i>
+    {{ 'ChangePassword' | translate }}
+  </button>
+  <button mat-menu-item (click)="logout()">
+    <i class="fa fa-power-off mx-1"></i>
+    {{ 'Logout' | translate }}
+  </button>
+</mat-menu>

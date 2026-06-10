@@ -18,11 +18,13 @@ import { PAGINATION_LABELS } from '@shared/components/pagination/pagination.comp
 import { PaginationLocalize } from '@shared/localize/pagination';
 import { SharedModule } from '@shared/shared.module';
 import { NotificationServiceProxy } from '@shared/service-proxies';
+import { SideConfigsComponent } from './layouts/side-configs/side-configs.component';
 
 @NgModule({
   declarations: [
     PanelComponent,
     HeaderComponent,
+    SideConfigsComponent,
     SideMenuComponent,
     MenuDynamicComponent,
     FooterComponent,

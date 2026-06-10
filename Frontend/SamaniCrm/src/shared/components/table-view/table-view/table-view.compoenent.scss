@@ -20,10 +20,10 @@
 }
 
 .table-responsive {
-  --border-color: #70707030;
+  --border-color: #2a2a3e;
   --header-height: 50px;
   --header-padding-y: 8px;
-  --bg-color: #23262b;
+  --bg-color: #111118;
   --fg-color: #ffffff;
   --header-shadow-color: #00000066;
   position: relative;
@@ -42,13 +42,15 @@
 
 .table-mrs {
   border: 1px var(--border-color) solid;
-  border-radius: 5px;
+  border-radius: 32px;
+  corner-shape: squircle;
   overflow: hidden;
   background-color: var(--bg-color);
   color: var(--fg-color);
 }
 
 .thead-mrs {
+  background: #1a1a26;
   height: var(--header-height);
   padding: var(--header-padding-y) 0px;
   box-shadow: 0px 0px 10px 5px var(--header-shadow-color);
@@ -70,6 +72,9 @@
 
 .tbody-mrs .tr-mrs {
   animation: showrow 350ms cubic-bezier(0.4, -0.32, 0.4, 1.24);
+  &:hover {
+    background: rgba(108, 99, 255, 0.04);
+  }
 }
 
 .tr-mrs:last-child {
