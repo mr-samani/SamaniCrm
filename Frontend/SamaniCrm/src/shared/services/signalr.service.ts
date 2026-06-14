@@ -38,9 +38,10 @@ export class SignalRService implements OnDestroy {
       .withUrl(signalRUri, {
         transport: signalR.HttpTransportType.WebSockets,
         withCredentials: true,
-        skipNegotiation: true,
+        skipNegotiation: false,
+
         // logger: LogLevel.Information,
-       // accessTokenFactory: () => token.accessToken ?? '',
+        // accessTokenFactory: () => token.accessToken ?? '',
       })
       .configureLogging(LogLevel.Critical)
       .withAutomaticReconnect()

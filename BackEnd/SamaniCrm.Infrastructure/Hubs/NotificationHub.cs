@@ -165,7 +165,7 @@ public class NotificationHub : Hub<INotificationHubService>
 
     private string? GetUserId()
     {
-        return Context?.User?.FindFirstValue(ClaimTypes.Sid);
+        return Context?.User?.FindFirstValue("sub");
     }
 
     private (string DeviceId, string DeviceType, string DeviceName, string Browser, string OperatingSystem) ExtractDeviceInfo()

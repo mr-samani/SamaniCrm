@@ -93,7 +93,6 @@ export class AddEditPlanFeaturesComponent extends AppComponentBase implements On
   }
 
   save() {
-    debugger;
     if (this.form()?.invalid) {
       this.notify.warning(this.l('CompleteFormFields'));
       return;

@@ -48,7 +48,7 @@ public sealed class TenantConnectionInterceptor : DbConnectionInterceptor
         if (connection.ConnectionString == connectionString)
             return;
 
-        Console.WriteLine($"CS+++== {connectionString}");
+        // Console.WriteLine($"CS+++== {connectionString}");
         connection.ConnectionString = connectionString;
     }
 }

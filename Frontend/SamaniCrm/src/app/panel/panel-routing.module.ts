@@ -34,7 +34,7 @@ const routes: Routes = [
 
       {
         path: 'tenants',
-        loadChildren: () => import('../Tenants/Tenants.module').then((m) => m.TenantsModule),
+        loadChildren: () => import('../tenant-management/tenants.module').then((m) => m.TenantsModule),
       },
       {
         path: 'users',

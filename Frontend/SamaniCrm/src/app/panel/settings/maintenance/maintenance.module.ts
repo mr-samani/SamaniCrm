@@ -16,7 +16,7 @@ import { MaintenanceServiceProxy } from '@shared/service-proxies/api/maintenance
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { AppLogsServiceProxy } from '@shared/service-proxies/api/app-logs.service';
 import { SecurityLogsComponent } from './tabs/security-logs/security-logs.component';
-import { AutoCompleteTenantComponent } from '@app/Tenants/auto-complete-tenant/auto-complete-tenant.component';
+import { AutoCompleteTenantComponent } from '@app/tenant-management/auto-complete-tenant/auto-complete-tenant.component';
 import { SecurityLogServiceProxy } from '@shared/service-proxies/api/security-log.service';
 import { ViewCacheEntriesComponent } from './tabs/cache/view-cache-entries/view-cache-entries.component';
 import { MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG, NgxMonacoEditorConfig } from 'ngx-monaco-editor-v2';

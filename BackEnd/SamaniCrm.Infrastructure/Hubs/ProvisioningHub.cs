@@ -40,7 +40,7 @@ public class ProvisioningHub : Hub<IProvisioningClient>
 
     public override async Task OnConnectedAsync()
     {
-        string? userId = Context?.User?.FindFirstValue(ClaimTypes.Sid);
+        string? userId = Context?.User?.FindFirstValue("sub");
         Console.WriteLine($"User {userId} connected to SignalR hub.");
         _logger.LogInformation("Client connected: {ConnectionId}", Context?.ConnectionId);
         await base.OnConnectedAsync();
