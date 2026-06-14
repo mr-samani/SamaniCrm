@@ -57,6 +57,10 @@ export class AddEditPlanFeaturesComponent extends AppComponentBase implements On
       )
       .subscribe((result) => {
         this.features = result.data ?? [];
+
+        if (this.features.length == 0) {
+          this.addFeature();
+        }
       });
   }
 

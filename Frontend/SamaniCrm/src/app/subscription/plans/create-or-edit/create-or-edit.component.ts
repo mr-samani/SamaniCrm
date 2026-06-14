@@ -22,7 +22,6 @@ export class CreateOrEditPlanComponent extends AppComponentBase implements OnIni
   saving = false;
   isUpdate: boolean;
   translations?: PlanTranslationDto[];
-  id?: string;
 
   _data = inject<PlanDto | undefined>(MAT_DIALOG_DATA);
   constructor(
@@ -59,7 +58,7 @@ export class CreateOrEditPlanComponent extends AppComponentBase implements OnIni
           culture: item.culture!,
           title: '',
           description: '',
-          planId: this.id,
+          planId: this._data?.id,
         }),
       );
     }
@@ -127,7 +126,7 @@ export class CreateOrEditPlanComponent extends AppComponentBase implements OnIni
     const input = new CreateOrEditPlanCommand();
 
     input.init(formValue);
-    input.id = this.id;
+    input.id = this._data?.id;
 
     this.subscriptionService
       .createOrEditPlan(input)

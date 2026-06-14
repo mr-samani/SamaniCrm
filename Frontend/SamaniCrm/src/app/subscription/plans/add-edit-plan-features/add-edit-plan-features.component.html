@@ -66,9 +66,41 @@
                 </div>
               </td>
               <td>
-                <div class="input-group">
-                  <input class="form-control" [(ngModel)]="item.value" [name]="'value_' + $index" required />
-                </div>
+                @switch (item.planFeatureType) {
+                  @case (PlanFeatureType.Boolean) {
+                    <mat-checkbox color="primary" [(ngModel)]="item.value" [name]="'value_' + $index"></mat-checkbox>
+                  }
+                  @case (PlanFeatureType.Decimal) {
+                    <div class="input-group">
+                      <input
+                        class="form-control"
+                        type="number"
+                        [(ngModel)]="item.value"
+                        [name]="'value_' + $index"
+                        required />
+                    </div>
+                  }
+                  @case (PlanFeatureType.Integer) {
+                    <div class="input-group">
+                      <input
+                        class="form-control"
+                        type="number"
+                        [(ngModel)]="item.value"
+                        [name]="'value_' + $index"
+                        required />
+                    </div>
+                  }
+                  @default {
+                    <div class="input-group">
+                      <input
+                        class="form-control"
+                        type="text"
+                        [(ngModel)]="item.value"
+                        [name]="'value_' + $index"
+                        required />
+                    </div>
+                  }
+                }
               </td>
               <td>
                 <div class="input-group">
