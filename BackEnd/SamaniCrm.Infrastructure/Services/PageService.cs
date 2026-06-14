@@ -111,7 +111,7 @@ namespace SamaniCrm.Infrastructure.Services
             }
             else
             {
-                var duplicatedSlug = await _context.Pages.Where(x => 
+                var duplicatedSlug = await _context.Pages.Where(x =>
                                             x.Slug.ToLower().Trim() == request.Slug.ToLower().Trim())
                                     .CountAsync(cancellationToken) > 0;
                 if (duplicatedSlug)
@@ -171,7 +171,6 @@ namespace SamaniCrm.Infrastructure.Services
         {
             var currentLanguage = L.CurrentLanguage;
             var query = from page in _context.Pages
-                        where page.Type == request.Type
                         join user in _userManager.Users
                             on page.AuthorId equals user.Id into userGroup
                         from author in userGroup.DefaultIfEmpty()
@@ -183,6 +182,11 @@ namespace SamaniCrm.Infrastructure.Services
                                 .Where(t => t.Culture == currentLanguage)
                                 .ToList()
                         };
+
+            if (request.Type != null)
+            {
+                query = query.Where(x => x.Page.Type == request.Type);
+            }
 
             if (!string.IsNullOrWhiteSpace(request.Title))
                 query = query.Where(p => p.Translations.Any(t => t.Title!.Contains(request.Title)));

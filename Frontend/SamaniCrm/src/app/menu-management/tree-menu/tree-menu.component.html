@@ -57,7 +57,13 @@
       <span>{{ node.title }}</span>
       <span>({{ node.url }})</span>
       <div class="actions" (click)="stopPagination($event)">
-        <span class="item-notes">({{ node.children.length }})</span>
+        <span class="item-notes">({{ ('Childs' | translate) + ': ' + node.children.length }})</span>
+        @if (node.isSystem) {
+          <span class="badge badge-danger">
+            {{ 'IsSystem' | translate }}
+          </span>
+        }
+
         <button mat-icon-button (click)="openCreateOrEditDialog(node)">
           <i class="fa fa-edit"></i>
         </button>

@@ -53,7 +53,7 @@ const routes: Routes = [
         path: 'maintenance',
         loadChildren: () => import('./settings/maintenance/maintenance.module').then((m) => m.MaintenanceModule),
       },
-      { path: 'menu', loadChildren: () => import('./settings/menu/menu.module').then((m) => m.MenuModule) },
+      { path: 'menu', loadChildren: () => import('../menu-management/menu.module').then((m) => m.MenuModule) },
 
       { path: 'content', loadChildren: () => import('./content/content.module').then((m) => m.ContentModule) },
       // products

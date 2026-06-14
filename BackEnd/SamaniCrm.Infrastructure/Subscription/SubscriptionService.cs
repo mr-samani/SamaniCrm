@@ -27,14 +27,16 @@ namespace SamaniCrm.Infrastructure.SubscriptionManager;
 public class SubscriptionService : ISubscriptionService
 {
     private readonly IApplicationDbContext _dbContext;
-    private readonly IMasterDbContext _masterDbContext;
     private readonly ILocalizer L;
+    private readonly ILanguageService _languageService;
 
-    public SubscriptionService(IApplicationDbContext dbContext, ILocalizer l, IMasterDbContext masterDbContext)
+    public SubscriptionService(IApplicationDbContext dbContext,
+        ILocalizer l,
+        ILanguageService languageService)
     {
         _dbContext = dbContext;
         L = l;
-        _masterDbContext = masterDbContext;
+        _languageService = languageService;
     }
 
     public async Task<bool> CreateOrEditPlan(PlanDto input, CancellationToken cancellation)
@@ -115,23 +117,34 @@ public class SubscriptionService : ISubscriptionService
         if (plan == null)
             throw new NotFoundException("Plan not found.");
 
-        List<PlanTranslationDto> translations = await _masterDbContext.Languages
-            .GroupJoin(_dbContext.PlanTranslations.Where(w => w.PlanId == planId),
-              lang => lang.Culture,
-              translation => translation.Culture,
-              (lang, trans) => new { lang, trans }
-            )
-            .SelectMany(
-            x => x.trans.DefaultIfEmpty(),
-            (x, trans) => new PlanTranslationDto()
-            {
-                Culture = x.lang.Culture,
-                PlanId = plan.Id,
-                Title = trans != null ? trans.Title : "",
-                Description = trans != null ? trans.Description : "",
 
-            }
-            ).ToListAsync(cancellation);
+        var allLangs = await _languageService.GetAllActiveLanguages();
+        var translationDict = await _dbContext.PlanTranslations
+              .AsNoTracking()
+              .Where(x => x.PlanId == planId)
+              .ToDictionaryAsync(
+                  x => x.Culture,
+                  x => new
+                  {
+                      x.Title,
+                      x.Description
+                  },
+                  cancellation);
+        List<PlanTranslationDto> translations = allLangs
+                .Select(lang =>
+                {
+                    translationDict.TryGetValue(lang.Culture, out var trans);
+
+                    return new PlanTranslationDto
+                    {
+                        Culture = lang.Culture,
+                        PlanId = plan.Id,
+                        Title = trans?.Title ?? string.Empty,
+                        Description = trans?.Description ?? string.Empty
+                    };
+                })
+                .ToList();
+
 
 
         return new PlanDto
@@ -200,11 +213,8 @@ public class SubscriptionService : ISubscriptionService
     public async Task<List<PlanFeatureDto>> GetAllPlanFeatureForEdit(Guid planId, CancellationToken cancellation)
     {
         var currentLangugage = L.CurrentLanguage;
-        // 1. لود کردن تمام زبان‌های سیستم (فقط یک بار اجرا می‌شود)
-        // فرض بر این است که _dbContext.Languages شامل تمام زبان‌های فعال سیستم است.
-        var allLanguages = await _masterDbContext.Languages
-            .Select(l => new { l.Culture, l.Name }) // فقط فیلدهای مورد نیاز را لود کنید
-            .ToListAsync(cancellation);
+        
+        var allLanguages = await _languageService.GetAllActiveLanguages();
 
         // 2. لود کردن تمام PlanFeatures برای این PlanId
         var planFeatures = await _dbContext.PlanFeatures

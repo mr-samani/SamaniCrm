@@ -1,0 +1,36 @@
+<h2 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <span cdkDragHandle class="title">{{ 'PublishedPages' | translate }}</span>
+
+  <button type="button" class="close-btn" aria-label="Close" mat-dialog-close mat-icon-button>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <div class="input-search">
+      <input
+        class="form-control"
+        type="text"
+        maxlength="500"
+        formControlName="filter"
+        [placeholder]="'SearchWithThreeDot' | translate" />
+      <button class="input-group-text btn btn-primary" (click)="reload()" type="submit">
+        <i class="fa fa-search mx-1"></i>
+      </button>
+    </div>
+  </form>
+
+  <table-view [list]="list" [fields]="fields" [operations]="operations" [loading]="loading"></table-view>
+
+  <pagination [total]="totalCount" [(page)]="page" (onChange)="onPageChange($event)"></pagination>
+
+  <!-- <pre dir="ltr" style="text-align: left;">{{form.value|json}}</pre> -->
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="btn btn-default" mat-dialog-close>{{ 'Close' | translate }}</button>
+</mat-dialog-actions>
+<ng-template #operations let-item>
+  <button type="button" class="btn btn-primary" (click)="ok(item)">
+    <span>{{ 'Select' | translate }}</span>
+  </button>
+</ng-template>

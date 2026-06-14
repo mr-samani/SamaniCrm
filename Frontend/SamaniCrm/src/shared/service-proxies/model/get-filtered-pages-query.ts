@@ -15,7 +15,7 @@ import { PageStatusEnum } from './page-status-enum';
 
 /** Interface for GetFilteredPagesQuery */
 export interface IGetFilteredPagesQuery {
-  type: PageTypeEnum;
+  type?: PageTypeEnum;
   title?: string;
   introduction?: string;
   authorName?: string;
@@ -30,7 +30,7 @@ export interface IGetFilteredPagesQuery {
 
 /** Class for GetFilteredPagesQuery */
 export class GetFilteredPagesQuery implements IGetFilteredPagesQuery {
-  type!: PageTypeEnum;
+  type?: PageTypeEnum;
   title?: string;
   introduction?: string;
   authorName?: string;

@@ -1,3 +1,4 @@
+import { SelectPageUrlComponent } from './select-page-url/select-page-url.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -9,11 +10,13 @@ import { MenuComponent } from './menu.component';
 import { MenuRoutingModule } from './menu-routing.module';
 import { TreeMenuComponent } from './tree-menu/tree-menu.component';
 import { CreateOrEditMenuComponent } from './create-or-edit/create-or-edit.component';
-import { MenuServiceProxy } from '@shared/service-proxies';
+import { MenuServiceProxy, PagesServiceProxy } from '@shared/service-proxies';
 import { SharedModule } from '@shared/shared.module';
+import { TableViewModule } from '@shared/components/table-view/table-view.module';
+import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 
 @NgModule({
-  declarations: [MenuComponent, TreeMenuComponent, CreateOrEditMenuComponent],
+  declarations: [MenuComponent, TreeMenuComponent, CreateOrEditMenuComponent, SelectPageUrlComponent],
   imports: [
     CommonModule,
     MenuRoutingModule,
@@ -24,7 +27,9 @@ import { SharedModule } from '@shared/shared.module';
     TabGroupModule,
     SwitchModule,
     SharedModule,
+    TableViewModule,
+    PaginationComponent,
   ],
-  providers: [MenuServiceProxy],
+  providers: [MenuServiceProxy, PagesServiceProxy],
 })
 export class MenuModule {}

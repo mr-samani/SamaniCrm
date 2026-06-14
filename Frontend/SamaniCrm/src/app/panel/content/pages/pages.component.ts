@@ -35,7 +35,7 @@ export class PagesComponent extends AppComponentBase implements OnInit {
     // { column: 'id', title: this.l('Id'), width: 100 },
     { column: 'title', title: this.l('Title') },
     { column: 'introduction', title: this.l('Introduction') },
-    { column: 'description', title: this.l('AdminDescription') },
+    { column: 'description', title: this.l('PrivateDescription') },
     { column: 'author', title: this.l('Author') },
     { column: 'created', title: this.l('CreationTime'), type: 'dateTime' },
     { column: 'statusText', title: this.l('Status') },

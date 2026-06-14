@@ -13,7 +13,7 @@ namespace SamaniCrm.Application.Pages.Queries
 {
     public class GetFilteredPagesQuery : PaginationRequest, IRequest<PaginatedResult<PageDto>>
     {
-        public required PageTypeEnum Type { get; set; }
+        public PageTypeEnum? Type { get; set; }
         public string? Title { get; set; }
         public string? Introduction { get; set; }
         public string? AuthorName { get; set; }

@@ -1,11 +1,12 @@
-import { Component, Inject,  OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AppComponentBase } from '@app/app-component-base';
 import { finalize } from 'rxjs';
 import { AppConst } from '@shared/app-const';
 import { MenuServiceProxy } from '@shared/service-proxies/api/menu.service';
 import { CreateOrEditMenuCommand, MenuTargetEnum, MenuTranslationsDTO } from '@shared/service-proxies';
+import { SelectPageUrlComponent } from '../select-page-url/select-page-url.component';
 
 @Component({
   selector: 'create-or-edit-menu',
@@ -24,9 +25,12 @@ export class CreateOrEditMenuComponent extends AppComponentBase implements OnIni
     @Inject(MAT_DIALOG_DATA) _data: { id: string },
     private dialogRef: MatDialogRef<CreateOrEditMenuComponent>,
     private menuService: MenuServiceProxy,
+    private matDialog: MatDialog,
   ) {
     super();
     this.form = this.fb.group({
+      name: ['', [Validators.required]],
+      orderIndex: ['', [Validators.required]],
       url: ['', [Validators.maxLength(500)]],
       icon: ['', [Validators.maxLength(200)]],
       translations: this.fb.array([]),
@@ -125,7 +129,7 @@ export class CreateOrEditMenuComponent extends AppComponentBase implements OnIni
       .createOrUpdate(input)
       .pipe(
         finalize(() => {
-          this.saving  = false;
+          this.saving = false;
           this.chdr.detectChanges();
         }),
       )
@@ -136,6 +140,19 @@ export class CreateOrEditMenuComponent extends AppComponentBase implements OnIni
             this.dialogRef.close(true);
           }
         },
+      });
+  }
+
+  selectUrlFromPages() {
+    this.matDialog
+      .open(SelectPageUrlComponent, {
+        width: '80%',
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.form.get('url')?.setValue(result);
+        }
       });
   }
 }

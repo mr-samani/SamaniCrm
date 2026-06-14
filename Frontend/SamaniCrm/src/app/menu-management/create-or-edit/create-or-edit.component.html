@@ -20,15 +20,45 @@
     <form [formGroup]="form">
       <div class="row">
         <mat-form-field class="col-md-6">
+          <mat-label>{{ 'Name' | translate }}</mat-label>
+          <input matInput formControlName="name" />
+          @if (form.get('name')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('Name' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field class="col-md-6">
+          <mat-label>{{ 'Order' | translate }}</mat-label>
+          <input matInput formControlName="orderIndex" type="number"/>
+          @if (form.get('orderIndex')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('Order' | translate) } }}
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field class="col-md-6">
           <mat-label>{{ 'Url' | translate }}</mat-label>
           <input matInput formControlName="url" />
+          <button matSuffix mat-icon-button type="button" (click)="selectUrlFromPages()">
+            <i class="fa fa-rectangle-list"></i>
+          </button>
+          @if (form.get('url')?.hasError('required')) {
+            <mat-error>
+              {{ 'IsRequired' | translate: { value: ('Url' | translate) } }}
+            </mat-error>
+          }
         </mat-form-field>
         <mat-form-field class="col-md-6">
           <mat-label>{{ 'Icon' | translate }}</mat-label>
           <input matInput formControlName="icon" />
+          <span matSuffix>
+            <i [class]="form.get('icon')?.value"></i>
+          </span>
         </mat-form-field>
         <mat-form-field class="col-md-6">
-          <mat-label>{{ 'Target' | translate }}</mat-label>
+          <mat-label>{{ 'LinkType' | translate }}</mat-label>
           <mat-select formControlName="target">
             @for (item of MenuTargetEnum | enumToArray; track $index) {
               <mat-option [value]="item">
@@ -66,8 +96,8 @@
   <!-- <pre dir="ltr" style="text-align: left;">{{form.value|json}}</pre> -->
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button  class="btn btn-default" mat-dialog-close >{{ 'Cancel' | translate }}</button>
-  <button  class="btn btn-primary"  (click)="save()" cdkFocusInitial [disabled]="loading || saving">
+  <button class="btn btn-default" mat-dialog-close>{{ 'Cancel' | translate }}</button>
+  <button class="btn btn-primary" (click)="save()" cdkFocusInitial [disabled]="loading || saving">
     @if (saving) {
       <mat-spinner color="primary" diameter="25"></mat-spinner>
     }

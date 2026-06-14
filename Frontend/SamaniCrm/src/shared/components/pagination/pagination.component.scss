@@ -22,3 +22,15 @@
     display: none;
   }
 }
+
+.page-link {
+  background: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.page-item.active:not(:disabled) {
+  .page-link {
+    background: var(--bs-pagination-active-bg);
+  }
+}

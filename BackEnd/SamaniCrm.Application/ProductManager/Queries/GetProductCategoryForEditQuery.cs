@@ -5,6 +5,7 @@ using SamaniCrm.Application.Common.Interfaces;
 using SamaniCrm.Application.DTOs;
 using SamaniCrm.Application.ProductManagerManager.Dtos;
 using SamaniCrm.Core.Shared.Interfaces;
+using SamaniCrm.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,15 +20,18 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
     public class GetProductCategoryForEditQueryHandler : IRequestHandler<GetProductCategoryForEditQuery, ProductCategoryDto>
     {
         private readonly IApplicationDbContext _dbContext;
-        private readonly IMasterDbContext _masterDbContext;
 
         private readonly ILocalizer L;
 
-        public GetProductCategoryForEditQueryHandler(IApplicationDbContext dbContext, ILocalizer l, IMasterDbContext masterDbContext)
+        private readonly ILanguageService _languageService;
+
+        public GetProductCategoryForEditQueryHandler(
+            IApplicationDbContext dbContext, ILocalizer l,
+            ILanguageService languageService)
         {
             _dbContext = dbContext;
             L = l;
-            _masterDbContext = masterDbContext;
+            _languageService = languageService;
         }
 
         public async Task<ProductCategoryDto> Handle(GetProductCategoryForEditQuery request, CancellationToken cancellationToken)
@@ -40,23 +44,18 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
             if (cat == null)
                 throw new NotFoundException("Category not found.");
 
-            List<ProductCategoryTranslationDto> translations = await _masterDbContext.Languages
-                .GroupJoin(_dbContext.ProductCategoryTranslations.Where(w => w.CategoryId == request.Id),
-                  lang => lang.Culture,
-                  translation => translation.Culture,
-                  (lang, trans) => new { lang, trans }
-                )
-                .SelectMany(
-                x => x.trans.DefaultIfEmpty(),
-                (x, trans) => new ProductCategoryTranslationDto()
-                {
-                    Culture = x.lang.Culture,
-                    ProductCategoryId = cat.Id,
-                    Title = trans != null ? trans.Title : "",
-                    Description = trans != null ? trans.Description : "",
+            var allLangs = await _languageService.GetAllActiveLanguages();
 
-                }
-                ).ToListAsync(cancellationToken);
+
+            var translationDict = await _dbContext.ProductCategoryTranslations
+                .Where(w => w.CategoryId == request.Id)
+                 .Select(x => new
+                 {
+                     x.Culture,
+                     x.Title
+                 })
+                .ToDictionaryAsync(x => x.Culture, x => x.Title, cancellationToken);
+
             string? parentTitle = "";
             if (cat.ParentId.HasValue)
             {
@@ -67,13 +66,22 @@ namespace SamaniCrm.Application.ProductManagerManager.Queries
                     ).FirstOrDefaultAsync(cancellationToken);
             }
 
+
+            var translations = allLangs.Select(lang => new ProductCategoryTranslationDto
+            {
+                Culture = lang.Culture,
+                ProductCategoryId = cat.Id,
+                Title = translationDict.TryGetValue(lang.Culture, out var title) ? title : string.Empty
+            }).ToList();
+
+
             return new ProductCategoryDto
             {
                 Id = cat.Id,
                 OrderIndex = cat.OrderIndex,
                 IsActive = cat.IsActive,
                 ParentId = cat.ParentId,
-                ParentTitle= parentTitle,
+                ParentTitle = parentTitle,
                 Image = cat.Image,
                 Slug = cat.Slug,
                 Translations = translations

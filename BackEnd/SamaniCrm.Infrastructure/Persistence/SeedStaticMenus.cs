@@ -205,7 +205,7 @@ namespace SamaniCrm.Infrastructure.Persistence
                 new Menu
                 {
                     Name="Products",
-                    Icon = "fa fa-package",
+                    Icon = "fa fa-cart-flatbed-boxes",
                     Url = "/products",
                     OrderIndex = 1,
                     IsSystem = true,
