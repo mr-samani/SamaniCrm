@@ -65,7 +65,7 @@ export class LastNotificationsComponent extends AppComponentBase implements OnIn
 
   async openNotify(item: NotificationDto) {
     const { NotificationInfoComponent } =
-      await import('@app/panel/notifications/notification-info/notification-info.component');
+      await import('@app/notification-management/notification-info/notification-info.component');
     this.matDialog
       .open(NotificationInfoComponent, {
         data: item,

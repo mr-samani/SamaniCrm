@@ -18,7 +18,7 @@ const routes: Routes = [
       },
       {
         path: 'dashboard',
-        loadComponent: () => import('./dashboard/dashboard.component').then((c) => c.DashboardComponent),
+        loadComponent: () => import('../dashboard-management/dashboard.component').then((c) => c.DashboardComponent),
       },
       {
         path: 'user-profile',
@@ -30,7 +30,7 @@ const routes: Routes = [
       //   path: 'media',
       //   loadChildren: () => import('../file-manager/file-manager.module').then((m) => m.FileManagerModule),
       // },
-      { path: 'languages', loadChildren: () => import('./languages/languages.module').then((m) => m.LanguagesModule) },
+      { path: 'languages', loadChildren: () => import('../language-management/languages.module').then((m) => m.LanguagesModule) },
 
       {
         path: 'tenants',
@@ -55,16 +55,14 @@ const routes: Routes = [
       },
       { path: 'menu', loadChildren: () => import('../menu-management/menu.module').then((m) => m.MenuModule) },
 
-      { path: 'content', loadChildren: () => import('./content/content.module').then((m) => m.ContentModule) },
-      // products
+      { path: 'content', loadChildren: () => import('../content-management/content.module').then((m) => m.ContentModule) },
       {
         path: 'products',
         loadChildren: () => import('../product-management/product.module').then((m) => m.ProductModule),
       },
-
       {
         path: 'notifications',
-        loadChildren: () => import('./notifications/notification.module').then((m) => m.NotificationModule),
+        loadChildren: () => import('../notification-management/notification.module').then((m) => m.NotificationModule),
       },
       {
         path: 'subscription',

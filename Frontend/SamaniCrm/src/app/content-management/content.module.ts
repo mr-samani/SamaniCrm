@@ -13,7 +13,7 @@ import { SharedModule } from '@shared/shared.module';
 import { TabGroupModule } from '@shared/components/tab-group/tab-group.module';
 import { CreateOrEditPageMetaDataDialogComponent } from './create-or-edit-page-meta-data-dialog/create-or-edit-page-meta-data-dialog.component';
 import { PagesServiceProxy } from '@shared/service-proxies/api/pages.service';
-import { PluginService } from '../../page-builder/services/plugin.service';
+import { PluginService } from '../page-builder/services/plugin.service';
 import { PageBuilderServiceProxy } from '@shared/service-proxies/api/page-builder.service';
 @NgModule({
   declarations: [ContentComponent, PagesComponent],
