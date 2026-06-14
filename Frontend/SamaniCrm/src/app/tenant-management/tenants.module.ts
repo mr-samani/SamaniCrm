@@ -6,7 +6,7 @@ import { TenantInfoComponent } from './create-tenant/tenant-info/tenant-info.com
 import { CreateTenantComponent } from './create-tenant/create-tenant.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TenantsComponent } from './Tenants.component';
+import { TenantsComponent } from './tenants.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { TranslateModule } from '@ngx-translate/core';
@@ -19,7 +19,7 @@ import { MaterialCommonModule } from '@shared/material/material.common.module';
 import { SharedModule } from '@shared/shared.module';
 import { TenantsServiceProxy } from '@shared/service-proxies/api/tenants.service';
 import { UserServiceProxy } from '@shared/service-proxies/api/user.service';
-import { TenantsRoutingModule } from './Tenants-routing.module';
+import { TenantsRoutingModule } from './tenants-routing.module';
 import { NgxInputColor } from 'ngx-input-color/color-picker';
 import { TenantUsersComponent } from './tenant-users/tenant-users.component';
 

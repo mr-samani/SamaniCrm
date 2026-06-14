@@ -14,9 +14,9 @@ import { TenantUsersComponent } from './tenant-users/tenant-users.component';
 
 @Component({
   standalone: false,
-  selector: 'app-Tenants',
-  templateUrl: './Tenants.component.html',
-  styleUrls: ['./Tenants.component.scss'],
+  selector: 'app-tenants',
+  templateUrl: './tenants.component.html',
+  styleUrls: ['./tenants.component.scss'],
 })
 export class TenantsComponent extends AppComponentBase implements OnInit, OnDestroy {
   loading = true;

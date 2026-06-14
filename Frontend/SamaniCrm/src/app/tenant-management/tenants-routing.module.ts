@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { TenantsComponent } from './Tenants.component';
+import { TenantsComponent } from './tenants.component';
 import { RouterModule, Routes } from '@angular/router';
 import { CreateTenantComponent } from './create-tenant/create-tenant.component';
 import { ProvisioningTenantComponent } from './provisioning-tenant/provisioning-tenant.component';
