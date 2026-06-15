@@ -11,7 +11,7 @@ namespace SamaniCrm.Application.MenuCommands
 {
     public record ReorderMenuCommand(List<ReorderItem> Items) : IRequest<bool>;
 
-    public record ReorderItem(Guid MenuId, Guid? ParentId, int OrderIndex);
+    public record ReorderItem(Guid MenuId, int OrderIndex, Guid? ParentId = null);
     public class ReorderMenuCommandHandler : IRequestHandler<ReorderMenuCommand, bool>
     {
         private readonly IApplicationDbContext _dbContext;

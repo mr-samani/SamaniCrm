@@ -14,15 +14,15 @@
 /** Interface for ReorderItem */
 export interface IReorderItem {
   menuId: string;
-  parentId: string;
   orderIndex: number;
+  parentId?: string;
 }
 
 /** Class for ReorderItem */
 export class ReorderItem implements IReorderItem {
   menuId!: string;
-  parentId!: string;
   orderIndex!: number;
+  parentId?: string;
 
   constructor(data?: IReorderItem) {
     if (data) {
@@ -36,8 +36,8 @@ export class ReorderItem implements IReorderItem {
 init(data?: any) {
   if (data) {
     this.menuId = data["menuId"];
-    this.parentId = data["parentId"];
     this.orderIndex = data["orderIndex"];
+    this.parentId = data["parentId"];
   }
 }
 

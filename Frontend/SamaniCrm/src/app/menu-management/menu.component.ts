@@ -63,7 +63,7 @@ export class MenuComponent extends AppComponentBase implements OnInit {
         new ReorderItem({
           menuId: list[i].id!,
           orderIndex: orderIndex,
-          parentId: parentId ?? "",
+          parentId: parentId,
         }),
       );
       orderIndex++;

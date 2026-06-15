@@ -97,6 +97,6 @@ export class SelectPageUrlComponent extends AppComponentBase implements OnInit {
   }
 
   ok(item: PageDto) {
-    this.dialogRef.close(item.slug);
+    this.dialogRef.close('page/' + item.slug);
   }
 }

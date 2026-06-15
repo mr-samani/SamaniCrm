@@ -24,15 +24,16 @@ import { CommonModule } from '@angular/common';
 import { FileManagerServiceProxy, PageBuilderServiceProxy } from '@shared/service-proxies';
 import { DYNAMIC_DATA } from '../dynamic-data/dynamic-data';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
+import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-edit-page',
   templateUrl: './edit-page.component.html',
   styleUrls: ['./edit-page.component.scss'],
-  imports: [NgxPageBuilder,FileManagerModule, CommonModule],
+  imports: [NgxPageBuilder, FileManagerModule, CommonModule],
   providers: [
     PagesServiceProxy,
     PageBuilderServiceProxy,
-    
+
     PluginService,
     providePageBuilder({
       customSources: CUSTOM_BLOCKS,
@@ -112,6 +113,8 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
       .subscribe((response) => {
         console.log(response);
         this.sharedPageDataService.pageInfo = response.data;
+        this.browserTitle.setTitle(this.sharedPageDataService.pageInfo?.title ?? this.pageId);
+
         try {
           this.styles = JSON.parse(this.sharedPageDataService.pageInfo?.styles ?? '[]');
         } catch (error) {

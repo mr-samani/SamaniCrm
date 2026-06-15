@@ -70,6 +70,7 @@ namespace SamaniCrm.Application.MenuCommands
                     // Add new translation
                     menu.Translations?.Add(new MenuTranslation
                     {
+                        MenuId = menu.Id,
                         Culture = item.Culture,
                         Title = item.Title,
                     });

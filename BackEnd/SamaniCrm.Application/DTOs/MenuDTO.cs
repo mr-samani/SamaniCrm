@@ -38,7 +38,7 @@ namespace SamaniCrm.Application.DTOs
 
     public class MenuTranslationsDTO
     {
-        public Guid MenuId { get; set; }
+        public Guid? MenuId { get; set; }
         public required string Culture { get; set; }
         public string Title { get; set; } = string.Empty;
     }
