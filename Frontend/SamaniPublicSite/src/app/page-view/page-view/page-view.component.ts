@@ -4,6 +4,7 @@ import { PageDto, PagesServiceProxy } from '@shared/service-proxies';
 import { finalize } from 'rxjs/operators';
 import { DynamicDataStructure, IPagebuilderOutput, PageBuilderConfig } from 'ngx-page-builder/core';
 import { DYNAMIC_DATA } from '../dynamic-data/dynamic-data';
+import { AppConst } from '@shared/app-const';
 
 @Component({
   selector: 'app-page-view',
@@ -12,7 +13,7 @@ import { DYNAMIC_DATA } from '../dynamic-data/dynamic-data';
   standalone: false,
 })
 export class PageViewComponent extends BaseComponent implements OnInit, AfterViewInit {
-  culture: '';
+  culture = '';
   slug = '';
   pageId = '';
   loading = signal(false);
@@ -27,15 +28,16 @@ export class PageViewComponent extends BaseComponent implements OnInit, AfterVie
     @Inject(DOCUMENT) private _document: Document,
   ) {
     super(injector);
-    this.culture = this.route.snapshot.params['culture'];
-    this.pageId = this.route.snapshot.params['pageId'];
-    this.slug = this.route.snapshot.params['slug'];
+    this.route.params.subscribe((p) => {
+      this.culture = p['culture'] ?? AppConst.currentLanguage;
+      this.pageId = p['pageId'];
+      this.slug = p['slug'];
+      this.getInfo();
+    });
   }
 
   ngOnInit() {}
-  ngAfterViewInit(): void {
-    this.getInfo();
-  }
+  ngAfterViewInit(): void {}
 
   getInfo() {
     this.loading.set(true);

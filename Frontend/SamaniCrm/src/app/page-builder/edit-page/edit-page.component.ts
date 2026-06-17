@@ -16,12 +16,17 @@ import {
   NgxPageBuilder,
   providePageBuilder,
 } from 'ngx-page-builder/designer';
-import { CustomToolbarButtons, DynamicDataStructure, IPage, IStyleSheetFile } from 'ngx-page-builder/core';
+import { CMSPage, CustomToolbarButtons, DynamicDataStructure, IPage, IStyleSheetFile } from 'ngx-page-builder/core';
 import { PluginService } from '../services/plugin.service';
 import { CUSTOM_BLOCKS } from '../custom-blocks/CustomBlocks';
 import { FileManagerService } from '@app/file-manager/file-manager.service';
 import { CommonModule } from '@angular/common';
-import { FileManagerServiceProxy, PageBuilderServiceProxy } from '@shared/service-proxies';
+import {
+  FileManagerServiceProxy,
+  GetFilteredPagesQuery,
+  PageBuilderServiceProxy,
+  PageStatusEnum,
+} from '@shared/service-proxies';
 import { DYNAMIC_DATA } from '../dynamic-data/dynamic-data';
 import { FileManagerModule } from '@app/file-manager/file-manager.module';
 import { Title } from '@angular/platform-browser';
@@ -83,6 +88,8 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
   ];
 
   dynamicData: DynamicDataStructure[] = DYNAMIC_DATA;
+  cmsPages: CMSPage[] = [];
+
   @ViewChild('pageBuilder') pageBuilder!: NgxPageBuilder;
   constructor(
     private pageService: PagesServiceProxy,
@@ -95,6 +102,7 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
   }
 
   ngOnInit() {
+    this.getAllPages();
     this.getPageInfo();
   }
   ngAfterViewInit(): void {}
@@ -124,6 +132,35 @@ export class EditPageComponent extends AppComponentBase implements OnInit, After
         if (this.sharedPageDataService.pageInfo && this.sharedPageDataService.pageInfo.data) {
           const d: IPage[] = JSON.parse(this.sharedPageDataService.pageInfo.data ?? '[]');
           this.data = d ?? [];
+        }
+      });
+  }
+
+  getAllPages() {
+    this.pageService
+      .getAllPages(
+        new GetFilteredPagesQuery({
+          status: PageStatusEnum.Published,
+          pageSize: 1000,
+          pageNumber: 1,
+        }),
+      )
+      .pipe(
+        finalize(() => {
+          this.hideMainLoading();
+          this.chdr.detectChanges();
+        }),
+      )
+      .subscribe((response) => {
+        if (response && response.data && response.data.items) {
+          this.cmsPages = response.data.items.map((m) => {
+            return {
+              slag: 'page/' + m.slug,
+              title: m.title,
+            } as CMSPage;
+          });
+
+          console.log('cmsPages', this.cmsPages);
         }
       });
   }

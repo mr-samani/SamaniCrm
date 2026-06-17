@@ -10,6 +10,10 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client,
   },
   {
+    path: 'page/:slug',
+    renderMode: RenderMode.Prerender,
+  },
+  {
     path: ':culture/page/:slug',
     renderMode: RenderMode.Prerender,
   },

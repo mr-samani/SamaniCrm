@@ -16,8 +16,8 @@ namespace SamaniCrm.Application.Pages.Queries
                  .WithMessage("PageNumber must be greater than 0.");
 
             RuleFor(x => x.PageSize)
-                .InclusiveBetween(1, 100)
-                .WithMessage("PageSize must be between 1 and 100.");
+                .InclusiveBetween(1, 1000)
+                .WithMessage("PageSize must be between 1 and 1000.");
 
             RuleFor(x => x.SortDirection)
                 .Must(dir => dir!.ToLower() == "asc" || dir.ToLower() == "desc")
