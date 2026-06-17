@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using SamaniCrm.Api.Attributes;
 using SamaniCrm.Application.Common.DTOs;
 using SamaniCrm.Application.DTOs.PageBuilder;
+using SamaniCrm.Application.DynamicData.Queries;
 using SamaniCrm.Application.Pages.Commands;
 using SamaniCrm.Application.Pages.Queries;
 using SamaniCrm.Core.Shared.Consts;
@@ -46,12 +47,20 @@ public class PageBuilderController : ApiBaseController
     [HttpPost("GetPlugins")]
     [Permission(AppPermissions.Pages.PluginList)]
     [ProducesResponseType(typeof(ApiResponse<PaginatedResult<PluginDto>>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetPlugins(GetPluginQuery Input,CancellationToken cancellationToken)
+    public async Task<IActionResult> GetPlugins(GetPluginQuery Input, CancellationToken cancellationToken)
     {
         PaginatedResult<PluginDto> result = await _mediator.Send(Input, cancellationToken);
         return ApiOk(result);
     }
 
 
-
+    [HttpPost("GetDynamicData")]
+    //  [Permission(AppPermissions.Pages.PluginList)]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(ApiResponse<List<DynamicDataListDto>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetDynamicData(GetDynamicDataQuery Input, CancellationToken cancellationToken)
+    {
+        List<DynamicDataListDto> result = await _mediator.Send(Input, cancellationToken);
+        return ApiOk(result);
+    }
 }

@@ -17,6 +17,7 @@ using SamaniCrm.Infrastructure.ExternalLogin;
 using SamaniCrm.Infrastructure.Identity;
 using SamaniCrm.Infrastructure.Jobs;
 using SamaniCrm.Infrastructure.Localizer;
+using SamaniCrm.Infrastructure.PageBuilderManager;
 using SamaniCrm.Infrastructure.Repositories;
 using SamaniCrm.Infrastructure.Security;
 using SamaniCrm.Infrastructure.Services;
@@ -78,6 +79,8 @@ public static partial class ServiceCollectionExtensions
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IUserPermissionService, UserPermissionService>();
         services.AddScoped<IPageService, PageService>();
+        services.AddScoped<IDynamicDataService, DynamicDataService>();
+
         services.AddScoped<IProductCategoryService, ProductCategoryService>();
 
 

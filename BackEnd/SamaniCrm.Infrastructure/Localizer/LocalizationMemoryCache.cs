@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 namespace SamaniCrm.Infrastructure.Localizer;
 public class LocalizationMemoryCache
 {
-    private readonly Dictionary<string, Dictionary<string, string>> _allCultures
+    private readonly ConcurrentDictionary<string, Dictionary<string, string>> _allCultures
         = new(StringComparer.OrdinalIgnoreCase);
 
     public void SetCulture(string culture, Dictionary<string, string> values)
